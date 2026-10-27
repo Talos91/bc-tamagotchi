@@ -1,0 +1,20 @@
+# Godot
+.godot/
+*.import
+export_presets.cfg
+# Blender
+*.blend1
+# OS / editors
+.DS_Store
+Thumbs.db
+desktop.ini
+.vscode/
+.idea/
+# Node (if a web client appears)
+node_modules/
+dist/
+# Claude local
+.claude/settings.local.json
+
+# Full-resolution originals stay local (300MB)
+docs/reference/venue-photos-original/
