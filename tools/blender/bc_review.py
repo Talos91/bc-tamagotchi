@@ -51,12 +51,12 @@ P = Matrix(((1, 0, 0), (0, 0, -1), (0, 1, 0)))          # Godot axes -> Blender 
 CAST = [
     ("nam", "Bar_Bartender", "idle"),
     ("hiro", "Bar_Stool3", "sit"), ("dougie", "Bar_Stool7", "sit"), ("patron_06", "Bar_Stool1", "sit"),
-    ("ploy", "Tables_T1_C2", "sit"), ("patron_02", "Tables_T0_C0", "sit"), ("patron_09", "Tables_T0_C1", "sit"),
+    ("ploy", "Tables_T2_C2", "sit"), ("patron_02", "Tables_T0_C0", "sit"), ("patron_09", "Tables_T0_C1", "sit"),
     ("patron_05", "Tables_T3_C2", "sit"), ("patron_11", "Tables_T4_C0", "sit"),
     ("tong", "Tables_DrumStool1", "sit"), ("patron_03", "CommunalTable_T0_N1", "sit"),
     ("patron_08", "CommunalTable_T1_S0", "sit"), ("mali", "CommunalTable_T0_S2", "sit"),
     ("bow", "Wander_StageFront", "dance"), ("jules", "Wander_Arcade", "idle_warm"),
-    ("player", "Wander_Lounge", "walk"),
+    ("player", "Player", "walk"),
     ("jo", "@Mic1", "idle_warm"), ("pete", "@Mic0", "idle"), ("boy", "@DrumKit", "sit"),
 ]
 PLAYER = B.P("player", "Player", "player", "PLAYER", "regular", "soft", "bob", ("wide", "flat", "smile"),
