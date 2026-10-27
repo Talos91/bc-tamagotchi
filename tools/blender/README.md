@@ -12,6 +12,34 @@ Approach copied from Ooze Syndicate's `Models/2.0/build_kit_2_0.py`: one script,
 materials, one builder, every run rebuilds the whole kit from scratch. Ooze used bmesh primitives with bevels;
 this kit uses a voxel grid instead (art bible section 2: no bevels, no smoothing).
 
+## The one file to open: `blender/BlackCabin.blend`
+
+**Rule: after any kit or character change, regenerate `blender/BlackCabin.blend`.** From the repo root (about
+2 minutes with the still):
+
+```
+"C:\Program Files\Blender Foundation\Blender 5.2\blender.exe" --background --factory-startup --python tools/blender/bc_review.py
+```
+
+`bc_chars.py` runs it at the end of every full run (`-- --no-review` to skip); `bc_kit.py` does not call it yet, so
+run the command above after a kit change. `-- --no-render` skips the still; `-- --all-cameras` also renders the
+three area cameras to the system temp folder.
+
+`bc_review.py` (imports `bc_kit` and `bc_chars`, copies neither) builds one scene with three top-level collections,
+each toggled with its checkbox in the outliner:
+
+| Collection | What | Camera |
+|---|---|---|
+| `VENUE` | The assembled room: kit instances and spawn spots from `game/assets/kit/layout.json` (exported by the venue session from `venue.tscn`), greybox walls, floors and lights parsed from `game/scenes/venue/venue.tscn`. Without `layout.json` it reads the instances from `venue.tscn` too. Cast: Nam behind the bar, the House Lights on stage (Boy on a drum stool), regulars and patrons seated, Bow dancing, the player walking in the lounge. The sub-collection `VENUE ceiling and near walls` (ceilings, lounge beams and red panels, the south and west cutaway walls) is excluded so the room reads from above; tick it to close the room | `Cam_VENUE` |
+| `KIT` | The kit grid from `bc_kit.build_review` (the same layout as `BlackCabinKit.blend`) | `Cam_KIT` |
+| `CHARACTERS` | Preset rows, the animation row and the parts lineup from `bc_chars.review_content` (as in `BlackCabinChars.blend`) | `Cam_CHARACTERS` |
+
+`Cam_OVERVIEW` is the active camera and renders `docs/art/review-overview.png`. Dark world, a warm key and a red
+wash sun, the venue's own lamps, neon and stage spots, and a compositor bloom on emissives in the render.
+Material Preview in the saved layout. Godot axes map to Blender as (x, y, z) -> (x, -z, y), the glTF exporter's
+mapping, so kit meshes sit where their GLBs sit in Godot. `BlackCabinKit.blend` and `BlackCabinChars.blend` stay
+as the per-pipeline review files.
+
 ## Run
 
 From the repo root (about 5 s for the whole kit):

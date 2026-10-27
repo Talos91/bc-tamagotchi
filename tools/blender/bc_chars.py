@@ -11,6 +11,7 @@ Material Preview) and renders docs/art/chars-showcase.png.
 Run headless from the repo root:
     blender --background --factory-startup --python tools/blender/bc_chars.py
     blender --background --factory-startup --python tools/blender/bc_chars.py -- --only tong,nam --no-blend
+`--no-review` skips the combined blender/BlackCabin.blend (bc_review.py), which a full run rebuilds last;
 `--no-render` keeps the .blend but skips the PNG; `--review-only` rebuilds just the .blend and the PNG. `--only` runs never write the manifest, libraries or .blend.
 
 Reuses bc_kit (imported, never edited): the voxel scale, the face tables, per-voxel jitter, the seam texture and
@@ -1177,12 +1178,9 @@ def text(coll, name, body, loc, size, mat, rot=(0, 0, 0)):
     return ob
 
 
-def build_review(render=True):
-    from mathutils import Vector
-    reset()
-    scene = bpy.context.scene
-    scene.name = "Black Cabin Chars"
-    lab = K.label_material()
+def review_content(scene, lab):
+    """The preset rows, the animation row and the parts lineup, one collection each, starting at y = 0 and
+    growing toward +Y. Returns (depth, widest row width) in metres. Shared by build_review and bc_review.py."""
     y = 0.0
     acts_by_body = {}
     widest = 0.0
@@ -1282,6 +1280,16 @@ def build_review(render=True):
                     build_mesh(part, "lineup." + label + "." + part.pid, lineup, offset=(x, y, 0))
             text(lineup, "lineup." + label + "_label", label, (x, y - 0.5, 0.002), 0.06, lab)
         y += 1.2 if is_bust else 1.8
+    return y, widest
+
+
+def build_review(render=True):
+    from mathutils import Vector
+    reset()
+    scene = bpy.context.scene
+    scene.name = "Black Cabin Chars"
+    lab = K.label_material()
+    y, widest = review_content(scene, lab)
     # floor, world, lights, camera
     setup = bpy.data.collections.new("review_setup")
     scene.collection.children.link(setup)
@@ -1349,7 +1357,7 @@ def build_review(render=True):
 
 # ------------------------------------------------------------------ run
 
-def run(only=None, blend=True, render=True):
+def run(only=None, blend=True, render=True, review=True):
     names = [p["name"] for p in PRESETS]
     assert len(names) == len(set(names)), "duplicate preset names"
     presets = export_presets(only)
@@ -1360,6 +1368,9 @@ def run(only=None, blend=True, render=True):
     print("BC_CHARS done: %d presets, %d libraries -> %s" % (len(presets), len(libs), OUT))
     if blend:
         build_review(render)
+    if review:                                    # the combined review file is always regenerated last
+        import bc_review
+        bc_review.build(render)
     return presets
 
 
@@ -1369,4 +1380,4 @@ if __name__ == "__main__":
     if "--review-only" in argv:
         build_review("--no-render" not in argv)
     else:
-        run(only, blend="--no-blend" not in argv, render="--no-render" not in argv)
+        run(only, blend="--no-blend" not in argv, render="--no-render" not in argv, review="--no-review" not in argv)
