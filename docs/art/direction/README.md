@@ -18,3 +18,10 @@ these, not the other way round.
 
 Layout: entrance lounge → curtain → main room. The main room sits on the
 right-hand side of the main bar.
+
+- `04-overall-look-mockup.webp` (added later on 2026-10-27) — Daniele's
+  direction for the overall game look: isometric whole-room view, chibi voxel
+  patrons with hair and faces, a live band, need bubbles over heads, a dark
+  HUD with glyph icons. **The map is not correct; it is a look reference
+  only.** Its HUD (Mood / Energy / Tidiness, coins, Serve / Chat / Music /
+  Clean / Decor) is a mockup, not the agreed design; see DECISIONS.md.
