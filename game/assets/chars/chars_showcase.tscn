@@ -1,0 +1,332 @@
+[gd_scene format=3]
+
+[ext_resource type="Script" path="res://assets/chars/chars_showcase.gd" id="1_kiojl"]
+[ext_resource type="PackedScene" path="res://assets/chars/presets/tong.glb" id="2_wurkv"]
+[ext_resource type="PackedScene" path="res://assets/chars/presets/ploy.glb" id="3_0sf45"]
+[ext_resource type="PackedScene" path="res://assets/chars/presets/jules.glb" id="4_8lnmj"]
+[ext_resource type="PackedScene" path="res://assets/chars/presets/mali.glb" id="5_bwflc"]
+[ext_resource type="PackedScene" path="res://assets/chars/presets/dougie.glb" id="6_5bu8i"]
+[ext_resource type="PackedScene" path="res://assets/chars/presets/lung_nop.glb" id="7_ebvwm"]
+[ext_resource type="PackedScene" path="res://assets/chars/presets/bow.glb" id="8_ufwd4"]
+[ext_resource type="PackedScene" path="res://assets/chars/presets/hiro.glb" id="9_txg3x"]
+[ext_resource type="PackedScene" path="res://assets/chars/presets/nam.glb" id="10_d37p2"]
+[ext_resource type="PackedScene" path="res://assets/chars/presets/fern.glb" id="11_bales"]
+[ext_resource type="PackedScene" path="res://assets/chars/presets/big.glb" id="12_e4le3"]
+[ext_resource type="PackedScene" path="res://assets/chars/presets/golf.glb" id="13_cppc2"]
+[ext_resource type="PackedScene" path="res://assets/chars/presets/khun_joy.glb" id="14_r3ty6"]
+[ext_resource type="PackedScene" path="res://assets/chars/presets/jo.glb" id="15_n8gxc"]
+[ext_resource type="PackedScene" path="res://assets/chars/presets/pete.glb" id="16_gtoth"]
+[ext_resource type="PackedScene" path="res://assets/chars/presets/boy.glb" id="17_b0wwi"]
+[ext_resource type="PackedScene" path="res://assets/chars/presets/patron_01.glb" id="18_ptb4w"]
+[ext_resource type="PackedScene" path="res://assets/chars/presets/patron_02.glb" id="19_nofim"]
+[ext_resource type="PackedScene" path="res://assets/chars/presets/patron_03.glb" id="20_rqfgs"]
+[ext_resource type="PackedScene" path="res://assets/chars/presets/patron_04.glb" id="21_plt0w"]
+[ext_resource type="PackedScene" path="res://assets/chars/presets/patron_05.glb" id="22_78xi0"]
+[ext_resource type="PackedScene" path="res://assets/chars/presets/patron_06.glb" id="23_7b7g4"]
+[ext_resource type="PackedScene" path="res://assets/chars/presets/patron_07.glb" id="24_ycr08"]
+[ext_resource type="PackedScene" path="res://assets/chars/presets/patron_08.glb" id="25_k30y4"]
+[ext_resource type="PackedScene" path="res://assets/chars/presets/patron_09.glb" id="26_et3y8"]
+[ext_resource type="PackedScene" path="res://assets/chars/presets/patron_10.glb" id="27_c0jnl"]
+[ext_resource type="PackedScene" path="res://assets/chars/presets/patron_11.glb" id="28_ambkc"]
+[ext_resource type="PackedScene" path="res://assets/chars/presets/patron_12.glb" id="29_ygk40"]
+
+[sub_resource type="Environment" id="Environment_j7yl7"]
+background_mode = 1
+background_color = Color(0.10980392, 0.050980393, 0.047058824, 1)
+ambient_light_source = 2
+ambient_light_color = Color(0.5, 0.32, 0.3, 1)
+ambient_light_energy = 0.3
+tonemap_mode = 2
+glow_enabled = true
+glow_intensity = 0.6
+glow_bloom = 0.05
+
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_1vtcs"]
+albedo_color = Color(0.22745098, 0.17254902, 0.1882353, 1)
+roughness = 0.3
+
+[sub_resource type="PlaneMesh" id="PlaneMesh_re40y"]
+material = SubResource("StandardMaterial3D_1vtcs")
+size = Vector2(14.45, 9.4)
+
+[node name="CharsShowcase" type="Node3D" unique_id=1576336705]
+script = ExtResource("1_kiojl")
+
+[node name="WorldEnvironment" type="WorldEnvironment" parent="." unique_id=1098653223]
+environment = SubResource("Environment_j7yl7")
+
+[node name="WarmKey" type="DirectionalLight3D" parent="." unique_id=1188152263]
+transform = Transform3D(0.8660254, 0.38302222, -0.32139382, 0, 0.64278764, 0.76604444, 0.5, -0.66341394, 0.5566704, 0, 0, 0)
+light_color = Color(1, 0.72, 0.5, 1)
+shadow_enabled = true
+
+[node name="RedFill" type="DirectionalLight3D" parent="." unique_id=1486109131]
+transform = Transform3D(-0.76604444, -0.32139382, 0.5566704, 0, 0.8660254, 0.5, -0.64278764, 0.38302222, -0.66341394, 0, 0, 0)
+light_color = Color(1, 0.12, 0.1, 1)
+light_energy = 0.15
+
+[node name="WarmRim" type="DirectionalLight3D" parent="." unique_id=912832842]
+transform = Transform3D(-0.9396926, -0.14454399, 0.30997556, 0, 0.90630776, 0.42261827, -0.3420202, 0.39713126, -0.8516507, 0, 0, 0)
+light_color = Color(1, 0.62, 0.32, 1)
+light_energy = 0.7
+
+[node name="tong" type="Node3D" parent="." unique_id=1681045486 instance=ExtResource("2_wurkv")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -3.325, 0, 0)
+
+[node name="tong_label" type="Label3D" parent="." unique_id=114325471]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -3.325, 0.02, 0.5)
+billboard = 1
+modulate = Color(1, 1, 1, 0.8)
+text = "Tong"
+
+[node name="ploy" type="Node3D" parent="." unique_id=120681522 instance=ExtResource("3_0sf45")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -2.375, 0, 0)
+
+[node name="ploy_label" type="Label3D" parent="." unique_id=1919983096]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -2.375, 0.02, 0.5)
+billboard = 1
+modulate = Color(1, 1, 1, 0.8)
+text = "Ploy"
+
+[node name="jules" type="Node3D" parent="." unique_id=393066420 instance=ExtResource("4_8lnmj")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -1.425, 0, 0)
+
+[node name="jules_label" type="Label3D" parent="." unique_id=864086899]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -1.425, 0.02, 0.5)
+billboard = 1
+modulate = Color(1, 1, 1, 0.8)
+text = "Jules"
+
+[node name="mali" type="Node3D" parent="." unique_id=923633853 instance=ExtResource("5_bwflc")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.475, 0, 0)
+
+[node name="mali_label" type="Label3D" parent="." unique_id=1051059410]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.475, 0.02, 0.5)
+billboard = 1
+modulate = Color(1, 1, 1, 0.8)
+text = "Mali"
+
+[node name="dougie" type="Node3D" parent="." unique_id=1028573366 instance=ExtResource("6_5bu8i")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.475, 0, 0)
+
+[node name="dougie_label" type="Label3D" parent="." unique_id=128929654]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.475, 0.02, 0.5)
+billboard = 1
+modulate = Color(1, 1, 1, 0.8)
+text = "Dougie"
+
+[node name="lung_nop" type="Node3D" parent="." unique_id=1300544622 instance=ExtResource("7_ebvwm")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 1.425, 0, 0)
+
+[node name="lung_nop_label" type="Label3D" parent="." unique_id=689694643]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 1.425, 0.02, 0.5)
+billboard = 1
+modulate = Color(1, 1, 1, 0.8)
+text = "Lung Nop"
+
+[node name="bow" type="Node3D" parent="." unique_id=505720937 instance=ExtResource("8_ufwd4")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 2.375, 0, 0)
+
+[node name="bow_label" type="Label3D" parent="." unique_id=1377960955]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 2.375, 0.02, 0.5)
+billboard = 1
+modulate = Color(1, 1, 1, 0.8)
+text = "Bow"
+
+[node name="hiro" type="Node3D" parent="." unique_id=1371066664 instance=ExtResource("9_txg3x")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 3.325, 0, 0)
+
+[node name="hiro_label" type="Label3D" parent="." unique_id=975406961]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 3.325, 0.02, 0.5)
+billboard = 1
+modulate = Color(1, 1, 1, 0.8)
+text = "Hiro"
+
+[node name="nam" type="Node3D" parent="." unique_id=665243377 instance=ExtResource("10_d37p2")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -3.325, 0, -2.7)
+
+[node name="nam_label" type="Label3D" parent="." unique_id=396480013]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -3.325, 0.02, -2.2)
+billboard = 1
+modulate = Color(1, 1, 1, 0.8)
+text = "Nam"
+
+[node name="fern" type="Node3D" parent="." unique_id=1481668069 instance=ExtResource("11_bales")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -2.375, 0, -2.7)
+
+[node name="fern_label" type="Label3D" parent="." unique_id=1430204321]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -2.375, 0.02, -2.2)
+billboard = 1
+modulate = Color(1, 1, 1, 0.8)
+text = "Fern"
+
+[node name="big" type="Node3D" parent="." unique_id=1434749692 instance=ExtResource("12_e4le3")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -1.425, 0, -2.7)
+
+[node name="big_label" type="Label3D" parent="." unique_id=1277220440]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -1.425, 0.02, -2.2)
+billboard = 1
+modulate = Color(1, 1, 1, 0.8)
+text = "Big"
+
+[node name="golf" type="Node3D" parent="." unique_id=689522410 instance=ExtResource("13_cppc2")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.475, 0, -2.7)
+
+[node name="golf_label" type="Label3D" parent="." unique_id=232422803]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.475, 0.02, -2.2)
+billboard = 1
+modulate = Color(1, 1, 1, 0.8)
+text = "Golf"
+
+[node name="khun_joy" type="Node3D" parent="." unique_id=1995524649 instance=ExtResource("14_r3ty6")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.475, 0, -2.7)
+
+[node name="khun_joy_label" type="Label3D" parent="." unique_id=1072483552]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.475, 0.02, -2.2)
+billboard = 1
+modulate = Color(1, 1, 1, 0.8)
+text = "Khun Joy"
+
+[node name="jo" type="Node3D" parent="." unique_id=235455763 instance=ExtResource("15_n8gxc")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 1.425, 0, -2.7)
+
+[node name="jo_label" type="Label3D" parent="." unique_id=794789426]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 1.425, 0.02, -2.2)
+billboard = 1
+modulate = Color(1, 1, 1, 0.8)
+text = "Jo"
+
+[node name="pete" type="Node3D" parent="." unique_id=75296616 instance=ExtResource("16_gtoth")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 2.375, 0, -2.7)
+
+[node name="pete_label" type="Label3D" parent="." unique_id=92284222]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 2.375, 0.02, -2.2)
+billboard = 1
+modulate = Color(1, 1, 1, 0.8)
+text = "Pete"
+
+[node name="boy" type="Node3D" parent="." unique_id=639468842 instance=ExtResource("17_b0wwi")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 3.325, 0, -2.7)
+
+[node name="boy_label" type="Label3D" parent="." unique_id=956082310]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 3.325, 0.02, -2.2)
+billboard = 1
+modulate = Color(1, 1, 1, 0.8)
+text = "Boy"
+
+[node name="patron_01" type="Node3D" parent="." unique_id=1725989781 instance=ExtResource("18_ptb4w")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -5.225, 0, -5.4)
+
+[node name="patron_01_label" type="Label3D" parent="." unique_id=1932162735]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -5.225, 0.02, -4.9)
+billboard = 1
+modulate = Color(1, 1, 1, 0.8)
+text = "Patron 1"
+
+[node name="patron_02" type="Node3D" parent="." unique_id=821538577 instance=ExtResource("19_nofim")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -4.275, 0, -5.4)
+
+[node name="patron_02_label" type="Label3D" parent="." unique_id=308120330]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -4.275, 0.02, -4.9)
+billboard = 1
+modulate = Color(1, 1, 1, 0.8)
+text = "Patron 2"
+
+[node name="patron_03" type="Node3D" parent="." unique_id=763803921 instance=ExtResource("20_rqfgs")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -3.325, 0, -5.4)
+
+[node name="patron_03_label" type="Label3D" parent="." unique_id=1369191883]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -3.325, 0.02, -4.9)
+billboard = 1
+modulate = Color(1, 1, 1, 0.8)
+text = "Patron 3"
+
+[node name="patron_04" type="Node3D" parent="." unique_id=378271009 instance=ExtResource("21_plt0w")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -2.375, 0, -5.4)
+
+[node name="patron_04_label" type="Label3D" parent="." unique_id=2142482212]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -2.375, 0.02, -4.9)
+billboard = 1
+modulate = Color(1, 1, 1, 0.8)
+text = "Patron 4"
+
+[node name="patron_05" type="Node3D" parent="." unique_id=1052426602 instance=ExtResource("22_78xi0")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -1.425, 0, -5.4)
+
+[node name="patron_05_label" type="Label3D" parent="." unique_id=335286412]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -1.425, 0.02, -4.9)
+billboard = 1
+modulate = Color(1, 1, 1, 0.8)
+text = "Patron 5"
+
+[node name="patron_06" type="Node3D" parent="." unique_id=720427175 instance=ExtResource("23_7b7g4")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.475, 0, -5.4)
+
+[node name="patron_06_label" type="Label3D" parent="." unique_id=2092388467]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.475, 0.02, -4.9)
+billboard = 1
+modulate = Color(1, 1, 1, 0.8)
+text = "Patron 6"
+
+[node name="patron_07" type="Node3D" parent="." unique_id=1294255950 instance=ExtResource("24_ycr08")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.475, 0, -5.4)
+
+[node name="patron_07_label" type="Label3D" parent="." unique_id=839029992]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.475, 0.02, -4.9)
+billboard = 1
+modulate = Color(1, 1, 1, 0.8)
+text = "Patron 7"
+
+[node name="patron_08" type="Node3D" parent="." unique_id=1085301636 instance=ExtResource("25_k30y4")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 1.425, 0, -5.4)
+
+[node name="patron_08_label" type="Label3D" parent="." unique_id=117113867]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 1.425, 0.02, -4.9)
+billboard = 1
+modulate = Color(1, 1, 1, 0.8)
+text = "Patron 8"
+
+[node name="patron_09" type="Node3D" parent="." unique_id=2027194000 instance=ExtResource("26_et3y8")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 2.375, 0, -5.4)
+
+[node name="patron_09_label" type="Label3D" parent="." unique_id=197886547]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 2.375, 0.02, -4.9)
+billboard = 1
+modulate = Color(1, 1, 1, 0.8)
+text = "Patron 9"
+
+[node name="patron_10" type="Node3D" parent="." unique_id=1334947116 instance=ExtResource("27_c0jnl")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 3.325, 0, -5.4)
+
+[node name="patron_10_label" type="Label3D" parent="." unique_id=1923190123]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 3.325, 0.02, -4.9)
+billboard = 1
+modulate = Color(1, 1, 1, 0.8)
+text = "Patron 10"
+
+[node name="patron_11" type="Node3D" parent="." unique_id=1978779569 instance=ExtResource("28_ambkc")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 4.275, 0, -5.4)
+
+[node name="patron_11_label" type="Label3D" parent="." unique_id=1190518955]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 4.275, 0.02, -4.9)
+billboard = 1
+modulate = Color(1, 1, 1, 0.8)
+text = "Patron 11"
+
+[node name="patron_12" type="Node3D" parent="." unique_id=523732525 instance=ExtResource("29_ygk40")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 5.225, 0, -5.4)
+
+[node name="patron_12_label" type="Label3D" parent="." unique_id=133273365]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 5.225, 0.02, -4.9)
+billboard = 1
+modulate = Color(1, 1, 1, 0.8)
+text = "Patron 12"
+
+[node name="Floor" type="MeshInstance3D" parent="." unique_id=1660823949]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -2.7)
+mesh = SubResource("PlaneMesh_re40y")
+
+[node name="Camera3D" type="Camera3D" parent="." unique_id=767277644]
+transform = Transform3D(1, 0, 0, 0, 0.7071068, 0.7071068, 0, -0.7071068, 0.7071068, 0, 8.326, 5.076)
+current = true
+fov = 40.0
