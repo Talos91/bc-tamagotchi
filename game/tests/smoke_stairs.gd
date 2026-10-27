@@ -9,7 +9,7 @@ func _init() -> void:
 	var js: TouchJoystick = main.get_node("UI/Joystick")
 	await process_frame
 	# Waypoints: round the tables to the stair foot, up the stairs, into the lounge
-	var legs := [Vector3(2.8, 0, 6.5), Vector3(2.8, 0, 3.3), Vector3(1.25, 0, 3.3), Vector3(1.25, 0, 7.9), Vector3(1.25, 0, 9.0), Vector3(5.0, 0, 11.5)]
+	var legs := [Vector3(7.0, 0, 5.5), Vector3(12.0, 0, 5.5), Vector3(21.0, 0, 5.5), Vector3(22.8, 0, 5.5), Vector3(24.0, 0, 5.5)]
 	for t in legs:
 		for i in 900:
 			var d: Vector3 = t - p.global_position
@@ -22,6 +22,6 @@ func _init() -> void:
 	for i in 30:
 		await physics_frame
 	print("final pos: ", p.global_position)
-	var ok := p.global_position.y > 2.0 and p.global_position.z > 8.0
+	var ok := p.global_position.x > 23.0 and p.global_position.y > 0.4
 	print("SMOKE ", "PASS" if ok else "FAIL")
 	quit(0 if ok else 1)

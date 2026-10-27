@@ -16,17 +16,15 @@ Engine rationale: `docs/tech/01-engine-decision.md`.
 
 `scenes/venue/venue.tscn` is **generated**: edit `tools/build_venue.gd`, then from `game/`:
 
-```
-godot --headless --path . --script res://tools/build_venue.gd
-```
+Units are metres. Entrance Lounge x 0..8, z 0..8: neon sign on the plant wall (north), long table, white
+columns, cabinet, stairs up on the west side to a landing. The red `Curtain` on the lounge's east wall (to the
+right when facing the sign) is a passable opening into the main room x 8..26: `Bar` along the north wall,
+`Tables` (rounds) in the middle, `CommunalTable` along the south wall, `Stage` at the far end with a ramp.
+Top-level node names are by zone (Lounge, Stairs, Curtain, MainRoom, Bar, Tables, CommunalTable, Stage).
+Emissive boxes mark the neon sign, amber shelf lights, candles and stage wash. Everything is CSG, a
+placeholder for the voxel kit. The stair ramp and fill boxes are hidden collision.
 
-Units are metres. Main room x 0..18, z 0..8: bar on the z=0 wall, round tables at z=4.5, stage platform and
-red curtain wall at the east end. Lounge up the stairs at y=2.4 (x 0..12, z 8..15) with the long table, CRT,
-cabinet, plant wall and the red neon sign. Emissive boxes mark the neon sign, amber bar shelf lights,
-candles, stage wash and CRT; a few OmniLights back them up. Everything is CSG, a placeholder for the voxel kit.
-The stair ramp and fill boxes are hidden collision; the visible steps are decoration.
-
-Smoke test (walks the player up the stairs; prints `SMOKE PASS`):
+Smoke test (walks the player from the lounge through the curtain onto the stage; prints `SMOKE PASS`):
 
 ```
 godot --headless --path . --script res://tests/smoke_stairs.gd

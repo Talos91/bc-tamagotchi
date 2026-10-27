@@ -25,7 +25,7 @@ environment = SubResource("env")
 [node name="Venue" parent="." instance=ExtResource("2")]
 
 [node name="Player" parent="." instance=ExtResource("3")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 8, 0.1, 6.5)
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 4, 0.1, 5.5)
 
 [node name="UI" type="CanvasLayer" parent="."]
 
