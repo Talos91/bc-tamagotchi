@@ -23,6 +23,7 @@ GDD is updated.
 | 2026-10-27 | **Neglect must have stakes.** Daniele: since it is a Tamagotchi, some interactions must be mandatory or the character "dies" (or the game's equivalent). GDD §2.5 currently says nothing breaks at 0. The exact consequence is open (see Still open); pillar 2 "cozy, never punishing" is softened to "cozy, with real stakes". |
 | 2026-10-28 | **Neglect is fatal.** If the character is neglected long enough it is gone for good; its memories stay in the album; the player creates a new character. Pillar 2 becomes "cozy, with real stakes". GDD §2.5 ("nothing breaks at 0") is overruled; the exact timeline, warnings, mandatory weekly interactions and what survives need a GDD chapter before implementation. |
 | 2026-10-28 | **Venue layout comes from direction renders 01–03 only.** Stage left, bar right, tables at the back when entering the main room through the curtain. The overall-look mockup (04) is never a layout source. The first integration pass followed 04 and is being redone. |
+| 2026-10-28 | **Quality bar: direction renders 05 and 06.** The game must look and feel like these two isometric voxel renders of the main room: proportions, layout, density, lighting and character detail. Current venue and character work is below this bar and is not accepted. No wave 3b work starts until a visual parity pass reaches it. |
 
 ## Still open
 

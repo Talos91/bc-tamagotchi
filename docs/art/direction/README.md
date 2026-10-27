@@ -30,3 +30,21 @@ place actually looks").
   HUD with glyph icons. **The map is not correct; it is a look reference
   only.** Its HUD (Mood / Energy / Tidiness, coins, Serve / Chat / Music /
   Clean / Decor) is a mockup, not the agreed design; see DECISIONS.md.
+
+## Quality bar (2026-10-28)
+
+- `05-main-room-iso-from-entrance.webp` and `06-main-room-iso-from-bar.webp`
+  are two near-accurate isometric voxel renders of the real main room, with
+  patrons, band and staff. Daniele: "our game should look and feel exactly
+  like this … we not settling for anything less than something looking like
+  this." They are the acceptance target for the venue, kit, lighting and
+  characters. The current build is "clunky, less detailed and doesn't respect
+  proportion nor layout" by comparison. Every visual session compares its
+  output side by side with these at matched camera angles before reporting.
+- What they show: stage on the left with red carpet, slatted glowing backdrop,
+  curtains, truss PARs, drums, guitars, amps, tree; drum-stool poufs in rows in
+  front of the stage; round tables with candle lamps and seated patrons in the
+  middle; a long communal table with many lamps at the front-left; the bar on
+  the right with a bartender, backlit bottle cubbies, stools; a disco ball;
+  cyan exit signs; dense, warm, glossy floor; characters with hair, clothes,
+  glasses in hand, a server carrying a tray.
