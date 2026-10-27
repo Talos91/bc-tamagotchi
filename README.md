@@ -9,6 +9,7 @@ minigames.
 - Brief: [docs/design/00-brief.md](docs/design/00-brief.md)
 - Reference photos of the real venue: `docs/reference/venue-photos/`
 - How work is split across sessions: [ORCHESTRATION.md](ORCHESTRATION.md)
+- **Game manual** (digest of every doc, for consulting): [docs/MANUAL.md](docs/MANUAL.md); the live copy to read and comment on is the Claude doc "Black Cabin Tamagotchi Game Manual" (https://claude.ai/artifact/6p6YVjvtt3EhjY599Bs8rQ)
 
 ## Layout
 
