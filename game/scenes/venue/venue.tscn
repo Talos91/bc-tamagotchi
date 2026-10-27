@@ -1,0 +1,893 @@
+[gd_scene format=3]
+
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_65jrm"]
+albedo_color = Color(0.22, 0.21, 0.21, 1)
+
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_lpbew"]
+albedo_color = Color(0.09, 0.08, 0.09, 1)
+
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_nm6to"]
+albedo_color = Color(0.09, 0.08, 0.09, 1)
+
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_0kxfn"]
+albedo_color = Color(0.09, 0.08, 0.09, 1)
+
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_s77mt"]
+albedo_color = Color(0.09, 0.08, 0.09, 1)
+
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_84xi6"]
+albedo_color = Color(0.16, 0.09, 0.06, 1)
+
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_30580"]
+albedo_color = Color(0.07, 0.05, 0.04, 1)
+
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_hb6m8"]
+albedo_color = Color(0.16, 0.09, 0.06, 1)
+
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_5t7m7"]
+albedo_color = Color(0.12, 0.07, 0.05, 1)
+
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_a0263"]
+albedo_color = Color(1, 0.62, 0.15, 1)
+emission_enabled = true
+emission = Color(1, 0.62, 0.15, 1)
+emission_energy_multiplier = 3.0
+
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_ae56i"]
+albedo_color = Color(1, 0.62, 0.15, 1)
+emission_enabled = true
+emission = Color(1, 0.62, 0.15, 1)
+emission_energy_multiplier = 3.0
+
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_yuhmj"]
+albedo_color = Color(1, 0.62, 0.15, 1)
+emission_enabled = true
+emission = Color(1, 0.62, 0.15, 1)
+emission_energy_multiplier = 3.0
+
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_231yp"]
+albedo_color = Color(1, 0.62, 0.15, 1)
+emission_enabled = true
+emission = Color(1, 0.62, 0.15, 1)
+emission_energy_multiplier = 3.0
+
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_tqqrh"]
+albedo_color = Color(0.25, 0.12, 0.1, 1)
+
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_2atwm"]
+albedo_color = Color(0.25, 0.12, 0.1, 1)
+
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_hxsln"]
+albedo_color = Color(0.25, 0.12, 0.1, 1)
+
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_qhtkb"]
+albedo_color = Color(0.25, 0.12, 0.1, 1)
+
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_kl8nc"]
+albedo_color = Color(0.25, 0.12, 0.1, 1)
+
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_7p8sd"]
+albedo_color = Color(0.25, 0.12, 0.1, 1)
+
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_frio7"]
+albedo_color = Color(0.2, 0.12, 0.08, 1)
+
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_dvvkg"]
+albedo_color = Color(1, 0.7, 0.3, 1)
+emission_enabled = true
+emission = Color(1, 0.7, 0.3, 1)
+emission_energy_multiplier = 4.0
+
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_xfeca"]
+albedo_color = Color(0.18, 0.1, 0.09, 1)
+
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_c6qcp"]
+albedo_color = Color(0.18, 0.1, 0.09, 1)
+
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_iu1ai"]
+albedo_color = Color(0.18, 0.1, 0.09, 1)
+
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_o5286"]
+albedo_color = Color(0.2, 0.12, 0.08, 1)
+
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_w53tn"]
+albedo_color = Color(1, 0.7, 0.3, 1)
+emission_enabled = true
+emission = Color(1, 0.7, 0.3, 1)
+emission_energy_multiplier = 4.0
+
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_8roke"]
+albedo_color = Color(0.18, 0.1, 0.09, 1)
+
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_r8pfy"]
+albedo_color = Color(0.18, 0.1, 0.09, 1)
+
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_mvxib"]
+albedo_color = Color(0.18, 0.1, 0.09, 1)
+
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_e0vbr"]
+albedo_color = Color(0.2, 0.12, 0.08, 1)
+
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_74eal"]
+albedo_color = Color(1, 0.7, 0.3, 1)
+emission_enabled = true
+emission = Color(1, 0.7, 0.3, 1)
+emission_energy_multiplier = 4.0
+
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_tcgnc"]
+albedo_color = Color(0.18, 0.1, 0.09, 1)
+
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_tc4rv"]
+albedo_color = Color(0.18, 0.1, 0.09, 1)
+
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_rkkmv"]
+albedo_color = Color(0.18, 0.1, 0.09, 1)
+
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_r3owj"]
+albedo_color = Color(0.2, 0.12, 0.08, 1)
+
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_x8euq"]
+albedo_color = Color(1, 0.7, 0.3, 1)
+emission_enabled = true
+emission = Color(1, 0.7, 0.3, 1)
+emission_energy_multiplier = 4.0
+
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_ddwjo"]
+albedo_color = Color(0.18, 0.1, 0.09, 1)
+
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_bqe7n"]
+albedo_color = Color(0.18, 0.1, 0.09, 1)
+
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_yovn5"]
+albedo_color = Color(0.18, 0.1, 0.09, 1)
+
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_uva6u"]
+albedo_color = Color(0.12, 0.1, 0.1, 1)
+
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_4cufo"]
+albedo_color = Color(0.45, 0.04, 0.05, 1)
+
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_dkwgx"]
+albedo_color = Color(0.35, 0.02, 0.04, 1)
+
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_jmj8b"]
+albedo_color = Color(0.35, 0.02, 0.04, 1)
+
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_b1q0m"]
+albedo_color = Color(0.35, 0.02, 0.04, 1)
+
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_38bko"]
+albedo_color = Color(0.35, 0.02, 0.04, 1)
+
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_dubfa"]
+albedo_color = Color(0.35, 0.02, 0.04, 1)
+
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_5gj2i"]
+albedo_color = Color(0.05, 0.05, 0.06, 1)
+
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_ihjl6"]
+albedo_color = Color(0.05, 0.05, 0.06, 1)
+
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_5psxt"]
+albedo_color = Color(1, 0.1, 0.1, 1)
+emission_enabled = true
+emission = Color(1, 0.1, 0.1, 1)
+emission_energy_multiplier = 1.5
+
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_vuqc1"]
+albedo_color = Color(0.8, 0.8, 0.9, 1)
+emission_enabled = true
+emission = Color(0.8, 0.8, 0.9, 1)
+emission_energy_multiplier = 0.8
+
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_7mxmv"]
+albedo_color = Color(0.25, 0.23, 0.22, 1)
+
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_k316m"]
+albedo_color = Color(0.25, 0.23, 0.22, 1)
+
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_q52d2"]
+albedo_color = Color(0.25, 0.23, 0.22, 1)
+
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_65i7t"]
+albedo_color = Color(0.25, 0.23, 0.22, 1)
+
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_e67yo"]
+albedo_color = Color(0.25, 0.23, 0.22, 1)
+
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_4rbia"]
+albedo_color = Color(0.25, 0.23, 0.22, 1)
+
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_dvd8c"]
+albedo_color = Color(0.25, 0.23, 0.22, 1)
+
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_n7xwr"]
+albedo_color = Color(0.25, 0.23, 0.22, 1)
+
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_jddcf"]
+albedo_color = Color(0.25, 0.23, 0.22, 1)
+
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_cgjmq"]
+albedo_color = Color(0.25, 0.23, 0.22, 1)
+
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_s50b7"]
+albedo_color = Color(0.25, 0.23, 0.22, 1)
+
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_xj1d1"]
+albedo_color = Color(0.25, 0.23, 0.22, 1)
+
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_ylwng"]
+albedo_color = Color(0, 0, 0, 1)
+
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_od55e"]
+albedo_color = Color(0, 0, 0, 1)
+
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_60psl"]
+albedo_color = Color(0, 0, 0, 1)
+
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_1dt35"]
+albedo_color = Color(0, 0, 0, 1)
+
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_65tt5"]
+albedo_color = Color(0, 0, 0, 1)
+
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_kkhnd"]
+albedo_color = Color(0, 0, 0, 1)
+
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_8lfrb"]
+albedo_color = Color(0, 0, 0, 1)
+
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_58hfq"]
+albedo_color = Color(0, 0, 0, 1)
+
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_vvnqj"]
+albedo_color = Color(0, 0, 0, 1)
+
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_n86t1"]
+albedo_color = Color(0, 0, 0, 1)
+
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_87eht"]
+albedo_color = Color(0, 0, 0, 1)
+
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_koa4a"]
+albedo_color = Color(0.05, 0.04, 0.04, 1)
+
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_hjqli"]
+albedo_color = Color(0.2, 0.19, 0.19, 1)
+
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_l5n0n"]
+albedo_color = Color(0.06, 0.06, 0.07, 1)
+
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_xv3dd"]
+albedo_color = Color(0.06, 0.06, 0.07, 1)
+
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_b5rma"]
+albedo_color = Color(0.06, 0.06, 0.07, 1)
+
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_um13d"]
+albedo_color = Color(0.2, 0.12, 0.08, 1)
+
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_6lbyx"]
+albedo_color = Color(0.18, 0.1, 0.09, 1)
+
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_sa3ix"]
+albedo_color = Color(0.18, 0.1, 0.09, 1)
+
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_svu6p"]
+albedo_color = Color(0.18, 0.1, 0.09, 1)
+
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_edl22"]
+albedo_color = Color(0.18, 0.1, 0.09, 1)
+
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_bftna"]
+albedo_color = Color(0.18, 0.1, 0.09, 1)
+
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_2wn26"]
+albedo_color = Color(0.1, 0.1, 0.12, 1)
+
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_3svjb"]
+albedo_color = Color(0.3, 0.6, 0.7, 1)
+emission_enabled = true
+emission = Color(0.3, 0.6, 0.7, 1)
+emission_energy_multiplier = 1.5
+
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_gdoqj"]
+albedo_color = Color(0.4, 0.05, 0.08, 1)
+
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_bwnjv"]
+albedo_color = Color(0.05, 0.2, 0.08, 1)
+
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_52oec"]
+albedo_color = Color(1, 0.05, 0.1, 1)
+emission_enabled = true
+emission = Color(1, 0.05, 0.1, 1)
+emission_energy_multiplier = 5.0
+
+[node name="Venue" type="Node3D" unique_id=1096728268]
+
+[node name="MainRoom" type="Node3D" parent="." unique_id=778699554]
+
+[node name="Floor" type="CSGBox3D" parent="MainRoom" unique_id=354717048]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 9, -0.1, 4)
+use_collision = true
+size = Vector3(18, 0.2, 8)
+material = SubResource("StandardMaterial3D_65jrm")
+
+[node name="WallNorth" type="CSGBox3D" parent="MainRoom" unique_id=1190437534]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 9, 1.75, -0.1)
+use_collision = true
+size = Vector3(18, 3.5, 0.2)
+material = SubResource("StandardMaterial3D_lpbew")
+
+[node name="WallWest" type="CSGBox3D" parent="MainRoom" unique_id=1467916477]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.1, 1.75, 4)
+use_collision = true
+size = Vector3(0.2, 3.5, 8)
+material = SubResource("StandardMaterial3D_nm6to")
+
+[node name="WallEast" type="CSGBox3D" parent="MainRoom" unique_id=1325755513]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 18.1, 1.75, 4)
+use_collision = true
+size = Vector3(0.2, 3.5, 8)
+material = SubResource("StandardMaterial3D_0kxfn")
+
+[node name="WallSouth" type="CSGBox3D" parent="MainRoom" unique_id=908330725]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 10.25, 1.75, 8.1)
+use_collision = true
+size = Vector3(15.5, 3.5, 0.2)
+material = SubResource("StandardMaterial3D_s77mt")
+
+[node name="Bar" type="Node3D" parent="." unique_id=1769044808]
+
+[node name="Counter" type="CSGBox3D" parent="Bar" unique_id=848842795]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 7.5, 0.55, 1.35)
+use_collision = true
+size = Vector3(9, 1.1, 0.7)
+material = SubResource("StandardMaterial3D_84xi6")
+
+[node name="CounterTop" type="CSGBox3D" parent="Bar" unique_id=182384729]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 7.5, 1.13, 1.35)
+size = Vector3(9.1, 0.06, 0.8)
+material = SubResource("StandardMaterial3D_30580")
+
+[node name="BackBar" type="CSGBox3D" parent="Bar" unique_id=2025401034]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 7.5, 0.5, 0.25)
+use_collision = true
+size = Vector3(9, 1, 0.5)
+material = SubResource("StandardMaterial3D_hb6m8")
+
+[node name="BottleShelf" type="CSGBox3D" parent="Bar" unique_id=25453430]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 7.5, 2.1, 0.2)
+size = Vector3(9, 1.4, 0.3)
+material = SubResource("StandardMaterial3D_5t7m7")
+
+[node name="ShelfLight0" type="CSGBox3D" parent="Bar" unique_id=1462408008]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 4.1, 1.38, 0.36)
+size = Vector3(1.8, 0.06, 0.12)
+material = SubResource("StandardMaterial3D_a0263")
+
+[node name="ShelfLight1" type="CSGBox3D" parent="Bar" unique_id=231460855]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 6.3, 1.38, 0.36)
+size = Vector3(1.8, 0.06, 0.12)
+material = SubResource("StandardMaterial3D_ae56i")
+
+[node name="ShelfLight2" type="CSGBox3D" parent="Bar" unique_id=2009761805]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 8.5, 1.38, 0.36)
+size = Vector3(1.8, 0.06, 0.12)
+material = SubResource("StandardMaterial3D_yuhmj")
+
+[node name="ShelfLight3" type="CSGBox3D" parent="Bar" unique_id=983621770]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 10.7, 1.38, 0.36)
+size = Vector3(1.8, 0.06, 0.12)
+material = SubResource("StandardMaterial3D_231yp")
+
+[node name="Stool0" type="CSGCylinder3D" parent="Bar" unique_id=1184570850]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 3.8, 0.275, 1.9)
+use_collision = true
+radius = 0.2
+height = 0.55
+sides = 12
+material = SubResource("StandardMaterial3D_tqqrh")
+
+[node name="Stool1" type="CSGCylinder3D" parent="Bar" unique_id=391067139]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 5.2, 0.275, 1.9)
+use_collision = true
+radius = 0.2
+height = 0.55
+sides = 12
+material = SubResource("StandardMaterial3D_2atwm")
+
+[node name="Stool2" type="CSGCylinder3D" parent="Bar" unique_id=1632158350]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 6.6, 0.275, 1.9)
+use_collision = true
+radius = 0.2
+height = 0.55
+sides = 12
+material = SubResource("StandardMaterial3D_hxsln")
+
+[node name="Stool3" type="CSGCylinder3D" parent="Bar" unique_id=275843869]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 8, 0.275, 1.9)
+use_collision = true
+radius = 0.2
+height = 0.55
+sides = 12
+material = SubResource("StandardMaterial3D_qhtkb")
+
+[node name="Stool4" type="CSGCylinder3D" parent="Bar" unique_id=1462870903]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 9.4, 0.275, 1.9)
+use_collision = true
+radius = 0.2
+height = 0.55
+sides = 12
+material = SubResource("StandardMaterial3D_kl8nc")
+
+[node name="Stool5" type="CSGCylinder3D" parent="Bar" unique_id=323868150]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 10.8, 0.275, 1.9)
+use_collision = true
+radius = 0.2
+height = 0.55
+sides = 12
+material = SubResource("StandardMaterial3D_7p8sd")
+
+[node name="Tables" type="Node3D" parent="." unique_id=1040514657]
+
+[node name="Table0" type="CSGCylinder3D" parent="Tables" unique_id=1845526879]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 4, 0.375, 4.5)
+use_collision = true
+height = 0.75
+sides = 12
+material = SubResource("StandardMaterial3D_frio7")
+
+[node name="Candle0" type="CSGBox3D" parent="Tables" unique_id=1570343136]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 4, 0.82, 4.5)
+size = Vector3(0.08, 0.14, 0.08)
+material = SubResource("StandardMaterial3D_dvvkg")
+
+[node name="Stool0_0" type="CSGCylinder3D" parent="Tables" unique_id=527353096]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 4.85, 0.225, 4.5)
+use_collision = true
+radius = 0.18
+height = 0.45
+sides = 12
+material = SubResource("StandardMaterial3D_xfeca")
+
+[node name="Stool0_1" type="CSGCylinder3D" parent="Tables" unique_id=980129858]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 3.575, 0.225, 5.2361217)
+use_collision = true
+radius = 0.18
+height = 0.45
+sides = 12
+material = SubResource("StandardMaterial3D_c6qcp")
+
+[node name="Stool0_2" type="CSGCylinder3D" parent="Tables" unique_id=335308093]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 3.575, 0.225, 3.7638783)
+use_collision = true
+radius = 0.18
+height = 0.45
+sides = 12
+material = SubResource("StandardMaterial3D_iu1ai")
+
+[node name="Table1" type="CSGCylinder3D" parent="Tables" unique_id=1501988803]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 7, 0.375, 4.5)
+use_collision = true
+height = 0.75
+sides = 12
+material = SubResource("StandardMaterial3D_o5286")
+
+[node name="Candle1" type="CSGBox3D" parent="Tables" unique_id=676851109]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 7, 0.82, 4.5)
+size = Vector3(0.08, 0.14, 0.08)
+material = SubResource("StandardMaterial3D_w53tn")
+
+[node name="Stool1_0" type="CSGCylinder3D" parent="Tables" unique_id=660976186]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 7.85, 0.225, 4.5)
+use_collision = true
+radius = 0.18
+height = 0.45
+sides = 12
+material = SubResource("StandardMaterial3D_8roke")
+
+[node name="Stool1_1" type="CSGCylinder3D" parent="Tables" unique_id=403092518]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 6.575, 0.225, 5.2361217)
+use_collision = true
+radius = 0.18
+height = 0.45
+sides = 12
+material = SubResource("StandardMaterial3D_r8pfy")
+
+[node name="Stool1_2" type="CSGCylinder3D" parent="Tables" unique_id=209579753]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 6.575, 0.225, 3.7638783)
+use_collision = true
+radius = 0.18
+height = 0.45
+sides = 12
+material = SubResource("StandardMaterial3D_mvxib")
+
+[node name="Table2" type="CSGCylinder3D" parent="Tables" unique_id=432851742]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 10, 0.375, 4.5)
+use_collision = true
+height = 0.75
+sides = 12
+material = SubResource("StandardMaterial3D_e0vbr")
+
+[node name="Candle2" type="CSGBox3D" parent="Tables" unique_id=579145767]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 10, 0.82, 4.5)
+size = Vector3(0.08, 0.14, 0.08)
+material = SubResource("StandardMaterial3D_74eal")
+
+[node name="Stool2_0" type="CSGCylinder3D" parent="Tables" unique_id=1822567458]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 10.85, 0.225, 4.5)
+use_collision = true
+radius = 0.18
+height = 0.45
+sides = 12
+material = SubResource("StandardMaterial3D_tcgnc")
+
+[node name="Stool2_1" type="CSGCylinder3D" parent="Tables" unique_id=1672781336]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 9.575, 0.225, 5.2361217)
+use_collision = true
+radius = 0.18
+height = 0.45
+sides = 12
+material = SubResource("StandardMaterial3D_tc4rv")
+
+[node name="Stool2_2" type="CSGCylinder3D" parent="Tables" unique_id=887249868]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 9.575, 0.225, 3.7638783)
+use_collision = true
+radius = 0.18
+height = 0.45
+sides = 12
+material = SubResource("StandardMaterial3D_rkkmv")
+
+[node name="Table3" type="CSGCylinder3D" parent="Tables" unique_id=532090658]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 13, 0.375, 4.5)
+use_collision = true
+height = 0.75
+sides = 12
+material = SubResource("StandardMaterial3D_r3owj")
+
+[node name="Candle3" type="CSGBox3D" parent="Tables" unique_id=967887763]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 13, 0.82, 4.5)
+size = Vector3(0.08, 0.14, 0.08)
+material = SubResource("StandardMaterial3D_x8euq")
+
+[node name="Stool3_0" type="CSGCylinder3D" parent="Tables" unique_id=1414797519]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 13.85, 0.225, 4.5)
+use_collision = true
+radius = 0.18
+height = 0.45
+sides = 12
+material = SubResource("StandardMaterial3D_ddwjo")
+
+[node name="Stool3_1" type="CSGCylinder3D" parent="Tables" unique_id=628688396]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 12.575, 0.225, 5.2361217)
+use_collision = true
+radius = 0.18
+height = 0.45
+sides = 12
+material = SubResource("StandardMaterial3D_bqe7n")
+
+[node name="Stool3_2" type="CSGCylinder3D" parent="Tables" unique_id=757971206]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 12.575, 0.225, 3.7638783)
+use_collision = true
+radius = 0.18
+height = 0.45
+sides = 12
+material = SubResource("StandardMaterial3D_yovn5")
+
+[node name="Stage" type="Node3D" parent="." unique_id=1117238443]
+
+[node name="Platform" type="CSGBox3D" parent="Stage" unique_id=41448475]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 16.5, 0.25, 4)
+use_collision = true
+size = Vector3(3, 0.5, 7)
+material = SubResource("StandardMaterial3D_uva6u")
+
+[node name="CurtainBack" type="CSGBox3D" parent="Stage" unique_id=1828217020]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 17.75, 1.75, 4)
+size = Vector3(0.3, 3.5, 7.8)
+material = SubResource("StandardMaterial3D_4cufo")
+
+[node name="CurtainFold0" type="CSGBox3D" parent="Stage" unique_id=485435154]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 17.5, 1.75, 0.55)
+size = Vector3(0.2, 3.5, 0.5)
+material = SubResource("StandardMaterial3D_dkwgx")
+
+[node name="CurtainFold1" type="CSGBox3D" parent="Stage" unique_id=1715226086]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 17.5, 1.75, 2.05)
+size = Vector3(0.2, 3.5, 0.5)
+material = SubResource("StandardMaterial3D_jmj8b")
+
+[node name="CurtainFold2" type="CSGBox3D" parent="Stage" unique_id=1749461387]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 17.5, 1.75, 3.55)
+size = Vector3(0.2, 3.5, 0.5)
+material = SubResource("StandardMaterial3D_b1q0m")
+
+[node name="CurtainFold3" type="CSGBox3D" parent="Stage" unique_id=29810845]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 17.5, 1.75, 5.05)
+size = Vector3(0.2, 3.5, 0.5)
+material = SubResource("StandardMaterial3D_38bko")
+
+[node name="CurtainFold4" type="CSGBox3D" parent="Stage" unique_id=2026816606]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 17.5, 1.75, 6.55)
+size = Vector3(0.2, 3.5, 0.5)
+material = SubResource("StandardMaterial3D_dubfa")
+
+[node name="Drums" type="CSGBox3D" parent="Stage" unique_id=490020156]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 17.050001, 0.85, 3.65)
+size = Vector3(0.9, 0.7, 0.9)
+material = SubResource("StandardMaterial3D_5gj2i")
+
+[node name="Amp" type="CSGBox3D" parent="Stage" unique_id=2036409657]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 16.599998, 0.95, 1.4000001)
+size = Vector3(0.6, 0.9, 0.4)
+material = SubResource("StandardMaterial3D_ihjl6")
+
+[node name="StageWash" type="CSGBox3D" parent="Stage" unique_id=2059792231]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 16.5, 3.25, 4)
+size = Vector3(2.8, 0.1, 6.4)
+material = SubResource("StandardMaterial3D_5psxt")
+
+[node name="DiscoBall" type="CSGBox3D" parent="Stage" unique_id=1552224850]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 14.599999, 3.2, 4)
+size = Vector3(0.4, 0.4, 0.4)
+material = SubResource("StandardMaterial3D_vuqc1")
+
+[node name="Stairs" type="Node3D" parent="." unique_id=305220631]
+
+[node name="Step0" type="CSGBox3D" parent="Stairs" unique_id=101377165]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 1.25, 0.1, 4.55)
+size = Vector3(1.5, 0.2, 0.3)
+material = SubResource("StandardMaterial3D_7mxmv")
+
+[node name="Step1" type="CSGBox3D" parent="Stairs" unique_id=1022602939]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 1.25, 0.2, 4.85)
+size = Vector3(1.5, 0.4, 0.3)
+material = SubResource("StandardMaterial3D_k316m")
+
+[node name="Step2" type="CSGBox3D" parent="Stairs" unique_id=466565830]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 1.25, 0.3, 5.15)
+size = Vector3(1.5, 0.6, 0.3)
+material = SubResource("StandardMaterial3D_q52d2")
+
+[node name="Step3" type="CSGBox3D" parent="Stairs" unique_id=510630226]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 1.25, 0.4, 5.4500003)
+size = Vector3(1.5, 0.8, 0.3)
+material = SubResource("StandardMaterial3D_65i7t")
+
+[node name="Step4" type="CSGBox3D" parent="Stairs" unique_id=264378106]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 1.25, 0.5, 5.75)
+size = Vector3(1.5, 1, 0.3)
+material = SubResource("StandardMaterial3D_e67yo")
+
+[node name="Step5" type="CSGBox3D" parent="Stairs" unique_id=538196492]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 1.25, 0.6, 6.05)
+size = Vector3(1.5, 1.2, 0.3)
+material = SubResource("StandardMaterial3D_4rbia")
+
+[node name="Step6" type="CSGBox3D" parent="Stairs" unique_id=1908601632]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 1.25, 0.7, 6.35)
+size = Vector3(1.5, 1.4, 0.3)
+material = SubResource("StandardMaterial3D_dvd8c")
+
+[node name="Step7" type="CSGBox3D" parent="Stairs" unique_id=212439295]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 1.25, 0.8, 6.65)
+size = Vector3(1.5, 1.6, 0.3)
+material = SubResource("StandardMaterial3D_n7xwr")
+
+[node name="Step8" type="CSGBox3D" parent="Stairs" unique_id=422673554]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 1.25, 0.9, 6.9500003)
+size = Vector3(1.5, 1.8, 0.3)
+material = SubResource("StandardMaterial3D_jddcf")
+
+[node name="Step9" type="CSGBox3D" parent="Stairs" unique_id=798703697]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 1.25, 1, 7.25)
+size = Vector3(1.5, 2, 0.3)
+material = SubResource("StandardMaterial3D_cgjmq")
+
+[node name="Step10" type="CSGBox3D" parent="Stairs" unique_id=1625133329]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 1.25, 1.1, 7.55)
+size = Vector3(1.5, 2.2, 0.3)
+material = SubResource("StandardMaterial3D_s50b7")
+
+[node name="Step11" type="CSGBox3D" parent="Stairs" unique_id=548650821]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 1.25, 1.2, 7.85)
+size = Vector3(1.5, 2.4, 0.3)
+material = SubResource("StandardMaterial3D_xj1d1")
+
+[node name="Fill1" type="CSGBox3D" parent="Stairs" unique_id=1722108624]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 1, 0.1, 4.85)
+visible = false
+use_collision = true
+size = Vector3(2, 0.2, 0.3)
+material = SubResource("StandardMaterial3D_ylwng")
+
+[node name="Fill2" type="CSGBox3D" parent="Stairs" unique_id=126592156]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 1, 0.2, 5.15)
+visible = false
+use_collision = true
+size = Vector3(2, 0.4, 0.3)
+material = SubResource("StandardMaterial3D_od55e")
+
+[node name="Fill3" type="CSGBox3D" parent="Stairs" unique_id=1856791490]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 1, 0.3, 5.4500003)
+visible = false
+use_collision = true
+size = Vector3(2, 0.6, 0.3)
+material = SubResource("StandardMaterial3D_60psl")
+
+[node name="Fill4" type="CSGBox3D" parent="Stairs" unique_id=1026147139]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 1, 0.4, 5.75)
+visible = false
+use_collision = true
+size = Vector3(2, 0.8, 0.3)
+material = SubResource("StandardMaterial3D_1dt35")
+
+[node name="Fill5" type="CSGBox3D" parent="Stairs" unique_id=1004210149]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 1, 0.5, 6.05)
+visible = false
+use_collision = true
+size = Vector3(2, 1, 0.3)
+material = SubResource("StandardMaterial3D_65tt5")
+
+[node name="Fill6" type="CSGBox3D" parent="Stairs" unique_id=1313069090]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 1, 0.6, 6.35)
+visible = false
+use_collision = true
+size = Vector3(2, 1.2, 0.3)
+material = SubResource("StandardMaterial3D_kkhnd")
+
+[node name="Fill7" type="CSGBox3D" parent="Stairs" unique_id=1144775566]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 1, 0.7, 6.65)
+visible = false
+use_collision = true
+size = Vector3(2, 1.4, 0.3)
+material = SubResource("StandardMaterial3D_8lfrb")
+
+[node name="Fill8" type="CSGBox3D" parent="Stairs" unique_id=608112273]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 1, 0.8, 6.9500003)
+visible = false
+use_collision = true
+size = Vector3(2, 1.6, 0.3)
+material = SubResource("StandardMaterial3D_58hfq")
+
+[node name="Fill9" type="CSGBox3D" parent="Stairs" unique_id=1586725190]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 1, 0.9, 7.25)
+visible = false
+use_collision = true
+size = Vector3(2, 1.8, 0.3)
+material = SubResource("StandardMaterial3D_vvnqj")
+
+[node name="Fill10" type="CSGBox3D" parent="Stairs" unique_id=691107015]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 1, 1, 7.55)
+visible = false
+use_collision = true
+size = Vector3(2, 2, 0.3)
+material = SubResource("StandardMaterial3D_n86t1")
+
+[node name="Fill11" type="CSGBox3D" parent="Stairs" unique_id=1079179320]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 1, 1.1, 7.85)
+visible = false
+use_collision = true
+size = Vector3(2, 2.2, 0.3)
+material = SubResource("StandardMaterial3D_87eht")
+
+[node name="Railing" type="CSGBox3D" parent="Stairs" unique_id=20665882]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 2.03, 1.7, 6.2)
+use_collision = true
+size = Vector3(0.06, 3.4, 3.6)
+material = SubResource("StandardMaterial3D_koa4a")
+
+[node name="StairRamp" type="CSGBox3D" parent="Stairs" unique_id=1242310822]
+transform = Transform3D(1, 0, 0, 0, 0.83205026, 0.5547002, 0, -0.5547002, 0.83205026, 1.25, 1.1, 6.2)
+visible = false
+use_collision = true
+size = Vector3(1.5, 0.2, 4.3266616)
+
+[node name="Lounge" type="Node3D" parent="." unique_id=822376506]
+
+[node name="Floor" type="CSGBox3D" parent="Lounge" unique_id=1925946863]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 6, 2.3, 11.5)
+use_collision = true
+size = Vector3(12, 0.2, 7)
+material = SubResource("StandardMaterial3D_hjqli")
+
+[node name="WallSouth" type="CSGBox3D" parent="Lounge" unique_id=987219844]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 6, 4.15, 15.1)
+use_collision = true
+size = Vector3(12, 3.5, 0.2)
+material = SubResource("StandardMaterial3D_l5n0n")
+
+[node name="WallWest" type="CSGBox3D" parent="Lounge" unique_id=543593383]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.1, 4.15, 11.6)
+use_collision = true
+size = Vector3(0.2, 3.5, 7.2)
+material = SubResource("StandardMaterial3D_xv3dd")
+
+[node name="WallEast" type="CSGBox3D" parent="Lounge" unique_id=1442976856]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 12.1, 4.15, 11.6)
+use_collision = true
+size = Vector3(0.2, 3.5, 7.2)
+material = SubResource("StandardMaterial3D_b5rma")
+
+[node name="LongTable" type="CSGBox3D" parent="Lounge" unique_id=958360593]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 5.5, 2.8000002, 11.349999)
+use_collision = true
+size = Vector3(5, 0.8, 0.9)
+material = SubResource("StandardMaterial3D_um13d")
+
+[node name="Bench0" type="CSGBox3D" parent="Lounge" unique_id=1404100358]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 3.55, 2.625, 12.2)
+size = Vector3(0.7, 0.45, 0.4)
+material = SubResource("StandardMaterial3D_6lbyx")
+
+[node name="Bench1" type="CSGBox3D" parent="Lounge" unique_id=198585961]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 4.5499997, 2.625, 12.2)
+size = Vector3(0.7, 0.45, 0.4)
+material = SubResource("StandardMaterial3D_sa3ix")
+
+[node name="Bench2" type="CSGBox3D" parent="Lounge" unique_id=1039569313]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 5.5499997, 2.625, 12.2)
+size = Vector3(0.7, 0.45, 0.4)
+material = SubResource("StandardMaterial3D_svu6p")
+
+[node name="Bench3" type="CSGBox3D" parent="Lounge" unique_id=11104073]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 6.5499997, 2.625, 12.2)
+size = Vector3(0.7, 0.45, 0.4)
+material = SubResource("StandardMaterial3D_edl22")
+
+[node name="Bench4" type="CSGBox3D" parent="Lounge" unique_id=1715522146]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 7.5499997, 2.625, 12.2)
+size = Vector3(0.7, 0.45, 0.4)
+material = SubResource("StandardMaterial3D_bftna")
+
+[node name="CRT" type="CSGBox3D" parent="Lounge" unique_id=665507875]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 10.9, 2.75, 9.3)
+size = Vector3(0.8, 0.7, 0.6)
+material = SubResource("StandardMaterial3D_2wn26")
+
+[node name="CRTScreen" type="CSGBox3D" parent="Lounge" unique_id=179752959]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 10.75, 2.75, 8.974999)
+size = Vector3(0.5, 0.4, 0.05)
+material = SubResource("StandardMaterial3D_3svjb")
+
+[node name="Cabinet" type="CSGBox3D" parent="Lounge" unique_id=824788824]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 11.25, 3.25, 12.35)
+use_collision = true
+size = Vector3(0.9, 1.7, 0.7)
+material = SubResource("StandardMaterial3D_gdoqj")
+
+[node name="Lights" type="Node3D" parent="." unique_id=1802336253]
+
+[node name="PlantWall" type="CSGBox3D" parent="Lights" unique_id=1080781018]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 6, 3.7, 14.900001)
+size = Vector3(6, 2.6, 0.2)
+material = SubResource("StandardMaterial3D_bwnjv")
+
+[node name="NeonSign" type="CSGBox3D" parent="Lights" unique_id=1597185428]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 6, 5.35, 14.74)
+size = Vector3(3.6, 0.5, 0.08)
+material = SubResource("StandardMaterial3D_52oec")
+
+[node name="NeonLight" type="OmniLight3D" parent="Lights" unique_id=1601272419]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 6, 5.1, 14)
+light_color = Color(1, 0.1, 0.15, 1)
+light_energy = 2.0
+omni_range = 7.0
+
+[node name="BarAmberLight" type="OmniLight3D" parent="Lights" unique_id=665407827]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 7.5, 2.4, 1.2)
+light_color = Color(1, 0.6, 0.2, 1)
+light_energy = 1.6
+omni_range = 8.0
+
+[node name="StageRedWash" type="OmniLight3D" parent="Lights" unique_id=249465378]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 16, 3, 4)
+light_color = Color(1, 0.05, 0.05, 1)
+light_energy = 1.8
+omni_range = 7.0
+
+[node name="LoungeAmber" type="OmniLight3D" parent="Lights" unique_id=406922456]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 6, 4.9, 11)
+light_color = Color(1, 0.7, 0.35, 1)
+omni_range = 7.0
