@@ -328,7 +328,7 @@ Memories are the collection layer: the record of nights out.
 
 | Type | Earned by | Count at launch |
 |---|---|---|
-| **Polaroid** | Notable moments: auto-captured voxel snapshot with a caption ("Thursday, front row, Mali's band") | ~40 authored triggers + random "candid" drops |
+| **Polaroid** | Notable moments: auto-captured voxel snapshot with a caption ("Thursday, front row, the House Lights") | ~40 authored triggers + random "candid" drops |
 | **Ticket stub** | Completing a set or event; Encore stubs; Headline stubs | 1 per performer + events |
 | **Coaster** | First time trying each drink | 24 drinks |
 | **Setlist** | Hearing every song in a performer's catalogue | 1 per performer |

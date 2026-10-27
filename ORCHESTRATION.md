@@ -54,11 +54,27 @@ Wave 1 has no file overlap, so all three start together.
 | 2C | Venue kit | 1B + 1C | Blender MCP script that generates the voxel venue kit (bar, round tables, stools, curtains, stage, disco ball, neon sign, CRT, pinball) and imports into `game/` |
 | 2D | Needs system prototype | 1A + 1C | The four meters, decay, refill actions, save/load, in `game/` |
 
-### Wave 3 — depends on wave 2
+### Wave 3a — build the room for real (parallel, disjoint paths)
 
-Multiplayer presence and persistence (reuse Ooze Syndicate's server model),
-first two minigames, performance/event system, character customization,
-memory collection. Split per feature, one session each.
+| # | Session | Owns | Deliverable |
+|---|---------|------|-------------|
+| 3A | 🛠️ Integration | `game/scenes/venue`, `game/scenes/main.tscn`, `game/scripts/camera*`, `game/scripts/player*`, `game/project.godot` | Replace the greybox with kit objects laid out per the renders; HDR 2D on; lamp/tealight point lights, floor reflections, haze; the portrait diorama follow camera with tap-to-move; room at 4 m; open it in a real window and commit screenshots next to the renders |
+| 3B | 🧱 Kit v2 | `tools/blender/bc_kit.py`, `game/assets/kit` | Banquette, stage steps, truss + PAR lights, stage tree, speakers, AC, wall lamps, paintings, soffit; browner wood; real plant-wall leaves; voxel floor tile; face merging to shrink the kit |
+| 3C | 🎨 Character kit | `tools/blender/bc_chars.py`, `game/assets/chars` | Chibi voxel avatar kit per art bible §7 and cast bible: 3 bodies × 4 heads, hair, outfits, skin palette; the 8 regulars and staff as presets; idle/walk/tipsy animation set; showcase scene |
+| 3D | 🎮 Minigames | `game/scenes/minigames`, `game/scripts/minigames` | Pour Perfect, Front Row Rhythm, Candle Talk, Neon Pinball as standalone portrait scenes with the shared frame and result card from the wireframes, each calling `Needs.apply_action` |
+
+### Wave 3b — depends on 3a
+
+🎮 Zone wiring (bar, stage, lounge triggers → Needs; visit begin/end; walk-out
+totals; Welcome Back dialogue; `game/i18n/strings.csv` with EN/TH), 🎭
+Character creator + the Flat screen, 🎵 Performance system (house band set,
+applause, schedule on Bangkok time), 🖼️ Memories album. Then a first-playable
+assembly pass and a real-device test.
+
+### Wave 4 — multiplayer
+
+Presence and persistence reusing Ooze Syndicate's relay + headless host +
+Supabase accounts. Not before the first playable is fun on a phone.
 
 ## Decisions the orchestrator still owes
 
@@ -67,6 +83,10 @@ memory collection. Split per feature, one session each.
 - Target platform (phone portrait, like a Tamagotchi, vs desktop).
 
 ## Log
+
+- 2026-10-27 — Wave 1 (design, art bible v2, engine + greybox) and wave 2
+  (cast, UI, 35-object kit, needs prototype with passing tests) done. Routine
+  calls logged in `docs/design/DECISIONS.md`. Wave 3 split into 3a/3b.
 
 - 2026-10-27 — Project created. Repo `Talos91/bc-tamagotchi` was empty.
   Brief and 12 venue photos imported. Waves defined.
