@@ -17,7 +17,12 @@ these, not the other way round.
   on the right with drums, guitar, mics, amps; red curtains behind.
 
 Layout: entrance lounge → curtain → main room. The main room sits on the
-right-hand side of the main bar.
+right-hand side of the main bar. **Standing in the main room where you enter
+through the curtain: the stage is on the left, the bar runs along the right,
+the round tables and the communal table fill the back.** Renders 01–03 are
+accurate to the real place and are the ONLY layout source. Render 04 is never
+used for layout (Daniele, 2026-10-28: "those [01–03] were accurate of how the
+place actually looks").
 
 - `04-overall-look-mockup.webp` (added later on 2026-10-27) — Daniele's
   direction for the overall game look: isometric whole-room view, chibi voxel

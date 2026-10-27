@@ -22,6 +22,7 @@ GDD is updated.
 | 2026-10-27 | **The app is a bridge to the real Black Cabin.** Confirmed real-world features: give discounts; win merch; win drinks; book tables; show the real event calendar; request songs; MAYBE order to the table from the app. These need a GDD chapter, a redemption flow the real staff can verify, and a backend (Supabase, as Ooze Syndicate uses). Coins and real-world rewards must be designed together. |
 | 2026-10-27 | **Neglect must have stakes.** Daniele: since it is a Tamagotchi, some interactions must be mandatory or the character "dies" (or the game's equivalent). GDD §2.5 currently says nothing breaks at 0. The exact consequence is open (see Still open); pillar 2 "cozy, never punishing" is softened to "cozy, with real stakes". |
 | 2026-10-28 | **Neglect is fatal.** If the character is neglected long enough it is gone for good; its memories stay in the album; the player creates a new character. Pillar 2 becomes "cozy, with real stakes". GDD §2.5 ("nothing breaks at 0") is overruled; the exact timeline, warnings, mandatory weekly interactions and what survives need a GDD chapter before implementation. |
+| 2026-10-28 | **Venue layout comes from direction renders 01–03 only.** Stage left, bar right, tables at the back when entering the main room through the curtain. The overall-look mockup (04) is never a layout source. The first integration pass followed 04 and is being redone. |
 
 ## Still open
 
