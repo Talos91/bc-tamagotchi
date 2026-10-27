@@ -15,7 +15,9 @@ extends SceneTree
 ##   round Tables and drum stools in the middle, raised red-carpet Stage across the east end with the slatted
 ##   backdrop, curtains, drum kit, amps, guitar, mics, truss; disco ball and track lights overhead.
 ## Kit objects are instanced from their .glb (never copied). Pieces the kit does not have yet (banquette, floor,
-## walls, soffit, truss) are simple boxes; a kit object named "banquette" replaces the box when it appears.
+## walls, PAR stand-ins) are simple boxes; the velvet banquette falls back to boxes if the kit lacks banquette_straight.
+## The kit's floor_tile_a/b are not used: one mesh per 1 m tile would be ~300 draw calls, so the floor stays
+## 2 m textured tiles (Compatibility shades at most 8 lights per mesh, so the floor cannot be one mesh either).
 ## Furniture gets box colliders so the NavigationRegion3D (baked here) routes tap-to-move around it.
 ## Ceiling slab, beams and lounge ceiling panels are on render layer 2: the game camera hides them (diorama
 ## cutaway), eye-level capture cameras show them. Walls carry meta "cut_normal" for camera_rig.gd's cutaway;
@@ -351,7 +353,7 @@ func _lounge() -> void:
 	# White columns, stretched to the 4 m ceiling
 	for i in 2:
 		var p: Vector3 = [Vector3(2.6, 0, 5.0), Vector3(7.0, 0, 3.2)][i]
-		_kit(g, "white_column", p, 0.0, "Column%d" % i, Vector3(1, ROOM_H / 3.5, 1))
+		_kit(g, "white_column", p, 0.0, "Column%d" % i)
 		_collider(g, "Column%dCollider" % i, p + Vector3(0, ROOM_H * 0.5, 0), Vector3(0.4, ROOM_H, 0.4))
 	# North-east corner: CRT on its cabinet, arcade cabinet, collectibles shelf with a high counter and stools
 	_kit_solid(g, "crt_monitor", Vector3(6.55, 0, 0.3), 0.0, "CRT")
@@ -365,6 +367,8 @@ func _lounge() -> void:
 		_seat("Lounge", "Lounge_Stool%d" % i, Vector3(8.5 + i * 0.9, 0, 1.85), 180.0, BAR_SEAT_H)
 	_omni(g, "ShelfGlow", SHELF_AMBER, 0.8, 2.6, Vector3(8.95, 1.6, 1.0))
 	# Red cove strip along the walls (R02) and the ceiling: black beam grid with red emissive panels
+	_kit(g, "wall_lamp", Vector3(6.4, 1.7, 0.1), 0.0, "RedDiscLamp")
+	_kit(g, "ac_unit", Vector3(7.6, 3.3, 0.15), 0.0, "ACUnit")
 	_box(g, "RedCove", Vector3(1.8, 0.9, 0.31), Vector3(4.2, 0.04, 0.04), _mat("red_strip", NEON_RED, 0.5, 3.0), false)
 	var ceil := _group("CeilingGrid", g)
 	for row in 4:
@@ -427,6 +431,10 @@ func _main_room() -> void:
 	ball.set_meta("occluder_radius", 0.9)
 	ball.add_to_group("occluder", true)
 	_kit(g, "exit_sign", Vector3(23.0, 2.9, 0.06), 0.0, "ExitSignNorth")
+	for i in 3:
+		_kit(g, ["painting_a", "painting_b", "painting_c"][i], Vector3(12.0 + i * 3.0, 1.55, 0.05), 0.0, "PaintingNorth%d" % i)
+	_kit(g, "wall_lamp", Vector3(10.4, 2.0, 0.1), 0.0, "WallLamp0")
+	_kit(g, "wall_lamp", Vector3(23.6, 2.0, 0.1), 0.0, "WallLamp1")
 	_kit(g, "exit_sign", Vector3(10.12, 2.9, 2.0), 90.0, "ExitSignWest")
 
 func _bar() -> void:
@@ -444,9 +452,11 @@ func _bar() -> void:
 	for i in 4:
 		_omni(g, "ShelfLight%d" % i, SHELF_AMBER, 2.4, 4.0, Vector3(12.8 + i * 2.6, 1.9, 9.25))
 	# Soffit light panels above the bar (R01), fascia behind them
-	_ceiling_group(_box(g, "SoffitFascia", Vector3(11.5, 3.45, 8.3), Vector3(10, 0.55, 1.7), _mat("beam_black", BEAM_BLACK, 0.7), false))
-	for i in 5:
-		_ceiling_group(_box(g, "Soffit%d" % i, Vector3(11.6 + i * 2.0, 3.38, 8.4), Vector3(1.8, 0.07, 1.5), _mat("soffit", SOFFIT_PEACH, 0.5, 0.9), false))
+	for i in 10:
+		_ceiling_group(_kit(g, "soffit_segment", Vector3(12.0 + i, ROOM_H, 8.75), 180.0, "Soffit%d" % i))
+	# Pixel-art paintings in red frames on the bar wall above the shelves (R01, R03)
+	_kit(g, "painting_b", Vector3(13.5, 2.6, 9.9), 180.0, "PaintingBar0")
+	_kit(g, "painting_c", Vector3(19.5, 2.6, 9.9), 180.0, "PaintingBar1")
 	_box(g, "BarWall", Vector3(11.5, 2.5, 9.95), Vector3(10, 0.95, 0.05), _mat("bar_front", Color("5e1c10"), 0.6), false)
 
 func _tables() -> void:
@@ -487,13 +497,13 @@ func _communal_table() -> void:
 			_seat("CommunalTable", "CommunalTable_T%d_S%d" % [u, k], Vector3(x - 1.0 + k, 0, 2.0), 180.0)
 		_table_lights(g, "Lamp%d" % u, Vector3(x - 0.4 + u * 0.8, 0.75, 1.35), true, 2)
 
-## Velvet banquette from x0 to x1 against a north wall at z0 (seat 0.6 deep). Boxes until the kit has one.
+## Velvet banquette from x0 to x1 against a north wall at z0 (seat 0.6 deep, 0.45 high).
 func _banquette_box(parent: Node, nm: String, x0: float, x1: float, z0: float, solid := true) -> void:
-	if kit.has("banquette"):
-		var w: float = kit.banquette.footprint_m[0]
+	if kit.has("banquette_straight"):
+		var w: float = kit.banquette_straight.footprint_m[0]
 		var count := int(round((x1 - x0) / w))
 		for i in count:
-			_kit(parent, "banquette", Vector3(x0 + w * (i + 0.5), 0, z0 + kit.banquette.footprint_m[1] * 0.5), 0.0, "%s%d" % [nm, i])
+			_kit(parent, "banquette_straight", Vector3(x0 + w * (i + 0.5), 0, z0 + kit.banquette_straight.footprint_m[1] * 0.5), 0.0, "%s%d" % [nm, i])
 	else:
 		var b := _group(nm, parent)
 		_box(b, "Seat", Vector3(x0, 0, z0), Vector3(x1 - x0, 0.45, 0.6), _mat("velvet_red", VELVET_RED, 0.95), false)
@@ -528,17 +538,17 @@ func _stage() -> void:
 			_kit(carpet, "stage_carpet_tile", Vector3(24.5 + ix, 0.45, 1.5 + iz), 0.0, "Tile%d_%d" % [ix, iz])
 	_collider(g, "PlatformCollider", Vector3(27.0, STAGE_H * 0.5, 5.0), Vector3(6.0, STAGE_H, 8.0))
 	# Front steps (visual) over a hidden ramp, centred on the aisle
-	_box(g, "Step0", Vector3(23.0, 0, 4.5), Vector3(0.5, 0.17, 2.0), _mat("carpet", CARPET_RED, 0.95), false)
-	_box(g, "Step1", Vector3(23.5, 0, 4.5), Vector3(0.5, 0.34, 2.0), _mat("carpet", CARPET_RED, 0.95), false)
+	for i in 2:
+		_kit(g, "stage_steps", Vector3(23.7, 0, 5.0 + i), -90.0, "Steps%d" % i)
 	_collider(g, "StageRamp", Vector3(23.5, STAGE_H * 0.5 - 0.1, 5.5), Vector3(sqrt(1.0 + STAGE_H * STAGE_H), 0.2, 2.0), Vector3(0, 0, atan2(STAGE_H, 1.0)))
 	# Slatted backdrop on the east wall, curtains flanking it and along the side walls
 	for i in 6:
 		_kit(g, "slatted_backdrop", Vector3(29.85, STAGE_H, 2.5 + i), -90.0, "Backdrop%d" % i)
 	for z in [1.5, 8.5]:
-		_kit(g, "curtain_panel", Vector3(29.85, STAGE_H, z), -90.0, "CurtainEast_%d" % int(z))
+		_kit(g, "curtain_panel", Vector3(29.85, 0, z), -90.0, "CurtainEast_%d" % int(z))
 	for i in 4:
-		_kit(g, "curtain_panel", Vector3(25.5 + i * 1.3, 0, 0.1), 0.0, "CurtainNorth%d" % i).scale.y = ROOM_H / 3.5
-		_kit(g, "curtain_panel", Vector3(25.5 + i * 1.3, 0, 9.9), 180.0, "CurtainSouth%d" % i).scale.y = ROOM_H / 3.5
+		_kit(g, "curtain_panel", Vector3(25.5 + i * 1.3, 0, 0.1), 0.0, "CurtainNorth%d" % i)
+		_kit(g, "curtain_panel", Vector3(25.5 + i * 1.3, 0, 9.9), 180.0, "CurtainSouth%d" % i)
 	# Backline (facing the room, -x)
 	_kit_solid(g, "drum_kit", Vector3(28.2, STAGE_H, 5.0), -90.0, "DrumKit")
 	_kit_solid(g, "amp", Vector3(29.2, STAGE_H, 2.7), -90.0, "AmpL")
@@ -551,10 +561,15 @@ func _stage() -> void:
 	_kit_solid(g, "monitor_wedge", Vector3(24.8, STAGE_H, 6.6), 90.0, "Wedge1")
 	# Truss with cube PARs over the stage front
 	var truss := _group("Truss", g)
-	_box(truss, "Bar", Vector3(24.6, 3.55, 1.0), Vector3(0.15, 0.15, 8.0), _mat("beam_black", BEAM_BLACK, 0.7), false)
-	var pars := [[2.0, NEON_RED], [3.6, NEON_RED], [5.0, STAGE_BLUE], [6.4, NEON_RED], [8.0, NEON_RED]]
+	for i in 4:
+		_kit(truss, "truss_segment", Vector3(24.6, ROOM_H, 2.0 + i * 2.0), 90.0, "Segment%d" % i)
+	var pars := [[2.0, "red"], [3.6, "amber"], [5.0, "blue"], [6.4, "amber"], [8.0, "red"]]
 	for i in pars.size():
-		_box(truss, "Par%d" % i, Vector3(24.55, 3.25, pars[i][0] - 0.13), Vector3(0.26, 0.26, 0.26), _mat("par_%d" % i, pars[i][1], 0.5, 4.0), false)
+		_kit(truss, "par_light_" + pars[i][1], Vector3(24.6, 3.6, pars[i][0]), 90.0, "Par%d" % i)
+	# Stage tree in the north-east corner, PA speakers either side of the stage front (R01)
+	_kit_solid(g, "stage_tree", Vector3(28.9, STAGE_H, 1.6), -90.0, "StageTree")
+	_kit_solid(g, "pa_speaker", Vector3(23.6, 0, 1.6), -90.0, "SpeakerL")
+	_kit_solid(g, "pa_speaker", Vector3(23.6, 0, 8.4), -90.0, "SpeakerR")
 	_spot(g, "RedWashL", NEON_RED, 5.0, 9.0, 38.0, Vector3(24.7, 3.3, 3.0), Vector3(27.6, 0.5, 4.0), true)
 	_spot(g, "RedWashR", NEON_RED, 5.0, 9.0, 38.0, Vector3(24.7, 3.3, 7.0), Vector3(27.6, 0.5, 6.0), true)
 	_spot(g, "BluePar", STAGE_BLUE, 2.5, 7.0, 18.0, Vector3(24.7, 3.3, 5.0), Vector3(28.2, 1.0, 5.0))

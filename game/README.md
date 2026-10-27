@@ -27,11 +27,11 @@ re-bakes if it is empty). Units are metres, x east, z south, room height 4 m.
 | `Stairs` | west wall | Kit stair run rising north to a landing at 2.4 m, hidden ramp collider |
 | `Curtain` | x 10, door z 4.8..7.2 | Partition with red curtain panels on the lounge side, valance, exit sign |
 | `MainRoom` | x 10..30, z 0..10 | Floor, walls, amber cove strip, track lights, disco ball |
-| `Bar` | south wall | 10 back-bar shelves, 10 counter units, 8 stools, soffit panels, 4 amber shelf lights |
+| `Bar` | south wall | 10 back-bar shelves, 10 counter units, 8 stools, soffit segments, paintings, 4 amber shelf lights |
 | `Tables` | middle | 6 round tables in two staggered rows (lamp or tealights each), chairs, drum stools; the z 5.5 aisle stays clear from curtain to stage |
 | `CommunalTable` | north wall | Two long tables, chairs both sides |
-| `Banquette` | north wall, x 18..22 | Velvet banquette (boxes until the kit has a `banquette`) with two small tables |
-| `Stage` | x 24..30, z 1..9, 0.5 m high | Kit risers, carpet tiles, steps over a hidden ramp, slatted backdrop, curtains, drum kit, amps, guitar, mics, wedges, truss with PARs, haze sheets |
+| `Banquette` | north wall, x 18..22 | Kit `banquette_straight` ×4 with two small tables |
+| `Stage` | x 24..30, z 1..9, 0.5 m high | Kit risers, carpet tiles, kit steps over a hidden ramp, slatted backdrop, curtains, drum kit, amps, guitar, mics, wedges, truss with red/amber/blue PARs, stage tree, PA speakers, haze sheets |
 | `Patrons` | | Simulated crowd (`scripts/venue_patrons.gd`) and `Spots/`, the seats, staff and wander points named by zone |
 | `CameraZones` | | One Marker3D per zone with the camera framing (see below) |
 | `Navigation` | | NavigationRegion3D, agent radius 0.4 m, baked from the static colliders |
@@ -92,11 +92,24 @@ depending on the zone; the floor view is the heaviest (kit objects carry 2–9 m
 ## Screenshots
 
 `tools/capture_venue.gd` runs main.tscn in a real window and writes the gameplay view of each zone plus eye-level
-views placed like the direction renders to `docs/art/screens/2026-10-27-integration/`:
+views placed like the direction renders, plus a `hud` shot with the UI on, to
+`docs/art/screens/2026-10-27-integration/`. Orientation is undecided, so capture both (half of 1080×1920 and
+1920×1080); `stretch/aspect=expand` lets the same scene fill either:
 
 ```
 godot --path . --resolution 540x960 --script res://tools/capture_venue.gd -- --tag=portrait
-godot --path . --resolution 1280x720 --script res://tools/capture_venue.gd -- --tag=landscape
+godot --path . --resolution 960x540 --script res://tools/capture_venue.gd -- --tag=landscape
+```
+
+## Layout export
+
+`assets/kit/layout.json` lists every kit instance in the venue (`object`, `zone`, `name`, `position`, `rotation_y`,
+`scale`) and every person spawn (`preset_slot` PLAYER / BAR_1 / PATRON / PATRON_WANDER, `spot`, `zone`, `pose`,
+`seat_h`, `position`, `rotation_y`), Godot axes in metres, for the combined Blender review file. Regenerate after
+`build_venue.gd`:
+
+```
+godot --headless --path . --script res://tools/export_layout.gd
 ```
 
 ## Tests

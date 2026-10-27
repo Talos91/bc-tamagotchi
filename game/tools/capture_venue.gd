@@ -1,7 +1,8 @@
 extends SceneTree
 ## Screenshots of main.tscn in a real window (not headless). Run from game/, one size per run:
 ##   godot --path . --resolution 540x960 --script res://tools/capture_venue.gd -- --tag=portrait
-##   godot --path . --resolution 1280x720 --script res://tools/capture_venue.gd -- --tag=landscape
+##   godot --path . --resolution 960x540 --script res://tools/capture_venue.gd -- --tag=landscape
+## (half of 1080x1920 and 1920x1080; orientation is undecided, so both are captured.)
 ## Writes <tag>-<shot>.png to docs/art/screens/2026-10-27-integration/ (override with --out=DIR): the diorama
 ## gameplay camera in each zone, then eye-level cameras that show the ceiling, placed like the direction renders.
 ## The player and the patron crowd (Venue/Patrons) are in every shot.
@@ -61,6 +62,14 @@ func _init() -> void:
 		await _save(out, tag, s.name)
 		print("%s %s zone=%s fps=%.0f gpu=%.2fms render_cpu=%.2fms draw_calls=%d" % [tag, s.name, p.rig.zone, fps, gpu / frames, cpu / frames,
 			RenderingServer.get_rendering_info(RenderingServer.RENDERING_INFO_TOTAL_DRAW_CALLS_IN_FRAME)])
+	# HUD check: joystick and needs debug HUD over the floor view
+	main.get_node("UI").visible = true
+	p.global_position = Vector3(15.0, 0, 5.5)
+	p.rig.snap()
+	for i in 30:
+		await process_frame
+	await _save(out, tag, "hud")
+	main.get_node("UI").visible = false
 	var cam := Camera3D.new()
 	main.add_child(cam)
 	for e in EYE:

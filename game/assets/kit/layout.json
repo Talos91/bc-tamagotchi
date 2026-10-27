@@ -1,0 +1,6215 @@
+{
+ "axes": "godot: x east, y up, z south",
+ "kit": [
+  {
+   "name": "PlantWall0_0",
+   "object": "plant_wall_tile",
+   "position": [
+    2.3,
+    0.9,
+    0.15
+   ],
+   "rotation_y": 0.0,
+   "scale": [
+    1.0,
+    1.0,
+    1.0
+   ],
+   "zone": "Lounge"
+  },
+  {
+   "name": "PlantWall0_1",
+   "object": "plant_wall_tile",
+   "position": [
+    2.3,
+    1.9,
+    0.15
+   ],
+   "rotation_y": 0.0,
+   "scale": [
+    1.0,
+    1.0,
+    1.0
+   ],
+   "zone": "Lounge"
+  },
+  {
+   "name": "PlantWall0_2",
+   "object": "plant_wall_tile",
+   "position": [
+    2.3,
+    2.9,
+    0.15
+   ],
+   "rotation_y": 0.0,
+   "scale": [
+    1.0,
+    1.0,
+    1.0
+   ],
+   "zone": "Lounge"
+  },
+  {
+   "name": "PlantWall1_0",
+   "object": "plant_wall_tile",
+   "position": [
+    3.3,
+    0.9,
+    0.15
+   ],
+   "rotation_y": 0.0,
+   "scale": [
+    1.0,
+    1.0,
+    1.0
+   ],
+   "zone": "Lounge"
+  },
+  {
+   "name": "PlantWall1_1",
+   "object": "plant_wall_tile",
+   "position": [
+    3.3,
+    1.9,
+    0.15
+   ],
+   "rotation_y": 0.0,
+   "scale": [
+    1.0,
+    1.0,
+    1.0
+   ],
+   "zone": "Lounge"
+  },
+  {
+   "name": "PlantWall1_2",
+   "object": "plant_wall_tile",
+   "position": [
+    3.3,
+    2.9,
+    0.15
+   ],
+   "rotation_y": 0.0,
+   "scale": [
+    1.0,
+    1.0,
+    1.0
+   ],
+   "zone": "Lounge"
+  },
+  {
+   "name": "PlantWall2_0",
+   "object": "plant_wall_tile",
+   "position": [
+    4.3,
+    0.9,
+    0.15
+   ],
+   "rotation_y": 0.0,
+   "scale": [
+    1.0,
+    1.0,
+    1.0
+   ],
+   "zone": "Lounge"
+  },
+  {
+   "name": "PlantWall2_1",
+   "object": "plant_wall_tile",
+   "position": [
+    4.3,
+    1.9,
+    0.15
+   ],
+   "rotation_y": 0.0,
+   "scale": [
+    1.0,
+    1.0,
+    1.0
+   ],
+   "zone": "Lounge"
+  },
+  {
+   "name": "PlantWall2_2",
+   "object": "plant_wall_tile",
+   "position": [
+    4.3,
+    2.9,
+    0.15
+   ],
+   "rotation_y": 0.0,
+   "scale": [
+    1.0,
+    1.0,
+    1.0
+   ],
+   "zone": "Lounge"
+  },
+  {
+   "name": "PlantWall3_0",
+   "object": "plant_wall_tile",
+   "position": [
+    5.3,
+    0.9,
+    0.15
+   ],
+   "rotation_y": 0.0,
+   "scale": [
+    1.0,
+    1.0,
+    1.0
+   ],
+   "zone": "Lounge"
+  },
+  {
+   "name": "PlantWall3_1",
+   "object": "plant_wall_tile",
+   "position": [
+    5.3,
+    1.9,
+    0.15
+   ],
+   "rotation_y": 0.0,
+   "scale": [
+    1.0,
+    1.0,
+    1.0
+   ],
+   "zone": "Lounge"
+  },
+  {
+   "name": "PlantWall3_2",
+   "object": "plant_wall_tile",
+   "position": [
+    5.3,
+    2.9,
+    0.15
+   ],
+   "rotation_y": 0.0,
+   "scale": [
+    1.0,
+    1.0,
+    1.0
+   ],
+   "zone": "Lounge"
+  },
+  {
+   "name": "NeonSign",
+   "object": "neon_sign",
+   "position": [
+    3.8,
+    1.75,
+    0.38
+   ],
+   "rotation_y": 0.0,
+   "scale": [
+    1.55,
+    1.55,
+    1.0
+   ],
+   "zone": "Lounge"
+  },
+  {
+   "name": "LoungeBanquette0",
+   "object": "banquette_straight",
+   "position": [
+    2.4,
+    0.0,
+    0.6
+   ],
+   "rotation_y": 0.0,
+   "scale": [
+    1.0,
+    1.0,
+    1.0
+   ],
+   "zone": "Lounge"
+  },
+  {
+   "name": "LoungeBanquette1",
+   "object": "banquette_straight",
+   "position": [
+    3.4,
+    0.0,
+    0.6
+   ],
+   "rotation_y": 0.0,
+   "scale": [
+    1.0,
+    1.0,
+    1.0
+   ],
+   "zone": "Lounge"
+  },
+  {
+   "name": "LoungeBanquette2",
+   "object": "banquette_straight",
+   "position": [
+    4.4,
+    0.0,
+    0.6
+   ],
+   "rotation_y": 0.0,
+   "scale": [
+    1.0,
+    1.0,
+    1.0
+   ],
+   "zone": "Lounge"
+  },
+  {
+   "name": "LoungeBanquette3",
+   "object": "banquette_straight",
+   "position": [
+    5.4,
+    0.0,
+    0.6
+   ],
+   "rotation_y": 0.0,
+   "scale": [
+    1.0,
+    1.0,
+    1.0
+   ],
+   "zone": "Lounge"
+  },
+  {
+   "name": "LongTable",
+   "object": "communal_table",
+   "position": [
+    3.9,
+    0.0,
+    1.55
+   ],
+   "rotation_y": 0.0,
+   "scale": [
+    1.0,
+    1.0,
+    1.0
+   ],
+   "zone": "Lounge"
+  },
+  {
+   "name": "LongTable0Lamp",
+   "object": "table_lamp_lit",
+   "position": [
+    2.82,
+    0.75,
+    1.55
+   ],
+   "rotation_y": 0.0,
+   "scale": [
+    1.0,
+    1.0,
+    1.0
+   ],
+   "zone": "Lounge"
+  },
+  {
+   "name": "LongTable0Tealight0",
+   "object": "tealight_lantern",
+   "position": [
+    3.02,
+    0.75,
+    1.61
+   ],
+   "rotation_y": 0.0,
+   "scale": [
+    1.0,
+    1.0,
+    1.0
+   ],
+   "zone": "Lounge"
+  },
+  {
+   "name": "LongTable0Napkins",
+   "object": "napkin_cup",
+   "position": [
+    2.95,
+    0.75,
+    1.41
+   ],
+   "rotation_y": 0.0,
+   "scale": [
+    1.0,
+    1.0,
+    1.0
+   ],
+   "zone": "Lounge"
+  },
+  {
+   "name": "Chair0",
+   "object": "cafe_chair",
+   "position": [
+    2.9,
+    0.0,
+    2.25
+   ],
+   "rotation_y": -180.0,
+   "scale": [
+    1.0,
+    1.0,
+    1.0
+   ],
+   "zone": "Lounge"
+  },
+  {
+   "name": "LongTable1Lamp",
+   "object": "table_lamp_lit",
+   "position": [
+    3.82,
+    0.75,
+    1.55
+   ],
+   "rotation_y": 0.0,
+   "scale": [
+    1.0,
+    1.0,
+    1.0
+   ],
+   "zone": "Lounge"
+  },
+  {
+   "name": "LongTable1Napkins",
+   "object": "napkin_cup",
+   "position": [
+    3.95,
+    0.75,
+    1.41
+   ],
+   "rotation_y": 0.0,
+   "scale": [
+    1.0,
+    1.0,
+    1.0
+   ],
+   "zone": "Lounge"
+  },
+  {
+   "name": "Chair1",
+   "object": "cafe_chair",
+   "position": [
+    3.9,
+    0.0,
+    2.25
+   ],
+   "rotation_y": -180.0,
+   "scale": [
+    1.0,
+    1.0,
+    1.0
+   ],
+   "zone": "Lounge"
+  },
+  {
+   "name": "LongTable2Lamp",
+   "object": "table_lamp_lit",
+   "position": [
+    4.82,
+    0.75,
+    1.55
+   ],
+   "rotation_y": 0.0,
+   "scale": [
+    1.0,
+    1.0,
+    1.0
+   ],
+   "zone": "Lounge"
+  },
+  {
+   "name": "LongTable2Tealight0",
+   "object": "tealight_lantern",
+   "position": [
+    5.02,
+    0.75,
+    1.61
+   ],
+   "rotation_y": 0.0,
+   "scale": [
+    1.0,
+    1.0,
+    1.0
+   ],
+   "zone": "Lounge"
+  },
+  {
+   "name": "LongTable2Napkins",
+   "object": "napkin_cup",
+   "position": [
+    4.95,
+    0.75,
+    1.41
+   ],
+   "rotation_y": 0.0,
+   "scale": [
+    1.0,
+    1.0,
+    1.0
+   ],
+   "zone": "Lounge"
+  },
+  {
+   "name": "Chair2",
+   "object": "cafe_chair",
+   "position": [
+    4.9,
+    0.0,
+    2.25
+   ],
+   "rotation_y": -180.0,
+   "scale": [
+    1.0,
+    1.0,
+    1.0
+   ],
+   "zone": "Lounge"
+  },
+  {
+   "name": "Column0",
+   "object": "white_column",
+   "position": [
+    2.6,
+    0.0,
+    5.0
+   ],
+   "rotation_y": 0.0,
+   "scale": [
+    1.0,
+    1.0,
+    1.0
+   ],
+   "zone": "Lounge"
+  },
+  {
+   "name": "Column1",
+   "object": "white_column",
+   "position": [
+    7.0,
+    0.0,
+    3.2
+   ],
+   "rotation_y": 0.0,
+   "scale": [
+    1.0,
+    1.0,
+    1.0
+   ],
+   "zone": "Lounge"
+  },
+  {
+   "name": "CRT",
+   "object": "crt_monitor",
+   "position": [
+    6.55,
+    0.0,
+    0.3
+   ],
+   "rotation_y": 0.0,
+   "scale": [
+    1.0,
+    1.0,
+    1.0
+   ],
+   "zone": "Lounge"
+  },
+  {
+   "name": "ArcadeCabinet",
+   "object": "arcade_cabinet",
+   "position": [
+    7.5,
+    0.0,
+    0.42
+   ],
+   "rotation_y": 0.0,
+   "scale": [
+    1.0,
+    1.0,
+    1.0
+   ],
+   "zone": "Lounge"
+  },
+  {
+   "name": "CollectiblesShelf",
+   "object": "collectibles_shelf",
+   "position": [
+    8.95,
+    0.0,
+    0.22
+   ],
+   "rotation_y": 0.0,
+   "scale": [
+    1.0,
+    1.0,
+    1.0
+   ],
+   "zone": "Lounge"
+  },
+  {
+   "name": "CounterStool0",
+   "object": "bar_stool",
+   "position": [
+    8.5,
+    0.0,
+    1.85
+   ],
+   "rotation_y": -180.0,
+   "scale": [
+    1.0,
+    1.0,
+    1.0
+   ],
+   "zone": "Lounge"
+  },
+  {
+   "name": "CounterStool1",
+   "object": "bar_stool",
+   "position": [
+    9.4,
+    0.0,
+    1.85
+   ],
+   "rotation_y": -180.0,
+   "scale": [
+    1.0,
+    1.0,
+    1.0
+   ],
+   "zone": "Lounge"
+  },
+  {
+   "name": "RedDiscLamp",
+   "object": "wall_lamp",
+   "position": [
+    6.4,
+    1.7,
+    0.1
+   ],
+   "rotation_y": 0.0,
+   "scale": [
+    1.0,
+    1.0,
+    1.0
+   ],
+   "zone": "Lounge"
+  },
+  {
+   "name": "ACUnit",
+   "object": "ac_unit",
+   "position": [
+    7.6,
+    3.3,
+    0.15
+   ],
+   "rotation_y": 0.0,
+   "scale": [
+    1.0,
+    1.0,
+    1.0
+   ],
+   "zone": "Lounge"
+  },
+  {
+   "name": "Beam0_0",
+   "object": "beam_segment",
+   "position": [
+    1.5,
+    4.0,
+    1.0
+   ],
+   "rotation_y": 0.0,
+   "scale": [
+    1.0,
+    1.0,
+    1.0
+   ],
+   "zone": "Lounge"
+  },
+  {
+   "name": "Beam0_1",
+   "object": "beam_segment",
+   "position": [
+    2.5,
+    4.0,
+    1.0
+   ],
+   "rotation_y": 0.0,
+   "scale": [
+    1.0,
+    1.0,
+    1.0
+   ],
+   "zone": "Lounge"
+  },
+  {
+   "name": "Beam0_2",
+   "object": "beam_segment",
+   "position": [
+    3.5,
+    4.0,
+    1.0
+   ],
+   "rotation_y": 0.0,
+   "scale": [
+    1.0,
+    1.0,
+    1.0
+   ],
+   "zone": "Lounge"
+  },
+  {
+   "name": "Beam0_3",
+   "object": "beam_segment",
+   "position": [
+    4.5,
+    4.0,
+    1.0
+   ],
+   "rotation_y": 0.0,
+   "scale": [
+    1.0,
+    1.0,
+    1.0
+   ],
+   "zone": "Lounge"
+  },
+  {
+   "name": "Beam0_4",
+   "object": "beam_segment",
+   "position": [
+    5.5,
+    4.0,
+    1.0
+   ],
+   "rotation_y": 0.0,
+   "scale": [
+    1.0,
+    1.0,
+    1.0
+   ],
+   "zone": "Lounge"
+  },
+  {
+   "name": "Beam0_5",
+   "object": "beam_segment",
+   "position": [
+    6.5,
+    4.0,
+    1.0
+   ],
+   "rotation_y": 0.0,
+   "scale": [
+    1.0,
+    1.0,
+    1.0
+   ],
+   "zone": "Lounge"
+  },
+  {
+   "name": "Beam0_6",
+   "object": "beam_segment",
+   "position": [
+    7.5,
+    4.0,
+    1.0
+   ],
+   "rotation_y": 0.0,
+   "scale": [
+    1.0,
+    1.0,
+    1.0
+   ],
+   "zone": "Lounge"
+  },
+  {
+   "name": "Beam0_7",
+   "object": "beam_segment",
+   "position": [
+    8.5,
+    4.0,
+    1.0
+   ],
+   "rotation_y": 0.0,
+   "scale": [
+    1.0,
+    1.0,
+    1.0
+   ],
+   "zone": "Lounge"
+  },
+  {
+   "name": "Beam0_8",
+   "object": "beam_segment",
+   "position": [
+    9.5,
+    4.0,
+    1.0
+   ],
+   "rotation_y": 0.0,
+   "scale": [
+    1.0,
+    1.0,
+    1.0
+   ],
+   "zone": "Lounge"
+  },
+  {
+   "name": "Beam1_0",
+   "object": "beam_segment",
+   "position": [
+    1.5,
+    4.0,
+    3.5
+   ],
+   "rotation_y": 0.0,
+   "scale": [
+    1.0,
+    1.0,
+    1.0
+   ],
+   "zone": "Lounge"
+  },
+  {
+   "name": "Beam1_1",
+   "object": "beam_segment",
+   "position": [
+    2.5,
+    4.0,
+    3.5
+   ],
+   "rotation_y": 0.0,
+   "scale": [
+    1.0,
+    1.0,
+    1.0
+   ],
+   "zone": "Lounge"
+  },
+  {
+   "name": "Beam1_2",
+   "object": "beam_segment",
+   "position": [
+    3.5,
+    4.0,
+    3.5
+   ],
+   "rotation_y": 0.0,
+   "scale": [
+    1.0,
+    1.0,
+    1.0
+   ],
+   "zone": "Lounge"
+  },
+  {
+   "name": "Beam1_3",
+   "object": "beam_segment",
+   "position": [
+    4.5,
+    4.0,
+    3.5
+   ],
+   "rotation_y": 0.0,
+   "scale": [
+    1.0,
+    1.0,
+    1.0
+   ],
+   "zone": "Lounge"
+  },
+  {
+   "name": "Beam1_4",
+   "object": "beam_segment",
+   "position": [
+    5.5,
+    4.0,
+    3.5
+   ],
+   "rotation_y": 0.0,
+   "scale": [
+    1.0,
+    1.0,
+    1.0
+   ],
+   "zone": "Lounge"
+  },
+  {
+   "name": "Beam1_5",
+   "object": "beam_segment",
+   "position": [
+    6.5,
+    4.0,
+    3.5
+   ],
+   "rotation_y": 0.0,
+   "scale": [
+    1.0,
+    1.0,
+    1.0
+   ],
+   "zone": "Lounge"
+  },
+  {
+   "name": "Beam1_6",
+   "object": "beam_segment",
+   "position": [
+    7.5,
+    4.0,
+    3.5
+   ],
+   "rotation_y": 0.0,
+   "scale": [
+    1.0,
+    1.0,
+    1.0
+   ],
+   "zone": "Lounge"
+  },
+  {
+   "name": "Beam1_7",
+   "object": "beam_segment",
+   "position": [
+    8.5,
+    4.0,
+    3.5
+   ],
+   "rotation_y": 0.0,
+   "scale": [
+    1.0,
+    1.0,
+    1.0
+   ],
+   "zone": "Lounge"
+  },
+  {
+   "name": "Beam1_8",
+   "object": "beam_segment",
+   "position": [
+    9.5,
+    4.0,
+    3.5
+   ],
+   "rotation_y": 0.0,
+   "scale": [
+    1.0,
+    1.0,
+    1.0
+   ],
+   "zone": "Lounge"
+  },
+  {
+   "name": "Beam2_0",
+   "object": "beam_segment",
+   "position": [
+    1.5,
+    4.0,
+    6.0
+   ],
+   "rotation_y": 0.0,
+   "scale": [
+    1.0,
+    1.0,
+    1.0
+   ],
+   "zone": "Lounge"
+  },
+  {
+   "name": "Beam2_1",
+   "object": "beam_segment",
+   "position": [
+    2.5,
+    4.0,
+    6.0
+   ],
+   "rotation_y": 0.0,
+   "scale": [
+    1.0,
+    1.0,
+    1.0
+   ],
+   "zone": "Lounge"
+  },
+  {
+   "name": "Beam2_2",
+   "object": "beam_segment",
+   "position": [
+    3.5,
+    4.0,
+    6.0
+   ],
+   "rotation_y": 0.0,
+   "scale": [
+    1.0,
+    1.0,
+    1.0
+   ],
+   "zone": "Lounge"
+  },
+  {
+   "name": "Beam2_3",
+   "object": "beam_segment",
+   "position": [
+    4.5,
+    4.0,
+    6.0
+   ],
+   "rotation_y": 0.0,
+   "scale": [
+    1.0,
+    1.0,
+    1.0
+   ],
+   "zone": "Lounge"
+  },
+  {
+   "name": "Beam2_4",
+   "object": "beam_segment",
+   "position": [
+    5.5,
+    4.0,
+    6.0
+   ],
+   "rotation_y": 0.0,
+   "scale": [
+    1.0,
+    1.0,
+    1.0
+   ],
+   "zone": "Lounge"
+  },
+  {
+   "name": "Beam2_5",
+   "object": "beam_segment",
+   "position": [
+    6.5,
+    4.0,
+    6.0
+   ],
+   "rotation_y": 0.0,
+   "scale": [
+    1.0,
+    1.0,
+    1.0
+   ],
+   "zone": "Lounge"
+  },
+  {
+   "name": "Beam2_6",
+   "object": "beam_segment",
+   "position": [
+    7.5,
+    4.0,
+    6.0
+   ],
+   "rotation_y": 0.0,
+   "scale": [
+    1.0,
+    1.0,
+    1.0
+   ],
+   "zone": "Lounge"
+  },
+  {
+   "name": "Beam2_7",
+   "object": "beam_segment",
+   "position": [
+    8.5,
+    4.0,
+    6.0
+   ],
+   "rotation_y": 0.0,
+   "scale": [
+    1.0,
+    1.0,
+    1.0
+   ],
+   "zone": "Lounge"
+  },
+  {
+   "name": "Beam2_8",
+   "object": "beam_segment",
+   "position": [
+    9.5,
+    4.0,
+    6.0
+   ],
+   "rotation_y": 0.0,
+   "scale": [
+    1.0,
+    1.0,
+    1.0
+   ],
+   "zone": "Lounge"
+  },
+  {
+   "name": "Beam3_0",
+   "object": "beam_segment",
+   "position": [
+    1.5,
+    4.0,
+    8.5
+   ],
+   "rotation_y": 0.0,
+   "scale": [
+    1.0,
+    1.0,
+    1.0
+   ],
+   "zone": "Lounge"
+  },
+  {
+   "name": "Beam3_1",
+   "object": "beam_segment",
+   "position": [
+    2.5,
+    4.0,
+    8.5
+   ],
+   "rotation_y": 0.0,
+   "scale": [
+    1.0,
+    1.0,
+    1.0
+   ],
+   "zone": "Lounge"
+  },
+  {
+   "name": "Beam3_2",
+   "object": "beam_segment",
+   "position": [
+    3.5,
+    4.0,
+    8.5
+   ],
+   "rotation_y": 0.0,
+   "scale": [
+    1.0,
+    1.0,
+    1.0
+   ],
+   "zone": "Lounge"
+  },
+  {
+   "name": "Beam3_3",
+   "object": "beam_segment",
+   "position": [
+    4.5,
+    4.0,
+    8.5
+   ],
+   "rotation_y": 0.0,
+   "scale": [
+    1.0,
+    1.0,
+    1.0
+   ],
+   "zone": "Lounge"
+  },
+  {
+   "name": "Beam3_4",
+   "object": "beam_segment",
+   "position": [
+    5.5,
+    4.0,
+    8.5
+   ],
+   "rotation_y": 0.0,
+   "scale": [
+    1.0,
+    1.0,
+    1.0
+   ],
+   "zone": "Lounge"
+  },
+  {
+   "name": "Beam3_5",
+   "object": "beam_segment",
+   "position": [
+    6.5,
+    4.0,
+    8.5
+   ],
+   "rotation_y": 0.0,
+   "scale": [
+    1.0,
+    1.0,
+    1.0
+   ],
+   "zone": "Lounge"
+  },
+  {
+   "name": "Beam3_6",
+   "object": "beam_segment",
+   "position": [
+    7.5,
+    4.0,
+    8.5
+   ],
+   "rotation_y": 0.0,
+   "scale": [
+    1.0,
+    1.0,
+    1.0
+   ],
+   "zone": "Lounge"
+  },
+  {
+   "name": "Beam3_7",
+   "object": "beam_segment",
+   "position": [
+    8.5,
+    4.0,
+    8.5
+   ],
+   "rotation_y": 0.0,
+   "scale": [
+    1.0,
+    1.0,
+    1.0
+   ],
+   "zone": "Lounge"
+  },
+  {
+   "name": "Beam3_8",
+   "object": "beam_segment",
+   "position": [
+    9.5,
+    4.0,
+    8.5
+   ],
+   "rotation_y": 0.0,
+   "scale": [
+    1.0,
+    1.0,
+    1.0
+   ],
+   "zone": "Lounge"
+  },
+  {
+   "name": "Panel0_0",
+   "object": "ceiling_panel",
+   "position": [
+    3.0,
+    4.0,
+    1.75
+   ],
+   "rotation_y": 0.0,
+   "scale": [
+    1.0,
+    1.0,
+    1.0
+   ],
+   "zone": "Lounge"
+  },
+  {
+   "name": "Panel0_1",
+   "object": "ceiling_panel",
+   "position": [
+    4.0,
+    4.0,
+    2.25
+   ],
+   "rotation_y": 0.0,
+   "scale": [
+    1.0,
+    1.0,
+    1.0
+   ],
+   "zone": "Lounge"
+  },
+  {
+   "name": "Panel0_2",
+   "object": "ceiling_panel",
+   "position": [
+    5.0,
+    4.0,
+    1.75
+   ],
+   "rotation_y": 0.0,
+   "scale": [
+    1.0,
+    1.0,
+    1.0
+   ],
+   "zone": "Lounge"
+  },
+  {
+   "name": "Panel0_3",
+   "object": "ceiling_panel",
+   "position": [
+    6.0,
+    4.0,
+    2.25
+   ],
+   "rotation_y": 0.0,
+   "scale": [
+    1.0,
+    1.0,
+    1.0
+   ],
+   "zone": "Lounge"
+  },
+  {
+   "name": "Panel0_4",
+   "object": "ceiling_panel",
+   "position": [
+    7.0,
+    4.0,
+    1.75
+   ],
+   "rotation_y": 0.0,
+   "scale": [
+    1.0,
+    1.0,
+    1.0
+   ],
+   "zone": "Lounge"
+  },
+  {
+   "name": "Panel0_5",
+   "object": "ceiling_panel",
+   "position": [
+    8.0,
+    4.0,
+    2.25
+   ],
+   "rotation_y": 0.0,
+   "scale": [
+    1.0,
+    1.0,
+    1.0
+   ],
+   "zone": "Lounge"
+  },
+  {
+   "name": "Panel1_0",
+   "object": "ceiling_panel",
+   "position": [
+    3.0,
+    4.0,
+    4.25
+   ],
+   "rotation_y": 0.0,
+   "scale": [
+    1.0,
+    1.0,
+    1.0
+   ],
+   "zone": "Lounge"
+  },
+  {
+   "name": "Panel1_1",
+   "object": "ceiling_panel",
+   "position": [
+    4.0,
+    4.0,
+    4.75
+   ],
+   "rotation_y": 0.0,
+   "scale": [
+    1.0,
+    1.0,
+    1.0
+   ],
+   "zone": "Lounge"
+  },
+  {
+   "name": "Panel1_2",
+   "object": "ceiling_panel",
+   "position": [
+    5.0,
+    4.0,
+    4.25
+   ],
+   "rotation_y": 0.0,
+   "scale": [
+    1.0,
+    1.0,
+    1.0
+   ],
+   "zone": "Lounge"
+  },
+  {
+   "name": "Panel1_3",
+   "object": "ceiling_panel",
+   "position": [
+    6.0,
+    4.0,
+    4.75
+   ],
+   "rotation_y": 0.0,
+   "scale": [
+    1.0,
+    1.0,
+    1.0
+   ],
+   "zone": "Lounge"
+  },
+  {
+   "name": "Panel1_4",
+   "object": "ceiling_panel",
+   "position": [
+    7.0,
+    4.0,
+    4.25
+   ],
+   "rotation_y": 0.0,
+   "scale": [
+    1.0,
+    1.0,
+    1.0
+   ],
+   "zone": "Lounge"
+  },
+  {
+   "name": "Panel1_5",
+   "object": "ceiling_panel",
+   "position": [
+    8.0,
+    4.0,
+    4.75
+   ],
+   "rotation_y": 0.0,
+   "scale": [
+    1.0,
+    1.0,
+    1.0
+   ],
+   "zone": "Lounge"
+  },
+  {
+   "name": "Panel2_0",
+   "object": "ceiling_panel",
+   "position": [
+    3.0,
+    4.0,
+    6.75
+   ],
+   "rotation_y": 0.0,
+   "scale": [
+    1.0,
+    1.0,
+    1.0
+   ],
+   "zone": "Lounge"
+  },
+  {
+   "name": "Panel2_1",
+   "object": "ceiling_panel",
+   "position": [
+    4.0,
+    4.0,
+    7.25
+   ],
+   "rotation_y": 0.0,
+   "scale": [
+    1.0,
+    1.0,
+    1.0
+   ],
+   "zone": "Lounge"
+  },
+  {
+   "name": "Panel2_2",
+   "object": "ceiling_panel",
+   "position": [
+    5.0,
+    4.0,
+    6.75
+   ],
+   "rotation_y": 0.0,
+   "scale": [
+    1.0,
+    1.0,
+    1.0
+   ],
+   "zone": "Lounge"
+  },
+  {
+   "name": "Panel2_3",
+   "object": "ceiling_panel",
+   "position": [
+    6.0,
+    4.0,
+    7.25
+   ],
+   "rotation_y": 0.0,
+   "scale": [
+    1.0,
+    1.0,
+    1.0
+   ],
+   "zone": "Lounge"
+  },
+  {
+   "name": "Panel2_4",
+   "object": "ceiling_panel",
+   "position": [
+    7.0,
+    4.0,
+    6.75
+   ],
+   "rotation_y": 0.0,
+   "scale": [
+    1.0,
+    1.0,
+    1.0
+   ],
+   "zone": "Lounge"
+  },
+  {
+   "name": "Panel2_5",
+   "object": "ceiling_panel",
+   "position": [
+    8.0,
+    4.0,
+    7.25
+   ],
+   "rotation_y": 0.0,
+   "scale": [
+    1.0,
+    1.0,
+    1.0
+   ],
+   "zone": "Lounge"
+  },
+  {
+   "name": "TrackLight0",
+   "object": "track_light",
+   "position": [
+    4.0,
+    4.0,
+    4.0
+   ],
+   "rotation_y": 0.0,
+   "scale": [
+    1.0,
+    1.0,
+    1.0
+   ],
+   "zone": "Lounge"
+  },
+  {
+   "name": "TrackLight1",
+   "object": "track_light",
+   "position": [
+    6.0,
+    4.0,
+    7.0
+   ],
+   "rotation_y": 0.0,
+   "scale": [
+    1.0,
+    1.0,
+    1.0
+   ],
+   "zone": "Lounge"
+  },
+  {
+   "name": "StairRun",
+   "object": "stair_run",
+   "position": [
+    0.85,
+    0.0,
+    3.0
+   ],
+   "rotation_y": 0.0,
+   "scale": [
+    1.0,
+    1.0,
+    1.0
+   ],
+   "zone": "Stairs"
+  },
+  {
+   "name": "Panel_5",
+   "object": "curtain_panel",
+   "position": [
+    9.8,
+    0.0,
+    0.5
+   ],
+   "rotation_y": -90.0,
+   "scale": [
+    1.0,
+    1.0,
+    1.0
+   ],
+   "zone": "Curtain"
+  },
+  {
+   "name": "Panel_15",
+   "object": "curtain_panel",
+   "position": [
+    9.8,
+    0.0,
+    1.5
+   ],
+   "rotation_y": -90.0,
+   "scale": [
+    1.0,
+    1.0,
+    1.0
+   ],
+   "zone": "Curtain"
+  },
+  {
+   "name": "Panel_25",
+   "object": "curtain_panel",
+   "position": [
+    9.8,
+    0.0,
+    2.5
+   ],
+   "rotation_y": -90.0,
+   "scale": [
+    1.0,
+    1.0,
+    1.0
+   ],
+   "zone": "Curtain"
+  },
+  {
+   "name": "Panel_35",
+   "object": "curtain_panel",
+   "position": [
+    9.8,
+    0.0,
+    3.5
+   ],
+   "rotation_y": -90.0,
+   "scale": [
+    1.0,
+    1.0,
+    1.0
+   ],
+   "zone": "Curtain"
+  },
+  {
+   "name": "Panel_43",
+   "object": "curtain_panel",
+   "position": [
+    9.8,
+    0.0,
+    4.3
+   ],
+   "rotation_y": -90.0,
+   "scale": [
+    1.0,
+    1.0,
+    1.0
+   ],
+   "zone": "Curtain"
+  },
+  {
+   "name": "Panel_77",
+   "object": "curtain_panel",
+   "position": [
+    9.8,
+    0.0,
+    7.7
+   ],
+   "rotation_y": -90.0,
+   "scale": [
+    1.0,
+    1.0,
+    1.0
+   ],
+   "zone": "Curtain"
+  },
+  {
+   "name": "Panel_85",
+   "object": "curtain_panel",
+   "position": [
+    9.8,
+    0.0,
+    8.5
+   ],
+   "rotation_y": -90.0,
+   "scale": [
+    1.0,
+    1.0,
+    1.0
+   ],
+   "zone": "Curtain"
+  },
+  {
+   "name": "Panel_95",
+   "object": "curtain_panel",
+   "position": [
+    9.8,
+    0.0,
+    9.5
+   ],
+   "rotation_y": -90.0,
+   "scale": [
+    1.0,
+    1.0,
+    1.0
+   ],
+   "zone": "Curtain"
+  },
+  {
+   "name": "ExitSign",
+   "object": "exit_sign",
+   "position": [
+    10.12,
+    3.35,
+    6.0
+   ],
+   "rotation_y": 90.0,
+   "scale": [
+    1.0,
+    1.0,
+    1.0
+   ],
+   "zone": "Curtain"
+  },
+  {
+   "name": "TrackBar0",
+   "object": "track_light",
+   "position": [
+    12.5,
+    4.0,
+    7.4
+   ],
+   "rotation_y": 0.0,
+   "scale": [
+    1.0,
+    1.0,
+    1.0
+   ],
+   "zone": "MainRoom"
+  },
+  {
+   "name": "TrackFloor0",
+   "object": "track_light",
+   "position": [
+    12.5,
+    4.0,
+    3.0
+   ],
+   "rotation_y": 0.0,
+   "scale": [
+    1.0,
+    1.0,
+    1.0
+   ],
+   "zone": "MainRoom"
+  },
+  {
+   "name": "TrackBar1",
+   "object": "track_light",
+   "position": [
+    14.7,
+    4.0,
+    7.4
+   ],
+   "rotation_y": 0.0,
+   "scale": [
+    1.0,
+    1.0,
+    1.0
+   ],
+   "zone": "MainRoom"
+  },
+  {
+   "name": "TrackFloor1",
+   "object": "track_light",
+   "position": [
+    14.7,
+    4.0,
+    3.0
+   ],
+   "rotation_y": 0.0,
+   "scale": [
+    1.0,
+    1.0,
+    1.0
+   ],
+   "zone": "MainRoom"
+  },
+  {
+   "name": "TrackBar2",
+   "object": "track_light",
+   "position": [
+    16.9,
+    4.0,
+    7.4
+   ],
+   "rotation_y": 0.0,
+   "scale": [
+    1.0,
+    1.0,
+    1.0
+   ],
+   "zone": "MainRoom"
+  },
+  {
+   "name": "TrackFloor2",
+   "object": "track_light",
+   "position": [
+    16.9,
+    4.0,
+    3.0
+   ],
+   "rotation_y": 0.0,
+   "scale": [
+    1.0,
+    1.0,
+    1.0
+   ],
+   "zone": "MainRoom"
+  },
+  {
+   "name": "TrackBar3",
+   "object": "track_light",
+   "position": [
+    19.1,
+    4.0,
+    7.4
+   ],
+   "rotation_y": 0.0,
+   "scale": [
+    1.0,
+    1.0,
+    1.0
+   ],
+   "zone": "MainRoom"
+  },
+  {
+   "name": "TrackFloor3",
+   "object": "track_light",
+   "position": [
+    19.1,
+    4.0,
+    3.0
+   ],
+   "rotation_y": 0.0,
+   "scale": [
+    1.0,
+    1.0,
+    1.0
+   ],
+   "zone": "MainRoom"
+  },
+  {
+   "name": "TrackBar4",
+   "object": "track_light",
+   "position": [
+    21.3,
+    4.0,
+    7.4
+   ],
+   "rotation_y": 0.0,
+   "scale": [
+    1.0,
+    1.0,
+    1.0
+   ],
+   "zone": "MainRoom"
+  },
+  {
+   "name": "TrackFloor4",
+   "object": "track_light",
+   "position": [
+    21.3,
+    4.0,
+    3.0
+   ],
+   "rotation_y": 0.0,
+   "scale": [
+    1.0,
+    1.0,
+    1.0
+   ],
+   "zone": "MainRoom"
+  },
+  {
+   "name": "DiscoBall",
+   "object": "disco_ball",
+   "position": [
+    19.0,
+    4.0,
+    5.5
+   ],
+   "rotation_y": 0.0,
+   "scale": [
+    1.0,
+    1.0,
+    1.0
+   ],
+   "zone": "MainRoom"
+  },
+  {
+   "name": "ExitSignNorth",
+   "object": "exit_sign",
+   "position": [
+    23.0,
+    2.9,
+    0.06
+   ],
+   "rotation_y": 0.0,
+   "scale": [
+    1.0,
+    1.0,
+    1.0
+   ],
+   "zone": "MainRoom"
+  },
+  {
+   "name": "PaintingNorth0",
+   "object": "painting_a",
+   "position": [
+    12.0,
+    1.55,
+    0.05
+   ],
+   "rotation_y": 0.0,
+   "scale": [
+    1.0,
+    1.0,
+    1.0
+   ],
+   "zone": "MainRoom"
+  },
+  {
+   "name": "PaintingNorth1",
+   "object": "painting_b",
+   "position": [
+    15.0,
+    1.55,
+    0.05
+   ],
+   "rotation_y": 0.0,
+   "scale": [
+    1.0,
+    1.0,
+    1.0
+   ],
+   "zone": "MainRoom"
+  },
+  {
+   "name": "PaintingNorth2",
+   "object": "painting_c",
+   "position": [
+    18.0,
+    1.55,
+    0.05
+   ],
+   "rotation_y": 0.0,
+   "scale": [
+    1.0,
+    1.0,
+    1.0
+   ],
+   "zone": "MainRoom"
+  },
+  {
+   "name": "WallLamp0",
+   "object": "wall_lamp",
+   "position": [
+    10.4,
+    2.0,
+    0.1
+   ],
+   "rotation_y": 0.0,
+   "scale": [
+    1.0,
+    1.0,
+    1.0
+   ],
+   "zone": "MainRoom"
+  },
+  {
+   "name": "WallLamp1",
+   "object": "wall_lamp",
+   "position": [
+    23.6,
+    2.0,
+    0.1
+   ],
+   "rotation_y": 0.0,
+   "scale": [
+    1.0,
+    1.0,
+    1.0
+   ],
+   "zone": "MainRoom"
+  },
+  {
+   "name": "ExitSignWest",
+   "object": "exit_sign",
+   "position": [
+    10.12,
+    2.9,
+    2.0
+   ],
+   "rotation_y": 90.0,
+   "scale": [
+    1.0,
+    1.0,
+    1.0
+   ],
+   "zone": "MainRoom"
+  },
+  {
+   "name": "BackBar0",
+   "object": "back_bar_shelf",
+   "position": [
+    12.0,
+    0.0,
+    9.85
+   ],
+   "rotation_y": -180.0,
+   "scale": [
+    1.0,
+    1.0,
+    1.0
+   ],
+   "zone": "Bar"
+  },
+  {
+   "name": "Counter0",
+   "object": "bar_counter",
+   "position": [
+    12.0,
+    0.0,
+    8.65
+   ],
+   "rotation_y": -180.0,
+   "scale": [
+    1.0,
+    1.0,
+    1.0
+   ],
+   "zone": "Bar"
+  },
+  {
+   "name": "BackBar1",
+   "object": "back_bar_shelf",
+   "position": [
+    13.0,
+    0.0,
+    9.85
+   ],
+   "rotation_y": -180.0,
+   "scale": [
+    1.0,
+    1.0,
+    1.0
+   ],
+   "zone": "Bar"
+  },
+  {
+   "name": "Counter1",
+   "object": "bar_counter",
+   "position": [
+    13.0,
+    0.0,
+    8.65
+   ],
+   "rotation_y": -180.0,
+   "scale": [
+    1.0,
+    1.0,
+    1.0
+   ],
+   "zone": "Bar"
+  },
+  {
+   "name": "BackBar2",
+   "object": "back_bar_shelf",
+   "position": [
+    14.0,
+    0.0,
+    9.85
+   ],
+   "rotation_y": -180.0,
+   "scale": [
+    1.0,
+    1.0,
+    1.0
+   ],
+   "zone": "Bar"
+  },
+  {
+   "name": "Counter2",
+   "object": "bar_counter",
+   "position": [
+    14.0,
+    0.0,
+    8.65
+   ],
+   "rotation_y": -180.0,
+   "scale": [
+    1.0,
+    1.0,
+    1.0
+   ],
+   "zone": "Bar"
+  },
+  {
+   "name": "BackBar3",
+   "object": "back_bar_shelf",
+   "position": [
+    15.0,
+    0.0,
+    9.85
+   ],
+   "rotation_y": -180.0,
+   "scale": [
+    1.0,
+    1.0,
+    1.0
+   ],
+   "zone": "Bar"
+  },
+  {
+   "name": "Counter3",
+   "object": "bar_counter",
+   "position": [
+    15.0,
+    0.0,
+    8.65
+   ],
+   "rotation_y": -180.0,
+   "scale": [
+    1.0,
+    1.0,
+    1.0
+   ],
+   "zone": "Bar"
+  },
+  {
+   "name": "BackBar4",
+   "object": "back_bar_shelf",
+   "position": [
+    16.0,
+    0.0,
+    9.85
+   ],
+   "rotation_y": -180.0,
+   "scale": [
+    1.0,
+    1.0,
+    1.0
+   ],
+   "zone": "Bar"
+  },
+  {
+   "name": "Counter4",
+   "object": "bar_counter",
+   "position": [
+    16.0,
+    0.0,
+    8.65
+   ],
+   "rotation_y": -180.0,
+   "scale": [
+    1.0,
+    1.0,
+    1.0
+   ],
+   "zone": "Bar"
+  },
+  {
+   "name": "BackBar5",
+   "object": "back_bar_shelf",
+   "position": [
+    17.0,
+    0.0,
+    9.85
+   ],
+   "rotation_y": -180.0,
+   "scale": [
+    1.0,
+    1.0,
+    1.0
+   ],
+   "zone": "Bar"
+  },
+  {
+   "name": "Counter5",
+   "object": "bar_counter",
+   "position": [
+    17.0,
+    0.0,
+    8.65
+   ],
+   "rotation_y": -180.0,
+   "scale": [
+    1.0,
+    1.0,
+    1.0
+   ],
+   "zone": "Bar"
+  },
+  {
+   "name": "BackBar6",
+   "object": "back_bar_shelf",
+   "position": [
+    18.0,
+    0.0,
+    9.85
+   ],
+   "rotation_y": -180.0,
+   "scale": [
+    1.0,
+    1.0,
+    1.0
+   ],
+   "zone": "Bar"
+  },
+  {
+   "name": "Counter6",
+   "object": "bar_counter",
+   "position": [
+    18.0,
+    0.0,
+    8.65
+   ],
+   "rotation_y": -180.0,
+   "scale": [
+    1.0,
+    1.0,
+    1.0
+   ],
+   "zone": "Bar"
+  },
+  {
+   "name": "BackBar7",
+   "object": "back_bar_shelf",
+   "position": [
+    19.0,
+    0.0,
+    9.85
+   ],
+   "rotation_y": -180.0,
+   "scale": [
+    1.0,
+    1.0,
+    1.0
+   ],
+   "zone": "Bar"
+  },
+  {
+   "name": "Counter7",
+   "object": "bar_counter",
+   "position": [
+    19.0,
+    0.0,
+    8.65
+   ],
+   "rotation_y": -180.0,
+   "scale": [
+    1.0,
+    1.0,
+    1.0
+   ],
+   "zone": "Bar"
+  },
+  {
+   "name": "BackBar8",
+   "object": "back_bar_shelf",
+   "position": [
+    20.0,
+    0.0,
+    9.85
+   ],
+   "rotation_y": -180.0,
+   "scale": [
+    1.0,
+    1.0,
+    1.0
+   ],
+   "zone": "Bar"
+  },
+  {
+   "name": "Counter8",
+   "object": "bar_counter",
+   "position": [
+    20.0,
+    0.0,
+    8.65
+   ],
+   "rotation_y": -180.0,
+   "scale": [
+    1.0,
+    1.0,
+    1.0
+   ],
+   "zone": "Bar"
+  },
+  {
+   "name": "BackBar9",
+   "object": "back_bar_shelf",
+   "position": [
+    21.0,
+    0.0,
+    9.85
+   ],
+   "rotation_y": -180.0,
+   "scale": [
+    1.0,
+    1.0,
+    1.0
+   ],
+   "zone": "Bar"
+  },
+  {
+   "name": "Counter9",
+   "object": "bar_counter",
+   "position": [
+    21.0,
+    0.0,
+    8.65
+   ],
+   "rotation_y": -180.0,
+   "scale": [
+    1.0,
+    1.0,
+    1.0
+   ],
+   "zone": "Bar"
+  },
+  {
+   "name": "Stool0",
+   "object": "bar_stool",
+   "position": [
+    12.0,
+    0.0,
+    7.95
+   ],
+   "rotation_y": 0.0,
+   "scale": [
+    1.0,
+    1.0,
+    1.0
+   ],
+   "zone": "Bar"
+  },
+  {
+   "name": "Stool1",
+   "object": "bar_stool",
+   "position": [
+    13.25,
+    0.0,
+    7.95
+   ],
+   "rotation_y": 0.0,
+   "scale": [
+    1.0,
+    1.0,
+    1.0
+   ],
+   "zone": "Bar"
+  },
+  {
+   "name": "Stool2",
+   "object": "bar_stool",
+   "position": [
+    14.5,
+    0.0,
+    7.95
+   ],
+   "rotation_y": 0.0,
+   "scale": [
+    1.0,
+    1.0,
+    1.0
+   ],
+   "zone": "Bar"
+  },
+  {
+   "name": "Stool3",
+   "object": "bar_stool",
+   "position": [
+    15.75,
+    0.0,
+    7.95
+   ],
+   "rotation_y": 0.0,
+   "scale": [
+    1.0,
+    1.0,
+    1.0
+   ],
+   "zone": "Bar"
+  },
+  {
+   "name": "Stool4",
+   "object": "bar_stool",
+   "position": [
+    17.0,
+    0.0,
+    7.95
+   ],
+   "rotation_y": 0.0,
+   "scale": [
+    1.0,
+    1.0,
+    1.0
+   ],
+   "zone": "Bar"
+  },
+  {
+   "name": "Stool5",
+   "object": "bar_stool",
+   "position": [
+    18.25,
+    0.0,
+    7.95
+   ],
+   "rotation_y": 0.0,
+   "scale": [
+    1.0,
+    1.0,
+    1.0
+   ],
+   "zone": "Bar"
+  },
+  {
+   "name": "Stool6",
+   "object": "bar_stool",
+   "position": [
+    19.5,
+    0.0,
+    7.95
+   ],
+   "rotation_y": 0.0,
+   "scale": [
+    1.0,
+    1.0,
+    1.0
+   ],
+   "zone": "Bar"
+  },
+  {
+   "name": "Stool7",
+   "object": "bar_stool",
+   "position": [
+    20.75,
+    0.0,
+    7.95
+   ],
+   "rotation_y": 0.0,
+   "scale": [
+    1.0,
+    1.0,
+    1.0
+   ],
+   "zone": "Bar"
+  },
+  {
+   "name": "Soffit0",
+   "object": "soffit_segment",
+   "position": [
+    12.0,
+    4.0,
+    8.75
+   ],
+   "rotation_y": -180.0,
+   "scale": [
+    1.0,
+    1.0,
+    1.0
+   ],
+   "zone": "Bar"
+  },
+  {
+   "name": "Soffit1",
+   "object": "soffit_segment",
+   "position": [
+    13.0,
+    4.0,
+    8.75
+   ],
+   "rotation_y": -180.0,
+   "scale": [
+    1.0,
+    1.0,
+    1.0
+   ],
+   "zone": "Bar"
+  },
+  {
+   "name": "Soffit2",
+   "object": "soffit_segment",
+   "position": [
+    14.0,
+    4.0,
+    8.75
+   ],
+   "rotation_y": -180.0,
+   "scale": [
+    1.0,
+    1.0,
+    1.0
+   ],
+   "zone": "Bar"
+  },
+  {
+   "name": "Soffit3",
+   "object": "soffit_segment",
+   "position": [
+    15.0,
+    4.0,
+    8.75
+   ],
+   "rotation_y": -180.0,
+   "scale": [
+    1.0,
+    1.0,
+    1.0
+   ],
+   "zone": "Bar"
+  },
+  {
+   "name": "Soffit4",
+   "object": "soffit_segment",
+   "position": [
+    16.0,
+    4.0,
+    8.75
+   ],
+   "rotation_y": -180.0,
+   "scale": [
+    1.0,
+    1.0,
+    1.0
+   ],
+   "zone": "Bar"
+  },
+  {
+   "name": "Soffit5",
+   "object": "soffit_segment",
+   "position": [
+    17.0,
+    4.0,
+    8.75
+   ],
+   "rotation_y": -180.0,
+   "scale": [
+    1.0,
+    1.0,
+    1.0
+   ],
+   "zone": "Bar"
+  },
+  {
+   "name": "Soffit6",
+   "object": "soffit_segment",
+   "position": [
+    18.0,
+    4.0,
+    8.75
+   ],
+   "rotation_y": -180.0,
+   "scale": [
+    1.0,
+    1.0,
+    1.0
+   ],
+   "zone": "Bar"
+  },
+  {
+   "name": "Soffit7",
+   "object": "soffit_segment",
+   "position": [
+    19.0,
+    4.0,
+    8.75
+   ],
+   "rotation_y": -180.0,
+   "scale": [
+    1.0,
+    1.0,
+    1.0
+   ],
+   "zone": "Bar"
+  },
+  {
+   "name": "Soffit8",
+   "object": "soffit_segment",
+   "position": [
+    20.0,
+    4.0,
+    8.75
+   ],
+   "rotation_y": -180.0,
+   "scale": [
+    1.0,
+    1.0,
+    1.0
+   ],
+   "zone": "Bar"
+  },
+  {
+   "name": "Soffit9",
+   "object": "soffit_segment",
+   "position": [
+    21.0,
+    4.0,
+    8.75
+   ],
+   "rotation_y": -180.0,
+   "scale": [
+    1.0,
+    1.0,
+    1.0
+   ],
+   "zone": "Bar"
+  },
+  {
+   "name": "PaintingBar0",
+   "object": "painting_b",
+   "position": [
+    13.5,
+    2.6,
+    9.9
+   ],
+   "rotation_y": -180.0,
+   "scale": [
+    1.0,
+    1.0,
+    1.0
+   ],
+   "zone": "Bar"
+  },
+  {
+   "name": "PaintingBar1",
+   "object": "painting_c",
+   "position": [
+    19.5,
+    2.6,
+    9.9
+   ],
+   "rotation_y": -180.0,
+   "scale": [
+    1.0,
+    1.0,
+    1.0
+   ],
+   "zone": "Bar"
+  },
+  {
+   "name": "Table0",
+   "object": "round_table",
+   "position": [
+    13.8,
+    0.0,
+    3.4
+   ],
+   "rotation_y": 0.0,
+   "scale": [
+    1.0,
+    1.0,
+    1.0
+   ],
+   "zone": "Tables"
+  },
+  {
+   "name": "Table0Lamp",
+   "object": "table_lamp_lit",
+   "position": [
+    13.72,
+    0.75,
+    3.4
+   ],
+   "rotation_y": 0.0,
+   "scale": [
+    1.0,
+    1.0,
+    1.0
+   ],
+   "zone": "Tables"
+  },
+  {
+   "name": "Table0Tealight0",
+   "object": "tealight_lantern",
+   "position": [
+    13.92,
+    0.75,
+    3.46
+   ],
+   "rotation_y": 0.0,
+   "scale": [
+    1.0,
+    1.0,
+    1.0
+   ],
+   "zone": "Tables"
+  },
+  {
+   "name": "Table0Napkins",
+   "object": "napkin_cup",
+   "position": [
+    13.85,
+    0.75,
+    3.26
+   ],
+   "rotation_y": 0.0,
+   "scale": [
+    1.0,
+    1.0,
+    1.0
+   ],
+   "zone": "Tables"
+  },
+  {
+   "name": "Table0Chair0",
+   "object": "cafe_chair",
+   "position": [
+    13.2,
+    0.0,
+    3.4
+   ],
+   "rotation_y": 90.0,
+   "scale": [
+    1.0,
+    1.0,
+    1.0
+   ],
+   "zone": "Tables"
+  },
+  {
+   "name": "Table0Chair1",
+   "object": "cafe_chair",
+   "position": [
+    14.4,
+    0.0,
+    3.4
+   ],
+   "rotation_y": -90.0,
+   "scale": [
+    1.0,
+    1.0,
+    1.0
+   ],
+   "zone": "Tables"
+  },
+  {
+   "name": "Table0Chair2",
+   "object": "cafe_chair",
+   "position": [
+    13.8,
+    0.0,
+    4.0
+   ],
+   "rotation_y": 180.0,
+   "scale": [
+    1.0,
+    1.0,
+    1.0
+   ],
+   "zone": "Tables"
+  },
+  {
+   "name": "Table1",
+   "object": "round_table",
+   "position": [
+    16.6,
+    0.0,
+    3.4
+   ],
+   "rotation_y": 0.0,
+   "scale": [
+    1.0,
+    1.0,
+    1.0
+   ],
+   "zone": "Tables"
+  },
+  {
+   "name": "Table1Tealight0",
+   "object": "tealight_lantern",
+   "position": [
+    16.72,
+    0.75,
+    3.46
+   ],
+   "rotation_y": 0.0,
+   "scale": [
+    1.0,
+    1.0,
+    1.0
+   ],
+   "zone": "Tables"
+  },
+  {
+   "name": "Table1Tealight1",
+   "object": "tealight_lantern",
+   "position": [
+    16.84,
+    0.75,
+    3.34
+   ],
+   "rotation_y": 0.0,
+   "scale": [
+    1.0,
+    1.0,
+    1.0
+   ],
+   "zone": "Tables"
+  },
+  {
+   "name": "Table1Napkins",
+   "object": "napkin_cup",
+   "position": [
+    16.65,
+    0.75,
+    3.26
+   ],
+   "rotation_y": 0.0,
+   "scale": [
+    1.0,
+    1.0,
+    1.0
+   ],
+   "zone": "Tables"
+  },
+  {
+   "name": "Table1Chair0",
+   "object": "cafe_chair",
+   "position": [
+    16.0,
+    0.0,
+    3.4
+   ],
+   "rotation_y": 90.0,
+   "scale": [
+    1.0,
+    1.0,
+    1.0
+   ],
+   "zone": "Tables"
+  },
+  {
+   "name": "Table1Chair1",
+   "object": "cafe_chair",
+   "position": [
+    17.2,
+    0.0,
+    3.4
+   ],
+   "rotation_y": -90.0,
+   "scale": [
+    1.0,
+    1.0,
+    1.0
+   ],
+   "zone": "Tables"
+  },
+  {
+   "name": "Table1Chair2",
+   "object": "cafe_chair",
+   "position": [
+    16.6,
+    0.0,
+    4.0
+   ],
+   "rotation_y": 180.0,
+   "scale": [
+    1.0,
+    1.0,
+    1.0
+   ],
+   "zone": "Tables"
+  },
+  {
+   "name": "Table2",
+   "object": "round_table",
+   "position": [
+    19.4,
+    0.0,
+    3.4
+   ],
+   "rotation_y": 0.0,
+   "scale": [
+    1.0,
+    1.0,
+    1.0
+   ],
+   "zone": "Tables"
+  },
+  {
+   "name": "Table2Lamp",
+   "object": "table_lamp_lit",
+   "position": [
+    19.32,
+    0.75,
+    3.4
+   ],
+   "rotation_y": 0.0,
+   "scale": [
+    1.0,
+    1.0,
+    1.0
+   ],
+   "zone": "Tables"
+  },
+  {
+   "name": "Table2Tealight0",
+   "object": "tealight_lantern",
+   "position": [
+    19.52,
+    0.75,
+    3.46
+   ],
+   "rotation_y": 0.0,
+   "scale": [
+    1.0,
+    1.0,
+    1.0
+   ],
+   "zone": "Tables"
+  },
+  {
+   "name": "Table2Napkins",
+   "object": "napkin_cup",
+   "position": [
+    19.45,
+    0.75,
+    3.26
+   ],
+   "rotation_y": 0.0,
+   "scale": [
+    1.0,
+    1.0,
+    1.0
+   ],
+   "zone": "Tables"
+  },
+  {
+   "name": "Table2Chair0",
+   "object": "cafe_chair",
+   "position": [
+    18.8,
+    0.0,
+    3.4
+   ],
+   "rotation_y": 90.0,
+   "scale": [
+    1.0,
+    1.0,
+    1.0
+   ],
+   "zone": "Tables"
+  },
+  {
+   "name": "Table2Chair1",
+   "object": "cafe_chair",
+   "position": [
+    20.0,
+    0.0,
+    3.4
+   ],
+   "rotation_y": -90.0,
+   "scale": [
+    1.0,
+    1.0,
+    1.0
+   ],
+   "zone": "Tables"
+  },
+  {
+   "name": "Table2Chair2",
+   "object": "cafe_chair",
+   "position": [
+    19.4,
+    0.0,
+    4.0
+   ],
+   "rotation_y": 180.0,
+   "scale": [
+    1.0,
+    1.0,
+    1.0
+   ],
+   "zone": "Tables"
+  },
+  {
+   "name": "Table3",
+   "object": "round_table",
+   "position": [
+    12.6,
+    0.0,
+    6.6
+   ],
+   "rotation_y": 0.0,
+   "scale": [
+    1.0,
+    1.0,
+    1.0
+   ],
+   "zone": "Tables"
+  },
+  {
+   "name": "Table3Tealight0",
+   "object": "tealight_lantern",
+   "position": [
+    12.72,
+    0.75,
+    6.66
+   ],
+   "rotation_y": 0.0,
+   "scale": [
+    1.0,
+    1.0,
+    1.0
+   ],
+   "zone": "Tables"
+  },
+  {
+   "name": "Table3Tealight1",
+   "object": "tealight_lantern",
+   "position": [
+    12.84,
+    0.75,
+    6.54
+   ],
+   "rotation_y": 0.0,
+   "scale": [
+    1.0,
+    1.0,
+    1.0
+   ],
+   "zone": "Tables"
+  },
+  {
+   "name": "Table3Napkins",
+   "object": "napkin_cup",
+   "position": [
+    12.65,
+    0.75,
+    6.46
+   ],
+   "rotation_y": 0.0,
+   "scale": [
+    1.0,
+    1.0,
+    1.0
+   ],
+   "zone": "Tables"
+  },
+  {
+   "name": "Table3Chair0",
+   "object": "cafe_chair",
+   "position": [
+    12.0,
+    0.0,
+    6.6
+   ],
+   "rotation_y": 90.0,
+   "scale": [
+    1.0,
+    1.0,
+    1.0
+   ],
+   "zone": "Tables"
+  },
+  {
+   "name": "Table3Chair1",
+   "object": "cafe_chair",
+   "position": [
+    13.2,
+    0.0,
+    6.6
+   ],
+   "rotation_y": -90.0,
+   "scale": [
+    1.0,
+    1.0,
+    1.0
+   ],
+   "zone": "Tables"
+  },
+  {
+   "name": "Table3Chair2",
+   "object": "cafe_chair",
+   "position": [
+    12.6,
+    0.0,
+    7.2
+   ],
+   "rotation_y": 180.0,
+   "scale": [
+    1.0,
+    1.0,
+    1.0
+   ],
+   "zone": "Tables"
+  },
+  {
+   "name": "Table4",
+   "object": "round_table",
+   "position": [
+    15.4,
+    0.0,
+    6.6
+   ],
+   "rotation_y": 0.0,
+   "scale": [
+    1.0,
+    1.0,
+    1.0
+   ],
+   "zone": "Tables"
+  },
+  {
+   "name": "Table4Lamp",
+   "object": "table_lamp_lit",
+   "position": [
+    15.32,
+    0.75,
+    6.6
+   ],
+   "rotation_y": 0.0,
+   "scale": [
+    1.0,
+    1.0,
+    1.0
+   ],
+   "zone": "Tables"
+  },
+  {
+   "name": "Table4Tealight0",
+   "object": "tealight_lantern",
+   "position": [
+    15.52,
+    0.75,
+    6.66
+   ],
+   "rotation_y": 0.0,
+   "scale": [
+    1.0,
+    1.0,
+    1.0
+   ],
+   "zone": "Tables"
+  },
+  {
+   "name": "Table4Napkins",
+   "object": "napkin_cup",
+   "position": [
+    15.45,
+    0.75,
+    6.46
+   ],
+   "rotation_y": 0.0,
+   "scale": [
+    1.0,
+    1.0,
+    1.0
+   ],
+   "zone": "Tables"
+  },
+  {
+   "name": "Table4Chair0",
+   "object": "cafe_chair",
+   "position": [
+    14.8,
+    0.0,
+    6.6
+   ],
+   "rotation_y": 90.0,
+   "scale": [
+    1.0,
+    1.0,
+    1.0
+   ],
+   "zone": "Tables"
+  },
+  {
+   "name": "Table4Chair1",
+   "object": "cafe_chair",
+   "position": [
+    16.0,
+    0.0,
+    6.6
+   ],
+   "rotation_y": -90.0,
+   "scale": [
+    1.0,
+    1.0,
+    1.0
+   ],
+   "zone": "Tables"
+  },
+  {
+   "name": "Table4Chair2",
+   "object": "cafe_chair",
+   "position": [
+    15.4,
+    0.0,
+    7.2
+   ],
+   "rotation_y": 180.0,
+   "scale": [
+    1.0,
+    1.0,
+    1.0
+   ],
+   "zone": "Tables"
+  },
+  {
+   "name": "Table5",
+   "object": "round_table",
+   "position": [
+    18.2,
+    0.0,
+    6.6
+   ],
+   "rotation_y": 0.0,
+   "scale": [
+    1.0,
+    1.0,
+    1.0
+   ],
+   "zone": "Tables"
+  },
+  {
+   "name": "Table5Tealight0",
+   "object": "tealight_lantern",
+   "position": [
+    18.32,
+    0.75,
+    6.66
+   ],
+   "rotation_y": 0.0,
+   "scale": [
+    1.0,
+    1.0,
+    1.0
+   ],
+   "zone": "Tables"
+  },
+  {
+   "name": "Table5Tealight1",
+   "object": "tealight_lantern",
+   "position": [
+    18.44,
+    0.75,
+    6.54
+   ],
+   "rotation_y": 0.0,
+   "scale": [
+    1.0,
+    1.0,
+    1.0
+   ],
+   "zone": "Tables"
+  },
+  {
+   "name": "Table5Napkins",
+   "object": "napkin_cup",
+   "position": [
+    18.25,
+    0.75,
+    6.46
+   ],
+   "rotation_y": 0.0,
+   "scale": [
+    1.0,
+    1.0,
+    1.0
+   ],
+   "zone": "Tables"
+  },
+  {
+   "name": "Table5Chair0",
+   "object": "cafe_chair",
+   "position": [
+    17.6,
+    0.0,
+    6.6
+   ],
+   "rotation_y": 90.0,
+   "scale": [
+    1.0,
+    1.0,
+    1.0
+   ],
+   "zone": "Tables"
+  },
+  {
+   "name": "Table5Chair1",
+   "object": "cafe_chair",
+   "position": [
+    18.8,
+    0.0,
+    6.6
+   ],
+   "rotation_y": -90.0,
+   "scale": [
+    1.0,
+    1.0,
+    1.0
+   ],
+   "zone": "Tables"
+  },
+  {
+   "name": "Table5Chair2",
+   "object": "cafe_chair",
+   "position": [
+    18.2,
+    0.0,
+    7.2
+   ],
+   "rotation_y": 180.0,
+   "scale": [
+    1.0,
+    1.0,
+    1.0
+   ],
+   "zone": "Tables"
+  },
+  {
+   "name": "DrumStool0",
+   "object": "drum_stool",
+   "position": [
+    21.7,
+    0.0,
+    2.6
+   ],
+   "rotation_y": 0.0,
+   "scale": [
+    1.0,
+    1.0,
+    1.0
+   ],
+   "zone": "Tables"
+  },
+  {
+   "name": "DrumStool1",
+   "object": "drum_stool",
+   "position": [
+    22.7,
+    0.0,
+    3.4
+   ],
+   "rotation_y": 37.0,
+   "scale": [
+    1.0,
+    1.0,
+    1.0
+   ],
+   "zone": "Tables"
+  },
+  {
+   "name": "DrumStool2",
+   "object": "drum_stool",
+   "position": [
+    21.8,
+    0.0,
+    4.3
+   ],
+   "rotation_y": 74.0,
+   "scale": [
+    1.0,
+    1.0,
+    1.0
+   ],
+   "zone": "Tables"
+  },
+  {
+   "name": "DrumStool3",
+   "object": "drum_stool",
+   "position": [
+    22.6,
+    0.0,
+    6.7
+   ],
+   "rotation_y": 111.0,
+   "scale": [
+    1.0,
+    1.0,
+    1.0
+   ],
+   "zone": "Tables"
+  },
+  {
+   "name": "DrumStool4",
+   "object": "drum_stool",
+   "position": [
+    21.7,
+    0.0,
+    7.4
+   ],
+   "rotation_y": 148.0,
+   "scale": [
+    1.0,
+    1.0,
+    1.0
+   ],
+   "zone": "Tables"
+  },
+  {
+   "name": "DrumStool5",
+   "object": "drum_stool",
+   "position": [
+    23.0,
+    0.0,
+    2.0
+   ],
+   "rotation_y": -175.0,
+   "scale": [
+    1.0,
+    1.0,
+    1.0
+   ],
+   "zone": "Tables"
+  },
+  {
+   "name": "Table0",
+   "object": "communal_table",
+   "position": [
+    13.0,
+    0.0,
+    1.35
+   ],
+   "rotation_y": 0.0,
+   "scale": [
+    1.0,
+    1.0,
+    1.0
+   ],
+   "zone": "CommunalTable"
+  },
+  {
+   "name": "Chair0_N0",
+   "object": "cafe_chair",
+   "position": [
+    12.0,
+    0.0,
+    0.7
+   ],
+   "rotation_y": 0.0,
+   "scale": [
+    1.0,
+    1.0,
+    1.0
+   ],
+   "zone": "CommunalTable"
+  },
+  {
+   "name": "Chair0_S0",
+   "object": "cafe_chair",
+   "position": [
+    12.0,
+    0.0,
+    2.0
+   ],
+   "rotation_y": -180.0,
+   "scale": [
+    1.0,
+    1.0,
+    1.0
+   ],
+   "zone": "CommunalTable"
+  },
+  {
+   "name": "Chair0_N1",
+   "object": "cafe_chair",
+   "position": [
+    13.0,
+    0.0,
+    0.7
+   ],
+   "rotation_y": 0.0,
+   "scale": [
+    1.0,
+    1.0,
+    1.0
+   ],
+   "zone": "CommunalTable"
+  },
+  {
+   "name": "Chair0_S1",
+   "object": "cafe_chair",
+   "position": [
+    13.0,
+    0.0,
+    2.0
+   ],
+   "rotation_y": -180.0,
+   "scale": [
+    1.0,
+    1.0,
+    1.0
+   ],
+   "zone": "CommunalTable"
+  },
+  {
+   "name": "Chair0_N2",
+   "object": "cafe_chair",
+   "position": [
+    14.0,
+    0.0,
+    0.7
+   ],
+   "rotation_y": 0.0,
+   "scale": [
+    1.0,
+    1.0,
+    1.0
+   ],
+   "zone": "CommunalTable"
+  },
+  {
+   "name": "Chair0_S2",
+   "object": "cafe_chair",
+   "position": [
+    14.0,
+    0.0,
+    2.0
+   ],
+   "rotation_y": -180.0,
+   "scale": [
+    1.0,
+    1.0,
+    1.0
+   ],
+   "zone": "CommunalTable"
+  },
+  {
+   "name": "Lamp0Lamp",
+   "object": "table_lamp_lit",
+   "position": [
+    12.52,
+    0.75,
+    1.35
+   ],
+   "rotation_y": 0.0,
+   "scale": [
+    1.0,
+    1.0,
+    1.0
+   ],
+   "zone": "CommunalTable"
+  },
+  {
+   "name": "Lamp0Tealight0",
+   "object": "tealight_lantern",
+   "position": [
+    12.72,
+    0.75,
+    1.41
+   ],
+   "rotation_y": 0.0,
+   "scale": [
+    1.0,
+    1.0,
+    1.0
+   ],
+   "zone": "CommunalTable"
+  },
+  {
+   "name": "Lamp0Tealight1",
+   "object": "tealight_lantern",
+   "position": [
+    12.84,
+    0.75,
+    1.29
+   ],
+   "rotation_y": 0.0,
+   "scale": [
+    1.0,
+    1.0,
+    1.0
+   ],
+   "zone": "CommunalTable"
+  },
+  {
+   "name": "Lamp0Napkins",
+   "object": "napkin_cup",
+   "position": [
+    12.65,
+    0.75,
+    1.21
+   ],
+   "rotation_y": 0.0,
+   "scale": [
+    1.0,
+    1.0,
+    1.0
+   ],
+   "zone": "CommunalTable"
+  },
+  {
+   "name": "Table1",
+   "object": "communal_table",
+   "position": [
+    16.0,
+    0.0,
+    1.35
+   ],
+   "rotation_y": 0.0,
+   "scale": [
+    1.0,
+    1.0,
+    1.0
+   ],
+   "zone": "CommunalTable"
+  },
+  {
+   "name": "Chair1_N0",
+   "object": "cafe_chair",
+   "position": [
+    15.0,
+    0.0,
+    0.7
+   ],
+   "rotation_y": 0.0,
+   "scale": [
+    1.0,
+    1.0,
+    1.0
+   ],
+   "zone": "CommunalTable"
+  },
+  {
+   "name": "Chair1_S0",
+   "object": "cafe_chair",
+   "position": [
+    15.0,
+    0.0,
+    2.0
+   ],
+   "rotation_y": -180.0,
+   "scale": [
+    1.0,
+    1.0,
+    1.0
+   ],
+   "zone": "CommunalTable"
+  },
+  {
+   "name": "Chair1_N1",
+   "object": "cafe_chair",
+   "position": [
+    16.0,
+    0.0,
+    0.7
+   ],
+   "rotation_y": 0.0,
+   "scale": [
+    1.0,
+    1.0,
+    1.0
+   ],
+   "zone": "CommunalTable"
+  },
+  {
+   "name": "Chair1_S1",
+   "object": "cafe_chair",
+   "position": [
+    16.0,
+    0.0,
+    2.0
+   ],
+   "rotation_y": -180.0,
+   "scale": [
+    1.0,
+    1.0,
+    1.0
+   ],
+   "zone": "CommunalTable"
+  },
+  {
+   "name": "Chair1_N2",
+   "object": "cafe_chair",
+   "position": [
+    17.0,
+    0.0,
+    0.7
+   ],
+   "rotation_y": 0.0,
+   "scale": [
+    1.0,
+    1.0,
+    1.0
+   ],
+   "zone": "CommunalTable"
+  },
+  {
+   "name": "Chair1_S2",
+   "object": "cafe_chair",
+   "position": [
+    17.0,
+    0.0,
+    2.0
+   ],
+   "rotation_y": -180.0,
+   "scale": [
+    1.0,
+    1.0,
+    1.0
+   ],
+   "zone": "CommunalTable"
+  },
+  {
+   "name": "Lamp1Lamp",
+   "object": "table_lamp_lit",
+   "position": [
+    16.32,
+    0.75,
+    1.35
+   ],
+   "rotation_y": 0.0,
+   "scale": [
+    1.0,
+    1.0,
+    1.0
+   ],
+   "zone": "CommunalTable"
+  },
+  {
+   "name": "Lamp1Tealight0",
+   "object": "tealight_lantern",
+   "position": [
+    16.52,
+    0.75,
+    1.41
+   ],
+   "rotation_y": 0.0,
+   "scale": [
+    1.0,
+    1.0,
+    1.0
+   ],
+   "zone": "CommunalTable"
+  },
+  {
+   "name": "Lamp1Tealight1",
+   "object": "tealight_lantern",
+   "position": [
+    16.64,
+    0.75,
+    1.29
+   ],
+   "rotation_y": 0.0,
+   "scale": [
+    1.0,
+    1.0,
+    1.0
+   ],
+   "zone": "CommunalTable"
+  },
+  {
+   "name": "Lamp1Napkins",
+   "object": "napkin_cup",
+   "position": [
+    16.45,
+    0.75,
+    1.21
+   ],
+   "rotation_y": 0.0,
+   "scale": [
+    1.0,
+    1.0,
+    1.0
+   ],
+   "zone": "CommunalTable"
+  },
+  {
+   "name": "Seat0",
+   "object": "banquette_straight",
+   "position": [
+    18.7,
+    0.0,
+    0.3
+   ],
+   "rotation_y": 0.0,
+   "scale": [
+    1.0,
+    1.0,
+    1.0
+   ],
+   "zone": "Banquette"
+  },
+  {
+   "name": "Seat1",
+   "object": "banquette_straight",
+   "position": [
+    19.7,
+    0.0,
+    0.3
+   ],
+   "rotation_y": 0.0,
+   "scale": [
+    1.0,
+    1.0,
+    1.0
+   ],
+   "zone": "Banquette"
+  },
+  {
+   "name": "Seat2",
+   "object": "banquette_straight",
+   "position": [
+    20.7,
+    0.0,
+    0.3
+   ],
+   "rotation_y": 0.0,
+   "scale": [
+    1.0,
+    1.0,
+    1.0
+   ],
+   "zone": "Banquette"
+  },
+  {
+   "name": "Seat3",
+   "object": "banquette_straight",
+   "position": [
+    21.7,
+    0.0,
+    0.3
+   ],
+   "rotation_y": 0.0,
+   "scale": [
+    1.0,
+    1.0,
+    1.0
+   ],
+   "zone": "Banquette"
+  },
+  {
+   "name": "Table0",
+   "object": "round_table",
+   "position": [
+    19.2,
+    0.0,
+    1.05
+   ],
+   "rotation_y": 0.0,
+   "scale": [
+    1.0,
+    1.0,
+    1.0
+   ],
+   "zone": "Banquette"
+  },
+  {
+   "name": "Table0Tealight0",
+   "object": "tealight_lantern",
+   "position": [
+    19.32,
+    0.75,
+    1.11
+   ],
+   "rotation_y": 0.0,
+   "scale": [
+    1.0,
+    1.0,
+    1.0
+   ],
+   "zone": "Banquette"
+  },
+  {
+   "name": "Table0Tealight1",
+   "object": "tealight_lantern",
+   "position": [
+    19.44,
+    0.75,
+    0.99
+   ],
+   "rotation_y": 0.0,
+   "scale": [
+    1.0,
+    1.0,
+    1.0
+   ],
+   "zone": "Banquette"
+  },
+  {
+   "name": "Table0Napkins",
+   "object": "napkin_cup",
+   "position": [
+    19.25,
+    0.75,
+    0.91
+   ],
+   "rotation_y": 0.0,
+   "scale": [
+    1.0,
+    1.0,
+    1.0
+   ],
+   "zone": "Banquette"
+  },
+  {
+   "name": "Table1",
+   "object": "round_table",
+   "position": [
+    21.2,
+    0.0,
+    1.05
+   ],
+   "rotation_y": 0.0,
+   "scale": [
+    1.0,
+    1.0,
+    1.0
+   ],
+   "zone": "Banquette"
+  },
+  {
+   "name": "Table1Tealight0",
+   "object": "tealight_lantern",
+   "position": [
+    21.32,
+    0.75,
+    1.11
+   ],
+   "rotation_y": 0.0,
+   "scale": [
+    1.0,
+    1.0,
+    1.0
+   ],
+   "zone": "Banquette"
+  },
+  {
+   "name": "Table1Tealight1",
+   "object": "tealight_lantern",
+   "position": [
+    21.44,
+    0.75,
+    0.99
+   ],
+   "rotation_y": 0.0,
+   "scale": [
+    1.0,
+    1.0,
+    1.0
+   ],
+   "zone": "Banquette"
+  },
+  {
+   "name": "Table1Napkins",
+   "object": "napkin_cup",
+   "position": [
+    21.25,
+    0.75,
+    0.91
+   ],
+   "rotation_y": 0.0,
+   "scale": [
+    1.0,
+    1.0,
+    1.0
+   ],
+   "zone": "Banquette"
+  },
+  {
+   "name": "Riser0",
+   "object": "stage_platform",
+   "position": [
+    24.5,
+    0.0,
+    2.0
+   ],
+   "rotation_y": -90.0,
+   "scale": [
+    1.0,
+    1.0,
+    1.0
+   ],
+   "zone": "Stage"
+  },
+  {
+   "name": "Riser1",
+   "object": "stage_platform",
+   "position": [
+    24.5,
+    0.0,
+    4.0
+   ],
+   "rotation_y": -90.0,
+   "scale": [
+    1.0,
+    1.0,
+    1.0
+   ],
+   "zone": "Stage"
+  },
+  {
+   "name": "Riser2",
+   "object": "stage_platform",
+   "position": [
+    24.5,
+    0.0,
+    6.0
+   ],
+   "rotation_y": -90.0,
+   "scale": [
+    1.0,
+    1.0,
+    1.0
+   ],
+   "zone": "Stage"
+  },
+  {
+   "name": "Riser3",
+   "object": "stage_platform",
+   "position": [
+    24.5,
+    0.0,
+    8.0
+   ],
+   "rotation_y": -90.0,
+   "scale": [
+    1.0,
+    1.0,
+    1.0
+   ],
+   "zone": "Stage"
+  },
+  {
+   "name": "Tile0_0",
+   "object": "stage_carpet_tile",
+   "position": [
+    24.5,
+    0.45,
+    1.5
+   ],
+   "rotation_y": 0.0,
+   "scale": [
+    1.0,
+    1.0,
+    1.0
+   ],
+   "zone": "Stage"
+  },
+  {
+   "name": "Tile0_1",
+   "object": "stage_carpet_tile",
+   "position": [
+    24.5,
+    0.45,
+    2.5
+   ],
+   "rotation_y": 0.0,
+   "scale": [
+    1.0,
+    1.0,
+    1.0
+   ],
+   "zone": "Stage"
+  },
+  {
+   "name": "Tile0_2",
+   "object": "stage_carpet_tile",
+   "position": [
+    24.5,
+    0.45,
+    3.5
+   ],
+   "rotation_y": 0.0,
+   "scale": [
+    1.0,
+    1.0,
+    1.0
+   ],
+   "zone": "Stage"
+  },
+  {
+   "name": "Tile0_3",
+   "object": "stage_carpet_tile",
+   "position": [
+    24.5,
+    0.45,
+    4.5
+   ],
+   "rotation_y": 0.0,
+   "scale": [
+    1.0,
+    1.0,
+    1.0
+   ],
+   "zone": "Stage"
+  },
+  {
+   "name": "Tile0_4",
+   "object": "stage_carpet_tile",
+   "position": [
+    24.5,
+    0.45,
+    5.5
+   ],
+   "rotation_y": 0.0,
+   "scale": [
+    1.0,
+    1.0,
+    1.0
+   ],
+   "zone": "Stage"
+  },
+  {
+   "name": "Tile0_5",
+   "object": "stage_carpet_tile",
+   "position": [
+    24.5,
+    0.45,
+    6.5
+   ],
+   "rotation_y": 0.0,
+   "scale": [
+    1.0,
+    1.0,
+    1.0
+   ],
+   "zone": "Stage"
+  },
+  {
+   "name": "Tile0_6",
+   "object": "stage_carpet_tile",
+   "position": [
+    24.5,
+    0.45,
+    7.5
+   ],
+   "rotation_y": 0.0,
+   "scale": [
+    1.0,
+    1.0,
+    1.0
+   ],
+   "zone": "Stage"
+  },
+  {
+   "name": "Tile0_7",
+   "object": "stage_carpet_tile",
+   "position": [
+    24.5,
+    0.45,
+    8.5
+   ],
+   "rotation_y": 0.0,
+   "scale": [
+    1.0,
+    1.0,
+    1.0
+   ],
+   "zone": "Stage"
+  },
+  {
+   "name": "Tile1_0",
+   "object": "stage_carpet_tile",
+   "position": [
+    25.5,
+    0.45,
+    1.5
+   ],
+   "rotation_y": 0.0,
+   "scale": [
+    1.0,
+    1.0,
+    1.0
+   ],
+   "zone": "Stage"
+  },
+  {
+   "name": "Tile1_1",
+   "object": "stage_carpet_tile",
+   "position": [
+    25.5,
+    0.45,
+    2.5
+   ],
+   "rotation_y": 0.0,
+   "scale": [
+    1.0,
+    1.0,
+    1.0
+   ],
+   "zone": "Stage"
+  },
+  {
+   "name": "Tile1_2",
+   "object": "stage_carpet_tile",
+   "position": [
+    25.5,
+    0.45,
+    3.5
+   ],
+   "rotation_y": 0.0,
+   "scale": [
+    1.0,
+    1.0,
+    1.0
+   ],
+   "zone": "Stage"
+  },
+  {
+   "name": "Tile1_3",
+   "object": "stage_carpet_tile",
+   "position": [
+    25.5,
+    0.45,
+    4.5
+   ],
+   "rotation_y": 0.0,
+   "scale": [
+    1.0,
+    1.0,
+    1.0
+   ],
+   "zone": "Stage"
+  },
+  {
+   "name": "Tile1_4",
+   "object": "stage_carpet_tile",
+   "position": [
+    25.5,
+    0.45,
+    5.5
+   ],
+   "rotation_y": 0.0,
+   "scale": [
+    1.0,
+    1.0,
+    1.0
+   ],
+   "zone": "Stage"
+  },
+  {
+   "name": "Tile1_5",
+   "object": "stage_carpet_tile",
+   "position": [
+    25.5,
+    0.45,
+    6.5
+   ],
+   "rotation_y": 0.0,
+   "scale": [
+    1.0,
+    1.0,
+    1.0
+   ],
+   "zone": "Stage"
+  },
+  {
+   "name": "Tile1_6",
+   "object": "stage_carpet_tile",
+   "position": [
+    25.5,
+    0.45,
+    7.5
+   ],
+   "rotation_y": 0.0,
+   "scale": [
+    1.0,
+    1.0,
+    1.0
+   ],
+   "zone": "Stage"
+  },
+  {
+   "name": "Tile1_7",
+   "object": "stage_carpet_tile",
+   "position": [
+    25.5,
+    0.45,
+    8.5
+   ],
+   "rotation_y": 0.0,
+   "scale": [
+    1.0,
+    1.0,
+    1.0
+   ],
+   "zone": "Stage"
+  },
+  {
+   "name": "Tile2_0",
+   "object": "stage_carpet_tile",
+   "position": [
+    26.5,
+    0.45,
+    1.5
+   ],
+   "rotation_y": 0.0,
+   "scale": [
+    1.0,
+    1.0,
+    1.0
+   ],
+   "zone": "Stage"
+  },
+  {
+   "name": "Tile2_1",
+   "object": "stage_carpet_tile",
+   "position": [
+    26.5,
+    0.45,
+    2.5
+   ],
+   "rotation_y": 0.0,
+   "scale": [
+    1.0,
+    1.0,
+    1.0
+   ],
+   "zone": "Stage"
+  },
+  {
+   "name": "Tile2_2",
+   "object": "stage_carpet_tile",
+   "position": [
+    26.5,
+    0.45,
+    3.5
+   ],
+   "rotation_y": 0.0,
+   "scale": [
+    1.0,
+    1.0,
+    1.0
+   ],
+   "zone": "Stage"
+  },
+  {
+   "name": "Tile2_3",
+   "object": "stage_carpet_tile",
+   "position": [
+    26.5,
+    0.45,
+    4.5
+   ],
+   "rotation_y": 0.0,
+   "scale": [
+    1.0,
+    1.0,
+    1.0
+   ],
+   "zone": "Stage"
+  },
+  {
+   "name": "Tile2_4",
+   "object": "stage_carpet_tile",
+   "position": [
+    26.5,
+    0.45,
+    5.5
+   ],
+   "rotation_y": 0.0,
+   "scale": [
+    1.0,
+    1.0,
+    1.0
+   ],
+   "zone": "Stage"
+  },
+  {
+   "name": "Tile2_5",
+   "object": "stage_carpet_tile",
+   "position": [
+    26.5,
+    0.45,
+    6.5
+   ],
+   "rotation_y": 0.0,
+   "scale": [
+    1.0,
+    1.0,
+    1.0
+   ],
+   "zone": "Stage"
+  },
+  {
+   "name": "Tile2_6",
+   "object": "stage_carpet_tile",
+   "position": [
+    26.5,
+    0.45,
+    7.5
+   ],
+   "rotation_y": 0.0,
+   "scale": [
+    1.0,
+    1.0,
+    1.0
+   ],
+   "zone": "Stage"
+  },
+  {
+   "name": "Tile2_7",
+   "object": "stage_carpet_tile",
+   "position": [
+    26.5,
+    0.45,
+    8.5
+   ],
+   "rotation_y": 0.0,
+   "scale": [
+    1.0,
+    1.0,
+    1.0
+   ],
+   "zone": "Stage"
+  },
+  {
+   "name": "Tile3_0",
+   "object": "stage_carpet_tile",
+   "position": [
+    27.5,
+    0.45,
+    1.5
+   ],
+   "rotation_y": 0.0,
+   "scale": [
+    1.0,
+    1.0,
+    1.0
+   ],
+   "zone": "Stage"
+  },
+  {
+   "name": "Tile3_1",
+   "object": "stage_carpet_tile",
+   "position": [
+    27.5,
+    0.45,
+    2.5
+   ],
+   "rotation_y": 0.0,
+   "scale": [
+    1.0,
+    1.0,
+    1.0
+   ],
+   "zone": "Stage"
+  },
+  {
+   "name": "Tile3_2",
+   "object": "stage_carpet_tile",
+   "position": [
+    27.5,
+    0.45,
+    3.5
+   ],
+   "rotation_y": 0.0,
+   "scale": [
+    1.0,
+    1.0,
+    1.0
+   ],
+   "zone": "Stage"
+  },
+  {
+   "name": "Tile3_3",
+   "object": "stage_carpet_tile",
+   "position": [
+    27.5,
+    0.45,
+    4.5
+   ],
+   "rotation_y": 0.0,
+   "scale": [
+    1.0,
+    1.0,
+    1.0
+   ],
+   "zone": "Stage"
+  },
+  {
+   "name": "Tile3_4",
+   "object": "stage_carpet_tile",
+   "position": [
+    27.5,
+    0.45,
+    5.5
+   ],
+   "rotation_y": 0.0,
+   "scale": [
+    1.0,
+    1.0,
+    1.0
+   ],
+   "zone": "Stage"
+  },
+  {
+   "name": "Tile3_5",
+   "object": "stage_carpet_tile",
+   "position": [
+    27.5,
+    0.45,
+    6.5
+   ],
+   "rotation_y": 0.0,
+   "scale": [
+    1.0,
+    1.0,
+    1.0
+   ],
+   "zone": "Stage"
+  },
+  {
+   "name": "Tile3_6",
+   "object": "stage_carpet_tile",
+   "position": [
+    27.5,
+    0.45,
+    7.5
+   ],
+   "rotation_y": 0.0,
+   "scale": [
+    1.0,
+    1.0,
+    1.0
+   ],
+   "zone": "Stage"
+  },
+  {
+   "name": "Tile3_7",
+   "object": "stage_carpet_tile",
+   "position": [
+    27.5,
+    0.45,
+    8.5
+   ],
+   "rotation_y": 0.0,
+   "scale": [
+    1.0,
+    1.0,
+    1.0
+   ],
+   "zone": "Stage"
+  },
+  {
+   "name": "Tile4_0",
+   "object": "stage_carpet_tile",
+   "position": [
+    28.5,
+    0.45,
+    1.5
+   ],
+   "rotation_y": 0.0,
+   "scale": [
+    1.0,
+    1.0,
+    1.0
+   ],
+   "zone": "Stage"
+  },
+  {
+   "name": "Tile4_1",
+   "object": "stage_carpet_tile",
+   "position": [
+    28.5,
+    0.45,
+    2.5
+   ],
+   "rotation_y": 0.0,
+   "scale": [
+    1.0,
+    1.0,
+    1.0
+   ],
+   "zone": "Stage"
+  },
+  {
+   "name": "Tile4_2",
+   "object": "stage_carpet_tile",
+   "position": [
+    28.5,
+    0.45,
+    3.5
+   ],
+   "rotation_y": 0.0,
+   "scale": [
+    1.0,
+    1.0,
+    1.0
+   ],
+   "zone": "Stage"
+  },
+  {
+   "name": "Tile4_3",
+   "object": "stage_carpet_tile",
+   "position": [
+    28.5,
+    0.45,
+    4.5
+   ],
+   "rotation_y": 0.0,
+   "scale": [
+    1.0,
+    1.0,
+    1.0
+   ],
+   "zone": "Stage"
+  },
+  {
+   "name": "Tile4_4",
+   "object": "stage_carpet_tile",
+   "position": [
+    28.5,
+    0.45,
+    5.5
+   ],
+   "rotation_y": 0.0,
+   "scale": [
+    1.0,
+    1.0,
+    1.0
+   ],
+   "zone": "Stage"
+  },
+  {
+   "name": "Tile4_5",
+   "object": "stage_carpet_tile",
+   "position": [
+    28.5,
+    0.45,
+    6.5
+   ],
+   "rotation_y": 0.0,
+   "scale": [
+    1.0,
+    1.0,
+    1.0
+   ],
+   "zone": "Stage"
+  },
+  {
+   "name": "Tile4_6",
+   "object": "stage_carpet_tile",
+   "position": [
+    28.5,
+    0.45,
+    7.5
+   ],
+   "rotation_y": 0.0,
+   "scale": [
+    1.0,
+    1.0,
+    1.0
+   ],
+   "zone": "Stage"
+  },
+  {
+   "name": "Tile4_7",
+   "object": "stage_carpet_tile",
+   "position": [
+    28.5,
+    0.45,
+    8.5
+   ],
+   "rotation_y": 0.0,
+   "scale": [
+    1.0,
+    1.0,
+    1.0
+   ],
+   "zone": "Stage"
+  },
+  {
+   "name": "Tile5_0",
+   "object": "stage_carpet_tile",
+   "position": [
+    29.5,
+    0.45,
+    1.5
+   ],
+   "rotation_y": 0.0,
+   "scale": [
+    1.0,
+    1.0,
+    1.0
+   ],
+   "zone": "Stage"
+  },
+  {
+   "name": "Tile5_1",
+   "object": "stage_carpet_tile",
+   "position": [
+    29.5,
+    0.45,
+    2.5
+   ],
+   "rotation_y": 0.0,
+   "scale": [
+    1.0,
+    1.0,
+    1.0
+   ],
+   "zone": "Stage"
+  },
+  {
+   "name": "Tile5_2",
+   "object": "stage_carpet_tile",
+   "position": [
+    29.5,
+    0.45,
+    3.5
+   ],
+   "rotation_y": 0.0,
+   "scale": [
+    1.0,
+    1.0,
+    1.0
+   ],
+   "zone": "Stage"
+  },
+  {
+   "name": "Tile5_3",
+   "object": "stage_carpet_tile",
+   "position": [
+    29.5,
+    0.45,
+    4.5
+   ],
+   "rotation_y": 0.0,
+   "scale": [
+    1.0,
+    1.0,
+    1.0
+   ],
+   "zone": "Stage"
+  },
+  {
+   "name": "Tile5_4",
+   "object": "stage_carpet_tile",
+   "position": [
+    29.5,
+    0.45,
+    5.5
+   ],
+   "rotation_y": 0.0,
+   "scale": [
+    1.0,
+    1.0,
+    1.0
+   ],
+   "zone": "Stage"
+  },
+  {
+   "name": "Tile5_5",
+   "object": "stage_carpet_tile",
+   "position": [
+    29.5,
+    0.45,
+    6.5
+   ],
+   "rotation_y": 0.0,
+   "scale": [
+    1.0,
+    1.0,
+    1.0
+   ],
+   "zone": "Stage"
+  },
+  {
+   "name": "Tile5_6",
+   "object": "stage_carpet_tile",
+   "position": [
+    29.5,
+    0.45,
+    7.5
+   ],
+   "rotation_y": 0.0,
+   "scale": [
+    1.0,
+    1.0,
+    1.0
+   ],
+   "zone": "Stage"
+  },
+  {
+   "name": "Tile5_7",
+   "object": "stage_carpet_tile",
+   "position": [
+    29.5,
+    0.45,
+    8.5
+   ],
+   "rotation_y": 0.0,
+   "scale": [
+    1.0,
+    1.0,
+    1.0
+   ],
+   "zone": "Stage"
+  },
+  {
+   "name": "Steps0",
+   "object": "stage_steps",
+   "position": [
+    23.7,
+    0.0,
+    5.0
+   ],
+   "rotation_y": -90.0,
+   "scale": [
+    1.0,
+    1.0,
+    1.0
+   ],
+   "zone": "Stage"
+  },
+  {
+   "name": "Steps1",
+   "object": "stage_steps",
+   "position": [
+    23.7,
+    0.0,
+    6.0
+   ],
+   "rotation_y": -90.0,
+   "scale": [
+    1.0,
+    1.0,
+    1.0
+   ],
+   "zone": "Stage"
+  },
+  {
+   "name": "Backdrop0",
+   "object": "slatted_backdrop",
+   "position": [
+    29.85,
+    0.5,
+    2.5
+   ],
+   "rotation_y": -90.0,
+   "scale": [
+    1.0,
+    1.0,
+    1.0
+   ],
+   "zone": "Stage"
+  },
+  {
+   "name": "Backdrop1",
+   "object": "slatted_backdrop",
+   "position": [
+    29.85,
+    0.5,
+    3.5
+   ],
+   "rotation_y": -90.0,
+   "scale": [
+    1.0,
+    1.0,
+    1.0
+   ],
+   "zone": "Stage"
+  },
+  {
+   "name": "Backdrop2",
+   "object": "slatted_backdrop",
+   "position": [
+    29.85,
+    0.5,
+    4.5
+   ],
+   "rotation_y": -90.0,
+   "scale": [
+    1.0,
+    1.0,
+    1.0
+   ],
+   "zone": "Stage"
+  },
+  {
+   "name": "Backdrop3",
+   "object": "slatted_backdrop",
+   "position": [
+    29.85,
+    0.5,
+    5.5
+   ],
+   "rotation_y": -90.0,
+   "scale": [
+    1.0,
+    1.0,
+    1.0
+   ],
+   "zone": "Stage"
+  },
+  {
+   "name": "Backdrop4",
+   "object": "slatted_backdrop",
+   "position": [
+    29.85,
+    0.5,
+    6.5
+   ],
+   "rotation_y": -90.0,
+   "scale": [
+    1.0,
+    1.0,
+    1.0
+   ],
+   "zone": "Stage"
+  },
+  {
+   "name": "Backdrop5",
+   "object": "slatted_backdrop",
+   "position": [
+    29.85,
+    0.5,
+    7.5
+   ],
+   "rotation_y": -90.0,
+   "scale": [
+    1.0,
+    1.0,
+    1.0
+   ],
+   "zone": "Stage"
+  },
+  {
+   "name": "CurtainEast_1",
+   "object": "curtain_panel",
+   "position": [
+    29.85,
+    0.0,
+    1.5
+   ],
+   "rotation_y": -90.0,
+   "scale": [
+    1.0,
+    1.0,
+    1.0
+   ],
+   "zone": "Stage"
+  },
+  {
+   "name": "CurtainEast_8",
+   "object": "curtain_panel",
+   "position": [
+    29.85,
+    0.0,
+    8.5
+   ],
+   "rotation_y": -90.0,
+   "scale": [
+    1.0,
+    1.0,
+    1.0
+   ],
+   "zone": "Stage"
+  },
+  {
+   "name": "CurtainNorth0",
+   "object": "curtain_panel",
+   "position": [
+    25.5,
+    0.0,
+    0.1
+   ],
+   "rotation_y": 0.0,
+   "scale": [
+    1.0,
+    1.0,
+    1.0
+   ],
+   "zone": "Stage"
+  },
+  {
+   "name": "CurtainSouth0",
+   "object": "curtain_panel",
+   "position": [
+    25.5,
+    0.0,
+    9.9
+   ],
+   "rotation_y": -180.0,
+   "scale": [
+    1.0,
+    1.0,
+    1.0
+   ],
+   "zone": "Stage"
+  },
+  {
+   "name": "CurtainNorth1",
+   "object": "curtain_panel",
+   "position": [
+    26.8,
+    0.0,
+    0.1
+   ],
+   "rotation_y": 0.0,
+   "scale": [
+    1.0,
+    1.0,
+    1.0
+   ],
+   "zone": "Stage"
+  },
+  {
+   "name": "CurtainSouth1",
+   "object": "curtain_panel",
+   "position": [
+    26.8,
+    0.0,
+    9.9
+   ],
+   "rotation_y": -180.0,
+   "scale": [
+    1.0,
+    1.0,
+    1.0
+   ],
+   "zone": "Stage"
+  },
+  {
+   "name": "CurtainNorth2",
+   "object": "curtain_panel",
+   "position": [
+    28.1,
+    0.0,
+    0.1
+   ],
+   "rotation_y": 0.0,
+   "scale": [
+    1.0,
+    1.0,
+    1.0
+   ],
+   "zone": "Stage"
+  },
+  {
+   "name": "CurtainSouth2",
+   "object": "curtain_panel",
+   "position": [
+    28.1,
+    0.0,
+    9.9
+   ],
+   "rotation_y": -180.0,
+   "scale": [
+    1.0,
+    1.0,
+    1.0
+   ],
+   "zone": "Stage"
+  },
+  {
+   "name": "CurtainNorth3",
+   "object": "curtain_panel",
+   "position": [
+    29.4,
+    0.0,
+    0.1
+   ],
+   "rotation_y": 0.0,
+   "scale": [
+    1.0,
+    1.0,
+    1.0
+   ],
+   "zone": "Stage"
+  },
+  {
+   "name": "CurtainSouth3",
+   "object": "curtain_panel",
+   "position": [
+    29.4,
+    0.0,
+    9.9
+   ],
+   "rotation_y": -180.0,
+   "scale": [
+    1.0,
+    1.0,
+    1.0
+   ],
+   "zone": "Stage"
+  },
+  {
+   "name": "DrumKit",
+   "object": "drum_kit",
+   "position": [
+    28.2,
+    0.5,
+    5.0
+   ],
+   "rotation_y": -90.0,
+   "scale": [
+    1.0,
+    1.0,
+    1.0
+   ],
+   "zone": "Stage"
+  },
+  {
+   "name": "AmpL",
+   "object": "amp",
+   "position": [
+    29.2,
+    0.5,
+    2.7
+   ],
+   "rotation_y": -90.0,
+   "scale": [
+    1.0,
+    1.0,
+    1.0
+   ],
+   "zone": "Stage"
+  },
+  {
+   "name": "AmpR",
+   "object": "amp",
+   "position": [
+    29.2,
+    0.5,
+    7.3
+   ],
+   "rotation_y": -90.0,
+   "scale": [
+    1.0,
+    1.0,
+    1.0
+   ],
+   "zone": "Stage"
+  },
+  {
+   "name": "Guitar",
+   "object": "guitar_on_stand",
+   "position": [
+    27.2,
+    0.5,
+    7.7
+   ],
+   "rotation_y": -90.0,
+   "scale": [
+    1.0,
+    1.0,
+    1.0
+   ],
+   "zone": "Stage"
+  },
+  {
+   "name": "Mic0",
+   "object": "mic_stand",
+   "position": [
+    25.7,
+    0.5,
+    3.9
+   ],
+   "rotation_y": -90.0,
+   "scale": [
+    1.0,
+    1.0,
+    1.0
+   ],
+   "zone": "Stage"
+  },
+  {
+   "name": "Mic1",
+   "object": "mic_stand",
+   "position": [
+    25.7,
+    0.5,
+    6.1
+   ],
+   "rotation_y": -90.0,
+   "scale": [
+    1.0,
+    1.0,
+    1.0
+   ],
+   "zone": "Stage"
+  },
+  {
+   "name": "Mic2",
+   "object": "mic_stand",
+   "position": [
+    26.8,
+    0.5,
+    2.6
+   ],
+   "rotation_y": -90.0,
+   "scale": [
+    1.0,
+    1.0,
+    1.0
+   ],
+   "zone": "Stage"
+  },
+  {
+   "name": "Wedge0",
+   "object": "monitor_wedge",
+   "position": [
+    24.8,
+    0.5,
+    3.4
+   ],
+   "rotation_y": 90.0,
+   "scale": [
+    1.0,
+    1.0,
+    1.0
+   ],
+   "zone": "Stage"
+  },
+  {
+   "name": "Wedge1",
+   "object": "monitor_wedge",
+   "position": [
+    24.8,
+    0.5,
+    6.6
+   ],
+   "rotation_y": 90.0,
+   "scale": [
+    1.0,
+    1.0,
+    1.0
+   ],
+   "zone": "Stage"
+  },
+  {
+   "name": "Segment0",
+   "object": "truss_segment",
+   "position": [
+    24.6,
+    4.0,
+    2.0
+   ],
+   "rotation_y": 90.0,
+   "scale": [
+    1.0,
+    1.0,
+    1.0
+   ],
+   "zone": "Stage"
+  },
+  {
+   "name": "Segment1",
+   "object": "truss_segment",
+   "position": [
+    24.6,
+    4.0,
+    4.0
+   ],
+   "rotation_y": 90.0,
+   "scale": [
+    1.0,
+    1.0,
+    1.0
+   ],
+   "zone": "Stage"
+  },
+  {
+   "name": "Segment2",
+   "object": "truss_segment",
+   "position": [
+    24.6,
+    4.0,
+    6.0
+   ],
+   "rotation_y": 90.0,
+   "scale": [
+    1.0,
+    1.0,
+    1.0
+   ],
+   "zone": "Stage"
+  },
+  {
+   "name": "Segment3",
+   "object": "truss_segment",
+   "position": [
+    24.6,
+    4.0,
+    8.0
+   ],
+   "rotation_y": 90.0,
+   "scale": [
+    1.0,
+    1.0,
+    1.0
+   ],
+   "zone": "Stage"
+  },
+  {
+   "name": "Par0",
+   "object": "par_light_red",
+   "position": [
+    24.6,
+    3.6,
+    2.0
+   ],
+   "rotation_y": 90.0,
+   "scale": [
+    1.0,
+    1.0,
+    1.0
+   ],
+   "zone": "Stage"
+  },
+  {
+   "name": "Par1",
+   "object": "par_light_amber",
+   "position": [
+    24.6,
+    3.6,
+    3.6
+   ],
+   "rotation_y": 90.0,
+   "scale": [
+    1.0,
+    1.0,
+    1.0
+   ],
+   "zone": "Stage"
+  },
+  {
+   "name": "Par2",
+   "object": "par_light_blue",
+   "position": [
+    24.6,
+    3.6,
+    5.0
+   ],
+   "rotation_y": 90.0,
+   "scale": [
+    1.0,
+    1.0,
+    1.0
+   ],
+   "zone": "Stage"
+  },
+  {
+   "name": "Par3",
+   "object": "par_light_amber",
+   "position": [
+    24.6,
+    3.6,
+    6.4
+   ],
+   "rotation_y": 90.0,
+   "scale": [
+    1.0,
+    1.0,
+    1.0
+   ],
+   "zone": "Stage"
+  },
+  {
+   "name": "Par4",
+   "object": "par_light_red",
+   "position": [
+    24.6,
+    3.6,
+    8.0
+   ],
+   "rotation_y": 90.0,
+   "scale": [
+    1.0,
+    1.0,
+    1.0
+   ],
+   "zone": "Stage"
+  },
+  {
+   "name": "StageTree",
+   "object": "stage_tree",
+   "position": [
+    28.9,
+    0.5,
+    1.6
+   ],
+   "rotation_y": -90.0,
+   "scale": [
+    1.0,
+    1.0,
+    1.0
+   ],
+   "zone": "Stage"
+  },
+  {
+   "name": "SpeakerL",
+   "object": "pa_speaker",
+   "position": [
+    23.6,
+    0.0,
+    1.6
+   ],
+   "rotation_y": -90.0,
+   "scale": [
+    1.0,
+    1.0,
+    1.0
+   ],
+   "zone": "Stage"
+  },
+  {
+   "name": "SpeakerR",
+   "object": "pa_speaker",
+   "position": [
+    23.6,
+    0.0,
+    8.4
+   ],
+   "rotation_y": -90.0,
+   "scale": [
+    1.0,
+    1.0,
+    1.0
+   ],
+   "zone": "Stage"
+  }
+ ],
+ "room_height_m": 4.0,
+ "source": "res://scenes/venue/venue.tscn",
+ "spawns": [
+  {
+   "pose": "stand",
+   "position": [
+    4.0,
+    0.0,
+    5.5
+   ],
+   "preset_slot": "PLAYER",
+   "rotation_y": 0.0,
+   "seat_h": 0.0,
+   "spot": "Player",
+   "zone": "Lounge"
+  },
+  {
+   "pose": "sit",
+   "position": [
+    2.9,
+    0.0,
+    2.25
+   ],
+   "preset_slot": "PATRON",
+   "rotation_y": -180.0,
+   "seat_h": 0.45,
+   "spot": "Lounge_Chair0",
+   "zone": "Lounge"
+  },
+  {
+   "pose": "sit",
+   "position": [
+    2.9,
+    0.0,
+    0.6
+   ],
+   "preset_slot": "PATRON",
+   "rotation_y": 0.0,
+   "seat_h": 0.45,
+   "spot": "Lounge_Banquette0",
+   "zone": "Lounge"
+  },
+  {
+   "pose": "sit",
+   "position": [
+    3.9,
+    0.0,
+    2.25
+   ],
+   "preset_slot": "PATRON",
+   "rotation_y": -180.0,
+   "seat_h": 0.45,
+   "spot": "Lounge_Chair1",
+   "zone": "Lounge"
+  },
+  {
+   "pose": "sit",
+   "position": [
+    3.9,
+    0.0,
+    0.6
+   ],
+   "preset_slot": "PATRON",
+   "rotation_y": 0.0,
+   "seat_h": 0.45,
+   "spot": "Lounge_Banquette1",
+   "zone": "Lounge"
+  },
+  {
+   "pose": "sit",
+   "position": [
+    4.9,
+    0.0,
+    2.25
+   ],
+   "preset_slot": "PATRON",
+   "rotation_y": -180.0,
+   "seat_h": 0.45,
+   "spot": "Lounge_Chair2",
+   "zone": "Lounge"
+  },
+  {
+   "pose": "sit",
+   "position": [
+    4.9,
+    0.0,
+    0.6
+   ],
+   "preset_slot": "PATRON",
+   "rotation_y": 0.0,
+   "seat_h": 0.45,
+   "spot": "Lounge_Banquette2",
+   "zone": "Lounge"
+  },
+  {
+   "pose": "sit",
+   "position": [
+    8.5,
+    0.0,
+    1.85
+   ],
+   "preset_slot": "PATRON",
+   "rotation_y": -180.0,
+   "seat_h": 0.8,
+   "spot": "Lounge_Stool0",
+   "zone": "Lounge"
+  },
+  {
+   "pose": "sit",
+   "position": [
+    9.4,
+    0.0,
+    1.85
+   ],
+   "preset_slot": "PATRON",
+   "rotation_y": -180.0,
+   "seat_h": 0.8,
+   "spot": "Lounge_Stool1",
+   "zone": "Lounge"
+  },
+  {
+   "pose": "sit",
+   "position": [
+    12.0,
+    0.0,
+    7.95
+   ],
+   "preset_slot": "PATRON",
+   "rotation_y": 0.0,
+   "seat_h": 0.8,
+   "spot": "Bar_Stool0",
+   "zone": "Bar"
+  },
+  {
+   "pose": "sit",
+   "position": [
+    13.25,
+    0.0,
+    7.95
+   ],
+   "preset_slot": "PATRON",
+   "rotation_y": 0.0,
+   "seat_h": 0.8,
+   "spot": "Bar_Stool1",
+   "zone": "Bar"
+  },
+  {
+   "pose": "sit",
+   "position": [
+    14.5,
+    0.0,
+    7.95
+   ],
+   "preset_slot": "PATRON",
+   "rotation_y": 0.0,
+   "seat_h": 0.8,
+   "spot": "Bar_Stool2",
+   "zone": "Bar"
+  },
+  {
+   "pose": "sit",
+   "position": [
+    15.75,
+    0.0,
+    7.95
+   ],
+   "preset_slot": "PATRON",
+   "rotation_y": 0.0,
+   "seat_h": 0.8,
+   "spot": "Bar_Stool3",
+   "zone": "Bar"
+  },
+  {
+   "pose": "sit",
+   "position": [
+    17.0,
+    0.0,
+    7.95
+   ],
+   "preset_slot": "PATRON",
+   "rotation_y": 0.0,
+   "seat_h": 0.8,
+   "spot": "Bar_Stool4",
+   "zone": "Bar"
+  },
+  {
+   "pose": "sit",
+   "position": [
+    18.25,
+    0.0,
+    7.95
+   ],
+   "preset_slot": "PATRON",
+   "rotation_y": 0.0,
+   "seat_h": 0.8,
+   "spot": "Bar_Stool5",
+   "zone": "Bar"
+  },
+  {
+   "pose": "sit",
+   "position": [
+    19.5,
+    0.0,
+    7.95
+   ],
+   "preset_slot": "PATRON",
+   "rotation_y": 0.0,
+   "seat_h": 0.8,
+   "spot": "Bar_Stool6",
+   "zone": "Bar"
+  },
+  {
+   "pose": "sit",
+   "position": [
+    20.75,
+    0.0,
+    7.95
+   ],
+   "preset_slot": "PATRON",
+   "rotation_y": 0.0,
+   "seat_h": 0.8,
+   "spot": "Bar_Stool7",
+   "zone": "Bar"
+  },
+  {
+   "pose": "staff",
+   "position": [
+    16.5,
+    0.0,
+    9.35
+   ],
+   "preset_slot": "BAR_1",
+   "rotation_y": -180.0,
+   "seat_h": 0.0,
+   "spot": "Bar_Bartender",
+   "zone": "Bar"
+  },
+  {
+   "pose": "sit",
+   "position": [
+    13.2,
+    0.0,
+    3.4
+   ],
+   "preset_slot": "PATRON",
+   "rotation_y": 90.0,
+   "seat_h": 0.45,
+   "spot": "Tables_T0_C0",
+   "zone": "Tables"
+  },
+  {
+   "pose": "sit",
+   "position": [
+    14.4,
+    0.0,
+    3.4
+   ],
+   "preset_slot": "PATRON",
+   "rotation_y": -90.0,
+   "seat_h": 0.45,
+   "spot": "Tables_T0_C1",
+   "zone": "Tables"
+  },
+  {
+   "pose": "sit",
+   "position": [
+    13.8,
+    0.0,
+    4.0
+   ],
+   "preset_slot": "PATRON",
+   "rotation_y": 180.0,
+   "seat_h": 0.45,
+   "spot": "Tables_T0_C2",
+   "zone": "Tables"
+  },
+  {
+   "pose": "sit",
+   "position": [
+    16.0,
+    0.0,
+    3.4
+   ],
+   "preset_slot": "PATRON",
+   "rotation_y": 90.0,
+   "seat_h": 0.45,
+   "spot": "Tables_T1_C0",
+   "zone": "Tables"
+  },
+  {
+   "pose": "sit",
+   "position": [
+    17.2,
+    0.0,
+    3.4
+   ],
+   "preset_slot": "PATRON",
+   "rotation_y": -90.0,
+   "seat_h": 0.45,
+   "spot": "Tables_T1_C1",
+   "zone": "Tables"
+  },
+  {
+   "pose": "sit",
+   "position": [
+    16.6,
+    0.0,
+    4.0
+   ],
+   "preset_slot": "PATRON",
+   "rotation_y": 180.0,
+   "seat_h": 0.45,
+   "spot": "Tables_T1_C2",
+   "zone": "Tables"
+  },
+  {
+   "pose": "sit",
+   "position": [
+    18.8,
+    0.0,
+    3.4
+   ],
+   "preset_slot": "PATRON",
+   "rotation_y": 90.0,
+   "seat_h": 0.45,
+   "spot": "Tables_T2_C0",
+   "zone": "Tables"
+  },
+  {
+   "pose": "sit",
+   "position": [
+    20.0,
+    0.0,
+    3.4
+   ],
+   "preset_slot": "PATRON",
+   "rotation_y": -90.0,
+   "seat_h": 0.45,
+   "spot": "Tables_T2_C1",
+   "zone": "Tables"
+  },
+  {
+   "pose": "sit",
+   "position": [
+    19.4,
+    0.0,
+    4.0
+   ],
+   "preset_slot": "PATRON",
+   "rotation_y": 180.0,
+   "seat_h": 0.45,
+   "spot": "Tables_T2_C2",
+   "zone": "Tables"
+  },
+  {
+   "pose": "sit",
+   "position": [
+    12.0,
+    0.0,
+    6.6
+   ],
+   "preset_slot": "PATRON",
+   "rotation_y": 90.0,
+   "seat_h": 0.45,
+   "spot": "Tables_T3_C0",
+   "zone": "Tables"
+  },
+  {
+   "pose": "sit",
+   "position": [
+    13.2,
+    0.0,
+    6.6
+   ],
+   "preset_slot": "PATRON",
+   "rotation_y": -90.0,
+   "seat_h": 0.45,
+   "spot": "Tables_T3_C1",
+   "zone": "Tables"
+  },
+  {
+   "pose": "sit",
+   "position": [
+    12.6,
+    0.0,
+    7.2
+   ],
+   "preset_slot": "PATRON",
+   "rotation_y": 180.0,
+   "seat_h": 0.45,
+   "spot": "Tables_T3_C2",
+   "zone": "Tables"
+  },
+  {
+   "pose": "sit",
+   "position": [
+    14.8,
+    0.0,
+    6.6
+   ],
+   "preset_slot": "PATRON",
+   "rotation_y": 90.0,
+   "seat_h": 0.45,
+   "spot": "Tables_T4_C0",
+   "zone": "Tables"
+  },
+  {
+   "pose": "sit",
+   "position": [
+    16.0,
+    0.0,
+    6.6
+   ],
+   "preset_slot": "PATRON",
+   "rotation_y": -90.0,
+   "seat_h": 0.45,
+   "spot": "Tables_T4_C1",
+   "zone": "Tables"
+  },
+  {
+   "pose": "sit",
+   "position": [
+    15.4,
+    0.0,
+    7.2
+   ],
+   "preset_slot": "PATRON",
+   "rotation_y": 180.0,
+   "seat_h": 0.45,
+   "spot": "Tables_T4_C2",
+   "zone": "Tables"
+  },
+  {
+   "pose": "sit",
+   "position": [
+    17.6,
+    0.0,
+    6.6
+   ],
+   "preset_slot": "PATRON",
+   "rotation_y": 90.0,
+   "seat_h": 0.45,
+   "spot": "Tables_T5_C0",
+   "zone": "Tables"
+  },
+  {
+   "pose": "sit",
+   "position": [
+    18.8,
+    0.0,
+    6.6
+   ],
+   "preset_slot": "PATRON",
+   "rotation_y": -90.0,
+   "seat_h": 0.45,
+   "spot": "Tables_T5_C1",
+   "zone": "Tables"
+  },
+  {
+   "pose": "sit",
+   "position": [
+    18.2,
+    0.0,
+    7.2
+   ],
+   "preset_slot": "PATRON",
+   "rotation_y": 180.0,
+   "seat_h": 0.45,
+   "spot": "Tables_T5_C2",
+   "zone": "Tables"
+  },
+  {
+   "pose": "sit",
+   "position": [
+    21.7,
+    0.0,
+    2.6
+   ],
+   "preset_slot": "PATRON",
+   "rotation_y": 90.0,
+   "seat_h": 0.45,
+   "spot": "Tables_DrumStool0",
+   "zone": "Tables"
+  },
+  {
+   "pose": "sit",
+   "position": [
+    22.7,
+    0.0,
+    3.4
+   ],
+   "preset_slot": "PATRON",
+   "rotation_y": 90.0,
+   "seat_h": 0.45,
+   "spot": "Tables_DrumStool1",
+   "zone": "Tables"
+  },
+  {
+   "pose": "sit",
+   "position": [
+    21.8,
+    0.0,
+    4.3
+   ],
+   "preset_slot": "PATRON",
+   "rotation_y": 90.0,
+   "seat_h": 0.45,
+   "spot": "Tables_DrumStool2",
+   "zone": "Tables"
+  },
+  {
+   "pose": "sit",
+   "position": [
+    22.6,
+    0.0,
+    6.7
+   ],
+   "preset_slot": "PATRON",
+   "rotation_y": 90.0,
+   "seat_h": 0.45,
+   "spot": "Tables_DrumStool3",
+   "zone": "Tables"
+  },
+  {
+   "pose": "sit",
+   "position": [
+    21.7,
+    0.0,
+    7.4
+   ],
+   "preset_slot": "PATRON",
+   "rotation_y": 90.0,
+   "seat_h": 0.45,
+   "spot": "Tables_DrumStool4",
+   "zone": "Tables"
+  },
+  {
+   "pose": "sit",
+   "position": [
+    23.0,
+    0.0,
+    2.0
+   ],
+   "preset_slot": "PATRON",
+   "rotation_y": 90.0,
+   "seat_h": 0.45,
+   "spot": "Tables_DrumStool5",
+   "zone": "Tables"
+  },
+  {
+   "pose": "sit",
+   "position": [
+    12.0,
+    0.0,
+    0.7
+   ],
+   "preset_slot": "PATRON",
+   "rotation_y": 0.0,
+   "seat_h": 0.45,
+   "spot": "CommunalTable_T0_N0",
+   "zone": "CommunalTable"
+  },
+  {
+   "pose": "sit",
+   "position": [
+    12.0,
+    0.0,
+    2.0
+   ],
+   "preset_slot": "PATRON",
+   "rotation_y": -180.0,
+   "seat_h": 0.45,
+   "spot": "CommunalTable_T0_S0",
+   "zone": "CommunalTable"
+  },
+  {
+   "pose": "sit",
+   "position": [
+    13.0,
+    0.0,
+    0.7
+   ],
+   "preset_slot": "PATRON",
+   "rotation_y": 0.0,
+   "seat_h": 0.45,
+   "spot": "CommunalTable_T0_N1",
+   "zone": "CommunalTable"
+  },
+  {
+   "pose": "sit",
+   "position": [
+    13.0,
+    0.0,
+    2.0
+   ],
+   "preset_slot": "PATRON",
+   "rotation_y": -180.0,
+   "seat_h": 0.45,
+   "spot": "CommunalTable_T0_S1",
+   "zone": "CommunalTable"
+  },
+  {
+   "pose": "sit",
+   "position": [
+    14.0,
+    0.0,
+    0.7
+   ],
+   "preset_slot": "PATRON",
+   "rotation_y": 0.0,
+   "seat_h": 0.45,
+   "spot": "CommunalTable_T0_N2",
+   "zone": "CommunalTable"
+  },
+  {
+   "pose": "sit",
+   "position": [
+    14.0,
+    0.0,
+    2.0
+   ],
+   "preset_slot": "PATRON",
+   "rotation_y": -180.0,
+   "seat_h": 0.45,
+   "spot": "CommunalTable_T0_S2",
+   "zone": "CommunalTable"
+  },
+  {
+   "pose": "sit",
+   "position": [
+    15.0,
+    0.0,
+    0.7
+   ],
+   "preset_slot": "PATRON",
+   "rotation_y": 0.0,
+   "seat_h": 0.45,
+   "spot": "CommunalTable_T1_N0",
+   "zone": "CommunalTable"
+  },
+  {
+   "pose": "sit",
+   "position": [
+    15.0,
+    0.0,
+    2.0
+   ],
+   "preset_slot": "PATRON",
+   "rotation_y": -180.0,
+   "seat_h": 0.45,
+   "spot": "CommunalTable_T1_S0",
+   "zone": "CommunalTable"
+  },
+  {
+   "pose": "sit",
+   "position": [
+    16.0,
+    0.0,
+    0.7
+   ],
+   "preset_slot": "PATRON",
+   "rotation_y": 0.0,
+   "seat_h": 0.45,
+   "spot": "CommunalTable_T1_N1",
+   "zone": "CommunalTable"
+  },
+  {
+   "pose": "sit",
+   "position": [
+    16.0,
+    0.0,
+    2.0
+   ],
+   "preset_slot": "PATRON",
+   "rotation_y": -180.0,
+   "seat_h": 0.45,
+   "spot": "CommunalTable_T1_S1",
+   "zone": "CommunalTable"
+  },
+  {
+   "pose": "sit",
+   "position": [
+    17.0,
+    0.0,
+    0.7
+   ],
+   "preset_slot": "PATRON",
+   "rotation_y": 0.0,
+   "seat_h": 0.45,
+   "spot": "CommunalTable_T1_N2",
+   "zone": "CommunalTable"
+  },
+  {
+   "pose": "sit",
+   "position": [
+    17.0,
+    0.0,
+    2.0
+   ],
+   "preset_slot": "PATRON",
+   "rotation_y": -180.0,
+   "seat_h": 0.45,
+   "spot": "CommunalTable_T1_S2",
+   "zone": "CommunalTable"
+  },
+  {
+   "pose": "sit",
+   "position": [
+    18.7,
+    0.0,
+    0.3
+   ],
+   "preset_slot": "PATRON",
+   "rotation_y": 0.0,
+   "seat_h": 0.45,
+   "spot": "Banquette_Seat0",
+   "zone": "Banquette"
+  },
+  {
+   "pose": "sit",
+   "position": [
+    19.7,
+    0.0,
+    0.3
+   ],
+   "preset_slot": "PATRON",
+   "rotation_y": 0.0,
+   "seat_h": 0.45,
+   "spot": "Banquette_Seat1",
+   "zone": "Banquette"
+  },
+  {
+   "pose": "sit",
+   "position": [
+    20.7,
+    0.0,
+    0.3
+   ],
+   "preset_slot": "PATRON",
+   "rotation_y": 0.0,
+   "seat_h": 0.45,
+   "spot": "Banquette_Seat2",
+   "zone": "Banquette"
+  },
+  {
+   "pose": "sit",
+   "position": [
+    21.7,
+    0.0,
+    0.3
+   ],
+   "preset_slot": "PATRON",
+   "rotation_y": 0.0,
+   "seat_h": 0.45,
+   "spot": "Banquette_Seat3",
+   "zone": "Banquette"
+  },
+  {
+   "pose": "wander",
+   "position": [
+    5.0,
+    0.0,
+    4.0
+   ],
+   "preset_slot": "PATRON_WANDER",
+   "rotation_y": 0.0,
+   "seat_h": 0.0,
+   "spot": "Wander_Lounge",
+   "zone": "Wander"
+  },
+  {
+   "pose": "wander",
+   "position": [
+    7.4,
+    0.0,
+    1.6
+   ],
+   "preset_slot": "PATRON_WANDER",
+   "rotation_y": 0.0,
+   "seat_h": 0.0,
+   "spot": "Wander_Arcade",
+   "zone": "Wander"
+  },
+  {
+   "pose": "wander",
+   "position": [
+    11.2,
+    0.0,
+    6.0
+   ],
+   "preset_slot": "PATRON_WANDER",
+   "rotation_y": 0.0,
+   "seat_h": 0.0,
+   "spot": "Wander_Curtain",
+   "zone": "Wander"
+  },
+  {
+   "pose": "wander",
+   "position": [
+    11.0,
+    0.0,
+    3.0
+   ],
+   "preset_slot": "PATRON_WANDER",
+   "rotation_y": 0.0,
+   "seat_h": 0.0,
+   "spot": "Wander_Communal",
+   "zone": "Wander"
+  },
+  {
+   "pose": "wander",
+   "position": [
+    15.5,
+    0.0,
+    5.4
+   ],
+   "preset_slot": "PATRON_WANDER",
+   "rotation_y": 0.0,
+   "seat_h": 0.0,
+   "spot": "Wander_Aisle",
+   "zone": "Wander"
+  },
+  {
+   "pose": "wander",
+   "position": [
+    21.0,
+    0.0,
+    5.6
+   ],
+   "preset_slot": "PATRON_WANDER",
+   "rotation_y": 0.0,
+   "seat_h": 0.0,
+   "spot": "Wander_StageFront",
+   "zone": "Wander"
+  },
+  {
+   "pose": "wander",
+   "position": [
+    22.0,
+    0.0,
+    7.6
+   ],
+   "preset_slot": "PATRON_WANDER",
+   "rotation_y": 0.0,
+   "seat_h": 0.0,
+   "spot": "Wander_BarEnd",
+   "zone": "Wander"
+  }
+ ],
+ "units": "m"
+}
