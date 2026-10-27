@@ -20,7 +20,13 @@ From the repo root (about 10 s for the whole kit):
 "C:\Program Files\Blender Foundation\Blender 5.2\blender.exe" --background --factory-startup --python tools/blender/bc_kit.py
 ```
 
-`-- --only round_table,bar_stool` rebuilds just those objects (and leaves `manifest.json` alone).
+`-- --only round_table,bar_stool` rebuilds just those objects (and leaves `manifest.json` and the .blend alone);
+`-- --no-blend` skips the review file.
+
+**Open in Blender:** `blender/BlackCabinKit.blend` (repo root), written by every full run. It has one collection
+per zone with a text label under each object, a dark world, warm lights, a camera framing the whole grid, and the
+viewport set to Material Preview with scene lights and world. In Blender the materials also multiply in the
+per-voxel jitter; that node is added after export, so the GLBs never carry it.
 Then refresh the Godot showcase and its still, from `game/`:
 
 ```

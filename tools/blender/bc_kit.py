@@ -7,6 +7,8 @@ game/assets/kit/<zone>/<object>.glb plus game/assets/kit/manifest.json.
 Run headless from the repo root:
     blender --background --factory-startup --python tools/blender/bc_kit.py
     blender --background --factory-startup --python tools/blender/bc_kit.py -- --only round_table,bar_stool
+A full run also saves a review scene to blender/BlackCabinKit.blend (zone collections, labels, lights, camera,
+Material Preview); pass `-- --no-blend` to skip it. `--only` runs never write the .blend.
 Or inside Blender (Blender MCP bridge or the Text editor):
     exec(open(r"<this file>", encoding="utf-8").read())
 
@@ -852,12 +854,164 @@ def track_light(v):
         v.box(x, 0, 2, x + 1, 1, 2, E("LampGold"))
 
 
+# ------------------------------------------------------------------ review .blend
+
+BLEND = os.path.join(REPO, "blender", "BlackCabinKit.blend")
+ZONE_ORDER = ("tables", "bar", "stage", "lounge", "circulation")   # front row (camera side) first
+REVIEW_GAP = 0.5
+REVIEW_MAX_W = 9.0
+
+
+def show_vertex_jitter():
+    """Multiply the COLOR_0 jitter into every non-emissive material, for viewing in Blender only.
+    Runs after every GLB is exported, so the glTF exporter never sees the extra nodes."""
+    for key, m in _MATS.items():
+        if key.endswith("_emissive"):
+            continue
+        nt = m.node_tree
+        seam = next(n for n in nt.nodes if n.type == "MIX")
+        ca = nt.nodes.new("ShaderNodeVertexColor")
+        ca.layer_name = "Col"
+        mul = nt.nodes.new("ShaderNodeMix")
+        mul.data_type = "RGBA"
+        mul.blend_type = "MULTIPLY"
+        mul.inputs["Factor"].default_value = 1.0
+        a = next(s for s in mul.inputs if s.name == "A" and s.type == "RGBA")
+        b = next(s for s in mul.inputs if s.name == "B" and s.type == "RGBA")
+        bsdf = next(n for n in nt.nodes if n.type == "BSDF_PRINCIPLED")
+        nt.links.new(next(s for s in seam.outputs if s.type == "RGBA"), a)
+        nt.links.new(ca.outputs["Color"], b)
+        nt.links.new(next(s for s in mul.outputs if s.type == "RGBA"), bsdf.inputs["Base Color"])
+
+
+def label_material():
+    m = bpy.data.materials.new("Label")
+    m.use_nodes = True
+    bsdf = next(n for n in m.node_tree.nodes if n.type == "BSDF_PRINCIPLED")
+    bsdf.inputs["Base Color"].default_value = (0.8, 0.75, 0.7, 1.0)
+    bsdf.inputs["Emission Color"].default_value = (0.8, 0.75, 0.7, 1.0)
+    bsdf.inputs["Emission Strength"].default_value = 0.6
+    return m
+
+
+def review_light(coll, name, kind, loc, energy, color, rot=None, size=None):
+    ld = bpy.data.lights.new(name, kind)
+    ld.energy = energy
+    ld.color = color
+    if size is not None:
+        ld.shadow_soft_size = size
+    lo = bpy.data.objects.new(name, ld)
+    lo.location = loc
+    if rot:
+        lo.rotation_euler = rot
+    coll.objects.link(lo)
+
+
+def build_review(objects, manifest, path=BLEND):
+    """Lay the kit out on a labelled grid, one collection per zone, and save a review .blend."""
+    from mathutils import Vector
+    scene = bpy.context.scene
+    scene.name = "Black Cabin Kit"
+    show_vertex_jitter()
+    lab_mat = label_material()
+    by_zone = {}
+    for o in manifest:
+        by_zone.setdefault(o["zone"], []).append(o)
+    y, widest = 0.0, 0.0
+    for zone in ZONE_ORDER:
+        if zone not in by_zone:
+            continue
+        coll = bpy.data.collections.new(zone)
+        scene.collection.children.link(coll)
+        lines, w = [[]], 0.0
+        for o in by_zone[zone]:                                      # wrap long zones onto extra lines
+            if w and w + o["footprint_m"][0] > REVIEW_MAX_W:
+                lines.append([])
+                w = 0.0
+            lines[-1].append(o)
+            w += o["footprint_m"][0] + REVIEW_GAP
+        for line in lines:
+            depth = max(o["footprint_m"][1] for o in line)
+            width = sum(o["footprint_m"][0] for o in line) + REVIEW_GAP * (len(line) - 1)
+            widest = max(widest, width)
+            y += depth / 2 + 0.35                                    # room for the labels in front
+            x = -width / 2
+            for o in line:
+                ob = objects[o["name"]]
+                for c in list(ob.users_collection):
+                    c.objects.unlink(ob)
+                coll.objects.link(ob)
+                x += o["footprint_m"][0] / 2
+                ob.location = (x, y, o["height_m"] + 0.3 if o["anchor"] == "ceiling" else 0.0)
+                cu = bpy.data.curves.new(o["name"] + "_label", "FONT")
+                cu.body = o["name"]
+                cu.size = 0.09
+                cu.align_x = "CENTER"
+                cu.materials.append(lab_mat)
+                lab = bpy.data.objects.new(o["name"] + "_label", cu)
+                lab.location = (x, y - o["footprint_m"][1] / 2 - 0.15, 0.002)
+                coll.objects.link(lab)
+                x += o["footprint_m"][0] / 2 + REVIEW_GAP
+            y += depth / 2
+        y += 0.8
+    span = Vector((widest + 3.0, y + 3.0))
+    centre = Vector((0.0, y / 2, 0.0))
+
+    setup = bpy.data.collections.new("review_setup")
+    scene.collection.children.link(setup)
+    me = bpy.data.meshes.new("Floor")
+    hx, hy = span.x / 2, span.y / 2
+    me.from_pydata([(-hx, -hy, 0), (hx, -hy, 0), (hx, hy, 0), (-hx, hy, 0)], [], [(0, 1, 2, 3)])
+    me.materials.append(material("FloorGrey"))
+    fl = bpy.data.objects.new("Floor", me)
+    fl.location = (centre.x, centre.y, -0.001)
+    setup.objects.link(fl)
+
+    world = bpy.data.worlds.new("CabinDark")
+    world.use_nodes = True
+    dark = hex_linear(PALETTE["CabinDark"][0])
+    world.node_tree.nodes["Background"].inputs["Color"].default_value = (*dark, 1.0)
+    world.color = dark
+    scene.world = world
+    review_light(setup, "WarmKey", "SUN", (0, 0, 10), 1.6, (1.0, 0.72, 0.5), rot=(math.radians(45), 0, math.radians(25)))
+    review_light(setup, "RedFill", "SUN", (0, 0, 10), 0.4, (1.0, 0.15, 0.1), rot=(math.radians(60), 0, math.radians(200)))
+    for i in range(3):                                               # warm pools along the grid
+        review_light(setup, "Pool%d" % i, "POINT", ((i - 1) * widest / 3, centre.y, 2.6), 400.0, (1.0, 0.7, 0.4), size=0.5)
+
+    cam = bpy.data.objects.new("ReviewCamera", bpy.data.cameras.new("ReviewCamera"))
+    cam.data.lens = 30
+    cam.data.clip_end = 500.0
+    dist = max(span.x * 0.8, span.y * 1.15)
+    aim = Vector((0.0, y * 0.42, 0.5))                               # a little in front of centre: tall rows are at the back
+    cam.location = aim + Vector((0.0, -dist * 0.75, dist * 0.7))
+    cam.rotation_euler = (aim - cam.location).to_track_quat("-Z", "Y").to_euler()
+    setup.objects.link(cam)
+    scene.camera = cam
+    scene.render.resolution_x, scene.render.resolution_y = 1920, 1080
+
+    for screen in bpy.data.screens:                                  # headless: no windows, edit the saved screens
+        for area in screen.areas:
+            for sp in area.spaces:
+                if sp.type != "VIEW_3D":
+                    continue
+                sp.shading.type = "MATERIAL"
+                sp.shading.use_scene_world = True
+                sp.shading.use_scene_lights = True
+                sp.clip_end = 500.0
+                if sp.region_3d:
+                    sp.region_3d.view_perspective = "CAMERA"
+    os.makedirs(os.path.dirname(path), exist_ok=True)
+    bpy.ops.wm.save_as_mainfile(filepath=path, compress=True)
+    print("BC_KIT review blend -> %s (%.1f MB)" % (path, os.path.getsize(path) / 1e6))
+
+
 # ------------------------------------------------------------------ run
 
-def run(only=None, out=OUT):
+def run(only=None, out=OUT, blend=True):
     bpy.ops.wm.read_factory_settings(use_empty=True)
     _MATS.clear()
     manifest = []
+    objects = {}
     names = [k[0] for k in KIT]
     assert len(names) == len(set(names)), "duplicate kit names"
     for name, zone, size_class, anchor, fn in KIT:
@@ -866,6 +1020,7 @@ def run(only=None, out=OUT):
         v = Vox()
         fn(v)
         ob, st = build_mesh(name, v, anchor)
+        objects[name] = ob
         rel = "%s/%s.glb" % (zone, name)
         export_glb(ob, os.path.join(out, zone, name + ".glb"))
         sx, sy, sz = st["size_vox"]
@@ -889,6 +1044,8 @@ def run(only=None, out=OUT):
             json.dump({"voxel_m": VOX, "front": "+Z (Godot) / -Y (Blender)", "objects": manifest}, f, indent=1)
             f.write("\n")
     print("BC_KIT done: %d objects -> %s" % (len(manifest), out))
+    if blend and not only:
+        build_review(objects, manifest)
     return manifest
 
 
@@ -897,4 +1054,4 @@ if __name__ == "__main__":
     only = None
     if "--only" in argv:
         only = set(argv[argv.index("--only") + 1].split(","))
-    run(only)
+    run(only, blend="--no-blend" not in argv)
