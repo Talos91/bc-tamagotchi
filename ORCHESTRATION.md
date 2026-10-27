@@ -17,6 +17,22 @@ the work, one session per deliverable, each on its own branch.
 5. End with a short report: what was produced, what was decided, what is
    still open for the orchestrator.
 
+## Session naming
+
+Every session title starts with an emoji so it can be told apart at a glance:
+
+| Emoji | Area |
+|-------|------|
+| 🎛️ | Orchestrator |
+| 🎲 | Game design (concept, GDD, systems, minigames) |
+| 🎨 | Art (art bible, sheets, kit visuals) |
+| 🛠️ | Tech (engine, skeleton, build, networking) |
+| 🎭 | Cast and characters |
+| 🖼️ | UI style guide and wireframes |
+| 🧱 | Venue kit (Blender MCP, assets) |
+| 🎮 | Gameplay features and minigames in-engine |
+| 🌐 | Multiplayer and persistence |
+
 ## Waves
 
 ### Wave 1 — foundations (run in parallel, documents only)
