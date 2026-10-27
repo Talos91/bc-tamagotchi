@@ -1,0 +1,15 @@
+{
+  "version": 1,
+  "regular": "mali",
+  "feeds": "friends",
+  "turns": 5,
+  "note": "Sequence: lines 1, 2, then line 3 if the candle is at 2+ (a story beat), else line 4; then 5 and 6. 'cards' are the topic cards offered; 'best' lights the candle fully, 'ok' half.",
+  "lines": [
+    {"id": 1, "key": "npc.mali.talk.1", "cards": ["story", "bangkok", "gossip"], "best": "story", "ok": ["bangkok"]},
+    {"id": 2, "key": "npc.mali.talk.2", "cards": ["music", "drinks", "gossip"], "best": "music", "ok": ["gossip"]},
+    {"id": 3, "key": "npc.mali.talk.3", "cards": ["story", "bangkok", "drinks"], "best": "story", "ok": ["bangkok"], "needs_candle": 2},
+    {"id": 4, "key": "npc.mali.talk.4", "cards": ["drinks", "bangkok", "story"], "best": "drinks", "ok": ["story"]},
+    {"id": 5, "key": "npc.mali.talk.5", "cards": ["music", "gossip", "drinks"], "best": "gossip", "ok": ["music"]},
+    {"id": 6, "key": "npc.mali.talk.6", "cards": ["story", "music", "bangkok"], "best": "story", "ok": ["music"]}
+  ]
+}

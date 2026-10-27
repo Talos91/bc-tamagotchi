@@ -1,0 +1,92 @@
+key,en,th,context,max
+need.music.name,Music,ดนตรี,Meter name on the result card (display.s),10
+need.friends.name,Friends,เพื่อน,Meter name on the result card (display.s),10
+need.drinks.name,Drinks,เครื่องดื่ม,Meter name on the result card (display.s),10
+need.nightlife.name,Nightlife,ราตรี,Meter name on the result card (display.s),10
+mg.frame.best,best {score},ดีที่สุด {score},Minigame frame status line. {score} = best points 0-100,24
+mg.frame.no_best,first time,ครั้งแรก,Minigame frame status line when there is no best score yet,24
+mg.pause.title,Paused,พักก่อน,Pause sheet heading,16
+mg.pause.resume,Resume,เล่นต่อ,Pause sheet primary button,18
+mg.pause.how_to,How to play,วิธีเล่น,Pause sheet secondary button,14
+mg.pause.leave,Leave,ออก,Pause sheet ghost button,14
+mg.pause.leave_note,You still keep a little something,ยังได้รางวัลเล็กน้อยอยู่ดี,Caption under Leave in the pause sheet,50
+mg.result.again,Again,อีกรอบ,Result card secondary button,14
+mg.result.done,Done,เสร็จ,Result card primary button,18
+mg.result.best,best {score},ดีที่สุด {score},Result card. {score} = best points 0-100,24
+mg.result.new_best,new best!,สถิติใหม่!,Result card tag when the score beats the previous best,24
+mg.result.plenty,That's plenty for tonight,คืนนี้พอแล้วนะ,Result card caption when another round would add nothing (diminishing returns),40
+mg.result.nothing_daily,Already caught up today,วันนี้คุยกันแล้วนะ,Result card caption for a once-a-day action already used,40
+mg.result.tab,The bar is full. The rest goes on your Tab,เต็มแล้ว ส่วนที่เหลือเข้าบิลของคุณ,Result card note when part of the gain overflowed to Tab,50
+mg.result.hearts,Hearts with {regular}: {count} of {max},หัวใจกับ{regular}: {count} จาก {max},Result card under Candle Talk. {regular} = regular's display name; {count} 0-3; {max} = 3,40
+cast.mali.name,Mali,มะลิ,Display name of the regular Mali (cast table 6.2),16
+mg.pour_perfect.title,Pour Perfect,Pour Perfect,Minigame name (stays English in both languages per strings guidelines 5),18
+mg.pour_perfect.subtitle,Fill each layer to its line,รินให้พอดีทุกชั้น,Subtitle under the name in the lab menu,34
+mg.pour_perfect.how_to,Hold to pour. Let go on the line. Three layers. Overflow only foams.,กดค้างเพื่อริน ปล่อยเมื่อถึงเส้น มีสามชั้น ล้นก็แค่ฟอง,Pause sheet help text,150
+mg.pour_perfect.tier_1,Nice pour,รินสวย,Result card tier word (lowest tier; never a fail word),18
+mg.pour_perfect.tier_2,Great pour,รินเก่งมาก,Result card tier word,18
+mg.pour_perfect.tier_3,Perfect pour,รินเป๊ะ,Result card tier word,18
+mg.pour_perfect.status,layer {n} of {total},ชั้นที่ {n} จาก {total},Frame status line. {n} current layer; {total} layer count,24
+mg.pour_perfect.hint_intro,Noi slides you a glass,น้ำเลื่อนแก้วมาให้,Hint while the glass arrives (Noi is the bartender slot),50
+mg.pour_perfect.hint_ready,Press and hold to pour,กดค้างเพื่อริน,Hint before pouring a layer,50
+mg.pour_perfect.hint_pour,Let go on the line,ปล่อยเมื่อถึงเส้น,Hint while pouring,50
+mg.front_row_rhythm.title,Front Row Rhythm,Front Row Rhythm,Minigame name (stays English),18
+mg.front_row_rhythm.subtitle,Clap with the band,ปรบมือตามวง,Subtitle under the name in the lab menu,34
+mg.front_row_rhythm.how_to,Tap the left or right half of the screen as each clap reaches the line.,แตะซ้ายหรือขวาของจอเมื่อจังหวะมาถึงเส้น,Pause sheet help text,150
+mg.front_row_rhythm.tier_1,Nice clapping,ปรบมือดี,Result card tier word,18
+mg.front_row_rhythm.tier_2,In the pocket,เข้าจังหวะ,Result card tier word,18
+mg.front_row_rhythm.tier_3,Perfect time,จังหวะเป๊ะ,Result card tier word,18
+mg.front_row_rhythm.status,combo {combo},คอมโบ {combo},Frame status line. {combo} = current streak,24
+mg.front_row_rhythm.hit_perfect,Perfect,เป๊ะ,Floating feedback on a perfect hit,12
+mg.front_row_rhythm.hit_good,Good,ดี,Floating feedback on a good hit,12
+mg.front_row_rhythm.hint,Tap left or right,แตะซ้ายหรือขวา,Hint at the bottom of the lanes,50
+mg.front_row_rhythm.song_1,Slow Sway,โยกช้า ๆ,Placeholder song title 1,22
+mg.front_row_rhythm.song_2,Late Train,รถไฟรอบดึก,Placeholder song title 2,22
+mg.front_row_rhythm.song_3,Rainy Soi,ซอยฝนตก,Placeholder song title 3,22
+mg.front_row_rhythm.song_4,Last Call Boogie,บูกี้คอลสุดท้าย,Placeholder song title 4,22
+mg.candle_talk.title,Candle Talk,Candle Talk,Minigame name (stays English),18
+mg.candle_talk.subtitle,Chat with a regular,คุยกับขาประจำ,Subtitle under the name in the lab menu,34
+mg.candle_talk.how_to,Mali says something. Tap the topic card that fits best. The candle brightens with each good match.,มะลิพูดอะไรบางอย่าง แตะการ์ดหัวข้อที่เหมาะที่สุด เทียนจะสว่างขึ้นทุกครั้งที่ตอบถูกใจ,Pause sheet help text,150
+mg.candle_talk.tier_1,Pleasant chat,คุยกันสบาย ๆ,Result card tier word,18
+mg.candle_talk.tier_2,Warm chat,คุยกันอบอุ่น,Result card tier word,18
+mg.candle_talk.tier_3,Candle lit,เทียนสว่างเต็มดวง,Result card tier word,18
+mg.candle_talk.status,{regular} · turn {turn} of {total},{regular} · ตาที่ {turn} จาก {total},Frame status line. {regular} display name; {turn} current turn; {total} turns,40
+mg.candle_talk.hint,Pick a topic,เลือกหัวข้อ,Hint above the topic cards,50
+mg.candle_talk.card.music,Music,เรื่องดนตรี,Topic card label (Candle Talk),22
+mg.candle_talk.card.drinks,Drinks,เรื่องเครื่องดื่ม,Topic card label (Candle Talk),22
+mg.candle_talk.card.gossip,Gossip,เรื่องซุบซิบ,Topic card label (Candle Talk),22
+mg.candle_talk.card.bangkok,Bangkok,เรื่องกรุงเทพฯ,Topic card label (Candle Talk),22
+mg.candle_talk.card.story,Your story,เรื่องของคุณ,Topic card label (Candle Talk),22
+mg.candle_talk.react.best_1,"Mmm, yes. Exactly that.",อื้ม ใช่เลย ตรงนั้นแหละ,Mali's reaction when the card fits best (variant 1),90
+mg.candle_talk.react.best_2,"Ha! You get it, nong.",ฮ่า! เข้าใจนี่นา น้อง,Mali's reaction when the card fits best (variant 2),90
+mg.candle_talk.react.ok_1,"Mm, that works too.",อืม แบบนั้นก็ได้เหมือนกัน,Mali's reaction when the card is near (variant 1),90
+mg.candle_talk.react.ok_2,"Fair enough. Go on.",ก็ได้ ๆ เล่าต่อเลย,Mali's reaction when the card is near (variant 2),90
+mg.candle_talk.react.off_1,"Hm. Okay. Drink some water, nong.",หืม โอเค ดื่มน้ำหน่อยนะน้อง,Mali's reaction when the card misses (variant 1),90
+mg.candle_talk.react.off_2,"Sure, sure. We'll get there.",ได้ ๆ เดี๋ยวก็เข้าใจกัน,Mali's reaction when the card misses (variant 2),90
+mg.candle_talk.close.tier_1,"Good talk, nong. Come sit with me again.",คุยสนุกนะน้อง มานั่งกับพี่อีกนะ,Mali's closing line at the lowest tier,90
+mg.candle_talk.close.tier_2,"That was lovely. You can sit here any day.",เมื่อกี้ดีมากเลย มานั่งตรงนี้ได้ทุกวันนะ,Mali's closing line at the middle tier,90
+mg.candle_talk.close.tier_3,"Look at that candle! You are officially on my team.",ดูเทียนนั่นสิ! น้องเป็นคนในทีมพี่แล้วนะ,Mali's closing line at the top tier,90
+npc.mali.talk.1,"Sit, sit. Long table is for everyone. That's the point of a long table.",นั่งสิน้อง นั่ง โต๊ะยาวมีไว้ให้ทุกคน ก็เพราะอย่างนี้แหละ,Mali's Candle Talk opening line 1. Cast bible 3.5. Needs a native Thai writer pass,90
+npc.mali.talk.2,"Tuesday quiz, seven o'clock, my team. You know one thing about eighties music? You're in.",ควิซวันอังคาร หนึ่งทุ่ม ทีมพี่ รู้เรื่องเพลงยุค 80 สักเรื่องไหม ถ้ารู้ก็เข้าทีมได้เลย,Mali's Candle Talk opening line 2 (cast bible 3.5),90
+npc.mali.talk.3,"I do HR all day. Here nobody needs a form to be my friend.",พี่ทำงานฝ่ายบุคคลทั้งวัน ที่นี่ไม่ต้องกรอกฟอร์มก็เป็นเพื่อนพี่ได้,Mali's Candle Talk line 3. Story beat: only comes up if the candle is already lit at 2+,90
+npc.mali.talk.4,"Have you eaten? Eat before the third drink, nong. I'm serious.",กินข้าวหรือยัง กินก่อนแก้วที่สามนะน้อง พี่พูดจริง,Mali's Candle Talk line 4. Replaces line 3 when the candle is low,90
+npc.mali.talk.5,"Lung Nop knows every jazz record ever made and still loses the music round. Beautiful.",ลุงนพรู้จักแผ่นแจ๊สทุกแผ่นในโลก แต่ก็ยังแพ้รอบดนตรี น่ารักดี,Mali's Candle Talk line 5 (cast bible 3.5),90
+npc.mali.talk.6,"We came second last week. Second is just first with homework.",สัปดาห์ก่อนเราได้ที่สอง ที่สองก็คือที่หนึ่งที่มีการบ้านไง,Mali's Candle Talk line 6 (cast bible 3.5),90
+mg.neon_pinball.title,Neon Pinball,Neon Pinball,Minigame name (stays English),18
+mg.neon_pinball.subtitle,The lounge arcade cabinet,ตู้เกมในเลานจ์,Subtitle under the name in the lab menu,34
+mg.neon_pinball.how_to,Hold the left or right half for that flipper. Swipe up on the right to launch. Swipe sideways to nudge. Light every letter of BLACK CABIN.,กดค้างซ้ายหรือขวาเพื่อตีฟลิปเปอร์ ปัดขึ้นทางขวาเพื่อยิงลูก ปัดข้างเพื่อเขย่าโต๊ะ จุดตัวอักษร BLACK CABIN ให้ครบ,Pause sheet help text. BLACK CABIN is brand-fixed,150
+mg.neon_pinball.tier_1,Good game,เล่นดี,Result card tier word,18
+mg.neon_pinball.tier_2,High roller,คะแนนสูง,Result card tier word,18
+mg.neon_pinball.tier_3,Neon legend,ตำนานนีออน,Result card tier word,18
+mg.neon_pinball.status,ball {ball} of {balls} · {points},ลูกที่ {ball} จาก {balls} · {points},Frame status line. {ball} current ball; {balls} total; {points} score,40
+mg.neon_pinball.tilt,Easy there,เบา ๆ หน่อย,Toast when nudging too often locks the flippers briefly,40
+mg.neon_pinball.ball_saved,Ball saved,ลูกกลับมาแล้ว,Toast when the ball save returns a drained ball,40
+mg.neon_pinball.word,BLACK CABIN!,BLACK CABIN!,Toast when every letter is lit (brand-fixed),40
+mg.neon_pinball.hint_launch,Swipe up on the right to launch,ปัดขึ้นทางขวาเพื่อยิงลูก,Hint while the ball waits in the lane,50
+lab.title,Minigame Lab,ห้องทดลองมินิเกม,Lab menu heading (dev tool),24
+lab.reset,Reset meters,รีเซ็ตมิเตอร์,Lab dev button that restores the starting meter values,18
+lab.lang,ภาษาไทย,English,Lab language toggle. Shows the other language's own name,18
+lab.vibe,Vibe: {state},ไวบ์: {state},Lab Vibe line. {state} = vibe word,24
+vibe.glowing,Glowing,เปล่งประกาย,Vibe state word,12
+vibe.good,Good,ดี,Vibe state word,12
+vibe.meh,Meh,เฉย ๆ,Vibe state word,12
+vibe.homebody,Homebody,ติดบ้าน,Vibe state word,12
