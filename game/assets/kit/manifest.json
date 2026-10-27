@@ -1,0 +1,900 @@
+{
+ "voxel_m": 0.05,
+ "front": "+Z (Godot) / -Y (Blender)",
+ "objects": [
+  {
+   "name": "bar_counter",
+   "zone": "bar",
+   "size_class": "L",
+   "anchor": "floor",
+   "path": "res://assets/kit/bar/bar_counter.glb",
+   "footprint_m": [
+    1.0,
+    0.65
+   ],
+   "height_m": 1.1,
+   "size_vox": [
+    20,
+    13,
+    22
+   ],
+   "emissive": true,
+   "materials": [
+    "BarFront",
+    "ShelfAmber_emissive",
+    "StoolBlack",
+    "TableWoodLit",
+    "WoodDark"
+   ],
+   "voxels": 4900,
+   "tris": 3380
+  },
+  {
+   "name": "back_bar_shelf",
+   "zone": "bar",
+   "size_class": "L",
+   "anchor": "floor",
+   "path": "res://assets/kit/bar/back_bar_shelf.glb",
+   "footprint_m": [
+    1.0,
+    0.3
+   ],
+   "height_m": 2.5,
+   "size_vox": [
+    20,
+    6,
+    50
+   ],
+   "emissive": true,
+   "materials": [
+    "BarFront",
+    "BottleAmber",
+    "BottleAmberCap",
+    "BottleClear",
+    "BottleClearCap",
+    "BottleGreen",
+    "BottleGreenCap",
+    "ShelfAmber_emissive",
+    "WoodDark"
+   ],
+   "voxels": 4059,
+   "tris": 8088
+  },
+  {
+   "name": "bottle_amber",
+   "zone": "bar",
+   "size_class": "XS",
+   "anchor": "floor",
+   "path": "res://assets/kit/bar/bottle_amber.glb",
+   "footprint_m": [
+    0.05,
+    0.05
+   ],
+   "height_m": 0.2,
+   "size_vox": [
+    1,
+    1,
+    4
+   ],
+   "emissive": false,
+   "materials": [
+    "BottleAmber",
+    "BottleAmberCap"
+   ],
+   "voxels": 4,
+   "tris": 34
+  },
+  {
+   "name": "bottle_green",
+   "zone": "bar",
+   "size_class": "XS",
+   "anchor": "floor",
+   "path": "res://assets/kit/bar/bottle_green.glb",
+   "footprint_m": [
+    0.05,
+    0.05
+   ],
+   "height_m": 0.2,
+   "size_vox": [
+    1,
+    1,
+    4
+   ],
+   "emissive": false,
+   "materials": [
+    "BottleGreen",
+    "BottleGreenCap"
+   ],
+   "voxels": 4,
+   "tris": 34
+  },
+  {
+   "name": "bottle_clear",
+   "zone": "bar",
+   "size_class": "XS",
+   "anchor": "floor",
+   "path": "res://assets/kit/bar/bottle_clear.glb",
+   "footprint_m": [
+    0.05,
+    0.05
+   ],
+   "height_m": 0.15,
+   "size_vox": [
+    1,
+    1,
+    3
+   ],
+   "emissive": false,
+   "materials": [
+    "BottleClear",
+    "BottleClearCap"
+   ],
+   "voxels": 3,
+   "tris": 26
+  },
+  {
+   "name": "bar_stool",
+   "zone": "bar",
+   "size_class": "S",
+   "anchor": "floor",
+   "path": "res://assets/kit/bar/bar_stool.glb",
+   "footprint_m": [
+    0.4,
+    0.4
+   ],
+   "height_m": 1.2,
+   "size_vox": [
+    8,
+    8,
+    24
+   ],
+   "emissive": false,
+   "materials": [
+    "StoolBlack",
+    "WoodDark"
+   ],
+   "voxels": 194,
+   "tris": 1220
+  },
+  {
+   "name": "round_table",
+   "zone": "tables",
+   "size_class": "M",
+   "anchor": "floor",
+   "path": "res://assets/kit/tables/round_table.glb",
+   "footprint_m": [
+    0.7,
+    0.7
+   ],
+   "height_m": 0.75,
+   "size_vox": [
+    14,
+    14,
+    15
+   ],
+   "emissive": false,
+   "materials": [
+    "TableWoodLit",
+    "WoodDark",
+    "WoodMid"
+   ],
+   "voxels": 260,
+   "tris": 1424
+  },
+  {
+   "name": "communal_table",
+   "zone": "tables",
+   "size_class": "L",
+   "anchor": "floor",
+   "path": "res://assets/kit/tables/communal_table.glb",
+   "footprint_m": [
+    3.0,
+    0.7
+   ],
+   "height_m": 0.75,
+   "size_vox": [
+    60,
+    14,
+    15
+   ],
+   "emissive": false,
+   "materials": [
+    "WoodDark",
+    "WoodMid"
+   ],
+   "voxels": 1296,
+   "tris": 5528
+  },
+  {
+   "name": "cafe_chair",
+   "zone": "tables",
+   "size_class": "S",
+   "anchor": "floor",
+   "path": "res://assets/kit/tables/cafe_chair.glb",
+   "footprint_m": [
+    0.4,
+    0.4
+   ],
+   "height_m": 0.9,
+   "size_vox": [
+    8,
+    8,
+    18
+   ],
+   "emissive": false,
+   "materials": [
+    "WoodDark",
+    "WoodMid"
+   ],
+   "voxels": 138,
+   "tris": 840
+  },
+  {
+   "name": "drum_stool",
+   "zone": "tables",
+   "size_class": "S",
+   "anchor": "floor",
+   "path": "res://assets/kit/tables/drum_stool.glb",
+   "footprint_m": [
+    0.45,
+    0.45
+   ],
+   "height_m": 0.45,
+   "size_vox": [
+    9,
+    9,
+    9
+   ],
+   "emissive": false,
+   "materials": [
+    "BeamBlack",
+    "StoolBlack"
+   ],
+   "voxels": 605,
+   "tris": 882
+  },
+  {
+   "name": "table_lamp_lit",
+   "zone": "tables",
+   "size_class": "S",
+   "anchor": "floor",
+   "path": "res://assets/kit/tables/table_lamp_lit.glb",
+   "footprint_m": [
+    0.25,
+    0.25
+   ],
+   "height_m": 0.5,
+   "size_vox": [
+    5,
+    5,
+    10
+   ],
+   "emissive": true,
+   "materials": [
+    "CymbalGold",
+    "LampGold_emissive"
+   ],
+   "voxels": 74,
+   "tris": 290
+  },
+  {
+   "name": "table_lamp_unlit",
+   "zone": "tables",
+   "size_class": "S",
+   "anchor": "floor",
+   "path": "res://assets/kit/tables/table_lamp_unlit.glb",
+   "footprint_m": [
+    0.25,
+    0.25
+   ],
+   "height_m": 0.5,
+   "size_vox": [
+    5,
+    5,
+    10
+   ],
+   "emissive": false,
+   "materials": [
+    "CymbalGold",
+    "LampGoldOff"
+   ],
+   "voxels": 74,
+   "tris": 290
+  },
+  {
+   "name": "tealight_lantern",
+   "zone": "tables",
+   "size_class": "XS",
+   "anchor": "floor",
+   "path": "res://assets/kit/tables/tealight_lantern.glb",
+   "footprint_m": [
+    0.1,
+    0.1
+   ],
+   "height_m": 0.15,
+   "size_vox": [
+    2,
+    2,
+    3
+   ],
+   "emissive": true,
+   "materials": [
+    "Tealight_emissive"
+   ],
+   "voxels": 12,
+   "tris": 56
+  },
+  {
+   "name": "napkin_cup",
+   "zone": "tables",
+   "size_class": "XS",
+   "anchor": "floor",
+   "path": "res://assets/kit/tables/napkin_cup.glb",
+   "footprint_m": [
+    0.1,
+    0.1
+   ],
+   "height_m": 0.15,
+   "size_vox": [
+    2,
+    2,
+    3
+   ],
+   "emissive": false,
+   "materials": [
+    "ColumnWhite"
+   ],
+   "voxels": 12,
+   "tris": 56
+  },
+  {
+   "name": "stage_platform",
+   "zone": "stage",
+   "size_class": "L",
+   "anchor": "floor",
+   "path": "res://assets/kit/stage/stage_platform.glb",
+   "footprint_m": [
+    2.0,
+    1.0
+   ],
+   "height_m": 0.45,
+   "size_vox": [
+    40,
+    20,
+    9
+   ],
+   "emissive": false,
+   "materials": [
+    "BeamBlack",
+    "StoolBlack"
+   ],
+   "voxels": 7200,
+   "tris": 3760
+  },
+  {
+   "name": "stage_carpet_tile",
+   "zone": "stage",
+   "size_class": "Architecture",
+   "anchor": "floor",
+   "path": "res://assets/kit/stage/stage_carpet_tile.glb",
+   "footprint_m": [
+    1.0,
+    1.0
+   ],
+   "height_m": 0.05,
+   "size_vox": [
+    20,
+    20,
+    1
+   ],
+   "emissive": false,
+   "materials": [
+    "CarpetRed"
+   ],
+   "voxels": 400,
+   "tris": 960
+  },
+  {
+   "name": "slatted_backdrop",
+   "zone": "stage",
+   "size_class": "L",
+   "anchor": "floor",
+   "path": "res://assets/kit/stage/slatted_backdrop.glb",
+   "footprint_m": [
+    1.0,
+    0.15
+   ],
+   "height_m": 3.0,
+   "size_vox": [
+    20,
+    3,
+    60
+   ],
+   "emissive": true,
+   "materials": [
+    "BeamBlack",
+    "ShelfAmber_emissive",
+    "SlatRed_emissive",
+    "VelvetRed"
+   ],
+   "voxels": 1920,
+   "tris": 9792
+  },
+  {
+   "name": "curtain_panel",
+   "zone": "stage",
+   "size_class": "Architecture",
+   "anchor": "floor",
+   "path": "res://assets/kit/stage/curtain_panel.glb",
+   "footprint_m": [
+    1.0,
+    0.15
+   ],
+   "height_m": 3.5,
+   "size_vox": [
+    20,
+    3,
+    70
+   ],
+   "emissive": false,
+   "materials": [
+    "BeamBlack",
+    "VelvetRed",
+    "VelvetShadow"
+   ],
+   "voxels": 3510,
+   "tris": 7684
+  },
+  {
+   "name": "drum_kit",
+   "zone": "stage",
+   "size_class": "M",
+   "anchor": "floor",
+   "path": "res://assets/kit/stage/drum_kit.glb",
+   "footprint_m": [
+    1.55,
+    0.85
+   ],
+   "height_m": 1.2,
+   "size_vox": [
+    31,
+    17,
+    24
+   ],
+   "emissive": false,
+   "materials": [
+    "CarpetRed",
+    "ColumnWhite",
+    "CymbalGold",
+    "DrumRed",
+    "FloorGrey",
+    "StoolBlack"
+   ],
+   "voxels": 1392,
+   "tris": 3796
+  },
+  {
+   "name": "guitar_on_stand",
+   "zone": "stage",
+   "size_class": "S",
+   "anchor": "floor",
+   "path": "res://assets/kit/stage/guitar_on_stand.glb",
+   "footprint_m": [
+    0.45,
+    0.4
+   ],
+   "height_m": 1.15,
+   "size_vox": [
+    9,
+    8,
+    23
+   ],
+   "emissive": false,
+   "materials": [
+    "BeamBlack",
+    "CarpetRed",
+    "ColumnWhite",
+    "CymbalGold",
+    "StoolBlack",
+    "WoodDark",
+    "WoodMid"
+   ],
+   "voxels": 188,
+   "tris": 854
+  },
+  {
+   "name": "amp",
+   "zone": "stage",
+   "size_class": "S",
+   "anchor": "floor",
+   "path": "res://assets/kit/stage/amp.glb",
+   "footprint_m": [
+    0.6,
+    0.4
+   ],
+   "height_m": 0.65,
+   "size_vox": [
+    12,
+    8,
+    13
+   ],
+   "emissive": true,
+   "materials": [
+    "BeamBlack",
+    "CymbalGold",
+    "FloorGrey",
+    "NeonRed_emissive",
+    "StoolBlack"
+   ],
+   "voxels": 1017,
+   "tris": 1140
+  },
+  {
+   "name": "mic_stand",
+   "zone": "stage",
+   "size_class": "S",
+   "anchor": "floor",
+   "path": "res://assets/kit/stage/mic_stand.glb",
+   "footprint_m": [
+    0.25,
+    0.25
+   ],
+   "height_m": 1.45,
+   "size_vox": [
+    5,
+    5,
+    29
+   ],
+   "emissive": false,
+   "materials": [
+    "BeamBlack",
+    "CarpetRed",
+    "FloorGrey"
+   ],
+   "voxels": 49,
+   "tris": 306
+  },
+  {
+   "name": "monitor_wedge",
+   "zone": "stage",
+   "size_class": "S",
+   "anchor": "floor",
+   "path": "res://assets/kit/stage/monitor_wedge.glb",
+   "footprint_m": [
+    0.6,
+    0.45
+   ],
+   "height_m": 0.35,
+   "size_vox": [
+    12,
+    9,
+    7
+   ],
+   "emissive": false,
+   "materials": [
+    "BeamBlack",
+    "FloorGrey",
+    "StoolBlack"
+   ],
+   "voxels": 480,
+   "tris": 712
+  },
+  {
+   "name": "disco_ball",
+   "zone": "stage",
+   "size_class": "S",
+   "anchor": "ceiling",
+   "path": "res://assets/kit/stage/disco_ball.glb",
+   "footprint_m": [
+    0.7,
+    0.7
+   ],
+   "height_m": 1.25,
+   "size_vox": [
+    14,
+    14,
+    25
+   ],
+   "emissive": true,
+   "materials": [
+    "BeamBlack",
+    "LampGold_emissive",
+    "MirrorGrey",
+    "SlatRed_emissive",
+    "White_emissive"
+   ],
+   "voxels": 512,
+   "tris": 3552
+  },
+  {
+   "name": "neon_sign",
+   "zone": "lounge",
+   "size_class": "M",
+   "anchor": "floor",
+   "path": "res://assets/kit/lounge/neon_sign.glb",
+   "footprint_m": [
+    1.65,
+    0.1
+   ],
+   "height_m": 1.0,
+   "size_vox": [
+    33,
+    2,
+    20
+   ],
+   "emissive": true,
+   "materials": [
+    "NeonRed_emissive",
+    "VelvetShadow"
+   ],
+   "voxels": 815,
+   "tris": 3518
+  },
+  {
+   "name": "plant_wall_tile",
+   "zone": "lounge",
+   "size_class": "L",
+   "anchor": "floor",
+   "path": "res://assets/kit/lounge/plant_wall_tile.glb",
+   "footprint_m": [
+    1.0,
+    0.3
+   ],
+   "height_m": 1.0,
+   "size_vox": [
+    20,
+    6,
+    20
+   ],
+   "emissive": false,
+   "materials": [
+    "BeamBlack",
+    "PlantDark",
+    "PlantGreen",
+    "PlantMid",
+    "WoodDark"
+   ],
+   "voxels": 1132,
+   "tris": 3024
+  },
+  {
+   "name": "white_column",
+   "zone": "lounge",
+   "size_class": "Architecture",
+   "anchor": "floor",
+   "path": "res://assets/kit/lounge/white_column.glb",
+   "footprint_m": [
+    0.4,
+    0.4
+   ],
+   "height_m": 3.5,
+   "size_vox": [
+    8,
+    8,
+    70
+   ],
+   "emissive": false,
+   "materials": [
+    "BeamBlack",
+    "ColumnWhite"
+   ],
+   "voxels": 4480,
+   "tris": 4608
+  },
+  {
+   "name": "beam_segment",
+   "zone": "lounge",
+   "size_class": "Architecture",
+   "anchor": "ceiling",
+   "path": "res://assets/kit/lounge/beam_segment.glb",
+   "footprint_m": [
+    1.0,
+    0.2
+   ],
+   "height_m": 0.25,
+   "size_vox": [
+    20,
+    4,
+    5
+   ],
+   "emissive": false,
+   "materials": [
+    "BeamBlack",
+    "StoolBlack"
+   ],
+   "voxels": 400,
+   "tris": 800
+  },
+  {
+   "name": "ceiling_panel",
+   "zone": "lounge",
+   "size_class": "Architecture",
+   "anchor": "ceiling",
+   "path": "res://assets/kit/lounge/ceiling_panel.glb",
+   "footprint_m": [
+    1.0,
+    1.0
+   ],
+   "height_m": 0.05,
+   "size_vox": [
+    20,
+    20,
+    1
+   ],
+   "emissive": true,
+   "materials": [
+    "PanelRed_emissive"
+   ],
+   "voxels": 400,
+   "tris": 1760
+  },
+  {
+   "name": "arcade_cabinet",
+   "zone": "lounge",
+   "size_class": "M",
+   "anchor": "floor",
+   "path": "res://assets/kit/lounge/arcade_cabinet.glb",
+   "footprint_m": [
+    0.7,
+    0.75
+   ],
+   "height_m": 1.8,
+   "size_vox": [
+    14,
+    15,
+    36
+   ],
+   "emissive": true,
+   "materials": [
+    "BeamBlack",
+    "CymbalGold",
+    "LampGold_emissive",
+    "NeonRed_emissive",
+    "PanelRed_emissive",
+    "ScreenCyan_emissive",
+    "StoolBlack"
+   ],
+   "voxels": 6048,
+   "tris": 4400
+  },
+  {
+   "name": "collectibles_shelf",
+   "zone": "lounge",
+   "size_class": "L",
+   "anchor": "floor",
+   "path": "res://assets/kit/lounge/collectibles_shelf.glb",
+   "footprint_m": [
+    2.0,
+    0.4
+   ],
+   "height_m": 2.2,
+   "size_vox": [
+    40,
+    8,
+    44
+   ],
+   "emissive": true,
+   "materials": [
+    "BarFront",
+    "BeamBlack",
+    "BottleClear",
+    "CeilingPlum",
+    "ColumnWhite",
+    "CymbalGold",
+    "DrumRed",
+    "MirrorGrey",
+    "PlantGreen",
+    "PlantMid",
+    "ShelfAmber_emissive",
+    "StageBlue",
+    "VelvetRed",
+    "White_emissive",
+    "WoodDark"
+   ],
+   "voxels": 5082,
+   "tris": 18392
+  },
+  {
+   "name": "crt_monitor",
+   "zone": "lounge",
+   "size_class": "S",
+   "anchor": "floor",
+   "path": "res://assets/kit/lounge/crt_monitor.glb",
+   "footprint_m": [
+    0.7,
+    0.5
+   ],
+   "height_m": 1.0,
+   "size_vox": [
+    14,
+    10,
+    20
+   ],
+   "emissive": true,
+   "materials": [
+    "BarFront",
+    "FloorGrey",
+    "ScreenCyan_emissive",
+    "StoolBlack",
+    "WoodDark"
+   ],
+   "voxels": 2244,
+   "tris": 2032
+  },
+  {
+   "name": "stair_run",
+   "zone": "circulation",
+   "size_class": "L",
+   "anchor": "floor",
+   "path": "res://assets/kit/circulation/stair_run.glb",
+   "footprint_m": [
+    1.6,
+    3.65
+   ],
+   "height_m": 3.3,
+   "size_vox": [
+    32,
+    73,
+    66
+   ],
+   "emissive": true,
+   "materials": [
+    "BeamBlack",
+    "ShelfAmber_emissive",
+    "StoolBlack",
+    "WoodDark"
+   ],
+   "voxels": 60402,
+   "tris": 21016
+  },
+  {
+   "name": "exit_sign",
+   "zone": "circulation",
+   "size_class": "XS",
+   "anchor": "floor",
+   "path": "res://assets/kit/circulation/exit_sign.glb",
+   "footprint_m": [
+    0.3,
+    0.1
+   ],
+   "height_m": 0.2,
+   "size_vox": [
+    6,
+    2,
+    4
+   ],
+   "emissive": true,
+   "materials": [
+    "BeamBlack",
+    "ExitCyan_emissive"
+   ],
+   "voxels": 48,
+   "tris": 152
+  },
+  {
+   "name": "track_light",
+   "zone": "circulation",
+   "size_class": "Architecture",
+   "anchor": "ceiling",
+   "path": "res://assets/kit/circulation/track_light.glb",
+   "footprint_m": [
+    1.0,
+    0.1
+   ],
+   "height_m": 0.3,
+   "size_vox": [
+    20,
+    2,
+    6
+   ],
+   "emissive": true,
+   "materials": [
+    "BeamBlack",
+    "LampGold_emissive",
+    "StoolBlack"
+   ],
+   "voxels": 71,
+   "tris": 416
+  }
+ ]
+}
