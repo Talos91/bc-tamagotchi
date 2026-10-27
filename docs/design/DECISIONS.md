@@ -19,6 +19,8 @@ GDD is updated.
 | 2026-10-27 | **The player's character is the Tamagotchi; the GDD stands.** The overall-look mockup (`docs/art/direction/04-overall-look-mockup.webp`) is a reference for interface *style* (dark HUD, glyph icons, need bubbles over heads, isometric room view), not for functionality. Its Mood/Energy/Tidiness meters and Serve/Clean/Decor actions are not the design. |
 | 2026-10-27 | **Orientation is open again.** Daniele's first idea was landscape; portrait was the GDD's recommendation. Decision deferred. Until then build so both work: the venue, camera and HUD must run at 1080×1920 and at 1920×1080; every screenshot set includes both. |
 | 2026-10-27 | **Coins: yes. Decor: no.** A virtual currency is in; players never decorate or build the venue (pillar 3, the room is authored). What coins are earned from and spent on (drinks, wardrobe, memories, tips to performers) needs a GDD chapter before any implementation. |
+| 2026-10-27 | **The app is a bridge to the real Black Cabin.** Confirmed real-world features: give discounts; win merch; win drinks; book tables; show the real event calendar; request songs; MAYBE order to the table from the app. These need a GDD chapter, a redemption flow the real staff can verify, and a backend (Supabase, as Ooze Syndicate uses). Coins and real-world rewards must be designed together. |
+| 2026-10-27 | **Neglect must have stakes.** Daniele: since it is a Tamagotchi, some interactions must be mandatory or the character "dies" (or the game's equivalent). GDD §2.5 currently says nothing breaks at 0. The exact consequence is open (see Still open); pillar 2 "cozy, never punishing" is softened to "cozy, with real stakes". |
 
 ## Still open
 
@@ -27,6 +29,8 @@ GDD is updated.
 - Brand typeface: does Black Cabin have one, or do we keep Kanit + IBM Plex Sans Thai Looped.
 - The asks to Black Cabin listed at the end of `03-cast.md` (consent, house band, staff packs).
 
+- What happens when the character is fully neglected (soft dormancy with losses vs a real death and a new character), and which interactions are mandatory per week.
+- Real-world bridge design: redemption flow, staff-side verification, what a booking or song request needs from Black Cabin's systems.
 - Orientation: landscape vs portrait primary (see above).
 - Coin economy design (earn/spend, no decor).
 - Chat policy for multiplayer (phrase wheel vs free text, now that the game is 21+).
