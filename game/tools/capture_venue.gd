@@ -13,13 +13,13 @@ const SHOTS := [
 	{"name": "entrance", "player": Vector3(11.0, 0, 6.0)},
 	{"name": "floor", "player": Vector3(16.0, 0, 5.5)},
 	{"name": "bar", "player": Vector3(16.6, 0, 7.4)},
-	{"name": "stage", "player": Vector3(25.5, 0.5, 5.0)},
+	{"name": "stage", "player": Vector3(25.5, 0.5, 2.6)},
 ]
 ## Eye-level views matched to R01 (main room from the entrance), R02 (lounge), R03 (main room from the stage end)
 const EYE := [
-	{"name": "eye-R01-entrance", "from": Vector3(10.6, 1.9, 6.4), "at": Vector3(30.0, 1.4, 4.6), "fov": 62.0, "player": Vector3(14.5, 0, 5.6)},
+	{"name": "eye-R01-entrance", "from": Vector3(10.7, 1.9, 6.2), "at": Vector3(30.0, 1.3, 4.4), "fov": 64.0, "player": Vector3(14.5, 0, 5.6)},
 	{"name": "eye-R02-lounge", "from": Vector3(6.6, 1.7, 9.6), "at": Vector3(3.4, 1.6, 0.0), "fov": 66.0, "player": Vector3(4.6, 0, 4.4)},
-	{"name": "eye-R03-from-stage", "from": Vector3(23.6, 3.2, 8.4), "at": Vector3(12.0, 0.0, 2.5), "fov": 64.0, "player": Vector3(18.0, 0, 5.2)},
+	{"name": "eye-R03-from-stage", "from": Vector3(29.2, 3.1, 6.0), "at": Vector3(11.0, 0.3, 6.6), "fov": 66.0, "player": Vector3(20.0, 0, 5.4)},
 ]
 
 func _init() -> void:

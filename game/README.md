@@ -26,18 +26,20 @@ re-bakes if it is empty). Units are metres, x east, z south, room height 4 m.
 | `Lounge` | x 0..10, z 0..10 | Neon sign on the plant wall (north), velvet banquette, long table with lamps, two white columns, CRT, arcade cabinet, collectibles shelf with high counter, beam grid with red ceiling panels |
 | `Stairs` | west wall | Kit stair run rising north to a landing at 2.4 m, hidden ramp collider |
 | `Curtain` | x 10, door z 4.8..7.2 | Partition with red curtain panels on the lounge side, valance, exit sign |
-| `MainRoom` | x 10..30, z 0..10 | Floor, walls, amber cove strip, track lights, disco ball |
-| `Bar` | south wall | 10 back-bar shelves, 10 counter units, 8 stools, soffit segments, paintings, 4 amber shelf lights |
-| `Tables` | middle | 6 round tables in two staggered rows (lamp or tealights each), chairs, drum stools; the z 5.5 aisle stays clear from curtain to stage |
-| `CommunalTable` | north wall | Two long tables, chairs both sides |
-| `Banquette` | north wall, x 18..22 | Kit `banquette_straight` ×4 with two small tables |
-| `Stage` | x 24..30, z 1..9, 0.5 m high | Kit risers, carpet tiles, kit steps over a hidden ramp, slatted backdrop, curtains, drum kit, amps, guitar, mics, wedges, truss with red/amber/blue PARs, stage tree, PA speakers, haze sheets |
+| `MainRoom` | x 10..30, z 0..10 | Floor, walls, amber cove strips, track lights, disco ball, paintings, wall lamps, exit signs, entrance plant |
+| `Bar` | right-hand (south) wall | 11 back-bar shelves, 11 counter units, 9 stools, bottles and tealights on the counter, soffit, paintings, 4 amber shelf lights |
+| `Tables` | middle and back | 10 round tables (lamp or tealights each), chairs, 6 drum stools in front of the stage; a clear aisle runs from the curtain to the stage steps |
+| `CommunalTable` | left (north) wall, before the stage | Two long tables, chairs both sides |
+| `Banquette` | entrance wall north of the curtain | Kit `banquette_straight` ×4 facing the room, two small tables |
+| `Stage` | left (north) wall at the far end, x 20..30, z 0..4, 0.5 m high | Kit risers, carpet tiles, kit steps over a hidden ramp, curtains behind, drum kit, amps, guitar, mics, wedges, truss with PARs, stage tree, PA speakers, haze; slatted backdrop on the far (east) wall |
 | `Patrons` | | Simulated crowd (`scripts/venue_patrons.gd`) and `Spots/`, the seats, staff and wander points named by zone |
 | `CameraZones` | | One Marker3D per zone with the camera framing (see below) |
 | `Navigation` | | NavigationRegion3D, agent radius 0.4 m, baked from the static colliders |
 
-Entering through the curtain you face the stage with the bar on your right and the communal table on your left,
-as in `docs/art/direction/01`. Ceiling slab, beams, panels, soffit and the track lights over the bar are on render
+Laid out from the three direction renders only (`04-overall-look-mockup` is style, not layout). Entering through
+the curtain (R01): the stage is on your left along the far half of the wall, the bar runs along your right, the
+communal table is on the left before the stage, round tables fill the middle and the back in front of the slatted
+backdrop. R03 is the reverse view from the stage end. Ceiling slab, beams, panels, soffit and the track lights over the bar are on render
 layer 2.
 
 ## Camera and controls
@@ -75,7 +77,7 @@ characters is a change to this one scene; the venue only calls `set_look` and `p
 
 ## Light budget
 
-26 dynamic lights, **2 shadow-casting** (the stage red washes). `max_renderable_lights=48` in `project.godot`;
+30 dynamic lights, **2 shadow-casting** (the stage red washes). `max_renderable_lights=48` in `project.godot`;
 Compatibility shades at most 8 lights per mesh, so the floor is 2 m tiles. Lamp and tealight lights fade out
 beyond 22 m from the camera.
 
@@ -83,10 +85,10 @@ beyond 22 m from the camera.
 |---|---|
 | Lounge | neon red, 2 red ceiling-panel omnis, 3 table lamps, arcade cyan, shelf amber (8) |
 | Bar | 4 amber shelf omnis (4) |
-| Tables / communal / banquette | 6 round tables, 2 communal lamps, 2 banquette tealights (10; tealights flicker ±8% at 1–2 Hz) |
+| Tables / communal / banquette | 10 round tables, 2 communal lamps, 2 banquette tables (14; tealights flicker ±8% at 1–2 Hz) |
 | Stage | 2 red spot washes (shadows), blue PAR spot, backdrop red omni (4) |
 
-Measured on an RTX 5080 laptop (`tools/capture_venue.gd`): GPU 0.3–1.2 ms and 180–1100 draw calls per frame
+Measured on an RTX 5080 laptop (`tools/capture_venue.gd`): GPU 0.9–5.4 ms and 250–1500 draw calls per frame with the crowd
 depending on the zone; the floor view is the heaviest (kit objects carry 2–9 material surfaces each).
 
 ## Screenshots

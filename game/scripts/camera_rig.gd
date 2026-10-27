@@ -3,7 +3,7 @@ extends Node3D
 ## Portrait diorama camera: a fixed-angle, elevated three-quarter view that follows the player and frames one
 ## zone at a time. Zones are the Marker3D nodes in group "camera_zone" (venue CameraZones/*, written by
 ## tools/build_venue.gd) with metas rect / clamp (Rect2 in x,z), yaw, pitch (degrees), dist, look_y. Switching
-## zone eases position, yaw, pitch and distance. Walls in group "cutaway" whose meta cut_normal faces the camera
+## zone eases position, yaw, pitch and distance. A zone with meta fallback=true applies only where no other does. Walls in group "cutaway" whose meta cut_normal faces the camera
 ## are hidden, as are hanging props in group "occluder" (metas occluder_center, occluder_radius) that sit
 ## between the camera and the look target; render layer 2 (ceiling) is never drawn by this camera.
 ## Lives in player.tscn as a top_level child, so it ignores the player's transform.
@@ -62,12 +62,15 @@ func world_to_input(d: Vector3) -> Vector2:
 func _zone_for(p: Vector3) -> Node3D:
 	var flat := Vector2(p.x, p.z)
 	for z in _zones:
-		if z.name.to_lower() == zone and (z.get_meta("rect") as Rect2).grow(HYSTERESIS).has_point(flat):
+		if z.name.to_lower() == zone and not z.get_meta("fallback", false) and (z.get_meta("rect") as Rect2).grow(HYSTERESIS).has_point(flat):
 			return z
+	var fallback: Node3D = null
 	for z in _zones:
 		if (z.get_meta("rect") as Rect2).has_point(flat):
-			return z
-	return null
+			if not z.get_meta("fallback", false):
+				return z
+			fallback = z
+	return fallback
 
 func _process(delta: float) -> void:
 	if _zones.is_empty() or not is_instance_valid(_target):

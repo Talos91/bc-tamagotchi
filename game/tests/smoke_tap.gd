@@ -12,7 +12,7 @@ func _init() -> void:
 		await physics_frame
 	var zones := {}
 	var ok := true
-	for goal in [Vector3(16.0, 0, 5.0), Vector3(16.6, 0, 7.6), Vector3(26.5, 0.5, 5.0), Vector3(4.0, 0, 6.5)]:
+	for goal in [Vector3(16.0, 0, 5.0), Vector3(16.6, 0, 7.6), Vector3(25.5, 0.5, 2.6), Vector3(4.0, 0, 6.5)]:
 		p.walk_to(goal)
 		for i in 1800:
 			await physics_frame
