@@ -16,6 +16,9 @@ GDD is updated.
 | 2026-10-27 | **Single-player first playable; multiplayer later.** The first playable follows GDD §14 (no multiplayer, no shop). Save format and systems must not block adding presence later. |
 | 2026-10-27 | **Visual target = `docs/art/direction/` renders.** The three voxel renders are the authority; the art bible is being revised to match them. |
 | 2026-10-27 | **Orchestrator calls after wave 2** (reversible by Daniele): (a) `SOFT_FLOOR_FACTOR` goes from 0.5 to 0.3 so the 6–9 day empty window in GDD §2 holds; (b) Welcome Back ×2 replaces, never stacks with, the daily ×0.75; (c) Neon Pinball runs on the arcade cabinet's screen (the renders show a cabinet, not a pinball table); (d) Screen Cyan is approved as the Nightlife meter colour in UI only; (e) meter numbers hidden by default; (f) Bangkok time wins everywhere, including event schedule; (g) the string table lives at `game/i18n/strings.csv`, owned by gameplay sessions; (h) the Flat stays as the minimal home screen; (i) the Velvet Banquette is added to the main room (it is in the real venue photos) and to the kit; (j) room height is 4 m / 80 voxels per the art bible, greybox adjusts; (k) Candle Talk +5 lean bonus approved; (l) tipsiness: one state per 30 real minutes, water drops one, Merry caps; other players later see walk and idle only; (m) anonymous patrons: 12 bodies from a kit; (n) hearts 0–3 for the first playable; (o) the ครับ/ค่ะ/จ้า particle choice goes into character creation; (p) `rendering/viewport/hdr_2d=true` is required in `project.godot` (glow washes out the Compatibility renderer otherwise). |
+| 2026-10-27 | **The player's character is the Tamagotchi; the GDD stands.** The overall-look mockup (`docs/art/direction/04-overall-look-mockup.webp`) is a reference for interface *style* (dark HUD, glyph icons, need bubbles over heads, isometric room view), not for functionality. Its Mood/Energy/Tidiness meters and Serve/Clean/Decor actions are not the design. |
+| 2026-10-27 | **Orientation is open again.** Daniele's first idea was landscape; portrait was the GDD's recommendation. Decision deferred. Until then build so both work: the venue, camera and HUD must run at 1080×1920 and at 1920×1080; every screenshot set includes both. |
+| 2026-10-27 | **Coins: yes. Decor: no.** A virtual currency is in; players never decorate or build the venue (pillar 3, the room is authored). What coins are earned from and spent on (drinks, wardrobe, memories, tips to performers) needs a GDD chapter before any implementation. |
 
 ## Still open
 
@@ -24,5 +27,7 @@ GDD is updated.
 - Brand typeface: does Black Cabin have one, or do we keep Kanit + IBM Plex Sans Thai Looped.
 - The asks to Black Cabin listed at the end of `03-cast.md` (consent, house band, staff packs).
 
+- Orientation: landscape vs portrait primary (see above).
+- Coin economy design (earn/spend, no decor).
 - Chat policy for multiplayer (phrase wheel vs free text, now that the game is 21+).
 - The Flat home screen: keep minimal or cut.
