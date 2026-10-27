@@ -14,7 +14,12 @@ the work, one session per deliverable, each on its own branch.
    in-engine before the GDD core loop is written.
 4. Commit on your own branch (`bc/<slug>`), push, and open a PR against
    `main`. The orchestrator reviews and merges.
-5. End with a short report: what was produced, what was decided, what is
+5. Blender rule (as in Ooze Syndicate): every generator script ends by saving
+   a review `.blend` into `blender/` at the repo root (`BlackCabinKit.blend`,
+   `BlackCabinChars.blend`, ...), with the objects laid out on a labelled grid,
+   lit, and a camera framing them, so Daniele can open the file and see what
+   was made. Commit the `.blend` with the script.
+6. End with a short report: what was produced, what was decided, what is
    still open for the orchestrator.
 
 ## Session naming
