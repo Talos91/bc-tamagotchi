@@ -1,5 +1,6 @@
 extends SceneTree
-## Headless smoke test: loads main.tscn, walks the player from the spawn to the stairs and up into the lounge.
+## Headless smoke test: loads main.tscn and walks the player with the joystick from the lounge spawn, through the
+## curtain and down the z 5.5 aisle of the main room, up the ramp onto the stage. Stick input is camera-relative.
 ##   godot --headless --path . --script res://tests/smoke_stairs.gd
 
 func _init() -> void:
@@ -8,15 +9,15 @@ func _init() -> void:
 	var p: Player = main.get_node("Player")
 	var js: TouchJoystick = main.get_node("UI/Joystick")
 	await process_frame
-	# Waypoints: round the tables to the stair foot, up the stairs, into the lounge
-	var legs := [Vector3(7.0, 0, 5.5), Vector3(12.0, 0, 5.5), Vector3(21.0, 0, 5.5), Vector3(22.8, 0, 5.5), Vector3(24.0, 0, 5.5)]
+	# Waypoints: lounge, curtain, aisle between the table rows, stage steps, onto the stage
+	var legs := [Vector3(7.0, 0, 5.8), Vector3(12.0, 0, 5.6), Vector3(21.0, 0, 5.5), Vector3(22.8, 0, 5.5), Vector3(24.6, 0, 5.5)]
 	for t in legs:
 		for i in 900:
 			var d: Vector3 = t - p.global_position
 			d.y = 0
 			if d.length() < 0.25:
 				break
-			js.value = Vector2(d.x, d.z).normalized()
+			js.value = p.rig.world_to_input(d.normalized())
 			await physics_frame
 	js.value = Vector2.ZERO
 	for i in 30:
