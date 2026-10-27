@@ -70,6 +70,17 @@ Wave 1 has no file overlap, so all three start together.
 
 ### Wave 3b — depends on 3a
 
+Inputs carried over from 3a reports (add to the relevant 3b brief):
+- Fonts: Kanit and IBM Plex Sans Thai Looped are not in the repo; add them
+  under `game/assets/fonts/` and a theme, or Thai breaks on mobile/web export.
+- `rules.gd` needs a Candle Talk lean-bonus action (+5 per DECISIONS); the
+  result card already flags `extra.lean`.
+- Pour Perfect runs 17–20 s vs the GDD's 20–30 s; pinball score mapping
+  (3000 pts = 1.0) is a guess; Rhythm's +8–12 Music per 60 s song feels small.
+- Thai lines for Mali are machine drafts; a native pass is required.
+- CSV import in the editor must be set to "Keep" (extra columns read as locales).
+- Memory drops are not built anywhere yet.
+
 🎮 Zone wiring (bar, stage, lounge triggers → Needs; visit begin/end; walk-out
 totals; Welcome Back dialogue; `game/i18n/strings.csv` with EN/TH), 🎭
 Character creator + the Flat screen, 🎵 Performance system (house band set,
