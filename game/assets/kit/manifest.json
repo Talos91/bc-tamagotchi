@@ -27,7 +27,8 @@
     "WoodDark"
    ],
    "voxels": 4900,
-   "tris": 3380
+   "tris": 72,
+   "tris_unmerged": 3380
   },
   {
    "name": "back_bar_shelf",
@@ -58,7 +59,8 @@
     "WoodDark"
    ],
    "voxels": 4059,
-   "tris": 8088
+   "tris": 700,
+   "tris_unmerged": 8088
   },
   {
    "name": "bottle_amber",
@@ -82,7 +84,8 @@
     "BottleAmberCap"
    ],
    "voxels": 4,
-   "tris": 34
+   "tris": 18,
+   "tris_unmerged": 34
   },
   {
    "name": "bottle_green",
@@ -106,7 +109,8 @@
     "BottleGreenCap"
    ],
    "voxels": 4,
-   "tris": 34
+   "tris": 18,
+   "tris_unmerged": 34
   },
   {
    "name": "bottle_clear",
@@ -130,7 +134,8 @@
     "BottleClearCap"
    ],
    "voxels": 3,
-   "tris": 26
+   "tris": 18,
+   "tris_unmerged": 26
   },
   {
    "name": "bar_stool",
@@ -154,7 +159,130 @@
     "WoodDark"
    ],
    "voxels": 194,
-   "tris": 1220
+   "tris": 126,
+   "tris_unmerged": 1220
+  },
+  {
+   "name": "soffit_segment",
+   "zone": "bar",
+   "size_class": "L",
+   "anchor": "ceiling",
+   "path": "res://assets/kit/bar/soffit_segment.glb",
+   "footprint_m": [
+    1.0,
+    0.4
+   ],
+   "height_m": 0.5,
+   "size_vox": [
+    20,
+    8,
+    10
+   ],
+   "emissive": true,
+   "materials": [
+    "BarFront",
+    "SoffitPeach_emissive",
+    "WoodDark"
+   ],
+   "voxels": 1600,
+   "tris": 38,
+   "tris_unmerged": 1760
+  },
+  {
+   "name": "painting_a",
+   "zone": "bar",
+   "size_class": "M",
+   "anchor": "floor",
+   "path": "res://assets/kit/bar/painting_a.glb",
+   "footprint_m": [
+    0.8,
+    0.1
+   ],
+   "height_m": 1.1,
+   "size_vox": [
+    16,
+    2,
+    22
+   ],
+   "emissive": false,
+   "materials": [
+    "CabinDark",
+    "CarpetRed",
+    "ColumnWhite",
+    "CymbalGold",
+    "DrumRed",
+    "VelvetRed",
+    "WoodMid"
+   ],
+   "voxels": 459,
+   "tris": 94,
+   "tris_unmerged": 1832,
+   "mount": "wall",
+   "mount_height_m": 1.4
+  },
+  {
+   "name": "painting_b",
+   "zone": "bar",
+   "size_class": "M",
+   "anchor": "floor",
+   "path": "res://assets/kit/bar/painting_b.glb",
+   "footprint_m": [
+    1.2,
+    0.1
+   ],
+   "height_m": 0.8,
+   "size_vox": [
+    24,
+    2,
+    16
+   ],
+   "emissive": false,
+   "materials": [
+    "BeamBlack",
+    "CarpetRed",
+    "CeilingPlum",
+    "ColumnWhite",
+    "CymbalGold",
+    "DrumRed",
+    "StageBlue"
+   ],
+   "voxels": 490,
+   "tris": 140,
+   "tris_unmerged": 1968,
+   "mount": "wall",
+   "mount_height_m": 1.5
+  },
+  {
+   "name": "painting_c",
+   "zone": "bar",
+   "size_class": "M",
+   "anchor": "floor",
+   "path": "res://assets/kit/bar/painting_c.glb",
+   "footprint_m": [
+    0.7,
+    0.1
+   ],
+   "height_m": 0.7,
+   "size_vox": [
+    14,
+    2,
+    14
+   ],
+   "emissive": false,
+   "materials": [
+    "ColumnWhite",
+    "CymbalGold",
+    "DrumRed",
+    "TableWoodLit",
+    "VelvetRed",
+    "VelvetShadow",
+    "WoodDark"
+   ],
+   "voxels": 264,
+   "tris": 116,
+   "tris_unmerged": 1080,
+   "mount": "wall",
+   "mount_height_m": 1.5
   },
   {
    "name": "round_table",
@@ -179,7 +307,8 @@
     "WoodMid"
    ],
    "voxels": 260,
-   "tris": 1424
+   "tris": 328,
+   "tris_unmerged": 1424
   },
   {
    "name": "communal_table",
@@ -203,7 +332,8 @@
     "WoodMid"
    ],
    "voxels": 1296,
-   "tris": 5528
+   "tris": 96,
+   "tris_unmerged": 5528
   },
   {
    "name": "cafe_chair",
@@ -227,7 +357,8 @@
     "WoodMid"
    ],
    "voxels": 138,
-   "tris": 840
+   "tris": 86,
+   "tris_unmerged": 840
   },
   {
    "name": "drum_stool",
@@ -251,7 +382,8 @@
     "StoolBlack"
    ],
    "voxels": 605,
-   "tris": 882
+   "tris": 190,
+   "tris_unmerged": 882
   },
   {
    "name": "table_lamp_lit",
@@ -275,7 +407,8 @@
     "LampGold_emissive"
    ],
    "voxels": 74,
-   "tris": 290
+   "tris": 74,
+   "tris_unmerged": 290
   },
   {
    "name": "table_lamp_unlit",
@@ -299,7 +432,8 @@
     "LampGoldOff"
    ],
    "voxels": 74,
-   "tris": 290
+   "tris": 74,
+   "tris_unmerged": 290
   },
   {
    "name": "tealight_lantern",
@@ -322,7 +456,8 @@
     "Tealight_emissive"
    ],
    "voxels": 12,
-   "tris": 56
+   "tris": 10,
+   "tris_unmerged": 56
   },
   {
    "name": "napkin_cup",
@@ -345,7 +480,8 @@
     "ColumnWhite"
    ],
    "voxels": 12,
-   "tris": 56
+   "tris": 10,
+   "tris_unmerged": 56
   },
   {
    "name": "stage_platform",
@@ -369,7 +505,8 @@
     "StoolBlack"
    ],
    "voxels": 7200,
-   "tris": 3760
+   "tris": 40,
+   "tris_unmerged": 3760
   },
   {
    "name": "stage_carpet_tile",
@@ -392,7 +529,8 @@
     "CarpetRed"
    ],
    "voxels": 400,
-   "tris": 960
+   "tris": 10,
+   "tris_unmerged": 960
   },
   {
    "name": "slatted_backdrop",
@@ -418,7 +556,8 @@
     "VelvetRed"
    ],
    "voxels": 1920,
-   "tris": 9792
+   "tris": 270,
+   "tris_unmerged": 9792
   },
   {
    "name": "curtain_panel",
@@ -430,11 +569,11 @@
     1.0,
     0.15
    ],
-   "height_m": 3.5,
+   "height_m": 4.0,
    "size_vox": [
     20,
     3,
-    70
+    80
    ],
    "emissive": false,
    "materials": [
@@ -442,8 +581,9 @@
     "VelvetRed",
     "VelvetShadow"
    ],
-   "voxels": 3510,
-   "tris": 7684
+   "voxels": 4010,
+   "tris": 66,
+   "tris_unmerged": 8764
   },
   {
    "name": "drum_kit",
@@ -463,6 +603,7 @@
    ],
    "emissive": false,
    "materials": [
+    "BeamBlack",
     "CarpetRed",
     "ColumnWhite",
     "CymbalGold",
@@ -470,8 +611,9 @@
     "FloorGrey",
     "StoolBlack"
    ],
-   "voxels": 1392,
-   "tris": 3796
+   "voxels": 2337,
+   "tris": 1954,
+   "tris_unmerged": 5628
   },
   {
    "name": "guitar_on_stand",
@@ -496,11 +638,13 @@
     "ColumnWhite",
     "CymbalGold",
     "StoolBlack",
+    "VelvetRed",
     "WoodDark",
     "WoodMid"
    ],
-   "voxels": 188,
-   "tris": 854
+   "voxels": 304,
+   "tris": 362,
+   "tris_unmerged": 1038
   },
   {
    "name": "amp",
@@ -527,7 +671,8 @@
     "StoolBlack"
    ],
    "voxels": 1017,
-   "tris": 1140
+   "tris": 156,
+   "tris_unmerged": 1140
   },
   {
    "name": "mic_stand",
@@ -552,7 +697,8 @@
     "FloorGrey"
    ],
    "voxels": 49,
-   "tris": 306
+   "tris": 62,
+   "tris_unmerged": 306
   },
   {
    "name": "monitor_wedge",
@@ -577,7 +723,8 @@
     "StoolBlack"
    ],
    "voxels": 480,
-   "tris": 712
+   "tris": 254,
+   "tris_unmerged": 712
   },
   {
    "name": "disco_ball",
@@ -599,12 +746,204 @@
    "materials": [
     "BeamBlack",
     "LampGold_emissive",
+    "MirrorDark",
     "MirrorGrey",
+    "MirrorLight",
     "SlatRed_emissive",
     "White_emissive"
    ],
    "voxels": 512,
-   "tris": 3552
+   "tris": 2786,
+   "tris_unmerged": 3552
+  },
+  {
+   "name": "stage_steps",
+   "zone": "stage",
+   "size_class": "M",
+   "anchor": "floor",
+   "path": "res://assets/kit/stage/stage_steps.glb",
+   "footprint_m": [
+    1.0,
+    0.6
+   ],
+   "height_m": 0.35,
+   "size_vox": [
+    20,
+    12,
+    7
+   ],
+   "emissive": true,
+   "materials": [
+    "BeamBlack",
+    "CarpetRed",
+    "ShelfAmber_emissive",
+    "StoolBlack"
+   ],
+   "voxels": 1200,
+   "tris": 74,
+   "tris_unmerged": 1280
+  },
+  {
+   "name": "truss_segment",
+   "zone": "stage",
+   "size_class": "L",
+   "anchor": "ceiling",
+   "path": "res://assets/kit/stage/truss_segment.glb",
+   "footprint_m": [
+    2.0,
+    0.3
+   ],
+   "height_m": 0.5,
+   "size_vox": [
+    40,
+    6,
+    10
+   ],
+   "emissive": false,
+   "materials": [
+    "BeamBlack",
+    "StoolBlack"
+   ],
+   "voxels": 472,
+   "tris": 1224,
+   "tris_unmerged": 3120,
+   "note": "2 m box truss along x; PAR lights hang under it: place a par_light_* origin at the truss origin minus height_m"
+  },
+  {
+   "name": "par_light_red",
+   "zone": "stage",
+   "size_class": "S",
+   "anchor": "ceiling",
+   "path": "res://assets/kit/stage/par_light_red.glb",
+   "footprint_m": [
+    0.3,
+    0.4
+   ],
+   "height_m": 0.5,
+   "size_vox": [
+    6,
+    8,
+    10
+   ],
+   "emissive": true,
+   "materials": [
+    "BeamBlack",
+    "NeonRed_emissive",
+    "StoolBlack"
+   ],
+   "voxels": 246,
+   "tris": 104,
+   "tris_unmerged": 568
+  },
+  {
+   "name": "par_light_amber",
+   "zone": "stage",
+   "size_class": "S",
+   "anchor": "ceiling",
+   "path": "res://assets/kit/stage/par_light_amber.glb",
+   "footprint_m": [
+    0.3,
+    0.4
+   ],
+   "height_m": 0.5,
+   "size_vox": [
+    6,
+    8,
+    10
+   ],
+   "emissive": true,
+   "materials": [
+    "BeamBlack",
+    "ShelfAmber_emissive",
+    "StoolBlack"
+   ],
+   "voxels": 246,
+   "tris": 104,
+   "tris_unmerged": 568,
+   "variant_of": "par_light_red"
+  },
+  {
+   "name": "par_light_blue",
+   "zone": "stage",
+   "size_class": "S",
+   "anchor": "ceiling",
+   "path": "res://assets/kit/stage/par_light_blue.glb",
+   "footprint_m": [
+    0.3,
+    0.4
+   ],
+   "height_m": 0.5,
+   "size_vox": [
+    6,
+    8,
+    10
+   ],
+   "emissive": true,
+   "materials": [
+    "BeamBlack",
+    "StageBlue_emissive",
+    "StoolBlack"
+   ],
+   "voxels": 246,
+   "tris": 104,
+   "tris_unmerged": 568,
+   "variant_of": "par_light_red"
+  },
+  {
+   "name": "stage_tree",
+   "zone": "stage",
+   "size_class": "M",
+   "anchor": "floor",
+   "path": "res://assets/kit/stage/stage_tree.glb",
+   "footprint_m": [
+    1.5,
+    0.75
+   ],
+   "height_m": 2.4,
+   "size_vox": [
+    30,
+    15,
+    48
+   ],
+   "emissive": false,
+   "materials": [
+    "BarkGrey",
+    "BeamBlack",
+    "OliveDark",
+    "OliveLeaf",
+    "StoolBlack",
+    "WoodDark"
+   ],
+   "voxels": 1722,
+   "tris": 4272,
+   "tris_unmerged": 6800
+  },
+  {
+   "name": "pa_speaker",
+   "zone": "stage",
+   "size_class": "S",
+   "anchor": "floor",
+   "path": "res://assets/kit/stage/pa_speaker.glb",
+   "footprint_m": [
+    0.5,
+    0.45
+   ],
+   "height_m": 1.0,
+   "size_vox": [
+    10,
+    9,
+    20
+   ],
+   "emissive": true,
+   "materials": [
+    "BeamBlack",
+    "FloorGrey",
+    "NeonRed_emissive",
+    "StoolBlack"
+   ],
+   "voxels": 1309,
+   "tris": 154,
+   "tris_unmerged": 1480
   },
   {
    "name": "neon_sign",
@@ -628,7 +967,8 @@
     "VelvetShadow"
    ],
    "voxels": 815,
-   "tris": 3518
+   "tris": 548,
+   "tris_unmerged": 3518
   },
   {
    "name": "plant_wall_tile",
@@ -654,8 +994,9 @@
     "PlantMid",
     "WoodDark"
    ],
-   "voxels": 1132,
-   "tris": 3024
+   "voxels": 897,
+   "tris": 1370,
+   "tris_unmerged": 2852
   },
   {
    "name": "white_column",
@@ -667,19 +1008,20 @@
     0.4,
     0.4
    ],
-   "height_m": 3.5,
+   "height_m": 4.0,
    "size_vox": [
     8,
     8,
-    70
+    80
    ],
    "emissive": false,
    "materials": [
     "BeamBlack",
     "ColumnWhite"
    ],
-   "voxels": 4480,
-   "tris": 4608
+   "voxels": 5120,
+   "tris": 18,
+   "tris_unmerged": 5248
   },
   {
    "name": "beam_segment",
@@ -703,7 +1045,8 @@
     "StoolBlack"
    ],
    "voxels": 400,
-   "tris": 800
+   "tris": 24,
+   "tris_unmerged": 800
   },
   {
    "name": "ceiling_panel",
@@ -726,7 +1069,8 @@
     "PanelRed_emissive"
    ],
    "voxels": 400,
-   "tris": 1760
+   "tris": 12,
+   "tris_unmerged": 1760
   },
   {
    "name": "arcade_cabinet",
@@ -755,7 +1099,8 @@
     "StoolBlack"
    ],
    "voxels": 6048,
-   "tris": 4400
+   "tris": 128,
+   "tris_unmerged": 4400
   },
   {
    "name": "collectibles_shelf",
@@ -792,7 +1137,8 @@
     "WoodDark"
    ],
    "voxels": 5082,
-   "tris": 18392
+   "tris": 1604,
+   "tris_unmerged": 18392
   },
   {
    "name": "crt_monitor",
@@ -819,7 +1165,119 @@
     "WoodDark"
    ],
    "voxels": 2244,
-   "tris": 2032
+   "tris": 62,
+   "tris_unmerged": 2032
+  },
+  {
+   "name": "banquette_straight",
+   "zone": "lounge",
+   "size_class": "L",
+   "anchor": "floor",
+   "path": "res://assets/kit/lounge/banquette_straight.glb",
+   "footprint_m": [
+    1.0,
+    0.6
+   ],
+   "height_m": 1.15,
+   "size_vox": [
+    20,
+    12,
+    23
+   ],
+   "emissive": false,
+   "materials": [
+    "BeamBlack",
+    "VelvetRed",
+    "VelvetShadow"
+   ],
+   "voxels": 2895,
+   "tris": 140,
+   "tris_unmerged": 3180
+  },
+  {
+   "name": "banquette_corner",
+   "zone": "lounge",
+   "size_class": "L",
+   "anchor": "floor",
+   "path": "res://assets/kit/lounge/banquette_corner.glb",
+   "footprint_m": [
+    0.6,
+    0.6
+   ],
+   "height_m": 1.15,
+   "size_vox": [
+    12,
+    12,
+    23
+   ],
+   "emissive": false,
+   "materials": [
+    "BeamBlack",
+    "VelvetRed",
+    "VelvetShadow"
+   ],
+   "voxels": 2126,
+   "tris": 120,
+   "tris_unmerged": 2720,
+   "variant_of": "banquette_straight"
+  },
+  {
+   "name": "ac_unit",
+   "zone": "lounge",
+   "size_class": "S",
+   "anchor": "floor",
+   "path": "res://assets/kit/lounge/ac_unit.glb",
+   "footprint_m": [
+    0.9,
+    0.3
+   ],
+   "height_m": 0.3,
+   "size_vox": [
+    18,
+    6,
+    6
+   ],
+   "emissive": true,
+   "materials": [
+    "BeamBlack",
+    "ColumnWhite",
+    "FloorGrey",
+    "PlasticWhite",
+    "ScreenCyan_emissive"
+   ],
+   "voxels": 531,
+   "tris": 66,
+   "tris_unmerged": 752,
+   "mount": "wall",
+   "mount_height_m": 2.9
+  },
+  {
+   "name": "wall_lamp",
+   "zone": "lounge",
+   "size_class": "S",
+   "anchor": "floor",
+   "path": "res://assets/kit/lounge/wall_lamp.glb",
+   "footprint_m": [
+    0.45,
+    0.2
+   ],
+   "height_m": 0.45,
+   "size_vox": [
+    9,
+    4,
+    9
+   ],
+   "emissive": true,
+   "materials": [
+    "BeamBlack",
+    "LampGold_emissive",
+    "NeonRed_emissive"
+   ],
+   "voxels": 120,
+   "tris": 190,
+   "tris_unmerged": 544,
+   "mount": "wall",
+   "mount_height_m": 1.8
   },
   {
    "name": "stair_run",
@@ -845,7 +1303,8 @@
     "WoodDark"
    ],
    "voxels": 60402,
-   "tris": 21016
+   "tris": 848,
+   "tris_unmerged": 21016
   },
   {
    "name": "exit_sign",
@@ -869,7 +1328,8 @@
     "ExitCyan_emissive"
    ],
    "voxels": 48,
-   "tris": 152
+   "tris": 18,
+   "tris_unmerged": 152
   },
   {
    "name": "track_light",
@@ -894,7 +1354,61 @@
     "StoolBlack"
    ],
    "voxels": 71,
-   "tris": 416
+   "tris": 120,
+   "tris_unmerged": 416
+  },
+  {
+   "name": "floor_tile_a",
+   "zone": "circulation",
+   "size_class": "Architecture",
+   "anchor": "floor",
+   "path": "res://assets/kit/circulation/floor_tile_a.glb",
+   "footprint_m": [
+    1.0,
+    1.0
+   ],
+   "height_m": 0.05,
+   "size_vox": [
+    20,
+    20,
+    1
+   ],
+   "emissive": false,
+   "materials": [
+    "FloorDeep",
+    "FloorGrey",
+    "FloorPale"
+   ],
+   "voxels": 400,
+   "tris": 178,
+   "tris_unmerged": 960
+  },
+  {
+   "name": "floor_tile_b",
+   "zone": "circulation",
+   "size_class": "Architecture",
+   "anchor": "floor",
+   "path": "res://assets/kit/circulation/floor_tile_b.glb",
+   "footprint_m": [
+    1.0,
+    1.0
+   ],
+   "height_m": 0.05,
+   "size_vox": [
+    20,
+    20,
+    1
+   ],
+   "emissive": false,
+   "materials": [
+    "FloorDeep",
+    "FloorGrey",
+    "FloorPale"
+   ],
+   "voxels": 400,
+   "tris": 172,
+   "tris_unmerged": 960,
+   "variant_of": "floor_tile_a"
   }
  ]
 }

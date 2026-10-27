@@ -1,42 +1,59 @@
 [gd_scene format=3]
 
-[ext_resource type="PackedScene" path="res://assets/kit/tables/round_table.glb" id="1_f0yta"]
-[ext_resource type="PackedScene" path="res://assets/kit/tables/communal_table.glb" id="2_v1s4j"]
-[ext_resource type="PackedScene" path="res://assets/kit/tables/cafe_chair.glb" id="3_py2b0"]
-[ext_resource type="PackedScene" path="res://assets/kit/tables/drum_stool.glb" id="4_f87q8"]
-[ext_resource type="PackedScene" path="res://assets/kit/tables/table_lamp_lit.glb" id="5_kv7oy"]
-[ext_resource type="PackedScene" path="res://assets/kit/tables/table_lamp_unlit.glb" id="6_q7pli"]
-[ext_resource type="PackedScene" path="res://assets/kit/tables/tealight_lantern.glb" id="7_bbwvs"]
-[ext_resource type="PackedScene" path="res://assets/kit/tables/napkin_cup.glb" id="8_yy6xu"]
-[ext_resource type="PackedScene" path="res://assets/kit/bar/bar_counter.glb" id="9_rojmb"]
-[ext_resource type="PackedScene" path="res://assets/kit/bar/back_bar_shelf.glb" id="10_2bnaw"]
-[ext_resource type="PackedScene" path="res://assets/kit/bar/bottle_amber.glb" id="11_letdv"]
-[ext_resource type="PackedScene" path="res://assets/kit/bar/bottle_green.glb" id="12_abbya"]
-[ext_resource type="PackedScene" path="res://assets/kit/bar/bottle_clear.glb" id="13_pyxbf"]
-[ext_resource type="PackedScene" path="res://assets/kit/bar/bar_stool.glb" id="14_jhcsb"]
-[ext_resource type="PackedScene" path="res://assets/kit/circulation/stair_run.glb" id="15_fg07q"]
-[ext_resource type="PackedScene" path="res://assets/kit/circulation/exit_sign.glb" id="16_okl8e"]
-[ext_resource type="PackedScene" path="res://assets/kit/circulation/track_light.glb" id="17_2djmw"]
-[ext_resource type="PackedScene" path="res://assets/kit/stage/stage_platform.glb" id="18_w5wq7"]
-[ext_resource type="PackedScene" path="res://assets/kit/stage/stage_carpet_tile.glb" id="19_tlicf"]
-[ext_resource type="PackedScene" path="res://assets/kit/stage/slatted_backdrop.glb" id="20_2g30w"]
-[ext_resource type="PackedScene" path="res://assets/kit/stage/curtain_panel.glb" id="21_pj8kx"]
-[ext_resource type="PackedScene" path="res://assets/kit/stage/drum_kit.glb" id="22_avgpg"]
-[ext_resource type="PackedScene" path="res://assets/kit/stage/guitar_on_stand.glb" id="23_ov1w5"]
-[ext_resource type="PackedScene" path="res://assets/kit/stage/amp.glb" id="24_2grro"]
-[ext_resource type="PackedScene" path="res://assets/kit/stage/mic_stand.glb" id="25_dd8mo"]
-[ext_resource type="PackedScene" path="res://assets/kit/stage/monitor_wedge.glb" id="26_2wiu0"]
-[ext_resource type="PackedScene" path="res://assets/kit/stage/disco_ball.glb" id="27_j7q4b"]
-[ext_resource type="PackedScene" path="res://assets/kit/lounge/neon_sign.glb" id="28_wsl4h"]
-[ext_resource type="PackedScene" path="res://assets/kit/lounge/plant_wall_tile.glb" id="29_spp4k"]
-[ext_resource type="PackedScene" path="res://assets/kit/lounge/white_column.glb" id="30_hatx6"]
-[ext_resource type="PackedScene" path="res://assets/kit/lounge/beam_segment.glb" id="31_n23ai"]
-[ext_resource type="PackedScene" path="res://assets/kit/lounge/ceiling_panel.glb" id="32_8qqyo"]
-[ext_resource type="PackedScene" path="res://assets/kit/lounge/arcade_cabinet.glb" id="33_hhvqs"]
-[ext_resource type="PackedScene" path="res://assets/kit/lounge/collectibles_shelf.glb" id="34_q7hig"]
-[ext_resource type="PackedScene" path="res://assets/kit/lounge/crt_monitor.glb" id="35_yrinv"]
+[ext_resource type="PackedScene" path="res://assets/kit/tables/round_table.glb" id="1_w5wq7"]
+[ext_resource type="PackedScene" path="res://assets/kit/tables/communal_table.glb" id="2_tlicf"]
+[ext_resource type="PackedScene" path="res://assets/kit/tables/cafe_chair.glb" id="3_2g30w"]
+[ext_resource type="PackedScene" path="res://assets/kit/tables/drum_stool.glb" id="4_pj8kx"]
+[ext_resource type="PackedScene" path="res://assets/kit/tables/table_lamp_lit.glb" id="5_avgpg"]
+[ext_resource type="PackedScene" path="res://assets/kit/tables/table_lamp_unlit.glb" id="6_ov1w5"]
+[ext_resource type="PackedScene" path="res://assets/kit/tables/tealight_lantern.glb" id="7_2grro"]
+[ext_resource type="PackedScene" path="res://assets/kit/tables/napkin_cup.glb" id="8_dd8mo"]
+[ext_resource type="PackedScene" path="res://assets/kit/bar/bar_counter.glb" id="9_2wiu0"]
+[ext_resource type="PackedScene" path="res://assets/kit/bar/back_bar_shelf.glb" id="10_j7q4b"]
+[ext_resource type="PackedScene" path="res://assets/kit/bar/bottle_amber.glb" id="11_wsl4h"]
+[ext_resource type="PackedScene" path="res://assets/kit/bar/bottle_green.glb" id="12_spp4k"]
+[ext_resource type="PackedScene" path="res://assets/kit/bar/bottle_clear.glb" id="13_hatx6"]
+[ext_resource type="PackedScene" path="res://assets/kit/bar/bar_stool.glb" id="14_n23ai"]
+[ext_resource type="PackedScene" path="res://assets/kit/bar/soffit_segment.glb" id="15_8qqyo"]
+[ext_resource type="PackedScene" path="res://assets/kit/bar/painting_a.glb" id="16_hhvqs"]
+[ext_resource type="PackedScene" path="res://assets/kit/bar/painting_b.glb" id="17_q7hig"]
+[ext_resource type="PackedScene" path="res://assets/kit/bar/painting_c.glb" id="18_yrinv"]
+[ext_resource type="PackedScene" path="res://assets/kit/circulation/stair_run.glb" id="19_7xqhk"]
+[ext_resource type="PackedScene" path="res://assets/kit/circulation/exit_sign.glb" id="20_lddae"]
+[ext_resource type="PackedScene" path="res://assets/kit/circulation/track_light.glb" id="21_hbx57"]
+[ext_resource type="PackedScene" path="res://assets/kit/circulation/floor_tile_a.glb" id="22_cqif2"]
+[ext_resource type="PackedScene" path="res://assets/kit/circulation/floor_tile_b.glb" id="23_8mi50"]
+[ext_resource type="PackedScene" path="res://assets/kit/stage/stage_platform.glb" id="24_2himn"]
+[ext_resource type="PackedScene" path="res://assets/kit/stage/stage_carpet_tile.glb" id="25_nk6s3"]
+[ext_resource type="PackedScene" path="res://assets/kit/stage/slatted_backdrop.glb" id="26_gw66g"]
+[ext_resource type="PackedScene" path="res://assets/kit/stage/curtain_panel.glb" id="27_n0yxg"]
+[ext_resource type="PackedScene" path="res://assets/kit/stage/drum_kit.glb" id="28_nort3"]
+[ext_resource type="PackedScene" path="res://assets/kit/stage/guitar_on_stand.glb" id="29_1r64o"]
+[ext_resource type="PackedScene" path="res://assets/kit/stage/amp.glb" id="30_3wk6d"]
+[ext_resource type="PackedScene" path="res://assets/kit/stage/mic_stand.glb" id="31_0q13b"]
+[ext_resource type="PackedScene" path="res://assets/kit/stage/monitor_wedge.glb" id="32_s4duq"]
+[ext_resource type="PackedScene" path="res://assets/kit/stage/disco_ball.glb" id="33_ii36l"]
+[ext_resource type="PackedScene" path="res://assets/kit/stage/stage_steps.glb" id="34_enl2m"]
+[ext_resource type="PackedScene" path="res://assets/kit/stage/truss_segment.glb" id="35_0ylfe"]
+[ext_resource type="PackedScene" path="res://assets/kit/stage/par_light_red.glb" id="36_okcob"]
+[ext_resource type="PackedScene" path="res://assets/kit/stage/par_light_amber.glb" id="37_wda4w"]
+[ext_resource type="PackedScene" path="res://assets/kit/stage/par_light_blue.glb" id="38_71vno"]
+[ext_resource type="PackedScene" path="res://assets/kit/stage/stage_tree.glb" id="39_o1465"]
+[ext_resource type="PackedScene" path="res://assets/kit/stage/pa_speaker.glb" id="40_83pvk"]
+[ext_resource type="PackedScene" path="res://assets/kit/lounge/neon_sign.glb" id="41_vher3"]
+[ext_resource type="PackedScene" path="res://assets/kit/lounge/plant_wall_tile.glb" id="42_453vy"]
+[ext_resource type="PackedScene" path="res://assets/kit/lounge/white_column.glb" id="43_3by8x"]
+[ext_resource type="PackedScene" path="res://assets/kit/lounge/beam_segment.glb" id="44_17kv1"]
+[ext_resource type="PackedScene" path="res://assets/kit/lounge/ceiling_panel.glb" id="45_daanq"]
+[ext_resource type="PackedScene" path="res://assets/kit/lounge/arcade_cabinet.glb" id="46_3cqga"]
+[ext_resource type="PackedScene" path="res://assets/kit/lounge/collectibles_shelf.glb" id="47_th6my"]
+[ext_resource type="PackedScene" path="res://assets/kit/lounge/crt_monitor.glb" id="48_ma0j6"]
+[ext_resource type="PackedScene" path="res://assets/kit/lounge/banquette_straight.glb" id="49_jbdx5"]
+[ext_resource type="PackedScene" path="res://assets/kit/lounge/banquette_corner.glb" id="50_v0yq3"]
+[ext_resource type="PackedScene" path="res://assets/kit/lounge/ac_unit.glb" id="51_gq6sa"]
+[ext_resource type="PackedScene" path="res://assets/kit/lounge/wall_lamp.glb" id="52_e0id6"]
 
-[sub_resource type="Environment" id="Environment_7xqhk"]
+[sub_resource type="Environment" id="Environment_gstel"]
 background_mode = 1
 background_color = Color(0.10980392, 0.050980393, 0.047058824, 1)
 ambient_light_source = 2
@@ -47,364 +64,517 @@ glow_enabled = true
 glow_intensity = 0.6
 glow_bloom = 0.05
 
-[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_lddae"]
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_3juq5"]
 albedo_color = Color(0.22745098, 0.17254902, 0.1882353, 1)
 roughness = 0.3
 
-[sub_resource type="PlaneMesh" id="PlaneMesh_hbx57"]
-material = SubResource("StandardMaterial3D_lddae")
-size = Vector2(18.05, 13.85)
+[sub_resource type="PlaneMesh" id="PlaneMesh_1sv1s"]
+material = SubResource("StandardMaterial3D_3juq5")
+size = Vector2(18.05, 16.65)
 
-[node name="KitShowcase" type="Node3D" unique_id=1215541861]
+[node name="KitShowcase" type="Node3D" unique_id=188069602]
 
-[node name="WorldEnvironment" type="WorldEnvironment" parent="." unique_id=1716754992]
-environment = SubResource("Environment_7xqhk")
+[node name="WorldEnvironment" type="WorldEnvironment" parent="." unique_id=1822247269]
+environment = SubResource("Environment_gstel")
 
-[node name="WarmKey" type="DirectionalLight3D" parent="." unique_id=576284882]
+[node name="WarmKey" type="DirectionalLight3D" parent="." unique_id=142194878]
 transform = Transform3D(0.8660254, 0.38302222, -0.32139382, 0, 0.64278764, 0.76604444, 0.5, -0.66341394, 0.5566704, 0, 0, 0)
 light_color = Color(1, 0.72, 0.5, 1)
 shadow_enabled = true
 
-[node name="RedFill" type="DirectionalLight3D" parent="." unique_id=547266309]
+[node name="RedFill" type="DirectionalLight3D" parent="." unique_id=770814646]
 transform = Transform3D(-0.76604444, -0.32139382, 0.5566704, 0, 0.8660254, 0.5, -0.64278764, 0.38302222, -0.66341394, 0, 0, 0)
 light_color = Color(1, 0.12, 0.1, 1)
 light_energy = 0.15
 
-[node name="Tables" type="Node3D" parent="." unique_id=833094334]
+[node name="Tables" type="Node3D" parent="." unique_id=1582020364]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -4, 0, 0)
 
-[node name="round_table" type="Node3D" parent="Tables" unique_id=1880887393 instance=ExtResource("1_f0yta")]
+[node name="round_table" type="Node3D" parent="Tables" unique_id=1674878182 instance=ExtResource("1_w5wq7")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -2.675, 0, -0.35)
 
-[node name="round_table_label" type="Label3D" parent="Tables" unique_id=1507079167]
+[node name="round_table_label" type="Label3D" parent="Tables" unique_id=887970589]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -2.675, 0.02, 0.120000005)
 billboard = 1
 modulate = Color(1, 1, 1, 0.75)
 text = "round_table"
 
-[node name="communal_table" type="Node3D" parent="Tables" unique_id=320977158 instance=ExtResource("2_v1s4j")]
+[node name="communal_table" type="Node3D" parent="Tables" unique_id=1354018848 instance=ExtResource("2_tlicf")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.325, 0, -0.35)
 
-[node name="communal_table_label" type="Label3D" parent="Tables" unique_id=240091631]
+[node name="communal_table_label" type="Label3D" parent="Tables" unique_id=1731660826]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.325, 0.02, 0.120000005)
 billboard = 1
 modulate = Color(1, 1, 1, 0.75)
 text = "communal_table"
 
-[node name="cafe_chair" type="Node3D" parent="Tables" unique_id=1148847746 instance=ExtResource("3_py2b0")]
+[node name="cafe_chair" type="Node3D" parent="Tables" unique_id=477439957 instance=ExtResource("3_2g30w")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 1.875, 0, -0.35)
 
-[node name="cafe_chair_label" type="Label3D" parent="Tables" unique_id=409420196]
+[node name="cafe_chair_label" type="Label3D" parent="Tables" unique_id=306138783]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 1.875, 0.02, -0.030000001)
 billboard = 1
 modulate = Color(1, 1, 1, 0.75)
 text = "cafe_chair"
 
-[node name="drum_stool" type="Node3D" parent="Tables" unique_id=569951653 instance=ExtResource("4_f87q8")]
+[node name="drum_stool" type="Node3D" parent="Tables" unique_id=2005965035 instance=ExtResource("4_pj8kx")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 2.8, 0, -0.35)
 
-[node name="drum_stool_label" type="Label3D" parent="Tables" unique_id=376995561]
+[node name="drum_stool_label" type="Label3D" parent="Tables" unique_id=1056000375]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 2.8, 0.02, -0.004999995)
 billboard = 1
 modulate = Color(1, 1, 1, 0.75)
 text = "drum_stool"
 
-[node name="table_lamp_lit" type="Node3D" parent="Tables" unique_id=1031168491 instance=ExtResource("5_kv7oy")]
+[node name="table_lamp_lit" type="Node3D" parent="Tables" unique_id=1481349059 instance=ExtResource("5_avgpg")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.975, 0, -1.525)
 
-[node name="table_lamp_lit_label" type="Label3D" parent="Tables" unique_id=754796767]
+[node name="table_lamp_lit_label" type="Label3D" parent="Tables" unique_id=1370338118]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.975, 0.02, -1.28)
 billboard = 1
 modulate = Color(1, 1, 1, 0.75)
 text = "table_lamp_lit"
 
-[node name="table_lamp_unlit" type="Node3D" parent="Tables" unique_id=826154338 instance=ExtResource("6_q7pli")]
+[node name="table_lamp_unlit" type="Node3D" parent="Tables" unique_id=1547164469 instance=ExtResource("6_ov1w5")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.225, 0, -1.525)
 
-[node name="table_lamp_unlit_label" type="Label3D" parent="Tables" unique_id=680978404]
+[node name="table_lamp_unlit_label" type="Label3D" parent="Tables" unique_id=431452090]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.225, 0.02, -1.28)
 billboard = 1
 modulate = Color(1, 1, 1, 0.75)
 text = "table_lamp_unlit"
 
-[node name="tealight_lantern" type="Node3D" parent="Tables" unique_id=1682523322 instance=ExtResource("7_bbwvs")]
+[node name="tealight_lantern" type="Node3D" parent="Tables" unique_id=867575576 instance=ExtResource("7_2grro")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.45, 0, -1.525)
 
-[node name="tealight_lantern_label" type="Label3D" parent="Tables" unique_id=42756423]
+[node name="tealight_lantern_label" type="Label3D" parent="Tables" unique_id=781870370]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.45, 0.02, -1.355)
 billboard = 1
 modulate = Color(1, 1, 1, 0.75)
 text = "tealight_lantern"
 
-[node name="napkin_cup" type="Node3D" parent="Tables" unique_id=553083610 instance=ExtResource("8_yy6xu")]
+[node name="napkin_cup" type="Node3D" parent="Tables" unique_id=595315370 instance=ExtResource("8_dd8mo")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 1.05, 0, -1.525)
 
-[node name="napkin_cup_label" type="Label3D" parent="Tables" unique_id=1506974664]
+[node name="napkin_cup_label" type="Label3D" parent="Tables" unique_id=1915454793]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 1.05, 0.02, -1.355)
 billboard = 1
 modulate = Color(1, 1, 1, 0.75)
 text = "napkin_cup"
 
-[node name="Bar" type="Node3D" parent="." unique_id=1555971754]
+[node name="Bar" type="Node3D" parent="." unique_id=1049102506]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -4, 0, 0)
 
-[node name="bar_counter" type="Node3D" parent="Bar" unique_id=1505770971 instance=ExtResource("9_rojmb")]
+[node name="bar_counter" type="Node3D" parent="Bar" unique_id=1881397921 instance=ExtResource("9_2wiu0")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -2.025, 0, -3.275)
 
-[node name="bar_counter_label" type="Label3D" parent="Bar" unique_id=341091261]
+[node name="bar_counter_label" type="Label3D" parent="Bar" unique_id=1111433475]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -2.025, 0.02, -2.8300002)
 billboard = 1
 modulate = Color(1, 1, 1, 0.75)
 text = "bar_counter"
 
-[node name="back_bar_shelf" type="Node3D" parent="Bar" unique_id=593238837 instance=ExtResource("10_2bnaw")]
+[node name="back_bar_shelf" type="Node3D" parent="Bar" unique_id=292665790 instance=ExtResource("10_j7q4b")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.525, 0, -3.275)
 
-[node name="back_bar_shelf_label" type="Label3D" parent="Bar" unique_id=1217605700]
+[node name="back_bar_shelf_label" type="Label3D" parent="Bar" unique_id=737208070]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.525, 0.02, -3.005)
 billboard = 1
 modulate = Color(1, 1, 1, 0.75)
 text = "back_bar_shelf"
 
-[node name="bottle_amber" type="Node3D" parent="Bar" unique_id=1383734012 instance=ExtResource("11_letdv")]
+[node name="bottle_amber" type="Node3D" parent="Bar" unique_id=1035696091 instance=ExtResource("11_wsl4h")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.5, 0, -3.275)
 
-[node name="bottle_amber_label" type="Label3D" parent="Bar" unique_id=1235203242]
+[node name="bottle_amber_label" type="Label3D" parent="Bar" unique_id=463529199]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.5, 0.02, -3.13)
 billboard = 1
 modulate = Color(1, 1, 1, 0.75)
 text = "bottle_amber"
 
-[node name="bottle_green" type="Node3D" parent="Bar" unique_id=478041510 instance=ExtResource("12_abbya")]
+[node name="bottle_green" type="Node3D" parent="Bar" unique_id=17583005 instance=ExtResource("12_spp4k")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 1.05, 0, -3.275)
 
-[node name="bottle_green_label" type="Label3D" parent="Bar" unique_id=537538413]
+[node name="bottle_green_label" type="Label3D" parent="Bar" unique_id=1429608409]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 1.05, 0.02, -3.13)
 billboard = 1
 modulate = Color(1, 1, 1, 0.75)
 text = "bottle_green"
 
-[node name="bottle_clear" type="Node3D" parent="Bar" unique_id=1660543329 instance=ExtResource("13_pyxbf")]
+[node name="bottle_clear" type="Node3D" parent="Bar" unique_id=661575351 instance=ExtResource("13_hatx6")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 1.6, 0, -3.275)
 
-[node name="bottle_clear_label" type="Label3D" parent="Bar" unique_id=1659886721]
+[node name="bottle_clear_label" type="Label3D" parent="Bar" unique_id=118643652]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 1.6, 0.02, -3.13)
 billboard = 1
 modulate = Color(1, 1, 1, 0.75)
 text = "bottle_clear"
 
-[node name="bar_stool" type="Node3D" parent="Bar" unique_id=710418542 instance=ExtResource("14_jhcsb")]
+[node name="bar_stool" type="Node3D" parent="Bar" unique_id=374427267 instance=ExtResource("14_n23ai")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 2.325, 0, -3.275)
 
-[node name="bar_stool_label" type="Label3D" parent="Bar" unique_id=26656678]
+[node name="bar_stool_label" type="Label3D" parent="Bar" unique_id=298109971]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 2.325, 0.02, -2.9550002)
 billboard = 1
 modulate = Color(1, 1, 1, 0.75)
 text = "bar_stool"
 
-[node name="Circulation" type="Node3D" parent="." unique_id=1417043752]
+[node name="soffit_segment" type="Node3D" parent="Bar" unique_id=2093632342 instance=ExtResource("15_8qqyo")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -2.1, 0.8, -4.5)
+
+[node name="soffit_segment_label" type="Label3D" parent="Bar" unique_id=1381361652]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -2.1, 0.02, -4.18)
+billboard = 1
+modulate = Color(1, 1, 1, 0.75)
+text = "soffit_segment"
+
+[node name="painting_a" type="Node3D" parent="Bar" unique_id=745767488 instance=ExtResource("16_hhvqs")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.7, 0, -4.5)
+
+[node name="painting_a_label" type="Label3D" parent="Bar" unique_id=786459862]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.7, 0.02, -4.33)
+billboard = 1
+modulate = Color(1, 1, 1, 0.75)
+text = "painting_a"
+
+[node name="painting_b" type="Node3D" parent="Bar" unique_id=2072652142 instance=ExtResource("17_q7hig")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.8, 0, -4.5)
+
+[node name="painting_b_label" type="Label3D" parent="Bar" unique_id=1497641996]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.8, 0.02, -4.33)
+billboard = 1
+modulate = Color(1, 1, 1, 0.75)
+text = "painting_b"
+
+[node name="painting_c" type="Node3D" parent="Bar" unique_id=1795419324 instance=ExtResource("18_yrinv")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 2.25, 0, -4.5)
+
+[node name="painting_c_label" type="Label3D" parent="Bar" unique_id=969855850]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 2.25, 0.02, -4.33)
+billboard = 1
+modulate = Color(1, 1, 1, 0.75)
+text = "painting_c"
+
+[node name="Circulation" type="Node3D" parent="." unique_id=766869026]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -4, 0, 0)
 
-[node name="stair_run" type="Node3D" parent="Circulation" unique_id=1133318579 instance=ExtResource("15_fg07q")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -1.15, 0, -6.725)
+[node name="stair_run" type="Node3D" parent="Circulation" unique_id=809846308 instance=ExtResource("19_7xqhk")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -1.9, 0, -7.825)
 
-[node name="stair_run_label" type="Label3D" parent="Circulation" unique_id=569343930]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -1.15, 0.02, -4.7799997)
+[node name="stair_run_label" type="Label3D" parent="Circulation" unique_id=1314396126]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -1.9, 0.02, -5.8799996)
 billboard = 1
 modulate = Color(1, 1, 1, 0.75)
 text = "stair_run"
 
-[node name="exit_sign" type="Node3D" parent="Circulation" unique_id=1498160203 instance=ExtResource("16_okl8e")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.3, 0, -6.725)
+[node name="exit_sign" type="Node3D" parent="Circulation" unique_id=1778936219 instance=ExtResource("20_lddae")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.45, 0, -7.825)
 
-[node name="exit_sign_label" type="Label3D" parent="Circulation" unique_id=1953523004]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.3, 0.02, -6.555)
+[node name="exit_sign_label" type="Label3D" parent="Circulation" unique_id=1301531727]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.45, 0.02, -7.6549997)
 billboard = 1
 modulate = Color(1, 1, 1, 0.75)
 text = "exit_sign"
 
-[node name="track_light" type="Node3D" parent="Circulation" unique_id=458737365 instance=ExtResource("17_2djmw")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 1.45, 0.6, -6.725)
+[node name="track_light" type="Node3D" parent="Circulation" unique_id=1070467236 instance=ExtResource("21_hbx57")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.7, 0.6, -7.825)
 
-[node name="track_light_label" type="Label3D" parent="Circulation" unique_id=147840617]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 1.45, 0.02, -6.555)
+[node name="track_light_label" type="Label3D" parent="Circulation" unique_id=326861939]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.7, 0.02, -7.6549997)
 billboard = 1
 modulate = Color(1, 1, 1, 0.75)
 text = "track_light"
 
-[node name="Stage" type="Node3D" parent="." unique_id=1769842602]
+[node name="floor_tile_a" type="Node3D" parent="Circulation" unique_id=99268685 instance=ExtResource("22_cqif2")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 2.2, 0, -7.825)
+
+[node name="floor_tile_a_label" type="Label3D" parent="Circulation" unique_id=1038944096]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 2.2, 0.02, -7.205)
+billboard = 1
+modulate = Color(1, 1, 1, 0.75)
+text = "floor_tile_a"
+
+[node name="floor_tile_b" type="Node3D" parent="Circulation" unique_id=1607460930 instance=ExtResource("23_8mi50")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -10.85)
+
+[node name="floor_tile_b_label" type="Label3D" parent="Circulation" unique_id=416465940]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.02, -10.2300005)
+billboard = 1
+modulate = Color(1, 1, 1, 0.75)
+text = "floor_tile_b"
+
+[node name="Stage" type="Node3D" parent="." unique_id=836876470]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 3.775, 0, 0)
 
-[node name="stage_platform" type="Node3D" parent="Stage" unique_id=1579029766 instance=ExtResource("18_w5wq7")]
+[node name="stage_platform" type="Node3D" parent="Stage" unique_id=1058676061 instance=ExtResource("24_2himn")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -2.25, 0, -0.5)
 
-[node name="stage_platform_label" type="Label3D" parent="Stage" unique_id=1482347586]
+[node name="stage_platform_label" type="Label3D" parent="Stage" unique_id=5604030]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -2.25, 0.02, 0.120000005)
 billboard = 1
 modulate = Color(1, 1, 1, 0.75)
 text = "stage_platform"
 
-[node name="stage_carpet_tile" type="Node3D" parent="Stage" unique_id=12236025 instance=ExtResource("19_tlicf")]
+[node name="stage_carpet_tile" type="Node3D" parent="Stage" unique_id=530140993 instance=ExtResource("25_nk6s3")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.25, 0, -0.5)
 
-[node name="stage_carpet_tile_label" type="Label3D" parent="Stage" unique_id=992683550]
+[node name="stage_carpet_tile_label" type="Label3D" parent="Stage" unique_id=1671219332]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.25, 0.02, 0.120000005)
 billboard = 1
 modulate = Color(1, 1, 1, 0.75)
 text = "stage_carpet_tile"
 
-[node name="slatted_backdrop" type="Node3D" parent="Stage" unique_id=960375943 instance=ExtResource("20_2g30w")]
+[node name="slatted_backdrop" type="Node3D" parent="Stage" unique_id=1063144945 instance=ExtResource("26_gw66g")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 1.25, 0, -0.5)
 
-[node name="slatted_backdrop_label" type="Label3D" parent="Stage" unique_id=997503974]
+[node name="slatted_backdrop_label" type="Label3D" parent="Stage" unique_id=1733730728]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 1.25, 0.02, -0.305)
 billboard = 1
 modulate = Color(1, 1, 1, 0.75)
 text = "slatted_backdrop"
 
-[node name="curtain_panel" type="Node3D" parent="Stage" unique_id=812604578 instance=ExtResource("21_pj8kx")]
+[node name="curtain_panel" type="Node3D" parent="Stage" unique_id=311834639 instance=ExtResource("27_n0yxg")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 2.75, 0, -0.5)
 
-[node name="curtain_panel_label" type="Label3D" parent="Stage" unique_id=1456691151]
+[node name="curtain_panel_label" type="Label3D" parent="Stage" unique_id=1185169800]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 2.75, 0.02, -0.305)
 billboard = 1
 modulate = Color(1, 1, 1, 0.75)
 text = "curtain_panel"
 
-[node name="drum_kit" type="Node3D" parent="Stage" unique_id=191154940 instance=ExtResource("22_avgpg")]
+[node name="drum_kit" type="Node3D" parent="Stage" unique_id=197157461 instance=ExtResource("28_nort3")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -1.95, 0, -2.125)
 
-[node name="drum_kit_label" type="Label3D" parent="Stage" unique_id=1295462877]
+[node name="drum_kit_label" type="Label3D" parent="Stage" unique_id=1959208634]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -1.95, 0.02, -1.5799999)
 billboard = 1
 modulate = Color(1, 1, 1, 0.75)
 text = "drum_kit"
 
-[node name="guitar_on_stand" type="Node3D" parent="Stage" unique_id=1628367555 instance=ExtResource("23_ov1w5")]
+[node name="guitar_on_stand" type="Node3D" parent="Stage" unique_id=1065314341 instance=ExtResource("29_1r64o")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.45, 0, -2.125)
 
-[node name="guitar_on_stand_label" type="Label3D" parent="Stage" unique_id=1809001295]
+[node name="guitar_on_stand_label" type="Label3D" parent="Stage" unique_id=121320771]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.45, 0.02, -1.8050001)
 billboard = 1
 modulate = Color(1, 1, 1, 0.75)
 text = "guitar_on_stand"
 
-[node name="amp" type="Node3D" parent="Stage" unique_id=1145681878 instance=ExtResource("24_2grro")]
+[node name="amp" type="Node3D" parent="Stage" unique_id=294070628 instance=ExtResource("30_3wk6d")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.575, 0, -2.125)
 
-[node name="amp_label" type="Label3D" parent="Stage" unique_id=272011099]
+[node name="amp_label" type="Label3D" parent="Stage" unique_id=610865451]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.575, 0.02, -1.8050001)
 billboard = 1
 modulate = Color(1, 1, 1, 0.75)
 text = "amp"
 
-[node name="mic_stand" type="Node3D" parent="Stage" unique_id=7588 instance=ExtResource("25_dd8mo")]
+[node name="mic_stand" type="Node3D" parent="Stage" unique_id=1921517329 instance=ExtResource("31_0q13b")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 1.5, 0, -2.125)
 
-[node name="mic_stand_label" type="Label3D" parent="Stage" unique_id=1265260799]
+[node name="mic_stand_label" type="Label3D" parent="Stage" unique_id=1592026405]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 1.5, 0.02, -1.88)
 billboard = 1
 modulate = Color(1, 1, 1, 0.75)
 text = "mic_stand"
 
-[node name="monitor_wedge" type="Node3D" parent="Stage" unique_id=1944297043 instance=ExtResource("26_2wiu0")]
+[node name="monitor_wedge" type="Node3D" parent="Stage" unique_id=1523333724 instance=ExtResource("32_s4duq")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 2.425, 0, -2.125)
 
-[node name="monitor_wedge_label" type="Label3D" parent="Stage" unique_id=1222493385]
+[node name="monitor_wedge_label" type="Label3D" parent="Stage" unique_id=889625764]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 2.425, 0.02, -1.78)
 billboard = 1
 modulate = Color(1, 1, 1, 0.75)
 text = "monitor_wedge"
 
-[node name="disco_ball" type="Node3D" parent="Stage" unique_id=2141169991 instance=ExtResource("27_j7q4b")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1.55, -3.6)
+[node name="disco_ball" type="Node3D" parent="Stage" unique_id=1848834532 instance=ExtResource("33_ii36l")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -2.8, 1.55, -3.6)
 
-[node name="disco_ball_label" type="Label3D" parent="Stage" unique_id=1386848686]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.02, -3.1299999)
+[node name="disco_ball_label" type="Label3D" parent="Stage" unique_id=1285315481]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -2.8, 0.02, -3.1299999)
 billboard = 1
 modulate = Color(1, 1, 1, 0.75)
 text = "disco_ball"
 
-[node name="Lounge" type="Node3D" parent="." unique_id=978833216]
+[node name="stage_steps" type="Node3D" parent="Stage" unique_id=180556045 instance=ExtResource("34_enl2m")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -1.45, 0, -3.6)
+
+[node name="stage_steps_label" type="Label3D" parent="Stage" unique_id=320330204]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -1.45, 0.02, -3.1799998)
+billboard = 1
+modulate = Color(1, 1, 1, 0.75)
+text = "stage_steps"
+
+[node name="truss_segment" type="Node3D" parent="Stage" unique_id=407505384 instance=ExtResource("35_0ylfe")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.55, 0.8, -3.6)
+
+[node name="truss_segment_label" type="Label3D" parent="Stage" unique_id=45727447]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.55, 0.02, -3.33)
+billboard = 1
+modulate = Color(1, 1, 1, 0.75)
+text = "truss_segment"
+
+[node name="par_light_red" type="Node3D" parent="Stage" unique_id=98181387 instance=ExtResource("36_okcob")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 2.2, 0.8, -3.6)
+
+[node name="par_light_red_label" type="Label3D" parent="Stage" unique_id=1911477295]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 2.2, 0.02, -3.28)
+billboard = 1
+modulate = Color(1, 1, 1, 0.75)
+text = "par_light_red"
+
+[node name="par_light_amber" type="Node3D" parent="Stage" unique_id=996783547 instance=ExtResource("37_wda4w")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 3, 0.8, -3.6)
+
+[node name="par_light_amber_label" type="Label3D" parent="Stage" unique_id=1856857274]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 3, 0.02, -3.28)
+billboard = 1
+modulate = Color(1, 1, 1, 0.75)
+text = "par_light_amber"
+
+[node name="par_light_blue" type="Node3D" parent="Stage" unique_id=1261527712 instance=ExtResource("38_71vno")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -1.5, 0.8, -5.025)
+
+[node name="par_light_blue_label" type="Label3D" parent="Stage" unique_id=1637700160]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -1.5, 0.02, -4.705)
+billboard = 1
+modulate = Color(1, 1, 1, 0.75)
+text = "par_light_blue"
+
+[node name="stage_tree" type="Node3D" parent="Stage" unique_id=882886507 instance=ExtResource("39_o1465")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.1, 0, -5.025)
+
+[node name="stage_tree_label" type="Label3D" parent="Stage" unique_id=343916379]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.1, 0.02, -4.53)
+billboard = 1
+modulate = Color(1, 1, 1, 0.75)
+text = "stage_tree"
+
+[node name="pa_speaker" type="Node3D" parent="Stage" unique_id=1278979855 instance=ExtResource("40_83pvk")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 1.4, 0, -5.025)
+
+[node name="pa_speaker_label" type="Label3D" parent="Stage" unique_id=1006471381]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 1.4, 0.02, -4.6800003)
+billboard = 1
+modulate = Color(1, 1, 1, 0.75)
+text = "pa_speaker"
+
+[node name="Lounge" type="Node3D" parent="." unique_id=688175308]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 3.775, 0, 0)
 
-[node name="neon_sign" type="Node3D" parent="Lounge" unique_id=188302961 instance=ExtResource("28_wsl4h")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -1.95, 0, -5.45)
+[node name="neon_sign" type="Node3D" parent="Lounge" unique_id=962749522 instance=ExtResource("41_vher3")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -1.95, 0, -6.9)
 
-[node name="neon_sign_label" type="Label3D" parent="Lounge" unique_id=169922877]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -1.95, 0.02, -5.2799997)
+[node name="neon_sign_label" type="Label3D" parent="Lounge" unique_id=440935189]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -1.95, 0.02, -6.73)
 billboard = 1
 modulate = Color(1, 1, 1, 0.75)
 text = "neon_sign"
 
-[node name="plant_wall_tile" type="Node3D" parent="Lounge" unique_id=1910982058 instance=ExtResource("29_spp4k")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.125, 0, -5.45)
+[node name="plant_wall_tile" type="Node3D" parent="Lounge" unique_id=1145416443 instance=ExtResource("42_453vy")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.125, 0, -6.9)
 
-[node name="plant_wall_tile_label" type="Label3D" parent="Lounge" unique_id=6464946]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.125, 0.02, -5.18)
+[node name="plant_wall_tile_label" type="Label3D" parent="Lounge" unique_id=717692432]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.125, 0.02, -6.63)
 billboard = 1
 modulate = Color(1, 1, 1, 0.75)
 text = "plant_wall_tile"
 
-[node name="white_column" type="Node3D" parent="Lounge" unique_id=1843818407 instance=ExtResource("30_hatx6")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 1.075, 0, -5.45)
+[node name="white_column" type="Node3D" parent="Lounge" unique_id=1240315502 instance=ExtResource("43_3by8x")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 1.075, 0, -6.9)
 
-[node name="white_column_label" type="Label3D" parent="Lounge" unique_id=207507396]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 1.075, 0.02, -5.1299996)
+[node name="white_column_label" type="Label3D" parent="Lounge" unique_id=1566617114]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 1.075, 0.02, -6.58)
 billboard = 1
 modulate = Color(1, 1, 1, 0.75)
 text = "white_column"
 
-[node name="beam_segment" type="Node3D" parent="Lounge" unique_id=255664168 instance=ExtResource("31_n23ai")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 2.275, 0.55, -5.45)
+[node name="beam_segment" type="Node3D" parent="Lounge" unique_id=1503210178 instance=ExtResource("44_17kv1")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 2.275, 0.55, -6.9)
 
-[node name="beam_segment_label" type="Label3D" parent="Lounge" unique_id=378120143]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 2.275, 0.02, -5.23)
+[node name="beam_segment_label" type="Label3D" parent="Lounge" unique_id=1625773467]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 2.275, 0.02, -6.6800003)
 billboard = 1
 modulate = Color(1, 1, 1, 0.75)
 text = "beam_segment"
 
-[node name="ceiling_panel" type="Node3D" parent="Lounge" unique_id=37279566 instance=ExtResource("32_8qqyo")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -2.45, 0.35, -6.85)
+[node name="ceiling_panel" type="Node3D" parent="Lounge" unique_id=98826907 instance=ExtResource("45_daanq")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -2.45, 0.35, -8.3)
 
-[node name="ceiling_panel_label" type="Label3D" parent="Lounge" unique_id=1213477134]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -2.45, 0.02, -6.23)
+[node name="ceiling_panel_label" type="Label3D" parent="Lounge" unique_id=1006759437]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -2.45, 0.02, -7.6800003)
 billboard = 1
 modulate = Color(1, 1, 1, 0.75)
 text = "ceiling_panel"
 
-[node name="arcade_cabinet" type="Node3D" parent="Lounge" unique_id=503087543 instance=ExtResource("33_hhvqs")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -1.1, 0, -6.85)
+[node name="arcade_cabinet" type="Node3D" parent="Lounge" unique_id=886754264 instance=ExtResource("46_3cqga")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -1.1, 0, -8.3)
 
-[node name="arcade_cabinet_label" type="Label3D" parent="Lounge" unique_id=831533202]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -1.1, 0.02, -6.355)
+[node name="arcade_cabinet_label" type="Label3D" parent="Lounge" unique_id=2058334294]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -1.1, 0.02, -7.8050003)
 billboard = 1
 modulate = Color(1, 1, 1, 0.75)
 text = "arcade_cabinet"
 
-[node name="collectibles_shelf" type="Node3D" parent="Lounge" unique_id=1920494732 instance=ExtResource("34_q7hig")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.75, 0, -6.85)
+[node name="collectibles_shelf" type="Node3D" parent="Lounge" unique_id=45424827 instance=ExtResource("47_th6my")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.75, 0, -8.3)
 
-[node name="collectibles_shelf_label" type="Label3D" parent="Lounge" unique_id=732005326]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.75, 0.02, -6.5299997)
+[node name="collectibles_shelf_label" type="Label3D" parent="Lounge" unique_id=300283329]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.75, 0.02, -7.98)
 billboard = 1
 modulate = Color(1, 1, 1, 0.75)
 text = "collectibles_shelf"
 
-[node name="crt_monitor" type="Node3D" parent="Lounge" unique_id=1956361087 instance=ExtResource("35_yrinv")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 2.6, 0, -6.85)
+[node name="crt_monitor" type="Node3D" parent="Lounge" unique_id=26404205 instance=ExtResource("48_ma0j6")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 2.6, 0, -8.3)
 
-[node name="crt_monitor_label" type="Label3D" parent="Lounge" unique_id=1434788769]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 2.6, 0.02, -6.48)
+[node name="crt_monitor_label" type="Label3D" parent="Lounge" unique_id=418130542]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 2.6, 0.02, -7.9300003)
 billboard = 1
 modulate = Color(1, 1, 1, 0.75)
 text = "crt_monitor"
 
-[node name="Floor" type="MeshInstance3D" parent="." unique_id=1364998596]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -4.925)
-mesh = SubResource("PlaneMesh_hbx57")
+[node name="banquette_straight" type="Node3D" parent="Lounge" unique_id=352878478 instance=ExtResource("49_jbdx5")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -1.725, 0, -9.8)
 
-[node name="Camera3D" type="Camera3D" parent="." unique_id=1540871989]
-transform = Transform3D(1, 0, 0, 0, 0.71699494, 0.69707847, 0, -0.69707847, 0.71699494, 0, 10.597751, 5.3583994)
+[node name="banquette_straight_label" type="Label3D" parent="Lounge" unique_id=740181831]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -1.725, 0.02, -9.38)
+billboard = 1
+modulate = Color(1, 1, 1, 0.75)
+text = "banquette_straight"
+
+[node name="banquette_corner" type="Node3D" parent="Lounge" unique_id=1657088585 instance=ExtResource("50_v0yq3")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.425, 0, -9.8)
+
+[node name="banquette_corner_label" type="Label3D" parent="Lounge" unique_id=444725029]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.425, 0.02, -9.38)
+billboard = 1
+modulate = Color(1, 1, 1, 0.75)
+text = "banquette_corner"
+
+[node name="ac_unit" type="Node3D" parent="Lounge" unique_id=1867901296 instance=ExtResource("51_gq6sa")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.825, 0, -9.8)
+
+[node name="ac_unit_label" type="Label3D" parent="Lounge" unique_id=1757854669]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.825, 0.02, -9.53)
+billboard = 1
+modulate = Color(1, 1, 1, 0.75)
+text = "ac_unit"
+
+[node name="wall_lamp" type="Node3D" parent="Lounge" unique_id=1637053387 instance=ExtResource("52_e0id6")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 2, 0, -9.8)
+
+[node name="wall_lamp_label" type="Label3D" parent="Lounge" unique_id=1347141324]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 2, 0.02, -9.58)
+billboard = 1
+modulate = Color(1, 1, 1, 0.75)
+text = "wall_lamp"
+
+[node name="Floor" type="MeshInstance3D" parent="." unique_id=677651385]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -6.325)
+mesh = SubResource("PlaneMesh_1sv1s")
+
+[node name="Camera3D" type="Camera3D" parent="." unique_id=434260377]
+transform = Transform3D(1, 0, 0, 0, 0.7169949, 0.69707835, 0, -0.69707835, 0.7169949, 0, 13.439751, 6.8816004)
 current = true
 fov = 45.0
