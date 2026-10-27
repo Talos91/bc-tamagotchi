@@ -32,6 +32,7 @@ re-bakes if it is empty). Units are metres, x east, z south, room height 4 m.
 | `CommunalTable` | north wall | Two long tables, chairs both sides |
 | `Banquette` | north wall, x 18..22 | Velvet banquette (boxes until the kit has a `banquette`) with two small tables |
 | `Stage` | x 24..30, z 1..9, 0.5 m high | Kit risers, carpet tiles, steps over a hidden ramp, slatted backdrop, curtains, drum kit, amps, guitar, mics, wedges, truss with PARs, haze sheets |
+| `Patrons` | | Simulated crowd (`scripts/venue_patrons.gd`) and `Spots/`, the seats, staff and wander points named by zone |
 | `CameraZones` | | One Marker3D per zone with the camera framing (see below) |
 | `Navigation` | | NavigationRegion3D, agent radius 0.4 m, baked from the static colliders |
 
@@ -54,6 +55,23 @@ layer 2.
 - **Tap / click to move.** A short tap on the floor raycasts from the camera and walks the navmesh
   (`Player.tap_at`, `Player.walk_to`). WASD / arrows and the on-screen joystick move relative to the camera and
   cancel a tap-walk.
+
+## People
+
+Every person is a `PatronFigure` (`scenes/venue/patron_figure.tscn`, `scripts/venue_patron_figure.gd`):
+`set_look(dict)` builds it, `play("idle" | "walk" | "sit")` poses it. With `{"preset": "patron_05"}` it
+instances `assets/chars/presets/patron_05.glb` (rigged, animated, from the character session) when that file is
+imported; otherwise, or with no preset, it builds a chibi box placeholder from the colours in the dict (head cube
+40% of the height, 1.2–1.4 m). Idles breathe and glance around (head bone turn on presets). Swapping in other
+characters is a change to this one scene; the venue only calls `set_look` and `play`.
+
+- **Player:** `player.tscn` carries a `Body/Figure` with `Player.look` (preset `patron_06`) and a warm ring on the
+  floor so it reads in a crowd.
+- **Crowd:** `Venue/Patrons` (`scripts/venue_patrons.gd`, seeded) seats 9 patrons, at least one in each seating
+  zone (round tables, bar stools, banquette, communal table, lounge), puts the bartender (`nam`) behind the bar
+  pacing its length, and sends 3 wanderers between the `Wander_*` spots along navmesh paths. Spots are
+  `Venue/Patrons/Spots/<Zone>_<Seat>` Marker3Ds (metas `zone`, `pose`, `seat_h`; seat at 0.45 m, bar stools
+  0.8 m), written by `tools/build_venue.gd`. Figures have no collision.
 
 ## Light budget
 
@@ -87,7 +105,7 @@ Headless, exit code 0 = pass, from `game/`:
 
 ```
 godot --headless --path . --script res://tests/smoke_stairs.gd   # joystick walk lounge -> curtain -> aisle -> stage
-godot --headless --path . --script res://tests/smoke_tap.gd      # tap-to-move to four goals, all four camera zones
+godot --headless --path . --script res://tests/smoke_tap.gd      # tap-to-move, all four camera zones, crowd spawned
 godot --headless --path . --script res://tests/smoke_hud.gd
 godot --headless --path . --script res://tests/test_needs.gd
 ```

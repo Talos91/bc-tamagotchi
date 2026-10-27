@@ -26,6 +26,7 @@ const OUT := "res://scenes/venue/venue.tscn"
 const ROOM_H := 4.0
 const STAGE_H := 0.5            # platform 0.45 + carpet tile 0.05
 const CEILING_LAYER := 2
+const BAR_SEAT_H := 0.8       # kit bar_stool seat top; chairs, drum stools and banquettes are 0.45
 
 # Palette (art bible §3, game values)
 const CABIN_DARK := Color("1c0d0c")
@@ -49,6 +50,7 @@ var vroot: Node3D
 var kit := {}          # name -> manifest entry
 var mats := {}
 var light_count := 0
+var spots: Node3D      # Patrons/Spots: seats, staff and wander points for scripts/venue_patrons.gd
 var shadow_count := 0
 
 func _init() -> void:
@@ -59,6 +61,8 @@ func _init() -> void:
 	vroot.name = "Venue"
 	vroot.add_to_group("nav_source", true)
 	_environment()
+	var patrons := _group("Patrons")
+	spots = _group("Spots", patrons)
 	_lounge()
 	_stairs()
 	_curtain()
@@ -71,6 +75,8 @@ func _init() -> void:
 	_camera_zones()
 	await process_frame   # root joins the tree after _init starts; navmesh parsing needs the venue inside it
 	_navigation()
+	_wander_spots()
+	patrons.set_script(load("res://scripts/venue_patrons.gd"))
 	vroot.set_script(load("res://scripts/venue.gd"))
 	var ps := PackedScene.new()
 	ps.pack(vroot)
@@ -264,6 +270,25 @@ func _table_lights(parent: Node, nm: String, top: Vector3, lamp: bool, tealights
 	else:
 		_omni(parent, nm + "Light", TEALIGHT, 1.3, 2.4, top + Vector3(0.12, 0.25, 0), "tealight")
 
+## Spot for scripts/venue_patrons.gd, named by zone so a later cast can be placed without moving the layout.
+func _seat(zone: String, nm: String, pos: Vector3, yaw_deg: float, seat_h := 0.45, pose := "sit") -> void:
+	var m := Marker3D.new()
+	m.name = nm
+	m.position = pos
+	m.rotation_degrees.y = yaw_deg
+	m.set_meta("zone", zone)
+	m.set_meta("pose", pose)
+	m.set_meta("seat_h", seat_h)
+	_own(m, spots)
+
+func _wander_spots() -> void:
+	var pts := {"Wander_Lounge": Vector3(5.0, 0, 4.0), "Wander_Arcade": Vector3(7.4, 0, 1.6),
+		"Wander_Curtain": Vector3(11.2, 0, 6.0), "Wander_Communal": Vector3(11.0, 0, 3.0),
+		"Wander_Aisle": Vector3(15.5, 0, 5.4), "Wander_StageFront": Vector3(21.0, 0, 5.6),
+		"Wander_BarEnd": Vector3(22.0, 0, 7.6)}
+	for k in pts:
+		_seat("Wander", k, pts[k], 0.0, 0.0, "wander")
+
 # --- environment ------------------------------------------------------------------------------------------
 
 func _environment() -> void:
@@ -321,6 +346,8 @@ func _lounge() -> void:
 	for i in 3:
 		_table_lights(g, "LongTable%d" % i, Vector3(2.9 + i * 1.0, 0.75, 1.55), true, 1 if i != 1 else 0)
 		_kit_solid(g, "cafe_chair", Vector3(2.9 + i * 1.0, 0, 2.25), 180.0, "Chair%d" % i)
+		_seat("Lounge", "Lounge_Chair%d" % i, Vector3(2.9 + i * 1.0, 0, 2.25), 180.0)
+		_seat("Lounge", "Lounge_Banquette%d" % i, Vector3(2.9 + i * 1.0, 0, 0.6), 0.0)
 	# White columns, stretched to the 4 m ceiling
 	for i in 2:
 		var p: Vector3 = [Vector3(2.6, 0, 5.0), Vector3(7.0, 0, 3.2)][i]
@@ -335,6 +362,7 @@ func _lounge() -> void:
 	_box(g, "HighCounter", Vector3(8.0, 0, 1.0), Vector3(1.9, 0.95, 0.5), _mat("wood_mid", WOOD_MID, 0.4))
 	for i in 2:
 		_kit_solid(g, "bar_stool", Vector3(8.5 + i * 0.9, 0, 1.85), 180.0, "CounterStool%d" % i)
+		_seat("Lounge", "Lounge_Stool%d" % i, Vector3(8.5 + i * 0.9, 0, 1.85), 180.0, BAR_SEAT_H)
 	_omni(g, "ShelfGlow", SHELF_AMBER, 0.8, 2.6, Vector3(8.95, 1.6, 1.0))
 	# Red cove strip along the walls (R02) and the ceiling: black beam grid with red emissive panels
 	_box(g, "RedCove", Vector3(1.8, 0.9, 0.31), Vector3(4.2, 0.04, 0.04), _mat("red_strip", NEON_RED, 0.5, 3.0), false)
@@ -411,6 +439,8 @@ func _bar() -> void:
 	_collider(g, "CounterCollider", Vector3(16.5, 0.55, 8.65), Vector3(10, 1.1, 0.65))
 	for i in 8:
 		_kit_solid(g, "bar_stool", Vector3(12.0 + i * 1.25, 0, 7.95), 0.0, "Stool%d" % i)
+		_seat("Bar", "Bar_Stool%d" % i, Vector3(12.0 + i * 1.25, 0, 7.95), 0.0, BAR_SEAT_H)
+	_seat("Bar", "Bar_Bartender", Vector3(16.5, 0, 9.35), 180.0, 0.0, "staff")
 	for i in 4:
 		_omni(g, "ShelfLight%d" % i, SHELF_AMBER, 2.4, 4.0, Vector3(12.8 + i * 2.6, 1.9, 9.25))
 	# Soffit light panels above the bar (R01), fascia behind them
@@ -436,11 +466,13 @@ func _tables() -> void:
 				var off: Vector2 = row.chairs[k]
 				var face := rad_to_deg(atan2(-off.x, -off.y))   # chair front (+z) turned toward the table
 				_kit_solid(g, "cafe_chair", c + Vector3(off.x, 0, off.y), face, "Table%dChair%d" % [n, k])
+				_seat("Tables", "Tables_T%d_C%d" % [n, k], c + Vector3(off.x, 0, off.y), face)
 			n += 1
 	# Drum stools between the tables and the stage (R01, R03)
 	var stools := [Vector2(21.7, 2.6), Vector2(22.7, 3.4), Vector2(21.8, 4.3), Vector2(22.6, 6.7), Vector2(21.7, 7.4), Vector2(23.0, 2.0)]
 	for i in stools.size():
 		_kit_solid(g, "drum_stool", Vector3(stools[i].x, 0, stools[i].y), i * 37.0, "DrumStool%d" % i)
+		_seat("Tables", "Tables_DrumStool%d" % i, Vector3(stools[i].x, 0, stools[i].y), 90.0)
 
 func _communal_table() -> void:
 	var g := _group("CommunalTable")
@@ -451,6 +483,8 @@ func _communal_table() -> void:
 		for k in 3:
 			_kit_solid(g, "cafe_chair", Vector3(x - 1.0 + k, 0, 0.7), 0.0, "Chair%d_N%d" % [u, k])
 			_kit_solid(g, "cafe_chair", Vector3(x - 1.0 + k, 0, 2.0), 180.0, "Chair%d_S%d" % [u, k])
+			_seat("CommunalTable", "CommunalTable_T%d_N%d" % [u, k], Vector3(x - 1.0 + k, 0, 0.7), 0.0)
+			_seat("CommunalTable", "CommunalTable_T%d_S%d" % [u, k], Vector3(x - 1.0 + k, 0, 2.0), 180.0)
 		_table_lights(g, "Lamp%d" % u, Vector3(x - 0.4 + u * 0.8, 0.75, 1.35), true, 2)
 
 ## Velvet banquette from x0 to x1 against a north wall at z0 (seat 0.6 deep). Boxes until the kit has one.
@@ -475,6 +509,8 @@ func _banquette() -> void:
 	var g := _group("Banquette")
 	# Main room, north wall east of the communal table (DECISIONS i), two small tables in front
 	_banquette_box(g, "Seat", 18.2, 22.2, 0.0)
+	for i in 4:
+		_seat("Banquette", "Banquette_Seat%d" % i, Vector3(18.7 + i, 0, 0.3), 0.0)
 	for i in 2:
 		var c := Vector3(19.2 + i * 2.0, 0, 1.05)
 		_kit_solid(g, "round_table", c, 0.0, "Table%d" % i)

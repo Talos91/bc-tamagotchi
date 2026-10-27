@@ -4,6 +4,7 @@ extends SceneTree
 ##   godot --path . --resolution 1280x720 --script res://tools/capture_venue.gd -- --tag=landscape
 ## Writes <tag>-<shot>.png to docs/art/screens/2026-10-27-integration/ (override with --out=DIR): the diorama
 ## gameplay camera in each zone, then eye-level cameras that show the ceiling, placed like the direction renders.
+## The player and the patron crowd (Venue/Patrons) are in every shot.
 ## Prints the average frame rate per gameplay shot (vsync off).
 
 const SHOTS := [
@@ -15,9 +16,9 @@ const SHOTS := [
 ]
 ## Eye-level views matched to R01 (main room from the entrance), R02 (lounge), R03 (main room from the stage end)
 const EYE := [
-	{"name": "eye-R01-entrance", "from": Vector3(10.6, 1.9, 6.4), "at": Vector3(30.0, 1.4, 4.6), "fov": 62.0},
-	{"name": "eye-R02-lounge", "from": Vector3(6.6, 1.7, 9.6), "at": Vector3(3.4, 1.6, 0.0), "fov": 66.0},
-	{"name": "eye-R03-from-stage", "from": Vector3(23.6, 3.2, 8.4), "at": Vector3(12.0, 0.0, 2.5), "fov": 64.0},
+	{"name": "eye-R01-entrance", "from": Vector3(10.6, 1.9, 6.4), "at": Vector3(30.0, 1.4, 4.6), "fov": 62.0, "player": Vector3(14.5, 0, 5.6)},
+	{"name": "eye-R02-lounge", "from": Vector3(6.6, 1.7, 9.6), "at": Vector3(3.4, 1.6, 0.0), "fov": 66.0, "player": Vector3(4.6, 0, 4.4)},
+	{"name": "eye-R03-from-stage", "from": Vector3(23.6, 3.2, 8.4), "at": Vector3(12.0, 0.0, 2.5), "fov": 64.0, "player": Vector3(18.0, 0, 5.2)},
 ]
 
 func _init() -> void:
@@ -67,7 +68,8 @@ func _init() -> void:
 		cam.keep_aspect = Camera3D.KEEP_HEIGHT if root.get_visible_rect().size.aspect() >= 1.0 else Camera3D.KEEP_WIDTH
 		cam.look_at_from_position(e.from, e.at)
 		cam.make_current()
-		p.visible = false
+		p.global_position = e.player
+		p.velocity = Vector3.ZERO
 		for i in 20:
 			await process_frame
 		await _save(out, tag, e.name)

@@ -2,10 +2,13 @@ class_name Player
 extends CharacterBody3D
 ## Diorama controller. Move with WASD / arrows or the on-screen joystick (touch_joystick.gd), relative to the
 ## camera; or tap / click the floor to walk there along the venue's navmesh (NavigationAgent3D). Any stick or key
-## input cancels a tap-walk. The camera is the CameraRig child (camera_rig.gd).
+## input cancels a tap-walk. The camera is the CameraRig child (camera_rig.gd); the body is a PatronFigure
+## (scenes/venue/patron_figure.tscn) with the `look` below, and a warm ring on the floor marks the player.
 
 @export var speed := 3.6
 @export var accel := 18.0
+@export var look := {"preset": "patron_06", "skin": Color("bc8860"), "hair": Color("1e1616"), "top": Color("d9c9a6"),
+	"bottom": Color("3f5878"), "shoes": Color("e4dde6"), "height": 1.35}
 
 const TAP_MAX_MOVE := 24.0      ## pixels a touch may travel and still count as a tap
 const TAP_MAX_TIME := 0.35      ## seconds
@@ -20,6 +23,10 @@ var _press_time := 0
 @onready var rig: CameraRig = $CameraRig
 @onready var _agent: NavigationAgent3D = $NavigationAgent3D
 @onready var _body: Node3D = $Body
+@onready var figure: PatronFigure = $Body/Figure
+
+func _ready() -> void:
+	figure.set_look(look)
 
 func _unhandled_input(event: InputEvent) -> void:
 	# Mouse clicks arrive as ScreenTouch too (project.godot emulates touch from mouse)
@@ -80,4 +87,7 @@ func _physics_process(delta: float) -> void:
 		velocity.y -= _gravity * delta
 	move_and_slide()
 	if dir.length() > 0.1:
-		_body.rotation.y = lerp_angle(_body.rotation.y, atan2(-dir.x, -dir.z), 12.0 * delta)
+		_body.rotation.y = lerp_angle(_body.rotation.y, atan2(dir.x, dir.z), 12.0 * delta)
+	var flat := Vector2(velocity.x, velocity.z).length()
+	figure.move_speed = flat
+	figure.play("walk" if flat > 0.3 else "idle")
