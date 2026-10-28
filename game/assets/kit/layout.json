@@ -4101,7 +4101,7 @@
    "name": "Table5",
    "object": "round_table",
    "position": [
-    20.4,
+    19.8,
     0.0,
     6.85
    ],
@@ -4117,7 +4117,7 @@
    "name": "Table5Lamp",
    "object": "table_lamp_lit",
    "position": [
-    20.3,
+    19.7,
     0.75,
     6.8
    ],
@@ -4133,7 +4133,7 @@
    "name": "Table5Tealight",
    "object": "tealight_lantern",
    "position": [
-    20.58,
+    19.98,
     0.75,
     6.97
    ],
@@ -4149,7 +4149,7 @@
    "name": "Table5Glass0",
    "object": "beer_glass",
    "position": [
-    20.658,
+    20.058,
     0.75,
     6.959
    ],
@@ -4165,7 +4165,7 @@
    "name": "Table5Glass1",
    "object": "beer_glass",
    "position": [
-    20.291,
+    19.691,
     0.75,
     7.108
    ],
@@ -4181,7 +4181,7 @@
    "name": "Table5Glass2",
    "object": "beer_glass",
    "position": [
-    20.142,
+    19.542,
     0.75,
     6.741
    ],
@@ -4197,7 +4197,7 @@
    "name": "Table5Glass3",
    "object": "beer_glass",
    "position": [
-    20.509,
+    19.909,
     0.75,
     6.592
    ],
@@ -4213,7 +4213,7 @@
    "name": "Table5Chair0",
    "object": "cafe_chair",
    "position": [
-    20.4,
+    19.8,
     0.0,
     6.19
    ],
@@ -4229,7 +4229,7 @@
    "name": "Table5Chair1",
    "object": "cafe_chair",
    "position": [
-    21.06,
+    20.46,
     0.0,
     6.85
    ],
@@ -4245,7 +4245,7 @@
    "name": "Table5Chair2",
    "object": "cafe_chair",
    "position": [
-    20.4,
+    19.8,
     0.0,
     7.51
    ],
@@ -4261,7 +4261,7 @@
    "name": "Table5Chair3",
    "object": "cafe_chair",
    "position": [
-    19.74,
+    19.14,
     0.0,
     6.85
    ],
@@ -4277,7 +4277,7 @@
    "name": "Table6",
    "object": "round_table",
    "position": [
-    23.2,
+    22.6,
     0.0,
     6.85
    ],
@@ -4293,7 +4293,7 @@
    "name": "Table6Lamp",
    "object": "table_lamp_lit",
    "position": [
-    23.1,
+    22.5,
     0.75,
     6.8
    ],
@@ -4309,7 +4309,7 @@
    "name": "Table6Tealight",
    "object": "tealight_lantern",
    "position": [
-    23.38,
+    22.78,
     0.75,
     6.97
    ],
@@ -4325,7 +4325,7 @@
    "name": "Table6TealightB",
    "object": "tealight_lantern",
    "position": [
-    23.0,
+    22.4,
     0.75,
     7.07
    ],
@@ -4341,7 +4341,7 @@
    "name": "Table6Glass0",
    "object": "beer_glass",
    "position": [
-    23.458,
+    22.858,
     0.75,
     6.959
    ],
@@ -4357,7 +4357,7 @@
    "name": "Table6Glass1",
    "object": "beer_glass",
    "position": [
-    23.091,
+    22.491,
     0.75,
     7.108
    ],
@@ -4373,7 +4373,7 @@
    "name": "Table6Glass2",
    "object": "beer_glass",
    "position": [
-    22.942,
+    22.342,
     0.75,
     6.741
    ],
@@ -4389,7 +4389,7 @@
    "name": "Table6Glass3",
    "object": "beer_glass",
    "position": [
-    23.309,
+    22.709,
     0.75,
     6.592
    ],
@@ -4405,7 +4405,7 @@
    "name": "Table6Chair0",
    "object": "cafe_chair",
    "position": [
-    23.2,
+    22.6,
     0.0,
     6.19
    ],
@@ -4421,7 +4421,7 @@
    "name": "Table6Chair1",
    "object": "cafe_chair",
    "position": [
-    23.86,
+    23.26,
     0.0,
     6.85
    ],
@@ -4437,7 +4437,7 @@
    "name": "Table6Chair2",
    "object": "cafe_chair",
    "position": [
-    23.2,
+    22.6,
     0.0,
     7.51
    ],
@@ -4453,553 +4453,9 @@
    "name": "Table6Chair3",
    "object": "cafe_chair",
    "position": [
-    22.54,
+    21.94,
     0.0,
     6.85
-   ],
-   "rotation_y": 90.0,
-   "scale": [
-    1.0,
-    1.0,
-    1.0
-   ],
-   "zone": "Tables"
-  },
-  {
-   "name": "Table7",
-   "object": "round_table",
-   "position": [
-    26.4,
-    0.0,
-    5.9
-   ],
-   "rotation_y": 0.0,
-   "scale": [
-    1.0,
-    1.0,
-    1.0
-   ],
-   "zone": "Tables"
-  },
-  {
-   "name": "Table7Lamp",
-   "object": "table_lamp_lit",
-   "position": [
-    26.3,
-    0.75,
-    5.85
-   ],
-   "rotation_y": 0.0,
-   "scale": [
-    1.0,
-    1.0,
-    1.0
-   ],
-   "zone": "Tables"
-  },
-  {
-   "name": "Table7Tealight",
-   "object": "tealight_lantern",
-   "position": [
-    26.58,
-    0.75,
-    6.02
-   ],
-   "rotation_y": 0.0,
-   "scale": [
-    1.0,
-    1.0,
-    1.0
-   ],
-   "zone": "Tables"
-  },
-  {
-   "name": "Table7Glass0",
-   "object": "beer_glass",
-   "position": [
-    26.658,
-    0.75,
-    6.009
-   ],
-   "rotation_y": 0.0,
-   "scale": [
-    1.0,
-    1.0,
-    1.0
-   ],
-   "zone": "Tables"
-  },
-  {
-   "name": "Table7Glass1",
-   "object": "beer_glass",
-   "position": [
-    26.291,
-    0.75,
-    6.158
-   ],
-   "rotation_y": 0.0,
-   "scale": [
-    1.0,
-    1.0,
-    1.0
-   ],
-   "zone": "Tables"
-  },
-  {
-   "name": "Table7Glass2",
-   "object": "beer_glass",
-   "position": [
-    26.142,
-    0.75,
-    5.791
-   ],
-   "rotation_y": 0.0,
-   "scale": [
-    1.0,
-    1.0,
-    1.0
-   ],
-   "zone": "Tables"
-  },
-  {
-   "name": "Table7Glass3",
-   "object": "beer_glass",
-   "position": [
-    26.509,
-    0.75,
-    5.642
-   ],
-   "rotation_y": 0.0,
-   "scale": [
-    1.0,
-    1.0,
-    1.0
-   ],
-   "zone": "Tables"
-  },
-  {
-   "name": "Table7Chair0",
-   "object": "cafe_chair",
-   "position": [
-    26.4,
-    0.0,
-    5.24
-   ],
-   "rotation_y": 0.0,
-   "scale": [
-    1.0,
-    1.0,
-    1.0
-   ],
-   "zone": "Tables"
-  },
-  {
-   "name": "Table7Chair1",
-   "object": "cafe_chair",
-   "position": [
-    27.06,
-    0.0,
-    5.9
-   ],
-   "rotation_y": -90.0,
-   "scale": [
-    1.0,
-    1.0,
-    1.0
-   ],
-   "zone": "Tables"
-  },
-  {
-   "name": "Table7Chair2",
-   "object": "cafe_chair",
-   "position": [
-    26.4,
-    0.0,
-    6.56
-   ],
-   "rotation_y": 180.0,
-   "scale": [
-    1.0,
-    1.0,
-    1.0
-   ],
-   "zone": "Tables"
-  },
-  {
-   "name": "Table7Chair3",
-   "object": "cafe_chair",
-   "position": [
-    25.74,
-    0.0,
-    5.9
-   ],
-   "rotation_y": 90.0,
-   "scale": [
-    1.0,
-    1.0,
-    1.0
-   ],
-   "zone": "Tables"
-  },
-  {
-   "name": "Table8",
-   "object": "round_table",
-   "position": [
-    26.4,
-    0.0,
-    8.6
-   ],
-   "rotation_y": 0.0,
-   "scale": [
-    1.0,
-    1.0,
-    1.0
-   ],
-   "zone": "Tables"
-  },
-  {
-   "name": "Table8Lamp",
-   "object": "table_lamp_lit",
-   "position": [
-    26.3,
-    0.75,
-    8.55
-   ],
-   "rotation_y": 0.0,
-   "scale": [
-    1.0,
-    1.0,
-    1.0
-   ],
-   "zone": "Tables"
-  },
-  {
-   "name": "Table8Tealight",
-   "object": "tealight_lantern",
-   "position": [
-    26.58,
-    0.75,
-    8.72
-   ],
-   "rotation_y": 0.0,
-   "scale": [
-    1.0,
-    1.0,
-    1.0
-   ],
-   "zone": "Tables"
-  },
-  {
-   "name": "Table8TealightB",
-   "object": "tealight_lantern",
-   "position": [
-    26.2,
-    0.75,
-    8.82
-   ],
-   "rotation_y": 0.0,
-   "scale": [
-    1.0,
-    1.0,
-    1.0
-   ],
-   "zone": "Tables"
-  },
-  {
-   "name": "Table8Glass0",
-   "object": "beer_glass",
-   "position": [
-    26.658,
-    0.75,
-    8.709
-   ],
-   "rotation_y": 0.0,
-   "scale": [
-    1.0,
-    1.0,
-    1.0
-   ],
-   "zone": "Tables"
-  },
-  {
-   "name": "Table8Glass1",
-   "object": "beer_glass",
-   "position": [
-    26.291,
-    0.75,
-    8.858
-   ],
-   "rotation_y": 0.0,
-   "scale": [
-    1.0,
-    1.0,
-    1.0
-   ],
-   "zone": "Tables"
-  },
-  {
-   "name": "Table8Glass2",
-   "object": "beer_glass",
-   "position": [
-    26.142,
-    0.75,
-    8.491
-   ],
-   "rotation_y": 0.0,
-   "scale": [
-    1.0,
-    1.0,
-    1.0
-   ],
-   "zone": "Tables"
-  },
-  {
-   "name": "Table8Glass3",
-   "object": "beer_glass",
-   "position": [
-    26.509,
-    0.75,
-    8.342
-   ],
-   "rotation_y": 0.0,
-   "scale": [
-    1.0,
-    1.0,
-    1.0
-   ],
-   "zone": "Tables"
-  },
-  {
-   "name": "Table8Chair0",
-   "object": "cafe_chair",
-   "position": [
-    26.4,
-    0.0,
-    7.94
-   ],
-   "rotation_y": 0.0,
-   "scale": [
-    1.0,
-    1.0,
-    1.0
-   ],
-   "zone": "Tables"
-  },
-  {
-   "name": "Table8Chair1",
-   "object": "cafe_chair",
-   "position": [
-    27.06,
-    0.0,
-    8.6
-   ],
-   "rotation_y": -90.0,
-   "scale": [
-    1.0,
-    1.0,
-    1.0
-   ],
-   "zone": "Tables"
-  },
-  {
-   "name": "Table8Chair2",
-   "object": "cafe_chair",
-   "position": [
-    26.4,
-    0.0,
-    9.26
-   ],
-   "rotation_y": 180.0,
-   "scale": [
-    1.0,
-    1.0,
-    1.0
-   ],
-   "zone": "Tables"
-  },
-  {
-   "name": "Table8Chair3",
-   "object": "cafe_chair",
-   "position": [
-    25.74,
-    0.0,
-    8.6
-   ],
-   "rotation_y": 90.0,
-   "scale": [
-    1.0,
-    1.0,
-    1.0
-   ],
-   "zone": "Tables"
-  },
-  {
-   "name": "Table9",
-   "object": "round_table",
-   "position": [
-    26.4,
-    0.0,
-    11.4
-   ],
-   "rotation_y": 0.0,
-   "scale": [
-    1.0,
-    1.0,
-    1.0
-   ],
-   "zone": "Tables"
-  },
-  {
-   "name": "Table9Lamp",
-   "object": "table_lamp_lit",
-   "position": [
-    26.3,
-    0.75,
-    11.35
-   ],
-   "rotation_y": 0.0,
-   "scale": [
-    1.0,
-    1.0,
-    1.0
-   ],
-   "zone": "Tables"
-  },
-  {
-   "name": "Table9Tealight",
-   "object": "tealight_lantern",
-   "position": [
-    26.58,
-    0.75,
-    11.52
-   ],
-   "rotation_y": 0.0,
-   "scale": [
-    1.0,
-    1.0,
-    1.0
-   ],
-   "zone": "Tables"
-  },
-  {
-   "name": "Table9Glass0",
-   "object": "beer_glass",
-   "position": [
-    26.658,
-    0.75,
-    11.509
-   ],
-   "rotation_y": 0.0,
-   "scale": [
-    1.0,
-    1.0,
-    1.0
-   ],
-   "zone": "Tables"
-  },
-  {
-   "name": "Table9Glass1",
-   "object": "beer_glass",
-   "position": [
-    26.291,
-    0.75,
-    11.658
-   ],
-   "rotation_y": 0.0,
-   "scale": [
-    1.0,
-    1.0,
-    1.0
-   ],
-   "zone": "Tables"
-  },
-  {
-   "name": "Table9Glass2",
-   "object": "beer_glass",
-   "position": [
-    26.142,
-    0.75,
-    11.291
-   ],
-   "rotation_y": 0.0,
-   "scale": [
-    1.0,
-    1.0,
-    1.0
-   ],
-   "zone": "Tables"
-  },
-  {
-   "name": "Table9Glass3",
-   "object": "beer_glass",
-   "position": [
-    26.509,
-    0.75,
-    11.142
-   ],
-   "rotation_y": 0.0,
-   "scale": [
-    1.0,
-    1.0,
-    1.0
-   ],
-   "zone": "Tables"
-  },
-  {
-   "name": "Table9Chair0",
-   "object": "cafe_chair",
-   "position": [
-    26.4,
-    0.0,
-    10.74
-   ],
-   "rotation_y": 0.0,
-   "scale": [
-    1.0,
-    1.0,
-    1.0
-   ],
-   "zone": "Tables"
-  },
-  {
-   "name": "Table9Chair1",
-   "object": "cafe_chair",
-   "position": [
-    27.06,
-    0.0,
-    11.4
-   ],
-   "rotation_y": -90.0,
-   "scale": [
-    1.0,
-    1.0,
-    1.0
-   ],
-   "zone": "Tables"
-  },
-  {
-   "name": "Table9Chair2",
-   "object": "cafe_chair",
-   "position": [
-    26.4,
-    0.0,
-    12.06
-   ],
-   "rotation_y": 180.0,
-   "scale": [
-    1.0,
-    1.0,
-    1.0
-   ],
-   "zone": "Tables"
-  },
-  {
-   "name": "Table9Chair3",
-   "object": "cafe_chair",
-   "position": [
-    25.74,
-    0.0,
-    11.4
    ],
    "rotation_y": 90.0,
    "scale": [
@@ -5013,7 +4469,7 @@
    "name": "DrumStool0",
    "object": "drum_stool",
    "position": [
-    18.6,
+    17.4,
     0.0,
     4.05
    ],
@@ -5029,7 +4485,7 @@
    "name": "DrumStool1",
    "object": "drum_stool",
    "position": [
-    19.6,
+    18.4,
     0.0,
     4.05
    ],
@@ -5045,7 +4501,7 @@
    "name": "DrumStool2",
    "object": "drum_stool",
    "position": [
-    23.4,
+    19.4,
     0.0,
     4.05
    ],
@@ -5061,7 +4517,7 @@
    "name": "DrumStool3",
    "object": "drum_stool",
    "position": [
-    24.4,
+    23.4,
     0.0,
     4.05
    ],
@@ -5077,9 +4533,9 @@
    "name": "DrumStool4",
    "object": "drum_stool",
    "position": [
-    25.4,
+    17.9,
     0.0,
-    4.05
+    4.9
    ],
    "rotation_y": 148.0,
    "scale": [
@@ -5093,11 +4549,59 @@
    "name": "DrumStool5",
    "object": "drum_stool",
    "position": [
-    26.4,
+    18.9,
     0.0,
-    4.05
+    4.9
    ],
    "rotation_y": -175.0,
+   "scale": [
+    1.0,
+    1.0,
+    1.0
+   ],
+   "zone": "Tables"
+  },
+  {
+   "name": "LowTable0",
+   "object": "round_table",
+   "position": [
+    25.35,
+    0.0,
+    0.5
+   ],
+   "rotation_y": 0.0,
+   "scale": [
+    0.7,
+    0.6,
+    0.7
+   ],
+   "zone": "Tables"
+  },
+  {
+   "name": "LowTable0Tealight",
+   "object": "tealight_lantern",
+   "position": [
+    25.4,
+    0.45,
+    0.5
+   ],
+   "rotation_y": 0.0,
+   "scale": [
+    1.0,
+    1.0,
+    1.0
+   ],
+   "zone": "Tables"
+  },
+  {
+   "name": "LowTable0Glass",
+   "object": "beer_glass",
+   "position": [
+    25.23,
+    0.45,
+    0.6
+   ],
+   "rotation_y": 0.0,
    "scale": [
     1.0,
     1.0,
@@ -5109,9 +4613,9 @@
    "name": "DrumStool6",
    "object": "drum_stool",
    "position": [
-    27.4,
+    25.35,
     0.0,
-    4.05
+    -0.12
    ],
    "rotation_y": -138.0,
    "scale": [
@@ -5125,11 +4629,59 @@
    "name": "DrumStool7",
    "object": "drum_stool",
    "position": [
-    17.9,
+    25.35,
     0.0,
-    4.9
+    1.12
    ],
    "rotation_y": -101.0,
+   "scale": [
+    1.0,
+    1.0,
+    1.0
+   ],
+   "zone": "Tables"
+  },
+  {
+   "name": "LowTable1",
+   "object": "round_table",
+   "position": [
+    25.35,
+    0.0,
+    5.4
+   ],
+   "rotation_y": 0.0,
+   "scale": [
+    0.7,
+    0.6,
+    0.7
+   ],
+   "zone": "Tables"
+  },
+  {
+   "name": "LowTable1Tealight",
+   "object": "tealight_lantern",
+   "position": [
+    25.4,
+    0.45,
+    5.4
+   ],
+   "rotation_y": 0.0,
+   "scale": [
+    1.0,
+    1.0,
+    1.0
+   ],
+   "zone": "Tables"
+  },
+  {
+   "name": "LowTable1Glass",
+   "object": "beer_glass",
+   "position": [
+    25.23,
+    0.45,
+    5.5
+   ],
+   "rotation_y": 0.0,
    "scale": [
     1.0,
     1.0,
@@ -5141,9 +4693,9 @@
    "name": "DrumStool8",
    "object": "drum_stool",
    "position": [
-    24.9,
+    25.35,
     0.0,
-    4.9
+    4.78
    ],
    "rotation_y": -64.0,
    "scale": [
@@ -5157,9 +4709,9 @@
    "name": "DrumStool9",
    "object": "drum_stool",
    "position": [
-    25.9,
+    25.35,
     0.0,
-    4.9
+    6.02
    ],
    "rotation_y": -27.0,
    "scale": [
@@ -5170,14 +4722,14 @@
    "zone": "Tables"
   },
   {
-   "name": "DrumStool10",
-   "object": "drum_stool",
+   "name": "EndTable0",
+   "object": "round_table",
    "position": [
     26.9,
     0.0,
-    4.9
+    0.25
    ],
-   "rotation_y": 10.0,
+   "rotation_y": 0.0,
    "scale": [
     1.0,
     1.0,
@@ -5186,14 +4738,14 @@
    "zone": "Tables"
   },
   {
-   "name": "DrumStool11",
-   "object": "drum_stool",
+   "name": "EndTable0Lamp",
+   "object": "table_lamp_lit",
    "position": [
-    12.0,
-    0.0,
-    3.6
+    27.02,
+    0.75,
+    0.17
    ],
-   "rotation_y": 47.0,
+   "rotation_y": 0.0,
    "scale": [
     1.0,
     1.0,
@@ -5202,14 +4754,862 @@
    "zone": "Tables"
   },
   {
-   "name": "DrumStool12",
-   "object": "drum_stool",
+   "name": "EndTable0Tealight",
+   "object": "tealight_lantern",
    "position": [
-    17.4,
+    26.75,
+    0.75,
+    0.4
+   ],
+   "rotation_y": 0.0,
+   "scale": [
+    1.0,
+    1.0,
+    1.0
+   ],
+   "zone": "Tables"
+  },
+  {
+   "name": "EndTable0Glass0",
+   "object": "beer_glass",
+   "position": [
+    26.65,
+    0.75,
+    0.05
+   ],
+   "rotation_y": 0.0,
+   "scale": [
+    1.0,
+    1.0,
+    1.0
+   ],
+   "zone": "Tables"
+  },
+  {
+   "name": "EndTable0Glass1",
+   "object": "beer_glass",
+   "position": [
+    26.65,
+    0.75,
+    0.35
+   ],
+   "rotation_y": 0.0,
+   "scale": [
+    1.0,
+    1.0,
+    1.0
+   ],
+   "zone": "Tables"
+  },
+  {
+   "name": "EndTable0Chair0",
+   "object": "cafe_chair",
+   "position": [
+    26.24,
     0.0,
+    0.25
+   ],
+   "rotation_y": 90.0,
+   "scale": [
+    1.0,
+    1.0,
+    1.0
+   ],
+   "zone": "Tables"
+  },
+  {
+   "name": "EndTable0Chair1",
+   "object": "cafe_chair",
+   "position": [
+    26.9,
+    0.0,
+    -0.41
+   ],
+   "rotation_y": 0.0,
+   "scale": [
+    1.0,
+    1.0,
+    1.0
+   ],
+   "zone": "Tables"
+  },
+  {
+   "name": "EndTable1",
+   "object": "round_table",
+   "position": [
+    26.9,
+    0.0,
+    1.85
+   ],
+   "rotation_y": 0.0,
+   "scale": [
+    1.0,
+    1.0,
+    1.0
+   ],
+   "zone": "Tables"
+  },
+  {
+   "name": "EndTable1Lamp",
+   "object": "table_lamp_lit",
+   "position": [
+    27.02,
+    0.75,
+    1.77
+   ],
+   "rotation_y": 0.0,
+   "scale": [
+    1.0,
+    1.0,
+    1.0
+   ],
+   "zone": "Tables"
+  },
+  {
+   "name": "EndTable1Tealight",
+   "object": "tealight_lantern",
+   "position": [
+    26.75,
+    0.75,
+    2.0
+   ],
+   "rotation_y": 0.0,
+   "scale": [
+    1.0,
+    1.0,
+    1.0
+   ],
+   "zone": "Tables"
+  },
+  {
+   "name": "EndTable1Glass0",
+   "object": "beer_glass",
+   "position": [
+    26.65,
+    0.75,
+    1.65
+   ],
+   "rotation_y": 0.0,
+   "scale": [
+    1.0,
+    1.0,
+    1.0
+   ],
+   "zone": "Tables"
+  },
+  {
+   "name": "EndTable1Glass1",
+   "object": "beer_glass",
+   "position": [
+    26.65,
+    0.75,
+    1.95
+   ],
+   "rotation_y": 0.0,
+   "scale": [
+    1.0,
+    1.0,
+    1.0
+   ],
+   "zone": "Tables"
+  },
+  {
+   "name": "EndTable1Chair0",
+   "object": "cafe_chair",
+   "position": [
+    26.9,
+    0.0,
+    1.19
+   ],
+   "rotation_y": 0.0,
+   "scale": [
+    1.0,
+    1.0,
+    1.0
+   ],
+   "zone": "Tables"
+  },
+  {
+   "name": "EndTable1Chair1",
+   "object": "cafe_chair",
+   "position": [
+    26.9,
+    0.0,
+    2.51
+   ],
+   "rotation_y": 180.0,
+   "scale": [
+    1.0,
+    1.0,
+    1.0
+   ],
+   "zone": "Tables"
+  },
+  {
+   "name": "EndTable2",
+   "object": "round_table",
+   "position": [
+    26.9,
+    0.0,
+    3.45
+   ],
+   "rotation_y": 0.0,
+   "scale": [
+    1.0,
+    1.0,
+    1.0
+   ],
+   "zone": "Tables"
+  },
+  {
+   "name": "EndTable2Lamp",
+   "object": "table_lamp_lit",
+   "position": [
+    27.02,
+    0.75,
+    3.37
+   ],
+   "rotation_y": 0.0,
+   "scale": [
+    1.0,
+    1.0,
+    1.0
+   ],
+   "zone": "Tables"
+  },
+  {
+   "name": "EndTable2Tealight",
+   "object": "tealight_lantern",
+   "position": [
+    26.75,
+    0.75,
     3.6
    ],
-   "rotation_y": 84.0,
+   "rotation_y": 0.0,
+   "scale": [
+    1.0,
+    1.0,
+    1.0
+   ],
+   "zone": "Tables"
+  },
+  {
+   "name": "EndTable2Glass0",
+   "object": "beer_glass",
+   "position": [
+    26.65,
+    0.75,
+    3.25
+   ],
+   "rotation_y": 0.0,
+   "scale": [
+    1.0,
+    1.0,
+    1.0
+   ],
+   "zone": "Tables"
+  },
+  {
+   "name": "EndTable2Glass1",
+   "object": "beer_glass",
+   "position": [
+    26.65,
+    0.75,
+    3.55
+   ],
+   "rotation_y": 0.0,
+   "scale": [
+    1.0,
+    1.0,
+    1.0
+   ],
+   "zone": "Tables"
+  },
+  {
+   "name": "EndTable2Chair0",
+   "object": "cafe_chair",
+   "position": [
+    26.9,
+    0.0,
+    2.79
+   ],
+   "rotation_y": 0.0,
+   "scale": [
+    1.0,
+    1.0,
+    1.0
+   ],
+   "zone": "Tables"
+  },
+  {
+   "name": "EndTable2Chair1",
+   "object": "cafe_chair",
+   "position": [
+    26.9,
+    0.0,
+    4.11
+   ],
+   "rotation_y": 180.0,
+   "scale": [
+    1.0,
+    1.0,
+    1.0
+   ],
+   "zone": "Tables"
+  },
+  {
+   "name": "EndTable3",
+   "object": "round_table",
+   "position": [
+    26.9,
+    0.0,
+    5.05
+   ],
+   "rotation_y": 0.0,
+   "scale": [
+    1.0,
+    1.0,
+    1.0
+   ],
+   "zone": "Tables"
+  },
+  {
+   "name": "EndTable3Lamp",
+   "object": "table_lamp_lit",
+   "position": [
+    27.02,
+    0.75,
+    4.97
+   ],
+   "rotation_y": 0.0,
+   "scale": [
+    1.0,
+    1.0,
+    1.0
+   ],
+   "zone": "Tables"
+  },
+  {
+   "name": "EndTable3Tealight",
+   "object": "tealight_lantern",
+   "position": [
+    26.75,
+    0.75,
+    5.2
+   ],
+   "rotation_y": 0.0,
+   "scale": [
+    1.0,
+    1.0,
+    1.0
+   ],
+   "zone": "Tables"
+  },
+  {
+   "name": "EndTable3Glass0",
+   "object": "beer_glass",
+   "position": [
+    26.65,
+    0.75,
+    4.85
+   ],
+   "rotation_y": 0.0,
+   "scale": [
+    1.0,
+    1.0,
+    1.0
+   ],
+   "zone": "Tables"
+  },
+  {
+   "name": "EndTable3Glass1",
+   "object": "beer_glass",
+   "position": [
+    26.65,
+    0.75,
+    5.15
+   ],
+   "rotation_y": 0.0,
+   "scale": [
+    1.0,
+    1.0,
+    1.0
+   ],
+   "zone": "Tables"
+  },
+  {
+   "name": "EndTable3Chair0",
+   "object": "cafe_chair",
+   "position": [
+    26.24,
+    0.0,
+    5.05
+   ],
+   "rotation_y": 90.0,
+   "scale": [
+    1.0,
+    1.0,
+    1.0
+   ],
+   "zone": "Tables"
+  },
+  {
+   "name": "EndTable3Chair1",
+   "object": "cafe_chair",
+   "position": [
+    26.9,
+    0.0,
+    4.39
+   ],
+   "rotation_y": 0.0,
+   "scale": [
+    1.0,
+    1.0,
+    1.0
+   ],
+   "zone": "Tables"
+  },
+  {
+   "name": "EndTable4",
+   "object": "round_table",
+   "position": [
+    26.9,
+    0.0,
+    6.65
+   ],
+   "rotation_y": 0.0,
+   "scale": [
+    1.0,
+    1.0,
+    1.0
+   ],
+   "zone": "Tables"
+  },
+  {
+   "name": "EndTable4Lamp",
+   "object": "table_lamp_lit",
+   "position": [
+    27.02,
+    0.75,
+    6.57
+   ],
+   "rotation_y": 0.0,
+   "scale": [
+    1.0,
+    1.0,
+    1.0
+   ],
+   "zone": "Tables"
+  },
+  {
+   "name": "EndTable4Tealight",
+   "object": "tealight_lantern",
+   "position": [
+    26.75,
+    0.75,
+    6.8
+   ],
+   "rotation_y": 0.0,
+   "scale": [
+    1.0,
+    1.0,
+    1.0
+   ],
+   "zone": "Tables"
+  },
+  {
+   "name": "EndTable4Glass0",
+   "object": "beer_glass",
+   "position": [
+    26.65,
+    0.75,
+    6.45
+   ],
+   "rotation_y": 0.0,
+   "scale": [
+    1.0,
+    1.0,
+    1.0
+   ],
+   "zone": "Tables"
+  },
+  {
+   "name": "EndTable4Glass1",
+   "object": "beer_glass",
+   "position": [
+    26.65,
+    0.75,
+    6.75
+   ],
+   "rotation_y": 0.0,
+   "scale": [
+    1.0,
+    1.0,
+    1.0
+   ],
+   "zone": "Tables"
+  },
+  {
+   "name": "EndTable4Chair0",
+   "object": "cafe_chair",
+   "position": [
+    26.24,
+    0.0,
+    6.65
+   ],
+   "rotation_y": 90.0,
+   "scale": [
+    1.0,
+    1.0,
+    1.0
+   ],
+   "zone": "Tables"
+  },
+  {
+   "name": "EndTable4Chair1",
+   "object": "cafe_chair",
+   "position": [
+    26.9,
+    0.0,
+    5.99
+   ],
+   "rotation_y": 0.0,
+   "scale": [
+    1.0,
+    1.0,
+    1.0
+   ],
+   "zone": "Tables"
+  },
+  {
+   "name": "EndTable5",
+   "object": "round_table",
+   "position": [
+    26.9,
+    0.0,
+    8.25
+   ],
+   "rotation_y": 0.0,
+   "scale": [
+    1.0,
+    1.0,
+    1.0
+   ],
+   "zone": "Tables"
+  },
+  {
+   "name": "EndTable5Lamp",
+   "object": "table_lamp_lit",
+   "position": [
+    27.02,
+    0.75,
+    8.17
+   ],
+   "rotation_y": 0.0,
+   "scale": [
+    1.0,
+    1.0,
+    1.0
+   ],
+   "zone": "Tables"
+  },
+  {
+   "name": "EndTable5Tealight",
+   "object": "tealight_lantern",
+   "position": [
+    26.75,
+    0.75,
+    8.4
+   ],
+   "rotation_y": 0.0,
+   "scale": [
+    1.0,
+    1.0,
+    1.0
+   ],
+   "zone": "Tables"
+  },
+  {
+   "name": "EndTable5Glass0",
+   "object": "beer_glass",
+   "position": [
+    26.65,
+    0.75,
+    8.05
+   ],
+   "rotation_y": 0.0,
+   "scale": [
+    1.0,
+    1.0,
+    1.0
+   ],
+   "zone": "Tables"
+  },
+  {
+   "name": "EndTable5Glass1",
+   "object": "beer_glass",
+   "position": [
+    26.65,
+    0.75,
+    8.35
+   ],
+   "rotation_y": 0.0,
+   "scale": [
+    1.0,
+    1.0,
+    1.0
+   ],
+   "zone": "Tables"
+  },
+  {
+   "name": "EndTable5Chair0",
+   "object": "cafe_chair",
+   "position": [
+    26.24,
+    0.0,
+    8.25
+   ],
+   "rotation_y": 90.0,
+   "scale": [
+    1.0,
+    1.0,
+    1.0
+   ],
+   "zone": "Tables"
+  },
+  {
+   "name": "EndTable5Chair1",
+   "object": "cafe_chair",
+   "position": [
+    26.9,
+    0.0,
+    7.59
+   ],
+   "rotation_y": 0.0,
+   "scale": [
+    1.0,
+    1.0,
+    1.0
+   ],
+   "zone": "Tables"
+  },
+  {
+   "name": "EndTable6",
+   "object": "round_table",
+   "position": [
+    26.9,
+    0.0,
+    9.85
+   ],
+   "rotation_y": 0.0,
+   "scale": [
+    1.0,
+    1.0,
+    1.0
+   ],
+   "zone": "Tables"
+  },
+  {
+   "name": "EndTable6Lamp",
+   "object": "table_lamp_lit",
+   "position": [
+    27.02,
+    0.75,
+    9.77
+   ],
+   "rotation_y": 0.0,
+   "scale": [
+    1.0,
+    1.0,
+    1.0
+   ],
+   "zone": "Tables"
+  },
+  {
+   "name": "EndTable6Tealight",
+   "object": "tealight_lantern",
+   "position": [
+    26.75,
+    0.75,
+    10.0
+   ],
+   "rotation_y": 0.0,
+   "scale": [
+    1.0,
+    1.0,
+    1.0
+   ],
+   "zone": "Tables"
+  },
+  {
+   "name": "EndTable6Glass0",
+   "object": "beer_glass",
+   "position": [
+    26.65,
+    0.75,
+    9.65
+   ],
+   "rotation_y": 0.0,
+   "scale": [
+    1.0,
+    1.0,
+    1.0
+   ],
+   "zone": "Tables"
+  },
+  {
+   "name": "EndTable6Glass1",
+   "object": "beer_glass",
+   "position": [
+    26.65,
+    0.75,
+    9.95
+   ],
+   "rotation_y": 0.0,
+   "scale": [
+    1.0,
+    1.0,
+    1.0
+   ],
+   "zone": "Tables"
+  },
+  {
+   "name": "EndTable6Chair0",
+   "object": "cafe_chair",
+   "position": [
+    26.24,
+    0.0,
+    9.85
+   ],
+   "rotation_y": 90.0,
+   "scale": [
+    1.0,
+    1.0,
+    1.0
+   ],
+   "zone": "Tables"
+  },
+  {
+   "name": "EndTable6Chair1",
+   "object": "cafe_chair",
+   "position": [
+    26.9,
+    0.0,
+    9.19
+   ],
+   "rotation_y": 0.0,
+   "scale": [
+    1.0,
+    1.0,
+    1.0
+   ],
+   "zone": "Tables"
+  },
+  {
+   "name": "EndTable7",
+   "object": "round_table",
+   "position": [
+    26.9,
+    0.0,
+    11.45
+   ],
+   "rotation_y": 0.0,
+   "scale": [
+    1.0,
+    1.0,
+    1.0
+   ],
+   "zone": "Tables"
+  },
+  {
+   "name": "EndTable7Lamp",
+   "object": "table_lamp_lit",
+   "position": [
+    27.02,
+    0.75,
+    11.37
+   ],
+   "rotation_y": 0.0,
+   "scale": [
+    1.0,
+    1.0,
+    1.0
+   ],
+   "zone": "Tables"
+  },
+  {
+   "name": "EndTable7Tealight",
+   "object": "tealight_lantern",
+   "position": [
+    26.75,
+    0.75,
+    11.6
+   ],
+   "rotation_y": 0.0,
+   "scale": [
+    1.0,
+    1.0,
+    1.0
+   ],
+   "zone": "Tables"
+  },
+  {
+   "name": "EndTable7Glass0",
+   "object": "beer_glass",
+   "position": [
+    26.65,
+    0.75,
+    11.25
+   ],
+   "rotation_y": 0.0,
+   "scale": [
+    1.0,
+    1.0,
+    1.0
+   ],
+   "zone": "Tables"
+  },
+  {
+   "name": "EndTable7Glass1",
+   "object": "beer_glass",
+   "position": [
+    26.65,
+    0.75,
+    11.55
+   ],
+   "rotation_y": 0.0,
+   "scale": [
+    1.0,
+    1.0,
+    1.0
+   ],
+   "zone": "Tables"
+  },
+  {
+   "name": "EndTable7Chair0",
+   "object": "cafe_chair",
+   "position": [
+    26.24,
+    0.0,
+    11.45
+   ],
+   "rotation_y": 90.0,
+   "scale": [
+    1.0,
+    1.0,
+    1.0
+   ],
+   "zone": "Tables"
+  },
+  {
+   "name": "EndTable7Chair1",
+   "object": "cafe_chair",
+   "position": [
+    26.9,
+    0.0,
+    10.79
+   ],
+   "rotation_y": 0.0,
    "scale": [
     1.0,
     1.0,
@@ -5221,7 +5621,7 @@
    "name": "Table",
    "object": "communal_table",
    "position": [
-    14.6,
+    14.4,
     0.0,
     1.75
    ],
@@ -5237,7 +5637,7 @@
    "name": "ChairN0",
    "object": "cafe_chair",
    "position": [
-    13.1,
+    12.9,
     0.0,
     1.0
    ],
@@ -5253,7 +5653,7 @@
    "name": "ChairS0",
    "object": "cafe_chair",
    "position": [
-    13.1,
+    12.9,
     0.0,
     2.5
    ],
@@ -5269,7 +5669,7 @@
    "name": "GlassN0",
    "object": "beer_glass",
    "position": [
-    13.2,
+    13.0,
     0.75,
     1.45
    ],
@@ -5285,7 +5685,7 @@
    "name": "GlassS0",
    "object": "beer_glass",
    "position": [
-    13.0,
+    12.8,
     0.75,
     2.05
    ],
@@ -5301,7 +5701,7 @@
    "name": "ChairN1",
    "object": "cafe_chair",
    "position": [
-    14.1,
+    13.9,
     0.0,
     1.0
    ],
@@ -5317,7 +5717,7 @@
    "name": "ChairS1",
    "object": "cafe_chair",
    "position": [
-    14.1,
+    13.9,
     0.0,
     2.5
    ],
@@ -5333,7 +5733,7 @@
    "name": "GlassN1",
    "object": "beer_glass",
    "position": [
-    14.2,
+    14.0,
     0.75,
     1.45
    ],
@@ -5349,7 +5749,7 @@
    "name": "GlassS1",
    "object": "beer_glass",
    "position": [
-    14.0,
+    13.8,
     0.75,
     2.05
    ],
@@ -5365,7 +5765,7 @@
    "name": "ChairN2",
    "object": "cafe_chair",
    "position": [
-    15.1,
+    14.9,
     0.0,
     1.0
    ],
@@ -5381,7 +5781,7 @@
    "name": "ChairS2",
    "object": "cafe_chair",
    "position": [
-    15.1,
+    14.9,
     0.0,
     2.5
    ],
@@ -5397,7 +5797,7 @@
    "name": "GlassN2",
    "object": "beer_glass",
    "position": [
-    15.2,
+    15.0,
     0.75,
     1.45
    ],
@@ -5413,7 +5813,7 @@
    "name": "GlassS2",
    "object": "beer_glass",
    "position": [
-    15.0,
+    14.8,
     0.75,
     2.05
    ],
@@ -5429,7 +5829,7 @@
    "name": "ChairN3",
    "object": "cafe_chair",
    "position": [
-    16.1,
+    15.9,
     0.0,
     1.0
    ],
@@ -5445,7 +5845,7 @@
    "name": "ChairS3",
    "object": "cafe_chair",
    "position": [
-    16.1,
+    15.9,
     0.0,
     2.5
    ],
@@ -5461,7 +5861,7 @@
    "name": "GlassN3",
    "object": "beer_glass",
    "position": [
-    16.2,
+    16.0,
     0.75,
     1.45
    ],
@@ -5477,7 +5877,7 @@
    "name": "GlassS3",
    "object": "beer_glass",
    "position": [
-    16.0,
+    15.8,
     0.75,
     2.05
    ],
@@ -5493,25 +5893,9 @@
    "name": "Lamp0",
    "object": "table_lamp_lit",
    "position": [
-    13.3,
+    12.8,
     0.75,
     1.7
-   ],
-   "rotation_y": 0.0,
-   "scale": [
-    1.0,
-    1.0,
-    1.0
-   ],
-   "zone": "CommunalTable"
-  },
-  {
-   "name": "Tealight0",
-   "object": "tealight_lantern",
-   "position": [
-    13.9,
-    0.75,
-    1.85
    ],
    "rotation_y": 0.0,
    "scale": [
@@ -5523,25 +5907,9 @@
   },
   {
    "name": "Lamp1",
-   "object": "table_lamp_lit",
-   "position": [
-    14.6,
-    0.75,
-    1.7
-   ],
-   "rotation_y": 0.0,
-   "scale": [
-    1.0,
-    1.0,
-    1.0
-   ],
-   "zone": "CommunalTable"
-  },
-  {
-   "name": "Tealight1",
    "object": "tealight_lantern",
    "position": [
-    15.2,
+    13.6,
     0.75,
     1.85
    ],
@@ -5557,7 +5925,7 @@
    "name": "Lamp2",
    "object": "table_lamp_lit",
    "position": [
-    15.9,
+    14.4,
     0.75,
     1.7
    ],
@@ -5570,12 +5938,28 @@
    "zone": "CommunalTable"
   },
   {
-   "name": "Tealight2",
+   "name": "Lamp3",
    "object": "tealight_lantern",
    "position": [
-    16.5,
+    15.2,
     0.75,
     1.85
+   ],
+   "rotation_y": 0.0,
+   "scale": [
+    1.0,
+    1.0,
+    1.0
+   ],
+   "zone": "CommunalTable"
+  },
+  {
+   "name": "Lamp4",
+   "object": "table_lamp_lit",
+   "position": [
+    16.0,
+    0.75,
+    1.7
    ],
    "rotation_y": 0.0,
    "scale": [
@@ -5589,7 +5973,7 @@
    "name": "Napkins0",
    "object": "napkin_cup",
    "position": [
-    14.0,
+    13.8,
     0.75,
     1.87
    ],
@@ -5605,7 +5989,7 @@
    "name": "Napkins1",
    "object": "napkin_cup",
    "position": [
-    15.3,
+    15.1,
     0.75,
     1.87
    ],
@@ -5621,7 +6005,7 @@
    "name": "SideTable",
    "object": "round_table",
    "position": [
-    11.4,
+    11.3,
     0.0,
     0.75
    ],
@@ -5637,7 +6021,7 @@
    "name": "SideLamp",
    "object": "table_lamp_lit",
    "position": [
-    11.3,
+    11.2,
     0.75,
     0.75
    ],
@@ -5653,7 +6037,7 @@
    "name": "SideTealight",
    "object": "tealight_lantern",
    "position": [
-    11.6,
+    11.5,
     0.75,
     0.85
    ],
@@ -5669,7 +6053,7 @@
    "name": "SideChair0",
    "object": "cafe_chair",
    "position": [
-    10.74,
+    10.64,
     0.0,
     0.75
    ],
@@ -5685,7 +6069,7 @@
    "name": "SideChair1",
    "object": "cafe_chair",
    "position": [
-    12.06,
+    11.96,
     0.0,
     0.75
    ],
@@ -5701,7 +6085,7 @@
    "name": "Riser0",
    "object": "stage_platform",
    "position": [
-    19.0,
+    17.6,
     0.0,
     2.8
    ],
@@ -5717,7 +6101,7 @@
    "name": "Riser1",
    "object": "stage_platform",
    "position": [
-    21.0,
+    19.6,
     0.0,
     2.8
    ],
@@ -5733,7 +6117,7 @@
    "name": "Riser2",
    "object": "stage_platform",
    "position": [
-    23.0,
+    21.6,
     0.0,
     2.8
    ],
@@ -5749,7 +6133,7 @@
    "name": "Riser3",
    "object": "stage_platform",
    "position": [
-    25.0,
+    23.6,
     0.0,
     2.8
    ],
@@ -5762,14 +6146,14 @@
    "zone": "Stage"
   },
   {
-   "name": "Riser4",
+   "name": "RiserEnd",
    "object": "stage_platform",
    "position": [
-    27.0,
+    24.1,
     0.0,
-    2.8
+    1.3
    ],
-   "rotation_y": 0.0,
+   "rotation_y": -90.0,
    "scale": [
     1.0,
     1.0,
@@ -5781,7 +6165,7 @@
    "name": "Tile0_0",
    "object": "stage_carpet_tile",
    "position": [
-    18.5,
+    17.1,
     0.55,
     0.0
    ],
@@ -5797,7 +6181,7 @@
    "name": "Tile0_1",
    "object": "stage_carpet_tile",
    "position": [
-    18.5,
+    17.1,
     0.55,
     1.0
    ],
@@ -5813,7 +6197,7 @@
    "name": "Tile0_2",
    "object": "stage_carpet_tile",
    "position": [
-    18.5,
+    17.1,
     0.55,
     2.0
    ],
@@ -5829,7 +6213,7 @@
    "name": "Tile0_3",
    "object": "stage_carpet_tile",
    "position": [
-    18.5,
+    17.1,
     0.55,
     2.8
    ],
@@ -5845,7 +6229,7 @@
    "name": "Tile1_0",
    "object": "stage_carpet_tile",
    "position": [
-    19.5,
+    18.1,
     0.55,
     0.0
    ],
@@ -5861,7 +6245,7 @@
    "name": "Tile1_1",
    "object": "stage_carpet_tile",
    "position": [
-    19.5,
+    18.1,
     0.55,
     1.0
    ],
@@ -5877,7 +6261,7 @@
    "name": "Tile1_2",
    "object": "stage_carpet_tile",
    "position": [
-    19.5,
+    18.1,
     0.55,
     2.0
    ],
@@ -5893,7 +6277,7 @@
    "name": "Tile1_3",
    "object": "stage_carpet_tile",
    "position": [
-    19.5,
+    18.1,
     0.55,
     2.8
    ],
@@ -5909,7 +6293,7 @@
    "name": "Tile2_0",
    "object": "stage_carpet_tile",
    "position": [
-    20.5,
+    19.1,
     0.55,
     0.0
    ],
@@ -5925,7 +6309,7 @@
    "name": "Tile2_1",
    "object": "stage_carpet_tile",
    "position": [
-    20.5,
+    19.1,
     0.55,
     1.0
    ],
@@ -5941,7 +6325,7 @@
    "name": "Tile2_2",
    "object": "stage_carpet_tile",
    "position": [
-    20.5,
+    19.1,
     0.55,
     2.0
    ],
@@ -5957,7 +6341,7 @@
    "name": "Tile2_3",
    "object": "stage_carpet_tile",
    "position": [
-    20.5,
+    19.1,
     0.55,
     2.8
    ],
@@ -5973,7 +6357,7 @@
    "name": "Tile3_0",
    "object": "stage_carpet_tile",
    "position": [
-    21.5,
+    20.1,
     0.55,
     0.0
    ],
@@ -5989,7 +6373,7 @@
    "name": "Tile3_1",
    "object": "stage_carpet_tile",
    "position": [
-    21.5,
+    20.1,
     0.55,
     1.0
    ],
@@ -6005,7 +6389,7 @@
    "name": "Tile3_2",
    "object": "stage_carpet_tile",
    "position": [
-    21.5,
+    20.1,
     0.55,
     2.0
    ],
@@ -6021,7 +6405,7 @@
    "name": "Tile3_3",
    "object": "stage_carpet_tile",
    "position": [
-    21.5,
+    20.1,
     0.55,
     2.8
    ],
@@ -6037,7 +6421,7 @@
    "name": "Tile4_0",
    "object": "stage_carpet_tile",
    "position": [
-    22.5,
+    21.1,
     0.55,
     0.0
    ],
@@ -6053,7 +6437,7 @@
    "name": "Tile4_1",
    "object": "stage_carpet_tile",
    "position": [
-    22.5,
+    21.1,
     0.55,
     1.0
    ],
@@ -6069,7 +6453,7 @@
    "name": "Tile4_2",
    "object": "stage_carpet_tile",
    "position": [
-    22.5,
+    21.1,
     0.55,
     2.0
    ],
@@ -6085,7 +6469,7 @@
    "name": "Tile4_3",
    "object": "stage_carpet_tile",
    "position": [
-    22.5,
+    21.1,
     0.55,
     2.8
    ],
@@ -6101,7 +6485,7 @@
    "name": "Tile5_0",
    "object": "stage_carpet_tile",
    "position": [
-    23.5,
+    22.1,
     0.55,
     0.0
    ],
@@ -6117,7 +6501,7 @@
    "name": "Tile5_1",
    "object": "stage_carpet_tile",
    "position": [
-    23.5,
+    22.1,
     0.55,
     1.0
    ],
@@ -6133,7 +6517,7 @@
    "name": "Tile5_2",
    "object": "stage_carpet_tile",
    "position": [
-    23.5,
+    22.1,
     0.55,
     2.0
    ],
@@ -6149,7 +6533,7 @@
    "name": "Tile5_3",
    "object": "stage_carpet_tile",
    "position": [
-    23.5,
+    22.1,
     0.55,
     2.8
    ],
@@ -6165,7 +6549,7 @@
    "name": "Tile6_0",
    "object": "stage_carpet_tile",
    "position": [
-    24.5,
+    23.1,
     0.55,
     0.0
    ],
@@ -6181,7 +6565,7 @@
    "name": "Tile6_1",
    "object": "stage_carpet_tile",
    "position": [
-    24.5,
+    23.1,
     0.55,
     1.0
    ],
@@ -6197,7 +6581,7 @@
    "name": "Tile6_2",
    "object": "stage_carpet_tile",
    "position": [
-    24.5,
+    23.1,
     0.55,
     2.0
    ],
@@ -6213,7 +6597,7 @@
    "name": "Tile6_3",
    "object": "stage_carpet_tile",
    "position": [
-    24.5,
+    23.1,
     0.55,
     2.8
    ],
@@ -6229,7 +6613,7 @@
    "name": "Tile7_0",
    "object": "stage_carpet_tile",
    "position": [
-    25.5,
+    24.1,
     0.55,
     0.0
    ],
@@ -6245,7 +6629,7 @@
    "name": "Tile7_1",
    "object": "stage_carpet_tile",
    "position": [
-    25.5,
+    24.1,
     0.55,
     1.0
    ],
@@ -6261,7 +6645,7 @@
    "name": "Tile7_2",
    "object": "stage_carpet_tile",
    "position": [
-    25.5,
+    24.1,
     0.55,
     2.0
    ],
@@ -6277,135 +6661,7 @@
    "name": "Tile7_3",
    "object": "stage_carpet_tile",
    "position": [
-    25.5,
-    0.55,
-    2.8
-   ],
-   "rotation_y": 0.0,
-   "scale": [
-    1.0,
-    1.0,
-    1.0
-   ],
-   "zone": "Stage"
-  },
-  {
-   "name": "Tile8_0",
-   "object": "stage_carpet_tile",
-   "position": [
-    26.5,
-    0.55,
-    0.0
-   ],
-   "rotation_y": 0.0,
-   "scale": [
-    1.0,
-    1.0,
-    1.0
-   ],
-   "zone": "Stage"
-  },
-  {
-   "name": "Tile8_1",
-   "object": "stage_carpet_tile",
-   "position": [
-    26.5,
-    0.55,
-    1.0
-   ],
-   "rotation_y": 0.0,
-   "scale": [
-    1.0,
-    1.0,
-    1.0
-   ],
-   "zone": "Stage"
-  },
-  {
-   "name": "Tile8_2",
-   "object": "stage_carpet_tile",
-   "position": [
-    26.5,
-    0.55,
-    2.0
-   ],
-   "rotation_y": 0.0,
-   "scale": [
-    1.0,
-    1.0,
-    1.0
-   ],
-   "zone": "Stage"
-  },
-  {
-   "name": "Tile8_3",
-   "object": "stage_carpet_tile",
-   "position": [
-    26.5,
-    0.55,
-    2.8
-   ],
-   "rotation_y": 0.0,
-   "scale": [
-    1.0,
-    1.0,
-    1.0
-   ],
-   "zone": "Stage"
-  },
-  {
-   "name": "Tile9_0",
-   "object": "stage_carpet_tile",
-   "position": [
-    27.5,
-    0.55,
-    0.0
-   ],
-   "rotation_y": 0.0,
-   "scale": [
-    1.0,
-    1.0,
-    1.0
-   ],
-   "zone": "Stage"
-  },
-  {
-   "name": "Tile9_1",
-   "object": "stage_carpet_tile",
-   "position": [
-    27.5,
-    0.55,
-    1.0
-   ],
-   "rotation_y": 0.0,
-   "scale": [
-    1.0,
-    1.0,
-    1.0
-   ],
-   "zone": "Stage"
-  },
-  {
-   "name": "Tile9_2",
-   "object": "stage_carpet_tile",
-   "position": [
-    27.5,
-    0.55,
-    2.0
-   ],
-   "rotation_y": 0.0,
-   "scale": [
-    1.0,
-    1.0,
-    1.0
-   ],
-   "zone": "Stage"
-  },
-  {
-   "name": "Tile9_3",
-   "object": "stage_carpet_tile",
-   "position": [
-    27.5,
+    24.1,
     0.55,
     2.8
    ],
@@ -6453,7 +6709,7 @@
    "name": "CurtainBack0",
    "object": "curtain_panel",
    "position": [
-    18.5,
+    17.1,
     0.0,
     -0.4
    ],
@@ -6469,7 +6725,7 @@
    "name": "CurtainBack1",
    "object": "curtain_panel",
    "position": [
-    19.5,
+    18.1,
     0.0,
     -0.4
    ],
@@ -6485,7 +6741,7 @@
    "name": "CurtainBack2",
    "object": "curtain_panel",
    "position": [
-    20.5,
+    19.1,
     0.0,
     -0.4
    ],
@@ -6501,7 +6757,7 @@
    "name": "CurtainBack3",
    "object": "curtain_panel",
    "position": [
-    21.5,
+    20.1,
     0.0,
     -0.4
    ],
@@ -6517,7 +6773,7 @@
    "name": "CurtainBack4",
    "object": "curtain_panel",
    "position": [
-    22.5,
+    21.1,
     0.0,
     -0.4
    ],
@@ -6533,7 +6789,7 @@
    "name": "CurtainBack5",
    "object": "curtain_panel",
    "position": [
-    23.5,
+    22.1,
     0.0,
     -0.4
    ],
@@ -6549,7 +6805,7 @@
    "name": "CurtainBack6",
    "object": "curtain_panel",
    "position": [
-    24.5,
+    23.1,
     0.0,
     -0.4
    ],
@@ -6565,39 +6821,7 @@
    "name": "CurtainBack7",
    "object": "curtain_panel",
    "position": [
-    25.5,
-    0.0,
-    -0.4
-   ],
-   "rotation_y": 0.0,
-   "scale": [
-    1.0,
-    1.0,
-    1.0
-   ],
-   "zone": "Stage"
-  },
-  {
-   "name": "CurtainBack8",
-   "object": "curtain_panel",
-   "position": [
-    26.5,
-    0.0,
-    -0.4
-   ],
-   "rotation_y": 0.0,
-   "scale": [
-    1.0,
-    1.0,
-    1.0
-   ],
-   "zone": "Stage"
-  },
-  {
-   "name": "CurtainBack9",
-   "object": "curtain_panel",
-   "position": [
-    27.5,
+    24.1,
     0.0,
     -0.4
    ],
@@ -6615,7 +6839,7 @@
    "position": [
     27.9,
     0.0,
-    3.8
+    0.0
    ],
    "rotation_y": -90.0,
    "scale": [
@@ -6631,7 +6855,7 @@
    "position": [
     27.9,
     0.0,
-    4.8
+    1.0
    ],
    "rotation_y": -90.0,
    "scale": [
@@ -6647,7 +6871,7 @@
    "position": [
     27.9,
     0.0,
-    5.8
+    2.0
    ],
    "rotation_y": -90.0,
    "scale": [
@@ -6663,7 +6887,7 @@
    "position": [
     27.9,
     0.0,
-    6.8
+    3.0
    ],
    "rotation_y": -90.0,
    "scale": [
@@ -6679,7 +6903,7 @@
    "position": [
     27.9,
     0.0,
-    7.8
+    4.0
    ],
    "rotation_y": -90.0,
    "scale": [
@@ -6695,7 +6919,7 @@
    "position": [
     27.9,
     0.0,
-    8.8
+    5.0
    ],
    "rotation_y": -90.0,
    "scale": [
@@ -6711,7 +6935,7 @@
    "position": [
     27.9,
     0.0,
-    9.8
+    6.0
    ],
    "rotation_y": -90.0,
    "scale": [
@@ -6727,7 +6951,7 @@
    "position": [
     27.9,
     0.0,
-    10.8
+    7.0
    ],
    "rotation_y": -90.0,
    "scale": [
@@ -6743,7 +6967,71 @@
    "position": [
     27.9,
     0.0,
-    11.8
+    8.0
+   ],
+   "rotation_y": -90.0,
+   "scale": [
+    1.0,
+    1.0,
+    1.0
+   ],
+   "zone": "Stage"
+  },
+  {
+   "name": "Backdrop9",
+   "object": "slatted_backdrop",
+   "position": [
+    27.9,
+    0.0,
+    9.0
+   ],
+   "rotation_y": -90.0,
+   "scale": [
+    1.0,
+    1.0,
+    1.0
+   ],
+   "zone": "Stage"
+  },
+  {
+   "name": "Backdrop10",
+   "object": "slatted_backdrop",
+   "position": [
+    27.9,
+    0.0,
+    10.0
+   ],
+   "rotation_y": -90.0,
+   "scale": [
+    1.0,
+    1.0,
+    1.0
+   ],
+   "zone": "Stage"
+  },
+  {
+   "name": "Backdrop11",
+   "object": "slatted_backdrop",
+   "position": [
+    27.9,
+    0.0,
+    11.0
+   ],
+   "rotation_y": -90.0,
+   "scale": [
+    1.0,
+    1.0,
+    1.0
+   ],
+   "zone": "Stage"
+  },
+  {
+   "name": "Backdrop12",
+   "object": "slatted_backdrop",
+   "position": [
+    27.9,
+    0.0,
+    12.0
    ],
    "rotation_y": -90.0,
    "scale": [
@@ -6759,7 +7047,7 @@
    "position": [
     27.75,
     2.85,
-    4.1
+    0.5
    ],
    "rotation_y": -90.0,
    "scale": [
@@ -6775,7 +7063,7 @@
    "position": [
     27.75,
     2.85,
-    5.5
+    2.5
    ],
    "rotation_y": -90.0,
    "scale": [
@@ -6791,7 +7079,7 @@
    "position": [
     27.75,
     2.85,
-    6.9
+    4.5
    ],
    "rotation_y": -90.0,
    "scale": [
@@ -6807,7 +7095,7 @@
    "position": [
     27.75,
     2.85,
-    8.3
+    6.5
    ],
    "rotation_y": -90.0,
    "scale": [
@@ -6823,7 +7111,7 @@
    "position": [
     27.75,
     2.85,
-    9.7
+    8.5
    ],
    "rotation_y": -90.0,
    "scale": [
@@ -6839,89 +7127,9 @@
    "position": [
     27.75,
     2.85,
-    11.1
+    10.5
    ],
    "rotation_y": -90.0,
-   "scale": [
-    1.0,
-    1.0,
-    1.0
-   ],
-   "zone": "Stage"
-  },
-  {
-   "name": "CurtainEast0",
-   "object": "curtain_panel",
-   "position": [
-    27.9,
-    0.0,
-    0.0
-   ],
-   "rotation_y": -90.0,
-   "scale": [
-    1.0,
-    1.0,
-    1.0
-   ],
-   "zone": "Stage"
-  },
-  {
-   "name": "CurtainEast1",
-   "object": "curtain_panel",
-   "position": [
-    27.9,
-    0.0,
-    1.0
-   ],
-   "rotation_y": -90.0,
-   "scale": [
-    1.0,
-    1.0,
-    1.0
-   ],
-   "zone": "Stage"
-  },
-  {
-   "name": "CurtainEast2",
-   "object": "curtain_panel",
-   "position": [
-    27.9,
-    0.0,
-    2.0
-   ],
-   "rotation_y": -90.0,
-   "scale": [
-    1.0,
-    1.0,
-    1.0
-   ],
-   "zone": "Stage"
-  },
-  {
-   "name": "CurtainEast3",
-   "object": "curtain_panel",
-   "position": [
-    27.9,
-    0.0,
-    3.0
-   ],
-   "rotation_y": -90.0,
-   "scale": [
-    1.0,
-    1.0,
-    1.0
-   ],
-   "zone": "Stage"
-  },
-  {
-   "name": "DrumKit",
-   "object": "drum_kit",
-   "position": [
-    23.4,
-    0.6,
-    0.75
-   ],
-   "rotation_y": 0.0,
    "scale": [
     1.0,
     1.0,
@@ -6933,23 +7141,7 @@
    "name": "AmpStackL",
    "object": "amp_stack",
    "position": [
-    19.4,
-    0.6,
-    -0.05
-   ],
-   "rotation_y": 0.0,
-   "scale": [
-    1.0,
-    1.0,
-    1.0
-   ],
-   "zone": "Stage"
-  },
-  {
-   "name": "AmpStackR",
-   "object": "amp_stack",
-   "position": [
-    25.8,
+    17.7,
     0.6,
     -0.05
    ],
@@ -6965,7 +7157,7 @@
    "name": "ComboL",
    "object": "amp",
    "position": [
-    21.0,
+    19.2,
     0.6,
     0.2
    ],
@@ -6978,12 +7170,60 @@
    "zone": "Stage"
   },
   {
+   "name": "DrumKit",
+   "object": "drum_kit",
+   "position": [
+    20.9,
+    0.6,
+    0.75
+   ],
+   "rotation_y": 0.0,
+   "scale": [
+    1.0,
+    1.0,
+    1.0
+   ],
+   "zone": "Stage"
+  },
+  {
+   "name": "AmpStackR",
+   "object": "amp_stack",
+   "position": [
+    22.7,
+    0.6,
+    -0.05
+   ],
+   "rotation_y": 0.0,
+   "scale": [
+    1.0,
+    1.0,
+    1.0
+   ],
+   "zone": "Stage"
+  },
+  {
+   "name": "StageTree",
+   "object": "stage_tree",
+   "position": [
+    24.2,
+    0.6,
+    0.3
+   ],
+   "rotation_y": -90.0,
+   "scale": [
+    1.0,
+    1.0,
+    1.0
+   ],
+   "zone": "Stage"
+  },
+  {
    "name": "ComboR",
    "object": "amp",
    "position": [
-    26.9,
+    23.9,
     0.6,
-    1.3
+    1.7
    ],
    "rotation_y": -20.0,
    "scale": [
@@ -6997,9 +7237,9 @@
    "name": "Guitar",
    "object": "guitar_on_stand",
    "position": [
-    18.7,
+    17.4,
     0.6,
-    1.2
+    1.3
    ],
    "rotation_y": 20.0,
    "scale": [
@@ -7013,7 +7253,7 @@
    "name": "Mic0",
    "object": "mic_stand",
    "position": [
-    20.3,
+    18.6,
     0.6,
     2.5
    ],
@@ -7029,7 +7269,7 @@
    "name": "Mic1",
    "object": "mic_stand",
    "position": [
-    23.6,
+    21.0,
     0.6,
     2.6
    ],
@@ -7045,7 +7285,7 @@
    "name": "Mic2",
    "object": "mic_stand",
    "position": [
-    25.6,
+    23.0,
     0.6,
     2.5
    ],
@@ -7058,10 +7298,26 @@
    "zone": "Stage"
   },
   {
+   "name": "Wedge17",
+   "object": "monitor_wedge",
+   "position": [
+    17.6,
+    0.6,
+    3.0
+   ],
+   "rotation_y": -180.0,
+   "scale": [
+    1.0,
+    1.0,
+    1.0
+   ],
+   "zone": "Stage"
+  },
+  {
    "name": "Wedge19",
    "object": "monitor_wedge",
    "position": [
-    19.4,
+    19.6,
     0.6,
     3.0
    ],
@@ -7090,60 +7346,12 @@
    "zone": "Stage"
   },
   {
-   "name": "Wedge25",
-   "object": "monitor_wedge",
-   "position": [
-    25.6,
-    0.6,
-    3.0
-   ],
-   "rotation_y": -180.0,
-   "scale": [
-    1.0,
-    1.0,
-    1.0
-   ],
-   "zone": "Stage"
-  },
-  {
-   "name": "Wedge27",
-   "object": "monitor_wedge",
-   "position": [
-    27.2,
-    0.6,
-    3.0
-   ],
-   "rotation_y": -180.0,
-   "scale": [
-    1.0,
-    1.0,
-    1.0
-   ],
-   "zone": "Stage"
-  },
-  {
-   "name": "StageTree",
-   "object": "stage_tree",
-   "position": [
-    27.3,
-    0.6,
-    0.3
-   ],
-   "rotation_y": -90.0,
-   "scale": [
-    1.0,
-    1.0,
-    1.0
-   ],
-   "zone": "Stage"
-  },
-  {
    "name": "SpeakerL",
    "object": "pa_speaker",
    "position": [
-    17.6,
+    16.3,
     0.0,
-    2.7
+    3.65
    ],
    "rotation_y": 0.0,
    "scale": [
@@ -7157,9 +7365,9 @@
    "name": "SpeakerLBack",
    "object": "pa_speaker",
    "position": [
-    17.6,
+    16.3,
     0.0,
-    0.0
+    -0.2
    ],
    "rotation_y": 0.0,
    "scale": [
@@ -7173,7 +7381,7 @@
    "name": "Segment0",
    "object": "truss_segment",
    "position": [
-    19.0,
+    17.6,
     4.0,
     -0.05
    ],
@@ -7189,7 +7397,7 @@
    "name": "Segment1",
    "object": "truss_segment",
    "position": [
-    21.0,
+    19.6,
     4.0,
     -0.05
    ],
@@ -7205,7 +7413,7 @@
    "name": "Segment2",
    "object": "truss_segment",
    "position": [
-    23.0,
+    21.6,
     4.0,
     -0.05
    ],
@@ -7221,23 +7429,7 @@
    "name": "Segment3",
    "object": "truss_segment",
    "position": [
-    25.0,
-    4.0,
-    -0.05
-   ],
-   "rotation_y": 0.0,
-   "scale": [
-    1.0,
-    1.0,
-    1.0
-   ],
-   "zone": "Stage"
-  },
-  {
-   "name": "Segment4",
-   "object": "truss_segment",
-   "position": [
-    27.0,
+    23.6,
     4.0,
     -0.05
    ],
@@ -7253,7 +7445,7 @@
    "name": "Par0",
    "object": "par_light_red",
    "position": [
-    19.0,
+    17.8,
     3.5,
     -0.05
    ],
@@ -7269,7 +7461,7 @@
    "name": "Par1",
    "object": "par_light_red",
    "position": [
-    21.0,
+    19.4,
     3.5,
     -0.05
    ],
@@ -7285,7 +7477,7 @@
    "name": "Par2",
    "object": "par_light_blue",
    "position": [
-    23.0,
+    21.0,
     3.5,
     -0.05
    ],
@@ -7301,7 +7493,7 @@
    "name": "Par3",
    "object": "par_light_red",
    "position": [
-    25.0,
+    22.6,
     3.5,
     -0.05
    ],
@@ -7317,7 +7509,7 @@
    "name": "Par4",
    "object": "par_light_amber",
    "position": [
-    27.0,
+    24.2,
     3.5,
     -0.05
    ],
@@ -7895,7 +8087,7 @@
   {
    "pose": "sit",
    "position": [
-    20.4,
+    19.8,
     0.0,
     6.19
    ],
@@ -7908,7 +8100,7 @@
   {
    "pose": "sit",
    "position": [
-    21.06,
+    20.46,
     0.0,
     6.85
    ],
@@ -7921,7 +8113,7 @@
   {
    "pose": "sit",
    "position": [
-    20.4,
+    19.8,
     0.0,
     7.51
    ],
@@ -7934,7 +8126,7 @@
   {
    "pose": "sit",
    "position": [
-    19.74,
+    19.14,
     0.0,
     6.85
    ],
@@ -7947,7 +8139,7 @@
   {
    "pose": "sit",
    "position": [
-    23.2,
+    22.6,
     0.0,
     6.19
    ],
@@ -7960,7 +8152,7 @@
   {
    "pose": "sit",
    "position": [
-    23.86,
+    23.26,
     0.0,
     6.85
    ],
@@ -7973,7 +8165,7 @@
   {
    "pose": "sit",
    "position": [
-    23.2,
+    22.6,
     0.0,
     7.51
    ],
@@ -7986,7 +8178,7 @@
   {
    "pose": "sit",
    "position": [
-    22.54,
+    21.94,
     0.0,
     6.85
    ],
@@ -7999,163 +8191,7 @@
   {
    "pose": "sit",
    "position": [
-    26.4,
-    0.0,
-    5.24
-   ],
-   "preset_slot": "PATRON",
-   "rotation_y": 0.0,
-   "seat_h": 0.45,
-   "spot": "Tables_T7_C0",
-   "zone": "Tables"
-  },
-  {
-   "pose": "sit",
-   "position": [
-    27.06,
-    0.0,
-    5.9
-   ],
-   "preset_slot": "PATRON",
-   "rotation_y": -90.0,
-   "seat_h": 0.45,
-   "spot": "Tables_T7_C1",
-   "zone": "Tables"
-  },
-  {
-   "pose": "sit",
-   "position": [
-    26.4,
-    0.0,
-    6.56
-   ],
-   "preset_slot": "PATRON",
-   "rotation_y": 180.0,
-   "seat_h": 0.45,
-   "spot": "Tables_T7_C2",
-   "zone": "Tables"
-  },
-  {
-   "pose": "sit",
-   "position": [
-    25.74,
-    0.0,
-    5.9
-   ],
-   "preset_slot": "PATRON",
-   "rotation_y": 90.0,
-   "seat_h": 0.45,
-   "spot": "Tables_T7_C3",
-   "zone": "Tables"
-  },
-  {
-   "pose": "sit",
-   "position": [
-    26.4,
-    0.0,
-    7.94
-   ],
-   "preset_slot": "PATRON",
-   "rotation_y": 0.0,
-   "seat_h": 0.45,
-   "spot": "Tables_T8_C0",
-   "zone": "Tables"
-  },
-  {
-   "pose": "sit",
-   "position": [
-    27.06,
-    0.0,
-    8.6
-   ],
-   "preset_slot": "PATRON",
-   "rotation_y": -90.0,
-   "seat_h": 0.45,
-   "spot": "Tables_T8_C1",
-   "zone": "Tables"
-  },
-  {
-   "pose": "sit",
-   "position": [
-    26.4,
-    0.0,
-    9.26
-   ],
-   "preset_slot": "PATRON",
-   "rotation_y": 180.0,
-   "seat_h": 0.45,
-   "spot": "Tables_T8_C2",
-   "zone": "Tables"
-  },
-  {
-   "pose": "sit",
-   "position": [
-    25.74,
-    0.0,
-    8.6
-   ],
-   "preset_slot": "PATRON",
-   "rotation_y": 90.0,
-   "seat_h": 0.45,
-   "spot": "Tables_T8_C3",
-   "zone": "Tables"
-  },
-  {
-   "pose": "sit",
-   "position": [
-    26.4,
-    0.0,
-    10.74
-   ],
-   "preset_slot": "PATRON",
-   "rotation_y": 0.0,
-   "seat_h": 0.45,
-   "spot": "Tables_T9_C0",
-   "zone": "Tables"
-  },
-  {
-   "pose": "sit",
-   "position": [
-    27.06,
-    0.0,
-    11.4
-   ],
-   "preset_slot": "PATRON",
-   "rotation_y": -90.0,
-   "seat_h": 0.45,
-   "spot": "Tables_T9_C1",
-   "zone": "Tables"
-  },
-  {
-   "pose": "sit",
-   "position": [
-    26.4,
-    0.0,
-    12.06
-   ],
-   "preset_slot": "PATRON",
-   "rotation_y": 180.0,
-   "seat_h": 0.45,
-   "spot": "Tables_T9_C2",
-   "zone": "Tables"
-  },
-  {
-   "pose": "sit",
-   "position": [
-    25.74,
-    0.0,
-    11.4
-   ],
-   "preset_slot": "PATRON",
-   "rotation_y": 90.0,
-   "seat_h": 0.45,
-   "spot": "Tables_T9_C3",
-   "zone": "Tables"
-  },
-  {
-   "pose": "sit",
-   "position": [
-    18.6,
+    17.4,
     0.0,
     4.05
    ],
@@ -8168,7 +8204,7 @@
   {
    "pose": "sit",
    "position": [
-    19.6,
+    18.4,
     0.0,
     4.05
    ],
@@ -8181,7 +8217,7 @@
   {
    "pose": "sit",
    "position": [
-    23.4,
+    19.4,
     0.0,
     4.05
    ],
@@ -8194,7 +8230,7 @@
   {
    "pose": "sit",
    "position": [
-    24.4,
+    23.4,
     0.0,
     4.05
    ],
@@ -8207,9 +8243,9 @@
   {
    "pose": "sit",
    "position": [
-    25.4,
+    17.9,
     0.0,
-    4.05
+    4.9
    ],
    "preset_slot": "PATRON",
    "rotation_y": -180.0,
@@ -8220,9 +8256,9 @@
   {
    "pose": "sit",
    "position": [
-    26.4,
+    18.9,
     0.0,
-    4.05
+    4.9
    ],
    "preset_slot": "PATRON",
    "rotation_y": -180.0,
@@ -8233,9 +8269,9 @@
   {
    "pose": "sit",
    "position": [
-    27.4,
+    25.35,
     0.0,
-    4.05
+    -0.12
    ],
    "preset_slot": "PATRON",
    "rotation_y": -180.0,
@@ -8246,9 +8282,9 @@
   {
    "pose": "sit",
    "position": [
-    17.9,
+    25.35,
     0.0,
-    4.9
+    1.12
    ],
    "preset_slot": "PATRON",
    "rotation_y": -180.0,
@@ -8259,9 +8295,9 @@
   {
    "pose": "sit",
    "position": [
-    24.9,
+    25.35,
     0.0,
-    4.9
+    4.78
    ],
    "preset_slot": "PATRON",
    "rotation_y": -180.0,
@@ -8272,9 +8308,9 @@
   {
    "pose": "sit",
    "position": [
-    25.9,
+    25.35,
     0.0,
-    4.9
+    6.02
    ],
    "preset_slot": "PATRON",
    "rotation_y": -180.0,
@@ -8285,46 +8321,215 @@
   {
    "pose": "sit",
    "position": [
+    26.24,
+    0.0,
+    0.25
+   ],
+   "preset_slot": "PATRON",
+   "rotation_y": 90.0,
+   "seat_h": 0.45,
+   "spot": "Tables_End0_C0",
+   "zone": "Tables"
+  },
+  {
+   "pose": "sit",
+   "position": [
     26.9,
     0.0,
-    4.9
+    -0.41
    ],
    "preset_slot": "PATRON",
-   "rotation_y": -180.0,
+   "rotation_y": 0.0,
    "seat_h": 0.45,
-   "spot": "Tables_DrumStool10",
+   "spot": "Tables_End0_C1",
    "zone": "Tables"
   },
   {
    "pose": "sit",
    "position": [
-    12.0,
+    26.9,
     0.0,
-    3.6
+    1.19
    ],
    "preset_slot": "PATRON",
-   "rotation_y": -180.0,
+   "rotation_y": 0.0,
    "seat_h": 0.45,
-   "spot": "Tables_DrumStool11",
+   "spot": "Tables_End1_C0",
    "zone": "Tables"
   },
   {
    "pose": "sit",
    "position": [
-    17.4,
+    26.9,
     0.0,
-    3.6
+    2.51
    ],
    "preset_slot": "PATRON",
-   "rotation_y": -180.0,
+   "rotation_y": 180.0,
    "seat_h": 0.45,
-   "spot": "Tables_DrumStool12",
+   "spot": "Tables_End1_C1",
    "zone": "Tables"
   },
   {
    "pose": "sit",
    "position": [
-    13.1,
+    26.9,
+    0.0,
+    2.79
+   ],
+   "preset_slot": "PATRON",
+   "rotation_y": 0.0,
+   "seat_h": 0.45,
+   "spot": "Tables_End2_C0",
+   "zone": "Tables"
+  },
+  {
+   "pose": "sit",
+   "position": [
+    26.9,
+    0.0,
+    4.11
+   ],
+   "preset_slot": "PATRON",
+   "rotation_y": 180.0,
+   "seat_h": 0.45,
+   "spot": "Tables_End2_C1",
+   "zone": "Tables"
+  },
+  {
+   "pose": "sit",
+   "position": [
+    26.24,
+    0.0,
+    5.05
+   ],
+   "preset_slot": "PATRON",
+   "rotation_y": 90.0,
+   "seat_h": 0.45,
+   "spot": "Tables_End3_C0",
+   "zone": "Tables"
+  },
+  {
+   "pose": "sit",
+   "position": [
+    26.9,
+    0.0,
+    4.39
+   ],
+   "preset_slot": "PATRON",
+   "rotation_y": 0.0,
+   "seat_h": 0.45,
+   "spot": "Tables_End3_C1",
+   "zone": "Tables"
+  },
+  {
+   "pose": "sit",
+   "position": [
+    26.24,
+    0.0,
+    6.65
+   ],
+   "preset_slot": "PATRON",
+   "rotation_y": 90.0,
+   "seat_h": 0.45,
+   "spot": "Tables_End4_C0",
+   "zone": "Tables"
+  },
+  {
+   "pose": "sit",
+   "position": [
+    26.9,
+    0.0,
+    5.99
+   ],
+   "preset_slot": "PATRON",
+   "rotation_y": 0.0,
+   "seat_h": 0.45,
+   "spot": "Tables_End4_C1",
+   "zone": "Tables"
+  },
+  {
+   "pose": "sit",
+   "position": [
+    26.24,
+    0.0,
+    8.25
+   ],
+   "preset_slot": "PATRON",
+   "rotation_y": 90.0,
+   "seat_h": 0.45,
+   "spot": "Tables_End5_C0",
+   "zone": "Tables"
+  },
+  {
+   "pose": "sit",
+   "position": [
+    26.9,
+    0.0,
+    7.59
+   ],
+   "preset_slot": "PATRON",
+   "rotation_y": 0.0,
+   "seat_h": 0.45,
+   "spot": "Tables_End5_C1",
+   "zone": "Tables"
+  },
+  {
+   "pose": "sit",
+   "position": [
+    26.24,
+    0.0,
+    9.85
+   ],
+   "preset_slot": "PATRON",
+   "rotation_y": 90.0,
+   "seat_h": 0.45,
+   "spot": "Tables_End6_C0",
+   "zone": "Tables"
+  },
+  {
+   "pose": "sit",
+   "position": [
+    26.9,
+    0.0,
+    9.19
+   ],
+   "preset_slot": "PATRON",
+   "rotation_y": 0.0,
+   "seat_h": 0.45,
+   "spot": "Tables_End6_C1",
+   "zone": "Tables"
+  },
+  {
+   "pose": "sit",
+   "position": [
+    26.24,
+    0.0,
+    11.45
+   ],
+   "preset_slot": "PATRON",
+   "rotation_y": 90.0,
+   "seat_h": 0.45,
+   "spot": "Tables_End7_C0",
+   "zone": "Tables"
+  },
+  {
+   "pose": "sit",
+   "position": [
+    26.9,
+    0.0,
+    10.79
+   ],
+   "preset_slot": "PATRON",
+   "rotation_y": 0.0,
+   "seat_h": 0.45,
+   "spot": "Tables_End7_C1",
+   "zone": "Tables"
+  },
+  {
+   "pose": "sit",
+   "position": [
+    12.9,
     0.0,
     1.0
    ],
@@ -8337,7 +8542,7 @@
   {
    "pose": "sit",
    "position": [
-    13.1,
+    12.9,
     0.0,
     2.5
    ],
@@ -8350,7 +8555,7 @@
   {
    "pose": "sit",
    "position": [
-    14.1,
+    13.9,
     0.0,
     1.0
    ],
@@ -8363,7 +8568,7 @@
   {
    "pose": "sit",
    "position": [
-    14.1,
+    13.9,
     0.0,
     2.5
    ],
@@ -8376,7 +8581,7 @@
   {
    "pose": "sit",
    "position": [
-    15.1,
+    14.9,
     0.0,
     1.0
    ],
@@ -8389,7 +8594,7 @@
   {
    "pose": "sit",
    "position": [
-    15.1,
+    14.9,
     0.0,
     2.5
    ],
@@ -8402,7 +8607,7 @@
   {
    "pose": "sit",
    "position": [
-    16.1,
+    15.9,
     0.0,
     1.0
    ],
@@ -8415,7 +8620,7 @@
   {
    "pose": "sit",
    "position": [
-    16.1,
+    15.9,
     0.0,
     2.5
    ],
@@ -8428,7 +8633,7 @@
   {
    "pose": "sit",
    "position": [
-    10.74,
+    10.64,
     0.0,
     0.75
    ],
@@ -8441,7 +8646,7 @@
   {
    "pose": "sit",
    "position": [
-    12.06,
+    11.96,
     0.0,
     0.75
    ],
@@ -8454,7 +8659,7 @@
   {
    "pose": "band_drums",
    "position": [
-    23.4,
+    20.9,
     0.6,
     0.25
    ],
@@ -8467,7 +8672,7 @@
   {
    "pose": "band_guitar",
    "position": [
-    20.3,
+    18.6,
     0.6,
     1.85
    ],
@@ -8480,7 +8685,7 @@
   {
    "pose": "band_vocal",
    "position": [
-    23.6,
+    21.0,
     0.6,
     1.95
    ],
@@ -8493,7 +8698,7 @@
   {
    "pose": "band_bass",
    "position": [
-    25.6,
+    23.0,
     0.6,
     1.85
    ],

@@ -24,7 +24,7 @@ could never sit side by side as in 05.
 
 | Item | Render evidence | Metres | Voxels |
 |---|---|---|---|
-| Stage length along the wall | 05: from the backdrop corner to the communal table, 55 % of the room | **10.0** | 200 |
+| Stage length along the wall | photo 07 (2026-10-28) overrides 05: the stage stops short of the end wall; drum stools and low tables, then a line of tables along the whole end wall | **8.0** | 160 |
 | Stage depth from the wall | 05: drums + front line of wedges; 06: four wedges deep | **3.6** | 72 |
 | Stage height | riser face = 1.3 x chair seat | **0.6** | 12 |
 | Riser | black, panel joints every 1 m, lighter top edge | | |
@@ -120,3 +120,4 @@ Game coordinates: x east from the lounge, z south, y up; main room x 10..28, z -
 | 6 | orchestrator review: cool dark glossy floor, dark wood walls, pilasters, cornice, soft curtain folds, dark-wood stage skirt, calmer red wash, small amber lamps, 0.8 m ball near the back, heads 0.86 and chin up, 66 seated; interior ReflectionProbe | 0.113 / 3.84 / 2.0 % | 0.118 / 3.46 / 1.3 % |
 | 7 | probe removed (it darkened the room under Compatibility), floor pool quads removed (rendered as flat rectangles) | 0.169 / 3.37 / 2.0 % | 0.187 / 2.82 / 1.6 % |
 | 8 | 06 camera pulled back from the disco ball | 0.169 / 3.37 / 2.0 % | 0.176 / 3.02 / 1.2 % |
+| 9 | photo 07: stage 8 m (x 16.6..24.6), stopping short of the end wall; a line of 8 tables along the whole end wall; drum stools and low tables between; backdrop across the whole end wall; communal table 5 lamps; 87 figures; crisper: contact-shadow texture under all floor furniture, darker tile seams, fog 0.004, contrast 1.18 | 0.170 / 3.60 / 2.7 % | 0.174 / 3.15 / 2.1 % |

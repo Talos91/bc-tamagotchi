@@ -29,7 +29,7 @@ const HAIRS := ["1e1616", "3e2618", "6a4228", "7e3220", "e6d0a0", "403a3e"]
 const TOPS := ["c99430", "d9c9a6", "3f5878", "66703a", "e4dde6", "2e6a6a", "6c88a8", "e8a030", "403a3e", "8a5aa0"]
 const BOTTOMS := ["3f5878", "221110", "403a3e", "4c5a30", "7c7270", "3e2618"]
 
-@export var seated_count := 66   # renders 05/06: two to four at every table, most bar stools taken
+@export var seated_count := 80   # renders 05/06, Daniele: every table seated, bar stools and poufs taken
 @export var wanderer_count := 2
 @export var crowd_seed := 1923
 

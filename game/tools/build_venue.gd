@@ -33,7 +33,8 @@ const STAGE_H := 0.6            # platform 0.55 + carpet tile 0.05 (parity-measu
 const MAIN_X1 := 28.0
 const MAIN_Z0 := -0.5
 const MAIN_Z1 := 14.0
-const STAGE_X0 := 18.0          # stage runs x STAGE_X0..MAIN_X1 along the north wall
+const STAGE_X0 := 16.6          # stage runs x STAGE_X0..STAGE_X1 along the north wall
+const STAGE_X1 := 24.6          # photo 07: it stops short of the end wall (drum stools, then the end-wall tables)
 const STAGE_Z1 := 3.3           # stage front edge
 const BAR_X0 := 11.5            # bar runs x BAR_X0 .. BAR_X0 + BAR_BAYS * 1.5 along the south wall
 const BAR_BAYS := 9
@@ -43,7 +44,7 @@ const BAR_SEAT_H := 0.8       # kit bar_stool seat top; chairs, drum stools and 
 # Palette (art bible §3, game values)
 const CABIN_DARK := Color("1c0d0c")
 const BEAM_BLACK := Color("160a0c")
-const FLOOR_GREY := Color("47434b")       # v3: renders 05/06 floor is a dark cool grey tile, glossy
+const FLOOR_GREY := Color("56505a")       # v3: renders 05/06 floor is a dark cool grey tile, glossy
 const VELVET_SHADOW := Color("3e0408")
 const VELVET_RED := Color("8c0610")
 const CARPET_RED := Color("9a0a12")
@@ -64,6 +65,7 @@ var mats := {}
 var light_count := 0
 var spots: Node3D      # Patrons/Spots: seats, staff and wander points for scripts/venue_patrons.gd
 var shadow_count := 0
+var shadow_spots: Array = []   # [centre Vector2 | Rect2, radius, strength] for _contact_shadows()
 
 func _init() -> void:
 	var data: Dictionary = JSON.parse_string(FileAccess.get_file_as_string(MANIFEST))
@@ -84,6 +86,7 @@ func _init() -> void:
 	_communal_table()
 	_stage()
 	_camera_zones()
+	_contact_shadows()
 	await process_frame   # root joins the tree after _init starts; navmesh parsing needs the venue inside it
 	_navigation()
 	_wander_spots()
@@ -136,7 +139,7 @@ func _floor_mat() -> StandardMaterial3D:
 			for py in 8:
 				for px in 8:
 					var seam := px == 0 or py == 0
-					img.set_pixel(tx * 8 + px, ty * 8 + py, c.darkened(0.3) if seam else c)
+					img.set_pixel(tx * 8 + px, ty * 8 + py, c.darkened(0.5) if seam else c)
 	var m := StandardMaterial3D.new()
 	m.resource_name = "FloorTile"
 	m.albedo_texture = ImageTexture.create_from_image(img)
@@ -170,6 +173,7 @@ func _kit_solid(parent: Node, kname: String, pos: Vector3, rot_deg := 0.0, nm :=
 		return null
 	var fp: Array = kit[kname].footprint_m
 	var height: float = kit[kname].height_m if h < 0.0 else h
+	_shadow_spot(pos, maxf(fp[0], fp[1]) * 0.5 + 0.06)
 	_collider(inst, "Collider", Vector3(0, height * 0.5, 0), Vector3(fp[0], height, fp[1]))
 	return inst
 
@@ -314,7 +318,7 @@ func _environment() -> void:
 	env.background_color = Color("0b0505")
 	env.ambient_light_source = Environment.AMBIENT_SOURCE_COLOR
 	env.ambient_light_color = Color(0.66, 0.50, 0.50)
-	env.ambient_light_energy = 1.7
+	env.ambient_light_energy = 1.65
 	env.tonemap_mode = Environment.TONE_MAPPER_FILMIC
 	env.tonemap_exposure = 1.15
 	env.tonemap_white = 6.0
@@ -332,11 +336,11 @@ func _environment() -> void:
 	env.fog_enabled = true
 	env.fog_light_color = Color(0.32, 0.07, 0.06)
 	env.fog_light_energy = 1.0
-	env.fog_density = 0.012
+	env.fog_density = 0.004
 	env.fog_sky_affect = 0.0
 	env.adjustment_enabled = true
 	env.adjustment_saturation = 1.15
-	env.adjustment_contrast = 1.05
+	env.adjustment_contrast = 1.18
 	var we := WorldEnvironment.new()
 	we.name = "WorldEnvironment"
 	we.environment = env
@@ -503,6 +507,7 @@ func _bar() -> void:
 	for i in int(bar_len):
 		_kit(g, "bar_counter", Vector3(BAR_X0 + 0.5 + i, 0, cz), 180.0, "Counter%d" % i)
 	_collider(g, "CounterCollider", Vector3(BAR_X0 + bar_len * 0.5, 0.55, cz), Vector3(bar_len, 1.1, 0.7))
+	_shadow_rect(Rect2(BAR_X0, cz - 0.42, bar_len, 0.3))
 	var sz := cz - 0.75
 	for i in 13:
 		var x := BAR_X0 + 0.6 + i * 1.0
@@ -537,7 +542,7 @@ func _round_table(g: Node, n: int, c: Vector3) -> void:
 	for k in 4:
 		var a := k * PI * 0.5 + 0.4
 		_kit(g, "beer_glass", top + Vector3(cos(a) * 0.28, 0, sin(a) * 0.28), 0.0, "Table%dGlass%d" % [n, k])
-	_omni(g, "Table%dLight" % n, LAMP_GOLD, 1.25, 3.2, top + Vector3(-0.1, 1.0, -0.05))
+	_omni(g, "Table%dLight" % n, LAMP_GOLD, 2.0, 3.4, top + Vector3(-0.1, 1.0, -0.05))
 	var offs := [Vector2(0, -0.66), Vector2(0.66, 0), Vector2(0, 0.66), Vector2(-0.66, 0)]
 	for k in 4:
 		var off: Vector2 = offs[k]
@@ -547,24 +552,58 @@ func _round_table(g: Node, n: int, c: Vector3) -> void:
 
 func _tables() -> void:
 	var g := _group("Tables")
-	# 05: bar-side column of five, middle-left column of two beside the poufs, back row of three before the
-	# backdrop. The z ~5.5 aisle from the curtain to the stage steps stays clear.
+	# 05 + photo 07: bar-side column of five, middle-left column of two beside the poufs. The z ~5.5 aisle from the
+	# curtain to the stage steps stays clear. The end wall is its own line of tables (_end_wall_tables).
 	var centres := [Vector2(13.2, 9.75), Vector2(15.8, 9.75), Vector2(18.4, 9.75), Vector2(21.0, 9.75), Vector2(23.6, 9.75),
-		Vector2(20.4, 6.85), Vector2(23.2, 6.85),
-		Vector2(26.4, 5.9), Vector2(26.4, 8.6), Vector2(26.4, 11.4)]
+		Vector2(19.8, 6.85), Vector2(22.6, 6.85)]
 	for n in centres.size():
 		_round_table(g, n, Vector3(centres[n].x, 0, centres[n].y))
-	# Drum-stool poufs in rows in front of the stage, facing it (05: 9 + 5; gap at the steps)
+	# Drum-stool poufs in two rows in front of the stage, facing it (05, 07; gap at the steps x 20.5..22.5)
 	var n := 0
-	for x in [18.6, 19.6, 23.4, 24.4, 25.4, 26.4, 27.4]:
+	for x in [17.4, 18.4, 19.4, 23.4]:
 		_pouf(g, n, Vector3(x, 0, STAGE_Z1 + 0.75))
 		n += 1
-	for x in [17.9, 24.9, 25.9, 26.9]:
+	for x in [17.9, 18.9]:
 		_pouf(g, n, Vector3(x, 0, STAGE_Z1 + 1.6))
 		n += 1
-	for x in [12.0, 17.4]:
-		_pouf(g, n, Vector3(x, 0, 3.6))
-		n += 1
+	# Between the stage end and the end-wall tables: drum stools round short low tables (photo 07)
+	for i in 2:
+		var c := Vector3(STAGE_X1 + 0.75, 0, [0.5, 5.4][i])
+		var lt := _kit(g, "round_table", c, 0.0, "LowTable%d" % i, Vector3(0.7, 0.6, 0.7))
+		_collider(lt, "Collider", Vector3(0, 0.25, 0), Vector3(0.9, 0.5, 0.9))
+		_shadow_spot(c, 0.42)
+		_kit(g, "tealight_lantern", c + Vector3(0.05, 0.45, 0.0), 0.0, "LowTable%dTealight" % i)
+		_kit(g, "beer_glass", c + Vector3(-0.12, 0.45, 0.1), 0.0, "LowTable%dGlass" % i)
+		for k in 2:
+			var p := c + Vector3(0, 0, -0.62 + k * 1.24)
+			_pouf(g, n, p)
+			n += 1
+	_end_wall_tables(g)
+
+## Photo 07: the whole end wall is one line of tables with chairs, in front of the slatted backdrop.
+func _end_wall_tables(g: Node) -> void:
+	var x := MAIN_X1 - 1.1
+	var k := 0
+	var z := MAIN_Z0 + 0.75
+	while z < 11.9:
+		var c := Vector3(x, 0, z)
+		_kit_solid(g, "round_table", c, 0.0, "EndTable%d" % k)
+		_kit(g, "table_lamp_lit", c + Vector3(0.12, 0.75, -0.08), 0.0, "EndTable%dLamp" % k)
+		_kit(g, "tealight_lantern", c + Vector3(-0.15, 0.75, 0.15), 0.0, "EndTable%dTealight" % k)
+		for j in 2:
+			_kit(g, "beer_glass", c + Vector3(-0.25, 0.75, -0.2 + j * 0.3), 0.0, "EndTable%dGlass%d" % [k, j])
+		if k % 2 == 0:
+			_omni(g, "EndLight%d" % k, LAMP_GOLD, 2.2, 3.6, c + Vector3(0, 1.8, 0.8))
+		var seats := [[Vector3(-0.66, 0, 0), -90.0], [Vector3(0, 0, -0.66), 0.0]]
+		if z > STAGE_Z1 - 2.0 and z < STAGE_Z1 + 1.0:
+			seats = [[Vector3(0, 0, -0.66), 0.0], [Vector3(0, 0, 0.66), 180.0]]   # keep the walkway past the stage end clear
+		for s in seats:
+			var off: Vector3 = s[0]
+			var face := rad_to_deg(atan2(-off.x, -off.z))
+			_kit_solid(g, "cafe_chair", c + off, face, "EndTable%dChair%d" % [k, seats.find(s)])
+			_seat("Tables", "Tables_End%d_C%d" % [k, seats.find(s)], c + off, face)
+		z += 1.6
+		k += 1
 
 func _pouf(g: Node, n: int, p: Vector3) -> void:
 	_kit_solid(g, "drum_stool", p, n * 37.0, "DrumStool%d" % n)
@@ -572,8 +611,8 @@ func _pouf(g: Node, n: int, p: Vector3) -> void:
 
 func _communal_table() -> void:
 	var g := _group("CommunalTable")
-	# Front-left (05): 4 m long along the room, four chairs a side, three lamps, three lanterns, two napkin boxes
-	var c := Vector3(14.6, 0, 1.75)
+	# Front-left (05): 4 m long along the room, four chairs a side, five lamps, lanterns, two napkin boxes
+	var c := Vector3(14.4, 0, 1.75)
 	_kit_solid(g, "communal_table", c, 0.0, "Table")
 	for k in 4:
 		var x := c.x - 1.5 + k
@@ -583,15 +622,15 @@ func _communal_table() -> void:
 		_seat("CommunalTable", "CommunalTable_S%d" % k, Vector3(x, 0, c.z + 0.75), 180.0)
 		_kit(g, "beer_glass", Vector3(x + 0.1, 0.75, c.z - 0.3), 0.0, "GlassN%d" % k)
 		_kit(g, "beer_glass", Vector3(x - 0.1, 0.75, c.z + 0.3), 0.0, "GlassS%d" % k)
+	for i in 5:
+		var x := c.x - 1.6 + i * 0.8
+		_kit(g, "table_lamp_lit" if i % 2 == 0 else "tealight_lantern", Vector3(x, 0.75, c.z + (-0.05 if i % 2 == 0 else 0.1)), 0.0, "Lamp%d" % i)
 	for i in 3:
-		var x := c.x - 1.3 + i * 1.3
-		_kit(g, "table_lamp_lit", Vector3(x, 0.75, c.z - 0.05), 0.0, "Lamp%d" % i)
-		_kit(g, "tealight_lantern", Vector3(x + 0.6, 0.75, c.z + 0.1), 0.0, "Tealight%d" % i)
-		_omni(g, "Light%d" % i, LAMP_GOLD, 1.2, 3.0, Vector3(x, 1.75, c.z))
+		_omni(g, "Light%d" % i, LAMP_GOLD, 1.8, 3.2, Vector3(c.x - 1.4 + i * 1.4, 1.75, c.z))
 	for i in 2:
 		_kit(g, "napkin_cup", Vector3(c.x - 0.6 + i * 1.3, 0.75, c.z + 0.12), 0.0, "Napkins%d" % i)
 	# Side table against the left wall by the entrance (05 bottom-left), two chairs
-	var s := Vector3(11.4, 0, 0.75)
+	var s := Vector3(11.3, 0, 0.75)
 	_kit_solid(g, "round_table", s, 0.0, "SideTable")
 	_kit(g, "table_lamp_lit", s + Vector3(-0.1, 0.75, 0), 0.0, "SideLamp")
 	_kit(g, "tealight_lantern", s + Vector3(0.2, 0.75, 0.1), 0.0, "SideTealight")
@@ -604,14 +643,16 @@ func _communal_table() -> void:
 
 func _stage() -> void:
 	var g := _group("Stage")
-	# Raised platform along the left-hand (north) wall at the far end (05/06): x STAGE_X0..MAIN_X1, z MAIN_Z0..
-	# STAGE_Z1, 0.6 m, front edge facing the room (+z). Kit risers along the front, red carpet on top, curtains
-	# behind, truss with PARs over the front edge.
-	var sw := MAIN_X1 - STAGE_X0
+	# Raised platform along the left-hand (north) wall (05/06, photo 07): x STAGE_X0..STAGE_X1, z MAIN_Z0..STAGE_Z1,
+	# 0.6 m. It stops short of the end wall: the end-wall tables and the drum stools sit beyond it. Kit risers
+	# along the front and the open end, red carpet on top, curtains behind, truss with PARs on the wall.
+	var sw := STAGE_X1 - STAGE_X0
 	var sd := STAGE_Z1 - MAIN_Z0
 	for i in int(sw / 2.0):
 		_kit(g, "stage_platform", Vector3(STAGE_X0 + 1.0 + i * 2.0, 0, STAGE_Z1 - 0.5), 0.0, "Riser%d" % i)
-	_box(g, "PlatformCore", Vector3(STAGE_X0, 0, MAIN_Z0), Vector3(sw, STAGE_H - 0.05, sd - 1.0), _mat("stool_black", STOOL_BLACK, 0.85), false)
+	_kit(g, "stage_platform", Vector3(STAGE_X1 - 0.5, 0, STAGE_Z1 - 2.0), -90.0, "RiserEnd")
+	_box(g, "EndSkirt", Vector3(STAGE_X1 - 0.2, 0, MAIN_Z0), Vector3(0.2, STAGE_H - 0.05, STAGE_Z1 - 2.0 - 1.0 - MAIN_Z0), _mat("frame_wood", Color("2a1810"), 0.55), false)
+	_box(g, "PlatformCore", Vector3(STAGE_X0, 0, MAIN_Z0), Vector3(sw - 1.0, STAGE_H - 0.05, sd - 1.0), _mat("stool_black", STOOL_BLACK, 0.85), false)
 	var carpet := _group("Carpet", g)
 	for ix in int(sw):
 		for iz in int(ceil(sd)):
@@ -620,60 +661,117 @@ func _stage() -> void:
 				cz = STAGE_Z1 - 0.5
 			_kit(carpet, "stage_carpet_tile", Vector3(STAGE_X0 + 0.5 + ix, STAGE_H - 0.05, cz), 0.0, "Tile%d_%d" % [ix, iz])
 	_collider(g, "PlatformCollider", Vector3(STAGE_X0 + sw * 0.5, STAGE_H * 0.5, MAIN_Z0 + sd * 0.5), Vector3(sw, STAGE_H, sd))
+	_shadow_rect(Rect2(STAGE_X0 - 0.1, STAGE_Z1 - 0.05, sw + 0.2, 0.35))
+	_shadow_rect(Rect2(STAGE_X1 - 0.05, MAIN_Z0, 0.35, sd))
 	# Front steps (kit) over a hidden ramp, x 20.5..22.5
 	for i in 2:
 		_kit(g, "stage_steps", Vector3(21.0 + i, 0, STAGE_Z1 + 0.3), 0.0, "Steps%d" % i)
 	# 1.4 m run: the navmesh only links cells that climb <= agent_max_climb (0.05) per 0.1 m cell
 	var run := 1.4
 	_collider(g, "StageRamp", Vector3(21.5, STAGE_H * 0.5 - 0.1, STAGE_Z1 + run * 0.5), Vector3(2.0, 0.2, sqrt(run * run + STAGE_H * STAGE_H)), Vector3(atan2(STAGE_H, run), 0, 0))
-	# Curtains along the wall behind the stage; slatted backdrop across the far (east) wall with six lanterns
+	# Curtains along the wall behind the stage; slatted backdrop across the whole end (east) wall with six lanterns
 	for i in int(sw):
 		_kit(g, "curtain_panel", Vector3(STAGE_X0 + 0.5 + i, 0, MAIN_Z0 + 0.1), 0.0, "CurtainBack%d" % i)
-	var z := STAGE_Z1
+	var z := MAIN_Z0
 	var k := 0
 	while z < 12.0:
 		_cut(_kit(g, "slatted_backdrop", Vector3(MAIN_X1 - 0.1, 0, z + 0.5), -90.0, "Backdrop%d" % k), Vector3.RIGHT)
 		z += 1.0
 		k += 1
 	for i in 6:
-		_cut(_kit(g, "backdrop_lantern", Vector3(MAIN_X1 - 0.25, 2.85, STAGE_Z1 + 0.8 + i * 1.4), -90.0, "BackdropLantern%d" % i), Vector3.RIGHT)
-	for zz in range(int(ceil(sd))):
-		_cut(_kit(g, "curtain_panel", Vector3(MAIN_X1 - 0.1, 0, MAIN_Z0 + 0.5 + zz), -90.0, "CurtainEast%d" % zz), Vector3.RIGHT)
-	# Backline facing the room (+z), 05: half stacks either side of the drums, combo, guitar, three mics,
-	# wedges on the front edge, olive tree in the backdrop corner, PAs at the stage ends
+		_cut(_kit(g, "backdrop_lantern", Vector3(MAIN_X1 - 0.25, 2.85, MAIN_Z0 + 1.0 + i * 2.0), -90.0, "BackdropLantern%d" % i), Vector3.RIGHT)
+	# Backline facing the room (+z), 05/07: half stacks either side of the drums, combo, guitar, three mics,
+	# wedges on the front edge, olive tree at the open end of the stage, PAs at the near end
 	var top := STAGE_H
-	_kit_solid(g, "drum_kit", Vector3(23.4, top, 0.75), 0.0, "DrumKit")
-	_kit_solid(g, "amp_stack", Vector3(19.4, top, -0.05), 0.0, "AmpStackL")
-	_kit_solid(g, "amp_stack", Vector3(25.8, top, -0.05), 0.0, "AmpStackR")
-	_kit_solid(g, "amp", Vector3(21.0, top, 0.2), 0.0, "ComboL")
-	_kit_solid(g, "amp", Vector3(26.9, top, 1.3), -20.0, "ComboR")
-	_kit_solid(g, "guitar_on_stand", Vector3(18.7, top, 1.2), 20.0, "Guitar")
-	_kit(g, "mic_stand", Vector3(20.3, top, 2.5), 0.0, "Mic0")
-	_kit(g, "mic_stand", Vector3(23.6, top, 2.6), 0.0, "Mic1")
-	_kit(g, "mic_stand", Vector3(25.6, top, 2.5), 0.0, "Mic2")
-	for x in [19.4, 23.6, 25.6, 27.2]:
+	_kit_solid(g, "amp_stack", Vector3(17.7, top, -0.05), 0.0, "AmpStackL")
+	_kit_solid(g, "amp", Vector3(19.2, top, 0.2), 0.0, "ComboL")
+	_kit_solid(g, "drum_kit", Vector3(20.9, top, 0.75), 0.0, "DrumKit")
+	_kit_solid(g, "amp_stack", Vector3(22.7, top, -0.05), 0.0, "AmpStackR")
+	_kit_solid(g, "stage_tree", Vector3(24.2, top, 0.3), -90.0, "StageTree")
+	_kit_solid(g, "amp", Vector3(23.9, top, 1.7), -20.0, "ComboR")
+	_kit_solid(g, "guitar_on_stand", Vector3(17.4, top, 1.3), 20.0, "Guitar")
+	_kit(g, "mic_stand", Vector3(18.6, top, 2.5), 0.0, "Mic0")
+	_kit(g, "mic_stand", Vector3(21.0, top, 2.6), 0.0, "Mic1")
+	_kit(g, "mic_stand", Vector3(23.0, top, 2.5), 0.0, "Mic2")
+	for x in [17.6, 19.6, 23.6]:
 		_kit_solid(g, "monitor_wedge", Vector3(x, top, STAGE_Z1 - 0.3), 180.0, "Wedge%d" % int(x))
-	_kit_solid(g, "stage_tree", Vector3(27.3, top, 0.3), -90.0, "StageTree")
-	_kit_solid(g, "pa_speaker", Vector3(STAGE_X0 - 0.4, 0, STAGE_Z1 - 0.6), 0.0, "SpeakerL")
-	_kit_solid(g, "pa_speaker", Vector3(STAGE_X0 - 0.4, 0, MAIN_Z0 + 0.5), 0.0, "SpeakerLBack")
-	# Band spots: drummer behind the kit, guitarist, bassist, singer (05/06)
-	_seat("Band", "Band_Drums", Vector3(23.4, top, 0.25), 0.0, 0.45, "band_drums")
-	_seat("Band", "Band_Guitar", Vector3(20.3, top, 1.85), 15.0, 0.0, "band_guitar")
-	_seat("Band", "Band_Vocal", Vector3(23.6, top, 1.95), 0.0, 0.0, "band_vocal")
-	_seat("Band", "Band_Bass", Vector3(25.6, top, 1.85), -15.0, 0.0, "band_bass")
+	_kit_solid(g, "pa_speaker", Vector3(STAGE_X0 - 0.3, 0, STAGE_Z1 + 0.35), 0.0, "SpeakerL")
+	_kit_solid(g, "pa_speaker", Vector3(STAGE_X0 - 0.3, 0, MAIN_Z0 + 0.3), 0.0, "SpeakerLBack")
+	# Band spots: drummer behind the kit, guitarist, singer, bassist (05/06)
+	_seat("Band", "Band_Drums", Vector3(20.9, top, 0.25), 0.0, 0.45, "band_drums")
+	_seat("Band", "Band_Guitar", Vector3(18.6, top, 1.85), 15.0, 0.0, "band_guitar")
+	_seat("Band", "Band_Vocal", Vector3(21.0, top, 1.95), 0.0, 0.0, "band_vocal")
+	_seat("Band", "Band_Bass", Vector3(23.0, top, 1.85), -15.0, 0.0, "band_bass")
 	# Truss with cube PARs along the top of the wall behind the stage (05: lamps over the curtains), facing the room
 	var truss := _group("Truss", g)
 	for i in int(sw / 2.0):
 		_kit(truss, "truss_segment", Vector3(STAGE_X0 + 1.0 + i * 2.0, ROOM_H, MAIN_Z0 + 0.45), 0.0, "Segment%d" % i)
-	var pars := [[19.0, "red"], [21.0, "red"], [23.0, "blue"], [25.0, "red"], [27.0, "amber"]]
+	var pars := [[17.8, "red"], [19.4, "red"], [21.0, "blue"], [22.6, "red"], [24.2, "amber"]]
 	for i in pars.size():
 		_kit(truss, "par_light_" + pars[i][1], Vector3(pars[i][0], ROOM_H - 0.5, MAIN_Z0 + 0.45), 0.0, "Par%d" % i)
-	_spot(g, "RedWashL", NEON_RED, 2.2, 9.0, 45.0, Vector3(20.5, 3.4, STAGE_Z1 + 0.4), Vector3(21.0, 0.5, 0.8), true)
-	_spot(g, "RedWashR", NEON_RED, 2.2, 9.0, 45.0, Vector3(25.5, 3.4, STAGE_Z1 + 0.4), Vector3(25.0, 0.5, 0.8), true)
-	_spot(g, "BluePar", STAGE_BLUE, 2.0, 7.0, 16.0, Vector3(23.0, 3.4, STAGE_Z1 + 0.3), Vector3(23.4, 1.0, 1.0))
-	_omni(g, "BackdropGlowA", Color("e0261c"), 2.6, 4.5, Vector3(MAIN_X1 - 1.0, 2.2, 6.0))
-	_omni(g, "BackdropGlowB", Color("e0261c"), 2.6, 4.5, Vector3(MAIN_X1 - 1.0, 2.2, 10.0))
-	_omni(g, "StageFrontRed", Color("d01818"), 0.6, 5.0, Vector3(19.0, 1.0, STAGE_Z1 + 1.4))
+	_spot(g, "RedWashL", NEON_RED, 2.2, 9.0, 45.0, Vector3(18.5, 3.4, STAGE_Z1 + 0.4), Vector3(19.0, 0.5, 0.8), true)
+	_spot(g, "RedWashR", NEON_RED, 2.2, 9.0, 45.0, Vector3(23.0, 3.4, STAGE_Z1 + 0.4), Vector3(22.5, 0.5, 0.8), true)
+	_spot(g, "BluePar", STAGE_BLUE, 2.0, 7.0, 16.0, Vector3(21.0, 3.4, STAGE_Z1 + 0.3), Vector3(20.9, 1.0, 1.0))
+	_omni(g, "BackdropGlowA", Color("e0261c"), 2.2, 4.5, Vector3(MAIN_X1 - 1.0, 2.6, 2.0))
+	_omni(g, "BackdropGlowB", Color("e0261c"), 2.2, 4.5, Vector3(MAIN_X1 - 1.0, 2.6, 6.5))
+	_omni(g, "BackdropGlowC", Color("e0261c"), 2.2, 4.5, Vector3(MAIN_X1 - 1.0, 2.6, 10.5))
+	_omni(g, "StageFrontRed", Color("d01818"), 0.6, 5.0, Vector3(18.5, 1.0, STAGE_Z1 + 1.4))
+
+## Contact shadows (Daniele: the renders have dark shadow under every piece of furniture). Every solid kit piece on the
+## main-room floor adds a soft dark disc; _contact_shadows() paints them all into one texture on one floor quad
+## (one draw call; Compatibility has no SSAO).
+func _shadow_spot(p: Vector3, r: float, strength := 0.75) -> void:
+	if p.y < 0.05 and p.x > 10.0 and p.x < MAIN_X1 and p.z > MAIN_Z0 and p.z < MAIN_Z1:
+		shadow_spots.append([Vector2(p.x, p.z), r, strength])
+
+func _shadow_rect(r: Rect2, strength := 0.7) -> void:
+	shadow_spots.append([r, 0.0, strength])
+
+func _contact_shadows() -> void:
+	const PPM := 16.0
+	var w := int((MAIN_X1 - 10.0) * PPM)
+	var h := int((MAIN_Z1 - MAIN_Z0) * PPM)
+	var alpha := PackedFloat32Array()
+	alpha.resize(w * h)
+	for s in shadow_spots:
+		if s[0] is Rect2:
+			var r: Rect2 = s[0]
+			for py in range(int((r.position.y - MAIN_Z0) * PPM), int((r.end.y - MAIN_Z0) * PPM)):
+				for px in range(int((r.position.x - 10.0) * PPM), int((r.end.x - 10.0) * PPM)):
+					if px >= 0 and py >= 0 and px < w and py < h:
+						alpha[py * w + px] = maxf(alpha[py * w + px], s[2])
+			continue
+		var c: Vector2 = s[0]
+		var rad: float = s[1] * 1.25
+		var cx := (c.x - 10.0) * PPM
+		var cy := (c.y - MAIN_Z0) * PPM
+		var rp := rad * PPM
+		for py in range(maxi(0, int(cy - rp)), mini(h, int(cy + rp) + 1)):
+			for px in range(maxi(0, int(cx - rp)), mini(w, int(cx + rp) + 1)):
+				var d := Vector2(px + 0.5 - cx, py + 0.5 - cy).length() / rp
+				if d < 1.0:
+					var a: float = s[2] * clampf((1.0 - d) / 0.45, 0.0, 1.0)
+					alpha[py * w + px] = maxf(alpha[py * w + px], a)
+	var img := Image.create(w, h, false, Image.FORMAT_RGBA8)
+	for py in h:
+		for px in w:
+			img.set_pixel(px, py, Color(0.02, 0.0, 0.0, alpha[py * w + px]))
+	var m := StandardMaterial3D.new()
+	m.resource_name = "ContactShadows"
+	m.shading_mode = BaseMaterial3D.SHADING_MODE_UNSHADED
+	m.transparency = BaseMaterial3D.TRANSPARENCY_ALPHA
+	m.albedo_texture = ImageTexture.create_from_image(img)
+	m.texture_filter = BaseMaterial3D.TEXTURE_FILTER_LINEAR
+	var qm := QuadMesh.new()
+	qm.size = Vector2(MAIN_X1 - 10.0, MAIN_Z1 - MAIN_Z0)
+	qm.orientation = PlaneMesh.FACE_Y
+	var mi := MeshInstance3D.new()
+	mi.name = "ContactShadows"
+	mi.mesh = qm
+	mi.material_override = m
+	mi.cast_shadow = GeometryInstance3D.SHADOW_CASTING_SETTING_OFF
+	mi.position = Vector3((10.0 + MAIN_X1) * 0.5, 0.006, (MAIN_Z0 + MAIN_Z1) * 0.5)
+	_own(mi, vroot.get_node("MainRoom"))
 
 ## Camera framings, one per zone, read by camera_rig.gd. rect = membership (x, z, w, d); clamp = where the look
 ## target may go inside the zone; yaw 0 looks north (-z), -90 looks east. A "fallback" zone (floor) covers the
