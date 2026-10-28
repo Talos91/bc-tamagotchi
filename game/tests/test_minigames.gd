@@ -469,6 +469,26 @@ func test_result_card() -> void:
 	card3.free()
 	n3.free()
 
+	# Lean bonus: extra.lean adds candle_talk_lean (+5 Friends) on top of the talk, and only then.
+	var n5 := fresh_needs()
+	n5.meters["friends"] = 30.0
+	var card5: Control = CardScript.new()
+	card5.needs = n5
+	var plain := {"game_id": "candle_talk", "action_id": "candle_talk", "key": "tong", "score": 1.0, "points": 100, "tier": 2, "extra": {"regular": "tong", "lean": false}}
+	var p1: Dictionary = card5.apply(plain)
+	check(absf(p1["gains"]["friends"] - 20.0) < 1e-6, "no lean flag: Friends +20 only (%s)" % [p1["gains"]])
+	var leaned := plain.duplicate(true)
+	leaned["key"] = "ploy"
+	leaned["extra"] = {"regular": "ploy", "lean": true}
+	var l1: Dictionary = card5.apply(leaned)
+	# Same visit: visit points 20 -> talk +20 lands in full (to 40), lean +5 lands at 50% (tier 2) = 22.5.
+	check(absf(l1["gains"]["friends"] - 22.5) < 1e-6, "lean flag: talk 20 + bonus 2.5 after diminishing (%s)" % [l1["gains"]])
+	check(absf(n5.meters["friends"] - (30.0 + p1["gains"]["friends"] + l1["gains"]["friends"])) < 1e-6, "shown gain equals what Needs applied")
+	var l2: Dictionary = card5.apply(leaned)
+	check(not l2["ok"], "lean cannot be farmed: same regular again earns nothing")
+	card5.free()
+	n5.free()
+
 	# Unknown action: no crash, no gain.
 	var n4 := fresh_needs()
 	var card4: Control = CardScript.new()

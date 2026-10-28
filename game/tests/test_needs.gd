@@ -27,6 +27,9 @@ func _init() -> void:
 	test_vibe_states()
 	test_save_roundtrip()
 	test_welcome_back()
+	test_welcome_back_replaces_daily()
+	test_candle_talk_lean()
+	test_start_value()
 	test_debug_clock()
 	print("")
 	print("%d checks, %d failed" % [checks, failures])
@@ -90,9 +93,18 @@ func test_decay_simulated_week() -> void:
 		var lost: float = Rules.DECAY_PER_HOUR[m] * 168.0
 		check(near(lost, gdd_week[m], 1.0), "%s weekly decay %.1f vs GDD %.0f" % [m, lost, gdd_week[m]])
 	check(Rules.DECAY_PER_HOUR["drinks"] * 168.0 > 100.0, "drinks should bottom out within a week")
-	# Soft floor: halved below 30
-	check(near(NeedsScript.decay_value(30.0, 10.0, 1.0), 25.0, 0.001), "soft floor halves decay below 30")
-	check(near(NeedsScript.decay_value(35.0, 10.0, 1.0), 35.0 - 5.0 - 2.5, 0.001), "decay crossing 30 is split")
+	# Soft floor: x0.3 below 30 (DECISIONS: Orchestrator calls after wave 2, (a))
+	check(Rules.SOFT_FLOOR_FACTOR == 0.3, "soft floor factor is 0.3")
+	check(near(NeedsScript.decay_value(30.0, 10.0, 1.0), 27.0, 0.001), "soft floor cuts decay to 30% below 30")
+	check(near(NeedsScript.decay_value(35.0, 10.0, 1.0), 35.0 - 5.0 - 1.5, 0.001), "decay crossing 30 is split")
+	# The floor keeps the empty window in the GDD's 6-9 day band even for the fastest meter: Drinks 100 -> 0.
+	var h := 0.0
+	var dv := 100.0
+	while dv > 0.0 and h < 24.0 * 40.0:
+		dv = NeedsScript.decay_value(dv, 1.0, Rules.DECAY_PER_HOUR["drinks"], true)
+		h += 1.0
+	print("  drinks 100 -> 0 with the soft floor: %.1f days" % (h / 24.0))
+	check(h / 24.0 > 6.0 and h / 24.0 < 16.0, "drinks empties in a bounded window with the floor (%.1f days)" % (h / 24.0))
 	check(NeedsScript.decay_value(1.0, 1000.0, 1.0) == 0.0, "meters never go below 0")
 	# Personality modifier: -10% on one meter
 	check(near(Rules.decay_rate("nightlife", "night_owl"), 0.45 * 0.9, 1e-6), "night_owl lowers nightlife decay 10%")
@@ -313,6 +325,47 @@ func test_welcome_back() -> void:
 	f.begin_visit()
 	check(not f.welcome_active(), "first ever visit is not a Welcome Back")
 	f.free()
+
+
+func test_welcome_back_replaces_daily() -> void:
+	print("[welcome back] x2 replaces the daily multiplier, never stacks (DECISIONS (b))")
+	check(Rules.gain_mult(1, true) == 2.0 and Rules.gain_mult(2, true) == 2.0 and Rules.gain_mult(3, true) == 2.0, "Welcome Back is x2 on any visit number")
+	check(Rules.gain_mult(2, false) == 0.75 and Rules.gain_mult(1, false) == 1.0, "without it the daily ladder applies")
+	var n := fresh()
+	set_all(n, 50.0)
+	n.apply_action("listen_song")
+	n.end_visit()  # visit 1 of the day, no welcome
+	n.time_override += 60.0
+	set_all(n, 10.0)  # Vibe below 25 ...
+	n.debug_advance(0.0)
+	n.homebody_flag = true  # ... so the second visit of the day is a Welcome Back
+	n.begin_visit()
+	check(n.welcome_active() and n.visits_today == 2, "second visit of the day is a Welcome Back")
+	set_all(n, 40.0)
+	var g: float = n.apply_action("order_drink")["gains"]["drinks"]
+	check(near(g, 30.0, 1e-6), "15-pt drink on visit 2 during Welcome Back = 30, not 22.5 (%.2f)" % g)
+	n.free()
+
+
+func test_candle_talk_lean() -> void:
+	print("[candle talk lean] +5 Friends action approved in DECISIONS (k)")
+	var def: Dictionary = Rules.ACTIONS.get("candle_talk_lean", {})
+	check(not def.is_empty() and def["gains"] == {"friends": 5.0}, "candle_talk_lean exists and is +5 Friends")
+	var n := fresh()
+	set_all(n, 40.0)
+	var r: Dictionary = n.apply_action("candle_talk_lean", 1.0, "tong")
+	check(r["ok"] and near(r["gains"]["friends"], 5.0, 1e-6), "lean bonus gives +5 Friends")
+	check(near(n.meters["friends"], 45.0, 1e-6) and near(n.meters["music"], 40.0, 1e-6), "only Friends moves")
+	n.free()
+
+
+func test_start_value() -> void:
+	print("[start value] new character starts at 75 on every meter (GDD §2.1)")
+	var n := fresh()
+	for m in Rules.METERS:
+		check(near(n.meters[m], 75.0, 1e-6), "%s starts at 75" % m)
+	check(Rules.vibe_state(n.vibe()) == Rules.VIBE_GOOD, "a new character is Good")
+	n.free()
 
 
 func test_debug_clock() -> void:

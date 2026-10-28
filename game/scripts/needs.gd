@@ -294,7 +294,7 @@ func apply_action(action_id: String, score := 1.0, key := "") -> Dictionary:
 		if cap_left <= 0.0:
 			return {"ok": false, "reason": "cap_reached", "gains": {}, "tab": 0.0}
 	var s := clampf(score, 0.0, 1.0)
-	var mult := current_daily_mult() * (Rules.WELCOME_BACK_GAIN_MULT if welcome_active() else 1.0)
+	var mult := Rules.gain_mult(maxi(visits_today, 1), welcome_active())
 	var gains := {}
 	var overflow := 0.0
 	var used := 0.0

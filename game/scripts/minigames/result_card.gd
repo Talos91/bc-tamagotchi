@@ -15,6 +15,7 @@ const Rules = preload("res://scripts/rules.gd")
 const BEST_KEY := "minigame_best"  # Needs.ext[BEST_KEY][game_id] = best points (0..100)
 const HEARTS_KEY := "hearts"  # Needs.ext[HEARTS_KEY][regular_id] = 0..MAX_HEARTS (DECISIONS: hearts 0-3)
 const MAX_HEARTS := 3
+const LEAN_ACTION := "candle_talk_lean"  # Rules.ACTIONS key for the extra.lean bonus
 const GAIN_EPSILON := 0.05
 
 var needs: Node
@@ -57,6 +58,13 @@ func apply(result: Dictionary) -> Dictionary:
 	var applied := {"ok": false, "reason": "no_needs", "gains": {}, "tab": 0.0}
 	if n != null:
 		applied = n.apply_action(str(result.get("action_id", "")), float(result.get("score", 0.0)), str(result.get("key", "")))
+		# Candle Talk lean bonus (DECISIONS (k)): a fully lit candle also earns candle_talk_lean, shown as one gain.
+		if applied.get("ok", false) and bool(result.get("extra", {}).get("lean", false)):
+			var lean: Dictionary = n.apply_action(LEAN_ACTION, 1.0, str(result.get("key", "")))
+			if lean.get("ok", false):
+				for m in lean["gains"]:
+					applied["gains"][m] = float(applied["gains"].get(m, 0.0)) + float(lean["gains"][m])
+				applied["tab"] = float(applied.get("tab", 0.0)) + float(lean.get("tab", 0.0))
 	var total := 0.0
 	for m in applied.get("gains", {}):
 		total += float(applied["gains"][m])

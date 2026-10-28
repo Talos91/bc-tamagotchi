@@ -12,7 +12,7 @@ const METERS: Array[String] = ["music", "friends", "drinks", "nightlife"]
 
 const METER_MAX := 100.0  # §2.1 "float 0-100"
 const METER_MIN := 0.0
-const START_VALUE := 75.0  # not in GDD: a new character starts "Good" (Vibe 50-79) on day one
+const START_VALUE := 75.0  # GDD §2.1 (start value line); 06-stakes §2 assumes it ("meters 75", Gone at 21.0 days)
 
 ## Points lost per REAL hour (§2.1 table). Full to empty is 100 / rate: 7.6, 8.3, 6.0, 9.3 days.
 const DECAY_PER_HOUR := {
@@ -23,8 +23,9 @@ const DECAY_PER_HOUR := {
 }
 
 ## §2.1 soft floor: below SOFT_FLOOR_BELOW, decay is multiplied by SOFT_FLOOR_FACTOR.
+## Factor 0.3 (was 0.5): DECISIONS "Orchestrator calls after wave 2" (a), so the 6-9 day empty window in §2 holds.
 const SOFT_FLOOR_BELOW := 30.0
-const SOFT_FLOOR_FACTOR := 0.5
+const SOFT_FLOOR_FACTOR := 0.3
 
 ## §2.1 personality modifier: lowers one meter's decay by 10%.
 const PERSONALITY_DECAY_MULT := 0.9
@@ -76,7 +77,9 @@ const OVERFLOW_TO_TAB_RATIO := 1.0
 # --- Welcome Back (GDD §2.5) ---------------------------------------------------------------------
 const WELCOME_BACK_VIBE_BELOW := 25.0  # first visit after Vibe has been below 25...
 const WELCOME_BACK_AWAY_DAYS := 7.0  # ...or after 7+ days away
-const WELCOME_BACK_GAIN_MULT := 2.0  # all gains doubled
+## All gains doubled. REPLACES the daily visit multiplier while active, never stacks with it
+## (DECISIONS "Orchestrator calls after wave 2" (b)); see Needs.apply_action.
+const WELCOME_BACK_GAIN_MULT := 2.0
 const WELCOME_BACK_MINUTES := 15.0  # for 15 minutes
 
 # --- Notifications (GDD §2.6), consumed by a later session ---------------------------------------
@@ -97,6 +100,7 @@ const VISIT_LOG_MAX := 200
 ## cap_per_visit: max base points of this action per visit ("Capped at +N per visit").
 ## once_per_visit: only the first call per visit counts ("First time ... each visit").
 ## daily_once: needs a key (e.g. the regular's id); one gain per key per day ("once per regular per day").
+## Source of each base value: GDD §2.3, except candle_talk_lean (DECISIONS (k); 03-cast §3.1).
 const ACTIONS := {
 	"order_drink": {"label": "Order a drink (free one is on the house)", "zone": "Bar", "gains": {"drinks": 15.0}},
 	"pour_perfect": {"label": "Pour Perfect / Shake & Serve", "zone": "Bar", "gains": {"drinks": [20.0, 30.0]}},
@@ -107,6 +111,9 @@ const ACTIONS := {
 	"applaud": {"label": "Applaud / request a song", "zone": "Stage", "gains": {"music": 2.0}, "cap_per_visit": 6.0},
 	"headline_set": {"label": "Headline Night set (70%+)", "zone": "Stage", "gains": {"music": 40.0, "nightlife": 20.0}},
 	"candle_talk": {"label": "Candle Talk with a regular", "zone": "Candle Floor", "gains": {"friends": [10.0, 20.0]}, "daily_once": true},
+	## Bonus on a good Candle Talk (result extra.lean, candle fully lit). The talk itself is already once per
+	## regular per day, so this fires at most as often. DECISIONS (k) approves +5; 03-cast §3.1 proposed it.
+	"candle_talk_lean": {"label": "Candle Talk lean bonus (candle fully lit)", "zone": "Candle Floor", "gains": {"friends": 5.0}},
 	"sit_with": {"label": "Sit at a table 60 s", "zone": "Any table", "gains": {"friends": 8.0}, "daily_once": true},
 	"social_verb": {"label": "Receive a wave / cheers / high five", "zone": "Any", "gains": {"friends": 2.0}, "cap_per_visit": 10.0},
 	"quiz_night": {"label": "Quiz Night / Name That Tune", "zone": "Long Table", "gains": {"music": 5.0, "friends": [10.0, 15.0]}},
@@ -132,6 +139,11 @@ static func decay_rate(meter: String, personality: String = "") -> float:
 	if PERSONALITIES.get(personality, "") == meter:
 		r *= PERSONALITY_DECAY_MULT
 	return r
+
+
+## Gain multiplier for an action: Welcome Back x2 replaces the daily visit multiplier, never stacks (DECISIONS (b)).
+static func gain_mult(visit_number: int, welcome: bool) -> float:
+	return WELCOME_BACK_GAIN_MULT if welcome else daily_mult(visit_number)
 
 
 ## Daily visit multiplier for the n-th visit (1-based) of a day (§2.4).
