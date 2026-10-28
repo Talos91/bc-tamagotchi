@@ -55,7 +55,7 @@ recomputed on load from elapsed real time, so no background process is needed.
 A new character starts with all four meters at **75** (Good, never Glowing:
 there is somewhere to go).
 
-| Meter | Fantasy | Decay / real hour | Full → empty | Low-meter tell (character) |
+| Meter | Fantasy | Decay / real hour | Full → empty (no floor) | Low-meter tell (character) |
 |---|---|---|---|---|
 | **Music** | Live sound, being in a crowd for a song | 0.55 | ~7.6 days | Hums to themselves, taps on things, wears headphones at home |
 | **Friends** | Being recognised, talking, company | 0.50 | ~8.3 days | Checks phone, sighs, looks at the door |
@@ -65,6 +65,11 @@ there is somewhere to go).
 Decay per full week: Music −92, Friends −84, Drinks −118 (bottoms out on
 day 6), Nightlife −76. **Drinks is deliberately the fastest**, so it's the
 small, frequent reason to drop in.
+
+**Drinks window: 6–10 days.** Drinks takes 6 days to empty with no floor and
+about 10 days from 100 with the ×0.3 floor below 30 (about 8 days to Empty,
+below 10), so a player who skips a week comes back to a thirsty character,
+not a lost one.
 
 **Soft floor:** below 30, decay ×0.3. The floor slows emptying; it does not
 stop it. Below 10 a meter is Empty (06-stakes §2).
@@ -101,7 +106,7 @@ minimum, never zero.
 | Try a drink you've never had | Bar | | | +5 bonus | | Also drops a Coaster memory |
 | Listen to one song (within earshot of the stage) | Stage / Candle Floor | +5 | | | | Passive; character sits or stands |
 | Finish a full set (4 songs) | Stage | +5 bonus | | | +5 | |
-| Front Row Rhythm (per song) | Stage | +8–12 | | | | Score-scaled |
+| Front Row Rhythm (per song) | Stage | +12–18 | | | | Score-scaled |
 | Applaud / request a song | Stage | +2 | | | | Capped at +6 per visit |
 | Headline Night set (attend 70%+ of it) | Stage | +40 | | | +20 | Fri/Sat only |
 | Candle Talk with a regular | Candle Floor / Banquette | | +10–20 | | | Score-scaled; once per regular per day. Candle fully lit: +5 Friends lean bonus on top |
@@ -115,10 +120,10 @@ minimum, never zero.
 | Stay until "last song" of a headline night | Any | | | | +10 | |
 
 **Sample 10-minute visit:** free drink (+15 D), Pour Perfect (+25 D), three
-songs from the front row (+15 M) plus one Front Row Rhythm round (+10 M),
+songs from the front row (+15 M) plus one Front Row Rhythm round (+15 M),
 Candle Talk with a regular (+15 F), sit with someone (+8 F), Lounge entry and a
-pinball game (+5, +15 N), one minute of dancing (+6 N). Totals: M +25,
-F +23, D +40, N +26. About 115 points against a weekly decay of ~370, so three
+pinball game (+5, +15 N), one minute of dancing (+6 N). Totals: M +30,
+F +23, D +40, N +26. About 120 points against a weekly decay of ~370, so three
 such visits cover a week.
 
 ### 2.4 Diminishing returns (instead of caps)
@@ -396,7 +401,7 @@ count cued by the bartender's nods, strain. Recipes found go in a recipe book.
 **3. Front Row Rhythm.** During any live song, two clap lanes (left / right
 hand) scroll to the song's beat map. Hits raise Crowd Vibe for everyone;
 misses only lose the bonus. Three difficulties. *Controls:* tap left / right
-half of the screen. *Feeds:* Music +8–12 per song.
+half of the screen. *Feeds:* Music +12–18 per song, by accuracy.
 
 **4. Open Mic.** Wednesdays: the player takes the stage, picks an instrument
 (voice, guitar, keys, drums) and 1 of 6 songs, and plays a three-lane chart.
@@ -444,31 +449,21 @@ tempo icons) to fit a mood curve: warm start, peak, wind down. A better fit
 raises the next set's starting Crowd Vibe and encore chance. *Controls:* drag
 and drop. *Feeds:* Music +10.
 
-**Proposed tuning (wave 3b, for the orchestrator to approve; nothing here is
-in code or binding).** Measured against the built first-playable minigames:
+**Applied tuning (wave 3b, approved 2026-10-28).**
 
-- **Pour Perfect length.** Built: 3 layers, pour rate 0.075 glass/s, 0.82 of a
-  glass to fill, so about 11 s of pouring plus intro and settle; a played round
-  lands at 17–20 s, not 20–30 s (the 30 s is only the time limit). *Proposed:*
-  keep the code and change the §9 table to **15–25 s**; a repeated bar action
-  should be short. If 20–30 s is wanted instead, set `POUR_RATE` to 0.06
-  (about 20–23 s, estimated, not measured). Reward stays +20–30 either way.
-- **Pinball score mapping.** Built: 3000 points = 1.0; bumpers 100, letters
-  250, BLACKCABIN word bonus 1500, so a clean letters-only game is 2500 plus
-  bumpers. The scripted test bot scores 1350 = 0.45 = about +14
-  Nightlife; "great" (0.6) is 1800. *Proposed:* **keep 3000 = 1.0** until real
-  playtests exist, then set it to the median human score × 2.5 (round to 100;
-  e.g. median 900 → 2200). Record each game's points in `Needs.ext` during
-  playtests so this is a lookup, not a guess.
-- **Front Row Rhythm gain.** Built: a song is 55–61 s, 65–94 notes, +8–12
-  Music. Listening to a song passively already gives +5, so a minute of full
-  attention adds only +3 at the minimum, against Pour Perfect's +20–30 for
-  about 20 s and Pinball's +10–20. *Proposed:* **+12–18 Music per song** (2.4× the
-  passive reward at the minimum, 3.6× at the top). In the §2.3 sample
-  visit this moves Music from +25 to +31 of a ~370 weekly decay (+1.5
-  points per visit on the Vibe average), so three visits still cover a week
-  without a fourth. Change `front_row_rhythm` in `rules.gd` and the §2.3 row
-  together.
+- **Pour Perfect length.** A played round lands at 17–20 s (3 layers, pour rate
+  0.075 glass/s; the 30 s is only the time limit), so the §9 table reads
+  **15–25 s**. No code change. Reward stays +20–30.
+- **Pinball score mapping.** 3000 points = 1.0 (bumpers 100, letters 250,
+  BLACKCABIN word bonus 1500). **Keep 3000 = 1.0 until playtests, then set it to
+  the median human score × 2.5**, rounded to 100 (e.g. median 900 → 2200).
+  Record each game's points in `Needs.ext` during playtests so this is a lookup,
+  not a guess.
+- **Front Row Rhythm gain.** A song is 55–61 s, 65–94 notes, and gives
+  **+12–18 Music** depending on accuracy (2.4× the passive listen reward at the
+  minimum, 3.6× at the top). In the §2.3 sample visit this moves Music from +25
+  to +30 of a ~370 weekly decay, so three visits still cover a week. Implemented
+  as `front_row_rhythm` in `rules.gd`.
 
 ---
 
