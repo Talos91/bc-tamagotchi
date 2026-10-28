@@ -77,8 +77,13 @@ func _init() -> void:
 	_environment()
 	var patrons := _group("Patrons")
 	spots = _group("Spots", patrons)
+	_lounge_shell()
+	lounge_turn = true
 	_lounge()
 	_stairs()
+	lounge_turn = false
+	for gname in ["Lounge", "Stairs"]:
+		(vroot.get_node(gname) as Node3D).transform = LOUNGE_TURN
 	_curtain()
 	_main_room()
 	_bar()
@@ -295,15 +300,15 @@ func _table_lights(parent: Node, nm: String, top: Vector3, lamp: bool, tealights
 func _seat(zone: String, nm: String, pos: Vector3, yaw_deg: float, seat_h := 0.45, pose := "sit") -> void:
 	var m := Marker3D.new()
 	m.name = nm
-	m.position = pos
-	m.rotation_degrees.y = yaw_deg
+	m.position = LOUNGE_TURN * pos if lounge_turn else pos
+	m.rotation_degrees.y = yaw_deg + (90.0 if lounge_turn else 0.0)
 	m.set_meta("zone", zone)
 	m.set_meta("pose", pose)
 	m.set_meta("seat_h", seat_h)
 	_own(m, spots)
 
 func _wander_spots() -> void:
-	var pts := {"Wander_Lounge": Vector3(5.0, 0, 4.0), "Wander_Arcade": Vector3(7.4, 0, 1.6),
+	var pts := {"Wander_Lounge": LOUNGE_TURN * Vector3(5.0, 0, 4.0), "Wander_Arcade": LOUNGE_TURN * Vector3(7.4, 0, 1.6),
 		"Wander_Communal": Vector3(12.0, 0, 3.4),
 		"Wander_Aisle": Vector3(16.0, 0, 5.6), "Wander_StageFront": Vector3(22.0, 0, 5.4),
 		"Wander_BackTables": Vector3(24.8, 0, 8.3), "Wander_BarEnd": Vector3(19.7, 0, 8.3)}
@@ -348,14 +353,27 @@ func _environment() -> void:
 
 # --- zones ------------------------------------------------------------------------------------------------
 
-func _lounge() -> void:
-	var g := _group("Lounge")
+## The lounge shell (floor, ceiling, outer walls, street door) stays put; its contents are laid out as in R02 and
+## then turned by LOUNGE_TURN (DECISIONS 2026-10-28, Daniele option A): 90 degrees counter-clockwise seen from
+## above about the lounge centre, so the neon / plant wall is on the west wall, the stairs on the south wall, the
+## street door on the north wall, and the curtain into the main room stays in the shared east wall.
+const LOUNGE_TURN := Transform3D(Basis(Vector3.UP, PI * 0.5), Vector3(5, 0, 5)) * Transform3D(Basis.IDENTITY, Vector3(-5, 0, -5))
+var lounge_turn := false   # _seat() turns lounge spots with the contents while this is set
+
+func _lounge_shell() -> void:
+	var g := _group("LoungeShell")
 	var wall := _mat("lounge_wall", Color("4a0c10"), 0.9)
 	_floor(g, 0, 0, 10, 10)
 	_ceiling(g, 0, 0, 10, 10)
 	_wall(g, "WallNorth", Vector3(0, 0, -0.2), Vector3(10, ROOM_H, 0.2), wall, Vector3.FORWARD)
 	_wall(g, "WallWest", Vector3(-0.2, 0, 0), Vector3(0.2, ROOM_H, 10), wall, Vector3.LEFT)
 	_wall(g, "WallSouth", Vector3(0, 0, 10), Vector3(10, ROOM_H, 0.2), wall, Vector3.BACK)
+	# Street door on the north wall (option A: the street side is north)
+	_box(g, "StreetDoor", Vector3(5.2, 0, -0.06), Vector3(1.6, 2.4, 0.08), _mat("door_dark", Color("120808"), 0.6), false)
+	_kit(g, "exit_sign", Vector3(6.0, 2.6, 0.05), 0.0, "ExitSignStreet")
+
+func _lounge() -> void:
+	var g := _group("Lounge")
 	# Plant wall framing the neon sign, velvet banquette under it, long table with lamps in front (R02)
 	for c in 4:
 		for r in 3:
@@ -779,7 +797,7 @@ func _contact_shadows() -> void:
 func _camera_zones() -> void:
 	var g := _group("CameraZones")
 	var zones := [
-		{"name": "lounge", "rect": Rect2(0, 0, 10, 10), "clamp": Rect2(3.0, 3.4, 4.2, 2.2), "yaw": 0.0, "pitch": -34.0, "dist": 7.5, "look_y": 1.3},
+		{"name": "lounge", "rect": Rect2(0, 0, 10, 10), "clamp": Rect2(3.4, 2.8, 2.2, 4.2), "yaw": 90.0, "pitch": -34.0, "dist": 7.5, "look_y": 1.3},
 		{"name": "bar", "rect": Rect2(BAR_X0, 7.4, 13.0, MAIN_Z1 - 7.4), "clamp": Rect2(13.0, 10.0, 10.0, 0.8), "yaw": 180.0, "pitch": -32.0, "dist": 7.0, "look_y": 1.0},
 		{"name": "stage", "rect": Rect2(STAGE_X0, MAIN_Z0, MAIN_X1 - STAGE_X0, STAGE_Z1 - MAIN_Z0 + 0.2), "clamp": Rect2(20.5, 1.2, 5.0, 0.4), "yaw": 0.0, "pitch": -24.0, "dist": 7.0, "look_y": 1.4},
 		{"name": "floor", "rect": Rect2(10, MAIN_Z0, MAIN_X1 - 10, MAIN_Z1 - MAIN_Z0), "clamp": Rect2(13.0, 4.0, 10.0, 4.0), "yaw": -90.0, "pitch": -30.0, "dist": 8.5, "look_y": 0.9, "fallback": true},

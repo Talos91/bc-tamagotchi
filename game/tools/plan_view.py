@@ -78,19 +78,18 @@ def main(out):
         tx -= (bx[2] - bx[0]) / 2
         d.rectangle([tx - 4, tz - 2, tx + bx[2] - bx[0] + 4, tz + bx[3] - bx[1] + 6], fill=(255, 255, 255))
         d.text((tx, tz), text, font=f, fill=col)
-    label("LOUNGE", 5.0, 8.2, big)
+    label("LOUNGE", 6.6, 4.6, big)
     label("MAIN ROOM", 13.5, 6.0, big)
-    label("STAIRS (up, west wall)", 2.6, 3.4)
-    label("NEON SIGN / PLANT WALL (north wall)", 4.2, -0.9)
-    label("STREET DOOR? not modelled; implied by", 5.0, 10.4)
-    label("render 02 viewpoint (south wall)", 5.0, 10.9)
+    label("STAIRS (up, south wall)", 3.0, 8.0)
+    label("NEON SIGN / PLANT WALL (west wall)", 2.6, 6.6)
+    label("STREET DOOR (north wall)", 6.0, -0.9)
     label("CURTAIN into main room", 10.0, 7.5, col=(180, 10, 20))
     label("STAGE (0.6 m)", 20.6, 1.5)
     label("BAR (back bar on south wall)", 18.2, 14.4)
     label("COMMUNAL TABLE", 14.4, 2.4)
     label("END-WALL TABLE LINE", 26.0, 7.6)
     label("BACKDROP (east wall)", 26.0, -1.4)
-    label("arcade / shelf", 8.0, 2.6)
+    label("arcade / shelf", 2.4, 1.2)
     # compass
     W, H = img.size
     for t, (cx, cy) in (("N", (W / 2, 4)), ("S", (W / 2, H - 30)), ("W", (6, H / 2)), ("E", (W - 24, H / 2))):

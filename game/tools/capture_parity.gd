@@ -4,7 +4,7 @@ extends SceneTree
 ##   godot --path . --resolution 1672x941 --script res://tools/capture_parity.gd -- --shot=R05 --n=1
 ##   godot --path . --resolution 1446x1087 --script res://tools/capture_parity.gd -- --shot=R06 --n=1
 ## Writes docs/art/screens/parity/<n>-<shot>-game.png. The ceiling layer is hidden and walls whose cutaway
-## normal faces the camera are hidden, as in the renders. game/tools/parity_compose.py makes the two-up.
+## normal faces the camera are hidden, as in the renders; the lounge is hidden (the renders show the main room only). game/tools/parity_compose.py makes the two-up.
 
 const SHOTS := {
 	"R05": {"from": Vector3(10.4, 6.0, 7.0), "at": Vector3(21.0, 0.6, 6.4), "fov": 46.0, "player": Vector3(12.8, 0, 6.0)},
@@ -54,6 +54,11 @@ func _init() -> void:
 		w.visible = nrm.dot(fwd) >= -0.3
 	for o in get_nodes_in_group("occluder"):
 		o.visible = true
+	# Renders 05/06 show the main room only: the lounge behind the entrance wall would show over its top
+	for gname in ["Lounge", "LoungeShell", "Stairs"]:
+		var zone_node := main.get_node_or_null("Venue/" + gname)
+		if zone_node:
+			zone_node.visible = false
 	for i in 50:
 		await process_frame
 	cam.make_current()
