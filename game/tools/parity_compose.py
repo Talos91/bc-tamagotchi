@@ -4,7 +4,10 @@
 
 Reads docs/art/screens/parity/<n>-R05-game.png and <n>-R06-game.png, copies the renders next to them as
 R05-render.png / R06-render.png, writes <n>-R05-twoup.png / <n>-R06-twoup.png and prints the luminance stats
-that docs/art/parity-measurements.md (Lighting) gives as targets.
+that docs/art/parity-measurements.md (Lighting) gives as targets, plus two crispness numbers measured at the
+render's size: edge = mean luminance gradient (Sobel, x100), how hard and dense the edges are; lc = local
+contrast, the mean standard deviation of luminance in 8 x 8 px blocks (x100); flat = share of those blocks
+whose std is under 0.01 (empty surfaces, flat-lit slabs and black voids read as flat).
 """
 import os
 import sys
@@ -22,8 +25,21 @@ def stats(img):
     lum = 0.2126 * a[..., 0] + 0.7152 * a[..., 1] + 0.0722 * a[..., 2]
     m = a.reshape(-1, 3).mean(0)
     p10, p50, p90 = np.percentile(lum, [10, 50, 90])
-    return "meanL %.3f  R/G %.2f  p10/50/90 %.2f/%.2f/%.2f  L>0.8 %.1f%%" % (
-        lum.mean(), m[0] / max(m[1], 1e-4), p10, p50, p90, 100 * (lum > 0.8).mean())
+    edge, lc, flat = crisp(lum)
+    return "meanL %.3f  R/G %.2f  p10/50/90 %.2f/%.2f/%.2f  L>0.8 %.1f%%  edge %.2f  lc %.2f  flat %.0f%%" % (
+        lum.mean(), m[0] / max(m[1], 1e-4), p10, p50, p90, 100 * (lum > 0.8).mean(), edge, lc, flat)
+
+
+def crisp(lum):
+    """Edge strength (mean Sobel magnitude), local contrast (mean 8 x 8 block std), both x100, and flat %."""
+    p = np.pad(lum, 1, mode="edge")
+    gx = (p[:-2, 2:] + 2 * p[1:-1, 2:] + p[2:, 2:]) - (p[:-2, :-2] + 2 * p[1:-1, :-2] + p[2:, :-2])
+    gy = (p[2:, :-2] + 2 * p[2:, 1:-1] + p[2:, 2:]) - (p[:-2, :-2] + 2 * p[:-2, 1:-1] + p[:-2, 2:])
+    edge = np.hypot(gx, gy).mean() / 4
+    h, w = (lum.shape[0] // 8) * 8, (lum.shape[1] // 8) * 8
+    blocks = lum[:h, :w].reshape(h // 8, 8, w // 8, 8)
+    std = blocks.std(axis=(1, 3))
+    return 100 * edge, 100 * std.mean(), 100 * (std < 0.01).mean()
 
 
 def main(n):

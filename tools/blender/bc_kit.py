@@ -57,15 +57,18 @@ PALETTE = {
     "VelvetShadow": ("#3E0408", 0.95, 0.0, 0),
     "VelvetRed":    ("#8C0610", 0.95, 0.0, 0),
     "CarpetRed":    ("#9A0A12", 0.95, 0.0, 0),
-    "SlatRed":      ("#D0161C", 0.60, 0.0, 2.5),
+    "StageCarpet":  ("#6A0C12", 0.95, 0.0, 0),                   # parity 15: darker than Carpet Red, the PAR pools model it
+    "StageCarpetBand": ("#360508", 0.95, 0.0, 0),
+    "SlatRed":      ("#D0161C", 0.60, 0.0, 2.0),
     "PanelRed":     ("#B80A10", 0.60, 0.0, 2.0),
     "NeonRed":      ("#FF2A14", 0.40, 0.0, 5.0),
     "DrumRed":      ("#9A2A1A", 0.25, 0.0, 0),
     # warm
-    "LampGold":     ("#FFDD78", 0.40, 0.0, 3.5),
+    "LampGold":     ("#FFDD78", 0.40, 0.0, 2.8),                 # parity 17: 3.5 -> 2.8
+    "CubbyGlow":    ("#E8642A", 0.40, 0.0, 1.5),                 # parity 17: back-bar cubby backlight, orange not white
     "Tealight":     ("#F7DB71", 0.40, 0.0, 3.5),
-    "ShelfAmber":   ("#FF8A30", 0.40, 0.0, 3.0),
-    "SoffitPeach":  ("#E8814A", 0.40, 0.0, 2.5),
+    "ShelfAmber":   ("#FF8A30", 0.40, 0.0, 2.2),                 # parity 13: 3.0 -> 2.2, cubbies glow, not white
+    "SoffitPeach":  ("#E8814A", 0.40, 0.0, 1.4),                 # parity 13: 2.5 -> 1.4
     "CymbalGold":   ("#E8A030", 0.30, 0.8, 0),
     # Wood v2: the bible's Game values were sampled off the renders, i.e. already lit red and amber, so under
     # the game's own red light they went orange-red. These are the same woods un-lit: hue moved from 6-19 deg
@@ -474,7 +477,7 @@ def bar_counter(v):
     v.box(0, D - 2, 12, W - 1, D - 1, 12, "WoodDark")                # speed rail / back shelf
     v.box(0, 1, H - 3, W - 1, 1, H - 3, E("ShelfAmber"))             # amber strip under the lip
     v.box(0, -2, H - 2, W - 1, D - 1, H - 2, "WoodDark")             # lip, 2 voxels proud
-    v.box(0, -2, H - 1, W - 1, D - 1, H - 1, "TableWoodLit")         # glossy top
+    v.box(0, -2, H - 1, W - 1, D - 1, H - 1, "WoodMid")              # satin top (parity 15: Table Wood Lit blew out under the lamps)
     v.box(0, -2, H - 1, W - 1, -2, H - 1, "WoodMid")                 # front nosing
 
 
@@ -495,7 +498,7 @@ def back_bar_shelf(v):
     for zb in (21, 30, 39, 48):
         v.box(3, 0, zb, W - 4, D - 1, zb, "WoodDark")                # shelf board
         v.box(3, 0, zb, W - 4, 0, zb, E("ShelfAmber"))               # lit shelf edge
-        v.box(3, D - 1, zb + 1, W - 4, D - 1, zb + 8, E("ShelfAmber"))  # backlight panel
+        v.box(3, D - 1, zb + 1, W - 4, D - 1, zb + 8, E("CubbyGlow"))   # backlight panel
         x = 4
         while x < W - 5:
             body, cap = tints[r.randrange(len(tints))]
@@ -749,6 +752,35 @@ def beer_glass(v):
     v.box(0, 0, 3, 1, 1, 3, "Foam")
 
 
+@kit("menu_card", "tables", "XS")
+def menu_card(v):
+    """Parity 14 dressing: folded table menu, a 3-voxel tent, cream with a red band."""
+    v.box(0, 1, 0, 2, 1, 2, "LabelCream")
+    v.box(0, 1, 1, 2, 1, 1, "BottleRed")
+    v.box(1, 0, 0, 1, 2, 0, "BeamBlack")
+
+
+@kit("pedalboard", "stage", "XS")
+def pedalboard(v):
+    """Parity 14 dressing (render 05 stage floor): black board with four coloured stomp boxes, a lit LED each."""
+    v.box(0, 0, 0, 11, 4, 0, "BeamBlack")
+    for i, c in enumerate(("DrumRed", "BottleGreen", "StageBlue", "CymbalGold")):
+        x = 1 + i * 3
+        v.box(x, 1, 1, x + 1, 3, 1, c)
+        v.set(x, 3, 2, "FloorGrey")                                  # knob
+        v.set(x + 1, 1, 2, E("NeonRed"))                             # LED
+
+
+@kit("cable_run", "stage", "XS")
+def cable_run(v):
+    """Parity 14 dressing: 1 m of black cable lying on the floor in a lazy S, one voxel thick. Tiles along x."""
+    for x in range(20):
+        y = 2 + round(1.6 * math.sin(x * math.pi / 10))
+        v.set(x, y, 0, "BeamBlack")
+        if x % 7 == 3:
+            v.set(x, y + 1, 0, "BeamBlack")
+
+
 @kit("backdrop_lantern", "stage", "XS", mount="wall", mount_height_m=3.3)
 def backdrop_lantern(v):
     """Small amber box lantern hung along the top of the slatted backdrop (render 05): six of them."""
@@ -778,7 +810,7 @@ def stage_carpet_tile(v):
     for x in range(20):
         for y in range(20):
             band = (x + y) % 10 < 2 or (x - y) % 20 == 0
-            v.set(x, y, 0, "VelvetRed" if band else "CarpetRed")
+            v.set(x, y, 0, "StageCarpetBand" if band else "StageCarpet")
 
 
 @kit("slatted_backdrop", "stage", "L")
@@ -789,8 +821,8 @@ def slatted_backdrop(v):
     for z in (42, 47):                                               # two rows of window lights
         for x in (3, 7, 11, 15):
             v.box(x, 2, z, x, 2, z + 1, E("ShelfAmber"))
-    for x in range(0, W, 2):
-        v.box(x, 0, 2, x, 0, H - 3, "VelvetRed")
+    for x in range(0, W, 2):                                         # parity 11: dark slats, the slits carry the glow
+        v.box(x, 0, 2, x, 0, H - 3, "VelvetShadow")
     v.box(0, 0, 0, W - 1, 2, 1, "BeamBlack")                         # bottom rail
     v.box(0, 0, H - 2, W - 1, 2, H - 1, "BeamBlack")                 # top rail
 

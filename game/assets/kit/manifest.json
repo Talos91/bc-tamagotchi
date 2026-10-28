@@ -23,12 +23,11 @@
     "BarFront",
     "ShelfAmber_emissive",
     "StoolBlack",
-    "TableWoodLit",
     "WoodDark",
     "WoodMid"
    ],
    "voxels": 5544,
-   "tris": 182,
+   "tris": 176,
    "tris_unmerged": 4008
   },
   {
@@ -57,6 +56,7 @@
     "BottleGreen",
     "BottleGreenCap",
     "BottleRed",
+    "CubbyGlow_emissive",
     "CymbalGold",
     "LabelCream",
     "ShelfAmber_emissive",
@@ -552,6 +552,86 @@
    "tris_unmerged": 72
   },
   {
+   "name": "menu_card",
+   "zone": "tables",
+   "size_class": "XS",
+   "anchor": "floor",
+   "path": "res://assets/kit/tables/menu_card.glb",
+   "footprint_m": [
+    0.15,
+    0.15
+   ],
+   "height_m": 0.15,
+   "size_vox": [
+    3,
+    3,
+    3
+   ],
+   "emissive": false,
+   "materials": [
+    "BeamBlack",
+    "BottleRed",
+    "LabelCream"
+   ],
+   "voxels": 11,
+   "tris": 46,
+   "tris_unmerged": 66
+  },
+  {
+   "name": "pedalboard",
+   "zone": "stage",
+   "size_class": "XS",
+   "anchor": "floor",
+   "path": "res://assets/kit/stage/pedalboard.glb",
+   "footprint_m": [
+    0.6,
+    0.25
+   ],
+   "height_m": 0.15,
+   "size_vox": [
+    12,
+    5,
+    3
+   ],
+   "emissive": true,
+   "materials": [
+    "BeamBlack",
+    "BottleGreen",
+    "CymbalGold",
+    "DrumRed",
+    "FloorGrey",
+    "NeonRed_emissive",
+    "StageBlue"
+   ],
+   "voxels": 92,
+   "tris": 154,
+   "tris_unmerged": 332
+  },
+  {
+   "name": "cable_run",
+   "zone": "stage",
+   "size_class": "XS",
+   "anchor": "floor",
+   "path": "res://assets/kit/stage/cable_run.glb",
+   "footprint_m": [
+    1.0,
+    0.25
+   ],
+   "height_m": 0.05,
+   "size_vox": [
+    20,
+    5,
+    1
+   ],
+   "emissive": false,
+   "materials": [
+    "BeamBlack"
+   ],
+   "voxels": 23,
+   "tris": 106,
+   "tris_unmerged": 170
+  },
+  {
    "name": "backdrop_lantern",
    "zone": "stage",
    "size_class": "XS",
@@ -623,8 +703,8 @@
    ],
    "emissive": false,
    "materials": [
-    "CarpetRed",
-    "VelvetRed"
+    "StageCarpet",
+    "StageCarpetBand"
    ],
    "voxels": 400,
    "tris": 260,
@@ -651,7 +731,7 @@
     "BeamBlack",
     "ShelfAmber_emissive",
     "SlatRed_emissive",
-    "VelvetRed"
+    "VelvetShadow"
    ],
    "voxels": 1920,
    "tris": 270,

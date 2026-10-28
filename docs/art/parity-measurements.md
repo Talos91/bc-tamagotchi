@@ -122,3 +122,21 @@ Game coordinates: x east from the lounge, z south, y up; main room x 10..28, z -
 | 8 | 06 camera pulled back from the disco ball | 0.169 / 3.37 / 2.0 % | 0.176 / 3.02 / 1.2 % |
 | 9 | photo 07: stage 8 m (x 16.6..24.6), stopping short of the end wall; a line of 8 tables along the whole end wall; drum stools and low tables between; backdrop across the whole end wall; communal table 5 lamps; 87 figures; crisper: contact-shadow texture under all floor furniture, darker tile seams, fog 0.004, contrast 1.18 | 0.170 / 3.60 / 2.7 % | 0.174 / 3.15 / 2.1 % |
 | 10 | lounge contents turned 90 degrees counter-clockwise (Daniele option A: neon/plant wall west, stairs south, street door north, curtain east); lounge hidden in parity shots; plan: screens/parity/plan-iteration-9.png | 0.173 / 3.56 / 2.6 % | 0.172 / 3.10 / 2.1 % |
+
+From iteration 11 `parity_compose.py` also measures crispness at the render's size: **edge** = mean Sobel
+luminance gradient (x100), **lc** = mean std of luminance in 8 x 8 px blocks (x100), **flat** = share of those
+blocks with std < 0.01 (empty surfaces, clipped slabs, black voids). Renders: R05 edge 5.06 / lc 4.97 / flat 22 %,
+R06 4.84 / 4.82 / 22 %. Iteration 10 measured R05 5.22 / 5.31 / 36 %, R06 4.37 / 4.54 / 34 %: the gap Daniele
+called "too empty" is the flat share, not the edge count (the old grid floor inflated edges). Characters are in
+every number (they are not masked); most of the remaining near-white pixels are blond and white hair.
+
+| n | Change | R05 meanL / R/G / L>0.8 / edge / flat | R06 meanL / R/G / L>0.8 / edge / flat |
+|---|---|---|---|
+| render | | 0.208 / 2.71 / 1.1 % / 5.06 / 22 % | 0.186 / 2.94 / 0.8 % / 4.84 / 22 % |
+| 11 | ambient 1.65 -> 1.2 and neutral; stage lit by one spot per truss PAR (no flood, no front fill), PARs tilted down, cornice shallow so they show; darker backdrop slats, no pilasters across it; darker shadow under the stage lip; upper walls 4-6 m | 0.143 / 3.02 / 2.3 % / 4.83 / 40 % | 0.146 / 2.64 / 1.7 % / 3.65 / 37 % |
+| 12 | shadowed warm key light (DirectionalLight, ceiling layer excluded, walls and cornices do not cast); floor 0.2 m running-bond tiles with a wide per-tile spread | 0.215 / 2.61 / 3.1 % / 6.58 / 33 % | 0.252 / 2.50 / 5.1 % / 5.47 / 31 % |
+| 13 | floor gloss softened (no lamp glints), key steeper from the bar side, PAR, shelf and counter lights lower | 0.208 / 2.59 / 2.8 % / 6.38 / 34 % | 0.239 / 2.42 / 4.3 % / 5.38 / 31 % |
+| 14 | dressing: napkins and menus on every table, second row of counter glasses, 36 bottles on the back-bar cabinet, two paintings on the north wall, pedalboards, eight cable runs and water bottles on stage; cubby and soffit emission lower | 0.198 / 2.63 / 2.1 % / 6.31 / 34 % | 0.229 / 2.41 / 4.3 % / 5.37 / 31 % |
+| 15 | stage carpet on its own darker swatches with a strong band (the pools and diamonds read), satin counter top | 0.185 / 2.60 / 2.1 % / 6.23 / 32 % | 0.212 / 2.43 / 4.0 % / 5.28 / 30 % |
+| 16 | upper walls in jittered dark brick, peach soffit panels over the back bar, two high exit signs | 0.188 / 2.59 / 2.1 % / 6.32 / 31 % | 0.214 / 2.46 / 4.1 % / 5.40 / 25 % |
+| 17 | cubby backlight on its own orange swatch, lamp shades 3.5 -> 2.8 | 0.188 / 2.60 / 1.9 % / 6.30 / 31 % | 0.214 / 2.46 / 4.1 % / 5.40 / 25 % |
