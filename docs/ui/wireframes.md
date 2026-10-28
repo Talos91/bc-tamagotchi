@@ -172,7 +172,7 @@ tap the floor to walk, tap a person or object to open its sheet.
 |   .. diorama: one zone framed ..   |
 |      back bar, amber shelves       |
 |      ====== bar counter ======     |
-|         (Noi)   [stool]            |
+|         (Nam)   [stool]            |
 |                                    |
 |              (you)                 |
 |                                    |
@@ -232,12 +232,12 @@ no numbers.
 | (<home)  (M)(F)(D*)(N)    (album)  |
 |                                    |
 |   .. scene stays visible ..        |
-|      (Noi behind the bar)          |
+|      (Nam behind the bar)          |
 |              (you)                 |
 |                                    |
 |.----------------------------------.|
 ||              ----                ||
-|| THE BAR . Noi                    ||
+|| THE BAR . Nam                    ||
 || "Evening! What are we having?"   ||
 ||----------------------------------||
 || (coupe) Order a drink            ||
@@ -249,7 +249,7 @@ no numbers.
 || (coupe) Try something new        ||
 ||         New coaster  (gold dot)  ||
 ||----------------------------------||
-|| (heads) Chat with Noi            ||
+|| (heads) Chat with Nam            ||
 |'----------------------------------'|
 |~~~~~~~~~~ home indicator ~~~~~~~~~~|
 +------------------------------------+
@@ -465,7 +465,7 @@ for tonight".
 | (pause)  POUR PERFECT   (coupe)    |
 | best 82 . layer 2 of 3             |
 |------------------------------------|
-|          (Noi, watching)           |
+|          (Nam, watching)           |
 |                                    |
 |            |          |            |
 |       -- 3 |----------| target     |
@@ -648,7 +648,7 @@ Memory detail (tap a tile):
 |   | the house band             |   |
 |   '----------------------------'   |
 | Tue 27 Oct 2026 . 21:14            |
-| Who was there: (Mali)(Noi)         |
+| Who was there: (Mali)(Nam)         |
 | [      PIN TO WALL               ] |
 +------------------------------------+
 ```
@@ -706,7 +706,7 @@ a 9:16 shareable image (1080 x 1920 export) with the UI chrome outside it.
 | |                                | |
 | |   3 nights out . 14 songs      | |
 | |   2 drinks you'd never had     | |
-| |   Regulars: (Mali)(Noi)(Ton)   | |
+| |   Regulars: (Mali)(Nam)(Ton)   | |
 | |                                | |
 | |  (M)(F)(D)(N)  GOOD WEEK       | |
 | |  Vibe: Glowing                 | |

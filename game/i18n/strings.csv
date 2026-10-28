@@ -26,7 +26,7 @@ mg.pour_perfect.tier_1,Nice pour,รินสวย,Result card tier word (lowes
 mg.pour_perfect.tier_2,Great pour,รินเก่งมาก,Result card tier word,18
 mg.pour_perfect.tier_3,Perfect pour,รินเป๊ะ,Result card tier word,18
 mg.pour_perfect.status,layer {n} of {total},ชั้นที่ {n} จาก {total},Frame status line. {n} current layer; {total} layer count,24
-mg.pour_perfect.hint_intro,Noi slides you a glass,น้ำเลื่อนแก้วมาให้,Hint while the glass arrives (Noi is the bartender slot),50
+mg.pour_perfect.hint_intro,Nam slides you a glass,น้ำเลื่อนแก้วมาให้,Hint while the glass arrives (Nam is the head bartender),50
 mg.pour_perfect.hint_ready,Press and hold to pour,กดค้างเพื่อริน,Hint before pouring a layer,50
 mg.pour_perfect.hint_pour,Let go on the line,ปล่อยเมื่อถึงเส้น,Hint while pouring,50
 mg.front_row_rhythm.title,Front Row Rhythm,Front Row Rhythm,Minigame name (stays English),18
