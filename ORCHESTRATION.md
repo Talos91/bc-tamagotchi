@@ -96,7 +96,7 @@ Layout is frozen at `game/assets/kit/layout.json` (146d334, plan confirmed by Da
 Status 2026-10-28: room accepted at parity iteration 17 pending 18 (DECISIONS).
 Running: 🎮 3b-M mechanical (Sonnet) — fonts + theme, `rules.gd` fixes (floor
 0.3, Welcome Back no-stack, lean bonus), START_VALUE, GDD amendments from
-04-coins §10.1 and 06-stakes §5, Noi/Nam fix, tuning proposals. Owns
+04-coins §10.1 and 06-stakes §5, Noi/Nam fix (done), tuning proposals (done). Owns
 `game/scripts/rules.gd|needs.gd|save.gd`, `game/tests/`, `game/assets/fonts/`,
 UI theme, `game/i18n/strings.csv`, `02-gdd.md`, `03-cast.md`.
 Running: 🎮 3b-Z zone wiring + first-playable assembly (Opus) — zones built at
@@ -110,12 +110,12 @@ by the orchestrator after each wave; workers write descriptive commit titles.
 Waiting for characters to be accepted: 🎭 creator + the Flat.
 
 Inputs carried over from 3a reports (add to the relevant 3b brief):
-- Fonts: Kanit and IBM Plex Sans Thai Looped are not in the repo; add them
-  under `game/assets/fonts/` and a theme, or Thai breaks on mobile/web export.
-- `rules.gd` needs a Candle Talk lean-bonus action (+5 per DECISIONS); the
-  result card already flags `extra.lean`.
-- Pour Perfect runs 17–20 s vs the GDD's 20–30 s; pinball score mapping
-  (3000 pts = 1.0) is a guess; Rhythm's +8–12 Music per 60 s song feels small.
+- ~~Fonts: Kanit and IBM Plex Sans Thai Looped are not in the repo; add them
+  under `game/assets/fonts/` and a theme, or Thai breaks on mobile/web export.~~ (done)
+- ~~`rules.gd` needs a Candle Talk lean-bonus action (+5 per DECISIONS); the
+  result card already flags `extra.lean`.~~ (done)
+- ~~Pour Perfect runs 17–20 s vs the GDD's 20–30 s; pinball score mapping
+  (3000 pts = 1.0) is a guess; Rhythm's +8–12 Music per 60 s song feels small.~~ (done)
 - Thai lines for Mali are machine drafts; a native pass is required.
 - CSV import in the editor must be set to "Keep" (extra columns read as locales).
 - Memory drops are not built anywhere yet.
