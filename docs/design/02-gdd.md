@@ -1,6 +1,9 @@
 # Black Cabin Tamagotchi — Game Design Document
 
 Status: draft v1 (session 1A, 2026-10-27). Read `01-high-concept.md` first.
+Revised 2026-10-28 (wave 3b): soft floor ×0.3, Welcome Back replaces the daily
+multiplier, Candle Talk lean bonus, start value 75, coin and Last Call
+amendments from `04-coins.md` §10.1 and `06-stakes.md` §5.2 applied in place.
 All numbers are starting values for tuning and live in one data file
 (`needs_config`) so they can be changed without code changes.
 
@@ -49,6 +52,8 @@ and the extra time goes into memories, friendships and minigame scores.
 
 Each meter is a float 0–100. Saved as `{value, last_updated_utc}` and
 recomputed on load from elapsed real time, so no background process is needed.
+A new character starts with all four meters at **75** (Good, never Glowing:
+there is somewhere to go).
 
 | Meter | Fantasy | Decay / real hour | Full → empty | Low-meter tell (character) |
 |---|---|---|---|---|
@@ -61,12 +66,12 @@ Decay per full week: Music −92, Friends −84, Drinks −118 (bottoms out on
 day 6), Nightlife −76. **Drinks is deliberately the fastest**, so it's the
 small, frequent reason to drop in.
 
-**Soft floor:** below 30, decay is halved. A character who isn't visited for
-two weeks reaches about 10–20 on most meters, not 0. Only a long absence
-empties them.
+**Soft floor:** below 30, decay ×0.3. The floor slows emptying; it does not
+stop it. Below 10 a meter is Empty (06-stakes §2).
 
-**Out of Town toggle:** freezes all decay for up to 14 days, once per 30 days.
-Shown as a suitcase in the flat.
+**Out of Town toggle:** freezes decay and the Last Call clocks for up to 14
+days, once per 30 days; plus one Long Trip of up to 35 days a year; only from
+Fine or Staying In (06-stakes §2.4). Shown as a suitcase in the flat.
 
 **Personality modifier:** set at character creation (§7). Lowers one meter's
 decay by 10%.
@@ -81,7 +86,7 @@ state.
 | 80–100 | **Glowing** | Warm rim light on the character, happy idles, +25% memory drop chance, can be picked for the Spotlight at headline nights |
 | 50–79 | **Good** | Normal |
 | 25–49 | **Meh** | Muted idles, one "missing it" line from a regular each visit |
-| 0–24 | **Homebody** | Character stays in pyjamas at the flat; the first visit after this triggers the **Welcome Back** (below) |
+| 0–24 | **Homebody** | Character stays in pyjamas at the flat; the first visit after this triggers the **Welcome Back** (below). Also the look for the Staying In stage, whatever the Vibe |
 
 ### 2.3 Refill actions
 
@@ -91,7 +96,7 @@ minimum, never zero.
 
 | Action | Zone | Music | Friends | Drinks | Nightlife | Notes |
 |---|---|---|---|---|---|---|
-| Order a drink (no minigame) | Bar | | | +15 | | First drink each visit is "on the house" (free) |
+| Order a drink (no minigame) | Bar | | | +15 | | First drink each visit is on the house (any drink); later drinks cost coins (04-coins §3.1); Pour Perfect is always free |
 | Pour Perfect / Shake & Serve minigame | Bar | | | +20–30 | | Score-scaled; replaces a plain order |
 | Try a drink you've never had | Bar | | | +5 bonus | | Also drops a Coaster memory |
 | Listen to one song (within earshot of the stage) | Stage / Candle Floor | +5 | | | | Passive; character sits or stands |
@@ -99,7 +104,7 @@ minimum, never zero.
 | Front Row Rhythm (per song) | Stage | +8–12 | | | | Score-scaled |
 | Applaud / request a song | Stage | +2 | | | | Capped at +6 per visit |
 | Headline Night set (attend 70%+ of it) | Stage | +40 | | | +20 | Fri/Sat only |
-| Candle Talk with a regular | Candle Floor / Banquette | | +10–20 | | | Score-scaled; once per regular per day |
+| Candle Talk with a regular | Candle Floor / Banquette | | +10–20 | | | Score-scaled; once per regular per day. Candle fully lit: +5 Friends lean bonus on top |
 | Sit at a table with another character for 60 s | Any table | | +8 | | | Once per character per day |
 | Receive a social verb (wave, cheers, high five) | Any | | +2 | | | Capped at +10 per visit |
 | Quiz Night / Name That Tune | Long Table | +5 | +10–15 | | | Score-scaled |
@@ -140,7 +145,9 @@ is at full strength. All four at 0 is just a very homebody character.
 
 **Welcome Back:** the first visit after Vibe has been below 25, or after 7+
 days away: the bartender says hello by name, the first drink is free, and all
-gains are doubled for 15 minutes (diminishing returns still apply). Two
+gains are doubled for 15 minutes (diminishing returns still apply). The ×2
+replaces the daily visit multiplier while it lasts; it never stacks with it.
+It also gives 10 coins and does not double coin earnings. Two
 regulars send warm postcards during the absence ("Haven't seen you at the long
 table lately"). Never guilt: copy may not say "abandoned / neglected / forgot".
 
@@ -150,6 +157,9 @@ table lately"). Never guilt: copy may not say "abandoned / neglected / forgot".
   is humming to themselves").
 - Friday 18:00 local: the headline act for tonight.
 - Never notify about a meter hitting 0. Never notify after 22:00 local.
+- Last Call stage messages use the 2-a-week budget; the one Last Call warning
+  (48 h before leaving) is outside it and moves earlier rather than into quiet
+  hours.
 
 ---
 
@@ -244,7 +254,7 @@ default.
 | Cheers (both must be holding a drink) | Both Friends +2, clink animation |
 | Sit with | Join their table; triggers the 60 s Friends +8 |
 | High five | Both Friends +2 |
-| Buy a round | Spend tokens; everyone at the table gets a drink (Drinks +10 each) and you get Friends +5 |
+| Buy a round | Spend coins (3 per person); everyone at the table gets a drink (Drinks +10 each) and you get Friends +5 |
 | Dance with | Paired dance animation, both Nightlife ×1.5 for 30 s |
 | Swap polaroids | Trade a duplicate polaroid memory |
 | Phrase wheel | 24 preset lines ("This song!", "Same again?", "Last one?") + emoji |
@@ -278,6 +288,7 @@ moment).
   in the stage zone. Falls slowly when no one interacts.
 - **Between songs:** a 5 s window to **applaud** (tap) or **request** (pick 1
   of 3 songs from the performer's catalogue; the most-picked plays next).
+  Requests stay free; a tip (3 coins) doubles your vote and adds Crowd Vibe.
 - **Encore:** if Crowd Vibe ≥ 70 at the end of a set, the performer plays one
   extra song and everyone present gets an Encore ticket-stub memory.
 - **Spotlight** (Headline Night only): one Glowing character in the front row
@@ -312,7 +323,8 @@ Name: free text, filtered.
 Slots: hat, top, outer layer, bottom, shoes, accessory (glasses, earrings),
 held item (only cosmetic: e.g. a tote bag, a vinyl record). Launch: **~60
 items**. New items come from memories, regulars' hearts, performer merch, the
-weekly stamp card and the shop (§12). Outfits can be saved as 3 presets.
+weekly stamp card and the merch rail by the Entrance (coins, 04-coins §3.2).
+Outfits can be saved as 3 presets.
 
 ### 7.3 The Flat
 
@@ -346,6 +358,7 @@ Memories are the collection layer: the record of nights out.
   heard, best memory, regulars seen) saved into the album. It's shareable as an
   image.
 - Completing a set (e.g. all 24 coasters) awards a cosmetic and a wall frame.
+- **Frames:** plain free, five styles for coins.
 
 ---
 
@@ -443,17 +456,19 @@ and drop. *Feeds:* Music +10.
 | **Regular Rank** | Newcomer → Familiar Face → Regular → Local → Part of the Furniture (5 ranks, ~2, 4, 8, 16 weeks at 3 visits/week) | Each rank: a reserved seat style, a bartender greeting, cosmetics, new phrase-wheel lines, a name on the "regulars" chalkboard at the bar |
 | **Hearts** | Per-regular friendship (§5.1) | Story beats, postcards, cosmetics |
 | **Collections** | Memories (§8) | Cosmetics, wall frames |
-| **Weekly stamp card** | 4 stamps: get each meter to 80+ at least once that week | Weekly cosmetic or token reward; a "Good Week" stamp in the album |
+| **Weekly stamp card** | 4 stamps: get each meter to 80+ at least once that week | Weekly cosmetic or 5 coins per stamp; a "Good Week" stamp in the album |
 | **Minigame bests** | Personal bests and per-minigame mastery (bronze/silver/gold) | Titles, cosmetic variants |
 
-Rank never goes down. Nothing decays except the four meters.
+Rank never goes down while the character lives; a new character starts at
+Newcomer. Nothing decays except the four meters.
 
 ### 10.2 Retention levers (and what we don't use)
 
 Used: needs (gentle return pull), weekly lineup and events, regulars'
 schedules, monthly new performers, the Week Recap.
 Not used: login streaks that reset, energy timers, expiring rewards, FOMO
-limited-forever items.
+limited-forever items. The Last Call clock is the one hard deadline. It is
+never shown as a streak count.
 
 ---
 
@@ -462,7 +477,7 @@ limited-forever items.
 | Cadence | Adds |
 |---|---|
 | **Weekly** | Lineup (which performer headlines), featured drink (+1 coaster), weekly stamp-card reward, 10 new quiz questions |
-| **Monthly** | 1 new performer (content unit §6.3), 1 new regular *or* a new story chapter for an existing one, 8–12 cosmetics, 1 monthly memory set (5 polaroids) |
+| **Monthly** | 1 new performer (content unit §6.3), 1 new regular *or* a new story chapter for an existing one, 8–12 cosmetics (about half coin-priced on the merch rail), 1 monthly memory set (5 polaroids) |
 | **Every 2 months** | 1 new minigame (from the backlog in §9 or new) |
 | **Quarterly** | 1 venue expansion or major state change. Order: **Upstairs** (via the staircase, a second small bar room), then a rooftop, then a back-alley stage. Each opens with a launch event week. |
 | **Seasonal (yearly, returning)** | Halloween (late Oct), **Loy Krathong** (Nov: krathong decorations, candle-floating memory), New Year countdown, Valentine's slow-dance night, **Songkran** (April: water-themed decorations, no water physics), Black Cabin anniversary (date from the venue) |
@@ -483,10 +498,7 @@ same night, a QR code at the real bar that unlocks a coaster.
   (cosmetic only), emote packs.
 - Optional monthly **Night Pass**: a cosmetic track earned by playing, with a
   free lane. No gameplay advantages.
-- Soft currency **Cabin Tokens** is earned by playing (stamp cards, ranks,
-  minigame firsts) and buys drinks beyond the free first one, song requests on
-  Headline Night, "buy a round". Tuned so a 3-visits-a-week player ends
-  every week with more tokens than they started with.
+- Coins: see 04-coins. Never sold for real money; Night Pass has no paid lane.
 - No loot boxes, no gacha.
 - Alternative worth weighing: the game as a **brand piece for the venue**
   (paid by or co-owned with Black Cabin, monetization secondary). This changes
@@ -526,7 +538,8 @@ compressed debug clock) and wants to return.
   disco ball with a dance emote)
 - Needs system: full decay model (§2.1), refill table rows that apply to
   included content, diminishing returns, Welcome Back, save/load, debug clock
-  (1 real minute = 1 game hour)
+  (1 real minute = 1 game hour), Last Call stages, Gone and new-character
+  flow, driven by the debug clock with a debug "jump to day N"
 - House band: 1 set of 4 songs on loop, applaud between songs
 - 3 regulars + bartender with schedules and Candle Talk, hearts 0–3
 - Minigames: **Pour Perfect, Front Row Rhythm, Candle Talk, Neon Pinball**
@@ -534,7 +547,9 @@ compressed debug clock) and wants to return.
 - Memories: ~15 (polaroids, 6 coasters, 1 ticket stub), album + wall of 6
 - Week Recap card
 
-**Out:** multiplayer of any kind, shop and tokens, events and headline nights,
+**Out:** multiplayer of any kind, merch rail and real-world rewards (a minimal
+coin loop is in, 04-coins §9), Last Call notification, real-bar check-in, Long
+Trip, events and headline nights,
 wardrobe beyond creation, notifications, other minigames, the Flat
 customisation, upstairs.
 
