@@ -1,5 +1,18 @@
 # Orchestration — how this project is run
 
+## Method
+
+Adopted 2026-10-28 (Daniele's cross-project orchestration method, vault `wiki/concepts/claude-orchestration-method.md`).
+Where this section and the older text below disagree, this section wins.
+
+- Working memory in the repo root: `PROJECT.md` (facts, tools, never-list), `STATE.md` (read first, under 40 lines,
+  rewritten after each event), `LOG.md` (append-only, one dated line per event), `handoffs/` (one note per task).
+- Profiles: generic role profiles live in the vault, `G:\My Drive\VAULTS\Talos Vault\wiki\agents\` (including `voxel-art.md`
+  and `social-features.md`); they carry no project facts.
+- A brief = generic profile + `PROJECT.md` + pointer to `STATE.md` + the task with exact inputs.
+- At most three workers at a time. Opus for design and art, Sonnet for mechanical work.
+- Done requires evidence (commit tip, test log, artefact path, handoff note) and a `LOG.md` line. No evidence, not done.
+
 One orchestrator session (Fable) plans, briefs, reviews and merges. It does
 not write game content or code itself. Worker sessions on cheaper models do
 the work, one session per deliverable, each on its own branch.
