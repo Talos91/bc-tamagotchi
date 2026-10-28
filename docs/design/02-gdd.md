@@ -444,6 +444,32 @@ tempo icons) to fit a mood curve: warm start, peak, wind down. A better fit
 raises the next set's starting Crowd Vibe and encore chance. *Controls:* drag
 and drop. *Feeds:* Music +10.
 
+**Proposed tuning (wave 3b, for the orchestrator to approve; nothing here is
+in code or binding).** Measured against the built first-playable minigames:
+
+- **Pour Perfect length.** Built: 3 layers, pour rate 0.075 glass/s, 0.82 of a
+  glass to fill, so about 11 s of pouring plus intro and settle; a played round
+  lands at 17–20 s, not 20–30 s (the 30 s is only the time limit). *Proposed:*
+  keep the code and change the §9 table to **15–25 s**; a repeated bar action
+  should be short. If 20–30 s is wanted instead, set `POUR_RATE` to 0.06
+  (about 20–23 s, estimated, not measured). Reward stays +20–30 either way.
+- **Pinball score mapping.** Built: 3000 points = 1.0; bumpers 100, letters
+  250, BLACKCABIN word bonus 1500, so a clean letters-only game is 2500 plus
+  bumpers. The scripted test bot scores 1350 = 0.45 = about +14
+  Nightlife; "great" (0.6) is 1800. *Proposed:* **keep 3000 = 1.0** until real
+  playtests exist, then set it to the median human score × 2.5 (round to 100;
+  e.g. median 900 → 2200). Record each game's points in `Needs.ext` during
+  playtests so this is a lookup, not a guess.
+- **Front Row Rhythm gain.** Built: a song is 55–61 s, 65–94 notes, +8–12
+  Music. Listening to a song passively already gives +5, so a minute of full
+  attention adds only +3 at the minimum, against Pour Perfect's +20–30 for
+  about 20 s and Pinball's +10–20. *Proposed:* **+12–18 Music per song** (2.4× the
+  passive reward at the minimum, 3.6× at the top). In the §2.3 sample
+  visit this moves Music from +25 to +31 of a ~370 weekly decay (+1.5
+  points per visit on the Vibe average), so three visits still cover a week
+  without a fourth. Change `front_row_rhythm` in `rules.gd` and the §2.3 row
+  together.
+
 ---
 
 ## 10. Progression and retention
