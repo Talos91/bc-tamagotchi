@@ -80,6 +80,15 @@ Layout is frozen at `game/assets/kit/layout.json` (146d334, plan confirmed by Da
 
 ### Wave 3b — depends on 3a and 3-parity
 
+Status 2026-10-28: room accepted at parity iteration 17 pending 18 (DECISIONS).
+Running: 🎮 3b-M mechanical (Sonnet) — fonts + theme, `rules.gd` fixes (floor
+0.3, Welcome Back no-stack, lean bonus), START_VALUE, GDD amendments from
+04-coins §10.1 and 06-stakes §5, Noi/Nam fix, tuning proposals. Owns
+`game/scripts/rules.gd|needs.gd|save.gd`, `game/tests/`, `game/assets/fonts/`,
+UI theme, `game/i18n/strings.csv`, `02-gdd.md`, `03-cast.md`.
+Waiting for room polish to finish: 🎮 zone wiring (touches `game/scenes/venue/`).
+Waiting for characters to be accepted: 🎭 creator + the Flat.
+
 Inputs carried over from 3a reports (add to the relevant 3b brief):
 - Fonts: Kanit and IBM Plex Sans Thai Looped are not in the repo; add them
   under `game/assets/fonts/` and a theme, or Thai breaks on mobile/web export.
