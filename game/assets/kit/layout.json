@@ -1986,6 +1986,22 @@
    "zone": "MainRoom"
   },
   {
+   "name": "ExitSignWestHigh",
+   "object": "exit_sign",
+   "position": [
+    10.15,
+    4.4,
+    9.7
+   ],
+   "rotation_y": 90.0,
+   "scale": [
+    1.0,
+    1.0,
+    1.0
+   ],
+   "zone": "MainRoom"
+  },
+  {
    "name": "Soffit0",
    "object": "soffit_segment",
    "position": [
@@ -2122,22 +2138,6 @@
     13.8
    ],
    "rotation_y": -180.0,
-   "scale": [
-    1.0,
-    1.0,
-    1.0
-   ],
-   "zone": "MainRoom"
-  },
-  {
-   "name": "ExitSignWestHigh",
-   "object": "exit_sign",
-   "position": [
-    10.15,
-    4.4,
-    9.6
-   ],
-   "rotation_y": 90.0,
    "scale": [
     1.0,
     1.0,
@@ -8339,7 +8339,7 @@
   },
   {
    "name": "Backdrop0",
-   "object": "slatted_backdrop",
+   "object": "slatted_backdrop_edge",
    "position": [
     27.9,
     0.0,
@@ -8355,7 +8355,7 @@
   },
   {
    "name": "Backdrop1",
-   "object": "slatted_backdrop",
+   "object": "slatted_backdrop_edge",
    "position": [
     27.9,
     0.0,
@@ -8371,7 +8371,7 @@
   },
   {
    "name": "Backdrop2",
-   "object": "slatted_backdrop",
+   "object": "slatted_backdrop_edge",
    "position": [
     27.9,
     0.0,
@@ -8499,7 +8499,7 @@
   },
   {
    "name": "Backdrop10",
-   "object": "slatted_backdrop",
+   "object": "slatted_backdrop_edge",
    "position": [
     27.9,
     0.0,
@@ -8515,7 +8515,7 @@
   },
   {
    "name": "Backdrop11",
-   "object": "slatted_backdrop",
+   "object": "slatted_backdrop_edge",
    "position": [
     27.9,
     0.0,
@@ -8531,7 +8531,7 @@
   },
   {
    "name": "Backdrop12",
-   "object": "slatted_backdrop",
+   "object": "slatted_backdrop_edge",
    "position": [
     27.9,
     0.0,

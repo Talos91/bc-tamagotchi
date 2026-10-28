@@ -730,12 +730,43 @@
    "materials": [
     "BeamBlack",
     "ShelfAmber_emissive",
+    "SlatRedMid_emissive",
+    "SlatRedTop_emissive",
     "SlatRed_emissive",
     "VelvetShadow"
    ],
    "voxels": 1920,
-   "tris": 270,
+   "tris": 286,
    "tris_unmerged": 9792
+  },
+  {
+   "name": "slatted_backdrop_edge",
+   "zone": "stage",
+   "size_class": "L",
+   "anchor": "floor",
+   "path": "res://assets/kit/stage/slatted_backdrop_edge.glb",
+   "footprint_m": [
+    1.0,
+    0.15
+   ],
+   "height_m": 3.0,
+   "size_vox": [
+    20,
+    3,
+    60
+   ],
+   "emissive": true,
+   "materials": [
+    "BeamBlack",
+    "ShelfAmber_emissive",
+    "SlatRedEdge_emissive",
+    "SlatRedTop_emissive",
+    "VelvetShadow"
+   ],
+   "voxels": 1920,
+   "tris": 278,
+   "tris_unmerged": 9792,
+   "variant_of": "slatted_backdrop"
   },
   {
    "name": "curtain_panel",

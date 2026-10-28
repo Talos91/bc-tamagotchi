@@ -140,3 +140,24 @@ every number (they are not masked); most of the remaining near-white pixels are 
 | 15 | stage carpet on its own darker swatches with a strong band (the pools and diamonds read), satin counter top | 0.185 / 2.60 / 2.1 % / 6.23 / 32 % | 0.212 / 2.43 / 4.0 % / 5.28 / 30 % |
 | 16 | upper walls in jittered dark brick, peach soffit panels over the back bar, two high exit signs | 0.188 / 2.59 / 2.1 % / 6.32 / 31 % | 0.214 / 2.46 / 4.1 % / 5.40 / 25 % |
 | 17 | cubby backlight on its own orange swatch, lamp shades 3.5 -> 2.8 | 0.188 / 2.60 / 1.9 % / 6.30 / 31 % | 0.214 / 2.46 / 4.1 % / 5.40 / 25 % |
+| 18 | floor darker and cooler (#57525C, same running bond); ambient and fog a little redder; backdrop graded (three emissive bands, brightest low; dimmer edge variant toward both ends of the wall; centre glow omni stronger); upper brick darker; exposure 1.2; one shadow map (below); west upper wall as twelve occluder segments (it blocked the lounge camera) | 0.180 / 2.75 / 2.2 % / 6.21 / 31 % | 0.201 / 2.63 / 3.5 % / 5.33 / 28 % |
+
+## Shadows on a phone budget (iteration 18)
+
+One shadow map in the venue: the KeyLight DirectionalLight, `SHADOW_ORTHOGONAL` (one split), max distance 28 m,
+`rendering/lights_and_shadows/directional_shadow/size=2048` in project.godot (16-bit depth, 8 MB). Over the room that
+is ~1.4 cm a texel, finer than a 5 cm voxel. The PAR spots no longer cast (they used the positional atlas).
+Measured with `game/tools/measure_shadows.gd`, floor view, 1080 x 1920, this desktop (not a phone):
+
+| Config | fps | GPU ms | draw calls |
+|---|---|---|---|
+| iteration 17: key 2 PSSM splits + 2 spot shadows | 25 | 31.6 | 3751 |
+| iteration 17: key 2 splits, no spot shadows | 26 | 29.3 | 2988 |
+| iteration 18: key orthogonal, no spot shadows | 32 | 24.0 | 3026 |
+| iteration 18: no shadows at all | 32 | 24.5 | 1855 |
+
+The shadow pass adds ~1170 draw calls but no measurable GPU time. The floor and entrance views are heavy without
+any shadow (1855 draw calls, 24 ms): Compatibility draws each object once more for every extra light touching it,
+and the main room has 42 lights. That, not the shadow, is the phone risk; it needs its own pass (fewer, larger
+lights or baked light) and a real-device measurement.
+

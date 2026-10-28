@@ -44,7 +44,7 @@ const BAR_SEAT_H := 0.8       # kit bar_stool seat top; chairs, drum stools and 
 # Palette (art bible §3, game values)
 const CABIN_DARK := Color("1c0d0c")
 const BEAM_BLACK := Color("160a0c")
-const FLOOR_GREY := Color("665c64")       # v3: renders 05/06 floor is a mid cool grey tile, glossy (iteration 11: lighter)
+const FLOOR_GREY := Color("57525c")   # iteration 18: darker and cooler (render 05 floor between the pools)       # v3: renders 05/06 floor is a mid cool grey tile, glossy (iteration 11: lighter)
 const VELVET_SHADOW := Color("3e0408")
 const VELVET_RED := Color("8c0610")
 const CARPET_RED := Color("9a0a12")
@@ -336,10 +336,10 @@ func _environment() -> void:
 	env.background_mode = Environment.BG_COLOR
 	env.background_color = Color("0b0505")
 	env.ambient_light_source = Environment.AMBIENT_SOURCE_COLOR
-	env.ambient_light_color = Color(0.52, 0.45, 0.45)   # iteration 11: neutral and lower, so lamps model the room
+	env.ambient_light_color = Color(0.56, 0.44, 0.44)   # iteration 11: lower, so lamps model the room; 18: a little red back
 	env.ambient_light_energy = 1.1
 	env.tonemap_mode = Environment.TONE_MAPPER_FILMIC
-	env.tonemap_exposure = 1.15
+	env.tonemap_exposure = 1.2
 	env.tonemap_white = 6.0
 	env.glow_enabled = true
 	env.glow_intensity = 0.22
@@ -353,7 +353,7 @@ func _environment() -> void:
 	env.set_glow_level(3, 0.6)
 	env.set_glow_level(4, 0.3)
 	env.fog_enabled = true
-	env.fog_light_color = Color(0.22, 0.08, 0.07)
+	env.fog_light_color = Color(0.30, 0.07, 0.06)
 	env.fog_light_energy = 1.0
 	env.fog_density = 0.004
 	env.fog_sky_affect = 0.0
@@ -373,8 +373,10 @@ func _environment() -> void:
 	key.shadow_opacity = 0.85
 	key.shadow_blur = 1.2
 	key.shadow_bias = 0.03
-	key.directional_shadow_mode = DirectionalLight3D.SHADOW_PARALLEL_2_SPLITS
-	key.directional_shadow_max_distance = 32.0
+	# Phone budget (iteration 18, parity-measurements.md): the only shadow map in the venue. One orthogonal map,
+	# 2048 (project.godot), over 28 m is ~1.4 cm a texel, finer than a 5 cm voxel; 2 PSSM splits doubled the casters.
+	key.directional_shadow_mode = DirectionalLight3D.SHADOW_ORTHOGONAL
+	key.directional_shadow_max_distance = 28.0
 	key.light_cull_mask = 0xFFFFF & ~(1 << (CEILING_LAYER - 1))
 	key.transform = Transform3D(Basis.looking_at(Vector3(-0.35, -1.0, -0.3)), Vector3(20, 8, 6))
 	_own(key, vroot)
@@ -522,7 +524,7 @@ func _main_room() -> void:
 	_box(g, "EastDoorGlass", Vector3(MAIN_X1 - 0.06, 1.2, 12.45), Vector3(0.04, 0.8, 0.6), _mat("door_glass", Color("c0181c"), 0.4, 1.4), false)
 	_kit(g, "exit_sign", Vector3(MAIN_X1 - 0.05, 2.6, 12.75), -90.0, "ExitSignEast")
 	_kit(g, "exit_sign", Vector3(MAIN_X1 - 0.05, 3.1, 10.9), -90.0, "ExitSignEast2")
-	_kit(g, "exit_sign", Vector3(10.25, 3.45, 6.0), 90.0, "ExitSignWest")
+	_cut(_kit(g, "exit_sign", Vector3(10.25, 3.45, 6.0), 90.0, "ExitSignWest"), Vector3.LEFT)   # 18: hides with its wall
 	# Disco ball over the centre of the room (05/06), 1 m, its centre 2.8 m up
 	var ball := _kit(g, "disco_ball", Vector3(23.6, ROOM_H, 8.3), 0.0, "DiscoBall")
 	ball.set_meta("occluder_center", Vector3(0, -1.2, 0))
@@ -547,20 +549,36 @@ func _frame(g: Node) -> void:
 	_cut(_box(g, "BeamS", Vector3(10, ROOM_H - 0.45, MAIN_Z1 - 0.97), Vector3(MAIN_X1 - 10, 0.15, 0.12), wood, false), Vector3.BACK)
 	# Upper walls, 4 m..6 m (iteration 11): the cutaway cameras sit above the ceiling line; renders 05/06 fill the frame
 	# top with dark ceiling, beams and soffits, not the void. Each hides with the wall below it.
-	var upper := _bond_mat("upper_brick", Color("3c2820"), 0.05, 0.9, 0.3)
+	var upper := _bond_mat("upper_brick", Color("2e221e"), 0.05, 0.9, 0.3)   # 18: darker, reads as ceiling, not red wall
 	var uh := 2.0
 	_cut(_nocast(_box(g, "UpperN", Vector3(10, ROOM_H, MAIN_Z0 - 0.2), Vector3(MAIN_X1 - 10, uh, 0.2), upper, false)), Vector3.FORWARD)
 	_cut(_nocast(_box(g, "UpperS", Vector3(10, ROOM_H, MAIN_Z1), Vector3(MAIN_X1 - 10, uh, 0.2), upper, false)), Vector3.BACK)
 	_cut(_nocast(_box(g, "UpperE", Vector3(MAIN_X1, ROOM_H, MAIN_Z0), Vector3(0.2, uh, MAIN_Z1 - MAIN_Z0), upper, false)), Vector3.RIGHT)
-	_cut(_nocast(_box(g, "UpperW", Vector3(9.9, ROOM_H, MAIN_Z0), Vector3(0.2, uh, MAIN_Z1 - MAIN_Z0), upper, false)), Vector3.LEFT)
+	# The west upper wall sits right in front of the lounge and floor-zone cameras (they look over the curtain wall
+	# from just east / west of it), so it is twelve 1.2 m occluder segments the rig hides on its sight line.
+	var zw := MAIN_Z0
+	var k := 0
+	while zw < MAIN_Z1 - 0.01:
+		var seg := Node3D.new()
+		seg.name = "UpperW%d" % k
+		seg.position = Vector3(10.0, ROOM_H + uh * 0.5, zw + 0.6)
+		seg.set_meta("occluder_center", Vector3.ZERO)
+		seg.set_meta("occluder_radius", 1.3)
+		seg.add_to_group("occluder", true)
+		_own(seg, g)
+		_nocast(_box(seg, "Brick", Vector3(-0.1, -uh * 0.5, -0.6), Vector3(0.2, uh, 1.2), upper, false))
+		for i in 4:
+			_box(seg, "Joist%d" % i, Vector3(0.1, 0.35 + i * 0.45 - uh * 0.5, -0.6), Vector3(0.06, 0.08, 1.2), wood, false)
+		if k == 8:
+			_kit(seg, "exit_sign", Vector3(0.15, 0.4 - uh * 0.5, 0.0), 90.0, "ExitSignWestHigh")
+		zw += 1.2
+		k += 1
 	for i in BAR_BAYS:   # 05: peach soffit panels along the top of the bar wall, one per bay
 		_cut(_kit(g, "soffit_segment", Vector3(BAR_X0 + 0.75 + i * 1.5, ROOM_H + 1.1, MAIN_Z1 - 0.2), 180.0, "Soffit%d" % i), Vector3.BACK)
-	_cut(_kit(g, "exit_sign", Vector3(10.15, ROOM_H + 0.4, 9.6), 90.0, "ExitSignWestHigh"), Vector3.LEFT)
 	_cut(_kit(g, "exit_sign", Vector3(21.0, ROOM_H + 0.4, MAIN_Z0 + 0.05), 0.0, "ExitSignNorthHigh"), Vector3.FORWARD)
 	for i in 4:   # ceiling joists as dark wood bands up the upper walls
 		var y := ROOM_H + 0.35 + i * 0.45
 		_cut(_box(g, "UpperBeamS%d" % i, Vector3(10, y, MAIN_Z1 - 0.06), Vector3(MAIN_X1 - 10, 0.08, 0.06), wood, false), Vector3.BACK)
-		_cut(_box(g, "UpperBeamW%d" % i, Vector3(10.1, y, MAIN_Z0), Vector3(0.06, 0.08, MAIN_Z1 - MAIN_Z0), wood, false), Vector3.LEFT)
 		_cut(_box(g, "UpperBeamN%d" % i, Vector3(10, y, MAIN_Z0), Vector3(MAIN_X1 - 10, 0.08, 0.06), wood, false), Vector3.FORWARD)
 		_cut(_box(g, "UpperBeamE%d" % i, Vector3(MAIN_X1 - 0.06, y, MAIN_Z0), Vector3(0.06, 0.08, MAIN_Z1 - MAIN_Z0), wood, false), Vector3.RIGHT)
 	# No ReflectionProbe: under Compatibility an interior probe darkened the whole room (iteration 6, mean
@@ -763,7 +781,8 @@ func _stage() -> void:
 	var z := MAIN_Z0
 	var k := 0
 	while z < 12.0:
-		_cut(_kit(g, "slatted_backdrop", Vector3(MAIN_X1 - 0.1, 0, z + 0.5), -90.0, "Backdrop%d" % k), Vector3.RIGHT)
+		var edge := z < 2.0 or z > 9.0   # iteration 18: the glow is graded, brightest at the centre of the wall
+		_cut(_kit(g, "slatted_backdrop_edge" if edge else "slatted_backdrop", Vector3(MAIN_X1 - 0.1, 0, z + 0.5), -90.0, "Backdrop%d" % k), Vector3.RIGHT)
 		z += 1.0
 		k += 1
 	for i in 6:
@@ -814,10 +833,10 @@ func _stage() -> void:
 		par.rotation_degrees.x = 40.0
 		var src := Vector3(pars[i][0], ROOM_H - 0.75, MAIN_Z0 + 0.75)
 		var blue: bool = pars[i][1] == "blue"
-		_spot(g, "ParSpot%d" % i, par_col[pars[i][1]], 2.4 if blue else 3.4, 7.5, 16.0 if blue else 24.0, src, aims[i], i == 1 or i == 3)
-	_omni(g, "BackdropGlowA", Color("e0261c"), 1.1, 4.0, Vector3(MAIN_X1 - 0.8, 2.6, 2.0))
-	_omni(g, "BackdropGlowB", Color("e0261c"), 1.1, 4.0, Vector3(MAIN_X1 - 0.8, 2.6, 6.5))
-	_omni(g, "BackdropGlowC", Color("e0261c"), 1.1, 4.0, Vector3(MAIN_X1 - 0.8, 2.6, 10.5))
+		_spot(g, "ParSpot%d" % i, par_col[pars[i][1]], 2.4 if blue else 3.4, 7.5, 16.0 if blue else 24.0, src, aims[i])   # no spot shadows: the key light's map is the one shadow (phone budget)
+	_omni(g, "BackdropGlowA", Color("e0261c"), 0.7, 4.0, Vector3(MAIN_X1 - 0.8, 1.6, 2.0))
+	_omni(g, "BackdropGlowB", Color("e0261c"), 1.4, 4.5, Vector3(MAIN_X1 - 0.8, 1.6, 6.0))
+	_omni(g, "BackdropGlowC", Color("e0261c"), 0.7, 4.0, Vector3(MAIN_X1 - 0.8, 1.6, 10.5))
 
 ## Contact shadows (Daniele: the renders have dark shadow under every piece of furniture). Every solid kit piece on the
 ## main-room floor adds a soft dark disc; _contact_shadows() paints them all into one texture on one floor quad

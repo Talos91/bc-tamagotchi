@@ -59,7 +59,10 @@ PALETTE = {
     "CarpetRed":    ("#9A0A12", 0.95, 0.0, 0),
     "StageCarpet":  ("#6A0C12", 0.95, 0.0, 0),                   # parity 15: darker than Carpet Red, the PAR pools model it
     "StageCarpetBand": ("#360508", 0.95, 0.0, 0),
-    "SlatRed":      ("#D0161C", 0.60, 0.0, 2.0),
+    "SlatRed":      ("#D0161C", 0.60, 0.0, 2.2),
+    "SlatRedMid":   ("#C0141A", 0.60, 0.0, 1.4),                 # parity 18: backdrop glow graded toward the top
+    "SlatRedTop":   ("#A01216", 0.60, 0.0, 0.8),
+    "SlatRedEdge":  ("#B01418", 0.60, 0.0, 1.2),                 # parity 18: panels toward the ends of the wall
     "PanelRed":     ("#B80A10", 0.60, 0.0, 2.0),
     "NeonRed":      ("#FF2A14", 0.40, 0.0, 5.0),
     "DrumRed":      ("#9A2A1A", 0.25, 0.0, 0),
@@ -813,11 +816,13 @@ def stage_carpet_tile(v):
             v.set(x, y, 0, "StageCarpetBand" if band else "StageCarpet")
 
 
-@kit("slatted_backdrop", "stage", "L")
-def slatted_backdrop(v):
-    """1-voxel slats with 1-voxel gaps in front of a Slat Red emissive panel; amber windows in the upper third."""
+def backdrop(v, low, mid, top):
+    """1-voxel slats with 1-voxel gaps in front of an emissive red panel; amber windows in the upper third.
+    Parity 18: the panel is graded in three bands (render 05: the slits glow hardest near the floor)."""
     W, H = 20, 60
-    v.box(0, 2, 2, W - 1, 2, H - 3, E("SlatRed"))
+    v.box(0, 2, 2, W - 1, 2, 21, E(low))
+    v.box(0, 2, 22, W - 1, 2, 39, E(mid))
+    v.box(0, 2, 40, W - 1, 2, H - 3, E(top))
     for z in (42, 47):                                               # two rows of window lights
         for x in (3, 7, 11, 15):
             v.box(x, 2, z, x, 2, z + 1, E("ShelfAmber"))
@@ -825,6 +830,17 @@ def slatted_backdrop(v):
         v.box(x, 0, 2, x, 0, H - 3, "VelvetShadow")
     v.box(0, 0, 0, W - 1, 2, 1, "BeamBlack")                         # bottom rail
     v.box(0, 0, H - 2, W - 1, 2, H - 1, "BeamBlack")                 # top rail
+
+
+@kit("slatted_backdrop", "stage", "L")
+def slatted_backdrop(v):
+    backdrop(v, "SlatRed", "SlatRedMid", "SlatRedTop")
+
+
+@kit("slatted_backdrop_edge", "stage", "L", variant_of="slatted_backdrop")
+def slatted_backdrop_edge(v):
+    """Toward the ends of the end wall: one step dimmer throughout."""
+    backdrop(v, "SlatRedEdge", "SlatRedTop", "SlatRedTop")
 
 
 @kit("curtain_panel", "stage", "Architecture")
