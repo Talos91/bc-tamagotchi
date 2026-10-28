@@ -1650,12 +1650,12 @@
    "zone": "Curtain"
   },
   {
-   "name": "ExitSign",
-   "object": "exit_sign",
+   "name": "MainPanel_0",
+   "object": "curtain_panel",
    "position": [
-    10.12,
-    3.35,
-    6.0
+    10.2,
+    0.0,
+    0.0
    ],
    "rotation_y": 90.0,
    "scale": [
@@ -1666,222 +1666,206 @@
    "zone": "Curtain"
   },
   {
-   "name": "TrackBar0",
-   "object": "track_light",
+   "name": "MainPanel_10",
+   "object": "curtain_panel",
    "position": [
-    12.5,
-    4.0,
-    7.4
-   ],
-   "rotation_y": 0.0,
-   "scale": [
-    1.0,
-    1.0,
+    10.2,
+    0.0,
     1.0
-   ],
-   "zone": "MainRoom"
-  },
-  {
-   "name": "TrackFloor0",
-   "object": "track_light",
-   "position": [
-    12.5,
-    4.0,
-    5.6
-   ],
-   "rotation_y": 0.0,
-   "scale": [
-    1.0,
-    1.0,
-    1.0
-   ],
-   "zone": "MainRoom"
-  },
-  {
-   "name": "TrackBar1",
-   "object": "track_light",
-   "position": [
-    14.5,
-    4.0,
-    7.4
-   ],
-   "rotation_y": 0.0,
-   "scale": [
-    1.0,
-    1.0,
-    1.0
-   ],
-   "zone": "MainRoom"
-  },
-  {
-   "name": "TrackFloor1",
-   "object": "track_light",
-   "position": [
-    15.1,
-    4.0,
-    5.6
-   ],
-   "rotation_y": 0.0,
-   "scale": [
-    1.0,
-    1.0,
-    1.0
-   ],
-   "zone": "MainRoom"
-  },
-  {
-   "name": "TrackBar2",
-   "object": "track_light",
-   "position": [
-    16.5,
-    4.0,
-    7.4
-   ],
-   "rotation_y": 0.0,
-   "scale": [
-    1.0,
-    1.0,
-    1.0
-   ],
-   "zone": "MainRoom"
-  },
-  {
-   "name": "TrackFloor2",
-   "object": "track_light",
-   "position": [
-    17.7,
-    4.0,
-    5.6
-   ],
-   "rotation_y": 0.0,
-   "scale": [
-    1.0,
-    1.0,
-    1.0
-   ],
-   "zone": "MainRoom"
-  },
-  {
-   "name": "TrackBar3",
-   "object": "track_light",
-   "position": [
-    18.5,
-    4.0,
-    7.4
-   ],
-   "rotation_y": 0.0,
-   "scale": [
-    1.0,
-    1.0,
-    1.0
-   ],
-   "zone": "MainRoom"
-  },
-  {
-   "name": "TrackFloor3",
-   "object": "track_light",
-   "position": [
-    20.3,
-    4.0,
-    5.6
-   ],
-   "rotation_y": 0.0,
-   "scale": [
-    1.0,
-    1.0,
-    1.0
-   ],
-   "zone": "MainRoom"
-  },
-  {
-   "name": "TrackBar4",
-   "object": "track_light",
-   "position": [
-    20.5,
-    4.0,
-    7.4
-   ],
-   "rotation_y": 0.0,
-   "scale": [
-    1.0,
-    1.0,
-    1.0
-   ],
-   "zone": "MainRoom"
-  },
-  {
-   "name": "TrackFloor4",
-   "object": "track_light",
-   "position": [
-    22.9,
-    4.0,
-    5.6
-   ],
-   "rotation_y": 0.0,
-   "scale": [
-    1.0,
-    1.0,
-    1.0
-   ],
-   "zone": "MainRoom"
-  },
-  {
-   "name": "TrackBar5",
-   "object": "track_light",
-   "position": [
-    22.5,
-    4.0,
-    7.4
-   ],
-   "rotation_y": 0.0,
-   "scale": [
-    1.0,
-    1.0,
-    1.0
-   ],
-   "zone": "MainRoom"
-  },
-  {
-   "name": "TrackFloor5",
-   "object": "track_light",
-   "position": [
-    25.5,
-    4.0,
-    5.6
-   ],
-   "rotation_y": 0.0,
-   "scale": [
-    1.0,
-    1.0,
-    1.0
-   ],
-   "zone": "MainRoom"
-  },
-  {
-   "name": "DiscoBall",
-   "object": "disco_ball",
-   "position": [
-    18.0,
-    4.0,
-    5.4
-   ],
-   "rotation_y": 0.0,
-   "scale": [
-    1.0,
-    1.0,
-    1.0
-   ],
-   "zone": "MainRoom"
-  },
-  {
-   "name": "ExitSignWest",
-   "object": "exit_sign",
-   "position": [
-    10.12,
-    3.35,
-    6.0
    ],
    "rotation_y": 90.0,
+   "scale": [
+    1.0,
+    1.0,
+    1.0
+   ],
+   "zone": "Curtain"
+  },
+  {
+   "name": "MainPanel_20",
+   "object": "curtain_panel",
+   "position": [
+    10.2,
+    0.0,
+    2.0
+   ],
+   "rotation_y": 90.0,
+   "scale": [
+    1.0,
+    1.0,
+    1.0
+   ],
+   "zone": "Curtain"
+  },
+  {
+   "name": "MainPanel_30",
+   "object": "curtain_panel",
+   "position": [
+    10.2,
+    0.0,
+    3.0
+   ],
+   "rotation_y": 90.0,
+   "scale": [
+    1.0,
+    1.0,
+    1.0
+   ],
+   "zone": "Curtain"
+  },
+  {
+   "name": "MainPanel_40",
+   "object": "curtain_panel",
+   "position": [
+    10.2,
+    0.0,
+    4.0
+   ],
+   "rotation_y": 90.0,
+   "scale": [
+    1.0,
+    1.0,
+    1.0
+   ],
+   "zone": "Curtain"
+  },
+  {
+   "name": "MainPanel_80",
+   "object": "curtain_panel",
+   "position": [
+    10.2,
+    0.0,
+    8.0
+   ],
+   "rotation_y": 90.0,
+   "scale": [
+    1.0,
+    1.0,
+    1.0
+   ],
+   "zone": "Curtain"
+  },
+  {
+   "name": "MainPanel_90",
+   "object": "curtain_panel",
+   "position": [
+    10.2,
+    0.0,
+    9.0
+   ],
+   "rotation_y": 90.0,
+   "scale": [
+    1.0,
+    1.0,
+    1.0
+   ],
+   "zone": "Curtain"
+  },
+  {
+   "name": "MainPanel_100",
+   "object": "curtain_panel",
+   "position": [
+    10.2,
+    0.0,
+    10.0
+   ],
+   "rotation_y": 90.0,
+   "scale": [
+    1.0,
+    1.0,
+    1.0
+   ],
+   "zone": "Curtain"
+  },
+  {
+   "name": "MainPanel_110",
+   "object": "curtain_panel",
+   "position": [
+    10.2,
+    0.0,
+    11.0
+   ],
+   "rotation_y": 90.0,
+   "scale": [
+    1.0,
+    1.0,
+    1.0
+   ],
+   "zone": "Curtain"
+  },
+  {
+   "name": "MainPanel_120",
+   "object": "curtain_panel",
+   "position": [
+    10.2,
+    0.0,
+    12.0
+   ],
+   "rotation_y": 90.0,
+   "scale": [
+    1.0,
+    1.0,
+    1.0
+   ],
+   "zone": "Curtain"
+  },
+  {
+   "name": "MainPanel_130",
+   "object": "curtain_panel",
+   "position": [
+    10.2,
+    0.0,
+    13.0
+   ],
+   "rotation_y": 90.0,
+   "scale": [
+    1.0,
+    1.0,
+    1.0
+   ],
+   "zone": "Curtain"
+  },
+  {
+   "name": "Sconce_110",
+   "object": "wall_lamp",
+   "position": [
+    11.0,
+    1.9,
+    -0.45
+   ],
+   "rotation_y": 0.0,
+   "scale": [
+    1.0,
+    1.0,
+    1.0
+   ],
+   "zone": "MainRoom"
+  },
+  {
+   "name": "Sconce_142",
+   "object": "wall_lamp",
+   "position": [
+    14.2,
+    1.9,
+    -0.45
+   ],
+   "rotation_y": 0.0,
+   "scale": [
+    1.0,
+    1.0,
+    1.0
+   ],
+   "zone": "MainRoom"
+  },
+  {
+   "name": "ExitSignStageDoor",
+   "object": "exit_sign",
+   "position": [
+    17.1,
+    2.5,
+    -0.45
+   ],
+   "rotation_y": 0.0,
    "scale": [
     1.0,
     1.0,
@@ -1893,11 +1877,43 @@
    "name": "ExitSignEast",
    "object": "exit_sign",
    "position": [
-    29.9,
-    3.0,
+    27.95,
+    2.6,
+    12.75
+   ],
+   "rotation_y": -90.0,
+   "scale": [
+    1.0,
+    1.0,
+    1.0
+   ],
+   "zone": "MainRoom"
+  },
+  {
+   "name": "ExitSignEast2",
+   "object": "exit_sign",
+   "position": [
+    27.95,
+    3.1,
+    10.9
+   ],
+   "rotation_y": -90.0,
+   "scale": [
+    1.0,
+    1.0,
+    1.0
+   ],
+   "zone": "MainRoom"
+  },
+  {
+   "name": "ExitSignWest",
+   "object": "exit_sign",
+   "position": [
+    10.25,
+    3.45,
     6.0
    ],
-   "rotation_y": -90.0,
+   "rotation_y": 90.0,
    "scale": [
     1.0,
     1.0,
@@ -1906,12 +1922,12 @@
    "zone": "MainRoom"
   },
   {
-   "name": "PaintingNorth0",
-   "object": "painting_a",
+   "name": "DiscoBall",
+   "object": "disco_ball",
    "position": [
-    13.6,
-    1.6,
-    0.05
+    21.0,
+    4.0,
+    7.9
    ],
    "rotation_y": 0.0,
    "scale": [
@@ -1922,124 +1938,140 @@
    "zone": "MainRoom"
   },
   {
-   "name": "PaintingNorth1",
-   "object": "painting_b",
-   "position": [
-    15.8,
-    1.6,
-    0.05
-   ],
-   "rotation_y": 0.0,
-   "scale": [
-    1.0,
-    1.0,
-    1.0
-   ],
-   "zone": "MainRoom"
-  },
-  {
-   "name": "PaintingNorth2",
-   "object": "painting_c",
-   "position": [
-    18.0,
-    1.6,
-    0.05
-   ],
-   "rotation_y": 0.0,
-   "scale": [
-    1.0,
-    1.0,
-    1.0
-   ],
-   "zone": "MainRoom"
-  },
-  {
-   "name": "WallLampWest_12",
-   "object": "wall_lamp",
-   "position": [
-    10.1,
-    1.95,
-    1.2
-   ],
-   "rotation_y": 90.0,
-   "scale": [
-    1.0,
-    1.0,
-    1.0
-   ],
-   "zone": "MainRoom"
-  },
-  {
-   "name": "WallLampWest_34",
-   "object": "wall_lamp",
-   "position": [
-    10.1,
-    1.95,
-    3.4
-   ],
-   "rotation_y": 90.0,
-   "scale": [
-    1.0,
-    1.0,
-    1.0
-   ],
-   "zone": "MainRoom"
-  },
-  {
-   "name": "WallLampEast",
-   "object": "wall_lamp",
-   "position": [
-    29.9,
-    2.0,
-    9.2
-   ],
-   "rotation_y": -90.0,
-   "scale": [
-    1.0,
-    1.0,
-    1.0
-   ],
-   "zone": "MainRoom"
-  },
-  {
-   "name": "PaintingEast",
-   "object": "painting_a",
-   "position": [
-    29.95,
-    1.6,
-    7.0
-   ],
-   "rotation_y": -90.0,
-   "scale": [
-    1.0,
-    1.0,
-    1.0
-   ],
-   "zone": "MainRoom"
-  },
-  {
-   "name": "EntrancePlant",
-   "object": "stage_tree",
-   "position": [
-    10.8,
-    0.0,
-    9.3
-   ],
-   "rotation_y": 90.0,
-   "scale": [
-    1.0,
-    1.0,
-    1.0
-   ],
-   "zone": "MainRoom"
-  },
-  {
-   "name": "BackBar0",
+   "name": "Bay0",
    "object": "back_bar_shelf",
    "position": [
-    12.5,
+    12.25,
     0.0,
-    9.85
+    13.75
+   ],
+   "rotation_y": -180.0,
+   "scale": [
+    1.0,
+    1.0,
+    1.0
+   ],
+   "zone": "Bar"
+  },
+  {
+   "name": "Bay1",
+   "object": "back_bar_shelf",
+   "position": [
+    13.75,
+    0.0,
+    13.75
+   ],
+   "rotation_y": -180.0,
+   "scale": [
+    1.0,
+    1.0,
+    1.0
+   ],
+   "zone": "Bar"
+  },
+  {
+   "name": "Bay2",
+   "object": "back_bar_shelf",
+   "position": [
+    15.25,
+    0.0,
+    13.75
+   ],
+   "rotation_y": -180.0,
+   "scale": [
+    1.0,
+    1.0,
+    1.0
+   ],
+   "zone": "Bar"
+  },
+  {
+   "name": "Bay3",
+   "object": "back_bar_art",
+   "position": [
+    16.75,
+    0.0,
+    13.75
+   ],
+   "rotation_y": -180.0,
+   "scale": [
+    1.0,
+    1.0,
+    1.0
+   ],
+   "zone": "Bar"
+  },
+  {
+   "name": "Bay4",
+   "object": "back_bar_shelf",
+   "position": [
+    18.25,
+    0.0,
+    13.75
+   ],
+   "rotation_y": -180.0,
+   "scale": [
+    1.0,
+    1.0,
+    1.0
+   ],
+   "zone": "Bar"
+  },
+  {
+   "name": "Bay5",
+   "object": "back_bar_shelf",
+   "position": [
+    19.75,
+    0.0,
+    13.75
+   ],
+   "rotation_y": -180.0,
+   "scale": [
+    1.0,
+    1.0,
+    1.0
+   ],
+   "zone": "Bar"
+  },
+  {
+   "name": "Bay6",
+   "object": "back_bar_shelf",
+   "position": [
+    21.25,
+    0.0,
+    13.75
+   ],
+   "rotation_y": -180.0,
+   "scale": [
+    1.0,
+    1.0,
+    1.0
+   ],
+   "zone": "Bar"
+  },
+  {
+   "name": "Bay7",
+   "object": "back_bar_shelf",
+   "position": [
+    22.75,
+    0.0,
+    13.75
+   ],
+   "rotation_y": -180.0,
+   "scale": [
+    1.0,
+    1.0,
+    1.0
+   ],
+   "zone": "Bar"
+  },
+  {
+   "name": "Bay8",
+   "object": "back_bar_shelf",
+   "position": [
+    24.25,
+    0.0,
+    13.75
    ],
    "rotation_y": -180.0,
    "scale": [
@@ -2053,25 +2085,9 @@
    "name": "Counter0",
    "object": "bar_counter",
    "position": [
-    12.5,
+    12.0,
     0.0,
-    8.65
-   ],
-   "rotation_y": -180.0,
-   "scale": [
-    1.0,
-    1.0,
-    1.0
-   ],
-   "zone": "Bar"
-  },
-  {
-   "name": "BackBar1",
-   "object": "back_bar_shelf",
-   "position": [
-    13.5,
-    0.0,
-    9.85
+    12.25
    ],
    "rotation_y": -180.0,
    "scale": [
@@ -2085,25 +2101,9 @@
    "name": "Counter1",
    "object": "bar_counter",
    "position": [
-    13.5,
+    13.0,
     0.0,
-    8.65
-   ],
-   "rotation_y": -180.0,
-   "scale": [
-    1.0,
-    1.0,
-    1.0
-   ],
-   "zone": "Bar"
-  },
-  {
-   "name": "BackBar2",
-   "object": "back_bar_shelf",
-   "position": [
-    14.5,
-    0.0,
-    9.85
+    12.25
    ],
    "rotation_y": -180.0,
    "scale": [
@@ -2117,25 +2117,9 @@
    "name": "Counter2",
    "object": "bar_counter",
    "position": [
-    14.5,
+    14.0,
     0.0,
-    8.65
-   ],
-   "rotation_y": -180.0,
-   "scale": [
-    1.0,
-    1.0,
-    1.0
-   ],
-   "zone": "Bar"
-  },
-  {
-   "name": "BackBar3",
-   "object": "back_bar_shelf",
-   "position": [
-    15.5,
-    0.0,
-    9.85
+    12.25
    ],
    "rotation_y": -180.0,
    "scale": [
@@ -2149,25 +2133,9 @@
    "name": "Counter3",
    "object": "bar_counter",
    "position": [
-    15.5,
+    15.0,
     0.0,
-    8.65
-   ],
-   "rotation_y": -180.0,
-   "scale": [
-    1.0,
-    1.0,
-    1.0
-   ],
-   "zone": "Bar"
-  },
-  {
-   "name": "BackBar4",
-   "object": "back_bar_shelf",
-   "position": [
-    16.5,
-    0.0,
-    9.85
+    12.25
    ],
    "rotation_y": -180.0,
    "scale": [
@@ -2181,25 +2149,9 @@
    "name": "Counter4",
    "object": "bar_counter",
    "position": [
-    16.5,
+    16.0,
     0.0,
-    8.65
-   ],
-   "rotation_y": -180.0,
-   "scale": [
-    1.0,
-    1.0,
-    1.0
-   ],
-   "zone": "Bar"
-  },
-  {
-   "name": "BackBar5",
-   "object": "back_bar_shelf",
-   "position": [
-    17.5,
-    0.0,
-    9.85
+    12.25
    ],
    "rotation_y": -180.0,
    "scale": [
@@ -2213,25 +2165,9 @@
    "name": "Counter5",
    "object": "bar_counter",
    "position": [
-    17.5,
+    17.0,
     0.0,
-    8.65
-   ],
-   "rotation_y": -180.0,
-   "scale": [
-    1.0,
-    1.0,
-    1.0
-   ],
-   "zone": "Bar"
-  },
-  {
-   "name": "BackBar6",
-   "object": "back_bar_shelf",
-   "position": [
-    18.5,
-    0.0,
-    9.85
+    12.25
    ],
    "rotation_y": -180.0,
    "scale": [
@@ -2245,25 +2181,9 @@
    "name": "Counter6",
    "object": "bar_counter",
    "position": [
-    18.5,
+    18.0,
     0.0,
-    8.65
-   ],
-   "rotation_y": -180.0,
-   "scale": [
-    1.0,
-    1.0,
-    1.0
-   ],
-   "zone": "Bar"
-  },
-  {
-   "name": "BackBar7",
-   "object": "back_bar_shelf",
-   "position": [
-    19.5,
-    0.0,
-    9.85
+    12.25
    ],
    "rotation_y": -180.0,
    "scale": [
@@ -2277,25 +2197,9 @@
    "name": "Counter7",
    "object": "bar_counter",
    "position": [
-    19.5,
+    19.0,
     0.0,
-    8.65
-   ],
-   "rotation_y": -180.0,
-   "scale": [
-    1.0,
-    1.0,
-    1.0
-   ],
-   "zone": "Bar"
-  },
-  {
-   "name": "BackBar8",
-   "object": "back_bar_shelf",
-   "position": [
-    20.5,
-    0.0,
-    9.85
+    12.25
    ],
    "rotation_y": -180.0,
    "scale": [
@@ -2309,25 +2213,9 @@
    "name": "Counter8",
    "object": "bar_counter",
    "position": [
-    20.5,
+    20.0,
     0.0,
-    8.65
-   ],
-   "rotation_y": -180.0,
-   "scale": [
-    1.0,
-    1.0,
-    1.0
-   ],
-   "zone": "Bar"
-  },
-  {
-   "name": "BackBar9",
-   "object": "back_bar_shelf",
-   "position": [
-    21.5,
-    0.0,
-    9.85
+    12.25
    ],
    "rotation_y": -180.0,
    "scale": [
@@ -2341,25 +2229,9 @@
    "name": "Counter9",
    "object": "bar_counter",
    "position": [
-    21.5,
+    21.0,
     0.0,
-    8.65
-   ],
-   "rotation_y": -180.0,
-   "scale": [
-    1.0,
-    1.0,
-    1.0
-   ],
-   "zone": "Bar"
-  },
-  {
-   "name": "BackBar10",
-   "object": "back_bar_shelf",
-   "position": [
-    22.5,
-    0.0,
-    9.85
+    12.25
    ],
    "rotation_y": -180.0,
    "scale": [
@@ -2373,9 +2245,41 @@
    "name": "Counter10",
    "object": "bar_counter",
    "position": [
-    22.5,
+    22.0,
     0.0,
-    8.65
+    12.25
+   ],
+   "rotation_y": -180.0,
+   "scale": [
+    1.0,
+    1.0,
+    1.0
+   ],
+   "zone": "Bar"
+  },
+  {
+   "name": "Counter11",
+   "object": "bar_counter",
+   "position": [
+    23.0,
+    0.0,
+    12.25
+   ],
+   "rotation_y": -180.0,
+   "scale": [
+    1.0,
+    1.0,
+    1.0
+   ],
+   "zone": "Bar"
+  },
+  {
+   "name": "Counter12",
+   "object": "bar_counter",
+   "position": [
+    24.0,
+    0.0,
+    12.25
    ],
    "rotation_y": -180.0,
    "scale": [
@@ -2389,9 +2293,9 @@
    "name": "Stool0",
    "object": "bar_stool",
    "position": [
-    12.6,
+    12.1,
     0.0,
-    7.95
+    11.5
    ],
    "rotation_y": 0.0,
    "scale": [
@@ -2405,9 +2309,9 @@
    "name": "Stool1",
    "object": "bar_stool",
    "position": [
-    13.8,
+    13.1,
     0.0,
-    7.95
+    11.5
    ],
    "rotation_y": 0.0,
    "scale": [
@@ -2421,9 +2325,9 @@
    "name": "Stool2",
    "object": "bar_stool",
    "position": [
-    15.0,
+    14.1,
     0.0,
-    7.95
+    11.5
    ],
    "rotation_y": 0.0,
    "scale": [
@@ -2437,9 +2341,9 @@
    "name": "Stool3",
    "object": "bar_stool",
    "position": [
-    16.2,
+    15.1,
     0.0,
-    7.95
+    11.5
    ],
    "rotation_y": 0.0,
    "scale": [
@@ -2453,9 +2357,9 @@
    "name": "Stool4",
    "object": "bar_stool",
    "position": [
-    17.4,
+    16.1,
     0.0,
-    7.95
+    11.5
    ],
    "rotation_y": 0.0,
    "scale": [
@@ -2469,9 +2373,9 @@
    "name": "Stool5",
    "object": "bar_stool",
    "position": [
-    18.6,
+    17.1,
     0.0,
-    7.95
+    11.5
    ],
    "rotation_y": 0.0,
    "scale": [
@@ -2485,9 +2389,9 @@
    "name": "Stool6",
    "object": "bar_stool",
    "position": [
-    19.8,
+    18.1,
     0.0,
-    7.95
+    11.5
    ],
    "rotation_y": 0.0,
    "scale": [
@@ -2501,9 +2405,9 @@
    "name": "Stool7",
    "object": "bar_stool",
    "position": [
-    21.0,
+    19.1,
     0.0,
-    7.95
+    11.5
    ],
    "rotation_y": 0.0,
    "scale": [
@@ -2517,185 +2421,9 @@
    "name": "Stool8",
    "object": "bar_stool",
    "position": [
-    22.2,
-    0.0,
-    7.95
-   ],
-   "rotation_y": 0.0,
-   "scale": [
-    1.0,
-    1.0,
-    1.0
-   ],
-   "zone": "Bar"
-  },
-  {
-   "name": "CounterBottle0",
-   "object": "bottle_amber",
-   "position": [
-    12.3,
-    1.1,
-    8.55
-   ],
-   "rotation_y": 0.0,
-   "scale": [
-    1.0,
-    1.0,
-    1.0
-   ],
-   "zone": "Bar"
-  },
-  {
-   "name": "CounterBottle1",
-   "object": "bottle_green",
-   "position": [
-    13.2,
-    1.1,
-    8.63
-   ],
-   "rotation_y": 0.0,
-   "scale": [
-    1.0,
-    1.0,
-    1.0
-   ],
-   "zone": "Bar"
-  },
-  {
-   "name": "CounterBottle2",
-   "object": "bottle_clear",
-   "position": [
-    13.86,
-    1.1,
-    8.71
-   ],
-   "rotation_y": 0.0,
-   "scale": [
-    1.0,
-    1.0,
-    1.0
-   ],
-   "zone": "Bar"
-  },
-  {
-   "name": "CounterBottle3",
-   "object": "bottle_amber",
-   "position": [
-    14.76,
-    1.1,
-    8.55
-   ],
-   "rotation_y": 0.0,
-   "scale": [
-    1.0,
-    1.0,
-    1.0
-   ],
-   "zone": "Bar"
-  },
-  {
-   "name": "CounterBottle4",
-   "object": "bottle_green",
-   "position": [
-    15.42,
-    1.1,
-    8.63
-   ],
-   "rotation_y": 0.0,
-   "scale": [
-    1.0,
-    1.0,
-    1.0
-   ],
-   "zone": "Bar"
-  },
-  {
-   "name": "CounterBottle5",
-   "object": "bottle_clear",
-   "position": [
-    16.32,
-    1.1,
-    8.71
-   ],
-   "rotation_y": 0.0,
-   "scale": [
-    1.0,
-    1.0,
-    1.0
-   ],
-   "zone": "Bar"
-  },
-  {
-   "name": "CounterBottle6",
-   "object": "bottle_amber",
-   "position": [
-    16.98,
-    1.1,
-    8.55
-   ],
-   "rotation_y": 0.0,
-   "scale": [
-    1.0,
-    1.0,
-    1.0
-   ],
-   "zone": "Bar"
-  },
-  {
-   "name": "CounterBottle7",
-   "object": "bottle_green",
-   "position": [
-    17.88,
-    1.1,
-    8.63
-   ],
-   "rotation_y": 0.0,
-   "scale": [
-    1.0,
-    1.0,
-    1.0
-   ],
-   "zone": "Bar"
-  },
-  {
-   "name": "CounterBottle8",
-   "object": "bottle_clear",
-   "position": [
-    18.54,
-    1.1,
-    8.71
-   ],
-   "rotation_y": 0.0,
-   "scale": [
-    1.0,
-    1.0,
-    1.0
-   ],
-   "zone": "Bar"
-  },
-  {
-   "name": "CounterBottle9",
-   "object": "bottle_amber",
-   "position": [
-    19.44,
-    1.1,
-    8.55
-   ],
-   "rotation_y": 0.0,
-   "scale": [
-    1.0,
-    1.0,
-    1.0
-   ],
-   "zone": "Bar"
-  },
-  {
-   "name": "CounterBottle10",
-   "object": "bottle_green",
-   "position": [
     20.1,
-    1.1,
-    8.63
+    0.0,
+    11.5
    ],
    "rotation_y": 0.0,
    "scale": [
@@ -2706,12 +2434,12 @@
    "zone": "Bar"
   },
   {
-   "name": "CounterBottle11",
-   "object": "bottle_clear",
+   "name": "Stool9",
+   "object": "bar_stool",
    "position": [
-    21.0,
-    1.1,
-    8.71
+    21.1,
+    0.0,
+    11.5
    ],
    "rotation_y": 0.0,
    "scale": [
@@ -2722,12 +2450,12 @@
    "zone": "Bar"
   },
   {
-   "name": "CounterBottle12",
-   "object": "bottle_amber",
+   "name": "Stool10",
+   "object": "bar_stool",
    "position": [
-    21.66,
-    1.1,
-    8.55
+    22.1,
+    0.0,
+    11.5
    ],
    "rotation_y": 0.0,
    "scale": [
@@ -2738,12 +2466,60 @@
    "zone": "Bar"
   },
   {
-   "name": "CounterBottle13",
-   "object": "bottle_green",
+   "name": "Stool11",
+   "object": "bar_stool",
    "position": [
-    22.56,
+    23.1,
+    0.0,
+    11.5
+   ],
+   "rotation_y": 0.0,
+   "scale": [
+    1.0,
+    1.0,
+    1.0
+   ],
+   "zone": "Bar"
+  },
+  {
+   "name": "Stool12",
+   "object": "bar_stool",
+   "position": [
+    24.1,
+    0.0,
+    11.5
+   ],
+   "rotation_y": 0.0,
+   "scale": [
+    1.0,
+    1.0,
+    1.0
+   ],
+   "zone": "Bar"
+  },
+  {
+   "name": "CounterLamp0",
+   "object": "table_lamp_lit",
+   "position": [
+    12.4,
     1.1,
-    8.63
+    12.3
+   ],
+   "rotation_y": 0.0,
+   "scale": [
+    1.0,
+    1.0,
+    1.0
+   ],
+   "zone": "Bar"
+  },
+  {
+   "name": "CounterNapkins0",
+   "object": "napkin_cup",
+   "position": [
+    12.8,
+    1.1,
+    12.4
    ],
    "rotation_y": 0.0,
    "scale": [
@@ -2757,9 +2533,41 @@
    "name": "CounterTealight0",
    "object": "tealight_lantern",
    "position": [
-    13.2,
+    13.7,
     1.1,
-    8.45
+    12.15
+   ],
+   "rotation_y": 0.0,
+   "scale": [
+    1.0,
+    1.0,
+    1.0
+   ],
+   "zone": "Bar"
+  },
+  {
+   "name": "CounterLamp1",
+   "object": "table_lamp_lit",
+   "position": [
+    15.0,
+    1.1,
+    12.3
+   ],
+   "rotation_y": 0.0,
+   "scale": [
+    1.0,
+    1.0,
+    1.0
+   ],
+   "zone": "Bar"
+  },
+  {
+   "name": "CounterNapkins1",
+   "object": "napkin_cup",
+   "position": [
+    15.4,
+    1.1,
+    12.4
    ],
    "rotation_y": 0.0,
    "scale": [
@@ -2773,9 +2581,41 @@
    "name": "CounterTealight1",
    "object": "tealight_lantern",
    "position": [
-    16.0,
+    16.3,
     1.1,
-    8.45
+    12.15
+   ],
+   "rotation_y": 0.0,
+   "scale": [
+    1.0,
+    1.0,
+    1.0
+   ],
+   "zone": "Bar"
+  },
+  {
+   "name": "CounterLamp2",
+   "object": "table_lamp_lit",
+   "position": [
+    17.6,
+    1.1,
+    12.3
+   ],
+   "rotation_y": 0.0,
+   "scale": [
+    1.0,
+    1.0,
+    1.0
+   ],
+   "zone": "Bar"
+  },
+  {
+   "name": "CounterNapkins2",
+   "object": "napkin_cup",
+   "position": [
+    18.0,
+    1.1,
+    12.4
    ],
    "rotation_y": 0.0,
    "scale": [
@@ -2789,9 +2629,41 @@
    "name": "CounterTealight2",
    "object": "tealight_lantern",
    "position": [
-    18.8,
+    18.9,
     1.1,
-    8.45
+    12.15
+   ],
+   "rotation_y": 0.0,
+   "scale": [
+    1.0,
+    1.0,
+    1.0
+   ],
+   "zone": "Bar"
+  },
+  {
+   "name": "CounterLamp3",
+   "object": "table_lamp_lit",
+   "position": [
+    20.2,
+    1.1,
+    12.3
+   ],
+   "rotation_y": 0.0,
+   "scale": [
+    1.0,
+    1.0,
+    1.0
+   ],
+   "zone": "Bar"
+  },
+  {
+   "name": "CounterNapkins3",
+   "object": "napkin_cup",
+   "position": [
+    20.6,
+    1.1,
+    12.4
    ],
    "rotation_y": 0.0,
    "scale": [
@@ -2805,9 +2677,9 @@
    "name": "CounterTealight3",
    "object": "tealight_lantern",
    "position": [
-    21.6,
+    21.5,
     1.1,
-    8.45
+    12.15
    ],
    "rotation_y": 0.0,
    "scale": [
@@ -2818,14 +2690,14 @@
    "zone": "Bar"
   },
   {
-   "name": "Soffit0",
-   "object": "soffit_segment",
+   "name": "CounterLamp4",
+   "object": "table_lamp_lit",
    "position": [
-    12.5,
-    4.0,
-    8.75
+    22.8,
+    1.1,
+    12.3
    ],
-   "rotation_y": -180.0,
+   "rotation_y": 0.0,
    "scale": [
     1.0,
     1.0,
@@ -2834,14 +2706,14 @@
    "zone": "Bar"
   },
   {
-   "name": "Soffit1",
-   "object": "soffit_segment",
+   "name": "CounterNapkins4",
+   "object": "napkin_cup",
    "position": [
-    13.5,
-    4.0,
-    8.75
+    23.2,
+    1.1,
+    12.4
    ],
-   "rotation_y": -180.0,
+   "rotation_y": 0.0,
    "scale": [
     1.0,
     1.0,
@@ -2850,14 +2722,14 @@
    "zone": "Bar"
   },
   {
-   "name": "Soffit2",
-   "object": "soffit_segment",
+   "name": "CounterTealight4",
+   "object": "tealight_lantern",
    "position": [
-    14.5,
-    4.0,
-    8.75
+    24.1,
+    1.1,
+    12.15
    ],
-   "rotation_y": -180.0,
+   "rotation_y": 0.0,
    "scale": [
     1.0,
     1.0,
@@ -2866,14 +2738,14 @@
    "zone": "Bar"
   },
   {
-   "name": "Soffit3",
-   "object": "soffit_segment",
+   "name": "CounterBottle0",
+   "object": "bottle_amber",
    "position": [
-    15.5,
-    4.0,
-    8.75
+    11.8,
+    1.1,
+    12.47
    ],
-   "rotation_y": -180.0,
+   "rotation_y": 0.0,
    "scale": [
     1.0,
     1.0,
@@ -2882,14 +2754,14 @@
    "zone": "Bar"
   },
   {
-   "name": "Soffit4",
-   "object": "soffit_segment",
+   "name": "CounterBottle1",
+   "object": "bottle_green",
    "position": [
-    16.5,
-    4.0,
-    8.75
+    12.51,
+    1.1,
+    12.53
    ],
-   "rotation_y": -180.0,
+   "rotation_y": 0.0,
    "scale": [
     1.0,
     1.0,
@@ -2898,14 +2770,14 @@
    "zone": "Bar"
   },
   {
-   "name": "Soffit5",
-   "object": "soffit_segment",
+   "name": "CounterBottle2",
+   "object": "bottle_clear",
    "position": [
-    17.5,
-    4.0,
-    8.75
+    13.22,
+    1.1,
+    12.47
    ],
-   "rotation_y": -180.0,
+   "rotation_y": 0.0,
    "scale": [
     1.0,
     1.0,
@@ -2914,14 +2786,14 @@
    "zone": "Bar"
   },
   {
-   "name": "Soffit6",
-   "object": "soffit_segment",
+   "name": "CounterBottle3",
+   "object": "bottle_amber",
    "position": [
-    18.5,
-    4.0,
-    8.75
+    13.93,
+    1.1,
+    12.53
    ],
-   "rotation_y": -180.0,
+   "rotation_y": 0.0,
    "scale": [
     1.0,
     1.0,
@@ -2930,14 +2802,14 @@
    "zone": "Bar"
   },
   {
-   "name": "Soffit7",
-   "object": "soffit_segment",
+   "name": "CounterBottle4",
+   "object": "bottle_green",
    "position": [
-    19.5,
-    4.0,
-    8.75
+    14.64,
+    1.1,
+    12.47
    ],
-   "rotation_y": -180.0,
+   "rotation_y": 0.0,
    "scale": [
     1.0,
     1.0,
@@ -2946,14 +2818,14 @@
    "zone": "Bar"
   },
   {
-   "name": "Soffit8",
-   "object": "soffit_segment",
+   "name": "CounterBottle5",
+   "object": "bottle_clear",
    "position": [
-    20.5,
-    4.0,
-    8.75
+    15.35,
+    1.1,
+    12.53
    ],
-   "rotation_y": -180.0,
+   "rotation_y": 0.0,
    "scale": [
     1.0,
     1.0,
@@ -2962,14 +2834,14 @@
    "zone": "Bar"
   },
   {
-   "name": "Soffit9",
-   "object": "soffit_segment",
+   "name": "CounterBottle6",
+   "object": "bottle_amber",
    "position": [
-    21.5,
-    4.0,
-    8.75
+    16.06,
+    1.1,
+    12.47
    ],
-   "rotation_y": -180.0,
+   "rotation_y": 0.0,
    "scale": [
     1.0,
     1.0,
@@ -2978,14 +2850,14 @@
    "zone": "Bar"
   },
   {
-   "name": "Soffit10",
-   "object": "soffit_segment",
+   "name": "CounterBottle7",
+   "object": "bottle_green",
    "position": [
-    22.5,
-    4.0,
-    8.75
+    16.77,
+    1.1,
+    12.53
    ],
-   "rotation_y": -180.0,
+   "rotation_y": 0.0,
    "scale": [
     1.0,
     1.0,
@@ -2994,14 +2866,14 @@
    "zone": "Bar"
   },
   {
-   "name": "PaintingBar0",
-   "object": "painting_b",
+   "name": "CounterBottle8",
+   "object": "bottle_clear",
    "position": [
-    14.5,
-    2.6,
-    9.9
+    17.48,
+    1.1,
+    12.47
    ],
-   "rotation_y": -180.0,
+   "rotation_y": 0.0,
    "scale": [
     1.0,
     1.0,
@@ -3010,14 +2882,286 @@
    "zone": "Bar"
   },
   {
-   "name": "PaintingBar1",
-   "object": "painting_c",
+   "name": "CounterBottle9",
+   "object": "bottle_amber",
    "position": [
-    20.5,
-    2.6,
-    9.9
+    18.19,
+    1.1,
+    12.53
    ],
-   "rotation_y": -180.0,
+   "rotation_y": 0.0,
+   "scale": [
+    1.0,
+    1.0,
+    1.0
+   ],
+   "zone": "Bar"
+  },
+  {
+   "name": "CounterBottle10",
+   "object": "bottle_green",
+   "position": [
+    18.9,
+    1.1,
+    12.47
+   ],
+   "rotation_y": 0.0,
+   "scale": [
+    1.0,
+    1.0,
+    1.0
+   ],
+   "zone": "Bar"
+  },
+  {
+   "name": "CounterBottle11",
+   "object": "bottle_clear",
+   "position": [
+    19.61,
+    1.1,
+    12.53
+   ],
+   "rotation_y": 0.0,
+   "scale": [
+    1.0,
+    1.0,
+    1.0
+   ],
+   "zone": "Bar"
+  },
+  {
+   "name": "CounterBottle12",
+   "object": "bottle_amber",
+   "position": [
+    20.32,
+    1.1,
+    12.47
+   ],
+   "rotation_y": 0.0,
+   "scale": [
+    1.0,
+    1.0,
+    1.0
+   ],
+   "zone": "Bar"
+  },
+  {
+   "name": "CounterBottle13",
+   "object": "bottle_green",
+   "position": [
+    21.03,
+    1.1,
+    12.53
+   ],
+   "rotation_y": 0.0,
+   "scale": [
+    1.0,
+    1.0,
+    1.0
+   ],
+   "zone": "Bar"
+  },
+  {
+   "name": "CounterBottle14",
+   "object": "bottle_clear",
+   "position": [
+    21.74,
+    1.1,
+    12.47
+   ],
+   "rotation_y": 0.0,
+   "scale": [
+    1.0,
+    1.0,
+    1.0
+   ],
+   "zone": "Bar"
+  },
+  {
+   "name": "CounterBottle15",
+   "object": "bottle_amber",
+   "position": [
+    22.45,
+    1.1,
+    12.53
+   ],
+   "rotation_y": 0.0,
+   "scale": [
+    1.0,
+    1.0,
+    1.0
+   ],
+   "zone": "Bar"
+  },
+  {
+   "name": "CounterBottle16",
+   "object": "bottle_green",
+   "position": [
+    23.16,
+    1.1,
+    12.47
+   ],
+   "rotation_y": 0.0,
+   "scale": [
+    1.0,
+    1.0,
+    1.0
+   ],
+   "zone": "Bar"
+  },
+  {
+   "name": "CounterBottle17",
+   "object": "bottle_clear",
+   "position": [
+    23.87,
+    1.1,
+    12.53
+   ],
+   "rotation_y": 0.0,
+   "scale": [
+    1.0,
+    1.0,
+    1.0
+   ],
+   "zone": "Bar"
+  },
+  {
+   "name": "CounterGlass0",
+   "object": "beer_glass",
+   "position": [
+    12.05,
+    1.1,
+    12.0
+   ],
+   "rotation_y": 0.0,
+   "scale": [
+    1.0,
+    1.0,
+    1.0
+   ],
+   "zone": "Bar"
+  },
+  {
+   "name": "CounterGlass1",
+   "object": "beer_glass",
+   "position": [
+    13.48,
+    1.1,
+    12.0
+   ],
+   "rotation_y": 0.0,
+   "scale": [
+    1.0,
+    1.0,
+    1.0
+   ],
+   "zone": "Bar"
+  },
+  {
+   "name": "CounterGlass2",
+   "object": "beer_glass",
+   "position": [
+    14.91,
+    1.1,
+    12.0
+   ],
+   "rotation_y": 0.0,
+   "scale": [
+    1.0,
+    1.0,
+    1.0
+   ],
+   "zone": "Bar"
+  },
+  {
+   "name": "CounterGlass3",
+   "object": "beer_glass",
+   "position": [
+    16.34,
+    1.1,
+    12.0
+   ],
+   "rotation_y": 0.0,
+   "scale": [
+    1.0,
+    1.0,
+    1.0
+   ],
+   "zone": "Bar"
+  },
+  {
+   "name": "CounterGlass4",
+   "object": "beer_glass",
+   "position": [
+    17.77,
+    1.1,
+    12.0
+   ],
+   "rotation_y": 0.0,
+   "scale": [
+    1.0,
+    1.0,
+    1.0
+   ],
+   "zone": "Bar"
+  },
+  {
+   "name": "CounterGlass5",
+   "object": "beer_glass",
+   "position": [
+    19.2,
+    1.1,
+    12.0
+   ],
+   "rotation_y": 0.0,
+   "scale": [
+    1.0,
+    1.0,
+    1.0
+   ],
+   "zone": "Bar"
+  },
+  {
+   "name": "CounterGlass6",
+   "object": "beer_glass",
+   "position": [
+    20.63,
+    1.1,
+    12.0
+   ],
+   "rotation_y": 0.0,
+   "scale": [
+    1.0,
+    1.0,
+    1.0
+   ],
+   "zone": "Bar"
+  },
+  {
+   "name": "CounterGlass7",
+   "object": "beer_glass",
+   "position": [
+    22.06,
+    1.1,
+    12.0
+   ],
+   "rotation_y": 0.0,
+   "scale": [
+    1.0,
+    1.0,
+    1.0
+   ],
+   "zone": "Bar"
+  },
+  {
+   "name": "CounterGlass8",
+   "object": "beer_glass",
+   "position": [
+    23.49,
+    1.1,
+    12.0
+   ],
+   "rotation_y": 0.0,
    "scale": [
     1.0,
     1.0,
@@ -3029,9 +3173,9 @@
    "name": "Table0",
    "object": "round_table",
    "position": [
-    14.4,
+    13.2,
     0.0,
-    3.5
+    9.75
    ],
    "rotation_y": 0.0,
    "scale": [
@@ -3045,9 +3189,9 @@
    "name": "Table0Lamp",
    "object": "table_lamp_lit",
    "position": [
-    14.32,
+    13.1,
     0.75,
-    3.5
+    9.7
    ],
    "rotation_y": 0.0,
    "scale": [
@@ -3058,12 +3202,12 @@
    "zone": "Tables"
   },
   {
-   "name": "Table0Tealight0",
+   "name": "Table0Tealight",
    "object": "tealight_lantern",
    "position": [
-    14.52,
+    13.38,
     0.75,
-    3.56
+    9.87
    ],
    "rotation_y": 0.0,
    "scale": [
@@ -3074,12 +3218,76 @@
    "zone": "Tables"
   },
   {
-   "name": "Table0Napkins",
-   "object": "napkin_cup",
+   "name": "Table0TealightB",
+   "object": "tealight_lantern",
    "position": [
-    14.45,
+    13.0,
     0.75,
-    3.36
+    9.97
+   ],
+   "rotation_y": 0.0,
+   "scale": [
+    1.0,
+    1.0,
+    1.0
+   ],
+   "zone": "Tables"
+  },
+  {
+   "name": "Table0Glass0",
+   "object": "beer_glass",
+   "position": [
+    13.458,
+    0.75,
+    9.859
+   ],
+   "rotation_y": 0.0,
+   "scale": [
+    1.0,
+    1.0,
+    1.0
+   ],
+   "zone": "Tables"
+  },
+  {
+   "name": "Table0Glass1",
+   "object": "beer_glass",
+   "position": [
+    13.091,
+    0.75,
+    10.008
+   ],
+   "rotation_y": 0.0,
+   "scale": [
+    1.0,
+    1.0,
+    1.0
+   ],
+   "zone": "Tables"
+  },
+  {
+   "name": "Table0Glass2",
+   "object": "beer_glass",
+   "position": [
+    12.942,
+    0.75,
+    9.641
+   ],
+   "rotation_y": 0.0,
+   "scale": [
+    1.0,
+    1.0,
+    1.0
+   ],
+   "zone": "Tables"
+  },
+  {
+   "name": "Table0Glass3",
+   "object": "beer_glass",
+   "position": [
+    13.309,
+    0.75,
+    9.492
    ],
    "rotation_y": 0.0,
    "scale": [
@@ -3093,11 +3301,11 @@
    "name": "Table0Chair0",
    "object": "cafe_chair",
    "position": [
-    13.8,
+    13.2,
     0.0,
-    3.5
+    9.09
    ],
-   "rotation_y": 90.0,
+   "rotation_y": 0.0,
    "scale": [
     1.0,
     1.0,
@@ -3109,11 +3317,43 @@
    "name": "Table0Chair1",
    "object": "cafe_chair",
    "position": [
-    15.0,
+    13.86,
     0.0,
-    3.5
+    9.75
    ],
    "rotation_y": -90.0,
+   "scale": [
+    1.0,
+    1.0,
+    1.0
+   ],
+   "zone": "Tables"
+  },
+  {
+   "name": "Table0Chair2",
+   "object": "cafe_chair",
+   "position": [
+    13.2,
+    0.0,
+    10.41
+   ],
+   "rotation_y": 180.0,
+   "scale": [
+    1.0,
+    1.0,
+    1.0
+   ],
+   "zone": "Tables"
+  },
+  {
+   "name": "Table0Chair3",
+   "object": "cafe_chair",
+   "position": [
+    12.54,
+    0.0,
+    9.75
+   ],
+   "rotation_y": 90.0,
    "scale": [
     1.0,
     1.0,
@@ -3125,9 +3365,9 @@
    "name": "Table1",
    "object": "round_table",
    "position": [
-    17.2,
+    15.8,
     0.0,
-    3.5
+    9.75
    ],
    "rotation_y": 0.0,
    "scale": [
@@ -3138,12 +3378,28 @@
    "zone": "Tables"
   },
   {
-   "name": "Table1Tealight0",
+   "name": "Table1Lamp",
+   "object": "table_lamp_lit",
+   "position": [
+    15.7,
+    0.75,
+    9.7
+   ],
+   "rotation_y": 0.0,
+   "scale": [
+    1.0,
+    1.0,
+    1.0
+   ],
+   "zone": "Tables"
+  },
+  {
+   "name": "Table1Tealight",
    "object": "tealight_lantern",
    "position": [
-    17.32,
+    15.98,
     0.75,
-    3.56
+    9.87
    ],
    "rotation_y": 0.0,
    "scale": [
@@ -3154,12 +3410,12 @@
    "zone": "Tables"
   },
   {
-   "name": "Table1Tealight1",
-   "object": "tealight_lantern",
+   "name": "Table1Glass0",
+   "object": "beer_glass",
    "position": [
-    17.44,
+    16.058,
     0.75,
-    3.44
+    9.859
    ],
    "rotation_y": 0.0,
    "scale": [
@@ -3170,12 +3426,44 @@
    "zone": "Tables"
   },
   {
-   "name": "Table1Napkins",
-   "object": "napkin_cup",
+   "name": "Table1Glass1",
+   "object": "beer_glass",
    "position": [
-    17.25,
+    15.691,
     0.75,
-    3.36
+    10.008
+   ],
+   "rotation_y": 0.0,
+   "scale": [
+    1.0,
+    1.0,
+    1.0
+   ],
+   "zone": "Tables"
+  },
+  {
+   "name": "Table1Glass2",
+   "object": "beer_glass",
+   "position": [
+    15.542,
+    0.75,
+    9.641
+   ],
+   "rotation_y": 0.0,
+   "scale": [
+    1.0,
+    1.0,
+    1.0
+   ],
+   "zone": "Tables"
+  },
+  {
+   "name": "Table1Glass3",
+   "object": "beer_glass",
+   "position": [
+    15.909,
+    0.75,
+    9.492
    ],
    "rotation_y": 0.0,
    "scale": [
@@ -3189,11 +3477,11 @@
    "name": "Table1Chair0",
    "object": "cafe_chair",
    "position": [
-    16.6,
+    15.8,
     0.0,
-    3.5
+    9.09
    ],
-   "rotation_y": 90.0,
+   "rotation_y": 0.0,
    "scale": [
     1.0,
     1.0,
@@ -3205,11 +3493,43 @@
    "name": "Table1Chair1",
    "object": "cafe_chair",
    "position": [
-    17.8,
+    16.46,
     0.0,
-    3.5
+    9.75
    ],
    "rotation_y": -90.0,
+   "scale": [
+    1.0,
+    1.0,
+    1.0
+   ],
+   "zone": "Tables"
+  },
+  {
+   "name": "Table1Chair2",
+   "object": "cafe_chair",
+   "position": [
+    15.8,
+    0.0,
+    10.41
+   ],
+   "rotation_y": 180.0,
+   "scale": [
+    1.0,
+    1.0,
+    1.0
+   ],
+   "zone": "Tables"
+  },
+  {
+   "name": "Table1Chair3",
+   "object": "cafe_chair",
+   "position": [
+    15.14,
+    0.0,
+    9.75
+   ],
+   "rotation_y": 90.0,
    "scale": [
     1.0,
     1.0,
@@ -3221,9 +3541,9 @@
    "name": "Table2",
    "object": "round_table",
    "position": [
-    12.6,
+    18.4,
     0.0,
-    6.7
+    9.75
    ],
    "rotation_y": 0.0,
    "scale": [
@@ -3237,9 +3557,9 @@
    "name": "Table2Lamp",
    "object": "table_lamp_lit",
    "position": [
-    12.52,
+    18.3,
     0.75,
-    6.7
+    9.7
    ],
    "rotation_y": 0.0,
    "scale": [
@@ -3250,12 +3570,12 @@
    "zone": "Tables"
   },
   {
-   "name": "Table2Tealight0",
+   "name": "Table2Tealight",
    "object": "tealight_lantern",
    "position": [
-    12.72,
+    18.58,
     0.75,
-    6.76
+    9.87
    ],
    "rotation_y": 0.0,
    "scale": [
@@ -3266,12 +3586,76 @@
    "zone": "Tables"
   },
   {
-   "name": "Table2Napkins",
-   "object": "napkin_cup",
+   "name": "Table2TealightB",
+   "object": "tealight_lantern",
    "position": [
-    12.65,
+    18.2,
     0.75,
-    6.56
+    9.97
+   ],
+   "rotation_y": 0.0,
+   "scale": [
+    1.0,
+    1.0,
+    1.0
+   ],
+   "zone": "Tables"
+  },
+  {
+   "name": "Table2Glass0",
+   "object": "beer_glass",
+   "position": [
+    18.658,
+    0.75,
+    9.859
+   ],
+   "rotation_y": 0.0,
+   "scale": [
+    1.0,
+    1.0,
+    1.0
+   ],
+   "zone": "Tables"
+  },
+  {
+   "name": "Table2Glass1",
+   "object": "beer_glass",
+   "position": [
+    18.291,
+    0.75,
+    10.008
+   ],
+   "rotation_y": 0.0,
+   "scale": [
+    1.0,
+    1.0,
+    1.0
+   ],
+   "zone": "Tables"
+  },
+  {
+   "name": "Table2Glass2",
+   "object": "beer_glass",
+   "position": [
+    18.142,
+    0.75,
+    9.641
+   ],
+   "rotation_y": 0.0,
+   "scale": [
+    1.0,
+    1.0,
+    1.0
+   ],
+   "zone": "Tables"
+  },
+  {
+   "name": "Table2Glass3",
+   "object": "beer_glass",
+   "position": [
+    18.509,
+    0.75,
+    9.492
    ],
    "rotation_y": 0.0,
    "scale": [
@@ -3285,11 +3669,11 @@
    "name": "Table2Chair0",
    "object": "cafe_chair",
    "position": [
-    12.0,
+    18.4,
     0.0,
-    6.7
+    9.09
    ],
-   "rotation_y": 90.0,
+   "rotation_y": 0.0,
    "scale": [
     1.0,
     1.0,
@@ -3301,9 +3685,9 @@
    "name": "Table2Chair1",
    "object": "cafe_chair",
    "position": [
-    13.2,
+    19.06,
     0.0,
-    6.7
+    9.75
    ],
    "rotation_y": -90.0,
    "scale": [
@@ -3317,11 +3701,27 @@
    "name": "Table2Chair2",
    "object": "cafe_chair",
    "position": [
-    12.6,
+    18.4,
     0.0,
-    7.3
+    10.41
    ],
    "rotation_y": 180.0,
+   "scale": [
+    1.0,
+    1.0,
+    1.0
+   ],
+   "zone": "Tables"
+  },
+  {
+   "name": "Table2Chair3",
+   "object": "cafe_chair",
+   "position": [
+    17.74,
+    0.0,
+    9.75
+   ],
+   "rotation_y": 90.0,
    "scale": [
     1.0,
     1.0,
@@ -3333,9 +3733,9 @@
    "name": "Table3",
    "object": "round_table",
    "position": [
-    15.4,
+    21.0,
     0.0,
-    6.7
+    9.75
    ],
    "rotation_y": 0.0,
    "scale": [
@@ -3346,12 +3746,28 @@
    "zone": "Tables"
   },
   {
-   "name": "Table3Tealight0",
+   "name": "Table3Lamp",
+   "object": "table_lamp_lit",
+   "position": [
+    20.9,
+    0.75,
+    9.7
+   ],
+   "rotation_y": 0.0,
+   "scale": [
+    1.0,
+    1.0,
+    1.0
+   ],
+   "zone": "Tables"
+  },
+  {
+   "name": "Table3Tealight",
    "object": "tealight_lantern",
    "position": [
-    15.52,
+    21.18,
     0.75,
-    6.76
+    9.87
    ],
    "rotation_y": 0.0,
    "scale": [
@@ -3362,12 +3778,12 @@
    "zone": "Tables"
   },
   {
-   "name": "Table3Tealight1",
-   "object": "tealight_lantern",
+   "name": "Table3Glass0",
+   "object": "beer_glass",
    "position": [
-    15.64,
+    21.258,
     0.75,
-    6.64
+    9.859
    ],
    "rotation_y": 0.0,
    "scale": [
@@ -3378,12 +3794,44 @@
    "zone": "Tables"
   },
   {
-   "name": "Table3Napkins",
-   "object": "napkin_cup",
+   "name": "Table3Glass1",
+   "object": "beer_glass",
    "position": [
-    15.45,
+    20.891,
     0.75,
-    6.56
+    10.008
+   ],
+   "rotation_y": 0.0,
+   "scale": [
+    1.0,
+    1.0,
+    1.0
+   ],
+   "zone": "Tables"
+  },
+  {
+   "name": "Table3Glass2",
+   "object": "beer_glass",
+   "position": [
+    20.742,
+    0.75,
+    9.641
+   ],
+   "rotation_y": 0.0,
+   "scale": [
+    1.0,
+    1.0,
+    1.0
+   ],
+   "zone": "Tables"
+  },
+  {
+   "name": "Table3Glass3",
+   "object": "beer_glass",
+   "position": [
+    21.109,
+    0.75,
+    9.492
    ],
    "rotation_y": 0.0,
    "scale": [
@@ -3397,11 +3845,11 @@
    "name": "Table3Chair0",
    "object": "cafe_chair",
    "position": [
-    14.8,
+    21.0,
     0.0,
-    6.7
+    9.09
    ],
-   "rotation_y": 90.0,
+   "rotation_y": 0.0,
    "scale": [
     1.0,
     1.0,
@@ -3413,9 +3861,9 @@
    "name": "Table3Chair1",
    "object": "cafe_chair",
    "position": [
-    16.0,
+    21.66,
     0.0,
-    6.7
+    9.75
    ],
    "rotation_y": -90.0,
    "scale": [
@@ -3429,11 +3877,27 @@
    "name": "Table3Chair2",
    "object": "cafe_chair",
    "position": [
-    15.4,
+    21.0,
     0.0,
-    7.3
+    10.41
    ],
    "rotation_y": 180.0,
+   "scale": [
+    1.0,
+    1.0,
+    1.0
+   ],
+   "zone": "Tables"
+  },
+  {
+   "name": "Table3Chair3",
+   "object": "cafe_chair",
+   "position": [
+    20.34,
+    0.0,
+    9.75
+   ],
+   "rotation_y": 90.0,
    "scale": [
     1.0,
     1.0,
@@ -3445,9 +3909,9 @@
    "name": "Table4",
    "object": "round_table",
    "position": [
-    18.2,
+    23.6,
     0.0,
-    6.7
+    9.75
    ],
    "rotation_y": 0.0,
    "scale": [
@@ -3461,9 +3925,9 @@
    "name": "Table4Lamp",
    "object": "table_lamp_lit",
    "position": [
-    18.12,
+    23.5,
     0.75,
-    6.7
+    9.7
    ],
    "rotation_y": 0.0,
    "scale": [
@@ -3474,12 +3938,12 @@
    "zone": "Tables"
   },
   {
-   "name": "Table4Tealight0",
+   "name": "Table4Tealight",
    "object": "tealight_lantern",
    "position": [
-    18.32,
+    23.78,
     0.75,
-    6.76
+    9.87
    ],
    "rotation_y": 0.0,
    "scale": [
@@ -3490,12 +3954,76 @@
    "zone": "Tables"
   },
   {
-   "name": "Table4Napkins",
-   "object": "napkin_cup",
+   "name": "Table4TealightB",
+   "object": "tealight_lantern",
    "position": [
-    18.25,
+    23.4,
     0.75,
-    6.56
+    9.97
+   ],
+   "rotation_y": 0.0,
+   "scale": [
+    1.0,
+    1.0,
+    1.0
+   ],
+   "zone": "Tables"
+  },
+  {
+   "name": "Table4Glass0",
+   "object": "beer_glass",
+   "position": [
+    23.858,
+    0.75,
+    9.859
+   ],
+   "rotation_y": 0.0,
+   "scale": [
+    1.0,
+    1.0,
+    1.0
+   ],
+   "zone": "Tables"
+  },
+  {
+   "name": "Table4Glass1",
+   "object": "beer_glass",
+   "position": [
+    23.491,
+    0.75,
+    10.008
+   ],
+   "rotation_y": 0.0,
+   "scale": [
+    1.0,
+    1.0,
+    1.0
+   ],
+   "zone": "Tables"
+  },
+  {
+   "name": "Table4Glass2",
+   "object": "beer_glass",
+   "position": [
+    23.342,
+    0.75,
+    9.641
+   ],
+   "rotation_y": 0.0,
+   "scale": [
+    1.0,
+    1.0,
+    1.0
+   ],
+   "zone": "Tables"
+  },
+  {
+   "name": "Table4Glass3",
+   "object": "beer_glass",
+   "position": [
+    23.709,
+    0.75,
+    9.492
    ],
    "rotation_y": 0.0,
    "scale": [
@@ -3509,11 +4037,11 @@
    "name": "Table4Chair0",
    "object": "cafe_chair",
    "position": [
-    17.6,
+    23.6,
     0.0,
-    6.7
+    9.09
    ],
-   "rotation_y": 90.0,
+   "rotation_y": 0.0,
    "scale": [
     1.0,
     1.0,
@@ -3525,9 +4053,9 @@
    "name": "Table4Chair1",
    "object": "cafe_chair",
    "position": [
-    18.8,
+    24.26,
     0.0,
-    6.7
+    9.75
    ],
    "rotation_y": -90.0,
    "scale": [
@@ -3541,11 +4069,27 @@
    "name": "Table4Chair2",
    "object": "cafe_chair",
    "position": [
-    18.2,
+    23.6,
     0.0,
-    7.3
+    10.41
    ],
    "rotation_y": 180.0,
+   "scale": [
+    1.0,
+    1.0,
+    1.0
+   ],
+   "zone": "Tables"
+  },
+  {
+   "name": "Table4Chair3",
+   "object": "cafe_chair",
+   "position": [
+    22.94,
+    0.0,
+    9.75
+   ],
+   "rotation_y": 90.0,
    "scale": [
     1.0,
     1.0,
@@ -3557,9 +4101,9 @@
    "name": "Table5",
    "object": "round_table",
    "position": [
-    21.0,
+    20.4,
     0.0,
-    6.7
+    6.85
    ],
    "rotation_y": 0.0,
    "scale": [
@@ -3570,12 +4114,28 @@
    "zone": "Tables"
   },
   {
-   "name": "Table5Tealight0",
+   "name": "Table5Lamp",
+   "object": "table_lamp_lit",
+   "position": [
+    20.3,
+    0.75,
+    6.8
+   ],
+   "rotation_y": 0.0,
+   "scale": [
+    1.0,
+    1.0,
+    1.0
+   ],
+   "zone": "Tables"
+  },
+  {
+   "name": "Table5Tealight",
    "object": "tealight_lantern",
    "position": [
-    21.12,
+    20.58,
     0.75,
-    6.76
+    6.97
    ],
    "rotation_y": 0.0,
    "scale": [
@@ -3586,12 +4146,12 @@
    "zone": "Tables"
   },
   {
-   "name": "Table5Tealight1",
-   "object": "tealight_lantern",
+   "name": "Table5Glass0",
+   "object": "beer_glass",
    "position": [
-    21.24,
+    20.658,
     0.75,
-    6.64
+    6.959
    ],
    "rotation_y": 0.0,
    "scale": [
@@ -3602,12 +4162,44 @@
    "zone": "Tables"
   },
   {
-   "name": "Table5Napkins",
-   "object": "napkin_cup",
+   "name": "Table5Glass1",
+   "object": "beer_glass",
    "position": [
-    21.05,
+    20.291,
     0.75,
-    6.56
+    7.108
+   ],
+   "rotation_y": 0.0,
+   "scale": [
+    1.0,
+    1.0,
+    1.0
+   ],
+   "zone": "Tables"
+  },
+  {
+   "name": "Table5Glass2",
+   "object": "beer_glass",
+   "position": [
+    20.142,
+    0.75,
+    6.741
+   ],
+   "rotation_y": 0.0,
+   "scale": [
+    1.0,
+    1.0,
+    1.0
+   ],
+   "zone": "Tables"
+  },
+  {
+   "name": "Table5Glass3",
+   "object": "beer_glass",
+   "position": [
+    20.509,
+    0.75,
+    6.592
    ],
    "rotation_y": 0.0,
    "scale": [
@@ -3623,9 +4215,9 @@
    "position": [
     20.4,
     0.0,
-    6.7
+    6.19
    ],
-   "rotation_y": 90.0,
+   "rotation_y": 0.0,
    "scale": [
     1.0,
     1.0,
@@ -3637,9 +4229,9 @@
    "name": "Table5Chair1",
    "object": "cafe_chair",
    "position": [
-    21.6,
+    21.06,
     0.0,
-    6.7
+    6.85
    ],
    "rotation_y": -90.0,
    "scale": [
@@ -3653,11 +4245,27 @@
    "name": "Table5Chair2",
    "object": "cafe_chair",
    "position": [
-    21.0,
+    20.4,
     0.0,
-    7.3
+    7.51
    ],
    "rotation_y": 180.0,
+   "scale": [
+    1.0,
+    1.0,
+    1.0
+   ],
+   "zone": "Tables"
+  },
+  {
+   "name": "Table5Chair3",
+   "object": "cafe_chair",
+   "position": [
+    19.74,
+    0.0,
+    6.85
+   ],
+   "rotation_y": 90.0,
    "scale": [
     1.0,
     1.0,
@@ -3669,9 +4277,9 @@
    "name": "Table6",
    "object": "round_table",
    "position": [
-    25.0,
+    23.2,
     0.0,
-    7.0
+    6.85
    ],
    "rotation_y": 0.0,
    "scale": [
@@ -3685,9 +4293,9 @@
    "name": "Table6Lamp",
    "object": "table_lamp_lit",
    "position": [
-    24.92,
+    23.1,
     0.75,
-    7.0
+    6.8
    ],
    "rotation_y": 0.0,
    "scale": [
@@ -3698,12 +4306,12 @@
    "zone": "Tables"
   },
   {
-   "name": "Table6Tealight0",
+   "name": "Table6Tealight",
    "object": "tealight_lantern",
    "position": [
-    25.12,
+    23.38,
     0.75,
-    7.06
+    6.97
    ],
    "rotation_y": 0.0,
    "scale": [
@@ -3714,12 +4322,76 @@
    "zone": "Tables"
   },
   {
-   "name": "Table6Napkins",
-   "object": "napkin_cup",
+   "name": "Table6TealightB",
+   "object": "tealight_lantern",
    "position": [
-    25.05,
+    23.0,
     0.75,
-    6.86
+    7.07
+   ],
+   "rotation_y": 0.0,
+   "scale": [
+    1.0,
+    1.0,
+    1.0
+   ],
+   "zone": "Tables"
+  },
+  {
+   "name": "Table6Glass0",
+   "object": "beer_glass",
+   "position": [
+    23.458,
+    0.75,
+    6.959
+   ],
+   "rotation_y": 0.0,
+   "scale": [
+    1.0,
+    1.0,
+    1.0
+   ],
+   "zone": "Tables"
+  },
+  {
+   "name": "Table6Glass1",
+   "object": "beer_glass",
+   "position": [
+    23.091,
+    0.75,
+    7.108
+   ],
+   "rotation_y": 0.0,
+   "scale": [
+    1.0,
+    1.0,
+    1.0
+   ],
+   "zone": "Tables"
+  },
+  {
+   "name": "Table6Glass2",
+   "object": "beer_glass",
+   "position": [
+    22.942,
+    0.75,
+    6.741
+   ],
+   "rotation_y": 0.0,
+   "scale": [
+    1.0,
+    1.0,
+    1.0
+   ],
+   "zone": "Tables"
+  },
+  {
+   "name": "Table6Glass3",
+   "object": "beer_glass",
+   "position": [
+    23.309,
+    0.75,
+    6.592
    ],
    "rotation_y": 0.0,
    "scale": [
@@ -3733,11 +4405,11 @@
    "name": "Table6Chair0",
    "object": "cafe_chair",
    "position": [
-    24.4,
+    23.2,
     0.0,
-    7.0
+    6.19
    ],
-   "rotation_y": 90.0,
+   "rotation_y": 0.0,
    "scale": [
     1.0,
     1.0,
@@ -3749,9 +4421,9 @@
    "name": "Table6Chair1",
    "object": "cafe_chair",
    "position": [
-    25.6,
+    23.86,
     0.0,
-    7.0
+    6.85
    ],
    "rotation_y": -90.0,
    "scale": [
@@ -3765,11 +4437,27 @@
    "name": "Table6Chair2",
    "object": "cafe_chair",
    "position": [
-    25.0,
+    23.2,
     0.0,
-    6.4
+    7.51
    ],
-   "rotation_y": 0.0,
+   "rotation_y": 180.0,
+   "scale": [
+    1.0,
+    1.0,
+    1.0
+   ],
+   "zone": "Tables"
+  },
+  {
+   "name": "Table6Chair3",
+   "object": "cafe_chair",
+   "position": [
+    22.54,
+    0.0,
+    6.85
+   ],
+   "rotation_y": 90.0,
    "scale": [
     1.0,
     1.0,
@@ -3781,9 +4469,9 @@
    "name": "Table7",
    "object": "round_table",
    "position": [
-    27.8,
+    26.4,
     0.0,
-    7.0
+    5.9
    ],
    "rotation_y": 0.0,
    "scale": [
@@ -3794,12 +4482,28 @@
    "zone": "Tables"
   },
   {
-   "name": "Table7Tealight0",
+   "name": "Table7Lamp",
+   "object": "table_lamp_lit",
+   "position": [
+    26.3,
+    0.75,
+    5.85
+   ],
+   "rotation_y": 0.0,
+   "scale": [
+    1.0,
+    1.0,
+    1.0
+   ],
+   "zone": "Tables"
+  },
+  {
+   "name": "Table7Tealight",
    "object": "tealight_lantern",
    "position": [
-    27.92,
+    26.58,
     0.75,
-    7.06
+    6.02
    ],
    "rotation_y": 0.0,
    "scale": [
@@ -3810,12 +4514,12 @@
    "zone": "Tables"
   },
   {
-   "name": "Table7Tealight1",
-   "object": "tealight_lantern",
+   "name": "Table7Glass0",
+   "object": "beer_glass",
    "position": [
-    28.04,
+    26.658,
     0.75,
-    6.94
+    6.009
    ],
    "rotation_y": 0.0,
    "scale": [
@@ -3826,12 +4530,44 @@
    "zone": "Tables"
   },
   {
-   "name": "Table7Napkins",
-   "object": "napkin_cup",
+   "name": "Table7Glass1",
+   "object": "beer_glass",
    "position": [
-    27.85,
+    26.291,
     0.75,
-    6.86
+    6.158
+   ],
+   "rotation_y": 0.0,
+   "scale": [
+    1.0,
+    1.0,
+    1.0
+   ],
+   "zone": "Tables"
+  },
+  {
+   "name": "Table7Glass2",
+   "object": "beer_glass",
+   "position": [
+    26.142,
+    0.75,
+    5.791
+   ],
+   "rotation_y": 0.0,
+   "scale": [
+    1.0,
+    1.0,
+    1.0
+   ],
+   "zone": "Tables"
+  },
+  {
+   "name": "Table7Glass3",
+   "object": "beer_glass",
+   "position": [
+    26.509,
+    0.75,
+    5.642
    ],
    "rotation_y": 0.0,
    "scale": [
@@ -3845,11 +4581,11 @@
    "name": "Table7Chair0",
    "object": "cafe_chair",
    "position": [
-    27.2,
+    26.4,
     0.0,
-    7.0
+    5.24
    ],
-   "rotation_y": 90.0,
+   "rotation_y": 0.0,
    "scale": [
     1.0,
     1.0,
@@ -3861,9 +4597,9 @@
    "name": "Table7Chair1",
    "object": "cafe_chair",
    "position": [
-    28.4,
+    27.06,
     0.0,
-    7.0
+    5.9
    ],
    "rotation_y": -90.0,
    "scale": [
@@ -3877,11 +4613,27 @@
    "name": "Table7Chair2",
    "object": "cafe_chair",
    "position": [
-    27.8,
+    26.4,
     0.0,
-    6.4
+    6.56
    ],
-   "rotation_y": 0.0,
+   "rotation_y": 180.0,
+   "scale": [
+    1.0,
+    1.0,
+    1.0
+   ],
+   "zone": "Tables"
+  },
+  {
+   "name": "Table7Chair3",
+   "object": "cafe_chair",
+   "position": [
+    25.74,
+    0.0,
+    5.9
+   ],
+   "rotation_y": 90.0,
    "scale": [
     1.0,
     1.0,
@@ -3893,9 +4645,9 @@
    "name": "Table8",
    "object": "round_table",
    "position": [
-    25.0,
+    26.4,
     0.0,
-    9.0
+    8.6
    ],
    "rotation_y": 0.0,
    "scale": [
@@ -3909,9 +4661,9 @@
    "name": "Table8Lamp",
    "object": "table_lamp_lit",
    "position": [
-    24.92,
+    26.3,
     0.75,
-    9.0
+    8.55
    ],
    "rotation_y": 0.0,
    "scale": [
@@ -3922,12 +4674,12 @@
    "zone": "Tables"
   },
   {
-   "name": "Table8Tealight0",
+   "name": "Table8Tealight",
    "object": "tealight_lantern",
    "position": [
-    25.12,
+    26.58,
     0.75,
-    9.06
+    8.72
    ],
    "rotation_y": 0.0,
    "scale": [
@@ -3938,12 +4690,76 @@
    "zone": "Tables"
   },
   {
-   "name": "Table8Napkins",
-   "object": "napkin_cup",
+   "name": "Table8TealightB",
+   "object": "tealight_lantern",
    "position": [
-    25.05,
+    26.2,
     0.75,
-    8.86
+    8.82
+   ],
+   "rotation_y": 0.0,
+   "scale": [
+    1.0,
+    1.0,
+    1.0
+   ],
+   "zone": "Tables"
+  },
+  {
+   "name": "Table8Glass0",
+   "object": "beer_glass",
+   "position": [
+    26.658,
+    0.75,
+    8.709
+   ],
+   "rotation_y": 0.0,
+   "scale": [
+    1.0,
+    1.0,
+    1.0
+   ],
+   "zone": "Tables"
+  },
+  {
+   "name": "Table8Glass1",
+   "object": "beer_glass",
+   "position": [
+    26.291,
+    0.75,
+    8.858
+   ],
+   "rotation_y": 0.0,
+   "scale": [
+    1.0,
+    1.0,
+    1.0
+   ],
+   "zone": "Tables"
+  },
+  {
+   "name": "Table8Glass2",
+   "object": "beer_glass",
+   "position": [
+    26.142,
+    0.75,
+    8.491
+   ],
+   "rotation_y": 0.0,
+   "scale": [
+    1.0,
+    1.0,
+    1.0
+   ],
+   "zone": "Tables"
+  },
+  {
+   "name": "Table8Glass3",
+   "object": "beer_glass",
+   "position": [
+    26.509,
+    0.75,
+    8.342
    ],
    "rotation_y": 0.0,
    "scale": [
@@ -3957,11 +4773,11 @@
    "name": "Table8Chair0",
    "object": "cafe_chair",
    "position": [
-    24.4,
+    26.4,
     0.0,
-    9.0
+    7.94
    ],
-   "rotation_y": 90.0,
+   "rotation_y": 0.0,
    "scale": [
     1.0,
     1.0,
@@ -3973,11 +4789,43 @@
    "name": "Table8Chair1",
    "object": "cafe_chair",
    "position": [
-    25.6,
+    27.06,
     0.0,
-    9.0
+    8.6
    ],
    "rotation_y": -90.0,
+   "scale": [
+    1.0,
+    1.0,
+    1.0
+   ],
+   "zone": "Tables"
+  },
+  {
+   "name": "Table8Chair2",
+   "object": "cafe_chair",
+   "position": [
+    26.4,
+    0.0,
+    9.26
+   ],
+   "rotation_y": 180.0,
+   "scale": [
+    1.0,
+    1.0,
+    1.0
+   ],
+   "zone": "Tables"
+  },
+  {
+   "name": "Table8Chair3",
+   "object": "cafe_chair",
+   "position": [
+    25.74,
+    0.0,
+    8.6
+   ],
+   "rotation_y": 90.0,
    "scale": [
     1.0,
     1.0,
@@ -3989,9 +4837,9 @@
    "name": "Table9",
    "object": "round_table",
    "position": [
-    27.8,
+    26.4,
     0.0,
-    9.0
+    11.4
    ],
    "rotation_y": 0.0,
    "scale": [
@@ -4002,12 +4850,28 @@
    "zone": "Tables"
   },
   {
-   "name": "Table9Tealight0",
+   "name": "Table9Lamp",
+   "object": "table_lamp_lit",
+   "position": [
+    26.3,
+    0.75,
+    11.35
+   ],
+   "rotation_y": 0.0,
+   "scale": [
+    1.0,
+    1.0,
+    1.0
+   ],
+   "zone": "Tables"
+  },
+  {
+   "name": "Table9Tealight",
    "object": "tealight_lantern",
    "position": [
-    27.92,
+    26.58,
     0.75,
-    9.06
+    11.52
    ],
    "rotation_y": 0.0,
    "scale": [
@@ -4018,12 +4882,12 @@
    "zone": "Tables"
   },
   {
-   "name": "Table9Tealight1",
-   "object": "tealight_lantern",
+   "name": "Table9Glass0",
+   "object": "beer_glass",
    "position": [
-    28.04,
+    26.658,
     0.75,
-    8.94
+    11.509
    ],
    "rotation_y": 0.0,
    "scale": [
@@ -4034,12 +4898,44 @@
    "zone": "Tables"
   },
   {
-   "name": "Table9Napkins",
-   "object": "napkin_cup",
+   "name": "Table9Glass1",
+   "object": "beer_glass",
    "position": [
-    27.85,
+    26.291,
     0.75,
-    8.86
+    11.658
+   ],
+   "rotation_y": 0.0,
+   "scale": [
+    1.0,
+    1.0,
+    1.0
+   ],
+   "zone": "Tables"
+  },
+  {
+   "name": "Table9Glass2",
+   "object": "beer_glass",
+   "position": [
+    26.142,
+    0.75,
+    11.291
+   ],
+   "rotation_y": 0.0,
+   "scale": [
+    1.0,
+    1.0,
+    1.0
+   ],
+   "zone": "Tables"
+  },
+  {
+   "name": "Table9Glass3",
+   "object": "beer_glass",
+   "position": [
+    26.509,
+    0.75,
+    11.142
    ],
    "rotation_y": 0.0,
    "scale": [
@@ -4053,11 +4949,11 @@
    "name": "Table9Chair0",
    "object": "cafe_chair",
    "position": [
-    27.2,
+    26.4,
     0.0,
-    9.0
+    10.74
    ],
-   "rotation_y": 90.0,
+   "rotation_y": 0.0,
    "scale": [
     1.0,
     1.0,
@@ -4069,11 +4965,43 @@
    "name": "Table9Chair1",
    "object": "cafe_chair",
    "position": [
-    28.4,
+    27.06,
     0.0,
-    9.0
+    11.4
    ],
    "rotation_y": -90.0,
+   "scale": [
+    1.0,
+    1.0,
+    1.0
+   ],
+   "zone": "Tables"
+  },
+  {
+   "name": "Table9Chair2",
+   "object": "cafe_chair",
+   "position": [
+    26.4,
+    0.0,
+    12.06
+   ],
+   "rotation_y": 180.0,
+   "scale": [
+    1.0,
+    1.0,
+    1.0
+   ],
+   "zone": "Tables"
+  },
+  {
+   "name": "Table9Chair3",
+   "object": "cafe_chair",
+   "position": [
+    25.74,
+    0.0,
+    11.4
+   ],
+   "rotation_y": 90.0,
    "scale": [
     1.0,
     1.0,
@@ -4085,9 +5013,9 @@
    "name": "DrumStool0",
    "object": "drum_stool",
    "position": [
-    24.0,
+    18.6,
     0.0,
-    4.75
+    4.05
    ],
    "rotation_y": 0.0,
    "scale": [
@@ -4101,9 +5029,9 @@
    "name": "DrumStool1",
    "object": "drum_stool",
    "position": [
-    25.0,
+    19.6,
     0.0,
-    5.5
+    4.05
    ],
    "rotation_y": 37.0,
    "scale": [
@@ -4117,9 +5045,9 @@
    "name": "DrumStool2",
    "object": "drum_stool",
    "position": [
-    26.0,
+    23.4,
     0.0,
-    4.75
+    4.05
    ],
    "rotation_y": 74.0,
    "scale": [
@@ -4133,9 +5061,9 @@
    "name": "DrumStool3",
    "object": "drum_stool",
    "position": [
-    27.0,
+    24.4,
     0.0,
-    5.5
+    4.05
    ],
    "rotation_y": 111.0,
    "scale": [
@@ -4149,9 +5077,9 @@
    "name": "DrumStool4",
    "object": "drum_stool",
    "position": [
-    28.0,
+    25.4,
     0.0,
-    4.75
+    4.05
    ],
    "rotation_y": 148.0,
    "scale": [
@@ -4165,9 +5093,9 @@
    "name": "DrumStool5",
    "object": "drum_stool",
    "position": [
-    29.0,
+    26.4,
     0.0,
-    5.5
+    4.05
    ],
    "rotation_y": -175.0,
    "scale": [
@@ -4178,12 +5106,124 @@
    "zone": "Tables"
   },
   {
-   "name": "Table0",
+   "name": "DrumStool6",
+   "object": "drum_stool",
+   "position": [
+    27.4,
+    0.0,
+    4.05
+   ],
+   "rotation_y": -138.0,
+   "scale": [
+    1.0,
+    1.0,
+    1.0
+   ],
+   "zone": "Tables"
+  },
+  {
+   "name": "DrumStool7",
+   "object": "drum_stool",
+   "position": [
+    17.9,
+    0.0,
+    4.9
+   ],
+   "rotation_y": -101.0,
+   "scale": [
+    1.0,
+    1.0,
+    1.0
+   ],
+   "zone": "Tables"
+  },
+  {
+   "name": "DrumStool8",
+   "object": "drum_stool",
+   "position": [
+    24.9,
+    0.0,
+    4.9
+   ],
+   "rotation_y": -64.0,
+   "scale": [
+    1.0,
+    1.0,
+    1.0
+   ],
+   "zone": "Tables"
+  },
+  {
+   "name": "DrumStool9",
+   "object": "drum_stool",
+   "position": [
+    25.9,
+    0.0,
+    4.9
+   ],
+   "rotation_y": -27.0,
+   "scale": [
+    1.0,
+    1.0,
+    1.0
+   ],
+   "zone": "Tables"
+  },
+  {
+   "name": "DrumStool10",
+   "object": "drum_stool",
+   "position": [
+    26.9,
+    0.0,
+    4.9
+   ],
+   "rotation_y": 10.0,
+   "scale": [
+    1.0,
+    1.0,
+    1.0
+   ],
+   "zone": "Tables"
+  },
+  {
+   "name": "DrumStool11",
+   "object": "drum_stool",
+   "position": [
+    12.0,
+    0.0,
+    3.6
+   ],
+   "rotation_y": 47.0,
+   "scale": [
+    1.0,
+    1.0,
+    1.0
+   ],
+   "zone": "Tables"
+  },
+  {
+   "name": "DrumStool12",
+   "object": "drum_stool",
+   "position": [
+    17.4,
+    0.0,
+    3.6
+   ],
+   "rotation_y": 84.0,
+   "scale": [
+    1.0,
+    1.0,
+    1.0
+   ],
+   "zone": "Tables"
+  },
+  {
+   "name": "Table",
    "object": "communal_table",
    "position": [
-    14.0,
+    14.6,
     0.0,
-    1.35
+    1.75
    ],
    "rotation_y": 0.0,
    "scale": [
@@ -4194,12 +5234,60 @@
    "zone": "CommunalTable"
   },
   {
-   "name": "Chair0_N0",
+   "name": "ChairN0",
    "object": "cafe_chair",
+   "position": [
+    13.1,
+    0.0,
+    1.0
+   ],
+   "rotation_y": 0.0,
+   "scale": [
+    1.0,
+    1.0,
+    1.0
+   ],
+   "zone": "CommunalTable"
+  },
+  {
+   "name": "ChairS0",
+   "object": "cafe_chair",
+   "position": [
+    13.1,
+    0.0,
+    2.5
+   ],
+   "rotation_y": -180.0,
+   "scale": [
+    1.0,
+    1.0,
+    1.0
+   ],
+   "zone": "CommunalTable"
+  },
+  {
+   "name": "GlassN0",
+   "object": "beer_glass",
+   "position": [
+    13.2,
+    0.75,
+    1.45
+   ],
+   "rotation_y": 0.0,
+   "scale": [
+    1.0,
+    1.0,
+    1.0
+   ],
+   "zone": "CommunalTable"
+  },
+  {
+   "name": "GlassS0",
+   "object": "beer_glass",
    "position": [
     13.0,
-    0.0,
-    0.7
+    0.75,
+    2.05
    ],
    "rotation_y": 0.0,
    "scale": [
@@ -4210,12 +5298,28 @@
    "zone": "CommunalTable"
   },
   {
-   "name": "Chair0_S0",
+   "name": "ChairN1",
    "object": "cafe_chair",
    "position": [
-    13.0,
+    14.1,
     0.0,
-    2.0
+    1.0
+   ],
+   "rotation_y": 0.0,
+   "scale": [
+    1.0,
+    1.0,
+    1.0
+   ],
+   "zone": "CommunalTable"
+  },
+  {
+   "name": "ChairS1",
+   "object": "cafe_chair",
+   "position": [
+    14.1,
+    0.0,
+    2.5
    ],
    "rotation_y": -180.0,
    "scale": [
@@ -4226,12 +5330,28 @@
    "zone": "CommunalTable"
   },
   {
-   "name": "Chair0_N1",
-   "object": "cafe_chair",
+   "name": "GlassN1",
+   "object": "beer_glass",
+   "position": [
+    14.2,
+    0.75,
+    1.45
+   ],
+   "rotation_y": 0.0,
+   "scale": [
+    1.0,
+    1.0,
+    1.0
+   ],
+   "zone": "CommunalTable"
+  },
+  {
+   "name": "GlassS1",
+   "object": "beer_glass",
    "position": [
     14.0,
-    0.0,
-    0.7
+    0.75,
+    2.05
    ],
    "rotation_y": 0.0,
    "scale": [
@@ -4242,60 +5362,236 @@
    "zone": "CommunalTable"
   },
   {
-   "name": "Chair0_S1",
+   "name": "ChairN2",
    "object": "cafe_chair",
+   "position": [
+    15.1,
+    0.0,
+    1.0
+   ],
+   "rotation_y": 0.0,
+   "scale": [
+    1.0,
+    1.0,
+    1.0
+   ],
+   "zone": "CommunalTable"
+  },
+  {
+   "name": "ChairS2",
+   "object": "cafe_chair",
+   "position": [
+    15.1,
+    0.0,
+    2.5
+   ],
+   "rotation_y": -180.0,
+   "scale": [
+    1.0,
+    1.0,
+    1.0
+   ],
+   "zone": "CommunalTable"
+  },
+  {
+   "name": "GlassN2",
+   "object": "beer_glass",
+   "position": [
+    15.2,
+    0.75,
+    1.45
+   ],
+   "rotation_y": 0.0,
+   "scale": [
+    1.0,
+    1.0,
+    1.0
+   ],
+   "zone": "CommunalTable"
+  },
+  {
+   "name": "GlassS2",
+   "object": "beer_glass",
+   "position": [
+    15.0,
+    0.75,
+    2.05
+   ],
+   "rotation_y": 0.0,
+   "scale": [
+    1.0,
+    1.0,
+    1.0
+   ],
+   "zone": "CommunalTable"
+  },
+  {
+   "name": "ChairN3",
+   "object": "cafe_chair",
+   "position": [
+    16.1,
+    0.0,
+    1.0
+   ],
+   "rotation_y": 0.0,
+   "scale": [
+    1.0,
+    1.0,
+    1.0
+   ],
+   "zone": "CommunalTable"
+  },
+  {
+   "name": "ChairS3",
+   "object": "cafe_chair",
+   "position": [
+    16.1,
+    0.0,
+    2.5
+   ],
+   "rotation_y": -180.0,
+   "scale": [
+    1.0,
+    1.0,
+    1.0
+   ],
+   "zone": "CommunalTable"
+  },
+  {
+   "name": "GlassN3",
+   "object": "beer_glass",
+   "position": [
+    16.2,
+    0.75,
+    1.45
+   ],
+   "rotation_y": 0.0,
+   "scale": [
+    1.0,
+    1.0,
+    1.0
+   ],
+   "zone": "CommunalTable"
+  },
+  {
+   "name": "GlassS3",
+   "object": "beer_glass",
+   "position": [
+    16.0,
+    0.75,
+    2.05
+   ],
+   "rotation_y": 0.0,
+   "scale": [
+    1.0,
+    1.0,
+    1.0
+   ],
+   "zone": "CommunalTable"
+  },
+  {
+   "name": "Lamp0",
+   "object": "table_lamp_lit",
+   "position": [
+    13.3,
+    0.75,
+    1.7
+   ],
+   "rotation_y": 0.0,
+   "scale": [
+    1.0,
+    1.0,
+    1.0
+   ],
+   "zone": "CommunalTable"
+  },
+  {
+   "name": "Tealight0",
+   "object": "tealight_lantern",
+   "position": [
+    13.9,
+    0.75,
+    1.85
+   ],
+   "rotation_y": 0.0,
+   "scale": [
+    1.0,
+    1.0,
+    1.0
+   ],
+   "zone": "CommunalTable"
+  },
+  {
+   "name": "Lamp1",
+   "object": "table_lamp_lit",
+   "position": [
+    14.6,
+    0.75,
+    1.7
+   ],
+   "rotation_y": 0.0,
+   "scale": [
+    1.0,
+    1.0,
+    1.0
+   ],
+   "zone": "CommunalTable"
+  },
+  {
+   "name": "Tealight1",
+   "object": "tealight_lantern",
+   "position": [
+    15.2,
+    0.75,
+    1.85
+   ],
+   "rotation_y": 0.0,
+   "scale": [
+    1.0,
+    1.0,
+    1.0
+   ],
+   "zone": "CommunalTable"
+  },
+  {
+   "name": "Lamp2",
+   "object": "table_lamp_lit",
+   "position": [
+    15.9,
+    0.75,
+    1.7
+   ],
+   "rotation_y": 0.0,
+   "scale": [
+    1.0,
+    1.0,
+    1.0
+   ],
+   "zone": "CommunalTable"
+  },
+  {
+   "name": "Tealight2",
+   "object": "tealight_lantern",
+   "position": [
+    16.5,
+    0.75,
+    1.85
+   ],
+   "rotation_y": 0.0,
+   "scale": [
+    1.0,
+    1.0,
+    1.0
+   ],
+   "zone": "CommunalTable"
+  },
+  {
+   "name": "Napkins0",
+   "object": "napkin_cup",
    "position": [
     14.0,
-    0.0,
-    2.0
-   ],
-   "rotation_y": -180.0,
-   "scale": [
-    1.0,
-    1.0,
-    1.0
-   ],
-   "zone": "CommunalTable"
-  },
-  {
-   "name": "Chair0_N2",
-   "object": "cafe_chair",
-   "position": [
-    15.0,
-    0.0,
-    0.7
-   ],
-   "rotation_y": 0.0,
-   "scale": [
-    1.0,
-    1.0,
-    1.0
-   ],
-   "zone": "CommunalTable"
-  },
-  {
-   "name": "Chair0_S2",
-   "object": "cafe_chair",
-   "position": [
-    15.0,
-    0.0,
-    2.0
-   ],
-   "rotation_y": -180.0,
-   "scale": [
-    1.0,
-    1.0,
-    1.0
-   ],
-   "zone": "CommunalTable"
-  },
-  {
-   "name": "Lamp0Lamp",
-   "object": "table_lamp_lit",
-   "position": [
-    13.52,
     0.75,
-    1.35
+    1.87
    ],
    "rotation_y": 0.0,
    "scale": [
@@ -4306,44 +5602,12 @@
    "zone": "CommunalTable"
   },
   {
-   "name": "Lamp0Tealight0",
-   "object": "tealight_lantern",
-   "position": [
-    13.72,
-    0.75,
-    1.41
-   ],
-   "rotation_y": 0.0,
-   "scale": [
-    1.0,
-    1.0,
-    1.0
-   ],
-   "zone": "CommunalTable"
-  },
-  {
-   "name": "Lamp0Tealight1",
-   "object": "tealight_lantern",
-   "position": [
-    13.84,
-    0.75,
-    1.29
-   ],
-   "rotation_y": 0.0,
-   "scale": [
-    1.0,
-    1.0,
-    1.0
-   ],
-   "zone": "CommunalTable"
-  },
-  {
-   "name": "Lamp0Napkins",
+   "name": "Napkins1",
    "object": "napkin_cup",
    "position": [
-    13.65,
+    15.3,
     0.75,
-    1.21
+    1.87
    ],
    "rotation_y": 0.0,
    "scale": [
@@ -4354,252 +5618,12 @@
    "zone": "CommunalTable"
   },
   {
-   "name": "Table1",
-   "object": "communal_table",
-   "position": [
-    17.0,
-    0.0,
-    1.35
-   ],
-   "rotation_y": 0.0,
-   "scale": [
-    1.0,
-    1.0,
-    1.0
-   ],
-   "zone": "CommunalTable"
-  },
-  {
-   "name": "Chair1_N0",
-   "object": "cafe_chair",
-   "position": [
-    16.0,
-    0.0,
-    0.7
-   ],
-   "rotation_y": 0.0,
-   "scale": [
-    1.0,
-    1.0,
-    1.0
-   ],
-   "zone": "CommunalTable"
-  },
-  {
-   "name": "Chair1_S0",
-   "object": "cafe_chair",
-   "position": [
-    16.0,
-    0.0,
-    2.0
-   ],
-   "rotation_y": -180.0,
-   "scale": [
-    1.0,
-    1.0,
-    1.0
-   ],
-   "zone": "CommunalTable"
-  },
-  {
-   "name": "Chair1_N1",
-   "object": "cafe_chair",
-   "position": [
-    17.0,
-    0.0,
-    0.7
-   ],
-   "rotation_y": 0.0,
-   "scale": [
-    1.0,
-    1.0,
-    1.0
-   ],
-   "zone": "CommunalTable"
-  },
-  {
-   "name": "Chair1_S1",
-   "object": "cafe_chair",
-   "position": [
-    17.0,
-    0.0,
-    2.0
-   ],
-   "rotation_y": -180.0,
-   "scale": [
-    1.0,
-    1.0,
-    1.0
-   ],
-   "zone": "CommunalTable"
-  },
-  {
-   "name": "Chair1_N2",
-   "object": "cafe_chair",
-   "position": [
-    18.0,
-    0.0,
-    0.7
-   ],
-   "rotation_y": 0.0,
-   "scale": [
-    1.0,
-    1.0,
-    1.0
-   ],
-   "zone": "CommunalTable"
-  },
-  {
-   "name": "Chair1_S2",
-   "object": "cafe_chair",
-   "position": [
-    18.0,
-    0.0,
-    2.0
-   ],
-   "rotation_y": -180.0,
-   "scale": [
-    1.0,
-    1.0,
-    1.0
-   ],
-   "zone": "CommunalTable"
-  },
-  {
-   "name": "Lamp1Lamp",
-   "object": "table_lamp_lit",
-   "position": [
-    17.32,
-    0.75,
-    1.35
-   ],
-   "rotation_y": 0.0,
-   "scale": [
-    1.0,
-    1.0,
-    1.0
-   ],
-   "zone": "CommunalTable"
-  },
-  {
-   "name": "Lamp1Tealight0",
-   "object": "tealight_lantern",
-   "position": [
-    17.52,
-    0.75,
-    1.41
-   ],
-   "rotation_y": 0.0,
-   "scale": [
-    1.0,
-    1.0,
-    1.0
-   ],
-   "zone": "CommunalTable"
-  },
-  {
-   "name": "Lamp1Tealight1",
-   "object": "tealight_lantern",
-   "position": [
-    17.64,
-    0.75,
-    1.29
-   ],
-   "rotation_y": 0.0,
-   "scale": [
-    1.0,
-    1.0,
-    1.0
-   ],
-   "zone": "CommunalTable"
-  },
-  {
-   "name": "Lamp1Napkins",
-   "object": "napkin_cup",
-   "position": [
-    17.45,
-    0.75,
-    1.21
-   ],
-   "rotation_y": 0.0,
-   "scale": [
-    1.0,
-    1.0,
-    1.0
-   ],
-   "zone": "CommunalTable"
-  },
-  {
-   "name": "Seat0",
-   "object": "banquette_straight",
-   "position": [
-    10.3,
-    0.0,
-    0.9
-   ],
-   "rotation_y": 90.0,
-   "scale": [
-    1.0,
-    1.0,
-    1.0
-   ],
-   "zone": "Banquette"
-  },
-  {
-   "name": "Seat1",
-   "object": "banquette_straight",
-   "position": [
-    10.3,
-    0.0,
-    1.9
-   ],
-   "rotation_y": 90.0,
-   "scale": [
-    1.0,
-    1.0,
-    1.0
-   ],
-   "zone": "Banquette"
-  },
-  {
-   "name": "Seat2",
-   "object": "banquette_straight",
-   "position": [
-    10.3,
-    0.0,
-    2.9
-   ],
-   "rotation_y": 90.0,
-   "scale": [
-    1.0,
-    1.0,
-    1.0
-   ],
-   "zone": "Banquette"
-  },
-  {
-   "name": "Seat3",
-   "object": "banquette_straight",
-   "position": [
-    10.3,
-    0.0,
-    3.9
-   ],
-   "rotation_y": 90.0,
-   "scale": [
-    1.0,
-    1.0,
-    1.0
-   ],
-   "zone": "Banquette"
-  },
-  {
-   "name": "Table0",
+   "name": "SideTable",
    "object": "round_table",
    "position": [
-    11.3,
+    11.4,
     0.0,
-    1.4
+    0.75
    ],
    "rotation_y": 0.0,
    "scale": [
@@ -4607,143 +5631,79 @@
     1.0,
     1.0
    ],
-   "zone": "Banquette"
+   "zone": "CommunalTable"
   },
   {
-   "name": "Table0Lamp",
+   "name": "SideLamp",
    "object": "table_lamp_lit",
    "position": [
-    11.22,
-    0.75,
-    1.4
-   ],
-   "rotation_y": 0.0,
-   "scale": [
-    1.0,
-    1.0,
-    1.0
-   ],
-   "zone": "Banquette"
-  },
-  {
-   "name": "Table0Tealight0",
-   "object": "tealight_lantern",
-   "position": [
-    11.42,
-    0.75,
-    1.46
-   ],
-   "rotation_y": 0.0,
-   "scale": [
-    1.0,
-    1.0,
-    1.0
-   ],
-   "zone": "Banquette"
-  },
-  {
-   "name": "Table0Tealight1",
-   "object": "tealight_lantern",
-   "position": [
-    11.54,
-    0.75,
-    1.34
-   ],
-   "rotation_y": 0.0,
-   "scale": [
-    1.0,
-    1.0,
-    1.0
-   ],
-   "zone": "Banquette"
-  },
-  {
-   "name": "Table0Napkins",
-   "object": "napkin_cup",
-   "position": [
-    11.35,
-    0.75,
-    1.26
-   ],
-   "rotation_y": 0.0,
-   "scale": [
-    1.0,
-    1.0,
-    1.0
-   ],
-   "zone": "Banquette"
-  },
-  {
-   "name": "Table1",
-   "object": "round_table",
-   "position": [
     11.3,
+    0.75,
+    0.75
+   ],
+   "rotation_y": 0.0,
+   "scale": [
+    1.0,
+    1.0,
+    1.0
+   ],
+   "zone": "CommunalTable"
+  },
+  {
+   "name": "SideTealight",
+   "object": "tealight_lantern",
+   "position": [
+    11.6,
+    0.75,
+    0.85
+   ],
+   "rotation_y": 0.0,
+   "scale": [
+    1.0,
+    1.0,
+    1.0
+   ],
+   "zone": "CommunalTable"
+  },
+  {
+   "name": "SideChair0",
+   "object": "cafe_chair",
+   "position": [
+    10.74,
     0.0,
-    3.4
+    0.75
    ],
-   "rotation_y": 0.0,
+   "rotation_y": -90.0,
    "scale": [
     1.0,
     1.0,
     1.0
    ],
-   "zone": "Banquette"
+   "zone": "CommunalTable"
   },
   {
-   "name": "Table1Tealight0",
-   "object": "tealight_lantern",
+   "name": "SideChair1",
+   "object": "cafe_chair",
    "position": [
-    11.42,
-    0.75,
-    3.46
+    12.06,
+    0.0,
+    0.75
    ],
-   "rotation_y": 0.0,
+   "rotation_y": 90.0,
    "scale": [
     1.0,
     1.0,
     1.0
    ],
-   "zone": "Banquette"
-  },
-  {
-   "name": "Table1Tealight1",
-   "object": "tealight_lantern",
-   "position": [
-    11.54,
-    0.75,
-    3.34
-   ],
-   "rotation_y": 0.0,
-   "scale": [
-    1.0,
-    1.0,
-    1.0
-   ],
-   "zone": "Banquette"
-  },
-  {
-   "name": "Table1Napkins",
-   "object": "napkin_cup",
-   "position": [
-    11.35,
-    0.75,
-    3.26
-   ],
-   "rotation_y": 0.0,
-   "scale": [
-    1.0,
-    1.0,
-    1.0
-   ],
-   "zone": "Banquette"
+   "zone": "CommunalTable"
   },
   {
    "name": "Riser0",
    "object": "stage_platform",
    "position": [
-    21.0,
+    19.0,
     0.0,
-    3.5
+    2.8
    ],
    "rotation_y": 0.0,
    "scale": [
@@ -4757,9 +5717,9 @@
    "name": "Riser1",
    "object": "stage_platform",
    "position": [
-    23.0,
+    21.0,
     0.0,
-    3.5
+    2.8
    ],
    "rotation_y": 0.0,
    "scale": [
@@ -4773,9 +5733,9 @@
    "name": "Riser2",
    "object": "stage_platform",
    "position": [
-    25.0,
+    23.0,
     0.0,
-    3.5
+    2.8
    ],
    "rotation_y": 0.0,
    "scale": [
@@ -4789,9 +5749,9 @@
    "name": "Riser3",
    "object": "stage_platform",
    "position": [
-    27.0,
+    25.0,
     0.0,
-    3.5
+    2.8
    ],
    "rotation_y": 0.0,
    "scale": [
@@ -4805,9 +5765,9 @@
    "name": "Riser4",
    "object": "stage_platform",
    "position": [
-    29.0,
+    27.0,
     0.0,
-    3.5
+    2.8
    ],
    "rotation_y": 0.0,
    "scale": [
@@ -4821,9 +5781,9 @@
    "name": "Tile0_0",
    "object": "stage_carpet_tile",
    "position": [
-    20.5,
-    0.45,
-    0.5
+    18.5,
+    0.55,
+    0.0
    ],
    "rotation_y": 0.0,
    "scale": [
@@ -4837,9 +5797,9 @@
    "name": "Tile0_1",
    "object": "stage_carpet_tile",
    "position": [
-    20.5,
-    0.45,
-    1.5
+    18.5,
+    0.55,
+    1.0
    ],
    "rotation_y": 0.0,
    "scale": [
@@ -4853,9 +5813,9 @@
    "name": "Tile0_2",
    "object": "stage_carpet_tile",
    "position": [
-    20.5,
-    0.45,
-    2.5
+    18.5,
+    0.55,
+    2.0
    ],
    "rotation_y": 0.0,
    "scale": [
@@ -4869,9 +5829,9 @@
    "name": "Tile0_3",
    "object": "stage_carpet_tile",
    "position": [
-    20.5,
-    0.45,
-    3.5
+    18.5,
+    0.55,
+    2.8
    ],
    "rotation_y": 0.0,
    "scale": [
@@ -4885,9 +5845,9 @@
    "name": "Tile1_0",
    "object": "stage_carpet_tile",
    "position": [
-    21.5,
-    0.45,
-    0.5
+    19.5,
+    0.55,
+    0.0
    ],
    "rotation_y": 0.0,
    "scale": [
@@ -4901,9 +5861,9 @@
    "name": "Tile1_1",
    "object": "stage_carpet_tile",
    "position": [
-    21.5,
-    0.45,
-    1.5
+    19.5,
+    0.55,
+    1.0
    ],
    "rotation_y": 0.0,
    "scale": [
@@ -4917,9 +5877,9 @@
    "name": "Tile1_2",
    "object": "stage_carpet_tile",
    "position": [
-    21.5,
-    0.45,
-    2.5
+    19.5,
+    0.55,
+    2.0
    ],
    "rotation_y": 0.0,
    "scale": [
@@ -4933,9 +5893,9 @@
    "name": "Tile1_3",
    "object": "stage_carpet_tile",
    "position": [
-    21.5,
-    0.45,
-    3.5
+    19.5,
+    0.55,
+    2.8
    ],
    "rotation_y": 0.0,
    "scale": [
@@ -4949,9 +5909,9 @@
    "name": "Tile2_0",
    "object": "stage_carpet_tile",
    "position": [
-    22.5,
-    0.45,
-    0.5
+    20.5,
+    0.55,
+    0.0
    ],
    "rotation_y": 0.0,
    "scale": [
@@ -4965,9 +5925,9 @@
    "name": "Tile2_1",
    "object": "stage_carpet_tile",
    "position": [
-    22.5,
-    0.45,
-    1.5
+    20.5,
+    0.55,
+    1.0
    ],
    "rotation_y": 0.0,
    "scale": [
@@ -4981,9 +5941,9 @@
    "name": "Tile2_2",
    "object": "stage_carpet_tile",
    "position": [
-    22.5,
-    0.45,
-    2.5
+    20.5,
+    0.55,
+    2.0
    ],
    "rotation_y": 0.0,
    "scale": [
@@ -4997,9 +5957,9 @@
    "name": "Tile2_3",
    "object": "stage_carpet_tile",
    "position": [
-    22.5,
-    0.45,
-    3.5
+    20.5,
+    0.55,
+    2.8
    ],
    "rotation_y": 0.0,
    "scale": [
@@ -5013,9 +5973,9 @@
    "name": "Tile3_0",
    "object": "stage_carpet_tile",
    "position": [
-    23.5,
-    0.45,
-    0.5
+    21.5,
+    0.55,
+    0.0
    ],
    "rotation_y": 0.0,
    "scale": [
@@ -5029,9 +5989,9 @@
    "name": "Tile3_1",
    "object": "stage_carpet_tile",
    "position": [
-    23.5,
-    0.45,
-    1.5
+    21.5,
+    0.55,
+    1.0
    ],
    "rotation_y": 0.0,
    "scale": [
@@ -5045,9 +6005,9 @@
    "name": "Tile3_2",
    "object": "stage_carpet_tile",
    "position": [
-    23.5,
-    0.45,
-    2.5
+    21.5,
+    0.55,
+    2.0
    ],
    "rotation_y": 0.0,
    "scale": [
@@ -5061,9 +6021,9 @@
    "name": "Tile3_3",
    "object": "stage_carpet_tile",
    "position": [
-    23.5,
-    0.45,
-    3.5
+    21.5,
+    0.55,
+    2.8
    ],
    "rotation_y": 0.0,
    "scale": [
@@ -5077,9 +6037,9 @@
    "name": "Tile4_0",
    "object": "stage_carpet_tile",
    "position": [
-    24.5,
-    0.45,
-    0.5
+    22.5,
+    0.55,
+    0.0
    ],
    "rotation_y": 0.0,
    "scale": [
@@ -5093,9 +6053,9 @@
    "name": "Tile4_1",
    "object": "stage_carpet_tile",
    "position": [
-    24.5,
-    0.45,
-    1.5
+    22.5,
+    0.55,
+    1.0
    ],
    "rotation_y": 0.0,
    "scale": [
@@ -5109,9 +6069,9 @@
    "name": "Tile4_2",
    "object": "stage_carpet_tile",
    "position": [
-    24.5,
-    0.45,
-    2.5
+    22.5,
+    0.55,
+    2.0
    ],
    "rotation_y": 0.0,
    "scale": [
@@ -5125,9 +6085,9 @@
    "name": "Tile4_3",
    "object": "stage_carpet_tile",
    "position": [
-    24.5,
-    0.45,
-    3.5
+    22.5,
+    0.55,
+    2.8
    ],
    "rotation_y": 0.0,
    "scale": [
@@ -5141,9 +6101,9 @@
    "name": "Tile5_0",
    "object": "stage_carpet_tile",
    "position": [
-    25.5,
-    0.45,
-    0.5
+    23.5,
+    0.55,
+    0.0
    ],
    "rotation_y": 0.0,
    "scale": [
@@ -5157,9 +6117,9 @@
    "name": "Tile5_1",
    "object": "stage_carpet_tile",
    "position": [
-    25.5,
-    0.45,
-    1.5
+    23.5,
+    0.55,
+    1.0
    ],
    "rotation_y": 0.0,
    "scale": [
@@ -5173,9 +6133,9 @@
    "name": "Tile5_2",
    "object": "stage_carpet_tile",
    "position": [
-    25.5,
-    0.45,
-    2.5
+    23.5,
+    0.55,
+    2.0
    ],
    "rotation_y": 0.0,
    "scale": [
@@ -5189,9 +6149,9 @@
    "name": "Tile5_3",
    "object": "stage_carpet_tile",
    "position": [
-    25.5,
-    0.45,
-    3.5
+    23.5,
+    0.55,
+    2.8
    ],
    "rotation_y": 0.0,
    "scale": [
@@ -5205,9 +6165,9 @@
    "name": "Tile6_0",
    "object": "stage_carpet_tile",
    "position": [
-    26.5,
-    0.45,
-    0.5
+    24.5,
+    0.55,
+    0.0
    ],
    "rotation_y": 0.0,
    "scale": [
@@ -5221,9 +6181,9 @@
    "name": "Tile6_1",
    "object": "stage_carpet_tile",
    "position": [
-    26.5,
-    0.45,
-    1.5
+    24.5,
+    0.55,
+    1.0
    ],
    "rotation_y": 0.0,
    "scale": [
@@ -5237,9 +6197,9 @@
    "name": "Tile6_2",
    "object": "stage_carpet_tile",
    "position": [
-    26.5,
-    0.45,
-    2.5
+    24.5,
+    0.55,
+    2.0
    ],
    "rotation_y": 0.0,
    "scale": [
@@ -5253,9 +6213,9 @@
    "name": "Tile6_3",
    "object": "stage_carpet_tile",
    "position": [
-    26.5,
-    0.45,
-    3.5
+    24.5,
+    0.55,
+    2.8
    ],
    "rotation_y": 0.0,
    "scale": [
@@ -5269,9 +6229,9 @@
    "name": "Tile7_0",
    "object": "stage_carpet_tile",
    "position": [
-    27.5,
-    0.45,
-    0.5
+    25.5,
+    0.55,
+    0.0
    ],
    "rotation_y": 0.0,
    "scale": [
@@ -5285,9 +6245,9 @@
    "name": "Tile7_1",
    "object": "stage_carpet_tile",
    "position": [
-    27.5,
-    0.45,
-    1.5
+    25.5,
+    0.55,
+    1.0
    ],
    "rotation_y": 0.0,
    "scale": [
@@ -5301,9 +6261,9 @@
    "name": "Tile7_2",
    "object": "stage_carpet_tile",
    "position": [
-    27.5,
-    0.45,
-    2.5
+    25.5,
+    0.55,
+    2.0
    ],
    "rotation_y": 0.0,
    "scale": [
@@ -5317,9 +6277,9 @@
    "name": "Tile7_3",
    "object": "stage_carpet_tile",
    "position": [
-    27.5,
-    0.45,
-    3.5
+    25.5,
+    0.55,
+    2.8
    ],
    "rotation_y": 0.0,
    "scale": [
@@ -5333,9 +6293,9 @@
    "name": "Tile8_0",
    "object": "stage_carpet_tile",
    "position": [
-    28.5,
-    0.45,
-    0.5
+    26.5,
+    0.55,
+    0.0
    ],
    "rotation_y": 0.0,
    "scale": [
@@ -5349,9 +6309,9 @@
    "name": "Tile8_1",
    "object": "stage_carpet_tile",
    "position": [
-    28.5,
-    0.45,
-    1.5
+    26.5,
+    0.55,
+    1.0
    ],
    "rotation_y": 0.0,
    "scale": [
@@ -5365,9 +6325,9 @@
    "name": "Tile8_2",
    "object": "stage_carpet_tile",
    "position": [
-    28.5,
-    0.45,
-    2.5
+    26.5,
+    0.55,
+    2.0
    ],
    "rotation_y": 0.0,
    "scale": [
@@ -5381,9 +6341,9 @@
    "name": "Tile8_3",
    "object": "stage_carpet_tile",
    "position": [
-    28.5,
-    0.45,
-    3.5
+    26.5,
+    0.55,
+    2.8
    ],
    "rotation_y": 0.0,
    "scale": [
@@ -5397,9 +6357,9 @@
    "name": "Tile9_0",
    "object": "stage_carpet_tile",
    "position": [
-    29.5,
-    0.45,
-    0.5
+    27.5,
+    0.55,
+    0.0
    ],
    "rotation_y": 0.0,
    "scale": [
@@ -5413,9 +6373,9 @@
    "name": "Tile9_1",
    "object": "stage_carpet_tile",
    "position": [
-    29.5,
-    0.45,
-    1.5
+    27.5,
+    0.55,
+    1.0
    ],
    "rotation_y": 0.0,
    "scale": [
@@ -5429,9 +6389,9 @@
    "name": "Tile9_2",
    "object": "stage_carpet_tile",
    "position": [
-    29.5,
-    0.45,
-    2.5
+    27.5,
+    0.55,
+    2.0
    ],
    "rotation_y": 0.0,
    "scale": [
@@ -5445,9 +6405,9 @@
    "name": "Tile9_3",
    "object": "stage_carpet_tile",
    "position": [
-    29.5,
-    0.45,
-    3.5
+    27.5,
+    0.55,
+    2.8
    ],
    "rotation_y": 0.0,
    "scale": [
@@ -5463,7 +6423,7 @@
    "position": [
     21.0,
     0.0,
-    4.3
+    3.6
    ],
    "rotation_y": 0.0,
    "scale": [
@@ -5479,7 +6439,7 @@
    "position": [
     22.0,
     0.0,
-    4.3
+    3.6
    ],
    "rotation_y": 0.0,
    "scale": [
@@ -5493,9 +6453,9 @@
    "name": "CurtainBack0",
    "object": "curtain_panel",
    "position": [
-    20.5,
+    18.5,
     0.0,
-    0.1
+    -0.4
    ],
    "rotation_y": 0.0,
    "scale": [
@@ -5509,9 +6469,9 @@
    "name": "CurtainBack1",
    "object": "curtain_panel",
    "position": [
-    21.5,
+    19.5,
     0.0,
-    0.1
+    -0.4
    ],
    "rotation_y": 0.0,
    "scale": [
@@ -5525,9 +6485,9 @@
    "name": "CurtainBack2",
    "object": "curtain_panel",
    "position": [
-    22.5,
+    20.5,
     0.0,
-    0.1
+    -0.4
    ],
    "rotation_y": 0.0,
    "scale": [
@@ -5541,9 +6501,9 @@
    "name": "CurtainBack3",
    "object": "curtain_panel",
    "position": [
-    23.5,
+    21.5,
     0.0,
-    0.1
+    -0.4
    ],
    "rotation_y": 0.0,
    "scale": [
@@ -5557,9 +6517,9 @@
    "name": "CurtainBack4",
    "object": "curtain_panel",
    "position": [
-    24.5,
+    22.5,
     0.0,
-    0.1
+    -0.4
    ],
    "rotation_y": 0.0,
    "scale": [
@@ -5573,9 +6533,9 @@
    "name": "CurtainBack5",
    "object": "curtain_panel",
    "position": [
-    25.5,
+    23.5,
     0.0,
-    0.1
+    -0.4
    ],
    "rotation_y": 0.0,
    "scale": [
@@ -5589,9 +6549,9 @@
    "name": "CurtainBack6",
    "object": "curtain_panel",
    "position": [
-    26.5,
+    24.5,
     0.0,
-    0.1
+    -0.4
    ],
    "rotation_y": 0.0,
    "scale": [
@@ -5605,9 +6565,9 @@
    "name": "CurtainBack7",
    "object": "curtain_panel",
    "position": [
-    27.5,
+    25.5,
     0.0,
-    0.1
+    -0.4
    ],
    "rotation_y": 0.0,
    "scale": [
@@ -5621,9 +6581,9 @@
    "name": "CurtainBack8",
    "object": "curtain_panel",
    "position": [
-    28.5,
+    26.5,
     0.0,
-    0.1
+    -0.4
    ],
    "rotation_y": 0.0,
    "scale": [
@@ -5637,9 +6597,9 @@
    "name": "CurtainBack9",
    "object": "curtain_panel",
    "position": [
-    29.5,
+    27.5,
     0.0,
-    0.1
+    -0.4
    ],
    "rotation_y": 0.0,
    "scale": [
@@ -5653,9 +6613,9 @@
    "name": "Backdrop0",
    "object": "slatted_backdrop",
    "position": [
-    29.85,
+    27.9,
     0.0,
-    4.5
+    3.8
    ],
    "rotation_y": -90.0,
    "scale": [
@@ -5669,9 +6629,9 @@
    "name": "Backdrop1",
    "object": "slatted_backdrop",
    "position": [
-    29.85,
+    27.9,
     0.0,
-    5.5
+    4.8
    ],
    "rotation_y": -90.0,
    "scale": [
@@ -5685,9 +6645,9 @@
    "name": "Backdrop2",
    "object": "slatted_backdrop",
    "position": [
-    29.85,
+    27.9,
     0.0,
-    6.5
+    5.8
    ],
    "rotation_y": -90.0,
    "scale": [
@@ -5701,9 +6661,9 @@
    "name": "Backdrop3",
    "object": "slatted_backdrop",
    "position": [
-    29.85,
+    27.9,
     0.0,
-    7.5
+    6.8
    ],
    "rotation_y": -90.0,
    "scale": [
@@ -5717,9 +6677,9 @@
    "name": "Backdrop4",
    "object": "slatted_backdrop",
    "position": [
-    29.85,
+    27.9,
     0.0,
-    8.5
+    7.8
    ],
    "rotation_y": -90.0,
    "scale": [
@@ -5733,9 +6693,9 @@
    "name": "Backdrop5",
    "object": "slatted_backdrop",
    "position": [
-    29.85,
+    27.9,
     0.0,
-    9.5
+    8.8
    ],
    "rotation_y": -90.0,
    "scale": [
@@ -5746,12 +6706,12 @@
    "zone": "Stage"
   },
   {
-   "name": "CurtainEast_5",
-   "object": "curtain_panel",
+   "name": "Backdrop6",
+   "object": "slatted_backdrop",
    "position": [
-    29.85,
+    27.9,
     0.0,
-    0.5
+    9.8
    ],
    "rotation_y": -90.0,
    "scale": [
@@ -5762,12 +6722,12 @@
    "zone": "Stage"
   },
   {
-   "name": "CurtainEast_15",
-   "object": "curtain_panel",
+   "name": "Backdrop7",
+   "object": "slatted_backdrop",
    "position": [
-    29.85,
+    27.9,
     0.0,
-    1.5
+    10.8
    ],
    "rotation_y": -90.0,
    "scale": [
@@ -5778,12 +6738,12 @@
    "zone": "Stage"
   },
   {
-   "name": "CurtainEast_25",
-   "object": "curtain_panel",
+   "name": "Backdrop8",
+   "object": "slatted_backdrop",
    "position": [
-    29.85,
+    27.9,
     0.0,
-    2.5
+    11.8
    ],
    "rotation_y": -90.0,
    "scale": [
@@ -5794,12 +6754,156 @@
    "zone": "Stage"
   },
   {
-   "name": "CurtainEast_35",
+   "name": "BackdropLantern0",
+   "object": "backdrop_lantern",
+   "position": [
+    27.75,
+    2.85,
+    4.1
+   ],
+   "rotation_y": -90.0,
+   "scale": [
+    1.0,
+    1.0,
+    1.0
+   ],
+   "zone": "Stage"
+  },
+  {
+   "name": "BackdropLantern1",
+   "object": "backdrop_lantern",
+   "position": [
+    27.75,
+    2.85,
+    5.5
+   ],
+   "rotation_y": -90.0,
+   "scale": [
+    1.0,
+    1.0,
+    1.0
+   ],
+   "zone": "Stage"
+  },
+  {
+   "name": "BackdropLantern2",
+   "object": "backdrop_lantern",
+   "position": [
+    27.75,
+    2.85,
+    6.9
+   ],
+   "rotation_y": -90.0,
+   "scale": [
+    1.0,
+    1.0,
+    1.0
+   ],
+   "zone": "Stage"
+  },
+  {
+   "name": "BackdropLantern3",
+   "object": "backdrop_lantern",
+   "position": [
+    27.75,
+    2.85,
+    8.3
+   ],
+   "rotation_y": -90.0,
+   "scale": [
+    1.0,
+    1.0,
+    1.0
+   ],
+   "zone": "Stage"
+  },
+  {
+   "name": "BackdropLantern4",
+   "object": "backdrop_lantern",
+   "position": [
+    27.75,
+    2.85,
+    9.7
+   ],
+   "rotation_y": -90.0,
+   "scale": [
+    1.0,
+    1.0,
+    1.0
+   ],
+   "zone": "Stage"
+  },
+  {
+   "name": "BackdropLantern5",
+   "object": "backdrop_lantern",
+   "position": [
+    27.75,
+    2.85,
+    11.1
+   ],
+   "rotation_y": -90.0,
+   "scale": [
+    1.0,
+    1.0,
+    1.0
+   ],
+   "zone": "Stage"
+  },
+  {
+   "name": "CurtainEast0",
    "object": "curtain_panel",
    "position": [
-    29.85,
+    27.9,
     0.0,
-    3.5
+    0.0
+   ],
+   "rotation_y": -90.0,
+   "scale": [
+    1.0,
+    1.0,
+    1.0
+   ],
+   "zone": "Stage"
+  },
+  {
+   "name": "CurtainEast1",
+   "object": "curtain_panel",
+   "position": [
+    27.9,
+    0.0,
+    1.0
+   ],
+   "rotation_y": -90.0,
+   "scale": [
+    1.0,
+    1.0,
+    1.0
+   ],
+   "zone": "Stage"
+  },
+  {
+   "name": "CurtainEast2",
+   "object": "curtain_panel",
+   "position": [
+    27.9,
+    0.0,
+    2.0
+   ],
+   "rotation_y": -90.0,
+   "scale": [
+    1.0,
+    1.0,
+    1.0
+   ],
+   "zone": "Stage"
+  },
+  {
+   "name": "CurtainEast3",
+   "object": "curtain_panel",
+   "position": [
+    27.9,
+    0.0,
+    3.0
    ],
    "rotation_y": -90.0,
    "scale": [
@@ -5813,43 +6917,75 @@
    "name": "DrumKit",
    "object": "drum_kit",
    "position": [
-    25.0,
-    0.5,
+    23.4,
+    0.6,
+    0.75
+   ],
+   "rotation_y": 0.0,
+   "scale": [
+    1.0,
+    1.0,
+    1.0
+   ],
+   "zone": "Stage"
+  },
+  {
+   "name": "AmpStackL",
+   "object": "amp_stack",
+   "position": [
+    19.4,
+    0.6,
+    -0.05
+   ],
+   "rotation_y": 0.0,
+   "scale": [
+    1.0,
+    1.0,
+    1.0
+   ],
+   "zone": "Stage"
+  },
+  {
+   "name": "AmpStackR",
+   "object": "amp_stack",
+   "position": [
+    25.8,
+    0.6,
+    -0.05
+   ],
+   "rotation_y": 0.0,
+   "scale": [
+    1.0,
+    1.0,
+    1.0
+   ],
+   "zone": "Stage"
+  },
+  {
+   "name": "ComboL",
+   "object": "amp",
+   "position": [
+    21.0,
+    0.6,
+    0.2
+   ],
+   "rotation_y": 0.0,
+   "scale": [
+    1.0,
+    1.0,
+    1.0
+   ],
+   "zone": "Stage"
+  },
+  {
+   "name": "ComboR",
+   "object": "amp",
+   "position": [
+    26.9,
+    0.6,
     1.3
    ],
-   "rotation_y": 0.0,
-   "scale": [
-    1.0,
-    1.0,
-    1.0
-   ],
-   "zone": "Stage"
-  },
-  {
-   "name": "AmpL",
-   "object": "amp",
-   "position": [
-    23.0,
-    0.5,
-    0.7
-   ],
-   "rotation_y": 0.0,
-   "scale": [
-    1.0,
-    1.0,
-    1.0
-   ],
-   "zone": "Stage"
-  },
-  {
-   "name": "AmpR",
-   "object": "amp",
-   "position": [
-    27.2,
-    0.5,
-    0.7
-   ],
-   "rotation_y": 0.0,
+   "rotation_y": -20.0,
    "scale": [
     1.0,
     1.0,
@@ -5861,11 +6997,11 @@
    "name": "Guitar",
    "object": "guitar_on_stand",
    "position": [
-    27.9,
-    0.5,
-    2.0
+    18.7,
+    0.6,
+    1.2
    ],
-   "rotation_y": 0.0,
+   "rotation_y": 20.0,
    "scale": [
     1.0,
     1.0,
@@ -5877,9 +7013,9 @@
    "name": "Mic0",
    "object": "mic_stand",
    "position": [
-    23.6,
-    0.5,
-    2.8
+    20.3,
+    0.6,
+    2.5
    ],
    "rotation_y": 0.0,
    "scale": [
@@ -5893,9 +7029,9 @@
    "name": "Mic1",
    "object": "mic_stand",
    "position": [
-    25.0,
-    0.5,
-    3.0
+    23.6,
+    0.6,
+    2.6
    ],
    "rotation_y": 0.0,
    "scale": [
@@ -5909,9 +7045,9 @@
    "name": "Mic2",
    "object": "mic_stand",
    "position": [
-    26.5,
-    0.5,
-    2.8
+    25.6,
+    0.6,
+    2.5
    ],
    "rotation_y": 0.0,
    "scale": [
@@ -5922,12 +7058,12 @@
    "zone": "Stage"
   },
   {
-   "name": "Wedge0",
+   "name": "Wedge19",
    "object": "monitor_wedge",
    "position": [
-    23.9,
-    0.5,
-    3.6
+    19.4,
+    0.6,
+    3.0
    ],
    "rotation_y": -180.0,
    "scale": [
@@ -5938,12 +7074,44 @@
    "zone": "Stage"
   },
   {
-   "name": "Wedge1",
+   "name": "Wedge23",
    "object": "monitor_wedge",
    "position": [
-    26.2,
-    0.5,
-    3.6
+    23.6,
+    0.6,
+    3.0
+   ],
+   "rotation_y": -180.0,
+   "scale": [
+    1.0,
+    1.0,
+    1.0
+   ],
+   "zone": "Stage"
+  },
+  {
+   "name": "Wedge25",
+   "object": "monitor_wedge",
+   "position": [
+    25.6,
+    0.6,
+    3.0
+   ],
+   "rotation_y": -180.0,
+   "scale": [
+    1.0,
+    1.0,
+    1.0
+   ],
+   "zone": "Stage"
+  },
+  {
+   "name": "Wedge27",
+   "object": "monitor_wedge",
+   "position": [
+    27.2,
+    0.6,
+    3.0
    ],
    "rotation_y": -180.0,
    "scale": [
@@ -5957,9 +7125,9 @@
    "name": "StageTree",
    "object": "stage_tree",
    "position": [
-    29.0,
-    0.5,
-    1.6
+    27.3,
+    0.6,
+    0.3
    ],
    "rotation_y": -90.0,
    "scale": [
@@ -5973,9 +7141,9 @@
    "name": "SpeakerL",
    "object": "pa_speaker",
    "position": [
-    19.65,
+    17.6,
     0.0,
-    3.6
+    2.7
    ],
    "rotation_y": 0.0,
    "scale": [
@@ -5986,12 +7154,12 @@
    "zone": "Stage"
   },
   {
-   "name": "SpeakerR",
+   "name": "SpeakerLBack",
    "object": "pa_speaker",
    "position": [
-    29.5,
-    0.5,
-    3.6
+    17.6,
+    0.0,
+    0.0
    ],
    "rotation_y": 0.0,
    "scale": [
@@ -6005,9 +7173,9 @@
    "name": "Segment0",
    "object": "truss_segment",
    "position": [
-    21.0,
+    19.0,
     4.0,
-    4.2
+    -0.05
    ],
    "rotation_y": 0.0,
    "scale": [
@@ -6021,9 +7189,9 @@
    "name": "Segment1",
    "object": "truss_segment",
    "position": [
-    23.0,
+    21.0,
     4.0,
-    4.2
+    -0.05
    ],
    "rotation_y": 0.0,
    "scale": [
@@ -6037,9 +7205,9 @@
    "name": "Segment2",
    "object": "truss_segment",
    "position": [
-    25.0,
+    23.0,
     4.0,
-    4.2
+    -0.05
    ],
    "rotation_y": 0.0,
    "scale": [
@@ -6053,9 +7221,9 @@
    "name": "Segment3",
    "object": "truss_segment",
    "position": [
-    27.0,
+    25.0,
     4.0,
-    4.2
+    -0.05
    ],
    "rotation_y": 0.0,
    "scale": [
@@ -6069,9 +7237,9 @@
    "name": "Segment4",
    "object": "truss_segment",
    "position": [
-    29.0,
+    27.0,
     4.0,
-    4.2
+    -0.05
    ],
    "rotation_y": 0.0,
    "scale": [
@@ -6085,11 +7253,11 @@
    "name": "Par0",
    "object": "par_light_red",
    "position": [
-    21.0,
-    3.6,
-    4.2
+    19.0,
+    3.5,
+    -0.05
    ],
-   "rotation_y": -180.0,
+   "rotation_y": 0.0,
    "scale": [
     1.0,
     1.0,
@@ -6101,11 +7269,11 @@
    "name": "Par1",
    "object": "par_light_red",
    "position": [
-    23.0,
-    3.6,
-    4.2
+    21.0,
+    3.5,
+    -0.05
    ],
-   "rotation_y": -180.0,
+   "rotation_y": 0.0,
    "scale": [
     1.0,
     1.0,
@@ -6117,11 +7285,11 @@
    "name": "Par2",
    "object": "par_light_blue",
    "position": [
-    25.0,
-    3.6,
-    4.2
+    23.0,
+    3.5,
+    -0.05
    ],
-   "rotation_y": -180.0,
+   "rotation_y": 0.0,
    "scale": [
     1.0,
     1.0,
@@ -6131,13 +7299,13 @@
   },
   {
    "name": "Par3",
-   "object": "par_light_amber",
+   "object": "par_light_red",
    "position": [
-    27.0,
-    3.6,
-    4.2
+    25.0,
+    3.5,
+    -0.05
    ],
-   "rotation_y": -180.0,
+   "rotation_y": 0.0,
    "scale": [
     1.0,
     1.0,
@@ -6147,13 +7315,13 @@
   },
   {
    "name": "Par4",
-   "object": "par_light_red",
+   "object": "par_light_amber",
    "position": [
-    29.0,
-    3.6,
-    4.2
+    27.0,
+    3.5,
+    -0.05
    ],
-   "rotation_y": -180.0,
+   "rotation_y": 0.0,
    "scale": [
     1.0,
     1.0,
@@ -6285,9 +7453,9 @@
   {
    "pose": "sit",
    "position": [
-    12.6,
+    12.1,
     0.0,
-    7.95
+    11.5
    ],
    "preset_slot": "PATRON",
    "rotation_y": 0.0,
@@ -6298,9 +7466,9 @@
   {
    "pose": "sit",
    "position": [
-    13.8,
+    13.1,
     0.0,
-    7.95
+    11.5
    ],
    "preset_slot": "PATRON",
    "rotation_y": 0.0,
@@ -6311,9 +7479,9 @@
   {
    "pose": "sit",
    "position": [
-    15.0,
+    14.1,
     0.0,
-    7.95
+    11.5
    ],
    "preset_slot": "PATRON",
    "rotation_y": 0.0,
@@ -6324,9 +7492,9 @@
   {
    "pose": "sit",
    "position": [
-    16.2,
+    15.1,
     0.0,
-    7.95
+    11.5
    ],
    "preset_slot": "PATRON",
    "rotation_y": 0.0,
@@ -6337,9 +7505,9 @@
   {
    "pose": "sit",
    "position": [
-    17.4,
+    16.1,
     0.0,
-    7.95
+    11.5
    ],
    "preset_slot": "PATRON",
    "rotation_y": 0.0,
@@ -6350,9 +7518,9 @@
   {
    "pose": "sit",
    "position": [
-    18.6,
+    17.1,
     0.0,
-    7.95
+    11.5
    ],
    "preset_slot": "PATRON",
    "rotation_y": 0.0,
@@ -6363,9 +7531,9 @@
   {
    "pose": "sit",
    "position": [
-    19.8,
+    18.1,
     0.0,
-    7.95
+    11.5
    ],
    "preset_slot": "PATRON",
    "rotation_y": 0.0,
@@ -6376,9 +7544,9 @@
   {
    "pose": "sit",
    "position": [
-    21.0,
+    19.1,
     0.0,
-    7.95
+    11.5
    ],
    "preset_slot": "PATRON",
    "rotation_y": 0.0,
@@ -6389,9 +7557,9 @@
   {
    "pose": "sit",
    "position": [
-    22.2,
+    20.1,
     0.0,
-    7.95
+    11.5
    ],
    "preset_slot": "PATRON",
    "rotation_y": 0.0,
@@ -6400,11 +7568,63 @@
    "zone": "Bar"
   },
   {
+   "pose": "sit",
+   "position": [
+    21.1,
+    0.0,
+    11.5
+   ],
+   "preset_slot": "PATRON",
+   "rotation_y": 0.0,
+   "seat_h": 0.8,
+   "spot": "Bar_Stool9",
+   "zone": "Bar"
+  },
+  {
+   "pose": "sit",
+   "position": [
+    22.1,
+    0.0,
+    11.5
+   ],
+   "preset_slot": "PATRON",
+   "rotation_y": 0.0,
+   "seat_h": 0.8,
+   "spot": "Bar_Stool10",
+   "zone": "Bar"
+  },
+  {
+   "pose": "sit",
+   "position": [
+    23.1,
+    0.0,
+    11.5
+   ],
+   "preset_slot": "PATRON",
+   "rotation_y": 0.0,
+   "seat_h": 0.8,
+   "spot": "Bar_Stool11",
+   "zone": "Bar"
+  },
+  {
+   "pose": "sit",
+   "position": [
+    24.1,
+    0.0,
+    11.5
+   ],
+   "preset_slot": "PATRON",
+   "rotation_y": 0.0,
+   "seat_h": 0.8,
+   "spot": "Bar_Stool12",
+   "zone": "Bar"
+  },
+  {
    "pose": "staff",
    "position": [
-    17.5,
+    17.1,
     0.0,
-    9.35
+    13.05
    ],
    "preset_slot": "BAR_1",
    "rotation_y": -180.0,
@@ -6415,12 +7635,12 @@
   {
    "pose": "sit",
    "position": [
-    13.8,
+    13.2,
     0.0,
-    3.5
+    9.09
    ],
    "preset_slot": "PATRON",
-   "rotation_y": 90.0,
+   "rotation_y": 0.0,
    "seat_h": 0.45,
    "spot": "Tables_T0_C0",
    "zone": "Tables"
@@ -6428,9 +7648,9 @@
   {
    "pose": "sit",
    "position": [
-    15.0,
+    13.86,
     0.0,
-    3.5
+    9.75
    ],
    "preset_slot": "PATRON",
    "rotation_y": -90.0,
@@ -6441,12 +7661,38 @@
   {
    "pose": "sit",
    "position": [
-    16.6,
+    13.2,
     0.0,
-    3.5
+    10.41
+   ],
+   "preset_slot": "PATRON",
+   "rotation_y": 180.0,
+   "seat_h": 0.45,
+   "spot": "Tables_T0_C2",
+   "zone": "Tables"
+  },
+  {
+   "pose": "sit",
+   "position": [
+    12.54,
+    0.0,
+    9.75
    ],
    "preset_slot": "PATRON",
    "rotation_y": 90.0,
+   "seat_h": 0.45,
+   "spot": "Tables_T0_C3",
+   "zone": "Tables"
+  },
+  {
+   "pose": "sit",
+   "position": [
+    15.8,
+    0.0,
+    9.09
+   ],
+   "preset_slot": "PATRON",
+   "rotation_y": 0.0,
    "seat_h": 0.45,
    "spot": "Tables_T1_C0",
    "zone": "Tables"
@@ -6454,9 +7700,9 @@
   {
    "pose": "sit",
    "position": [
-    17.8,
+    16.46,
     0.0,
-    3.5
+    9.75
    ],
    "preset_slot": "PATRON",
    "rotation_y": -90.0,
@@ -6467,12 +7713,38 @@
   {
    "pose": "sit",
    "position": [
-    12.0,
+    15.8,
     0.0,
-    6.7
+    10.41
+   ],
+   "preset_slot": "PATRON",
+   "rotation_y": 180.0,
+   "seat_h": 0.45,
+   "spot": "Tables_T1_C2",
+   "zone": "Tables"
+  },
+  {
+   "pose": "sit",
+   "position": [
+    15.14,
+    0.0,
+    9.75
    ],
    "preset_slot": "PATRON",
    "rotation_y": 90.0,
+   "seat_h": 0.45,
+   "spot": "Tables_T1_C3",
+   "zone": "Tables"
+  },
+  {
+   "pose": "sit",
+   "position": [
+    18.4,
+    0.0,
+    9.09
+   ],
+   "preset_slot": "PATRON",
+   "rotation_y": 0.0,
    "seat_h": 0.45,
    "spot": "Tables_T2_C0",
    "zone": "Tables"
@@ -6480,9 +7752,9 @@
   {
    "pose": "sit",
    "position": [
-    13.2,
+    19.06,
     0.0,
-    6.7
+    9.75
    ],
    "preset_slot": "PATRON",
    "rotation_y": -90.0,
@@ -6493,9 +7765,9 @@
   {
    "pose": "sit",
    "position": [
-    12.6,
+    18.4,
     0.0,
-    7.3
+    10.41
    ],
    "preset_slot": "PATRON",
    "rotation_y": 180.0,
@@ -6506,12 +7778,25 @@
   {
    "pose": "sit",
    "position": [
-    14.8,
+    17.74,
     0.0,
-    6.7
+    9.75
    ],
    "preset_slot": "PATRON",
    "rotation_y": 90.0,
+   "seat_h": 0.45,
+   "spot": "Tables_T2_C3",
+   "zone": "Tables"
+  },
+  {
+   "pose": "sit",
+   "position": [
+    21.0,
+    0.0,
+    9.09
+   ],
+   "preset_slot": "PATRON",
+   "rotation_y": 0.0,
    "seat_h": 0.45,
    "spot": "Tables_T3_C0",
    "zone": "Tables"
@@ -6519,9 +7804,9 @@
   {
    "pose": "sit",
    "position": [
-    16.0,
+    21.66,
     0.0,
-    6.7
+    9.75
    ],
    "preset_slot": "PATRON",
    "rotation_y": -90.0,
@@ -6532,9 +7817,9 @@
   {
    "pose": "sit",
    "position": [
-    15.4,
+    21.0,
     0.0,
-    7.3
+    10.41
    ],
    "preset_slot": "PATRON",
    "rotation_y": 180.0,
@@ -6545,12 +7830,25 @@
   {
    "pose": "sit",
    "position": [
-    17.6,
+    20.34,
     0.0,
-    6.7
+    9.75
    ],
    "preset_slot": "PATRON",
    "rotation_y": 90.0,
+   "seat_h": 0.45,
+   "spot": "Tables_T3_C3",
+   "zone": "Tables"
+  },
+  {
+   "pose": "sit",
+   "position": [
+    23.6,
+    0.0,
+    9.09
+   ],
+   "preset_slot": "PATRON",
+   "rotation_y": 0.0,
    "seat_h": 0.45,
    "spot": "Tables_T4_C0",
    "zone": "Tables"
@@ -6558,9 +7856,9 @@
   {
    "pose": "sit",
    "position": [
-    18.8,
+    24.26,
     0.0,
-    6.7
+    9.75
    ],
    "preset_slot": "PATRON",
    "rotation_y": -90.0,
@@ -6571,9 +7869,9 @@
   {
    "pose": "sit",
    "position": [
-    18.2,
+    23.6,
     0.0,
-    7.3
+    10.41
    ],
    "preset_slot": "PATRON",
    "rotation_y": 180.0,
@@ -6584,12 +7882,25 @@
   {
    "pose": "sit",
    "position": [
-    20.4,
+    22.94,
     0.0,
-    6.7
+    9.75
    ],
    "preset_slot": "PATRON",
    "rotation_y": 90.0,
+   "seat_h": 0.45,
+   "spot": "Tables_T4_C3",
+   "zone": "Tables"
+  },
+  {
+   "pose": "sit",
+   "position": [
+    20.4,
+    0.0,
+    6.19
+   ],
+   "preset_slot": "PATRON",
+   "rotation_y": 0.0,
    "seat_h": 0.45,
    "spot": "Tables_T5_C0",
    "zone": "Tables"
@@ -6597,9 +7908,9 @@
   {
    "pose": "sit",
    "position": [
-    21.6,
+    21.06,
     0.0,
-    6.7
+    6.85
    ],
    "preset_slot": "PATRON",
    "rotation_y": -90.0,
@@ -6610,9 +7921,9 @@
   {
    "pose": "sit",
    "position": [
-    21.0,
+    20.4,
     0.0,
-    7.3
+    7.51
    ],
    "preset_slot": "PATRON",
    "rotation_y": 180.0,
@@ -6623,12 +7934,25 @@
   {
    "pose": "sit",
    "position": [
-    24.4,
+    19.74,
     0.0,
-    7.0
+    6.85
    ],
    "preset_slot": "PATRON",
    "rotation_y": 90.0,
+   "seat_h": 0.45,
+   "spot": "Tables_T5_C3",
+   "zone": "Tables"
+  },
+  {
+   "pose": "sit",
+   "position": [
+    23.2,
+    0.0,
+    6.19
+   ],
+   "preset_slot": "PATRON",
+   "rotation_y": 0.0,
    "seat_h": 0.45,
    "spot": "Tables_T6_C0",
    "zone": "Tables"
@@ -6636,9 +7960,9 @@
   {
    "pose": "sit",
    "position": [
-    25.6,
+    23.86,
     0.0,
-    7.0
+    6.85
    ],
    "preset_slot": "PATRON",
    "rotation_y": -90.0,
@@ -6649,12 +7973,12 @@
   {
    "pose": "sit",
    "position": [
-    25.0,
+    23.2,
     0.0,
-    6.4
+    7.51
    ],
    "preset_slot": "PATRON",
-   "rotation_y": 0.0,
+   "rotation_y": 180.0,
    "seat_h": 0.45,
    "spot": "Tables_T6_C2",
    "zone": "Tables"
@@ -6662,12 +7986,25 @@
   {
    "pose": "sit",
    "position": [
-    27.2,
+    22.54,
     0.0,
-    7.0
+    6.85
    ],
    "preset_slot": "PATRON",
    "rotation_y": 90.0,
+   "seat_h": 0.45,
+   "spot": "Tables_T6_C3",
+   "zone": "Tables"
+  },
+  {
+   "pose": "sit",
+   "position": [
+    26.4,
+    0.0,
+    5.24
+   ],
+   "preset_slot": "PATRON",
+   "rotation_y": 0.0,
    "seat_h": 0.45,
    "spot": "Tables_T7_C0",
    "zone": "Tables"
@@ -6675,9 +8012,9 @@
   {
    "pose": "sit",
    "position": [
-    28.4,
+    27.06,
     0.0,
-    7.0
+    5.9
    ],
    "preset_slot": "PATRON",
    "rotation_y": -90.0,
@@ -6688,12 +8025,12 @@
   {
    "pose": "sit",
    "position": [
-    27.8,
+    26.4,
     0.0,
-    6.4
+    6.56
    ],
    "preset_slot": "PATRON",
-   "rotation_y": 0.0,
+   "rotation_y": 180.0,
    "seat_h": 0.45,
    "spot": "Tables_T7_C2",
    "zone": "Tables"
@@ -6701,12 +8038,25 @@
   {
    "pose": "sit",
    "position": [
-    24.4,
+    25.74,
     0.0,
-    9.0
+    5.9
    ],
    "preset_slot": "PATRON",
    "rotation_y": 90.0,
+   "seat_h": 0.45,
+   "spot": "Tables_T7_C3",
+   "zone": "Tables"
+  },
+  {
+   "pose": "sit",
+   "position": [
+    26.4,
+    0.0,
+    7.94
+   ],
+   "preset_slot": "PATRON",
+   "rotation_y": 0.0,
    "seat_h": 0.45,
    "spot": "Tables_T8_C0",
    "zone": "Tables"
@@ -6714,9 +8064,9 @@
   {
    "pose": "sit",
    "position": [
-    25.6,
+    27.06,
     0.0,
-    9.0
+    8.6
    ],
    "preset_slot": "PATRON",
    "rotation_y": -90.0,
@@ -6727,12 +8077,38 @@
   {
    "pose": "sit",
    "position": [
-    27.2,
+    26.4,
     0.0,
-    9.0
+    9.26
+   ],
+   "preset_slot": "PATRON",
+   "rotation_y": 180.0,
+   "seat_h": 0.45,
+   "spot": "Tables_T8_C2",
+   "zone": "Tables"
+  },
+  {
+   "pose": "sit",
+   "position": [
+    25.74,
+    0.0,
+    8.6
    ],
    "preset_slot": "PATRON",
    "rotation_y": 90.0,
+   "seat_h": 0.45,
+   "spot": "Tables_T8_C3",
+   "zone": "Tables"
+  },
+  {
+   "pose": "sit",
+   "position": [
+    26.4,
+    0.0,
+    10.74
+   ],
+   "preset_slot": "PATRON",
+   "rotation_y": 0.0,
    "seat_h": 0.45,
    "spot": "Tables_T9_C0",
    "zone": "Tables"
@@ -6740,9 +8116,9 @@
   {
    "pose": "sit",
    "position": [
-    28.4,
+    27.06,
     0.0,
-    9.0
+    11.4
    ],
    "preset_slot": "PATRON",
    "rotation_y": -90.0,
@@ -6753,9 +8129,35 @@
   {
    "pose": "sit",
    "position": [
-    24.0,
+    26.4,
     0.0,
-    4.75
+    12.06
+   ],
+   "preset_slot": "PATRON",
+   "rotation_y": 180.0,
+   "seat_h": 0.45,
+   "spot": "Tables_T9_C2",
+   "zone": "Tables"
+  },
+  {
+   "pose": "sit",
+   "position": [
+    25.74,
+    0.0,
+    11.4
+   ],
+   "preset_slot": "PATRON",
+   "rotation_y": 90.0,
+   "seat_h": 0.45,
+   "spot": "Tables_T9_C3",
+   "zone": "Tables"
+  },
+  {
+   "pose": "sit",
+   "position": [
+    18.6,
+    0.0,
+    4.05
    ],
    "preset_slot": "PATRON",
    "rotation_y": -180.0,
@@ -6766,9 +8168,9 @@
   {
    "pose": "sit",
    "position": [
-    25.0,
+    19.6,
     0.0,
-    5.5
+    4.05
    ],
    "preset_slot": "PATRON",
    "rotation_y": -180.0,
@@ -6779,9 +8181,9 @@
   {
    "pose": "sit",
    "position": [
-    26.0,
+    23.4,
     0.0,
-    4.75
+    4.05
    ],
    "preset_slot": "PATRON",
    "rotation_y": -180.0,
@@ -6792,9 +8194,9 @@
   {
    "pose": "sit",
    "position": [
-    27.0,
+    24.4,
     0.0,
-    5.5
+    4.05
    ],
    "preset_slot": "PATRON",
    "rotation_y": -180.0,
@@ -6805,9 +8207,9 @@
   {
    "pose": "sit",
    "position": [
-    28.0,
+    25.4,
     0.0,
-    4.75
+    4.05
    ],
    "preset_slot": "PATRON",
    "rotation_y": -180.0,
@@ -6818,9 +8220,9 @@
   {
    "pose": "sit",
    "position": [
-    29.0,
+    26.4,
     0.0,
-    5.5
+    4.05
    ],
    "preset_slot": "PATRON",
    "rotation_y": -180.0,
@@ -6831,210 +8233,275 @@
   {
    "pose": "sit",
    "position": [
-    13.0,
+    27.4,
     0.0,
-    0.7
-   ],
-   "preset_slot": "PATRON",
-   "rotation_y": 0.0,
-   "seat_h": 0.45,
-   "spot": "CommunalTable_T0_N0",
-   "zone": "CommunalTable"
-  },
-  {
-   "pose": "sit",
-   "position": [
-    13.0,
-    0.0,
-    2.0
+    4.05
    ],
    "preset_slot": "PATRON",
    "rotation_y": -180.0,
    "seat_h": 0.45,
-   "spot": "CommunalTable_T0_S0",
-   "zone": "CommunalTable"
+   "spot": "Tables_DrumStool6",
+   "zone": "Tables"
   },
   {
    "pose": "sit",
    "position": [
-    14.0,
+    17.9,
     0.0,
-    0.7
-   ],
-   "preset_slot": "PATRON",
-   "rotation_y": 0.0,
-   "seat_h": 0.45,
-   "spot": "CommunalTable_T0_N1",
-   "zone": "CommunalTable"
-  },
-  {
-   "pose": "sit",
-   "position": [
-    14.0,
-    0.0,
-    2.0
+    4.9
    ],
    "preset_slot": "PATRON",
    "rotation_y": -180.0,
    "seat_h": 0.45,
-   "spot": "CommunalTable_T0_S1",
-   "zone": "CommunalTable"
+   "spot": "Tables_DrumStool7",
+   "zone": "Tables"
   },
   {
    "pose": "sit",
    "position": [
-    15.0,
+    24.9,
     0.0,
-    0.7
-   ],
-   "preset_slot": "PATRON",
-   "rotation_y": 0.0,
-   "seat_h": 0.45,
-   "spot": "CommunalTable_T0_N2",
-   "zone": "CommunalTable"
-  },
-  {
-   "pose": "sit",
-   "position": [
-    15.0,
-    0.0,
-    2.0
+    4.9
    ],
    "preset_slot": "PATRON",
    "rotation_y": -180.0,
    "seat_h": 0.45,
-   "spot": "CommunalTable_T0_S2",
-   "zone": "CommunalTable"
+   "spot": "Tables_DrumStool8",
+   "zone": "Tables"
   },
   {
    "pose": "sit",
    "position": [
-    16.0,
+    25.9,
     0.0,
-    0.7
-   ],
-   "preset_slot": "PATRON",
-   "rotation_y": 0.0,
-   "seat_h": 0.45,
-   "spot": "CommunalTable_T1_N0",
-   "zone": "CommunalTable"
-  },
-  {
-   "pose": "sit",
-   "position": [
-    16.0,
-    0.0,
-    2.0
+    4.9
    ],
    "preset_slot": "PATRON",
    "rotation_y": -180.0,
    "seat_h": 0.45,
-   "spot": "CommunalTable_T1_S0",
-   "zone": "CommunalTable"
+   "spot": "Tables_DrumStool9",
+   "zone": "Tables"
   },
   {
    "pose": "sit",
    "position": [
-    17.0,
+    26.9,
     0.0,
-    0.7
-   ],
-   "preset_slot": "PATRON",
-   "rotation_y": 0.0,
-   "seat_h": 0.45,
-   "spot": "CommunalTable_T1_N1",
-   "zone": "CommunalTable"
-  },
-  {
-   "pose": "sit",
-   "position": [
-    17.0,
-    0.0,
-    2.0
+    4.9
    ],
    "preset_slot": "PATRON",
    "rotation_y": -180.0,
    "seat_h": 0.45,
-   "spot": "CommunalTable_T1_S1",
-   "zone": "CommunalTable"
+   "spot": "Tables_DrumStool10",
+   "zone": "Tables"
   },
   {
    "pose": "sit",
    "position": [
-    18.0,
+    12.0,
     0.0,
-    0.7
-   ],
-   "preset_slot": "PATRON",
-   "rotation_y": 0.0,
-   "seat_h": 0.45,
-   "spot": "CommunalTable_T1_N2",
-   "zone": "CommunalTable"
-  },
-  {
-   "pose": "sit",
-   "position": [
-    18.0,
-    0.0,
-    2.0
+    3.6
    ],
    "preset_slot": "PATRON",
    "rotation_y": -180.0,
    "seat_h": 0.45,
-   "spot": "CommunalTable_T1_S2",
+   "spot": "Tables_DrumStool11",
+   "zone": "Tables"
+  },
+  {
+   "pose": "sit",
+   "position": [
+    17.4,
+    0.0,
+    3.6
+   ],
+   "preset_slot": "PATRON",
+   "rotation_y": -180.0,
+   "seat_h": 0.45,
+   "spot": "Tables_DrumStool12",
+   "zone": "Tables"
+  },
+  {
+   "pose": "sit",
+   "position": [
+    13.1,
+    0.0,
+    1.0
+   ],
+   "preset_slot": "PATRON",
+   "rotation_y": 0.0,
+   "seat_h": 0.45,
+   "spot": "CommunalTable_N0",
    "zone": "CommunalTable"
   },
   {
    "pose": "sit",
    "position": [
-    10.3,
+    13.1,
     0.0,
-    0.9
+    2.5
+   ],
+   "preset_slot": "PATRON",
+   "rotation_y": -180.0,
+   "seat_h": 0.45,
+   "spot": "CommunalTable_S0",
+   "zone": "CommunalTable"
+  },
+  {
+   "pose": "sit",
+   "position": [
+    14.1,
+    0.0,
+    1.0
+   ],
+   "preset_slot": "PATRON",
+   "rotation_y": 0.0,
+   "seat_h": 0.45,
+   "spot": "CommunalTable_N1",
+   "zone": "CommunalTable"
+  },
+  {
+   "pose": "sit",
+   "position": [
+    14.1,
+    0.0,
+    2.5
+   ],
+   "preset_slot": "PATRON",
+   "rotation_y": -180.0,
+   "seat_h": 0.45,
+   "spot": "CommunalTable_S1",
+   "zone": "CommunalTable"
+  },
+  {
+   "pose": "sit",
+   "position": [
+    15.1,
+    0.0,
+    1.0
+   ],
+   "preset_slot": "PATRON",
+   "rotation_y": 0.0,
+   "seat_h": 0.45,
+   "spot": "CommunalTable_N2",
+   "zone": "CommunalTable"
+  },
+  {
+   "pose": "sit",
+   "position": [
+    15.1,
+    0.0,
+    2.5
+   ],
+   "preset_slot": "PATRON",
+   "rotation_y": -180.0,
+   "seat_h": 0.45,
+   "spot": "CommunalTable_S2",
+   "zone": "CommunalTable"
+  },
+  {
+   "pose": "sit",
+   "position": [
+    16.1,
+    0.0,
+    1.0
+   ],
+   "preset_slot": "PATRON",
+   "rotation_y": 0.0,
+   "seat_h": 0.45,
+   "spot": "CommunalTable_N3",
+   "zone": "CommunalTable"
+  },
+  {
+   "pose": "sit",
+   "position": [
+    16.1,
+    0.0,
+    2.5
+   ],
+   "preset_slot": "PATRON",
+   "rotation_y": -180.0,
+   "seat_h": 0.45,
+   "spot": "CommunalTable_S3",
+   "zone": "CommunalTable"
+  },
+  {
+   "pose": "sit",
+   "position": [
+    10.74,
+    0.0,
+    0.75
+   ],
+   "preset_slot": "PATRON",
+   "rotation_y": -90.0,
+   "seat_h": 0.45,
+   "spot": "CommunalTable_Side0",
+   "zone": "CommunalTable"
+  },
+  {
+   "pose": "sit",
+   "position": [
+    12.06,
+    0.0,
+    0.75
    ],
    "preset_slot": "PATRON",
    "rotation_y": 90.0,
    "seat_h": 0.45,
-   "spot": "Banquette_Seat0",
-   "zone": "Banquette"
+   "spot": "CommunalTable_Side1",
+   "zone": "CommunalTable"
   },
   {
-   "pose": "sit",
+   "pose": "band_drums",
    "position": [
-    10.3,
-    0.0,
-    1.9
+    23.4,
+    0.6,
+    0.25
    ],
    "preset_slot": "PATRON",
-   "rotation_y": 90.0,
+   "rotation_y": 0.0,
    "seat_h": 0.45,
-   "spot": "Banquette_Seat1",
-   "zone": "Banquette"
+   "spot": "Band_Drums",
+   "zone": "Band"
   },
   {
-   "pose": "sit",
+   "pose": "band_guitar",
    "position": [
-    10.3,
-    0.0,
-    2.9
+    20.3,
+    0.6,
+    1.85
    ],
    "preset_slot": "PATRON",
-   "rotation_y": 90.0,
-   "seat_h": 0.45,
-   "spot": "Banquette_Seat2",
-   "zone": "Banquette"
+   "rotation_y": 15.0,
+   "seat_h": 0.0,
+   "spot": "Band_Guitar",
+   "zone": "Band"
   },
   {
-   "pose": "sit",
+   "pose": "band_vocal",
    "position": [
-    10.3,
-    0.0,
-    3.9
+    23.6,
+    0.6,
+    1.95
    ],
    "preset_slot": "PATRON",
-   "rotation_y": 90.0,
-   "seat_h": 0.45,
-   "spot": "Banquette_Seat3",
-   "zone": "Banquette"
+   "rotation_y": 0.0,
+   "seat_h": 0.0,
+   "spot": "Band_Vocal",
+   "zone": "Band"
+  },
+  {
+   "pose": "band_bass",
+   "position": [
+    25.6,
+    0.6,
+    1.85
+   ],
+   "preset_slot": "PATRON",
+   "rotation_y": -15.0,
+   "seat_h": 0.0,
+   "spot": "Band_Bass",
+   "zone": "Band"
   },
   {
    "pose": "wander",
@@ -7065,9 +8532,9 @@
   {
    "pose": "wander",
    "position": [
-    12.6,
+    12.0,
     0.0,
-    2.7
+    3.4
    ],
    "preset_slot": "PATRON_WANDER",
    "rotation_y": 0.0,
@@ -7080,7 +8547,7 @@
    "position": [
     16.0,
     0.0,
-    5.4
+    5.6
    ],
    "preset_slot": "PATRON_WANDER",
    "rotation_y": 0.0,
@@ -7091,7 +8558,7 @@
   {
    "pose": "wander",
    "position": [
-    22.6,
+    22.0,
     0.0,
     5.4
    ],
@@ -7104,9 +8571,9 @@
   {
    "pose": "wander",
    "position": [
-    26.4,
+    24.8,
     0.0,
-    8.0
+    8.3
    ],
    "preset_slot": "PATRON_WANDER",
    "rotation_y": 0.0,
@@ -7117,9 +8584,9 @@
   {
    "pose": "wander",
    "position": [
-    23.6,
+    19.7,
     0.0,
-    8.4
+    8.3
    ],
    "preset_slot": "PATRON_WANDER",
    "rotation_y": 0.0,

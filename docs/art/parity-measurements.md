@@ -98,7 +98,22 @@ mean luminance 0.17-0.23, R/G 2.3-3.0, p90 0.40-0.48.
 
 ## Cameras
 
-| View | Camera position (game coords: x east from the lounge, z south, room x 10..28, z -2..12) | Look at | Vertical FOV |
+Game coordinates: x east from the lounge, z south, y up; main room x 10..28, z -0.5..14
+(`game/tools/capture_parity.gd`, tuned over five iterations against the renders).
+
+| View | Camera position | Look at | Vertical FOV | Aspect |
+|---|---|---|---|---|
+| 05 from the entrance | (9.4, 7.2, 7.0), entrance wall cut away | (20.5, 0.3, 6.6) | 48 | 1672 x 941 |
+| 06 from the bar end | (27.2, 6.8, 9.6), backdrop wall cut away | (16.0, 0.3, 6.6) | 54 | 1446 x 1087 |
+
+## Iterations (`docs/art/screens/parity/<n>-R0x-twoup.png`)
+
+| n | Change | R05 meanL / R/G / L>0.8 | R06 meanL / R/G / L>0.8 |
 |---|---|---|---|
-| 05 from the entrance | (8.5, 10.5, 5.6), wall behind the camera cut away | (21.5, 0, 5.0) | 42 |
-| 06 from the bar end | (30.5, 10.0, 10.0) | (17.0, 0, 3.4) | 46 |
+| render | | 0.208 / 2.71 / 1.1 % | 0.186 / 2.94 / 0.8 % |
+| 0 | old build (20 x 10 m room, kit v2) | 0.149 / 3.88 / 1.6 % | 0.130 / 4.20 / 1.9 % |
+| 1 | kit v3, room re-laid at 18 x 14.5 m | 0.187 / 3.34 / 4.5 % | 0.151 / 3.90 / 2.8 % |
+| 2 | render patrons, band, server; lighter floor, ambient | 0.240 / 2.98 / 4.0 % | 0.229 / 2.61 / 3.7 % |
+| 3 | figures at 0.8 scale, truss to the wall, no floating track rails | 0.236 / 3.37 / 3.6 % | 0.202 / 3.49 / 2.5 % |
+| 4 | red wash halved, lamp pools lifted and softened | 0.207 / 3.17 / 3.1 % | 0.192 / 3.19 / 2.3 % |
+| 5 | camera framing | 0.212 / 2.92 / 3.3 % | 0.208 / 2.73 / 3.3 % |

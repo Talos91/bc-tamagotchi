@@ -1,7 +1,7 @@
 extends SceneTree
 ## Headless smoke test: tap-to-move. Loads main.tscn, sends the player from the lounge to the stage along the
 ## navmesh (as a floor tap would), then taps the screen centre; checks arrival and the camera zone changes, and that
-## the patron crowd spawned (10-14 figures, a bartender, someone seated in every seating zone).
+## the patron crowd spawned (30-50 figures as in renders 05/06, a bartender, someone seated in every seating zone).
 ##   godot --headless --path . --script res://tests/smoke_tap.gd
 
 func _init() -> void:
@@ -32,9 +32,9 @@ func _init() -> void:
 	var crowd: Array = main.get_node("Venue/Patrons").figures
 	var seated_zones := {}
 	for f in crowd:
-		if f.state == "sit":
+		if f.state == "sit" and str(f.name).begins_with("Patron"):
 			seated_zones[str(f.name).get_slice("_", 1)] = true
 	print("patrons: ", crowd.size(), " presets: ", crowd.filter(func(f): return f.is_preset()).size(), " seated zones: ", seated_zones.keys())
-	ok = ok and crowd.size() >= 10 and crowd.size() <= 14 and main.has_node("Venue/Patrons/Bartender") and seated_zones.size() == 5
+	ok = ok and crowd.size() >= 30 and crowd.size() <= 50 and main.has_node("Venue/Patrons/Bartender") and seated_zones.size() == 4
 	print("SMOKE TAP ", "PASS" if ok else "FAIL")
 	quit(0 if ok else 1)

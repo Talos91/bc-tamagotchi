@@ -195,6 +195,9 @@
    "heart"
   ],
   "hair": [
+   "shaggy",
+   "wavy",
+   "afro",
    "crop",
    "buzz",
    "bob",
@@ -433,6 +436,41 @@
      "Denim",
      "StoolBlack"
     ]
+   },
+   "beard": {
+    "slot": "face_hair",
+    "colours": [
+     "HairBlack",
+     "HairBlack"
+    ]
+   },
+   "hat_fedora": {
+    "slot": "hat",
+    "colours": [
+     "StoolBlack",
+     "Charcoal"
+    ]
+   },
+   "vest": {
+    "slot": "outer",
+    "colours": [
+     "StoolBlack",
+     "Charcoal"
+    ]
+   },
+   "tray": {
+    "slot": "held_L",
+    "colours": [
+     "StoolBlack",
+     "BottleAmber"
+    ]
+   },
+   "beer_left": {
+    "slot": "held_L",
+    "colours": [
+     "BottleAmber",
+     "Cream"
+    ]
    }
   }
  },
@@ -484,6 +522,39 @@
       "skin__Skin3"
      ],
      "tris": 44
+    },
+    {
+     "id": "hair_shaggy",
+     "slot": "hair",
+     "bones": [
+      "head"
+     ],
+     "materials": [
+      "hair__HairDarkBrown"
+     ],
+     "tris": 314
+    },
+    {
+     "id": "hair_wavy",
+     "slot": "hair",
+     "bones": [
+      "head"
+     ],
+     "materials": [
+      "hair__HairDarkBrown"
+     ],
+     "tris": 292
+    },
+    {
+     "id": "hair_afro",
+     "slot": "hair",
+     "bones": [
+      "head"
+     ],
+     "materials": [
+      "hair__HairDarkBrown"
+     ],
+     "tris": 1588
     },
     {
      "id": "hair_crop",
@@ -1345,6 +1416,66 @@
       "wheelie_bag__Denim"
      ],
      "tris": 94
+    },
+    {
+     "id": "beard",
+     "slot": "face_hair",
+     "bones": [
+      "head"
+     ],
+     "materials": [
+      "beard__HairBlack"
+     ],
+     "tris": 92
+    },
+    {
+     "id": "hat_fedora",
+     "slot": "hat",
+     "bones": [
+      "head"
+     ],
+     "materials": [
+      "hat_fedora_2__Charcoal",
+      "hat_fedora__StoolBlack"
+     ],
+     "tris": 76
+    },
+    {
+     "id": "vest",
+     "slot": "outer",
+     "bones": [
+      "spine"
+     ],
+     "materials": [
+      "vest_2__Charcoal",
+      "vest__StoolBlack"
+     ],
+     "tris": 64
+    },
+    {
+     "id": "tray",
+     "slot": "held_L",
+     "bones": [
+      "arm_L"
+     ],
+     "materials": [
+      "tray_2__BottleAmber",
+      "tray_3__Cream",
+      "tray__StoolBlack"
+     ],
+     "tris": 118
+    },
+    {
+     "id": "beer_left",
+     "slot": "held_L",
+     "bones": [
+      "arm_L"
+     ],
+     "materials": [
+      "beer_left_2__Cream",
+      "beer_left__BottleAmber"
+     ],
+     "tris": 20
     }
    ]
   },
@@ -1395,6 +1526,39 @@
       "skin__Skin3"
      ],
      "tris": 44
+    },
+    {
+     "id": "hair_shaggy",
+     "slot": "hair",
+     "bones": [
+      "head"
+     ],
+     "materials": [
+      "hair__HairDarkBrown"
+     ],
+     "tris": 256
+    },
+    {
+     "id": "hair_wavy",
+     "slot": "hair",
+     "bones": [
+      "head"
+     ],
+     "materials": [
+      "hair__HairDarkBrown"
+     ],
+     "tris": 274
+    },
+    {
+     "id": "hair_afro",
+     "slot": "hair",
+     "bones": [
+      "head"
+     ],
+     "materials": [
+      "hair__HairDarkBrown"
+     ],
+     "tris": 1530
     },
     {
      "id": "hair_crop",
@@ -2256,6 +2420,66 @@
       "wheelie_bag__Denim"
      ],
      "tris": 94
+    },
+    {
+     "id": "beard",
+     "slot": "face_hair",
+     "bones": [
+      "head"
+     ],
+     "materials": [
+      "beard__HairBlack"
+     ],
+     "tris": 92
+    },
+    {
+     "id": "hat_fedora",
+     "slot": "hat",
+     "bones": [
+      "head"
+     ],
+     "materials": [
+      "hat_fedora_2__Charcoal",
+      "hat_fedora__StoolBlack"
+     ],
+     "tris": 76
+    },
+    {
+     "id": "vest",
+     "slot": "outer",
+     "bones": [
+      "spine"
+     ],
+     "materials": [
+      "vest_2__Charcoal",
+      "vest__StoolBlack"
+     ],
+     "tris": 64
+    },
+    {
+     "id": "tray",
+     "slot": "held_L",
+     "bones": [
+      "arm_L"
+     ],
+     "materials": [
+      "tray_2__BottleAmber",
+      "tray_3__Cream",
+      "tray__StoolBlack"
+     ],
+     "tris": 118
+    },
+    {
+     "id": "beer_left",
+     "slot": "held_L",
+     "bones": [
+      "arm_L"
+     ],
+     "materials": [
+      "beer_left_2__Cream",
+      "beer_left__BottleAmber"
+     ],
+     "tris": 20
     }
    ]
   },
@@ -2306,6 +2530,39 @@
       "skin__Skin3"
      ],
      "tris": 44
+    },
+    {
+     "id": "hair_shaggy",
+     "slot": "hair",
+     "bones": [
+      "head"
+     ],
+     "materials": [
+      "hair__HairDarkBrown"
+     ],
+     "tris": 292
+    },
+    {
+     "id": "hair_wavy",
+     "slot": "hair",
+     "bones": [
+      "head"
+     ],
+     "materials": [
+      "hair__HairDarkBrown"
+     ],
+     "tris": 270
+    },
+    {
+     "id": "hair_afro",
+     "slot": "hair",
+     "bones": [
+      "head"
+     ],
+     "materials": [
+      "hair__HairDarkBrown"
+     ],
+     "tris": 1650
     },
     {
      "id": "hair_crop",
@@ -3167,6 +3424,66 @@
       "wheelie_bag__Denim"
      ],
      "tris": 94
+    },
+    {
+     "id": "beard",
+     "slot": "face_hair",
+     "bones": [
+      "head"
+     ],
+     "materials": [
+      "beard__HairBlack"
+     ],
+     "tris": 92
+    },
+    {
+     "id": "hat_fedora",
+     "slot": "hat",
+     "bones": [
+      "head"
+     ],
+     "materials": [
+      "hat_fedora_2__Charcoal",
+      "hat_fedora__StoolBlack"
+     ],
+     "tris": 76
+    },
+    {
+     "id": "vest",
+     "slot": "outer",
+     "bones": [
+      "spine"
+     ],
+     "materials": [
+      "vest_2__Charcoal",
+      "vest__StoolBlack"
+     ],
+     "tris": 64
+    },
+    {
+     "id": "tray",
+     "slot": "held_L",
+     "bones": [
+      "arm_L"
+     ],
+     "materials": [
+      "tray_2__BottleAmber",
+      "tray_3__Cream",
+      "tray__StoolBlack"
+     ],
+     "tris": 118
+    },
+    {
+     "id": "beer_left",
+     "slot": "held_L",
+     "bones": [
+      "arm_L"
+     ],
+     "materials": [
+      "beer_left_2__Cream",
+      "beer_left__BottleAmber"
+     ],
+     "tris": 20
     }
    ]
   }
@@ -5275,6 +5592,1014 @@
    "height_vox": 35,
    "head_top_vox": 31,
    "tris": 920
+  },
+  {
+   "name": "server",
+   "display": "Server",
+   "role": "staff",
+   "slot": "FLOOR",
+   "path": "res://assets/chars/presets/server.glb",
+   "body": "regular",
+   "parts": {
+    "head": "square",
+    "hair": "shaggy",
+    "eyes": "dot",
+    "brows": "thick",
+    "mouth": "smile",
+    "top": "shirt",
+    "bottom": "trousers",
+    "shoes": "boots",
+    "accessories": [
+     "vest",
+     "tray",
+     "beard"
+    ]
+   },
+   "colours": {
+    "beard": {
+     "swatch": "HairDarkBrown",
+     "hex": "#3E2618"
+    },
+    "bottom": {
+     "swatch": "StoolBlack",
+     "hex": "#221110"
+    },
+    "bottom_trim": {
+     "swatch": "Charcoal",
+     "hex": "#403A3E"
+    },
+    "eyes": {
+     "swatch": "Ink",
+     "hex": "#160B0A"
+    },
+    "hair": {
+     "swatch": "HairDarkBrown",
+     "hex": "#3E2618"
+    },
+    "mouth": {
+     "swatch": "Mouth",
+     "hex": "#6A2420"
+    },
+    "shoes": {
+     "swatch": "WoodDark",
+     "hex": "#36241A"
+    },
+    "shoes_trim": {
+     "swatch": "StoolBlack",
+     "hex": "#221110"
+    },
+    "skin": {
+     "swatch": "Skin2",
+     "hex": "#E4BA96"
+    },
+    "top": {
+     "swatch": "ColumnWhite",
+     "hex": "#E4DDE6"
+    },
+    "top_trim": {
+     "swatch": "Cream",
+     "hex": "#D9C9A6"
+    },
+    "tray": {
+     "swatch": "StoolBlack",
+     "hex": "#221110"
+    },
+    "tray_2": {
+     "swatch": "BottleAmber",
+     "hex": "#8A4A1A"
+    },
+    "tray_3": {
+     "swatch": "Cream",
+     "hex": "#D9C9A6"
+    },
+    "vest": {
+     "swatch": "StoolBlack",
+     "hex": "#221110"
+    },
+    "vest_2": {
+     "swatch": "Charcoal",
+     "hex": "#403A3E"
+    }
+   },
+   "height_m": 1.65,
+   "height_vox": 33,
+   "head_top_vox": 29,
+   "tris": 810
+  },
+  {
+   "name": "patron_13",
+   "display": "Patron 13",
+   "role": "patron",
+   "slot": "PATRON",
+   "path": "res://assets/chars/presets/patron_13.glb",
+   "body": "regular",
+   "parts": {
+    "head": "square",
+    "hair": "shaggy",
+    "eyes": "dot",
+    "brows": "thick",
+    "mouth": "smile",
+    "top": "shirt",
+    "bottom": "jeans",
+    "shoes": "boots",
+    "accessories": [
+     "beard",
+     "drink_beer"
+    ]
+   },
+   "colours": {
+    "beard": {
+     "swatch": "HairBlack",
+     "hex": "#1E1616"
+    },
+    "bottom": {
+     "swatch": "Denim",
+     "hex": "#3F5878"
+    },
+    "bottom_trim": {
+     "swatch": "Stone",
+     "hex": "#7C7270"
+    },
+    "drink_beer": {
+     "swatch": "BottleAmber",
+     "hex": "#8A4A1A"
+    },
+    "drink_beer_2": {
+     "swatch": "Cream",
+     "hex": "#D9C9A6"
+    },
+    "eyes": {
+     "swatch": "Ink",
+     "hex": "#160B0A"
+    },
+    "hair": {
+     "swatch": "HairBlack",
+     "hex": "#1E1616"
+    },
+    "mouth": {
+     "swatch": "Mouth",
+     "hex": "#6A2420"
+    },
+    "shoes": {
+     "swatch": "Charcoal",
+     "hex": "#403A3E"
+    },
+    "shoes_trim": {
+     "swatch": "Stone",
+     "hex": "#7C7270"
+    },
+    "skin": {
+     "swatch": "Skin3",
+     "hex": "#D2A07A"
+    },
+    "top": {
+     "swatch": "ColumnWhite",
+     "hex": "#E4DDE6"
+    },
+    "top_trim": {
+     "swatch": "Cream",
+     "hex": "#D9C9A6"
+    }
+   },
+   "height_m": 1.65,
+   "height_vox": 33,
+   "head_top_vox": 29,
+   "tris": 664
+  },
+  {
+   "name": "patron_14",
+   "display": "Patron 14",
+   "role": "patron",
+   "slot": "PATRON",
+   "path": "res://assets/chars/presets/patron_14.glb",
+   "body": "petite",
+   "parts": {
+    "head": "soft",
+    "hair": "wavy",
+    "eyes": "lashes",
+    "brows": "arched",
+    "mouth": "smile",
+    "top": "blouse",
+    "bottom": "jeans",
+    "shoes": "loafers",
+    "accessories": [
+     "drink_beer"
+    ]
+   },
+   "colours": {
+    "bottom": {
+     "swatch": "Denim",
+     "hex": "#3F5878"
+    },
+    "bottom_trim": {
+     "swatch": "Stone",
+     "hex": "#7C7270"
+    },
+    "drink_beer": {
+     "swatch": "BottleAmber",
+     "hex": "#8A4A1A"
+    },
+    "drink_beer_2": {
+     "swatch": "Cream",
+     "hex": "#D9C9A6"
+    },
+    "eyes": {
+     "swatch": "Ink",
+     "hex": "#160B0A"
+    },
+    "hair": {
+     "swatch": "HairBleach",
+     "hex": "#E6D49A"
+    },
+    "mouth": {
+     "swatch": "Mouth",
+     "hex": "#6A2420"
+    },
+    "shoes": {
+     "swatch": "WoodDark",
+     "hex": "#36241A"
+    },
+    "shoes_trim": {
+     "swatch": "Stone",
+     "hex": "#7C7270"
+    },
+    "skin": {
+     "swatch": "Skin1",
+     "hex": "#F0D2B6"
+    },
+    "top": {
+     "swatch": "Charcoal",
+     "hex": "#403A3E"
+    },
+    "top_trim": {
+     "swatch": "Cream",
+     "hex": "#D9C9A6"
+    }
+   },
+   "height_m": 1.45,
+   "height_vox": 29,
+   "head_top_vox": 26,
+   "tris": 580
+  },
+  {
+   "name": "patron_15",
+   "display": "Patron 15",
+   "role": "patron",
+   "slot": "PATRON",
+   "path": "res://assets/chars/presets/patron_15.glb",
+   "body": "regular",
+   "parts": {
+    "head": "round",
+    "hair": "afro",
+    "eyes": "dot",
+    "brows": "arched",
+    "mouth": "grin",
+    "top": "blouse",
+    "bottom": "skirt",
+    "shoes": "loafers",
+    "accessories": [
+     "drink_beer"
+    ]
+   },
+   "colours": {
+    "bottom": {
+     "swatch": "StoolBlack",
+     "hex": "#221110"
+    },
+    "bottom_trim": {
+     "swatch": "Stone",
+     "hex": "#7C7270"
+    },
+    "drink_beer": {
+     "swatch": "BottleAmber",
+     "hex": "#8A4A1A"
+    },
+    "drink_beer_2": {
+     "swatch": "Cream",
+     "hex": "#D9C9A6"
+    },
+    "eyes": {
+     "swatch": "Ink",
+     "hex": "#160B0A"
+    },
+    "hair": {
+     "swatch": "HairBlack",
+     "hex": "#1E1616"
+    },
+    "mouth": {
+     "swatch": "Mouth",
+     "hex": "#6A2420"
+    },
+    "shoes": {
+     "swatch": "StoolBlack",
+     "hex": "#221110"
+    },
+    "shoes_trim": {
+     "swatch": "Stone",
+     "hex": "#7C7270"
+    },
+    "skin": {
+     "swatch": "Skin7",
+     "hex": "#6A432C"
+    },
+    "top": {
+     "swatch": "VelvetRed",
+     "hex": "#8C0610"
+    },
+    "top_trim": {
+     "swatch": "Cream",
+     "hex": "#D9C9A6"
+    }
+   },
+   "height_m": 1.75,
+   "height_vox": 35,
+   "head_top_vox": 29,
+   "tris": 1886
+  },
+  {
+   "name": "patron_16",
+   "display": "Patron 16",
+   "role": "patron",
+   "slot": "PATRON",
+   "path": "res://assets/chars/presets/patron_16.glb",
+   "body": "regular",
+   "parts": {
+    "head": "square",
+    "hair": "shaggy",
+    "eyes": "sleepy",
+    "brows": "flat",
+    "mouth": "small",
+    "top": "shirt",
+    "bottom": "trousers",
+    "shoes": "boots",
+    "accessories": [
+     "hat_fedora",
+     "beard"
+    ]
+   },
+   "colours": {
+    "beard": {
+     "swatch": "HairBlack",
+     "hex": "#1E1616"
+    },
+    "bottom": {
+     "swatch": "StoolBlack",
+     "hex": "#221110"
+    },
+    "bottom_trim": {
+     "swatch": "Stone",
+     "hex": "#7C7270"
+    },
+    "eyes": {
+     "swatch": "Ink",
+     "hex": "#160B0A"
+    },
+    "hair": {
+     "swatch": "HairBlack",
+     "hex": "#1E1616"
+    },
+    "hat_fedora": {
+     "swatch": "StoolBlack",
+     "hex": "#221110"
+    },
+    "hat_fedora_2": {
+     "swatch": "Charcoal",
+     "hex": "#403A3E"
+    },
+    "mouth": {
+     "swatch": "Mouth",
+     "hex": "#6A2420"
+    },
+    "shoes": {
+     "swatch": "Charcoal",
+     "hex": "#403A3E"
+    },
+    "shoes_trim": {
+     "swatch": "Stone",
+     "hex": "#7C7270"
+    },
+    "skin": {
+     "swatch": "Skin4",
+     "hex": "#BC8860"
+    },
+    "top": {
+     "swatch": "ColumnWhite",
+     "hex": "#E4DDE6"
+    },
+    "top_trim": {
+     "swatch": "Cream",
+     "hex": "#D9C9A6"
+    }
+   },
+   "height_m": 1.75,
+   "height_vox": 35,
+   "head_top_vox": 29,
+   "tris": 684
+  },
+  {
+   "name": "patron_17",
+   "display": "Patron 17",
+   "role": "patron",
+   "slot": "PATRON",
+   "path": "res://assets/chars/presets/patron_17.glb",
+   "body": "petite",
+   "parts": {
+    "head": "heart",
+    "hair": "wavy",
+    "eyes": "wide",
+    "brows": "arched",
+    "mouth": "open",
+    "top": "tee",
+    "bottom": "jeans",
+    "shoes": "sneakers",
+    "accessories": [
+     "drink_beer"
+    ]
+   },
+   "colours": {
+    "bottom": {
+     "swatch": "Denim",
+     "hex": "#3F5878"
+    },
+    "bottom_trim": {
+     "swatch": "Stone",
+     "hex": "#7C7270"
+    },
+    "drink_beer": {
+     "swatch": "BottleAmber",
+     "hex": "#8A4A1A"
+    },
+    "drink_beer_2": {
+     "swatch": "Cream",
+     "hex": "#D9C9A6"
+    },
+    "eyes": {
+     "swatch": "Ink",
+     "hex": "#160B0A"
+    },
+    "hair": {
+     "swatch": "HairAuburn",
+     "hex": "#7E3220"
+    },
+    "mouth": {
+     "swatch": "Mouth",
+     "hex": "#6A2420"
+    },
+    "shoes": {
+     "swatch": "WoodDark",
+     "hex": "#36241A"
+    },
+    "shoes_trim": {
+     "swatch": "Stone",
+     "hex": "#7C7270"
+    },
+    "skin": {
+     "swatch": "Skin2",
+     "hex": "#E4BA96"
+    },
+    "top": {
+     "swatch": "Stone",
+     "hex": "#7C7270"
+    },
+    "top_trim": {
+     "swatch": "Cream",
+     "hex": "#D9C9A6"
+    }
+   },
+   "height_m": 1.45,
+   "height_vox": 29,
+   "head_top_vox": 26,
+   "tris": 580
+  },
+  {
+   "name": "patron_18",
+   "display": "Patron 18",
+   "role": "patron",
+   "slot": "PATRON",
+   "path": "res://assets/chars/presets/patron_18.glb",
+   "body": "broad",
+   "parts": {
+    "head": "square",
+    "hair": "shaggy",
+    "eyes": "dot",
+    "brows": "thick",
+    "mouth": "flat",
+    "top": "tee",
+    "bottom": "jeans",
+    "shoes": "boots",
+    "accessories": [
+     "beard",
+     "drink_beer"
+    ]
+   },
+   "colours": {
+    "beard": {
+     "swatch": "HairDarkBrown",
+     "hex": "#3E2618"
+    },
+    "bottom": {
+     "swatch": "Charcoal",
+     "hex": "#403A3E"
+    },
+    "bottom_trim": {
+     "swatch": "Stone",
+     "hex": "#7C7270"
+    },
+    "drink_beer": {
+     "swatch": "BottleAmber",
+     "hex": "#8A4A1A"
+    },
+    "drink_beer_2": {
+     "swatch": "Cream",
+     "hex": "#D9C9A6"
+    },
+    "eyes": {
+     "swatch": "Ink",
+     "hex": "#160B0A"
+    },
+    "hair": {
+     "swatch": "HairDarkBrown",
+     "hex": "#3E2618"
+    },
+    "mouth": {
+     "swatch": "Mouth",
+     "hex": "#6A2420"
+    },
+    "shoes": {
+     "swatch": "StoolBlack",
+     "hex": "#221110"
+    },
+    "shoes_trim": {
+     "swatch": "Stone",
+     "hex": "#7C7270"
+    },
+    "skin": {
+     "swatch": "Skin5",
+     "hex": "#A06E4A"
+    },
+    "top": {
+     "swatch": "Moss",
+     "hex": "#4C5A30"
+    },
+    "top_trim": {
+     "swatch": "Cream",
+     "hex": "#D9C9A6"
+    }
+   },
+   "height_m": 1.75,
+   "height_vox": 35,
+   "head_top_vox": 31,
+   "tris": 708
+  },
+  {
+   "name": "patron_19",
+   "display": "Patron 19",
+   "role": "patron",
+   "slot": "PATRON",
+   "path": "res://assets/chars/presets/patron_19.glb",
+   "body": "regular",
+   "parts": {
+    "head": "soft",
+    "hair": "wavy",
+    "eyes": "lashes",
+    "brows": "flat",
+    "mouth": "smile",
+    "top": "blouse",
+    "bottom": "skirt",
+    "shoes": "loafers",
+    "accessories": [
+     "drink_beer"
+    ]
+   },
+   "colours": {
+    "bottom": {
+     "swatch": "StoolBlack",
+     "hex": "#221110"
+    },
+    "bottom_trim": {
+     "swatch": "Stone",
+     "hex": "#7C7270"
+    },
+    "drink_beer": {
+     "swatch": "BottleAmber",
+     "hex": "#8A4A1A"
+    },
+    "drink_beer_2": {
+     "swatch": "Cream",
+     "hex": "#D9C9A6"
+    },
+    "eyes": {
+     "swatch": "Ink",
+     "hex": "#160B0A"
+    },
+    "hair": {
+     "swatch": "HairBleach",
+     "hex": "#E6D49A"
+    },
+    "mouth": {
+     "swatch": "Mouth",
+     "hex": "#6A2420"
+    },
+    "shoes": {
+     "swatch": "Charcoal",
+     "hex": "#403A3E"
+    },
+    "shoes_trim": {
+     "swatch": "Stone",
+     "hex": "#7C7270"
+    },
+    "skin": {
+     "swatch": "Skin2",
+     "hex": "#E4BA96"
+    },
+    "top": {
+     "swatch": "Denim",
+     "hex": "#3F5878"
+    },
+    "top_trim": {
+     "swatch": "Cream",
+     "hex": "#D9C9A6"
+    }
+   },
+   "height_m": 1.6,
+   "height_vox": 32,
+   "head_top_vox": 29,
+   "tris": 606
+  },
+  {
+   "name": "patron_20",
+   "display": "Patron 20",
+   "role": "patron",
+   "slot": "PATRON",
+   "path": "res://assets/chars/presets/patron_20.glb",
+   "body": "regular",
+   "parts": {
+    "head": "round",
+    "hair": "afro",
+    "eyes": "dot",
+    "brows": "flat",
+    "mouth": "smile",
+    "top": "shirt",
+    "bottom": "trousers",
+    "shoes": "sneakers",
+    "accessories": [
+     "drink_beer"
+    ]
+   },
+   "colours": {
+    "bottom": {
+     "swatch": "Charcoal",
+     "hex": "#403A3E"
+    },
+    "bottom_trim": {
+     "swatch": "Stone",
+     "hex": "#7C7270"
+    },
+    "drink_beer": {
+     "swatch": "BottleAmber",
+     "hex": "#8A4A1A"
+    },
+    "drink_beer_2": {
+     "swatch": "Cream",
+     "hex": "#D9C9A6"
+    },
+    "eyes": {
+     "swatch": "Ink",
+     "hex": "#160B0A"
+    },
+    "hair": {
+     "swatch": "HairBlack",
+     "hex": "#1E1616"
+    },
+    "mouth": {
+     "swatch": "Mouth",
+     "hex": "#6A2420"
+    },
+    "shoes": {
+     "swatch": "WoodDark",
+     "hex": "#36241A"
+    },
+    "shoes_trim": {
+     "swatch": "Stone",
+     "hex": "#7C7270"
+    },
+    "skin": {
+     "swatch": "Skin6",
+     "hex": "#845636"
+    },
+    "top": {
+     "swatch": "DenimLight",
+     "hex": "#6C88A8"
+    },
+    "top_trim": {
+     "swatch": "Cream",
+     "hex": "#D9C9A6"
+    }
+   },
+   "height_m": 1.75,
+   "height_vox": 35,
+   "head_top_vox": 29,
+   "tris": 1786
+  },
+  {
+   "name": "patron_21",
+   "display": "Patron 21",
+   "role": "patron",
+   "slot": "PATRON",
+   "path": "res://assets/chars/presets/patron_21.glb",
+   "body": "petite",
+   "parts": {
+    "head": "soft",
+    "hair": "afro",
+    "eyes": "lashes",
+    "brows": "arched",
+    "mouth": "small",
+    "top": "blouse",
+    "bottom": "skirt",
+    "shoes": "loafers",
+    "accessories": [
+     "drink_beer"
+    ]
+   },
+   "colours": {
+    "bottom": {
+     "swatch": "StoolBlack",
+     "hex": "#221110"
+    },
+    "bottom_trim": {
+     "swatch": "Stone",
+     "hex": "#7C7270"
+    },
+    "drink_beer": {
+     "swatch": "BottleAmber",
+     "hex": "#8A4A1A"
+    },
+    "drink_beer_2": {
+     "swatch": "Cream",
+     "hex": "#D9C9A6"
+    },
+    "eyes": {
+     "swatch": "Ink",
+     "hex": "#160B0A"
+    },
+    "hair": {
+     "swatch": "HairBlack",
+     "hex": "#1E1616"
+    },
+    "mouth": {
+     "swatch": "Mouth",
+     "hex": "#6A2420"
+    },
+    "shoes": {
+     "swatch": "StoolBlack",
+     "hex": "#221110"
+    },
+    "shoes_trim": {
+     "swatch": "Stone",
+     "hex": "#7C7270"
+    },
+    "skin": {
+     "swatch": "Skin8",
+     "hex": "#4E3022"
+    },
+    "top": {
+     "swatch": "VelvetRed",
+     "hex": "#8C0610"
+    },
+    "top_trim": {
+     "swatch": "Cream",
+     "hex": "#D9C9A6"
+    }
+   },
+   "height_m": 1.6,
+   "height_vox": 32,
+   "head_top_vox": 26,
+   "tris": 1904
+  },
+  {
+   "name": "patron_22",
+   "display": "Patron 22",
+   "role": "patron",
+   "slot": "PATRON",
+   "path": "res://assets/chars/presets/patron_22.glb",
+   "body": "regular",
+   "parts": {
+    "head": "square",
+    "hair": "shaggy",
+    "eyes": "dot",
+    "brows": "flat",
+    "mouth": "grin",
+    "top": "hoodie",
+    "bottom": "jeans",
+    "shoes": "sneakers",
+    "accessories": [
+     "drink_beer"
+    ]
+   },
+   "colours": {
+    "bottom": {
+     "swatch": "Denim",
+     "hex": "#3F5878"
+    },
+    "bottom_trim": {
+     "swatch": "Stone",
+     "hex": "#7C7270"
+    },
+    "drink_beer": {
+     "swatch": "BottleAmber",
+     "hex": "#8A4A1A"
+    },
+    "drink_beer_2": {
+     "swatch": "Cream",
+     "hex": "#D9C9A6"
+    },
+    "eyes": {
+     "swatch": "Ink",
+     "hex": "#160B0A"
+    },
+    "hair": {
+     "swatch": "HairBrown",
+     "hex": "#6A4228"
+    },
+    "mouth": {
+     "swatch": "Mouth",
+     "hex": "#6A2420"
+    },
+    "shoes": {
+     "swatch": "Charcoal",
+     "hex": "#403A3E"
+    },
+    "shoes_trim": {
+     "swatch": "Stone",
+     "hex": "#7C7270"
+    },
+    "skin": {
+     "swatch": "Skin3",
+     "hex": "#D2A07A"
+    },
+    "top": {
+     "swatch": "Charcoal",
+     "hex": "#403A3E"
+    },
+    "top_trim": {
+     "swatch": "Cream",
+     "hex": "#D9C9A6"
+    }
+   },
+   "height_m": 1.65,
+   "height_vox": 33,
+   "head_top_vox": 29,
+   "tris": 512
+  },
+  {
+   "name": "patron_23",
+   "display": "Patron 23",
+   "role": "patron",
+   "slot": "PATRON",
+   "path": "res://assets/chars/presets/patron_23.glb",
+   "body": "broad",
+   "parts": {
+    "head": "round",
+    "hair": "swept",
+    "eyes": "sleepy",
+    "brows": "thick",
+    "mouth": "smile",
+    "top": "shirt",
+    "bottom": "trousers",
+    "shoes": "loafers",
+    "accessories": [
+     "drink_beer"
+    ]
+   },
+   "colours": {
+    "bottom": {
+     "swatch": "StoolBlack",
+     "hex": "#221110"
+    },
+    "bottom_trim": {
+     "swatch": "Stone",
+     "hex": "#7C7270"
+    },
+    "drink_beer": {
+     "swatch": "BottleAmber",
+     "hex": "#8A4A1A"
+    },
+    "drink_beer_2": {
+     "swatch": "Cream",
+     "hex": "#D9C9A6"
+    },
+    "eyes": {
+     "swatch": "Ink",
+     "hex": "#160B0A"
+    },
+    "hair": {
+     "swatch": "HairWhite",
+     "hex": "#E4E0DC"
+    },
+    "mouth": {
+     "swatch": "Mouth",
+     "hex": "#6A2420"
+    },
+    "shoes": {
+     "swatch": "WoodDark",
+     "hex": "#36241A"
+    },
+    "shoes_trim": {
+     "swatch": "Stone",
+     "hex": "#7C7270"
+    },
+    "skin": {
+     "swatch": "Skin1",
+     "hex": "#F0D2B6"
+    },
+    "top": {
+     "swatch": "Charcoal",
+     "hex": "#403A3E"
+    },
+    "top_trim": {
+     "swatch": "Cream",
+     "hex": "#D9C9A6"
+    }
+   },
+   "height_m": 1.65,
+   "height_vox": 33,
+   "head_top_vox": 31,
+   "tris": 344
+  },
+  {
+   "name": "patron_24",
+   "display": "Patron 24",
+   "role": "patron",
+   "slot": "PATRON",
+   "path": "res://assets/chars/presets/patron_24.glb",
+   "body": "regular",
+   "parts": {
+    "head": "heart",
+    "hair": "wavy",
+    "eyes": "wide",
+    "brows": "arched",
+    "mouth": "smile",
+    "top": "tee",
+    "bottom": "jeans",
+    "shoes": "sneakers",
+    "accessories": [
+     "drink_beer"
+    ]
+   },
+   "colours": {
+    "bottom": {
+     "swatch": "Denim",
+     "hex": "#3F5878"
+    },
+    "bottom_trim": {
+     "swatch": "Stone",
+     "hex": "#7C7270"
+    },
+    "drink_beer": {
+     "swatch": "BottleAmber",
+     "hex": "#8A4A1A"
+    },
+    "drink_beer_2": {
+     "swatch": "Cream",
+     "hex": "#D9C9A6"
+    },
+    "eyes": {
+     "swatch": "Ink",
+     "hex": "#160B0A"
+    },
+    "hair": {
+     "swatch": "HairDarkBrown",
+     "hex": "#3E2618"
+    },
+    "mouth": {
+     "swatch": "Mouth",
+     "hex": "#6A2420"
+    },
+    "shoes": {
+     "swatch": "StoolBlack",
+     "hex": "#221110"
+    },
+    "shoes_trim": {
+     "swatch": "Stone",
+     "hex": "#7C7270"
+    },
+    "skin": {
+     "swatch": "Skin3",
+     "hex": "#D2A07A"
+    },
+    "top": {
+     "swatch": "VelvetRed",
+     "hex": "#8C0610"
+    },
+    "top_trim": {
+     "swatch": "Cream",
+     "hex": "#D9C9A6"
+    }
+   },
+   "height_m": 1.6,
+   "height_vox": 32,
+   "head_top_vox": 29,
+   "tris": 562
   }
  ]
 }

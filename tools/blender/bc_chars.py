@@ -243,7 +243,7 @@ def build_mouth(v, D, C):
 
 
 # ---- hair. T = top row of the head; hair adds a 1-voxel cap above it and may rise up to 5 (bible section 7).
-HAIRS = ("crop", "buzz", "bob", "bun", "quiff", "ponytail", "side_part", "swept", "long", "spiky", "curly",
+HAIRS = ("shaggy", "wavy", "afro", "crop", "buzz", "bob", "bun", "quiff", "ponytail", "side_part", "swept", "long", "spiky", "curly",
          "sideburns", "chignon")
 
 
@@ -268,7 +268,52 @@ def build_hair(style, D, C):
     def fringe(zlo, xr=(HX0, HX1)):
         b(xr, (HY0 - 1, HY0 - 1), (zlo, T))
 
-    if style == "crop":
+    def lumpy(x0, x1, y0, y1, z, seed, chance=0.55):
+        """One irregular layer: each 2 x 2 tuft is set with probability `chance` (renders 05/06 hair reads as
+        clumps, not a flat cap)."""
+        for x in range(x0, x1 + 1, 2):
+            for y in range(y0, y1 + 1, 2):
+                if zlib.crc32(("%s%d,%d,%d" % (seed, x, y, z)).encode()) % 100 < chance * 100:
+                    b((x, min(x + 1, x1)), (y, min(y + 1, y1)), (z, z))
+
+    if style == "shaggy":
+        # renders 05/06, the most common look: a thick messy mop over the ears, jagged fringe, clumps on top
+        b((HX0 - 1, HX1 + 1), (HY0 - 1, HY1 + 1), (T + 1, T + 2))
+        lumpy(HX0 - 1, HX1 + 1, HY0 - 1, HY1 + 1, T + 3, "shag")
+        lumpy(HX0 + 1, HX1 - 1, HY0 + 1, HY1 - 1, T + 4, "shag2", 0.35)
+        b((HX0 - 2, HX0 - 1), (HY0, HY1 + 1), (Z + 3, T))
+        b((HX1 + 1, HX1 + 2), (HY0, HY1 + 1), (Z + 3, T))
+        b((HX0 - 1, HX1 + 1), (HY1 + 1, HY1 + 2), (Z + 1, T))
+        fringe(T - 1)
+        for x in range(HX0, HX1 + 1, 2):                             # jagged fringe tips
+            if zlib.crc32(("fr%d" % x).encode()) % 2:
+                b((x, x), (HY0 - 1, HY0 - 1), (T - 3, T - 2))
+    elif style == "wavy":
+        # long voluminous waves past the shoulders (05: the blonde patrons, the ginger at the bar)
+        b((HX0 - 1, HX1 + 1), (HY0 - 1, HY1 + 1), (T + 1, T + 2))
+        lumpy(HX0, HX1, HY0, HY1 + 1, T + 3, "wave")
+        for side, x0, x1 in ((-1, HX0 - 3, HX0 - 1), (1, HX1 + 1, HX1 + 3)):
+            for z in range(Z - 4, T + 1):
+                flare = 1 if (z - Z) % 4 in (0, 1) else 0             # the wave: in and out every 2 rows
+                xa, xb = (x0 + 1 - flare, x1) if side < 0 else (x0, x1 - 1 + flare)
+                b((xa, xb), (HY0 + 1, HY1 + 2), (z, z))
+        b((HX0 - 1, HX1 + 1), (HY1 + 1, HY1 + 3), (Z - 4, T))
+        fringe(T - 2, (HX0, -1)); fringe(T - 1, (0, HX1))
+    elif style == "afro":
+        cz = T - 1.0
+        head = set((x, y, z) for x in range(HX0, HX1 + 1) for y in range(HY0, HY1 + 1) for z in range(Z, T + 1))
+
+        def keep(x, y, z):
+            if (x, y, z) in head:
+                return False
+            if y < HY0 and z < T - 1:
+                return False
+            d = ((x + 0.5) / 9.8) ** 2 + ((y + 0.5) / 9.8) ** 2 + ((z + 0.5 - cz) / 7.6) ** 2
+            if d > 1.0:
+                return False
+            return d < 0.86 or zlib.crc32(("afro%d,%d,%d" % (x, y, z)).encode()) % 3 > 0   # tufted edge
+        b((HX0 - 4, HX1 + 4), (HY0 - 3, HY1 + 4), (T - 6, T + 7), keep)
+    elif style == "crop":
         cap(); sides(T - 3); back(T - 4); fringe(T - 1)
     elif style == "buzz":
         cap(0)
@@ -484,6 +529,11 @@ ACC = {
     "sketchbook":     ("held_L", "WoodMid", "Cream"),
     "vinyl":          ("held_L", "Mustard", "StoolBlack"),
     "wheelie_bag":    ("floor", "Denim", "StoolBlack"),
+    "beard":          ("face_hair", "HairBlack", "HairBlack"),
+    "hat_fedora":     ("hat", "StoolBlack", "Charcoal"),
+    "vest":           ("outer", "StoolBlack", "Charcoal"),
+    "tray":           ("held_L", "StoolBlack", "BottleAmber"),
+    "beer_left":      ("held_L", "BottleAmber", "Cream"),
 }
 
 
@@ -622,6 +672,39 @@ def build_acc(aid, D, C):
         x = L[1] + 1
         bx((x, x), (-5, 1), (az - 2, az + 4), bone="arm_L")
         bx((x, x), (-3, -1), (az, az + 2), b2, "arm_L")                            # label
+    elif aid == "beard":
+        y = HY0 - 1
+        bx((-4, 3), (y, y), (Z, Z))                                               # chin row
+        bx((-3, 2), (y, y), (Z - 1, Z - 1))                                       # under the chin
+        for x0 in (HX0, HX1 - 1):
+            bx((x0, x0 + 1), (y, y), (Z, Z + 3))                                  # jaw
+        bx((HX0 - 1, HX0 - 1), (HY0, HY0 + 3), (Z, Z + 4))                        # sideburn to the jaw
+        bx((HX1 + 1, HX1 + 1), (HY0, HY0 + 3), (Z, Z + 4))
+        bx((-3, 2), (y, y), (Z + 3, Z + 3), keep=lambda x, yy, z: x not in (-1, 0))   # moustache
+    elif aid == "hat_fedora":
+        bx((HX0 - 2, HX1 + 2), (HY0 - 2, HY1 + 2), (T + 2, T + 2),
+           keep=lambda x, y, z: not (x in (HX0 - 2, HX1 + 2) and y in (HY0 - 2, HY1 + 2)))
+        bx((HX0, HX1), (HY0 + 1, HY1), (T + 3, T + 3), b2)                       # band
+        bx((HX0, HX1), (HY0 + 1, HY1), (T + 4, T + 6),
+           keep=lambda x, y, z: not (z == T + 6 and -2 <= x <= 1))               # pinched crown
+    elif aid == "vest":
+        y0, y1 = D["y0"] - 1, D["y1"] + 1
+        for x0, x1 in ((D["x0"], D["x0"] + 2), (D["x1"] - 2, D["x1"])):
+            bx((x0, x1), (y0, y0), (leg + 1, h - 1), bone="spine")
+        bx((D["x0"], D["x1"]), (y1, y1), (leg + 1, h - 1), bone="spine")
+        bx((D["x1"] - 2, D["x1"] - 2), (y0 - 1, y0 - 1), (leg + 4, leg + 4), b2, "spine")   # button
+        bx((D["x0"] + 2, D["x0"] + 2), (y0 - 1, y0 - 1), (leg + 4, leg + 4), b2, "spine")
+    elif aid == "tray":
+        # 06/05: the server's round tray held flat at the left hand with four pints on it
+        zt = az + 1
+        bx((lc - 3, lc + 3), (-9, -2), (zt, zt), bone="arm_L",
+           keep=lambda x, y, z: not (x in (lc - 3, lc + 3) and y in (-9, -2)))
+        for gx, gy in ((lc - 2, -8), (lc + 1, -8), (lc - 2, -5), (lc + 1, -5)):
+            bx((gx, gx + 1), (gy, gy + 1), (zt + 1, zt + 3), b2, "arm_L")
+            bx((gx, gx + 1), (gy, gy + 1), (zt + 4, zt + 4), ("tray_3", "Cream"), "arm_L")
+    elif aid == "beer_left":
+        bx((lc - 1, lc), (-4, -3), (az, az + 2), bone="arm_L")
+        bx((lc - 1, lc), (-4, -3), (az + 3, az + 3), b2, "arm_L")
     elif aid == "wheelie_bag":
         x0 = D["x0"] - 9
         bx((x0, x0 + 4), (0, 3), (1, 8), bone="root")
@@ -738,6 +821,45 @@ for i in range(12):
                      skin=PATRON_SKIN[i], hair=PATRON_HAIR[i], top=PATRON_TOPS[i], top_trim="Cream",
                      bottom=PATRON_BOTTOMS[i % len(PATRON_BOTTOMS)], bottom_trim="Stone",
                      shoes=("Charcoal", "WoodDark", "ColumnWhite")[i % 3], shoes_trim="Stone"))
+
+
+# Server and render patrons (renders 05/06): white shirt + black vest + tray; big hair, beards, fedoras, red tops
+PRESETS.append(P("server", "Server", "staff", "FLOOR", "regular", "square", "shaggy", ("dot", "thick", "smile"),
+                 "shirt", "trousers", "boots", ["vest", "tray", "beard"],
+                 skin="Skin2", hair="HairDarkBrown", top="ColumnWhite", top_trim="Cream", bottom="StoolBlack",
+                 bottom_trim="Charcoal", shoes="WoodDark", shoes_trim="StoolBlack", beard="HairDarkBrown"))
+RENDER_PATRONS = [
+    # (body, head, hair, face, top, bottom, shoes, acc, skin, hair colour, top colour, bottom colour)
+    ("regular", "square", "shaggy", ("dot", "thick", "smile"), "shirt", "jeans", "boots", ["beard", "drink_beer"],
+     "Skin3", "HairBlack", "ColumnWhite", "Denim"),
+    ("petite", "soft", "wavy", ("lashes", "arched", "smile"), "blouse", "jeans", "loafers", ["drink_beer"],
+     "Skin1", "HairBleach", "Charcoal", "Denim"),
+    ("regular", "round", "afro", ("dot", "arched", "grin"), "blouse", "skirt", "loafers", ["drink_beer"],
+     "Skin7", "HairBlack", "VelvetRed", "StoolBlack"),
+    ("regular", "square", "shaggy", ("sleepy", "flat", "small"), "shirt", "trousers", "boots", ["hat_fedora", "beard"],
+     "Skin4", "HairBlack", "ColumnWhite", "StoolBlack"),
+    ("petite", "heart", "wavy", ("wide", "arched", "open"), "tee", "jeans", "sneakers", ["drink_beer"],
+     "Skin2", "HairAuburn", "Stone", "Denim"),
+    ("broad", "square", "shaggy", ("dot", "thick", "flat"), "tee", "jeans", "boots", ["beard", "drink_beer"],
+     "Skin5", "HairDarkBrown", "Moss", "Charcoal"),
+    ("regular", "soft", "wavy", ("lashes", "flat", "smile"), "blouse", "skirt", "loafers", ["drink_beer"],
+     "Skin2", "HairBleach", "Denim", "StoolBlack"),
+    ("regular", "round", "afro", ("dot", "flat", "smile"), "shirt", "trousers", "sneakers", ["drink_beer"],
+     "Skin6", "HairBlack", "DenimLight", "Charcoal"),
+    ("petite", "soft", "afro", ("lashes", "arched", "small"), "blouse", "skirt", "loafers", ["drink_beer"],
+     "Skin8", "HairBlack", "VelvetRed", "StoolBlack"),
+    ("regular", "square", "shaggy", ("dot", "flat", "grin"), "hoodie", "jeans", "sneakers", ["drink_beer"],
+     "Skin3", "HairBrown", "Charcoal", "Denim"),
+    ("broad", "round", "swept", ("sleepy", "thick", "smile"), "shirt", "trousers", "loafers", ["drink_beer"],
+     "Skin1", "HairWhite", "Charcoal", "StoolBlack"),
+    ("regular", "heart", "wavy", ("wide", "arched", "smile"), "tee", "jeans", "sneakers", ["drink_beer"],
+     "Skin3", "HairDarkBrown", "VelvetRed", "Denim"),
+]
+for i, (body, head, hair, face, top, bottom, shoes, acc, sk, hc, tc, bc) in enumerate(RENDER_PATRONS):
+    PRESETS.append(P("patron_%02d" % (13 + i), "Patron %d" % (13 + i), "patron", "PATRON", body, head, hair, face,
+                     top, bottom, shoes, acc, skin=sk, hair=hc, top=tc, top_trim="Cream", bottom=bc,
+                     bottom_trim="Stone", shoes=("Charcoal", "WoodDark", "StoolBlack")[i % 3], shoes_trim="Stone",
+                     beard=hc))
 
 
 def assemble(spec):
