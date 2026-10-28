@@ -4,6 +4,8 @@ extends CharacterBody3D
 ## camera; or tap / click the floor to walk there along the venue's navmesh (NavigationAgent3D). Any stick or key
 ## input cancels a tap-walk. The camera is the CameraRig child (camera_rig.gd); the body is a PatronFigure
 ## (scenes/venue/patron_figure.tscn) with the `look` below, and a warm ring on the floor marks the player.
+## main.gd sets `tap_handler` (a tap on a zone walks there and opens it), `input_enabled` (off under sheets and
+## minigames), `anim_suffix` (tipsiness: "_warm" plays idle_warm / walk_warm) and `pose_override` (seated at a table).
 
 @export var speed := 3.6
 @export var accel := 18.0
@@ -15,6 +17,10 @@ const TAP_MAX_TIME := 0.35      ## seconds
 
 var joystick: TouchJoystick   ## set by main.gd; null = keyboard only
 var walking_to := false       ## true while following a tap-to-move path
+var input_enabled := true     ## false while a sheet, minigame or dialogue is open
+var tap_handler: Callable     ## (world_pos: Vector3) -> bool; true = the tap was taken (e.g. a zone)
+var anim_suffix := ""         ## tipsiness set: "", "_warm", "_tipsy", "_merry"
+var pose_override := ""       ## played instead of idle while standing still
 var _gravity: float = ProjectSettings.get_setting("physics/3d/default_gravity", 9.8)
 var _press_index := -1
 var _press_pos := Vector2.ZERO
@@ -29,6 +35,9 @@ func _ready() -> void:
 	figure.set_look(look)
 
 func _unhandled_input(event: InputEvent) -> void:
+	if not input_enabled:
+		_press_index = -1
+		return
 	# Mouse clicks arrive as ScreenTouch too (project.godot emulates touch from mouse)
 	if event is InputEventScreenTouch:
 		if event.pressed and _press_index == -1:
@@ -49,6 +58,8 @@ func tap_at(screen_pos: Vector2) -> bool:
 	var hit := get_world_3d().direct_space_state.intersect_ray(q)
 	if hit.is_empty():
 		return false
+	if tap_handler.is_valid() and tap_handler.call(hit.position):
+		return true
 	walk_to(hit.position)
 	return true
 
@@ -64,7 +75,7 @@ func _input_vector() -> Vector2:
 		float(Input.is_physical_key_pressed(KEY_S) or Input.is_physical_key_pressed(KEY_DOWN)) - float(Input.is_physical_key_pressed(KEY_W) or Input.is_physical_key_pressed(KEY_UP)))
 	if joystick and joystick.value.length() > v.length():
 		v = joystick.value
-	return v.limit_length(1.0)
+	return v.limit_length(1.0) if input_enabled else Vector2.ZERO
 
 func _physics_process(delta: float) -> void:
 	var iv := _input_vector()
@@ -90,4 +101,14 @@ func _physics_process(delta: float) -> void:
 		_body.rotation.y = lerp_angle(_body.rotation.y, atan2(dir.x, dir.z), 12.0 * delta)
 	var flat := Vector2(velocity.x, velocity.z).length()
 	figure.move_speed = flat
-	figure.play("walk" if flat > 0.3 else "idle")
+	if flat > 0.3:
+		figure.play(_anim_name("walk"))
+	else:
+		figure.play(pose_override if pose_override != "" else _anim_name("idle"))
+
+## The tipsiness variant of a base animation when the figure has it (box placeholders do not).
+func _anim_name(base: String) -> String:
+	var ap: AnimationPlayer = figure.get("_anim")
+	if anim_suffix != "" and ap != null and ap.has_animation(base + anim_suffix):
+		return base + anim_suffix
+	return base

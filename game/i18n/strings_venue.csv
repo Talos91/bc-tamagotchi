@@ -1,0 +1,111 @@
+key,en,th,context,max
+venue.cast.nam,Nam,น้ำ,Display name of the bartender Nam (cast table),16
+venue.zone.lounge,THE LOUNGE,เลานจ์,"HUD zone name, display.l, camera zone Lounge",16
+venue.zone.bar,THE BAR,บาร์,"HUD zone name, camera zone Bar",16
+venue.zone.stage,STAGE,เวที,"HUD zone name, camera zone Stage & Front Row",16
+venue.zone.floor,CANDLE FLOOR,โซนเทียน,"HUD zone name, camera zone Candle Floor",16
+venue.hint.bar,Bar,บาร์,Walk hint chip at the screen edge; tap walks to the bar,14
+venue.hint.stage,Stage,เวที,Walk hint chip; tap walks to the stage front,14
+venue.hint.table,Mali's table,โต๊ะมะลิ,Walk hint chip; tap walks to the table where the regular Mali sits,14
+venue.hint.arcade,Pinball,พินบอล,Walk hint chip; tap walks to the pinball cabinet in the Lounge,14
+venue.hint.exit,Door,ประตู,Walk hint chip; tap walks to the street door,14
+venue.band.live,LIVE · song {n} of 4,เล่นสด · เพลงที่ {n} จาก 4,HUD caption while the house band plays; {n} = song number 1-4,32
+venue.band.break,Next song in {s}s,เพลงถัดไปอีก {s} วิ,HUD caption between songs; {s} = seconds,32
+venue.hud.welcome,x2 · {m} min,x2 · {m} นาที,Gold Welcome Back chip beside the meters; {m} = minutes left,14
+venue.hud.sitting,Sitting · {s}s,นั่งอยู่ · {s} วิ,HUD caption while the player sits at a table; {s} = seconds left,24
+venue.hud.leave,Leave,กลับบ้าน,Home button label under the door glyph; opens the walk-out summary,10
+venue.tipsy.1,Warm,อุ่น ๆ,"Tipsiness chip, state 1 of 3 (03-cast 5.1); mood, never harm",10
+venue.tipsy.2,Tipsy,กรึ่ม ๆ,"Tipsiness chip, state 2",10
+venue.tipsy.3,Merry,ครึ้มใจ,"Tipsiness chip, state 3",10
+venue.prompt.bar,Tap to order a drink,แตะเพื่อสั่งเครื่องดื่ม,Zone prompt pill near the bar,40
+venue.prompt.stage,Tap to watch the band,แตะเพื่อดูวงดนตรี,Zone prompt pill near the stage,40
+venue.prompt.table_regular,Tap to sit with {regular},แตะเพื่อนั่งกับ{regular},Zone prompt pill at the table of a regular; {regular} = their name,40
+venue.prompt.table,Tap to sit down,แตะเพื่อนั่งลง,Zone prompt pill at an empty table,40
+venue.prompt.arcade,Tap to play pinball,แตะเพื่อเล่นพินบอล,Zone prompt pill at the arcade cabinet,40
+venue.prompt.exit,Tap to head home,แตะเพื่อกลับบ้าน,Zone prompt pill at the street door,40
+venue.sheet.bar.head,THE BAR · {who},บาร์ · {who},Sheet header; {who} = bartender name,26
+venue.sheet.bar.greet,Evening! What are we having?,สวัสดีค่ะ วันนี้รับอะไรดีคะ,Nam's greeting line on the bar sheet,90
+venue.sheet.bar.greet_merry,"Water or a mocktail for now, na?",ตอนนี้ขอเป็นน้ำเปล่าหรือม็อกเทลก่อนนะคะ,Nam's line when the player is Merry (03-cast 5.1),90
+venue.sheet.bar.order,Order a drink,สั่งเครื่องดื่ม,Bar sheet row title,26
+venue.sheet.bar.order_free,First one's on the house,แก้วแรกร้านเลี้ยง,"Bar row sub-line, first drink of the visit",34
+venue.sheet.bar.order_sub,The house cocktail,ค็อกเทลประจำร้าน,Bar row sub-line after the first drink,34
+venue.sheet.bar.mocktail,Thai iced tea,ชาเย็น,"Bar row title, a non-alcoholic drink",26
+venue.sheet.bar.mocktail_sub,"No alcohol, same refill",ไม่มีแอลกอฮอล์ อิ่มเท่ากัน,Bar row sub-line,34
+venue.sheet.bar.water,A glass of water,น้ำเปล่าหนึ่งแก้ว,Bar row title,26
+venue.sheet.bar.water_sub,Takes the edge off,ช่วยให้สร่างขึ้นหน่อย,Bar row sub-line: water lowers tipsiness one state,34
+venue.sheet.bar.try,Try something new,ลองอะไรใหม่ ๆ,Bar row title,26
+venue.sheet.bar.try_sub,New for you: {drink},ใหม่สำหรับคุณ: {drink},Bar row sub-line; {drink} = drink name,34
+venue.sheet.bar.try_done,You've tried the whole menu,คุณลองครบทั้งเมนูแล้ว,"Disabled reason, all drinks tried",40
+venue.sheet.bar.pour,Pour it yourself,ชงเอง,"Bar row title, opens Pour Perfect",26
+venue.sheet.bar.pour_sub,Pour Perfect · {best},Pour Perfect · {best},Bar row sub-line; {best} = best score text,34
+venue.sheet.bar.merry,Water or a mocktail for now,ตอนนี้ขอเป็นน้ำหรือม็อกเทลก่อน,Disabled reason on alcoholic rows while Merry,40
+venue.sheet.best,best {score},สูงสุด {score},Best score inside a sheet sub-line,14
+venue.sheet.no_best,first try,ครั้งแรก,Sub-line text when the game was never played,14
+venue.sheet.game,GAME,เกม,Chip on minigame rows,6
+venue.sheet.stage.head,STAGE · The house band,เวที · วงประจำร้าน,Stage sheet header,26
+venue.sheet.stage.front,Find a spot near the front,หาที่ใกล้เวที,Stage row title,26
+venue.sheet.stage.front_sub,Every song you hear fills Music,ทุกเพลงที่ฟังเติมดนตรี,Stage row sub-line,34
+venue.sheet.stage.rhythm,Play along,เล่นตามจังหวะ,"Stage row title, opens Front Row Rhythm",26
+venue.sheet.stage.rhythm_sub,Front Row Rhythm · {best},Front Row Rhythm · {best},Stage row sub-line,34
+venue.sheet.stage.applaud,Applaud,ปรบมือ,Stage row title,26
+venue.sheet.stage.applaud_sub,The band hears you,วงได้ยินคุณ,Stage row sub-line,34
+venue.sheet.stage.between,Between songs only,ได้เฉพาะช่วงพักเพลง,Disabled reason while a song plays,40
+venue.sheet.plenty,That's plenty for tonight,คืนนี้พอแล้วล่ะ,Disabled reason when the per-visit cap is reached,40
+venue.sheet.table.head,CANDLE FLOOR,โซนเทียน,"Table sheet header, no regular",26
+venue.sheet.table.head_regular,CANDLE FLOOR · {regular},โซนเทียน · {regular},Table sheet header with a regular,26
+venue.sheet.table.greet,A free seat by the candle.,มีที่ว่างข้างเทียน,Line on a table without a regular,90
+venue.sheet.table.greet_regular,{regular} waves you over.,{regular}โบกมือเรียกคุณ,Line at the regular's table,90
+venue.sheet.table.talk,Candle Talk,คุยใต้แสงเทียน,"Table row title, opens Candle Talk",26
+venue.sheet.table.talk_sub,with {regular} · {best},กับ{regular} · {best},Table row sub-line,34
+venue.sheet.table.talked,"Already talked today, try tomorrow",วันนี้คุยแล้ว พรุ่งนี้มาใหม่นะ,"Disabled reason, daily Candle Talk used (wireframe 4)",40
+venue.sheet.table.sit,Sit here a while,นั่งตรงนี้สักพัก,Table row title (one minute seated),26
+venue.sheet.table.sit_regular,Sit with {regular},นั่งกับ{regular},Table row title at the regular's table,26
+venue.sheet.table.sit_sub,Stay a minute,นั่งสักนาที,Table row sub-line,34
+venue.sheet.table.sat,Already sat here today,วันนี้นั่งตรงนี้แล้ว,"Disabled reason, daily sit used",40
+venue.sheet.arcade.head,THE LOUNGE · Pinball,เลานจ์ · พินบอล,Arcade sheet header,26
+venue.sheet.arcade.greet,The cabinet hums under the red neon.,ตู้เกมส่งเสียงหึ่ง ๆ ใต้ไฟนีออนแดง,Line on the arcade sheet,90
+venue.sheet.arcade.play,Play Neon Pinball,เล่น Neon Pinball,Arcade row title,26
+venue.sheet.arcade.play_sub,One game · {best},หนึ่งเกม · {best},Arcade row sub-line,34
+venue.sheet.exit.head,THE DOOR,ประตู,Exit sheet header,26
+venue.sheet.exit.greet,Calling it a night?,จะกลับแล้วเหรอ,Line on the exit sheet,90
+venue.sheet.exit.leave,Head home,กลับบ้าน,Exit row title,26
+venue.sheet.exit.leave_sub,See tonight's totals,ดูสรุปของคืนนี้,Exit row sub-line,34
+venue.card.order,{who} slides one over.,{who}ยื่นแก้วมาให้,Action card line after ordering; {who} = bartender,40
+venue.card.mocktail,"Thai iced tea, extra ice.",ชาเย็น เพิ่มน้ำแข็ง,Action card line after a mocktail,40
+venue.card.water,A tall glass of water. Cheers.,น้ำเย็นแก้วใหญ่ ชนแก้ว,Action card line after water,40
+venue.card.try,New for you: {drink},ใหม่สำหรับคุณ: {drink},Action card line after trying a new drink,40
+venue.card.applaud,The band nods back.,วงพยักหน้าตอบ,Action card line after applauding,40
+venue.card.song,That one was good.,เพลงนี้ดีมาก,Action card line when a song heard in full lands,40
+venue.card.set,Full set! The band takes a bow.,ครบเซ็ต! วงโค้งขอบคุณ,Action card line after hearing four songs,40
+venue.card.sit,A good minute at the table.,นั่งคุยกันได้ดีหนึ่งนาที,Action card line after sitting 60 s,40
+venue.card.lounge,The Lounge glows red.,เลานจ์เรืองแสงสีแดง,"Action card line, first time in the Lounge this visit",40
+venue.card.front,Listening from the front.,ฟังอยู่หน้าเวที,Toast after finding a spot,40
+venue.card.plenty,That's plenty for tonight,คืนนี้พอแล้วล่ะ,Action card line when the action landed no points,40
+venue.card.tab,Full! The rest goes on your Tab.,เต็มแล้ว ส่วนที่เกินเข้าแท็บ,Action card note when a meter overflowed,40
+venue.welcome.title,WELCOME BACK,ยินดีต้อนรับกลับมา,Welcome Back dialogue title (GDD 2.5); never guilt copy,18
+venue.welcome.line,{name}! Good to see you. First one's on me.,{name}! ดีใจที่ได้เจอนะ แก้วแรกน้ำเลี้ยงเอง,Nam greets the player by name (GDD 2.5),90
+venue.welcome.friend,Hey you,เธอ,Fallback for {name} when the player has no display name,16
+venue.welcome.bonus,Everything counts double for 15 minutes,ทุกอย่างได้สองเท่า 15 นาที,Welcome Back bonus line,40
+venue.welcome.ok,"Thanks, Nam",ขอบคุณนะน้ำ,Primary button on the Welcome Back dialogue,18
+venue.walkout.title,HEADING HOME,กลับบ้านแล้ว,Walk-out summary title (wireframe 4b),18
+venue.walkout.when,{day} · {minutes} min,{day} · {minutes} นาที,"Walk-out sub-title; {day} = weekday, {minutes} = visit length",32
+venue.walkout.taxi,Taxi home tonight.,คืนนี้นั่งแท็กซี่กลับ,Walk-out line when the player left Merry (03-cast 5.1),40
+venue.walkout.nothing,A quiet one. Nothing changed tonight.,คืนนี้เงียบ ๆ ไม่มีอะไรเปลี่ยน,Walk-out line when nothing was gained,40
+venue.walkout.back,BACK TO THE FLAT,กลับห้อง,Primary button on the walk-out summary,18
+venue.flat.title,AT HOME,ที่บ้าน,Placeholder Flat check-in title (the Flat is not built yet),18
+venue.flat.vibe,Vibe: {state},อารมณ์: {state},Flat line; {state} = vibe word,32
+venue.flat.soon,Your flat is coming soon.,ห้องของคุณกำลังจะมาเร็ว ๆ นี้,Placeholder note on the Flat stub,40
+venue.flat.go_out,GO OUT,ออกไปเที่ยว,Primary button on the Flat stub: starts a new visit,18
+venue.day.0,Sunday,วันอาทิตย์,"Weekday name, Time.get_datetime weekday 0",12
+venue.day.1,Monday,วันจันทร์,Weekday name,12
+venue.day.2,Tuesday,วันอังคาร,Weekday name,12
+venue.day.3,Wednesday,วันพุธ,Weekday name,12
+venue.day.4,Thursday,วันพฤหัสบดี,Weekday name,12
+venue.day.5,Friday,วันศุกร์,Weekday name,12
+venue.day.6,Saturday,วันเสาร์,Weekday name,12
+venue.drink.lychee_fizz,Lychee Fizz,ลิ้นจี่ฟิซ,Drink name on the Try something new row,20
+venue.drink.thai_tea_sour,Thai Tea Sour,ชาไทยซาวร์,Drink name,20
+venue.drink.mekhong_mule,Mekhong Mule,แม่โขงมิวล์,Drink name,20
+venue.drink.butterfly_gin,Butterfly Pea Gin,จินอัญชัน,Drink name,20
+venue.drink.pandan_colada,Pandan Colada,ใบเตยโคลาดา,Drink name,20
+venue.drink.smoky_old_fashioned,Smoky Old Fashioned,สโมกกี้โอลด์แฟชั่น,Drink name,20

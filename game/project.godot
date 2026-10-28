@@ -27,6 +27,10 @@ theme/custom="res://ui/bc_theme.tres"
 
 pointing/emulate_touch_from_mouse=true
 
+[internationalization]
+
+locale/translations=PackedStringArray("res://i18n/strings_venue.en.translation", "res://i18n/strings_venue.th.translation")
+
 [navigation]
 
 3d/default_cell_size=0.1
