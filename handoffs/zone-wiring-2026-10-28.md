@@ -7,8 +7,7 @@
 - `5fbe25b` `game/tests/smoke_loop.gd`: Welcome Back, every zone, all four minigames, a song, a sit, leave with totals, GO OUT. PASS.
 - `42cec51` `docs/tech/02-playtest-guide.md`, `docs/art/screens/loop/hud-portrait-bar.png` (1080×1920), `hud-landscape-stage.png` (1920×1080).
 
-Suites: smoke_loop, smoke_stairs, smoke_tap, smoke_hud, test_minigames PASS. test_needs passed on the committed rules; it fails
-("music gained 30.0, GDD says 25") against the uncommitted `rules.gd` Rhythm-gain edit in the working tree (another session's).
+Suites: smoke_loop, smoke_stairs, smoke_tap, smoke_hud, test_needs, test_minigames all PASS at `fcf99d5`.
 
 ## Calls made where the GDD / brief left it open (log in DECISIONS)
 
