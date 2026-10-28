@@ -74,8 +74,8 @@ Daniele.
 | 10-27 | Phone portrait primary, desktop secondary; diorama follow camera, tap-to-move, one-thumb minigames | Camera, HUD (orientation later reopened) |
 | 10-27 | Single-player FP per GDD §14; multiplayer later | Scope, save |
 | 10-27 | Visual target = the `docs/art/direction/` renders | Art bible, kit |
-| 10-27 | (a) `SOFT_FLOOR_FACTOR` 0.5 → 0.3 | `rules.gd` (not changed yet) |
-| 10-27 | (b) Welcome Back ×2 replaces, never stacks with, the daily ×0.75 | Needs (code stacks them) |
+| 10-27 | (a) `SOFT_FLOOR_FACTOR` 0.5 → 0.3 | `rules.gd` (done) |
+| 10-27 | (b) Welcome Back ×2 replaces the daily ×0.75 | Needs (done) |
 | 10-27 | (c) Neon Pinball runs on the arcade cabinet's screen | Minigame |
 | 10-27 | (d) Screen Cyan is the Nightlife meter colour, UI only | UI |
 | 10-27 | (e) Meter numbers hidden by default | HUD |
@@ -84,7 +84,7 @@ Daniele.
 | 10-27 | (h) The Flat stays as the minimal home screen | UI |
 | 10-27 | (i) Velvet Banquette added to the main room and the kit | Venue, kit |
 | 10-27 | (j) Room height 4 m / 80 voxels | Venue, kit |
-| 10-27 | (k) Candle Talk +5 lean bonus approved | Needs (not coded) |
+| 10-27 | (k) Candle Talk +5 Friends lean bonus approved (to the player, not the regular) | Needs (done) |
 | 10-27 | (l) Tipsiness: one state per 30 real minutes, water drops one, Merry caps; others later see walk and idle only | Cast, characters |
 | 10-27 | (m) Anonymous patrons: 12 bodies from a kit | Characters |
 | 10-27 | (n) Hearts 0 to 3 for the FP | Regulars |
@@ -147,12 +147,12 @@ Each meter is saved as value plus timestamp and recomputed from elapsed real tim
 | Drinks | 0.70 | ~6.0 days | Stares into an empty glass |
 | Nightlife | 0.45 | ~9.3 days | Yawns, pyjamas by 9 pm |
 
-Drinks is fastest on purpose. A week costs about 370 points in all.
+Drinks is fastest on purpose; its empty window is 6 to 10 days (GDD §2). A week costs about 370 points in all.
 
 | Rule | Value |
 |---|---|
-| New character | 75 (`START_VALUE`). OPEN: creator wireframe says 70 |
-| Soft floor | Below 30, decay × `SOFT_FLOOR_FACTOR`. SUPERSEDED: GDD and code 0.5; DECISIONS (a) **0.3**. Code still 0.5 |
+| New character | 75 (`START_VALUE`; GDD and code agree) |
+| Soft floor | Below 30, decay × `SOFT_FLOOR_FACTOR` = **0.3** (GDD, code and DECISIONS (a) agree) |
 | Personality | One meter decays ×0.9 (Night Owl, Music Nerd, Social Butterfly, Easy Sipper) |
 | Out of Town | Freezes decay up to 14 days, once per 30 days (extended in section 5) |
 | Debug clock | 1 real minute = 1 game hour, debug builds only |
@@ -172,10 +172,10 @@ chance, Spotlight eligible), 50 to 79 **Good**, 25 to 49 **Meh** (a "missing it"
 | Try a new drink | Bar | Drinks +5 | Drops a coaster | Yes |
 | Listen to a song | Stage, Candle Floor | Music +5 | Passive | Yes |
 | Full set (4 songs) | Stage | Music +5, Nightlife +5 | | Yes |
-| Front Row Rhythm | Stage | Music +8 to 12 per song | | Yes |
+| Front Row Rhythm | Stage | Music +12 to 18 per song | By accuracy | Yes |
 | Applaud / request | Stage | Music +2 | Cap +6 a visit | Applaud |
 | Headline set (70%+) | Stage | Music +40, Nightlife +20 | Fri/Sat | |
-| Candle Talk | Candle Floor, Banquette | Friends +10 to 20 | Once per regular per day; +5 lean bonus (approved, not coded) | Yes |
+| Candle Talk | Candle Floor, Banquette | Friends +10 to 20 | Once per regular per day; +5 Friends lean bonus to the player on a good talk | Yes |
 | Sit 60 s with someone | Any table | Friends +8 | Once per character per day | Yes |
 | Receive a social verb | Any | Friends +2 | Cap +10 a visit | |
 | Quiz / Name That Tune | Long Table | Music +5, Friends +10 to 15 | | |
@@ -192,8 +192,8 @@ day: 1st visit ×1.0, 2nd ×0.75, 3rd+ ×0.5. A visit ends on leaving or after 1
 **Tab** (progression points) 1:1. No hard caps.
 
 **Welcome Back.** First visit after Vibe below 25, after 7+ days away, or rescuing a declining character: greeting
-by name, first drink free, gains ×2 for 15 minutes (diminishing returns still apply), 10 coins. DECISIONS (b) says
-×2 replaces the daily ×0.75; `needs.gd` currently multiplies both. Copy never says "abandoned / neglected / forgot /
+by name, first drink free, gains ×2 for 15 minutes (diminishing returns still apply), 10 coins. The ×2 replaces the
+daily ×0.75 while it lasts. Copy never says "abandoned / neglected / forgot /
 die / dead".
 
 **Notifications** (out of the FP). Opt-in, default on, max 2 a week. Lowest meter crossing 40: one character line.
@@ -275,7 +275,7 @@ constants such as `EMPTY_BELOW 10`, `NIGHT_OUT_MIN_MINUTES 5`, `LAST_CALL_NOTIFY
 
 OPEN (06-stakes §8): 21/14 days or 14/10; keep Rule B; quiet hours device-local or Bangkok; emergency retroactive
 trip; coins and wardrobe surviving; real-bar check-in and its backend timing; Last Call by email or LINE; letter
-reasons fixed or player-written; code floor to 0.3.
+reasons fixed or player-written; the code floor is already 0.3.
 
 Source files: `docs/design/06-stakes.md`, `docs/design/DECISIONS.md`.
 
@@ -370,7 +370,7 @@ and save a seat; at 3 they give a memory. OPEN: hearts 4 to 5 at launch.
 
 | Act | Genre | When | FP |
 |---|---|---|---|
-| The House Lights (Jo, Pete, Boy) | Soul-pop covers | 4-song sets every ~8 minutes, every night | Yes |
+| The House Lights (Jo, Pete on yellow electric bass, Boy); the fourth stage spot is a rotating guest performer slot (anonymous `band_guitar` for now) | Soul-pop covers | 4-song sets every ~8 minutes, every night | Yes |
 | The Thursday Club | Jazz trio | Thursday | |
 | Monsoon Funk Unit / Plaa Thong / Soi Dog Blues | Funk / Thai dream indie / blues | Headline Fri/Sat, rotating | |
 | Fah | Singer-songwriter | Slow Sunday | |
@@ -403,7 +403,7 @@ three-word tier (good, great, perfect; great from score 0.6, perfect from 0.85).
 |---|---|---|---|---|---|
 | 1 | Pour Perfect | Bar | Drinks +20 to 30 | 20 to 30 s | Yes |
 | 2 | Shake & Serve | Bar | Drinks +20 to 30, Friends +5 | 45 to 60 s | |
-| 3 | Front Row Rhythm | Stage | Music +8 to 12 per song | 60 to 90 s | Yes |
+| 3 | Front Row Rhythm | Stage | Music +12 to 18 per song | 60 to 90 s | Yes |
 | 4 | Open Mic | Stage | Music +15, Nightlife +10 | 90 s | |
 | 5 | Candle Talk | Candle Floor | Friends +10 to 20, hearts | 60 to 90 s | Yes |
 | 6 | Name That Tune | Long Table | Friends +10 to 15, Music +5 | 2 min | |
@@ -415,16 +415,16 @@ three-word tier (good, great, perfect; great from score 0.6, perfect from 0.85).
 | 12 | Setlist Shuffle | Stage | Music +10 | 60 to 90 s | |
 
 **Pour Perfect.** Controls: hold anywhere to pour, release on the line. Build: 3 layers with targets at 30%, 58% and
-82% of the glass; 30 s limit; overfill foams and costs at most 0.3 of the score. OPEN: plays in 17 to 20 s versus
-the GDD's 20 to 30.
+82% of the glass; 30 s limit; overfill foams and costs at most 0.3 of the score. A round plays in 17 to 20 s; the
+GDD table now says 15 to 25 s (code unchanged).
 
 **Front Row Rhythm.** Controls: tap the left or right half on the beat. Build: 4 beat-map songs rotating by day,
 4-beat count-in, perfect window 0.07 s, good 0.14 s, one song per round. The GDD's three difficulties are not built,
-and there is no live set yet for it to raise Crowd Vibe. OPEN: +8 to 12 per song "feels small".
+and there is no live set yet for it to raise Crowd Vibe. A song gives +12 to 18 Music by accuracy.
 
 **Candle Talk.** Controls: tap one of three topic cards. Build: 5 turns; best card lights the candle fully, a near
-card half; story lines appear only once the candle is at 2+; hearts 0 to 3 saved; it reports a "lean" flag but
-`rules.gd` has no lean action. OPEN: only Mali's script exists, though the FP regulars are Tong, Ploy and Jules.
+card half; story lines appear only once the candle is at 2+; hearts 0 to 3 saved; it reports a "lean" flag
+that grants the player +5 Friends. OPEN: only Mali's script exists, though the FP regulars are Tong, Ploy and Jules.
 
 **Neon Pinball.** SUPERSEDED: GDD "pinball table"; DECISIONS (c) puts it on the arcade cabinet's screen. Controls:
 hold a half for its flipper, swipe up (or tap) to launch, swipe sideways to nudge (with tilt). Build: 3 balls, 10 s
@@ -692,7 +692,7 @@ and Empty stay calm: never red, never shaking. Vibe shows as a word and a candle
 The zone sheet lists things you'd do there, not meter buttons. Design frame 390 × 844 dp ("dp" is a screen unit that
 keeps the same physical size across phones); tap targets 48 dp minimum; top of screen for reading, bottom 40% for
 doing. Landscape re-flows the same screens: a 420 dp left column, side panels, minigames in a centred 9:16 area.
-OPEN: wireframes call the bartender "Noi"; the cast names `BAR_1` Nam.
+The bartender is Nam (น้ำ), `BAR_1`.
 
 **Thai rules.**
 
@@ -766,7 +766,7 @@ deliverable each on a `bc/<slug>` branch, open a PR to `main` and report back.
 | 1 | Concept + GDD, art bible, engine + greybox | Done |
 | 2 | Cast, UI guide + wireframes, venue kit, needs prototype | Done |
 | 3a | Venue integration, kit v2, character kit, minigames | Done; venue layout being corrected to renders 01 to 03 |
-| 3b | Zone wiring, creator + Flat, performance system, memories; FP assembly; real-device test | Not started |
+| 3b | Zone wiring, creator + Flat, performance system, memories; FP assembly; real-device test | Mechanical work done; zone wiring in progress |
 | 4 | Multiplayer on Ooze's relay + Supabase | After the FP is fun |
 
 | Emoji | Area | Emoji | Area |
@@ -784,49 +784,47 @@ Source files: `docs/tech/01-engine-decision.md`, `game/README.md`, `tools/blende
 
 ## 15. Status and open questions
 
-**Built and tested on `main` (head `e5785ae`).**
+**Where the project stands (2026-10-28).** The room is accepted at parity iteration 18 (`6dc9f5d`), layout frozen.
+Characters v2 (`ae9decf`) are accepted as the base. Wave 3b mechanical work is done: the floor is 0.3, Welcome Back
+replaces the daily multiplier, the lean bonus gives +5 Friends, the Rhythm gain is +12 to 18 Music, fonts are in. Zone
+wiring (walking to zones, zone sheets, minigames reachable from the venue) is in progress.
 
-| Area | Commits | What runs |
-|---|---|---|
-| Needs | `184e394` | Decay, floor (0.5), personality, diminishing returns, daily multiplier, Welcome Back, Tab, Out of Town, save/load, debug clock and HUD |
-| Minigames | `f749960` | Four FP games, frame, result card, lab, string loader |
-| Venue | `f26a150`, `76ba8aa`, `71f68b2` | Kit-built room, lighting, diorama camera (4 zones), tap-to-move, crowd (9 seated, Nam, 3 wanderers), both orientations captured |
-| Kit, characters | `9ee9148`, `9b0141b`, `0cf04ea` | 52 objects; 28 presets, 13 animations |
-| Review file | `e5785ae` | `blender/BlackCabin.blend` |
+**Built and tested on `main`.**
 
-**Designed only:** Last Call (`403a2c1`), coins (`ac0be50`), bridge, memories, the Flat, creator, zone wiring
-(minigames unreachable from the venue), performances and schedule, regular behaviour, events, notifications,
-wardrobe, fonts, Thai native pass, backend, multiplayer. The GDD amendments in `04-coins.md` §10.1 and `06-stakes.md`
-§5 are not yet applied to `02-gdd.md`.
+| Area | What runs |
+|---|---|
+| Needs | Decay, 0.3 floor, personality, diminishing returns, Welcome Back replacing the daily multiplier, Tab, Out of Town, save/load, debug clock and HUD |
+| Minigames | Four FP games, frame, result card, lab, string loader |
+| Venue | Kit-built room, lighting, diorama camera, tap-to-move, crowd, both orientations |
+| Kit, characters | Kit objects; characters v2 presets and animations |
 
-**Code versus decisions:** floor 0.5 not 0.3; Welcome Back stacks with the daily ×0.75; no lean-bonus action; fonts
-missing.
+**Designed only:** Last Call, coins, bridge, memories, the Flat, creator, performances and schedule, regular behaviour,
+events, notifications, wardrobe, Thai native pass, backend, multiplayer.
 
-**Every OPEN item.**
+**Known debt, not blocking:** 42 lights give about 1,850 draw calls and 24 ms GPU on desktop (needs a performance pass
+and a real-device measurement before any phone build); the lounge camera is partly blocked by the curtain wall; figures
+are lit darker than the renders and heads are above the 27 to 34 % target.
 
-1. Orientation: landscape or portrait primary.
-2. Black Cabin's opening hours and what the game shows at 14:00.
-3. Staff turnover if a real person leaves.
-4. Brand typeface.
-5. Last Call: 21/14 or 14/10 days; Rule B; quiet-hours time zone; emergency trip; coins and wardrobe surviving;
-   real-bar check-in; email/LINE warning; letter reasons.
-6. Coin economy sign-off, including "never sold for real money".
-7. Real-world bridge chapter (redemption, staff verification, booking and song requests, order-to-table, legal).
-8. Multiplayer chat policy.
-9. The Flat: kept by (h), still listed open.
-10. Hearts 4 to 5 at launch.
-11. Starting meters 75 or 70.
-12. Bartender "Noi" (wireframes) versus Nam (cast).
-13. Candle Talk content only for Mali; FP needs Tong, Ploy, Jules; Mali's Thai is machine-drafted.
-14. Minigame tuning: Pour Perfect length, pinball mapping, Rhythm gains, difficulty picker.
-15. Skin tone count: 12, 8 or 6.
-16. Kit deviations from the art bible (wood values, banquette channels, lamp tiers, size classes).
-17. Headline notification time zone.
-18. Notification budget of 2 a week, never confirmed.
-19. English minigame names with Thai subtitles; glossary file.
-20. Web export size baseline not recorded.
-21. Music licensing and beat maps per performer.
-22. Premium cosmetics or no monetization beyond the commission.
+**Still open (DECISIONS).**
+
+1. Black Cabin's real opening hours and what the game shows at 14:00.
+2. Staff turnover policy if a real person leaves.
+3. Brand typeface: Black Cabin's own, or Kanit + IBM Plex Sans Thai Looped.
+4. The asks to Black Cabin (consent, house band, staff packs).
+5. Death rules: Last Call timeline, warnings, mandatory weekly interactions, what survives (06-stakes §8 lists the
+   sub-questions: 21/14 or 14/10 days, Rule B, quiet-hours time zone, emergency trip, coins and wardrobe surviving,
+   real-bar check-in, email/LINE warning, letter reasons).
+6. Real-world bridge chapter (redemption, staff verification, booking and song requests, order-to-table, legal).
+7. Orientation: landscape or portrait primary.
+8. Coin economy (earn/spend, no decor; "never sold for real money").
+9. Multiplayer chat policy.
+10. The Flat: kept as a minimal home screen by (h), still listed open.
+
+**Smaller items from the documents:** hearts 4 to 5 at launch; Candle Talk content only for Mali (FP needs Tong, Ploy,
+Jules; Mali's Thai is machine-drafted); difficulty picker for Rhythm; skin tone count (12, 8 or 6); kit deviations from
+the art bible; headline notification time zone; the 2-a-week notification budget; English minigame names with Thai
+subtitles; web export size baseline; music licensing and beat maps per performer; premium cosmetics or no
+monetization beyond the commission; pinball mapping to be set from playtests (median human score × 2.5).
 
 **Asks for Black Cabin.**
 
