@@ -1,0 +1,38 @@
+[gd_resource type="Theme" load_steps=7 format=3]
+
+[ext_resource type="FontFile" path="res://assets/fonts/IBMPlexSansThaiLooped-Regular.ttf" id="1_plex"]
+[ext_resource type="FontFile" path="res://assets/fonts/IBMPlexSansThaiLooped-Medium.ttf" id="2_plexm"]
+[ext_resource type="FontFile" path="res://assets/fonts/Kanit-SemiBold.ttf" id="3_kanits"]
+[ext_resource type="FontFile" path="res://assets/fonts/Kanit-Bold.ttf" id="4_kanitb"]
+
+[sub_resource type="FontVariation" id="FontVariation_text"]
+base_font = ExtResource("1_plex")
+fallbacks = [ExtResource("3_kanits")]
+
+[sub_resource type="FontVariation" id="FontVariation_textm"]
+base_font = ExtResource("2_plexm")
+fallbacks = [ExtResource("3_kanits")]
+
+[resource]
+default_font = SubResource("FontVariation_text")
+default_font_size = 15
+LabelBody/base_type = &"Label"
+LabelBody/font_sizes/font_size = 15
+LabelBody/fonts/font = SubResource("FontVariation_text")
+LabelBodyL/base_type = &"Label"
+LabelBodyL/font_sizes/font_size = 17
+LabelBodyL/fonts/font = SubResource("FontVariation_textm")
+LabelCaption/base_type = &"Label"
+LabelCaption/font_sizes/font_size = 13
+LabelCaption/fonts/font = SubResource("FontVariation_text")
+LabelDisplayL/base_type = &"Label"
+LabelDisplayL/font_sizes/font_size = 24
+LabelDisplayL/fonts/font = ExtResource("3_kanits")
+LabelDisplayS/base_type = &"Label"
+LabelDisplayS/font_sizes/font_size = 14
+LabelDisplayS/fonts/font = ExtResource("3_kanits")
+LabelDisplayXL/base_type = &"Label"
+LabelDisplayXL/font_sizes/font_size = 32
+LabelDisplayXL/fonts/font = ExtResource("4_kanitb")
+Button/font_sizes/font_size = 15
+Button/fonts/font = SubResource("FontVariation_textm")
