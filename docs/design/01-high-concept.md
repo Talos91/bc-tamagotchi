@@ -55,9 +55,9 @@ same game.**
    in the venue: listening, drinking, talking, dancing. There are no feeding
    buttons and no menus that fill meters. If an action doesn't feel like
    something you'd do at Black Cabin, it doesn't refill anything.
-2. **Cozy, never punishing.** Needs drain over days, not hours. Empty meters
-   change how your character looks and acts, and never cost items, progress
-   or friends. Coming back after a month is welcomed, not penalised.
+2. **Cozy, with real stakes.** Needs drain over days; a normal week costs
+   nothing; three weeks without a night out and your character leaves Bangkok
+   for good, memories kept.
 3. **The room is the star.** One fixed, authored, real place, faithful to the
    real Black Cabin (velvet curtains, ribbed glass table lamps, candles, the
    orange "BLACK CABIN" sign, the drum kit by the olive tree). It grows through
@@ -71,14 +71,14 @@ same game.**
 | **Animal Crossing** | You own and build an island; daily chores on a real-time calendar. | You own nothing but your look and your memories. You *visit* a place someone else runs. The pull is your character's needs, not a to-do list. |
 | **Habbo Hotel** | User-built rooms; chat is the content. | One authored venue with scheduled live content (sets, quiz nights, headline nights). Social play runs through verbs (cheers, sit with, dance with, buy a round), not free chat. NPC regulars keep the room alive when it's quiet. |
 | **The Sims** | Needs drain in minutes; constant micromanagement; failure states. | Needs drain over a real week; one 10-minute visit fixes a lot; no failure state. |
-| **Tamagotchi** | You care for a creature that can get sick or die. | You care for *yourself-as-avatar*, and the care is going out. Neglect makes your character a homebody, never sick. |
+| **Tamagotchi** | You care for a creature that can get sick or die. | You care for *yourself-as-avatar*, and the care is going out. Neglect makes your character a homebody, then makes them leave Bangkok (06-stakes). |
 
 ## The "Tamagotchi" hook, stated precisely
 
 Your character has four needs (Music, Friends, Drinks, Nightlife), each a
-0–100 meter that drains continuously in real time and empties in roughly 6–9
+0–100 meter that drains continuously in real time and empties in roughly 6–10
 days. The only way to refill them is to take your character to Black Cabin and
 do the things people do there. A typical 10-minute visit restores about 30
 points to each meter, so **three visits a week keeps a character happy**.
-Neglect has no lasting cost: an empty meter only changes your character's mood,
-look and idle behaviour until the next night out.
+Neglect makes your character a homebody, then makes them leave Bangkok for good
+(06-stakes); their memories stay in the album.
