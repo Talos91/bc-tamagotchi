@@ -6,12 +6,20 @@ extends Node3D
 ##   {"skin": Color, "hair": Color, "top": Color, "bottom": Color, "shoes": Color, "height": 1.3}
 ##                                     -> chibi box placeholder (head cube 40% of the height, art bible §7),
 ##                                        also the fallback when the preset is missing.
-## `play("idle" | "walk" | "sit")` switches pose. Pivot at the feet, front +Z; seated figures expect a 0.45 m seat
-## (the presets' sit pose puts the hips there). Idles breathe and turn the head now and then.
+## `play(name)` switches pose: idle, walk, sit, sit_drink, sit_talk, sit_hold, sit_applaud, stand_drink, cheers,
+## the tipsy set, and per role idle_tray / walk_tray / pour or play_guitar / play_bass / play_drums / sing (see
+## assets/chars/README.md). `look["anims"]` remaps names, e.g. {"walk": "walk_tray"} for the server. Held drinks
+## are shown only in the poses that hold them. Presets are drawn at FIG_SCALE (renders 05/06: 1.2-1.3 m figures);
+## seated poses put the thighs on a seat at SEAT_H * FIG_SCALE above the root, so lower the root by that much
+## below the real seat. Loops start at a random phase so a crowd never moves in step.
 ## To swap placeholders for the final characters, replace this scene; the venue only calls set_look() and play().
 
 const PRESET_DIR := "res://assets/chars/presets/"
 const SEAT_H := 0.45
+const FIG_SCALE := 0.75
+## Prop meshes (accessory ids) that only show in the poses that use them
+const DRINKS := ["drink_beer", "drink_mug", "glass_gold", "beer_left"]
+const DRINK_ANIMS := ["sit_drink", "sit_talk", "sit_hold", "stand_drink", "cheers", "pour"]
 
 var look := {}
 var state := "idle"
@@ -20,6 +28,7 @@ var move_speed := 0.0            ## m/s, scales the walk cycle
 var _model: Node3D
 var _anim: AnimationPlayer
 var _head_mod: HeadTurn
+var _props: Array[Node3D] = []
 # Box placeholder parts
 var _hips: Node3D
 var _head: Node3D
@@ -31,18 +40,16 @@ var _turn := 0.0
 var _turn_goal := 0.0
 var _next_turn := 0.0
 
-## Turns the head bone of a preset on top of its animation. Renders 05/06: heads a little smaller than the kit's
-## 12-voxel cube and tipped up so faces read from the high diorama camera.
+## Turns the head bone of a preset on top of its animation, tipped a little chin-up so faces read from the
+## high diorama camera (renders 05/06).
 class HeadTurn extends SkeletonModifier3D:
-	const HEAD_SCALE := 0.86
-	const CHIN_UP := -0.22
+	const CHIN_UP := -0.12
 	var yaw := 0.0
 	var bone := -1
 	func _process_modification() -> void:
 		var sk := get_skeleton()
 		if sk and bone >= 0:
 			sk.set_bone_pose_rotation(bone, Quaternion(Vector3.UP, yaw) * Quaternion(Vector3.RIGHT, CHIN_UP) * sk.get_bone_pose_rotation(bone))
-			sk.set_bone_pose_scale(bone, Vector3.ONE * HEAD_SCALE)
 
 func _ready() -> void:
 	_t = randf() * 10.0
@@ -58,6 +65,7 @@ func set_look(d: Dictionary) -> void:
 	_model = null
 	_anim = null
 	_head_mod = null
+	_props.clear()
 	_legs.clear()
 	_arms.clear()
 	var preset: String = d.get("preset", "")
@@ -78,14 +86,26 @@ func play(s: String, force := false) -> void:
 		return
 	state = s
 	if _anim:
-		_anim.play(s if _anim.has_animation(s) else "idle", 0.25)
+		var a: String = look.get("anims", {}).get(s, s)
+		if not _anim.has_animation(a):
+			a = s if _anim.has_animation(s) else "idle"
+		_anim.play(a, 0.25)
+		var anim := _anim.get_animation(a)
+		if anim.loop_mode != Animation.LOOP_NONE and a != "walk" and not a.begins_with("walk_"):
+			_anim.seek(randf() * anim.length, true)
+		for p in _props:
+			p.visible = a == "pour" if String(p.name) in ["beer_left", "bottle"] else a in DRINK_ANIMS
 	elif _hips:
 		_pose_boxes(0.0)
 
 func _build_preset(ps: PackedScene) -> void:
 	_model = ps.instantiate()
 	_model.name = "Model"
+	_model.scale = Vector3.ONE * FIG_SCALE
 	add_child(_model)
+	for n in _model.find_children("*", "Node3D", true, false):
+		if String(n.name) in DRINKS or String(n.name) == "bottle":
+			_props.append(n)
 	var found := _model.find_children("*", "AnimationPlayer", true, false)
 	if found.size() > 0:
 		_anim = found[0]

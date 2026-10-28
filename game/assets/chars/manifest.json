@@ -4,40 +4,51 @@
  "front": "+Z (Godot) / -Y (Blender)",
  "left": "+X",
  "seat_vox": 9,
+ "fig_scale": 0.75,
  "bones": {
   "root": null,
   "hips": "root",
   "spine": "hips",
   "head": "spine",
   "arm_L": "spine",
+  "forearm_L": "arm_L",
   "arm_R": "spine",
+  "forearm_R": "arm_R",
   "leg_L": "hips",
-  "leg_R": "hips"
+  "shin_L": "leg_L",
+  "leg_R": "hips",
+  "shin_R": "leg_R"
  },
  "bodies": {
   "petite": {
    "tw": 8,
-   "td": 6,
-   "leg": 6,
-   "chest": 7,
-   "h": 15,
-   "T": 25
+   "td": 5,
+   "leg": 10,
+   "chest": 8,
+   "h": 20,
+   "elbow": 16,
+   "knee": 5,
+   "T": 28
   },
   "regular": {
    "tw": 8,
-   "td": 6,
-   "leg": 8,
-   "chest": 8,
-   "h": 18,
-   "T": 28
+   "td": 5,
+   "leg": 11,
+   "chest": 9,
+   "h": 22,
+   "elbow": 18,
+   "knee": 5,
+   "T": 30
   },
   "broad": {
    "tw": 10,
-   "td": 8,
-   "leg": 8,
+   "td": 6,
+   "leg": 11,
    "chest": 10,
-   "h": 20,
-   "T": 30
+   "h": 23,
+   "elbow": 18,
+   "knee": 5,
+   "T": 31
   }
  },
  "animations": [
@@ -59,6 +70,41 @@
    "name": "sit",
    "frames": 48,
    "seconds": 2.0,
+   "loop": true,
+   "root_speed_mps": 0.0
+  },
+  {
+   "name": "sit_drink",
+   "frames": 96,
+   "seconds": 4.0,
+   "loop": true,
+   "root_speed_mps": 0.0
+  },
+  {
+   "name": "sit_talk",
+   "frames": 96,
+   "seconds": 4.0,
+   "loop": true,
+   "root_speed_mps": 0.0
+  },
+  {
+   "name": "sit_hold",
+   "frames": 96,
+   "seconds": 4.0,
+   "loop": true,
+   "root_speed_mps": 0.0
+  },
+  {
+   "name": "sit_applaud",
+   "frames": 24,
+   "seconds": 1.0,
+   "loop": true,
+   "root_speed_mps": 0.0
+  },
+  {
+   "name": "stand_drink",
+   "frames": 96,
+   "seconds": 4.0,
    "loop": true,
    "root_speed_mps": 0.0
   },
@@ -131,7 +177,63 @@
    "seconds": 3.0,
    "loop": true,
    "root_speed_mps": 0.0
+  },
+  {
+   "name": "idle_tray",
+   "frames": 48,
+   "seconds": 2.0,
+   "loop": true,
+   "root_speed_mps": 0.0
+  },
+  {
+   "name": "walk_tray",
+   "frames": 16,
+   "seconds": 0.667,
+   "loop": true,
+   "root_speed_mps": 1.0
+  },
+  {
+   "name": "pour",
+   "frames": 72,
+   "seconds": 3.0,
+   "loop": true,
+   "root_speed_mps": 0.0
+  },
+  {
+   "name": "play_guitar",
+   "frames": 48,
+   "seconds": 2.0,
+   "loop": true,
+   "root_speed_mps": 0.0
+  },
+  {
+   "name": "play_bass",
+   "frames": 48,
+   "seconds": 2.0,
+   "loop": true,
+   "root_speed_mps": 0.0
+  },
+  {
+   "name": "sing",
+   "frames": 48,
+   "seconds": 2.0,
+   "loop": true,
+   "root_speed_mps": 0.0
+  },
+  {
+   "name": "play_drums",
+   "frames": 48,
+   "seconds": 2.0,
+   "loop": true,
+   "root_speed_mps": 0.0
   }
+ ],
+ "drinks": [
+  "drink_beer",
+  "drink_mug",
+  "glass_gold",
+  "beer_left",
+  "bottle"
  ],
  "swatches": {
   "skin": {
@@ -148,11 +250,12 @@
    "HairBlack": "#1E1616",
    "HairDarkBrown": "#3E2618",
    "HairBrown": "#6A4228",
-   "HairAuburn": "#7E3220",
-   "HairBleach": "#E6D49A",
+   "HairAuburn": "#8E3A1E",
+   "HairBleach": "#E8CF86",
    "HairGrey": "#8E8890",
    "HairWhite": "#E4E0DC",
-   "HairRose": "#B05A64"
+   "HairRose": "#B05A64",
+   "HairGinger": "#C0602A"
   },
   "wardrobe": {
    "CabinDark": "#1C0D0C",
@@ -178,13 +281,18 @@
    "Olive": "#66703A",
    "Moss": "#4C5A30",
    "Mustard": "#C99430",
-   "Rust": "#A04A26"
+   "Rust": "#A04A26",
+   "Jacket": "#262028",
+   "ShirtWhite": "#ECE6E0",
+   "DressRed": "#B0141C",
+   "Leather": "#5A3020"
   },
   "face": {
-   "Ink": "#160B0A",
+   "Ink": "#120808",
    "Mouth": "#6A2420",
    "Blush": "#E0786E",
-   "Lens": "#2A1E1A"
+   "Lens": "#2A1E1A",
+   "Beer": "#E8A23A"
   }
  },
  "parts": {
@@ -198,17 +306,17 @@
    "shaggy",
    "wavy",
    "afro",
+   "curly",
+   "long",
+   "bob",
    "crop",
    "buzz",
-   "bob",
    "bun",
    "quiff",
    "ponytail",
    "side_part",
    "swept",
-   "long",
    "spiky",
-   "curly",
    "sideburns",
    "chignon"
   ],
@@ -234,20 +342,25 @@
   ],
   "tops": [
    "tee",
-   "hoodie",
    "shirt",
+   "shirt_rolled",
    "shirt_tie",
+   "jacket",
+   "hoodie",
    "cardigan",
    "bomber",
    "staff_shirt",
    "blouse",
-   "blazer"
+   "blazer",
+   "dress",
+   "knit"
   ],
   "bottoms": [
    "jeans",
    "trousers",
    "shorts",
-   "skirt"
+   "skirt",
+   "dress"
   ],
   "shoes": [
    "sneakers",
@@ -274,6 +387,13 @@
     "colours": [
      "Rust",
      "Cream"
+    ]
+   },
+   "hat_fedora": {
+    "slot": "hat",
+    "colours": [
+     "StoolBlack",
+     "Charcoal"
     ]
    },
    "glasses_round": {
@@ -304,6 +424,20 @@
      "Charcoal"
     ]
    },
+   "beard": {
+    "slot": "face_hair",
+    "colours": [
+     "HairBlack",
+     "HairBlack"
+    ]
+   },
+   "moustache": {
+    "slot": "face_hair",
+    "colours": [
+     "HairBlack",
+     "HairBlack"
+    ]
+   },
    "ribbon": {
     "slot": "hair_acc",
     "colours": [
@@ -332,6 +466,13 @@
      "CymbalGold"
     ]
    },
+   "vest": {
+    "slot": "outer",
+    "colours": [
+     "StoolBlack",
+     "Charcoal"
+    ]
+   },
    "bar_towel": {
     "slot": "arm_acc",
     "colours": [
@@ -353,10 +494,17 @@
      "Cream"
     ]
    },
+   "guitar_electric": {
+    "slot": "instrument",
+    "colours": [
+     "DrumRed",
+     "ColumnWhite"
+    ]
+   },
    "bass": {
     "slot": "instrument",
     "colours": [
-     "CymbalGold",
+     "Mustard",
      "StoolBlack"
     ]
    },
@@ -367,25 +515,39 @@
      "Sand"
     ]
    },
-   "mic": {
-    "slot": "held_R",
+   "drink_beer": {
+    "slot": "drink",
     "colours": [
-     "StoolBlack",
-     "MirrorGrey"
+     "BeerAmber_emissive",
+     "Foam"
     ]
    },
-   "drink_beer": {
-    "slot": "held_R",
+   "drink_mug": {
+    "slot": "drink",
     "colours": [
-     "BottleAmber",
-     "Cream"
+     "BeerAmber_emissive",
+     "Foam"
     ]
    },
    "glass_gold": {
-    "slot": "held_R",
+    "slot": "drink",
     "colours": [
      "BottleClear",
      "CymbalGold"
+    ]
+   },
+   "beer_left": {
+    "slot": "drink",
+    "colours": [
+     "BeerAmber_emissive",
+     "Foam"
+    ]
+   },
+   "bottle": {
+    "slot": "drink",
+    "colours": [
+     "BottleGreen",
+     "LabelCream"
     ]
    },
    "shaker": {
@@ -393,6 +555,13 @@
     "colours": [
      "MirrorGrey",
      "CymbalGold"
+    ]
+   },
+   "tray": {
+    "slot": "held_L",
+    "colours": [
+     "StoolBlack",
+     "BeerAmber_emissive"
     ]
    },
    "notebook": {
@@ -436,48 +605,13 @@
      "Denim",
      "StoolBlack"
     ]
-   },
-   "beard": {
-    "slot": "face_hair",
-    "colours": [
-     "HairBlack",
-     "HairBlack"
-    ]
-   },
-   "hat_fedora": {
-    "slot": "hat",
-    "colours": [
-     "StoolBlack",
-     "Charcoal"
-    ]
-   },
-   "vest": {
-    "slot": "outer",
-    "colours": [
-     "StoolBlack",
-     "Charcoal"
-    ]
-   },
-   "tray": {
-    "slot": "held_L",
-    "colours": [
-     "StoolBlack",
-     "BottleAmber"
-    ]
-   },
-   "beer_left": {
-    "slot": "held_L",
-    "colours": [
-     "BottleAmber",
-     "Cream"
-    ]
    }
   }
  },
  "libraries": {
   "petite": {
    "path": "res://assets/chars/parts/parts_petite.glb",
-   "height_vox": 26,
+   "height_vox": 29,
    "parts": [
     {
      "id": "head_square",
@@ -488,7 +622,7 @@
      "materials": [
       "skin__Skin3"
      ],
-     "tris": 12
+     "tris": 28
     },
     {
      "id": "head_round",
@@ -499,7 +633,7 @@
      "materials": [
       "skin__Skin3"
      ],
-     "tris": 48
+     "tris": 64
     },
     {
      "id": "head_soft",
@@ -510,7 +644,7 @@
      "materials": [
       "skin__Skin3"
      ],
-     "tris": 28
+     "tris": 44
     },
     {
      "id": "head_heart",
@@ -521,7 +655,7 @@
      "materials": [
       "skin__Skin3"
      ],
-     "tris": 44
+     "tris": 60
     },
     {
      "id": "hair_shaggy",
@@ -532,7 +666,7 @@
      "materials": [
       "hair__HairDarkBrown"
      ],
-     "tris": 314
+     "tris": 390
     },
     {
      "id": "hair_wavy",
@@ -543,7 +677,7 @@
      "materials": [
       "hair__HairDarkBrown"
      ],
-     "tris": 292
+     "tris": 524
     },
     {
      "id": "hair_afro",
@@ -554,7 +688,40 @@
      "materials": [
       "hair__HairDarkBrown"
      ],
-     "tris": 1588
+     "tris": 1088
+    },
+    {
+     "id": "hair_curly",
+     "slot": "hair",
+     "bones": [
+      "head"
+     ],
+     "materials": [
+      "hair__HairDarkBrown"
+     ],
+     "tris": 768
+    },
+    {
+     "id": "hair_long",
+     "slot": "hair",
+     "bones": [
+      "head"
+     ],
+     "materials": [
+      "hair__HairDarkBrown"
+     ],
+     "tris": 330
+    },
+    {
+     "id": "hair_bob",
+     "slot": "hair",
+     "bones": [
+      "head"
+     ],
+     "materials": [
+      "hair__HairDarkBrown"
+     ],
+     "tris": 312
     },
     {
      "id": "hair_crop",
@@ -565,7 +732,7 @@
      "materials": [
       "hair__HairDarkBrown"
      ],
-     "tris": 56
+     "tris": 296
     },
     {
      "id": "hair_buzz",
@@ -579,17 +746,6 @@
      "tris": 12
     },
     {
-     "id": "hair_bob",
-     "slot": "hair",
-     "bones": [
-      "head"
-     ],
-     "materials": [
-      "hair__HairDarkBrown"
-     ],
-     "tris": 62
-    },
-    {
      "id": "hair_bun",
      "slot": "hair",
      "bones": [
@@ -598,7 +754,7 @@
      "materials": [
       "hair__HairDarkBrown"
      ],
-     "tris": 72
+     "tris": 244
     },
     {
      "id": "hair_quiff",
@@ -609,7 +765,7 @@
      "materials": [
       "hair__HairDarkBrown"
      ],
-     "tris": 76
+     "tris": 250
     },
     {
      "id": "hair_ponytail",
@@ -620,7 +776,7 @@
      "materials": [
       "hair__HairDarkBrown"
      ],
-     "tris": 86
+     "tris": 346
     },
     {
      "id": "hair_side_part",
@@ -631,7 +787,7 @@
      "materials": [
       "hair__HairDarkBrown"
      ],
-     "tris": 76
+     "tris": 248
     },
     {
      "id": "hair_swept",
@@ -642,18 +798,7 @@
      "materials": [
       "hair__HairDarkBrown"
      ],
-     "tris": 60
-    },
-    {
-     "id": "hair_long",
-     "slot": "hair",
-     "bones": [
-      "head"
-     ],
-     "materials": [
-      "hair__HairDarkBrown"
-     ],
-     "tris": 60
+     "tris": 198
     },
     {
      "id": "hair_spiky",
@@ -664,18 +809,7 @@
      "materials": [
       "hair__HairDarkBrown"
      ],
-     "tris": 258
-    },
-    {
-     "id": "hair_curly",
-     "slot": "hair",
-     "bones": [
-      "head"
-     ],
-     "materials": [
-      "hair__HairDarkBrown"
-     ],
-     "tris": 680
+     "tris": 334
     },
     {
      "id": "hair_sideburns",
@@ -686,7 +820,7 @@
      "materials": [
       "hair__HairDarkBrown"
      ],
-     "tris": 58
+     "tris": 224
     },
     {
      "id": "hair_chignon",
@@ -697,7 +831,7 @@
      "materials": [
       "hair__HairDarkBrown"
      ],
-     "tris": 74
+     "tris": 288
     },
     {
      "id": "eyes_dot",
@@ -763,7 +897,7 @@
      "materials": [
       "hair__HairDarkBrown"
      ],
-     "tris": 8
+     "tris": 24
     },
     {
      "id": "brows_arched",
@@ -774,7 +908,7 @@
      "materials": [
       "hair__HairDarkBrown"
      ],
-     "tris": 12
+     "tris": 72
     },
     {
      "id": "brows_worried",
@@ -785,7 +919,7 @@
      "materials": [
       "hair__HairDarkBrown"
      ],
-     "tris": 12
+     "tris": 48
     },
     {
      "id": "brows_thick",
@@ -870,26 +1004,13 @@
      "bones": [
       "arm_L",
       "arm_R",
+      "forearm_L",
+      "forearm_R",
       "spine"
      ],
      "materials": [
       "skin__Skin3",
-      "top__Stone",
-      "top_trim__Cream"
-     ],
-     "tris": 64
-    },
-    {
-     "id": "top_hoodie",
-     "slot": "top",
-     "bones": [
-      "arm_L",
-      "arm_R",
-      "spine"
-     ],
-     "materials": [
-      "top__Stone",
-      "top_trim__Cream"
+      "top__Stone"
      ],
      "tris": 72
     },
@@ -899,13 +1020,35 @@
      "bones": [
       "arm_L",
       "arm_R",
+      "forearm_L",
+      "forearm_R",
       "spine"
      ],
      "materials": [
+      "skin__Skin3",
       "top__Stone",
+      "top_accent__Cream",
       "top_trim__Cream"
      ],
-     "tris": 56
+     "tris": 128
+    },
+    {
+     "id": "top_shirt_rolled",
+     "slot": "top",
+     "bones": [
+      "arm_L",
+      "arm_R",
+      "forearm_L",
+      "forearm_R",
+      "spine"
+     ],
+     "materials": [
+      "skin__Skin3",
+      "top__Stone",
+      "top_accent__Cream",
+      "top_trim__Cream"
+     ],
+     "tris": 132
     },
     {
      "id": "top_shirt_tie",
@@ -913,14 +1056,52 @@
      "bones": [
       "arm_L",
       "arm_R",
+      "forearm_L",
+      "forearm_R",
       "spine"
      ],
      "materials": [
       "skin__Skin3",
       "top__Stone",
+      "top_accent__Cream",
       "top_trim__Cream"
      ],
-     "tris": 62
+     "tris": 130
+    },
+    {
+     "id": "top_jacket",
+     "slot": "top",
+     "bones": [
+      "arm_L",
+      "arm_R",
+      "forearm_L",
+      "forearm_R",
+      "hips",
+      "spine"
+     ],
+     "materials": [
+      "top__Stone",
+      "top_accent__Cream",
+      "top_trim__Cream"
+     ],
+     "tris": 156
+    },
+    {
+     "id": "top_hoodie",
+     "slot": "top",
+     "bones": [
+      "arm_L",
+      "arm_R",
+      "forearm_L",
+      "forearm_R",
+      "spine"
+     ],
+     "materials": [
+      "top__Stone",
+      "top_accent__Cream",
+      "top_trim__Cream"
+     ],
+     "tris": 96
     },
     {
      "id": "top_cardigan",
@@ -928,6 +1109,8 @@
      "bones": [
       "arm_L",
       "arm_R",
+      "forearm_L",
+      "forearm_R",
       "spine"
      ],
      "materials": [
@@ -935,7 +1118,7 @@
       "top_accent__Cream",
       "top_dust__Cream"
      ],
-     "tris": 242
+     "tris": 268
     },
     {
      "id": "top_bomber",
@@ -943,13 +1126,16 @@
      "bones": [
       "arm_L",
       "arm_R",
+      "forearm_L",
+      "forearm_R",
       "spine"
      ],
      "materials": [
       "top__Stone",
+      "top_accent__Cream",
       "top_trim__Cream"
      ],
-     "tris": 72
+     "tris": 102
     },
     {
      "id": "top_staff_shirt",
@@ -957,14 +1143,17 @@
      "bones": [
       "arm_L",
       "arm_R",
+      "forearm_L",
+      "forearm_R",
       "spine"
      ],
      "materials": [
       "skin__Skin3",
       "top__Stone",
+      "top_accent__Cream",
       "top_trim__Cream"
      ],
-     "tris": 88
+     "tris": 130
     },
     {
      "id": "top_blouse",
@@ -972,6 +1161,8 @@
      "bones": [
       "arm_L",
       "arm_R",
+      "forearm_L",
+      "forearm_R",
       "spine"
      ],
      "materials": [
@@ -979,7 +1170,7 @@
       "top__Stone",
       "top_trim__Cream"
      ],
-     "tris": 72
+     "tris": 106
     },
     {
      "id": "top_blazer",
@@ -987,6 +1178,8 @@
      "bones": [
       "arm_L",
       "arm_R",
+      "forearm_L",
+      "forearm_R",
       "hips",
       "spine"
      ],
@@ -995,7 +1188,40 @@
       "top_accent__Cream",
       "top_trim__Cream"
      ],
-     "tris": 70
+     "tris": 122
+    },
+    {
+     "id": "top_dress",
+     "slot": "top",
+     "bones": [
+      "arm_L",
+      "arm_R",
+      "forearm_L",
+      "forearm_R",
+      "spine"
+     ],
+     "materials": [
+      "skin__Skin3",
+      "top__Stone"
+     ],
+     "tris": 96
+    },
+    {
+     "id": "top_knit",
+     "slot": "top",
+     "bones": [
+      "arm_L",
+      "arm_R",
+      "forearm_L",
+      "forearm_R",
+      "spine"
+     ],
+     "materials": [
+      "skin__Skin3",
+      "top__Stone",
+      "top_trim__Cream"
+     ],
+     "tris": 96
     },
     {
      "id": "bottom_jeans",
@@ -1003,13 +1229,16 @@
      "bones": [
       "hips",
       "leg_L",
-      "leg_R"
+      "leg_R",
+      "shin_L",
+      "shin_R"
      ],
      "materials": [
       "bottom__Denim",
-      "bottom_trim__DenimLight"
+      "bottom_trim__CymbalGold",
+      "bottom_trim__Leather"
      ],
-     "tris": 60
+     "tris": 96
     },
     {
      "id": "bottom_trousers",
@@ -1017,13 +1246,16 @@
      "bones": [
       "hips",
       "leg_L",
-      "leg_R"
+      "leg_R",
+      "shin_L",
+      "shin_R"
      ],
      "materials": [
       "bottom__Denim",
-      "bottom_trim__DenimLight"
+      "bottom_trim__CymbalGold",
+      "bottom_trim__Leather"
      ],
-     "tris": 44
+     "tris": 80
     },
     {
      "id": "bottom_shorts",
@@ -1031,13 +1263,15 @@
      "bones": [
       "hips",
       "leg_L",
-      "leg_R"
+      "leg_R",
+      "shin_L",
+      "shin_R"
      ],
      "materials": [
       "bottom__Denim",
       "skin__Skin3"
      ],
-     "tris": 52
+     "tris": 76
     },
     {
      "id": "bottom_skirt",
@@ -1045,21 +1279,38 @@
      "bones": [
       "hips",
       "leg_L",
-      "leg_R"
+      "leg_R",
+      "shin_L",
+      "shin_R"
      ],
      "materials": [
       "bottom__Denim",
-      "bottom_trim__DenimLight",
       "skin__Skin3"
      ],
-     "tris": 92
+     "tris": 134
+    },
+    {
+     "id": "bottom_dress",
+     "slot": "bottom",
+     "bones": [
+      "hips",
+      "leg_L",
+      "leg_R",
+      "shin_L",
+      "shin_R"
+     ],
+     "materials": [
+      "bottom__Denim",
+      "skin__Skin3"
+     ],
+     "tris": 104
     },
     {
      "id": "shoes_sneakers",
      "slot": "shoes",
      "bones": [
-      "leg_L",
-      "leg_R"
+      "shin_L",
+      "shin_R"
      ],
      "materials": [
       "shoes__Charcoal",
@@ -1071,21 +1322,21 @@
      "id": "shoes_boots",
      "slot": "shoes",
      "bones": [
-      "leg_L",
-      "leg_R"
+      "shin_L",
+      "shin_R"
      ],
      "materials": [
       "shoes__Charcoal",
       "shoes_trim__Cream"
      ],
-     "tris": 104
+     "tris": 56
     },
     {
      "id": "shoes_loafers",
      "slot": "shoes",
      "bones": [
-      "leg_L",
-      "leg_R"
+      "shin_L",
+      "shin_R"
      ],
      "materials": [
       "shoes__Charcoal",
@@ -1097,8 +1348,8 @@
      "id": "hands",
      "slot": "hands",
      "bones": [
-      "arm_L",
-      "arm_R"
+      "forearm_L",
+      "forearm_R"
      ],
      "materials": [
       "skin__Skin3"
@@ -1140,293 +1391,6 @@
       "hat_beanie__Rust"
      ],
      "tris": 52
-    },
-    {
-     "id": "glasses_round",
-     "slot": "glasses",
-     "bones": [
-      "head"
-     ],
-     "materials": [
-      "glasses_round__CymbalGold"
-     ],
-     "tris": 100
-    },
-    {
-     "id": "glasses_tinted",
-     "slot": "glasses",
-     "bones": [
-      "head"
-     ],
-     "materials": [
-      "glasses_tinted_2__Lens",
-      "glasses_tinted__CymbalGold"
-     ],
-     "tris": 92
-    },
-    {
-     "id": "glasses_up",
-     "slot": "glasses",
-     "bones": [
-      "head"
-     ],
-     "materials": [
-      "glasses_up_2__Lens",
-      "glasses_up__StoolBlack"
-     ],
-     "tris": 60
-    },
-    {
-     "id": "headphones",
-     "slot": "ears",
-     "bones": [
-      "head"
-     ],
-     "materials": [
-      "headphones_2__Charcoal",
-      "headphones__StoolBlack"
-     ],
-     "tris": 56
-    },
-    {
-     "id": "ribbon",
-     "slot": "hair_acc",
-     "bones": [
-      "head"
-     ],
-     "materials": [
-      "ribbon_2__Cream",
-      "ribbon__Rust"
-     ],
-     "tris": 76
-    },
-    {
-     "id": "pencil",
-     "slot": "hair_acc",
-     "bones": [
-      "head"
-     ],
-     "materials": [
-      "pencil_2__Charcoal",
-      "pencil__Mustard"
-     ],
-     "tris": 20
-    },
-    {
-     "id": "gig_bag",
-     "slot": "back",
-     "bones": [
-      "spine"
-     ],
-     "materials": [
-      "gig_bag_2__Charcoal",
-      "gig_bag__StoolBlack"
-     ],
-     "tris": 116
-    },
-    {
-     "id": "apron",
-     "slot": "outer",
-     "bones": [
-      "spine"
-     ],
-     "materials": [
-      "apron_2__CymbalGold",
-      "apron__Cream"
-     ],
-     "tris": 44
-    },
-    {
-     "id": "bar_towel",
-     "slot": "arm_acc",
-     "bones": [
-      "arm_L"
-     ],
-     "materials": [
-      "bar_towel__ColumnWhite"
-     ],
-     "tris": 34
-    },
-    {
-     "id": "gaffer_tape",
-     "slot": "belt",
-     "bones": [
-      "hips"
-     ],
-     "materials": [
-      "gaffer_tape_2__Charcoal",
-      "gaffer_tape__Stone"
-     ],
-     "tris": 20
-    },
-    {
-     "id": "guitar",
-     "slot": "instrument",
-     "bones": [
-      "spine"
-     ],
-     "materials": [
-      "guitar_2__Cream",
-      "guitar__WoodMid",
-      "guitar_hole__StoolBlack"
-     ],
-     "tris": 118
-    },
-    {
-     "id": "bass",
-     "slot": "instrument",
-     "bones": [
-      "spine"
-     ],
-     "materials": [
-      "bass_2__StoolBlack",
-      "bass__CymbalGold"
-     ],
-     "tris": 126
-    },
-    {
-     "id": "drumsticks",
-     "slot": "held",
-     "bones": [
-      "arm_L",
-      "arm_R"
-     ],
-     "materials": [
-      "drumsticks__Sand"
-     ],
-     "tris": 24
-    },
-    {
-     "id": "mic",
-     "slot": "held_R",
-     "bones": [
-      "arm_R"
-     ],
-     "materials": [
-      "mic_2__MirrorGrey",
-      "mic__StoolBlack"
-     ],
-     "tris": 24
-    },
-    {
-     "id": "drink_beer",
-     "slot": "held_R",
-     "bones": [
-      "arm_R"
-     ],
-     "materials": [
-      "drink_beer_2__Cream",
-      "drink_beer__BottleAmber"
-     ],
-     "tris": 20
-    },
-    {
-     "id": "glass_gold",
-     "slot": "held_R",
-     "bones": [
-      "arm_R"
-     ],
-     "materials": [
-      "glass_gold_2__CymbalGold",
-      "glass_gold__BottleClear"
-     ],
-     "tris": 20
-    },
-    {
-     "id": "shaker",
-     "slot": "held_R",
-     "bones": [
-      "arm_R"
-     ],
-     "materials": [
-      "shaker_2__CymbalGold",
-      "shaker__MirrorGrey"
-     ],
-     "tris": 20
-    },
-    {
-     "id": "notebook",
-     "slot": "held_R",
-     "bones": [
-      "arm_R"
-     ],
-     "materials": [
-      "notebook_2__Charcoal",
-      "notebook__Cream"
-     ],
-     "tris": 20
-    },
-    {
-     "id": "torch",
-     "slot": "held_R",
-     "bones": [
-      "arm_R"
-     ],
-     "materials": [
-      "torch_2__LampGoldOff",
-      "torch__StoolBlack"
-     ],
-     "tris": 20
-    },
-    {
-     "id": "clicker",
-     "slot": "held_L",
-     "bones": [
-      "arm_L"
-     ],
-     "materials": [
-      "clicker_2__Charcoal",
-      "clicker__Stone"
-     ],
-     "tris": 22
-    },
-    {
-     "id": "sketchbook",
-     "slot": "held_L",
-     "bones": [
-      "arm_L"
-     ],
-     "materials": [
-      "sketchbook_2__Cream",
-      "sketchbook__WoodMid"
-     ],
-     "tris": 20
-    },
-    {
-     "id": "vinyl",
-     "slot": "held_L",
-     "bones": [
-      "arm_L"
-     ],
-     "materials": [
-      "vinyl_2__StoolBlack",
-      "vinyl__Mustard"
-     ],
-     "tris": 28
-    },
-    {
-     "id": "wheelie_bag",
-     "slot": "floor",
-     "bones": [
-      "root"
-     ],
-     "materials": [
-      "wheelie_bag_2__StoolBlack",
-      "wheelie_bag_3__MirrorGrey",
-      "wheelie_bag__Denim"
-     ],
-     "tris": 94
-    },
-    {
-     "id": "beard",
-     "slot": "face_hair",
-     "bones": [
-      "head"
-     ],
-     "materials": [
-      "beard__HairBlack"
-     ],
-     "tris": 92
     },
     {
      "id": "hat_fedora",
@@ -1441,711 +1405,6 @@
      "tris": 76
     },
     {
-     "id": "vest",
-     "slot": "outer",
-     "bones": [
-      "spine"
-     ],
-     "materials": [
-      "vest_2__Charcoal",
-      "vest__StoolBlack"
-     ],
-     "tris": 64
-    },
-    {
-     "id": "tray",
-     "slot": "held_L",
-     "bones": [
-      "arm_L"
-     ],
-     "materials": [
-      "tray_2__BottleAmber",
-      "tray_3__Cream",
-      "tray__StoolBlack"
-     ],
-     "tris": 118
-    },
-    {
-     "id": "beer_left",
-     "slot": "held_L",
-     "bones": [
-      "arm_L"
-     ],
-     "materials": [
-      "beer_left_2__Cream",
-      "beer_left__BottleAmber"
-     ],
-     "tris": 20
-    }
-   ]
-  },
-  "regular": {
-   "path": "res://assets/chars/parts/parts_regular.glb",
-   "height_vox": 29,
-   "parts": [
-    {
-     "id": "head_square",
-     "slot": "head",
-     "bones": [
-      "head"
-     ],
-     "materials": [
-      "skin__Skin3"
-     ],
-     "tris": 12
-    },
-    {
-     "id": "head_round",
-     "slot": "head",
-     "bones": [
-      "head"
-     ],
-     "materials": [
-      "skin__Skin3"
-     ],
-     "tris": 48
-    },
-    {
-     "id": "head_soft",
-     "slot": "head",
-     "bones": [
-      "head"
-     ],
-     "materials": [
-      "skin__Skin3"
-     ],
-     "tris": 28
-    },
-    {
-     "id": "head_heart",
-     "slot": "head",
-     "bones": [
-      "head"
-     ],
-     "materials": [
-      "skin__Skin3"
-     ],
-     "tris": 44
-    },
-    {
-     "id": "hair_shaggy",
-     "slot": "hair",
-     "bones": [
-      "head"
-     ],
-     "materials": [
-      "hair__HairDarkBrown"
-     ],
-     "tris": 256
-    },
-    {
-     "id": "hair_wavy",
-     "slot": "hair",
-     "bones": [
-      "head"
-     ],
-     "materials": [
-      "hair__HairDarkBrown"
-     ],
-     "tris": 274
-    },
-    {
-     "id": "hair_afro",
-     "slot": "hair",
-     "bones": [
-      "head"
-     ],
-     "materials": [
-      "hair__HairDarkBrown"
-     ],
-     "tris": 1530
-    },
-    {
-     "id": "hair_crop",
-     "slot": "hair",
-     "bones": [
-      "head"
-     ],
-     "materials": [
-      "hair__HairDarkBrown"
-     ],
-     "tris": 56
-    },
-    {
-     "id": "hair_buzz",
-     "slot": "hair",
-     "bones": [
-      "head"
-     ],
-     "materials": [
-      "hair__HairDarkBrown"
-     ],
-     "tris": 12
-    },
-    {
-     "id": "hair_bob",
-     "slot": "hair",
-     "bones": [
-      "head"
-     ],
-     "materials": [
-      "hair__HairDarkBrown"
-     ],
-     "tris": 62
-    },
-    {
-     "id": "hair_bun",
-     "slot": "hair",
-     "bones": [
-      "head"
-     ],
-     "materials": [
-      "hair__HairDarkBrown"
-     ],
-     "tris": 72
-    },
-    {
-     "id": "hair_quiff",
-     "slot": "hair",
-     "bones": [
-      "head"
-     ],
-     "materials": [
-      "hair__HairDarkBrown"
-     ],
-     "tris": 76
-    },
-    {
-     "id": "hair_ponytail",
-     "slot": "hair",
-     "bones": [
-      "head"
-     ],
-     "materials": [
-      "hair__HairDarkBrown"
-     ],
-     "tris": 86
-    },
-    {
-     "id": "hair_side_part",
-     "slot": "hair",
-     "bones": [
-      "head"
-     ],
-     "materials": [
-      "hair__HairDarkBrown"
-     ],
-     "tris": 76
-    },
-    {
-     "id": "hair_swept",
-     "slot": "hair",
-     "bones": [
-      "head"
-     ],
-     "materials": [
-      "hair__HairDarkBrown"
-     ],
-     "tris": 60
-    },
-    {
-     "id": "hair_long",
-     "slot": "hair",
-     "bones": [
-      "head"
-     ],
-     "materials": [
-      "hair__HairDarkBrown"
-     ],
-     "tris": 60
-    },
-    {
-     "id": "hair_spiky",
-     "slot": "hair",
-     "bones": [
-      "head"
-     ],
-     "materials": [
-      "hair__HairDarkBrown"
-     ],
-     "tris": 258
-    },
-    {
-     "id": "hair_curly",
-     "slot": "hair",
-     "bones": [
-      "head"
-     ],
-     "materials": [
-      "hair__HairDarkBrown"
-     ],
-     "tris": 680
-    },
-    {
-     "id": "hair_sideburns",
-     "slot": "hair",
-     "bones": [
-      "head"
-     ],
-     "materials": [
-      "hair__HairDarkBrown"
-     ],
-     "tris": 58
-    },
-    {
-     "id": "hair_chignon",
-     "slot": "hair",
-     "bones": [
-      "head"
-     ],
-     "materials": [
-      "hair__HairDarkBrown"
-     ],
-     "tris": 74
-    },
-    {
-     "id": "eyes_dot",
-     "slot": "eyes",
-     "bones": [
-      "head"
-     ],
-     "materials": [
-      "eyes__Ink"
-     ],
-     "tris": 8
-    },
-    {
-     "id": "eyes_wide",
-     "slot": "eyes",
-     "bones": [
-      "head"
-     ],
-     "materials": [
-      "eyes__Ink"
-     ],
-     "tris": 16
-    },
-    {
-     "id": "eyes_sleepy",
-     "slot": "eyes",
-     "bones": [
-      "head"
-     ],
-     "materials": [
-      "eyes__Ink"
-     ],
-     "tris": 8
-    },
-    {
-     "id": "eyes_happy",
-     "slot": "eyes",
-     "bones": [
-      "head"
-     ],
-     "materials": [
-      "eyes__Ink"
-     ],
-     "tris": 12
-    },
-    {
-     "id": "eyes_lashes",
-     "slot": "eyes",
-     "bones": [
-      "head"
-     ],
-     "materials": [
-      "eyes__Ink"
-     ],
-     "tris": 12
-    },
-    {
-     "id": "brows_flat",
-     "slot": "brows",
-     "bones": [
-      "head"
-     ],
-     "materials": [
-      "hair__HairDarkBrown"
-     ],
-     "tris": 8
-    },
-    {
-     "id": "brows_arched",
-     "slot": "brows",
-     "bones": [
-      "head"
-     ],
-     "materials": [
-      "hair__HairDarkBrown"
-     ],
-     "tris": 12
-    },
-    {
-     "id": "brows_worried",
-     "slot": "brows",
-     "bones": [
-      "head"
-     ],
-     "materials": [
-      "hair__HairDarkBrown"
-     ],
-     "tris": 12
-    },
-    {
-     "id": "brows_thick",
-     "slot": "brows",
-     "bones": [
-      "head"
-     ],
-     "materials": [
-      "hair__HairDarkBrown"
-     ],
-     "tris": 24
-    },
-    {
-     "id": "mouth_smile",
-     "slot": "mouth",
-     "bones": [
-      "head"
-     ],
-     "materials": [
-      "mouth__Mouth"
-     ],
-     "tris": 8
-    },
-    {
-     "id": "mouth_small",
-     "slot": "mouth",
-     "bones": [
-      "head"
-     ],
-     "materials": [
-      "mouth__Mouth"
-     ],
-     "tris": 4
-    },
-    {
-     "id": "mouth_flat",
-     "slot": "mouth",
-     "bones": [
-      "head"
-     ],
-     "materials": [
-      "mouth__Mouth"
-     ],
-     "tris": 8
-    },
-    {
-     "id": "mouth_open",
-     "slot": "mouth",
-     "bones": [
-      "head"
-     ],
-     "materials": [
-      "mouth__Mouth"
-     ],
-     "tris": 8
-    },
-    {
-     "id": "mouth_grin",
-     "slot": "mouth",
-     "bones": [
-      "head"
-     ],
-     "materials": [
-      "mouth__Mouth"
-     ],
-     "tris": 12
-    },
-    {
-     "id": "blush",
-     "slot": "blush",
-     "bones": [
-      "head"
-     ],
-     "materials": [
-      "blush__Blush"
-     ],
-     "tris": 8
-    },
-    {
-     "id": "top_tee",
-     "slot": "top",
-     "bones": [
-      "arm_L",
-      "arm_R",
-      "spine"
-     ],
-     "materials": [
-      "skin__Skin3",
-      "top__Stone",
-      "top_trim__Cream"
-     ],
-     "tris": 64
-    },
-    {
-     "id": "top_hoodie",
-     "slot": "top",
-     "bones": [
-      "arm_L",
-      "arm_R",
-      "spine"
-     ],
-     "materials": [
-      "top__Stone",
-      "top_trim__Cream"
-     ],
-     "tris": 72
-    },
-    {
-     "id": "top_shirt",
-     "slot": "top",
-     "bones": [
-      "arm_L",
-      "arm_R",
-      "spine"
-     ],
-     "materials": [
-      "top__Stone",
-      "top_trim__Cream"
-     ],
-     "tris": 56
-    },
-    {
-     "id": "top_shirt_tie",
-     "slot": "top",
-     "bones": [
-      "arm_L",
-      "arm_R",
-      "spine"
-     ],
-     "materials": [
-      "skin__Skin3",
-      "top__Stone",
-      "top_trim__Cream"
-     ],
-     "tris": 58
-    },
-    {
-     "id": "top_cardigan",
-     "slot": "top",
-     "bones": [
-      "arm_L",
-      "arm_R",
-      "spine"
-     ],
-     "materials": [
-      "top__Stone",
-      "top_accent__Cream",
-      "top_dust__Cream"
-     ],
-     "tris": 230
-    },
-    {
-     "id": "top_bomber",
-     "slot": "top",
-     "bones": [
-      "arm_L",
-      "arm_R",
-      "spine"
-     ],
-     "materials": [
-      "top__Stone",
-      "top_trim__Cream"
-     ],
-     "tris": 72
-    },
-    {
-     "id": "top_staff_shirt",
-     "slot": "top",
-     "bones": [
-      "arm_L",
-      "arm_R",
-      "spine"
-     ],
-     "materials": [
-      "skin__Skin3",
-      "top__Stone",
-      "top_trim__Cream"
-     ],
-     "tris": 88
-    },
-    {
-     "id": "top_blouse",
-     "slot": "top",
-     "bones": [
-      "arm_L",
-      "arm_R",
-      "spine"
-     ],
-     "materials": [
-      "skin__Skin3",
-      "top__Stone",
-      "top_trim__Cream"
-     ],
-     "tris": 88
-    },
-    {
-     "id": "top_blazer",
-     "slot": "top",
-     "bones": [
-      "arm_L",
-      "arm_R",
-      "hips",
-      "spine"
-     ],
-     "materials": [
-      "top__Stone",
-      "top_accent__Cream",
-      "top_trim__Cream"
-     ],
-     "tris": 70
-    },
-    {
-     "id": "bottom_jeans",
-     "slot": "bottom",
-     "bones": [
-      "hips",
-      "leg_L",
-      "leg_R"
-     ],
-     "materials": [
-      "bottom__Denim",
-      "bottom_trim__DenimLight"
-     ],
-     "tris": 60
-    },
-    {
-     "id": "bottom_trousers",
-     "slot": "bottom",
-     "bones": [
-      "hips",
-      "leg_L",
-      "leg_R"
-     ],
-     "materials": [
-      "bottom__Denim",
-      "bottom_trim__DenimLight"
-     ],
-     "tris": 44
-    },
-    {
-     "id": "bottom_shorts",
-     "slot": "bottom",
-     "bones": [
-      "hips",
-      "leg_L",
-      "leg_R"
-     ],
-     "materials": [
-      "bottom__Denim",
-      "skin__Skin3"
-     ],
-     "tris": 52
-    },
-    {
-     "id": "bottom_skirt",
-     "slot": "bottom",
-     "bones": [
-      "hips",
-      "leg_L",
-      "leg_R"
-     ],
-     "materials": [
-      "bottom__Denim",
-      "bottom_trim__DenimLight",
-      "skin__Skin3"
-     ],
-     "tris": 92
-    },
-    {
-     "id": "shoes_sneakers",
-     "slot": "shoes",
-     "bones": [
-      "leg_L",
-      "leg_R"
-     ],
-     "materials": [
-      "shoes__Charcoal",
-      "shoes_trim__Cream"
-     ],
-     "tris": 40
-    },
-    {
-     "id": "shoes_boots",
-     "slot": "shoes",
-     "bones": [
-      "leg_L",
-      "leg_R"
-     ],
-     "materials": [
-      "shoes__Charcoal",
-      "shoes_trim__Cream"
-     ],
-     "tris": 104
-    },
-    {
-     "id": "shoes_loafers",
-     "slot": "shoes",
-     "bones": [
-      "leg_L",
-      "leg_R"
-     ],
-     "materials": [
-      "shoes__Charcoal",
-      "shoes_trim__Cream"
-     ],
-     "tris": 52
-    },
-    {
-     "id": "hands",
-     "slot": "hands",
-     "bones": [
-      "arm_L",
-      "arm_R"
-     ],
-     "materials": [
-      "skin__Skin3"
-     ],
-     "tris": 24
-    },
-    {
-     "id": "hat_bucket",
-     "slot": "hat",
-     "bones": [
-      "head"
-     ],
-     "materials": [
-      "hat_bucket_2__Cream",
-      "hat_bucket__Olive"
-     ],
-     "tris": 36
-    },
-    {
-     "id": "hat_flat_cap",
-     "slot": "hat",
-     "bones": [
-      "head"
-     ],
-     "materials": [
-      "hat_flat_cap_2__Charcoal",
-      "hat_flat_cap__Stone"
-     ],
-     "tris": 42
-    },
-    {
-     "id": "hat_beanie",
-     "slot": "hat",
-     "bones": [
-      "head"
-     ],
-     "materials": [
-      "hat_beanie_2__Cream",
-      "hat_beanie__Rust"
-     ],
-     "tris": 52
-    },
-    {
      "id": "glasses_round",
      "slot": "glasses",
      "bones": [
@@ -2191,6 +1450,28 @@
       "headphones__StoolBlack"
      ],
      "tris": 56
+    },
+    {
+     "id": "beard",
+     "slot": "face_hair",
+     "bones": [
+      "head"
+     ],
+     "materials": [
+      "beard__HairBlack"
+     ],
+     "tris": 120
+    },
+    {
+     "id": "moustache",
+     "slot": "face_hair",
+     "bones": [
+      "head"
+     ],
+     "materials": [
+      "moustache__HairBlack"
+     ],
+     "tris": 40
     },
     {
      "id": "ribbon",
@@ -2241,6 +1522,18 @@
      "tris": 44
     },
     {
+     "id": "vest",
+     "slot": "outer",
+     "bones": [
+      "spine"
+     ],
+     "materials": [
+      "vest_2__Charcoal",
+      "vest__StoolBlack"
+     ],
+     "tris": 100
+    },
+    {
      "id": "bar_towel",
      "slot": "arm_acc",
      "bones": [
@@ -2249,7 +1542,7 @@
      "materials": [
       "bar_towel__ColumnWhite"
      ],
-     "tris": 34
+     "tris": 28
     },
     {
      "id": "gaffer_tape",
@@ -2272,9 +1565,26 @@
      "materials": [
       "guitar_2__Cream",
       "guitar__WoodMid",
-      "guitar_hole__StoolBlack"
+      "guitar_hole__StoolBlack",
+      "guitar_neck__WoodDark",
+      "guitar_strap__StoolBlack"
      ],
-     "tris": 118
+     "tris": 150
+    },
+    {
+     "id": "guitar_electric",
+     "slot": "instrument",
+     "bones": [
+      "spine"
+     ],
+     "materials": [
+      "guitar_electric_2__ColumnWhite",
+      "guitar_electric_3__MirrorGrey",
+      "guitar_electric__DrumRed",
+      "guitar_neck__WoodDark",
+      "guitar_strap__StoolBlack"
+     ],
+     "tris": 146
     },
     {
      "id": "bass",
@@ -2284,63 +1594,94 @@
      ],
      "materials": [
       "bass_2__StoolBlack",
-      "bass__CymbalGold"
+      "bass_3__MirrorGrey",
+      "bass__Mustard",
+      "guitar_neck__WoodDark",
+      "guitar_strap__StoolBlack"
      ],
-     "tris": 126
+     "tris": 160
     },
     {
      "id": "drumsticks",
      "slot": "held",
      "bones": [
-      "arm_L",
-      "arm_R"
+      "forearm_L",
+      "forearm_R"
      ],
      "materials": [
+      "drumsticks_2__Sand",
       "drumsticks__Sand"
      ],
-     "tris": 24
-    },
-    {
-     "id": "mic",
-     "slot": "held_R",
-     "bones": [
-      "arm_R"
-     ],
-     "materials": [
-      "mic_2__MirrorGrey",
-      "mic__StoolBlack"
-     ],
-     "tris": 24
+     "tris": 40
     },
     {
      "id": "drink_beer",
-     "slot": "held_R",
+     "slot": "drink",
      "bones": [
-      "arm_R"
+      "forearm_R"
      ],
      "materials": [
-      "drink_beer_2__Cream",
-      "drink_beer__BottleAmber"
+      "drink_beer_2__Foam",
+      "drink_beer__BeerAmber_emissive"
      ],
      "tris": 20
     },
     {
-     "id": "glass_gold",
-     "slot": "held_R",
+     "id": "drink_mug",
+     "slot": "drink",
      "bones": [
-      "arm_R"
+      "forearm_R"
+     ],
+     "materials": [
+      "drink_mug_2__Foam",
+      "drink_mug_3__BottleClear",
+      "drink_mug__BeerAmber_emissive"
+     ],
+     "tris": 36
+    },
+    {
+     "id": "glass_gold",
+     "slot": "drink",
+     "bones": [
+      "forearm_R"
      ],
      "materials": [
       "glass_gold_2__CymbalGold",
+      "glass_gold_3__BottleClear",
       "glass_gold__BottleClear"
      ],
+     "tris": 28
+    },
+    {
+     "id": "beer_left",
+     "slot": "drink",
+     "bones": [
+      "forearm_L"
+     ],
+     "materials": [
+      "beer_left_2__Foam",
+      "beer_left__BeerAmber_emissive"
+     ],
      "tris": 20
+    },
+    {
+     "id": "bottle",
+     "slot": "drink",
+     "bones": [
+      "forearm_R"
+     ],
+     "materials": [
+      "bottle_2__LabelCream",
+      "bottle_3__BottleGreenCap",
+      "bottle__BottleGreen"
+     ],
+     "tris": 40
     },
     {
      "id": "shaker",
      "slot": "held_R",
      "bones": [
-      "arm_R"
+      "forearm_R"
      ],
      "materials": [
       "shaker_2__CymbalGold",
@@ -2349,10 +1690,23 @@
      "tris": 20
     },
     {
+     "id": "tray",
+     "slot": "held_L",
+     "bones": [
+      "forearm_L"
+     ],
+     "materials": [
+      "tray_2__BeerAmber_emissive",
+      "tray_3__Foam",
+      "tray__StoolBlack"
+     ],
+     "tris": 120
+    },
+    {
      "id": "notebook",
      "slot": "held_R",
      "bones": [
-      "arm_R"
+      "forearm_R"
      ],
      "materials": [
       "notebook_2__Charcoal",
@@ -2364,7 +1718,7 @@
      "id": "torch",
      "slot": "held_R",
      "bones": [
-      "arm_R"
+      "forearm_R"
      ],
      "materials": [
       "torch_2__LampGoldOff",
@@ -2376,7 +1730,7 @@
      "id": "clicker",
      "slot": "held_L",
      "bones": [
-      "arm_L"
+      "forearm_L"
      ],
      "materials": [
       "clicker_2__Charcoal",
@@ -2388,7 +1742,7 @@
      "id": "sketchbook",
      "slot": "held_L",
      "bones": [
-      "arm_L"
+      "forearm_L"
      ],
      "materials": [
       "sketchbook_2__Cream",
@@ -2400,7 +1754,7 @@
      "id": "vinyl",
      "slot": "held_L",
      "bones": [
-      "arm_L"
+      "forearm_L"
      ],
      "materials": [
       "vinyl_2__StoolBlack",
@@ -2420,71 +1774,11 @@
       "wheelie_bag__Denim"
      ],
      "tris": 94
-    },
-    {
-     "id": "beard",
-     "slot": "face_hair",
-     "bones": [
-      "head"
-     ],
-     "materials": [
-      "beard__HairBlack"
-     ],
-     "tris": 92
-    },
-    {
-     "id": "hat_fedora",
-     "slot": "hat",
-     "bones": [
-      "head"
-     ],
-     "materials": [
-      "hat_fedora_2__Charcoal",
-      "hat_fedora__StoolBlack"
-     ],
-     "tris": 76
-    },
-    {
-     "id": "vest",
-     "slot": "outer",
-     "bones": [
-      "spine"
-     ],
-     "materials": [
-      "vest_2__Charcoal",
-      "vest__StoolBlack"
-     ],
-     "tris": 64
-    },
-    {
-     "id": "tray",
-     "slot": "held_L",
-     "bones": [
-      "arm_L"
-     ],
-     "materials": [
-      "tray_2__BottleAmber",
-      "tray_3__Cream",
-      "tray__StoolBlack"
-     ],
-     "tris": 118
-    },
-    {
-     "id": "beer_left",
-     "slot": "held_L",
-     "bones": [
-      "arm_L"
-     ],
-     "materials": [
-      "beer_left_2__Cream",
-      "beer_left__BottleAmber"
-     ],
-     "tris": 20
     }
    ]
   },
-  "broad": {
-   "path": "res://assets/chars/parts/parts_broad.glb",
+  "regular": {
+   "path": "res://assets/chars/parts/parts_regular.glb",
    "height_vox": 31,
    "parts": [
     {
@@ -2496,7 +1790,7 @@
      "materials": [
       "skin__Skin3"
      ],
-     "tris": 12
+     "tris": 28
     },
     {
      "id": "head_round",
@@ -2507,7 +1801,7 @@
      "materials": [
       "skin__Skin3"
      ],
-     "tris": 48
+     "tris": 64
     },
     {
      "id": "head_soft",
@@ -2518,7 +1812,7 @@
      "materials": [
       "skin__Skin3"
      ],
-     "tris": 28
+     "tris": 44
     },
     {
      "id": "head_heart",
@@ -2529,7 +1823,7 @@
      "materials": [
       "skin__Skin3"
      ],
-     "tris": 44
+     "tris": 60
     },
     {
      "id": "hair_shaggy",
@@ -2540,7 +1834,7 @@
      "materials": [
       "hair__HairDarkBrown"
      ],
-     "tris": 292
+     "tris": 388
     },
     {
      "id": "hair_wavy",
@@ -2551,7 +1845,7 @@
      "materials": [
       "hair__HairDarkBrown"
      ],
-     "tris": 270
+     "tris": 454
     },
     {
      "id": "hair_afro",
@@ -2562,7 +1856,40 @@
      "materials": [
       "hair__HairDarkBrown"
      ],
-     "tris": 1650
+     "tris": 1076
+    },
+    {
+     "id": "hair_curly",
+     "slot": "hair",
+     "bones": [
+      "head"
+     ],
+     "materials": [
+      "hair__HairDarkBrown"
+     ],
+     "tris": 884
+    },
+    {
+     "id": "hair_long",
+     "slot": "hair",
+     "bones": [
+      "head"
+     ],
+     "materials": [
+      "hair__HairDarkBrown"
+     ],
+     "tris": 364
+    },
+    {
+     "id": "hair_bob",
+     "slot": "hair",
+     "bones": [
+      "head"
+     ],
+     "materials": [
+      "hair__HairDarkBrown"
+     ],
+     "tris": 324
     },
     {
      "id": "hair_crop",
@@ -2573,7 +1900,7 @@
      "materials": [
       "hair__HairDarkBrown"
      ],
-     "tris": 56
+     "tris": 266
     },
     {
      "id": "hair_buzz",
@@ -2587,17 +1914,6 @@
      "tris": 12
     },
     {
-     "id": "hair_bob",
-     "slot": "hair",
-     "bones": [
-      "head"
-     ],
-     "materials": [
-      "hair__HairDarkBrown"
-     ],
-     "tris": 62
-    },
-    {
      "id": "hair_bun",
      "slot": "hair",
      "bones": [
@@ -2606,7 +1922,7 @@
      "materials": [
       "hair__HairDarkBrown"
      ],
-     "tris": 72
+     "tris": 330
     },
     {
      "id": "hair_quiff",
@@ -2617,7 +1933,7 @@
      "materials": [
       "hair__HairDarkBrown"
      ],
-     "tris": 76
+     "tris": 256
     },
     {
      "id": "hair_ponytail",
@@ -2628,7 +1944,7 @@
      "materials": [
       "hair__HairDarkBrown"
      ],
-     "tris": 86
+     "tris": 308
     },
     {
      "id": "hair_side_part",
@@ -2639,7 +1955,7 @@
      "materials": [
       "hair__HairDarkBrown"
      ],
-     "tris": 76
+     "tris": 192
     },
     {
      "id": "hair_swept",
@@ -2650,18 +1966,7 @@
      "materials": [
       "hair__HairDarkBrown"
      ],
-     "tris": 60
-    },
-    {
-     "id": "hair_long",
-     "slot": "hair",
-     "bones": [
-      "head"
-     ],
-     "materials": [
-      "hair__HairDarkBrown"
-     ],
-     "tris": 60
+     "tris": 174
     },
     {
      "id": "hair_spiky",
@@ -2672,18 +1977,7 @@
      "materials": [
       "hair__HairDarkBrown"
      ],
-     "tris": 258
-    },
-    {
-     "id": "hair_curly",
-     "slot": "hair",
-     "bones": [
-      "head"
-     ],
-     "materials": [
-      "hair__HairDarkBrown"
-     ],
-     "tris": 680
+     "tris": 314
     },
     {
      "id": "hair_sideburns",
@@ -2694,7 +1988,7 @@
      "materials": [
       "hair__HairDarkBrown"
      ],
-     "tris": 58
+     "tris": 212
     },
     {
      "id": "hair_chignon",
@@ -2705,7 +1999,7 @@
      "materials": [
       "hair__HairDarkBrown"
      ],
-     "tris": 74
+     "tris": 320
     },
     {
      "id": "eyes_dot",
@@ -2771,7 +2065,7 @@
      "materials": [
       "hair__HairDarkBrown"
      ],
-     "tris": 8
+     "tris": 24
     },
     {
      "id": "brows_arched",
@@ -2782,7 +2076,7 @@
      "materials": [
       "hair__HairDarkBrown"
      ],
-     "tris": 12
+     "tris": 72
     },
     {
      "id": "brows_worried",
@@ -2793,7 +2087,7 @@
      "materials": [
       "hair__HairDarkBrown"
      ],
-     "tris": 12
+     "tris": 48
     },
     {
      "id": "brows_thick",
@@ -2878,26 +2172,13 @@
      "bones": [
       "arm_L",
       "arm_R",
+      "forearm_L",
+      "forearm_R",
       "spine"
      ],
      "materials": [
       "skin__Skin3",
-      "top__Stone",
-      "top_trim__Cream"
-     ],
-     "tris": 64
-    },
-    {
-     "id": "top_hoodie",
-     "slot": "top",
-     "bones": [
-      "arm_L",
-      "arm_R",
-      "spine"
-     ],
-     "materials": [
-      "top__Stone",
-      "top_trim__Cream"
+      "top__Stone"
      ],
      "tris": 72
     },
@@ -2907,13 +2188,35 @@
      "bones": [
       "arm_L",
       "arm_R",
+      "forearm_L",
+      "forearm_R",
       "spine"
      ],
      "materials": [
+      "skin__Skin3",
       "top__Stone",
+      "top_accent__Cream",
       "top_trim__Cream"
      ],
-     "tris": 56
+     "tris": 124
+    },
+    {
+     "id": "top_shirt_rolled",
+     "slot": "top",
+     "bones": [
+      "arm_L",
+      "arm_R",
+      "forearm_L",
+      "forearm_R",
+      "spine"
+     ],
+     "materials": [
+      "skin__Skin3",
+      "top__Stone",
+      "top_accent__Cream",
+      "top_trim__Cream"
+     ],
+     "tris": 128
     },
     {
      "id": "top_shirt_tie",
@@ -2921,14 +2224,52 @@
      "bones": [
       "arm_L",
       "arm_R",
+      "forearm_L",
+      "forearm_R",
       "spine"
      ],
      "materials": [
       "skin__Skin3",
       "top__Stone",
+      "top_accent__Cream",
       "top_trim__Cream"
      ],
-     "tris": 58
+     "tris": 130
+    },
+    {
+     "id": "top_jacket",
+     "slot": "top",
+     "bones": [
+      "arm_L",
+      "arm_R",
+      "forearm_L",
+      "forearm_R",
+      "hips",
+      "spine"
+     ],
+     "materials": [
+      "top__Stone",
+      "top_accent__Cream",
+      "top_trim__Cream"
+     ],
+     "tris": 156
+    },
+    {
+     "id": "top_hoodie",
+     "slot": "top",
+     "bones": [
+      "arm_L",
+      "arm_R",
+      "forearm_L",
+      "forearm_R",
+      "spine"
+     ],
+     "materials": [
+      "top__Stone",
+      "top_accent__Cream",
+      "top_trim__Cream"
+     ],
+     "tris": 96
     },
     {
      "id": "top_cardigan",
@@ -2936,6 +2277,8 @@
      "bones": [
       "arm_L",
       "arm_R",
+      "forearm_L",
+      "forearm_R",
       "spine"
      ],
      "materials": [
@@ -2943,7 +2286,7 @@
       "top_accent__Cream",
       "top_dust__Cream"
      ],
-     "tris": 354
+     "tris": 304
     },
     {
      "id": "top_bomber",
@@ -2951,13 +2294,16 @@
      "bones": [
       "arm_L",
       "arm_R",
+      "forearm_L",
+      "forearm_R",
       "spine"
      ],
      "materials": [
       "top__Stone",
+      "top_accent__Cream",
       "top_trim__Cream"
      ],
-     "tris": 72
+     "tris": 102
     },
     {
      "id": "top_staff_shirt",
@@ -2965,14 +2311,17 @@
      "bones": [
       "arm_L",
       "arm_R",
+      "forearm_L",
+      "forearm_R",
       "spine"
      ],
      "materials": [
       "skin__Skin3",
       "top__Stone",
+      "top_accent__Cream",
       "top_trim__Cream"
      ],
-     "tris": 88
+     "tris": 130
     },
     {
      "id": "top_blouse",
@@ -2980,6 +2329,8 @@
      "bones": [
       "arm_L",
       "arm_R",
+      "forearm_L",
+      "forearm_R",
       "spine"
      ],
      "materials": [
@@ -2987,7 +2338,7 @@
       "top__Stone",
       "top_trim__Cream"
      ],
-     "tris": 88
+     "tris": 106
     },
     {
      "id": "top_blazer",
@@ -2995,6 +2346,8 @@
      "bones": [
       "arm_L",
       "arm_R",
+      "forearm_L",
+      "forearm_R",
       "hips",
       "spine"
      ],
@@ -3003,7 +2356,40 @@
       "top_accent__Cream",
       "top_trim__Cream"
      ],
-     "tris": 70
+     "tris": 122
+    },
+    {
+     "id": "top_dress",
+     "slot": "top",
+     "bones": [
+      "arm_L",
+      "arm_R",
+      "forearm_L",
+      "forearm_R",
+      "spine"
+     ],
+     "materials": [
+      "skin__Skin3",
+      "top__Stone"
+     ],
+     "tris": 96
+    },
+    {
+     "id": "top_knit",
+     "slot": "top",
+     "bones": [
+      "arm_L",
+      "arm_R",
+      "forearm_L",
+      "forearm_R",
+      "spine"
+     ],
+     "materials": [
+      "skin__Skin3",
+      "top__Stone",
+      "top_trim__Cream"
+     ],
+     "tris": 96
     },
     {
      "id": "bottom_jeans",
@@ -3011,13 +2397,16 @@
      "bones": [
       "hips",
       "leg_L",
-      "leg_R"
+      "leg_R",
+      "shin_L",
+      "shin_R"
      ],
      "materials": [
       "bottom__Denim",
-      "bottom_trim__DenimLight"
+      "bottom_trim__CymbalGold",
+      "bottom_trim__Leather"
      ],
-     "tris": 60
+     "tris": 96
     },
     {
      "id": "bottom_trousers",
@@ -3025,13 +2414,16 @@
      "bones": [
       "hips",
       "leg_L",
-      "leg_R"
+      "leg_R",
+      "shin_L",
+      "shin_R"
      ],
      "materials": [
       "bottom__Denim",
-      "bottom_trim__DenimLight"
+      "bottom_trim__CymbalGold",
+      "bottom_trim__Leather"
      ],
-     "tris": 44
+     "tris": 80
     },
     {
      "id": "bottom_shorts",
@@ -3039,13 +2431,15 @@
      "bones": [
       "hips",
       "leg_L",
-      "leg_R"
+      "leg_R",
+      "shin_L",
+      "shin_R"
      ],
      "materials": [
       "bottom__Denim",
       "skin__Skin3"
      ],
-     "tris": 52
+     "tris": 76
     },
     {
      "id": "bottom_skirt",
@@ -3053,21 +2447,38 @@
      "bones": [
       "hips",
       "leg_L",
-      "leg_R"
+      "leg_R",
+      "shin_L",
+      "shin_R"
      ],
      "materials": [
       "bottom__Denim",
-      "bottom_trim__DenimLight",
       "skin__Skin3"
      ],
-     "tris": 84
+     "tris": 134
+    },
+    {
+     "id": "bottom_dress",
+     "slot": "bottom",
+     "bones": [
+      "hips",
+      "leg_L",
+      "leg_R",
+      "shin_L",
+      "shin_R"
+     ],
+     "materials": [
+      "bottom__Denim",
+      "skin__Skin3"
+     ],
+     "tris": 104
     },
     {
      "id": "shoes_sneakers",
      "slot": "shoes",
      "bones": [
-      "leg_L",
-      "leg_R"
+      "shin_L",
+      "shin_R"
      ],
      "materials": [
       "shoes__Charcoal",
@@ -3079,21 +2490,21 @@
      "id": "shoes_boots",
      "slot": "shoes",
      "bones": [
-      "leg_L",
-      "leg_R"
+      "shin_L",
+      "shin_R"
      ],
      "materials": [
       "shoes__Charcoal",
       "shoes_trim__Cream"
      ],
-     "tris": 104
+     "tris": 56
     },
     {
      "id": "shoes_loafers",
      "slot": "shoes",
      "bones": [
-      "leg_L",
-      "leg_R"
+      "shin_L",
+      "shin_R"
      ],
      "materials": [
       "shoes__Charcoal",
@@ -3105,8 +2516,8 @@
      "id": "hands",
      "slot": "hands",
      "bones": [
-      "arm_L",
-      "arm_R"
+      "forearm_L",
+      "forearm_R"
      ],
      "materials": [
       "skin__Skin3"
@@ -3148,6 +2559,18 @@
       "hat_beanie__Rust"
      ],
      "tris": 52
+    },
+    {
+     "id": "hat_fedora",
+     "slot": "hat",
+     "bones": [
+      "head"
+     ],
+     "materials": [
+      "hat_fedora_2__Charcoal",
+      "hat_fedora__StoolBlack"
+     ],
+     "tris": 76
     },
     {
      "id": "glasses_round",
@@ -3195,6 +2618,1196 @@
       "headphones__StoolBlack"
      ],
      "tris": 56
+    },
+    {
+     "id": "beard",
+     "slot": "face_hair",
+     "bones": [
+      "head"
+     ],
+     "materials": [
+      "beard__HairBlack"
+     ],
+     "tris": 120
+    },
+    {
+     "id": "moustache",
+     "slot": "face_hair",
+     "bones": [
+      "head"
+     ],
+     "materials": [
+      "moustache__HairBlack"
+     ],
+     "tris": 40
+    },
+    {
+     "id": "ribbon",
+     "slot": "hair_acc",
+     "bones": [
+      "head"
+     ],
+     "materials": [
+      "ribbon_2__Cream",
+      "ribbon__Rust"
+     ],
+     "tris": 76
+    },
+    {
+     "id": "pencil",
+     "slot": "hair_acc",
+     "bones": [
+      "head"
+     ],
+     "materials": [
+      "pencil_2__Charcoal",
+      "pencil__Mustard"
+     ],
+     "tris": 20
+    },
+    {
+     "id": "gig_bag",
+     "slot": "back",
+     "bones": [
+      "spine"
+     ],
+     "materials": [
+      "gig_bag_2__Charcoal",
+      "gig_bag__StoolBlack"
+     ],
+     "tris": 140
+    },
+    {
+     "id": "apron",
+     "slot": "outer",
+     "bones": [
+      "spine"
+     ],
+     "materials": [
+      "apron_2__CymbalGold",
+      "apron__Cream"
+     ],
+     "tris": 44
+    },
+    {
+     "id": "vest",
+     "slot": "outer",
+     "bones": [
+      "spine"
+     ],
+     "materials": [
+      "vest_2__Charcoal",
+      "vest__StoolBlack"
+     ],
+     "tris": 100
+    },
+    {
+     "id": "bar_towel",
+     "slot": "arm_acc",
+     "bones": [
+      "arm_L"
+     ],
+     "materials": [
+      "bar_towel__ColumnWhite"
+     ],
+     "tris": 28
+    },
+    {
+     "id": "gaffer_tape",
+     "slot": "belt",
+     "bones": [
+      "hips"
+     ],
+     "materials": [
+      "gaffer_tape_2__Charcoal",
+      "gaffer_tape__Stone"
+     ],
+     "tris": 20
+    },
+    {
+     "id": "guitar",
+     "slot": "instrument",
+     "bones": [
+      "spine"
+     ],
+     "materials": [
+      "guitar_2__Cream",
+      "guitar__WoodMid",
+      "guitar_hole__StoolBlack",
+      "guitar_neck__WoodDark",
+      "guitar_strap__StoolBlack"
+     ],
+     "tris": 150
+    },
+    {
+     "id": "guitar_electric",
+     "slot": "instrument",
+     "bones": [
+      "spine"
+     ],
+     "materials": [
+      "guitar_electric_2__ColumnWhite",
+      "guitar_electric_3__MirrorGrey",
+      "guitar_electric__DrumRed",
+      "guitar_neck__WoodDark",
+      "guitar_strap__StoolBlack"
+     ],
+     "tris": 146
+    },
+    {
+     "id": "bass",
+     "slot": "instrument",
+     "bones": [
+      "spine"
+     ],
+     "materials": [
+      "bass_2__StoolBlack",
+      "bass_3__MirrorGrey",
+      "bass__Mustard",
+      "guitar_neck__WoodDark",
+      "guitar_strap__StoolBlack"
+     ],
+     "tris": 160
+    },
+    {
+     "id": "drumsticks",
+     "slot": "held",
+     "bones": [
+      "forearm_L",
+      "forearm_R"
+     ],
+     "materials": [
+      "drumsticks_2__Sand",
+      "drumsticks__Sand"
+     ],
+     "tris": 40
+    },
+    {
+     "id": "drink_beer",
+     "slot": "drink",
+     "bones": [
+      "forearm_R"
+     ],
+     "materials": [
+      "drink_beer_2__Foam",
+      "drink_beer__BeerAmber_emissive"
+     ],
+     "tris": 20
+    },
+    {
+     "id": "drink_mug",
+     "slot": "drink",
+     "bones": [
+      "forearm_R"
+     ],
+     "materials": [
+      "drink_mug_2__Foam",
+      "drink_mug_3__BottleClear",
+      "drink_mug__BeerAmber_emissive"
+     ],
+     "tris": 36
+    },
+    {
+     "id": "glass_gold",
+     "slot": "drink",
+     "bones": [
+      "forearm_R"
+     ],
+     "materials": [
+      "glass_gold_2__CymbalGold",
+      "glass_gold_3__BottleClear",
+      "glass_gold__BottleClear"
+     ],
+     "tris": 28
+    },
+    {
+     "id": "beer_left",
+     "slot": "drink",
+     "bones": [
+      "forearm_L"
+     ],
+     "materials": [
+      "beer_left_2__Foam",
+      "beer_left__BeerAmber_emissive"
+     ],
+     "tris": 20
+    },
+    {
+     "id": "bottle",
+     "slot": "drink",
+     "bones": [
+      "forearm_R"
+     ],
+     "materials": [
+      "bottle_2__LabelCream",
+      "bottle_3__BottleGreenCap",
+      "bottle__BottleGreen"
+     ],
+     "tris": 40
+    },
+    {
+     "id": "shaker",
+     "slot": "held_R",
+     "bones": [
+      "forearm_R"
+     ],
+     "materials": [
+      "shaker_2__CymbalGold",
+      "shaker__MirrorGrey"
+     ],
+     "tris": 20
+    },
+    {
+     "id": "tray",
+     "slot": "held_L",
+     "bones": [
+      "forearm_L"
+     ],
+     "materials": [
+      "tray_2__BeerAmber_emissive",
+      "tray_3__Foam",
+      "tray__StoolBlack"
+     ],
+     "tris": 120
+    },
+    {
+     "id": "notebook",
+     "slot": "held_R",
+     "bones": [
+      "forearm_R"
+     ],
+     "materials": [
+      "notebook_2__Charcoal",
+      "notebook__Cream"
+     ],
+     "tris": 20
+    },
+    {
+     "id": "torch",
+     "slot": "held_R",
+     "bones": [
+      "forearm_R"
+     ],
+     "materials": [
+      "torch_2__LampGoldOff",
+      "torch__StoolBlack"
+     ],
+     "tris": 20
+    },
+    {
+     "id": "clicker",
+     "slot": "held_L",
+     "bones": [
+      "forearm_L"
+     ],
+     "materials": [
+      "clicker_2__Charcoal",
+      "clicker__Stone"
+     ],
+     "tris": 22
+    },
+    {
+     "id": "sketchbook",
+     "slot": "held_L",
+     "bones": [
+      "forearm_L"
+     ],
+     "materials": [
+      "sketchbook_2__Cream",
+      "sketchbook__WoodMid"
+     ],
+     "tris": 20
+    },
+    {
+     "id": "vinyl",
+     "slot": "held_L",
+     "bones": [
+      "forearm_L"
+     ],
+     "materials": [
+      "vinyl_2__StoolBlack",
+      "vinyl__Mustard"
+     ],
+     "tris": 28
+    },
+    {
+     "id": "wheelie_bag",
+     "slot": "floor",
+     "bones": [
+      "root"
+     ],
+     "materials": [
+      "wheelie_bag_2__StoolBlack",
+      "wheelie_bag_3__MirrorGrey",
+      "wheelie_bag__Denim"
+     ],
+     "tris": 94
+    }
+   ]
+  },
+  "broad": {
+   "path": "res://assets/chars/parts/parts_broad.glb",
+   "height_vox": 32,
+   "parts": [
+    {
+     "id": "head_square",
+     "slot": "head",
+     "bones": [
+      "head"
+     ],
+     "materials": [
+      "skin__Skin3"
+     ],
+     "tris": 28
+    },
+    {
+     "id": "head_round",
+     "slot": "head",
+     "bones": [
+      "head"
+     ],
+     "materials": [
+      "skin__Skin3"
+     ],
+     "tris": 64
+    },
+    {
+     "id": "head_soft",
+     "slot": "head",
+     "bones": [
+      "head"
+     ],
+     "materials": [
+      "skin__Skin3"
+     ],
+     "tris": 44
+    },
+    {
+     "id": "head_heart",
+     "slot": "head",
+     "bones": [
+      "head"
+     ],
+     "materials": [
+      "skin__Skin3"
+     ],
+     "tris": 60
+    },
+    {
+     "id": "hair_shaggy",
+     "slot": "hair",
+     "bones": [
+      "head"
+     ],
+     "materials": [
+      "hair__HairDarkBrown"
+     ],
+     "tris": 448
+    },
+    {
+     "id": "hair_wavy",
+     "slot": "hair",
+     "bones": [
+      "head"
+     ],
+     "materials": [
+      "hair__HairDarkBrown"
+     ],
+     "tris": 418
+    },
+    {
+     "id": "hair_afro",
+     "slot": "hair",
+     "bones": [
+      "head"
+     ],
+     "materials": [
+      "hair__HairDarkBrown"
+     ],
+     "tris": 1124
+    },
+    {
+     "id": "hair_curly",
+     "slot": "hair",
+     "bones": [
+      "head"
+     ],
+     "materials": [
+      "hair__HairDarkBrown"
+     ],
+     "tris": 854
+    },
+    {
+     "id": "hair_long",
+     "slot": "hair",
+     "bones": [
+      "head"
+     ],
+     "materials": [
+      "hair__HairDarkBrown"
+     ],
+     "tris": 340
+    },
+    {
+     "id": "hair_bob",
+     "slot": "hair",
+     "bones": [
+      "head"
+     ],
+     "materials": [
+      "hair__HairDarkBrown"
+     ],
+     "tris": 278
+    },
+    {
+     "id": "hair_crop",
+     "slot": "hair",
+     "bones": [
+      "head"
+     ],
+     "materials": [
+      "hair__HairDarkBrown"
+     ],
+     "tris": 316
+    },
+    {
+     "id": "hair_buzz",
+     "slot": "hair",
+     "bones": [
+      "head"
+     ],
+     "materials": [
+      "hair__HairDarkBrown"
+     ],
+     "tris": 12
+    },
+    {
+     "id": "hair_bun",
+     "slot": "hair",
+     "bones": [
+      "head"
+     ],
+     "materials": [
+      "hair__HairDarkBrown"
+     ],
+     "tris": 246
+    },
+    {
+     "id": "hair_quiff",
+     "slot": "hair",
+     "bones": [
+      "head"
+     ],
+     "materials": [
+      "hair__HairDarkBrown"
+     ],
+     "tris": 238
+    },
+    {
+     "id": "hair_ponytail",
+     "slot": "hair",
+     "bones": [
+      "head"
+     ],
+     "materials": [
+      "hair__HairDarkBrown"
+     ],
+     "tris": 306
+    },
+    {
+     "id": "hair_side_part",
+     "slot": "hair",
+     "bones": [
+      "head"
+     ],
+     "materials": [
+      "hair__HairDarkBrown"
+     ],
+     "tris": 234
+    },
+    {
+     "id": "hair_swept",
+     "slot": "hair",
+     "bones": [
+      "head"
+     ],
+     "materials": [
+      "hair__HairDarkBrown"
+     ],
+     "tris": 182
+    },
+    {
+     "id": "hair_spiky",
+     "slot": "hair",
+     "bones": [
+      "head"
+     ],
+     "materials": [
+      "hair__HairDarkBrown"
+     ],
+     "tris": 316
+    },
+    {
+     "id": "hair_sideburns",
+     "slot": "hair",
+     "bones": [
+      "head"
+     ],
+     "materials": [
+      "hair__HairDarkBrown"
+     ],
+     "tris": 236
+    },
+    {
+     "id": "hair_chignon",
+     "slot": "hair",
+     "bones": [
+      "head"
+     ],
+     "materials": [
+      "hair__HairDarkBrown"
+     ],
+     "tris": 294
+    },
+    {
+     "id": "eyes_dot",
+     "slot": "eyes",
+     "bones": [
+      "head"
+     ],
+     "materials": [
+      "eyes__Ink"
+     ],
+     "tris": 8
+    },
+    {
+     "id": "eyes_wide",
+     "slot": "eyes",
+     "bones": [
+      "head"
+     ],
+     "materials": [
+      "eyes__Ink"
+     ],
+     "tris": 16
+    },
+    {
+     "id": "eyes_sleepy",
+     "slot": "eyes",
+     "bones": [
+      "head"
+     ],
+     "materials": [
+      "eyes__Ink"
+     ],
+     "tris": 8
+    },
+    {
+     "id": "eyes_happy",
+     "slot": "eyes",
+     "bones": [
+      "head"
+     ],
+     "materials": [
+      "eyes__Ink"
+     ],
+     "tris": 12
+    },
+    {
+     "id": "eyes_lashes",
+     "slot": "eyes",
+     "bones": [
+      "head"
+     ],
+     "materials": [
+      "eyes__Ink"
+     ],
+     "tris": 12
+    },
+    {
+     "id": "brows_flat",
+     "slot": "brows",
+     "bones": [
+      "head"
+     ],
+     "materials": [
+      "hair__HairDarkBrown"
+     ],
+     "tris": 24
+    },
+    {
+     "id": "brows_arched",
+     "slot": "brows",
+     "bones": [
+      "head"
+     ],
+     "materials": [
+      "hair__HairDarkBrown"
+     ],
+     "tris": 72
+    },
+    {
+     "id": "brows_worried",
+     "slot": "brows",
+     "bones": [
+      "head"
+     ],
+     "materials": [
+      "hair__HairDarkBrown"
+     ],
+     "tris": 48
+    },
+    {
+     "id": "brows_thick",
+     "slot": "brows",
+     "bones": [
+      "head"
+     ],
+     "materials": [
+      "hair__HairDarkBrown"
+     ],
+     "tris": 24
+    },
+    {
+     "id": "mouth_smile",
+     "slot": "mouth",
+     "bones": [
+      "head"
+     ],
+     "materials": [
+      "mouth__Mouth"
+     ],
+     "tris": 8
+    },
+    {
+     "id": "mouth_small",
+     "slot": "mouth",
+     "bones": [
+      "head"
+     ],
+     "materials": [
+      "mouth__Mouth"
+     ],
+     "tris": 4
+    },
+    {
+     "id": "mouth_flat",
+     "slot": "mouth",
+     "bones": [
+      "head"
+     ],
+     "materials": [
+      "mouth__Mouth"
+     ],
+     "tris": 8
+    },
+    {
+     "id": "mouth_open",
+     "slot": "mouth",
+     "bones": [
+      "head"
+     ],
+     "materials": [
+      "mouth__Mouth"
+     ],
+     "tris": 8
+    },
+    {
+     "id": "mouth_grin",
+     "slot": "mouth",
+     "bones": [
+      "head"
+     ],
+     "materials": [
+      "mouth__Mouth"
+     ],
+     "tris": 12
+    },
+    {
+     "id": "blush",
+     "slot": "blush",
+     "bones": [
+      "head"
+     ],
+     "materials": [
+      "blush__Blush"
+     ],
+     "tris": 8
+    },
+    {
+     "id": "top_tee",
+     "slot": "top",
+     "bones": [
+      "arm_L",
+      "arm_R",
+      "forearm_L",
+      "forearm_R",
+      "spine"
+     ],
+     "materials": [
+      "skin__Skin3",
+      "top__Stone"
+     ],
+     "tris": 72
+    },
+    {
+     "id": "top_shirt",
+     "slot": "top",
+     "bones": [
+      "arm_L",
+      "arm_R",
+      "forearm_L",
+      "forearm_R",
+      "spine"
+     ],
+     "materials": [
+      "skin__Skin3",
+      "top__Stone",
+      "top_accent__Cream",
+      "top_trim__Cream"
+     ],
+     "tris": 132
+    },
+    {
+     "id": "top_shirt_rolled",
+     "slot": "top",
+     "bones": [
+      "arm_L",
+      "arm_R",
+      "forearm_L",
+      "forearm_R",
+      "spine"
+     ],
+     "materials": [
+      "skin__Skin3",
+      "top__Stone",
+      "top_accent__Cream",
+      "top_trim__Cream"
+     ],
+     "tris": 136
+    },
+    {
+     "id": "top_shirt_tie",
+     "slot": "top",
+     "bones": [
+      "arm_L",
+      "arm_R",
+      "forearm_L",
+      "forearm_R",
+      "spine"
+     ],
+     "materials": [
+      "skin__Skin3",
+      "top__Stone",
+      "top_accent__Cream",
+      "top_trim__Cream"
+     ],
+     "tris": 130
+    },
+    {
+     "id": "top_jacket",
+     "slot": "top",
+     "bones": [
+      "arm_L",
+      "arm_R",
+      "forearm_L",
+      "forearm_R",
+      "hips",
+      "spine"
+     ],
+     "materials": [
+      "top__Stone",
+      "top_accent__Cream",
+      "top_trim__Cream"
+     ],
+     "tris": 156
+    },
+    {
+     "id": "top_hoodie",
+     "slot": "top",
+     "bones": [
+      "arm_L",
+      "arm_R",
+      "forearm_L",
+      "forearm_R",
+      "spine"
+     ],
+     "materials": [
+      "top__Stone",
+      "top_accent__Cream",
+      "top_trim__Cream"
+     ],
+     "tris": 96
+    },
+    {
+     "id": "top_cardigan",
+     "slot": "top",
+     "bones": [
+      "arm_L",
+      "arm_R",
+      "forearm_L",
+      "forearm_R",
+      "spine"
+     ],
+     "materials": [
+      "top__Stone",
+      "top_accent__Cream",
+      "top_dust__Cream"
+     ],
+     "tris": 388
+    },
+    {
+     "id": "top_bomber",
+     "slot": "top",
+     "bones": [
+      "arm_L",
+      "arm_R",
+      "forearm_L",
+      "forearm_R",
+      "spine"
+     ],
+     "materials": [
+      "top__Stone",
+      "top_accent__Cream",
+      "top_trim__Cream"
+     ],
+     "tris": 102
+    },
+    {
+     "id": "top_staff_shirt",
+     "slot": "top",
+     "bones": [
+      "arm_L",
+      "arm_R",
+      "forearm_L",
+      "forearm_R",
+      "spine"
+     ],
+     "materials": [
+      "skin__Skin3",
+      "top__Stone",
+      "top_accent__Cream",
+      "top_trim__Cream"
+     ],
+     "tris": 134
+    },
+    {
+     "id": "top_blouse",
+     "slot": "top",
+     "bones": [
+      "arm_L",
+      "arm_R",
+      "forearm_L",
+      "forearm_R",
+      "spine"
+     ],
+     "materials": [
+      "skin__Skin3",
+      "top__Stone",
+      "top_trim__Cream"
+     ],
+     "tris": 106
+    },
+    {
+     "id": "top_blazer",
+     "slot": "top",
+     "bones": [
+      "arm_L",
+      "arm_R",
+      "forearm_L",
+      "forearm_R",
+      "hips",
+      "spine"
+     ],
+     "materials": [
+      "top__Stone",
+      "top_accent__Cream",
+      "top_trim__Cream"
+     ],
+     "tris": 122
+    },
+    {
+     "id": "top_dress",
+     "slot": "top",
+     "bones": [
+      "arm_L",
+      "arm_R",
+      "forearm_L",
+      "forearm_R",
+      "spine"
+     ],
+     "materials": [
+      "skin__Skin3",
+      "top__Stone"
+     ],
+     "tris": 100
+    },
+    {
+     "id": "top_knit",
+     "slot": "top",
+     "bones": [
+      "arm_L",
+      "arm_R",
+      "forearm_L",
+      "forearm_R",
+      "spine"
+     ],
+     "materials": [
+      "skin__Skin3",
+      "top__Stone",
+      "top_trim__Cream"
+     ],
+     "tris": 96
+    },
+    {
+     "id": "bottom_jeans",
+     "slot": "bottom",
+     "bones": [
+      "hips",
+      "leg_L",
+      "leg_R",
+      "shin_L",
+      "shin_R"
+     ],
+     "materials": [
+      "bottom__Denim",
+      "bottom_trim__CymbalGold",
+      "bottom_trim__Leather"
+     ],
+     "tris": 96
+    },
+    {
+     "id": "bottom_trousers",
+     "slot": "bottom",
+     "bones": [
+      "hips",
+      "leg_L",
+      "leg_R",
+      "shin_L",
+      "shin_R"
+     ],
+     "materials": [
+      "bottom__Denim",
+      "bottom_trim__CymbalGold",
+      "bottom_trim__Leather"
+     ],
+     "tris": 80
+    },
+    {
+     "id": "bottom_shorts",
+     "slot": "bottom",
+     "bones": [
+      "hips",
+      "leg_L",
+      "leg_R",
+      "shin_L",
+      "shin_R"
+     ],
+     "materials": [
+      "bottom__Denim",
+      "skin__Skin3"
+     ],
+     "tris": 76
+    },
+    {
+     "id": "bottom_skirt",
+     "slot": "bottom",
+     "bones": [
+      "hips",
+      "leg_L",
+      "leg_R",
+      "shin_L",
+      "shin_R"
+     ],
+     "materials": [
+      "bottom__Denim",
+      "skin__Skin3"
+     ],
+     "tris": 134
+    },
+    {
+     "id": "bottom_dress",
+     "slot": "bottom",
+     "bones": [
+      "hips",
+      "leg_L",
+      "leg_R",
+      "shin_L",
+      "shin_R"
+     ],
+     "materials": [
+      "bottom__Denim",
+      "skin__Skin3"
+     ],
+     "tris": 104
+    },
+    {
+     "id": "shoes_sneakers",
+     "slot": "shoes",
+     "bones": [
+      "shin_L",
+      "shin_R"
+     ],
+     "materials": [
+      "shoes__Charcoal",
+      "shoes_trim__Cream"
+     ],
+     "tris": 40
+    },
+    {
+     "id": "shoes_boots",
+     "slot": "shoes",
+     "bones": [
+      "shin_L",
+      "shin_R"
+     ],
+     "materials": [
+      "shoes__Charcoal",
+      "shoes_trim__Cream"
+     ],
+     "tris": 56
+    },
+    {
+     "id": "shoes_loafers",
+     "slot": "shoes",
+     "bones": [
+      "shin_L",
+      "shin_R"
+     ],
+     "materials": [
+      "shoes__Charcoal",
+      "shoes_trim__Cream"
+     ],
+     "tris": 52
+    },
+    {
+     "id": "hands",
+     "slot": "hands",
+     "bones": [
+      "forearm_L",
+      "forearm_R"
+     ],
+     "materials": [
+      "skin__Skin3"
+     ],
+     "tris": 24
+    },
+    {
+     "id": "hat_bucket",
+     "slot": "hat",
+     "bones": [
+      "head"
+     ],
+     "materials": [
+      "hat_bucket_2__Cream",
+      "hat_bucket__Olive"
+     ],
+     "tris": 36
+    },
+    {
+     "id": "hat_flat_cap",
+     "slot": "hat",
+     "bones": [
+      "head"
+     ],
+     "materials": [
+      "hat_flat_cap_2__Charcoal",
+      "hat_flat_cap__Stone"
+     ],
+     "tris": 42
+    },
+    {
+     "id": "hat_beanie",
+     "slot": "hat",
+     "bones": [
+      "head"
+     ],
+     "materials": [
+      "hat_beanie_2__Cream",
+      "hat_beanie__Rust"
+     ],
+     "tris": 52
+    },
+    {
+     "id": "hat_fedora",
+     "slot": "hat",
+     "bones": [
+      "head"
+     ],
+     "materials": [
+      "hat_fedora_2__Charcoal",
+      "hat_fedora__StoolBlack"
+     ],
+     "tris": 76
+    },
+    {
+     "id": "glasses_round",
+     "slot": "glasses",
+     "bones": [
+      "head"
+     ],
+     "materials": [
+      "glasses_round__CymbalGold"
+     ],
+     "tris": 100
+    },
+    {
+     "id": "glasses_tinted",
+     "slot": "glasses",
+     "bones": [
+      "head"
+     ],
+     "materials": [
+      "glasses_tinted_2__Lens",
+      "glasses_tinted__CymbalGold"
+     ],
+     "tris": 92
+    },
+    {
+     "id": "glasses_up",
+     "slot": "glasses",
+     "bones": [
+      "head"
+     ],
+     "materials": [
+      "glasses_up_2__Lens",
+      "glasses_up__StoolBlack"
+     ],
+     "tris": 60
+    },
+    {
+     "id": "headphones",
+     "slot": "ears",
+     "bones": [
+      "head"
+     ],
+     "materials": [
+      "headphones_2__Charcoal",
+      "headphones__StoolBlack"
+     ],
+     "tris": 56
+    },
+    {
+     "id": "beard",
+     "slot": "face_hair",
+     "bones": [
+      "head"
+     ],
+     "materials": [
+      "beard__HairBlack"
+     ],
+     "tris": 120
+    },
+    {
+     "id": "moustache",
+     "slot": "face_hair",
+     "bones": [
+      "head"
+     ],
+     "materials": [
+      "moustache__HairBlack"
+     ],
+     "tris": 40
     },
     {
      "id": "ribbon",
@@ -3245,6 +3858,18 @@
      "tris": 44
     },
     {
+     "id": "vest",
+     "slot": "outer",
+     "bones": [
+      "spine"
+     ],
+     "materials": [
+      "vest_2__Charcoal",
+      "vest__StoolBlack"
+     ],
+     "tris": 100
+    },
+    {
      "id": "bar_towel",
      "slot": "arm_acc",
      "bones": [
@@ -3253,7 +3878,7 @@
      "materials": [
       "bar_towel__ColumnWhite"
      ],
-     "tris": 34
+     "tris": 28
     },
     {
      "id": "gaffer_tape",
@@ -3276,9 +3901,26 @@
      "materials": [
       "guitar_2__Cream",
       "guitar__WoodMid",
-      "guitar_hole__StoolBlack"
+      "guitar_hole__StoolBlack",
+      "guitar_neck__WoodDark",
+      "guitar_strap__StoolBlack"
      ],
-     "tris": 118
+     "tris": 150
+    },
+    {
+     "id": "guitar_electric",
+     "slot": "instrument",
+     "bones": [
+      "spine"
+     ],
+     "materials": [
+      "guitar_electric_2__ColumnWhite",
+      "guitar_electric_3__MirrorGrey",
+      "guitar_electric__DrumRed",
+      "guitar_neck__WoodDark",
+      "guitar_strap__StoolBlack"
+     ],
+     "tris": 146
     },
     {
      "id": "bass",
@@ -3288,63 +3930,94 @@
      ],
      "materials": [
       "bass_2__StoolBlack",
-      "bass__CymbalGold"
+      "bass_3__MirrorGrey",
+      "bass__Mustard",
+      "guitar_neck__WoodDark",
+      "guitar_strap__StoolBlack"
      ],
-     "tris": 126
+     "tris": 160
     },
     {
      "id": "drumsticks",
      "slot": "held",
      "bones": [
-      "arm_L",
-      "arm_R"
+      "forearm_L",
+      "forearm_R"
      ],
      "materials": [
+      "drumsticks_2__Sand",
       "drumsticks__Sand"
      ],
-     "tris": 24
-    },
-    {
-     "id": "mic",
-     "slot": "held_R",
-     "bones": [
-      "arm_R"
-     ],
-     "materials": [
-      "mic_2__MirrorGrey",
-      "mic__StoolBlack"
-     ],
-     "tris": 24
+     "tris": 40
     },
     {
      "id": "drink_beer",
-     "slot": "held_R",
+     "slot": "drink",
      "bones": [
-      "arm_R"
+      "forearm_R"
      ],
      "materials": [
-      "drink_beer_2__Cream",
-      "drink_beer__BottleAmber"
+      "drink_beer_2__Foam",
+      "drink_beer__BeerAmber_emissive"
      ],
      "tris": 20
     },
     {
-     "id": "glass_gold",
-     "slot": "held_R",
+     "id": "drink_mug",
+     "slot": "drink",
      "bones": [
-      "arm_R"
+      "forearm_R"
+     ],
+     "materials": [
+      "drink_mug_2__Foam",
+      "drink_mug_3__BottleClear",
+      "drink_mug__BeerAmber_emissive"
+     ],
+     "tris": 36
+    },
+    {
+     "id": "glass_gold",
+     "slot": "drink",
+     "bones": [
+      "forearm_R"
      ],
      "materials": [
       "glass_gold_2__CymbalGold",
+      "glass_gold_3__BottleClear",
       "glass_gold__BottleClear"
      ],
+     "tris": 28
+    },
+    {
+     "id": "beer_left",
+     "slot": "drink",
+     "bones": [
+      "forearm_L"
+     ],
+     "materials": [
+      "beer_left_2__Foam",
+      "beer_left__BeerAmber_emissive"
+     ],
      "tris": 20
+    },
+    {
+     "id": "bottle",
+     "slot": "drink",
+     "bones": [
+      "forearm_R"
+     ],
+     "materials": [
+      "bottle_2__LabelCream",
+      "bottle_3__BottleGreenCap",
+      "bottle__BottleGreen"
+     ],
+     "tris": 40
     },
     {
      "id": "shaker",
      "slot": "held_R",
      "bones": [
-      "arm_R"
+      "forearm_R"
      ],
      "materials": [
       "shaker_2__CymbalGold",
@@ -3353,10 +4026,23 @@
      "tris": 20
     },
     {
+     "id": "tray",
+     "slot": "held_L",
+     "bones": [
+      "forearm_L"
+     ],
+     "materials": [
+      "tray_2__BeerAmber_emissive",
+      "tray_3__Foam",
+      "tray__StoolBlack"
+     ],
+     "tris": 120
+    },
+    {
      "id": "notebook",
      "slot": "held_R",
      "bones": [
-      "arm_R"
+      "forearm_R"
      ],
      "materials": [
       "notebook_2__Charcoal",
@@ -3368,7 +4054,7 @@
      "id": "torch",
      "slot": "held_R",
      "bones": [
-      "arm_R"
+      "forearm_R"
      ],
      "materials": [
       "torch_2__LampGoldOff",
@@ -3380,7 +4066,7 @@
      "id": "clicker",
      "slot": "held_L",
      "bones": [
-      "arm_L"
+      "forearm_L"
      ],
      "materials": [
       "clicker_2__Charcoal",
@@ -3392,7 +4078,7 @@
      "id": "sketchbook",
      "slot": "held_L",
      "bones": [
-      "arm_L"
+      "forearm_L"
      ],
      "materials": [
       "sketchbook_2__Cream",
@@ -3404,7 +4090,7 @@
      "id": "vinyl",
      "slot": "held_L",
      "bones": [
-      "arm_L"
+      "forearm_L"
      ],
      "materials": [
       "vinyl_2__StoolBlack",
@@ -3424,66 +4110,6 @@
       "wheelie_bag__Denim"
      ],
      "tris": 94
-    },
-    {
-     "id": "beard",
-     "slot": "face_hair",
-     "bones": [
-      "head"
-     ],
-     "materials": [
-      "beard__HairBlack"
-     ],
-     "tris": 92
-    },
-    {
-     "id": "hat_fedora",
-     "slot": "hat",
-     "bones": [
-      "head"
-     ],
-     "materials": [
-      "hat_fedora_2__Charcoal",
-      "hat_fedora__StoolBlack"
-     ],
-     "tris": 76
-    },
-    {
-     "id": "vest",
-     "slot": "outer",
-     "bones": [
-      "spine"
-     ],
-     "materials": [
-      "vest_2__Charcoal",
-      "vest__StoolBlack"
-     ],
-     "tris": 64
-    },
-    {
-     "id": "tray",
-     "slot": "held_L",
-     "bones": [
-      "arm_L"
-     ],
-     "materials": [
-      "tray_2__BottleAmber",
-      "tray_3__Cream",
-      "tray__StoolBlack"
-     ],
-     "tris": 118
-    },
-    {
-     "id": "beer_left",
-     "slot": "held_L",
-     "bones": [
-      "arm_L"
-     ],
-     "materials": [
-      "beer_left_2__Cream",
-      "beer_left__BottleAmber"
-     ],
-     "tris": 20
     }
    ]
   }
@@ -3517,20 +4143,20 @@
      "hex": "#3F5878"
     },
     "bottom_trim": {
-     "swatch": "DenimLight",
-     "hex": "#6C88A8"
+     "swatch": "Leather",
+     "hex": "#5A3020"
     },
     "drink_beer": {
-     "swatch": "BottleAmber",
-     "hex": "#8A4A1A"
+     "swatch": "BeerAmber_emissive",
+     "hex": "#E8A23A"
     },
     "drink_beer_2": {
-     "swatch": "Cream",
-     "hex": "#D9C9A6"
+     "swatch": "Foam",
+     "hex": "#F6EEDC"
     },
     "eyes": {
      "swatch": "Ink",
-     "hex": "#160B0A"
+     "hex": "#120808"
     },
     "gig_bag": {
      "swatch": "StoolBlack",
@@ -3571,16 +4197,33 @@
     "top": {
      "swatch": "Mustard",
      "hex": "#C99430"
-    },
-    "top_trim": {
-     "swatch": "Cream",
-     "hex": "#D9C9A6"
     }
    },
-   "height_m": 1.7,
-   "height_vox": 34,
-   "head_top_vox": 29,
-   "tris": 464
+   "height_m": 1.75,
+   "height_vox": 35,
+   "head_top_vox": 31,
+   "tris": 718,
+   "animations": [
+    "idle",
+    "walk",
+    "sit",
+    "sit_drink",
+    "sit_talk",
+    "sit_hold",
+    "sit_applaud",
+    "stand_drink",
+    "cheers",
+    "applaud",
+    "dance",
+    "idle_warm",
+    "idle_tipsy",
+    "idle_merry",
+    "walk_warm",
+    "walk_tipsy",
+    "walk_merry",
+    "idle_sad"
+   ],
+   "bytes": 239680
   },
   {
    "name": "ploy",
@@ -3609,12 +4252,12 @@
      "hex": "#403A3E"
     },
     "bottom_trim": {
-     "swatch": "StoolBlack",
-     "hex": "#221110"
+     "swatch": "CymbalGold",
+     "hex": "#E8A030"
     },
     "eyes": {
      "swatch": "Ink",
-     "hex": "#160B0A"
+     "hex": "#120808"
     },
     "hair": {
      "swatch": "HairBlack",
@@ -3661,10 +4304,31 @@
      "hex": "#D9C9A6"
     }
    },
-   "height_m": 1.5,
-   "height_vox": 30,
-   "head_top_vox": 26,
-   "tris": 360
+   "height_m": 1.7,
+   "height_vox": 34,
+   "head_top_vox": 29,
+   "tris": 690,
+   "animations": [
+    "idle",
+    "walk",
+    "sit",
+    "sit_drink",
+    "sit_talk",
+    "sit_hold",
+    "sit_applaud",
+    "stand_drink",
+    "cheers",
+    "applaud",
+    "dance",
+    "idle_warm",
+    "idle_tipsy",
+    "idle_merry",
+    "walk_warm",
+    "walk_tipsy",
+    "walk_merry",
+    "idle_sad"
+   ],
+   "bytes": 235668
   },
   {
    "name": "jules",
@@ -3682,7 +4346,9 @@
     "top": "bomber",
     "bottom": "jeans",
     "shoes": "boots",
-    "accessories": []
+    "accessories": [
+     "drink_beer"
+    ]
    },
    "colours": {
     "bottom": {
@@ -3690,16 +4356,24 @@
      "hex": "#403A3E"
     },
     "bottom_trim": {
-     "swatch": "Stone",
-     "hex": "#7C7270"
+     "swatch": "CymbalGold",
+     "hex": "#E8A030"
+    },
+    "drink_beer": {
+     "swatch": "BeerAmber_emissive",
+     "hex": "#E8A23A"
+    },
+    "drink_beer_2": {
+     "swatch": "Foam",
+     "hex": "#F6EEDC"
     },
     "eyes": {
      "swatch": "Ink",
-     "hex": "#160B0A"
+     "hex": "#120808"
     },
     "hair": {
      "swatch": "HairBleach",
-     "hex": "#E6D49A"
+     "hex": "#E8CF86"
     },
     "mouth": {
      "swatch": "Mouth",
@@ -3721,15 +4395,40 @@
      "swatch": "Olive",
      "hex": "#66703A"
     },
+    "top_accent": {
+     "swatch": "Cream",
+     "hex": "#D9C9A6"
+    },
     "top_trim": {
      "swatch": "Mustard",
      "hex": "#C99430"
     }
    },
-   "height_m": 1.65,
-   "height_vox": 33,
-   "head_top_vox": 29,
-   "tris": 416
+   "height_m": 1.8,
+   "height_vox": 36,
+   "head_top_vox": 31,
+   "tris": 682,
+   "animations": [
+    "idle",
+    "walk",
+    "sit",
+    "sit_drink",
+    "sit_talk",
+    "sit_hold",
+    "sit_applaud",
+    "stand_drink",
+    "cheers",
+    "applaud",
+    "dance",
+    "idle_warm",
+    "idle_tipsy",
+    "idle_merry",
+    "walk_warm",
+    "walk_tipsy",
+    "walk_merry",
+    "idle_sad"
+   ],
+   "bytes": 233336
   },
   {
    "name": "mali",
@@ -3748,7 +4447,8 @@
     "bottom": "skirt",
     "shoes": "loafers",
     "accessories": [
-     "glasses_up"
+     "glasses_up",
+     "drink_mug"
     ]
    },
    "colours": {
@@ -3756,13 +4456,21 @@
      "swatch": "FloorGrey",
      "hex": "#3A2C30"
     },
-    "bottom_trim": {
-     "swatch": "Charcoal",
-     "hex": "#403A3E"
+    "drink_mug": {
+     "swatch": "BeerAmber_emissive",
+     "hex": "#E8A23A"
+    },
+    "drink_mug_2": {
+     "swatch": "Foam",
+     "hex": "#F6EEDC"
+    },
+    "drink_mug_3": {
+     "swatch": "BottleClear",
+     "hex": "#A8A0A0"
     },
     "eyes": {
      "swatch": "Ink",
-     "hex": "#160B0A"
+     "hex": "#120808"
     },
     "glasses_up": {
      "swatch": "StoolBlack",
@@ -3805,10 +4513,31 @@
      "hex": "#D9C9A6"
     }
    },
-   "height_m": 1.65,
-   "height_vox": 33,
-   "head_top_vox": 31,
-   "tris": 716
+   "height_m": 1.75,
+   "height_vox": 35,
+   "head_top_vox": 32,
+   "tris": 1304,
+   "animations": [
+    "idle",
+    "walk",
+    "sit",
+    "sit_drink",
+    "sit_talk",
+    "sit_hold",
+    "sit_applaud",
+    "stand_drink",
+    "cheers",
+    "applaud",
+    "dance",
+    "idle_warm",
+    "idle_tipsy",
+    "idle_merry",
+    "walk_warm",
+    "walk_tipsy",
+    "walk_merry",
+    "idle_sad"
+   ],
+   "bytes": 304232
   },
   {
    "name": "dougie",
@@ -3828,6 +4557,7 @@
     "shoes": "boots",
     "accessories": [
      "hat_flat_cap",
+     "moustache",
      "drink_beer"
     ]
    },
@@ -3837,20 +4567,20 @@
      "hex": "#3F5878"
     },
     "bottom_trim": {
-     "swatch": "DenimLight",
-     "hex": "#6C88A8"
+     "swatch": "CymbalGold",
+     "hex": "#E8A030"
     },
     "drink_beer": {
-     "swatch": "BottleAmber",
-     "hex": "#8A4A1A"
+     "swatch": "BeerAmber_emissive",
+     "hex": "#E8A23A"
     },
     "drink_beer_2": {
-     "swatch": "Cream",
-     "hex": "#D9C9A6"
+     "swatch": "Foam",
+     "hex": "#F6EEDC"
     },
     "eyes": {
      "swatch": "Ink",
-     "hex": "#160B0A"
+     "hex": "#120808"
     },
     "hair": {
      "swatch": "HairGrey",
@@ -3863,6 +4593,10 @@
     "hat_flat_cap_2": {
      "swatch": "Charcoal",
      "hex": "#403A3E"
+    },
+    "moustache": {
+     "swatch": "HairGrey",
+     "hex": "#8E8890"
     },
     "mouth": {
      "swatch": "Mouth",
@@ -3884,15 +4618,40 @@
      "swatch": "Moss",
      "hex": "#4C5A30"
     },
+    "top_accent": {
+     "swatch": "Cream",
+     "hex": "#D9C9A6"
+    },
     "top_trim": {
      "swatch": "Cream",
      "hex": "#D9C9A6"
     }
    },
-   "height_m": 1.75,
-   "height_vox": 35,
-   "head_top_vox": 31,
-   "tris": 416
+   "height_m": 1.8,
+   "height_vox": 36,
+   "head_top_vox": 32,
+   "tris": 662,
+   "animations": [
+    "idle",
+    "walk",
+    "sit",
+    "sit_drink",
+    "sit_talk",
+    "sit_hold",
+    "sit_applaud",
+    "stand_drink",
+    "cheers",
+    "applaud",
+    "dance",
+    "idle_warm",
+    "idle_tipsy",
+    "idle_merry",
+    "walk_warm",
+    "walk_tipsy",
+    "walk_merry",
+    "idle_sad"
+   ],
+   "bytes": 235068
   },
   {
    "name": "lung_nop",
@@ -3921,12 +4680,12 @@
      "hex": "#B49A76"
     },
     "bottom_trim": {
-     "swatch": "WoodMid",
-     "hex": "#5E3E2A"
+     "swatch": "CymbalGold",
+     "hex": "#E8A030"
     },
     "eyes": {
      "swatch": "Ink",
-     "hex": "#160B0A"
+     "hex": "#120808"
     },
     "glasses_tinted": {
      "swatch": "CymbalGold",
@@ -3960,6 +4719,10 @@
      "swatch": "Cream",
      "hex": "#D9C9A6"
     },
+    "top_accent": {
+     "swatch": "WoodMid",
+     "hex": "#5E3E2A"
+    },
     "top_trim": {
      "swatch": "Sand",
      "hex": "#B49A76"
@@ -3973,10 +4736,31 @@
      "hex": "#221110"
     }
    },
-   "height_m": 1.55,
-   "height_vox": 31,
-   "head_top_vox": 29,
-   "tris": 424
+   "height_m": 1.7,
+   "height_vox": 34,
+   "head_top_vox": 31,
+   "tris": 658,
+   "animations": [
+    "idle",
+    "walk",
+    "sit",
+    "sit_drink",
+    "sit_talk",
+    "sit_hold",
+    "sit_applaud",
+    "stand_drink",
+    "cheers",
+    "applaud",
+    "dance",
+    "idle_warm",
+    "idle_tipsy",
+    "idle_merry",
+    "walk_warm",
+    "walk_tipsy",
+    "walk_merry",
+    "idle_sad"
+   ],
+   "bytes": 233072
   },
   {
    "name": "bow",
@@ -4004,13 +4788,9 @@
      "swatch": "Denim",
      "hex": "#3F5878"
     },
-    "bottom_trim": {
-     "swatch": "Cream",
-     "hex": "#D9C9A6"
-    },
     "eyes": {
      "swatch": "Ink",
-     "hex": "#160B0A"
+     "hex": "#120808"
     },
     "hair": {
      "swatch": "HairDarkBrown",
@@ -4061,10 +4841,31 @@
      "hex": "#8C8892"
     }
    },
-   "height_m": 1.5,
-   "height_vox": 30,
-   "head_top_vox": 26,
-   "tris": 528
+   "height_m": 1.65,
+   "height_vox": 33,
+   "head_top_vox": 29,
+   "tris": 1018,
+   "animations": [
+    "idle",
+    "walk",
+    "sit",
+    "sit_drink",
+    "sit_talk",
+    "sit_hold",
+    "sit_applaud",
+    "stand_drink",
+    "cheers",
+    "applaud",
+    "dance",
+    "idle_warm",
+    "idle_tipsy",
+    "idle_merry",
+    "walk_warm",
+    "walk_tipsy",
+    "walk_merry",
+    "idle_sad"
+   ],
+   "bytes": 272200
   },
   {
    "name": "hiro",
@@ -4092,12 +4893,12 @@
      "hex": "#403A3E"
     },
     "bottom_trim": {
-     "swatch": "StoolBlack",
-     "hex": "#221110"
+     "swatch": "CymbalGold",
+     "hex": "#E8A030"
     },
     "eyes": {
      "swatch": "Ink",
-     "hex": "#160B0A"
+     "hex": "#120808"
     },
     "hair": {
      "swatch": "HairBlack",
@@ -4128,18 +4929,43 @@
      "hex": "#E4BA96"
     },
     "top": {
-     "swatch": "Cream",
-     "hex": "#D9C9A6"
+     "swatch": "ShirtWhite",
+     "hex": "#ECE6E0"
     },
-    "top_trim": {
+    "top_accent": {
      "swatch": "DrumRed",
      "hex": "#9A2A1A"
+    },
+    "top_trim": {
+     "swatch": "Cream",
+     "hex": "#D9C9A6"
     }
    },
-   "height_m": 1.55,
-   "height_vox": 31,
-   "head_top_vox": 29,
-   "tris": 322
+   "height_m": 1.7,
+   "height_vox": 34,
+   "head_top_vox": 31,
+   "tris": 578,
+   "animations": [
+    "idle",
+    "walk",
+    "sit",
+    "sit_drink",
+    "sit_talk",
+    "sit_hold",
+    "sit_applaud",
+    "stand_drink",
+    "cheers",
+    "applaud",
+    "dance",
+    "idle_warm",
+    "idle_tipsy",
+    "idle_merry",
+    "walk_warm",
+    "walk_tipsy",
+    "walk_merry",
+    "idle_sad"
+   ],
+   "bytes": 222444
   },
   {
    "name": "nam",
@@ -4159,7 +4985,9 @@
     "shoes": "loafers",
     "accessories": [
      "apron",
-     "bar_towel"
+     "bar_towel",
+     "bottle",
+     "beer_left"
     ]
    },
    "colours": {
@@ -4175,6 +5003,26 @@
      "swatch": "ColumnWhite",
      "hex": "#E4DDE6"
     },
+    "beer_left": {
+     "swatch": "BeerAmber_emissive",
+     "hex": "#E8A23A"
+    },
+    "beer_left_2": {
+     "swatch": "Foam",
+     "hex": "#F6EEDC"
+    },
+    "bottle": {
+     "swatch": "BottleGreen",
+     "hex": "#2E5A28"
+    },
+    "bottle_2": {
+     "swatch": "LabelCream",
+     "hex": "#E8DCC0"
+    },
+    "bottle_3": {
+     "swatch": "BottleGreenCap",
+     "hex": "#44703A"
+    },
     "bottom": {
      "swatch": "StoolBlack",
      "hex": "#221110"
@@ -4185,7 +5033,7 @@
     },
     "eyes": {
      "swatch": "Ink",
-     "hex": "#160B0A"
+     "hex": "#120808"
     },
     "hair": {
      "swatch": "HairBlack",
@@ -4211,15 +5059,43 @@
      "swatch": "CabinDark",
      "hex": "#1C0D0C"
     },
+    "top_accent": {
+     "swatch": "CymbalGold",
+     "hex": "#E8A030"
+    },
     "top_trim": {
      "swatch": "CymbalGold",
      "hex": "#E8A030"
     }
    },
-   "height_m": 1.5,
-   "height_vox": 30,
-   "head_top_vox": 29,
-   "tris": 418
+   "height_m": 1.65,
+   "height_vox": 33,
+   "head_top_vox": 31,
+   "tris": 852,
+   "animations": [
+    "idle",
+    "walk",
+    "sit",
+    "sit_drink",
+    "sit_talk",
+    "sit_hold",
+    "sit_applaud",
+    "stand_drink",
+    "cheers",
+    "applaud",
+    "dance",
+    "idle_warm",
+    "idle_tipsy",
+    "idle_merry",
+    "walk_warm",
+    "walk_tipsy",
+    "walk_merry",
+    "idle_sad",
+    "idle_tray",
+    "walk_tray",
+    "pour"
+   ],
+   "bytes": 278500
   },
   {
    "name": "fern",
@@ -4238,25 +5114,30 @@
     "bottom": "skirt",
     "shoes": "sneakers",
     "accessories": [
-     "shaker"
+     "shaker",
+     "beer_left"
     ]
    },
    "colours": {
+    "beer_left": {
+     "swatch": "BeerAmber_emissive",
+     "hex": "#E8A23A"
+    },
+    "beer_left_2": {
+     "swatch": "Foam",
+     "hex": "#F6EEDC"
+    },
     "bottom": {
      "swatch": "StoolBlack",
      "hex": "#221110"
     },
-    "bottom_trim": {
-     "swatch": "CymbalGold",
-     "hex": "#E8A030"
-    },
     "eyes": {
      "swatch": "Ink",
-     "hex": "#160B0A"
+     "hex": "#120808"
     },
     "hair": {
      "swatch": "HairAuburn",
-     "hex": "#7E3220"
+     "hex": "#8E3A1E"
     },
     "mouth": {
      "swatch": "Mouth",
@@ -4286,15 +5167,43 @@
      "swatch": "CabinDark",
      "hex": "#1C0D0C"
     },
+    "top_accent": {
+     "swatch": "CymbalGold",
+     "hex": "#E8A030"
+    },
     "top_trim": {
      "swatch": "CymbalGold",
      "hex": "#E8A030"
     }
    },
-   "height_m": 1.35,
-   "height_vox": 27,
-   "head_top_vox": 26,
-   "tris": 400
+   "height_m": 1.6,
+   "height_vox": 32,
+   "head_top_vox": 29,
+   "tris": 944,
+   "animations": [
+    "idle",
+    "walk",
+    "sit",
+    "sit_drink",
+    "sit_talk",
+    "sit_hold",
+    "sit_applaud",
+    "stand_drink",
+    "cheers",
+    "applaud",
+    "dance",
+    "idle_warm",
+    "idle_tipsy",
+    "idle_merry",
+    "walk_warm",
+    "walk_tipsy",
+    "walk_merry",
+    "idle_sad",
+    "idle_tray",
+    "walk_tray",
+    "pour"
+   ],
+   "bytes": 284084
   },
   {
    "name": "big",
@@ -4314,10 +5223,15 @@
     "shoes": "boots",
     "accessories": [
      "torch",
-     "clicker"
+     "clicker",
+     "beard"
     ]
    },
    "colours": {
+    "beard": {
+     "swatch": "HairBlack",
+     "hex": "#1E1616"
+    },
     "bottom": {
      "swatch": "StoolBlack",
      "hex": "#221110"
@@ -4336,7 +5250,7 @@
     },
     "eyes": {
      "swatch": "Ink",
-     "hex": "#160B0A"
+     "hex": "#120808"
     },
     "hair": {
      "swatch": "HairBlack",
@@ -4362,6 +5276,10 @@
      "swatch": "CabinDark",
      "hex": "#1C0D0C"
     },
+    "top_accent": {
+     "swatch": "CymbalGold",
+     "hex": "#E8A030"
+    },
     "top_trim": {
      "swatch": "CymbalGold",
      "hex": "#E8A030"
@@ -4375,10 +5293,34 @@
      "hex": "#8A7444"
     }
    },
-   "height_m": 1.6,
-   "height_vox": 32,
-   "head_top_vox": 31,
-   "tris": 366
+   "height_m": 1.65,
+   "height_vox": 33,
+   "head_top_vox": 32,
+   "tris": 542,
+   "animations": [
+    "idle",
+    "walk",
+    "sit",
+    "sit_drink",
+    "sit_talk",
+    "sit_hold",
+    "sit_applaud",
+    "stand_drink",
+    "cheers",
+    "applaud",
+    "dance",
+    "idle_warm",
+    "idle_tipsy",
+    "idle_merry",
+    "walk_warm",
+    "walk_tipsy",
+    "walk_merry",
+    "idle_sad",
+    "idle_tray",
+    "walk_tray",
+    "pour"
+   ],
+   "bytes": 240288
   },
   {
    "name": "golf",
@@ -4412,7 +5354,7 @@
     },
     "eyes": {
      "swatch": "Ink",
-     "hex": "#160B0A"
+     "hex": "#120808"
     },
     "gaffer_tape": {
      "swatch": "Stone",
@@ -4454,15 +5396,43 @@
      "swatch": "CabinDark",
      "hex": "#1C0D0C"
     },
+    "top_accent": {
+     "swatch": "CymbalGold",
+     "hex": "#E8A030"
+    },
     "top_trim": {
      "swatch": "CymbalGold",
      "hex": "#E8A030"
     }
    },
-   "height_m": 1.65,
-   "height_vox": 33,
-   "head_top_vox": 29,
-   "tris": 598
+   "height_m": 1.8,
+   "height_vox": 36,
+   "head_top_vox": 31,
+   "tris": 788,
+   "animations": [
+    "idle",
+    "walk",
+    "sit",
+    "sit_drink",
+    "sit_talk",
+    "sit_hold",
+    "sit_applaud",
+    "stand_drink",
+    "cheers",
+    "applaud",
+    "dance",
+    "idle_warm",
+    "idle_tipsy",
+    "idle_merry",
+    "walk_warm",
+    "walk_tipsy",
+    "walk_merry",
+    "idle_sad",
+    "idle_tray",
+    "walk_tray",
+    "pour"
+   ],
+   "bytes": 267672
   },
   {
    "name": "khun_joy",
@@ -4495,7 +5465,7 @@
     },
     "eyes": {
      "swatch": "Ink",
-     "hex": "#160B0A"
+     "hex": "#120808"
     },
     "glass_gold": {
      "swatch": "BottleClear",
@@ -4504,6 +5474,10 @@
     "glass_gold_2": {
      "swatch": "CymbalGold",
      "hex": "#E8A030"
+    },
+    "glass_gold_3": {
+     "swatch": "BottleClear",
+     "hex": "#A8A0A0"
     },
     "hair": {
      "swatch": "HairBlack",
@@ -4538,1060 +5512,34 @@
      "hex": "#E8A030"
     }
    },
-   "height_m": 1.5,
-   "height_vox": 30,
-   "head_top_vox": 29,
-   "tris": 360
-  },
-  {
-   "name": "jo",
-   "display": "Jo",
-   "role": "band",
-   "slot": "PERF_HOUSE_VOX",
-   "path": "res://assets/chars/presets/jo.glb",
-   "body": "petite",
-   "parts": {
-    "head": "round",
-    "hair": "long",
-    "eyes": "wide",
-    "brows": "arched",
-    "mouth": "open",
-    "top": "blouse",
-    "bottom": "skirt",
-    "shoes": "boots",
-    "accessories": [
-     "guitar"
-    ]
-   },
-   "colours": {
-    "bottom": {
-     "swatch": "Charcoal",
-     "hex": "#403A3E"
-    },
-    "bottom_trim": {
-     "swatch": "Cream",
-     "hex": "#D9C9A6"
-    },
-    "eyes": {
-     "swatch": "Ink",
-     "hex": "#160B0A"
-    },
-    "guitar": {
-     "swatch": "WoodMid",
-     "hex": "#5E3E2A"
-    },
-    "guitar_2": {
-     "swatch": "Cream",
-     "hex": "#D9C9A6"
-    },
-    "guitar_hole": {
-     "swatch": "StoolBlack",
-     "hex": "#221110"
-    },
-    "hair": {
-     "swatch": "HairBlack",
-     "hex": "#1E1616"
-    },
-    "mouth": {
-     "swatch": "Mouth",
-     "hex": "#6A2420"
-    },
-    "shoes": {
-     "swatch": "WoodDark",
-     "hex": "#36241A"
-    },
-    "shoes_trim": {
-     "swatch": "StoolBlack",
-     "hex": "#221110"
-    },
-    "skin": {
-     "swatch": "Skin4",
-     "hex": "#BC8860"
-    },
-    "top": {
-     "swatch": "Mustard",
-     "hex": "#C99430"
-    },
-    "top_trim": {
-     "swatch": "Cream",
-     "hex": "#D9C9A6"
-    }
-   },
-   "height_m": 1.35,
-   "height_vox": 27,
-   "head_top_vox": 26,
-   "tris": 554
-  },
-  {
-   "name": "pete",
-   "display": "Pete",
-   "role": "band",
-   "slot": "PERF_HOUSE_BASS",
-   "path": "res://assets/chars/presets/pete.glb",
-   "body": "regular",
-   "parts": {
-    "head": "square",
-    "hair": "curly",
-    "eyes": "dot",
-    "brows": "flat",
-    "mouth": "smile",
-    "top": "tee",
-    "bottom": "jeans",
-    "shoes": "sneakers",
-    "accessories": [
-     "bass"
-    ]
-   },
-   "colours": {
-    "bass": {
-     "swatch": "CymbalGold",
-     "hex": "#E8A030"
-    },
-    "bass_2": {
-     "swatch": "StoolBlack",
-     "hex": "#221110"
-    },
-    "bottom": {
-     "swatch": "Denim",
-     "hex": "#3F5878"
-    },
-    "bottom_trim": {
-     "swatch": "DenimLight",
-     "hex": "#6C88A8"
-    },
-    "eyes": {
-     "swatch": "Ink",
-     "hex": "#160B0A"
-    },
-    "hair": {
-     "swatch": "HairBlack",
-     "hex": "#1E1616"
-    },
-    "mouth": {
-     "swatch": "Mouth",
-     "hex": "#6A2420"
-    },
-    "shoes": {
-     "swatch": "Charcoal",
-     "hex": "#403A3E"
-    },
-    "shoes_trim": {
-     "swatch": "ColumnWhite",
-     "hex": "#E4DDE6"
-    },
-    "skin": {
-     "swatch": "Skin5",
-     "hex": "#A06E4A"
-    },
-    "top": {
-     "swatch": "Teal",
-     "hex": "#2F6B6A"
-    },
-    "top_trim": {
-     "swatch": "Cream",
-     "hex": "#D9C9A6"
-    }
-   },
    "height_m": 1.65,
    "height_vox": 33,
-   "head_top_vox": 29,
-   "tris": 1030
-  },
-  {
-   "name": "boy",
-   "display": "Boy",
-   "role": "band",
-   "slot": "PERF_HOUSE_DRUMS",
-   "path": "res://assets/chars/presets/boy.glb",
-   "body": "broad",
-   "parts": {
-    "head": "soft",
-    "hair": "spiky",
-    "eyes": "happy",
-    "brows": "flat",
-    "mouth": "grin",
-    "top": "tee",
-    "bottom": "shorts",
-    "shoes": "sneakers",
-    "accessories": [
-     "hat_beanie",
-     "drumsticks"
-    ]
-   },
-   "colours": {
-    "bottom": {
-     "swatch": "Olive",
-     "hex": "#66703A"
-    },
-    "drumsticks": {
-     "swatch": "Sand",
-     "hex": "#B49A76"
-    },
-    "eyes": {
-     "swatch": "Ink",
-     "hex": "#160B0A"
-    },
-    "hair": {
-     "swatch": "HairBlack",
-     "hex": "#1E1616"
-    },
-    "hat_beanie": {
-     "swatch": "Rust",
-     "hex": "#A04A26"
-    },
-    "hat_beanie_2": {
-     "swatch": "Cream",
-     "hex": "#D9C9A6"
-    },
-    "mouth": {
-     "swatch": "Mouth",
-     "hex": "#6A2420"
-    },
-    "shoes": {
-     "swatch": "ColumnWhite",
-     "hex": "#E4DDE6"
-    },
-    "shoes_trim": {
-     "swatch": "Stone",
-     "hex": "#7C7270"
-    },
-    "skin": {
-     "swatch": "Skin4",
-     "hex": "#BC8860"
-    },
-    "top": {
-     "swatch": "Charcoal",
-     "hex": "#403A3E"
-    },
-    "top_trim": {
-     "swatch": "CymbalGold",
-     "hex": "#E8A030"
-    }
-   },
-   "height_m": 1.8,
-   "height_vox": 36,
    "head_top_vox": 31,
-   "tris": 574
-  },
-  {
-   "name": "patron_01",
-   "display": "Patron 1",
-   "role": "patron",
-   "slot": "PATRON",
-   "path": "res://assets/chars/presets/patron_01.glb",
-   "body": "petite",
-   "parts": {
-    "head": "square",
-    "hair": "crop",
-    "eyes": "dot",
-    "brows": "flat",
-    "mouth": "smile",
-    "top": "tee",
-    "bottom": "jeans",
-    "shoes": "sneakers",
-    "accessories": []
-   },
-   "colours": {
-    "bottom": {
-     "swatch": "Denim",
-     "hex": "#3F5878"
-    },
-    "bottom_trim": {
-     "swatch": "Stone",
-     "hex": "#7C7270"
-    },
-    "eyes": {
-     "swatch": "Ink",
-     "hex": "#160B0A"
-    },
-    "hair": {
-     "swatch": "HairBlack",
-     "hex": "#1E1616"
-    },
-    "mouth": {
-     "swatch": "Mouth",
-     "hex": "#6A2420"
-    },
-    "shoes": {
-     "swatch": "Charcoal",
-     "hex": "#403A3E"
-    },
-    "shoes_trim": {
-     "swatch": "Stone",
-     "hex": "#7C7270"
-    },
-    "skin": {
-     "swatch": "Skin2",
-     "hex": "#E4BA96"
-    },
-    "top": {
-     "swatch": "Stone",
-     "hex": "#7C7270"
-    },
-    "top_trim": {
-     "swatch": "Cream",
-     "hex": "#D9C9A6"
-    }
-   },
-   "height_m": 1.35,
-   "height_vox": 27,
-   "head_top_vox": 26,
-   "tris": 280
-  },
-  {
-   "name": "patron_02",
-   "display": "Patron 2",
-   "role": "patron",
-   "slot": "PATRON",
-   "path": "res://assets/chars/presets/patron_02.glb",
-   "body": "petite",
-   "parts": {
-    "head": "round",
-    "hair": "long",
-    "eyes": "lashes",
-    "brows": "arched",
-    "mouth": "small",
-    "top": "cardigan",
-    "bottom": "jeans",
-    "shoes": "loafers",
-    "accessories": [
-     "drink_beer"
-    ]
-   },
-   "colours": {
-    "bottom": {
-     "swatch": "Charcoal",
-     "hex": "#403A3E"
-    },
-    "bottom_trim": {
-     "swatch": "Stone",
-     "hex": "#7C7270"
-    },
-    "drink_beer": {
-     "swatch": "BottleAmber",
-     "hex": "#8A4A1A"
-    },
-    "drink_beer_2": {
-     "swatch": "Cream",
-     "hex": "#D9C9A6"
-    },
-    "eyes": {
-     "swatch": "Ink",
-     "hex": "#160B0A"
-    },
-    "hair": {
-     "swatch": "HairDarkBrown",
-     "hex": "#3E2618"
-    },
-    "mouth": {
-     "swatch": "Mouth",
-     "hex": "#6A2420"
-    },
-    "shoes": {
-     "swatch": "WoodDark",
-     "hex": "#36241A"
-    },
-    "shoes_trim": {
-     "swatch": "Stone",
-     "hex": "#7C7270"
-    },
-    "skin": {
-     "swatch": "Skin4",
-     "hex": "#BC8860"
-    },
-    "top": {
-     "swatch": "Denim",
-     "hex": "#3F5878"
-    },
-    "top_accent": {
-     "swatch": "Cream",
-     "hex": "#D9C9A6"
-    },
-    "top_dust": {
-     "swatch": "Cream",
-     "hex": "#D9C9A6"
-    }
-   },
-   "height_m": 1.35,
-   "height_vox": 27,
-   "head_top_vox": 26,
-   "tris": 534
-  },
-  {
-   "name": "patron_03",
-   "display": "Patron 3",
-   "role": "patron",
-   "slot": "PATRON",
-   "path": "res://assets/chars/presets/patron_03.glb",
-   "body": "petite",
-   "parts": {
-    "head": "soft",
-    "hair": "buzz",
-    "eyes": "sleepy",
-    "brows": "flat",
-    "mouth": "flat",
-    "top": "tee",
-    "bottom": "shorts",
-    "shoes": "sneakers",
-    "accessories": []
-   },
-   "colours": {
-    "bottom": {
-     "swatch": "Sand",
-     "hex": "#B49A76"
-    },
-    "eyes": {
-     "swatch": "Ink",
-     "hex": "#160B0A"
-    },
-    "hair": {
-     "swatch": "HairBrown",
-     "hex": "#6A4228"
-    },
-    "mouth": {
-     "swatch": "Mouth",
-     "hex": "#6A2420"
-    },
-    "shoes": {
-     "swatch": "ColumnWhite",
-     "hex": "#E4DDE6"
-    },
-    "shoes_trim": {
-     "swatch": "Stone",
-     "hex": "#7C7270"
-    },
-    "skin": {
-     "swatch": "Skin6",
-     "hex": "#845636"
-    },
-    "top": {
-     "swatch": "Sand",
-     "hex": "#B49A76"
-    },
-    "top_trim": {
-     "swatch": "Cream",
-     "hex": "#D9C9A6"
-    }
-   },
-   "height_m": 1.35,
-   "height_vox": 27,
-   "head_top_vox": 26,
-   "tris": 244
-  },
-  {
-   "name": "patron_04",
-   "display": "Patron 4",
-   "role": "patron",
-   "slot": "PATRON",
-   "path": "res://assets/chars/presets/patron_04.glb",
-   "body": "petite",
-   "parts": {
-    "head": "heart",
-    "hair": "curly",
-    "eyes": "dot",
-    "brows": "none",
-    "mouth": "open",
-    "top": "shirt",
-    "bottom": "trousers",
-    "shoes": "boots",
-    "accessories": []
-   },
-   "colours": {
-    "bottom": {
-     "swatch": "StoolBlack",
-     "hex": "#221110"
-    },
-    "bottom_trim": {
-     "swatch": "Stone",
-     "hex": "#7C7270"
-    },
-    "eyes": {
-     "swatch": "Ink",
-     "hex": "#160B0A"
-    },
-    "hair": {
-     "swatch": "HairBlack",
-     "hex": "#1E1616"
-    },
-    "mouth": {
-     "swatch": "Mouth",
-     "hex": "#6A2420"
-    },
-    "shoes": {
-     "swatch": "Charcoal",
-     "hex": "#403A3E"
-    },
-    "shoes_trim": {
-     "swatch": "Stone",
-     "hex": "#7C7270"
-    },
-    "skin": {
-     "swatch": "Skin3",
-     "hex": "#D2A07A"
-    },
-    "top": {
-     "swatch": "Olive",
-     "hex": "#66703A"
-    },
-    "top_trim": {
-     "swatch": "Cream",
-     "hex": "#D9C9A6"
-    }
-   },
-   "height_m": 1.5,
-   "height_vox": 30,
-   "head_top_vox": 26,
-   "tris": 968
-  },
-  {
-   "name": "patron_05",
-   "display": "Patron 5",
-   "role": "patron",
-   "slot": "PATRON",
-   "path": "res://assets/chars/presets/patron_05.glb",
-   "body": "regular",
-   "parts": {
-    "head": "square",
-    "hair": "crop",
-    "eyes": "dot",
-    "brows": "flat",
-    "mouth": "smile",
-    "top": "blouse",
-    "bottom": "skirt",
-    "shoes": "loafers",
-    "accessories": [
-     "drink_beer"
-    ]
-   },
-   "colours": {
-    "bottom": {
-     "swatch": "Stone",
-     "hex": "#7C7270"
-    },
-    "bottom_trim": {
-     "swatch": "Stone",
-     "hex": "#7C7270"
-    },
-    "drink_beer": {
-     "swatch": "BottleAmber",
-     "hex": "#8A4A1A"
-    },
-    "drink_beer_2": {
-     "swatch": "Cream",
-     "hex": "#D9C9A6"
-    },
-    "eyes": {
-     "swatch": "Ink",
-     "hex": "#160B0A"
-    },
-    "hair": {
-     "swatch": "HairAuburn",
-     "hex": "#7E3220"
-    },
-    "mouth": {
-     "swatch": "Mouth",
-     "hex": "#6A2420"
-    },
-    "shoes": {
-     "swatch": "WoodDark",
-     "hex": "#36241A"
-    },
-    "shoes_trim": {
-     "swatch": "Stone",
-     "hex": "#7C7270"
-    },
-    "skin": {
-     "swatch": "Skin5",
-     "hex": "#A06E4A"
-    },
-    "top": {
-     "swatch": "Teal",
-     "hex": "#2F6B6A"
-    },
-    "top_trim": {
-     "swatch": "Cream",
-     "hex": "#D9C9A6"
-    }
-   },
-   "height_m": 1.5,
-   "height_vox": 30,
-   "head_top_vox": 29,
-   "tris": 368
-  },
-  {
-   "name": "patron_06",
-   "display": "Patron 6",
-   "role": "patron",
-   "slot": "PATRON",
-   "path": "res://assets/chars/presets/patron_06.glb",
-   "body": "regular",
-   "parts": {
-    "head": "round",
-    "hair": "long",
-    "eyes": "lashes",
-    "brows": "arched",
-    "mouth": "small",
-    "top": "hoodie",
-    "bottom": "trousers",
-    "shoes": "sneakers",
-    "accessories": []
-   },
-   "colours": {
-    "bottom": {
-     "swatch": "Moss",
-     "hex": "#4C5A30"
-    },
-    "bottom_trim": {
-     "swatch": "Stone",
-     "hex": "#7C7270"
-    },
-    "eyes": {
-     "swatch": "Ink",
-     "hex": "#160B0A"
-    },
-    "hair": {
-     "swatch": "HairBlack",
-     "hex": "#1E1616"
-    },
-    "mouth": {
-     "swatch": "Mouth",
-     "hex": "#6A2420"
-    },
-    "shoes": {
-     "swatch": "ColumnWhite",
-     "hex": "#E4DDE6"
-    },
-    "shoes_trim": {
-     "swatch": "Stone",
-     "hex": "#7C7270"
-    },
-    "skin": {
-     "swatch": "Skin1",
-     "hex": "#F0D2B6"
-    },
-    "top": {
-     "swatch": "Charcoal",
-     "hex": "#403A3E"
-    },
-    "top_trim": {
-     "swatch": "Cream",
-     "hex": "#D9C9A6"
-    }
-   },
-   "height_m": 1.5,
-   "height_vox": 30,
-   "head_top_vox": 29,
-   "tris": 316
-  },
-  {
-   "name": "patron_07",
-   "display": "Patron 7",
-   "role": "patron",
-   "slot": "PATRON",
-   "path": "res://assets/chars/presets/patron_07.glb",
-   "body": "regular",
-   "parts": {
-    "head": "soft",
-    "hair": "buzz",
-    "eyes": "sleepy",
-    "brows": "flat",
-    "mouth": "flat",
-    "top": "tee",
-    "bottom": "jeans",
-    "shoes": "sneakers",
-    "accessories": []
-   },
-   "colours": {
-    "bottom": {
-     "swatch": "Denim",
-     "hex": "#3F5878"
-    },
-    "bottom_trim": {
-     "swatch": "Stone",
-     "hex": "#7C7270"
-    },
-    "eyes": {
-     "swatch": "Ink",
-     "hex": "#160B0A"
-    },
-    "hair": {
-     "swatch": "HairDarkBrown",
-     "hex": "#3E2618"
-    },
-    "mouth": {
-     "swatch": "Mouth",
-     "hex": "#6A2420"
-    },
-    "shoes": {
-     "swatch": "Charcoal",
-     "hex": "#403A3E"
-    },
-    "shoes_trim": {
-     "swatch": "Stone",
-     "hex": "#7C7270"
-    },
-    "skin": {
-     "swatch": "Skin7",
-     "hex": "#6A432C"
-    },
-    "top": {
-     "swatch": "DenimLight",
-     "hex": "#6C88A8"
-    },
-    "top_trim": {
-     "swatch": "Cream",
-     "hex": "#D9C9A6"
-    }
-   },
-   "height_m": 1.5,
-   "height_vox": 30,
-   "head_top_vox": 29,
-   "tris": 252
-  },
-  {
-   "name": "patron_08",
-   "display": "Patron 8",
-   "role": "patron",
-   "slot": "PATRON",
-   "path": "res://assets/chars/presets/patron_08.glb",
-   "body": "regular",
-   "parts": {
-    "head": "heart",
-    "hair": "curly",
-    "eyes": "dot",
-    "brows": "none",
-    "mouth": "open",
-    "top": "cardigan",
-    "bottom": "jeans",
-    "shoes": "loafers",
-    "accessories": [
-     "drink_beer"
-    ]
-   },
-   "colours": {
-    "bottom": {
-     "swatch": "Charcoal",
-     "hex": "#403A3E"
-    },
-    "bottom_trim": {
-     "swatch": "Stone",
-     "hex": "#7C7270"
-    },
-    "drink_beer": {
-     "swatch": "BottleAmber",
-     "hex": "#8A4A1A"
-    },
-    "drink_beer_2": {
-     "swatch": "Cream",
-     "hex": "#D9C9A6"
-    },
-    "eyes": {
-     "swatch": "Ink",
-     "hex": "#160B0A"
-    },
-    "hair": {
-     "swatch": "HairGrey",
-     "hex": "#8E8890"
-    },
-    "mouth": {
-     "swatch": "Mouth",
-     "hex": "#6A2420"
-    },
-    "shoes": {
-     "swatch": "WoodDark",
-     "hex": "#36241A"
-    },
-    "shoes_trim": {
-     "swatch": "Stone",
-     "hex": "#7C7270"
-    },
-    "skin": {
-     "swatch": "Skin8",
-     "hex": "#4E3022"
-    },
-    "top": {
-     "swatch": "Moss",
-     "hex": "#4C5A30"
-    },
-    "top_accent": {
-     "swatch": "Cream",
-     "hex": "#D9C9A6"
-    },
-    "top_dust": {
-     "swatch": "Cream",
-     "hex": "#D9C9A6"
-    }
-   },
-   "height_m": 1.65,
-   "height_vox": 33,
-   "head_top_vox": 29,
-   "tris": 1126
-  },
-  {
-   "name": "patron_09",
-   "display": "Patron 9",
-   "role": "patron",
-   "slot": "PATRON",
-   "path": "res://assets/chars/presets/patron_09.glb",
-   "body": "broad",
-   "parts": {
-    "head": "square",
-    "hair": "crop",
-    "eyes": "dot",
-    "brows": "flat",
-    "mouth": "smile",
-    "top": "tee",
-    "bottom": "shorts",
-    "shoes": "sneakers",
-    "accessories": []
-   },
-   "colours": {
-    "bottom": {
-     "swatch": "Sand",
-     "hex": "#B49A76"
-    },
-    "eyes": {
-     "swatch": "Ink",
-     "hex": "#160B0A"
-    },
-    "hair": {
-     "swatch": "HairBlack",
-     "hex": "#1E1616"
-    },
-    "mouth": {
-     "swatch": "Mouth",
-     "hex": "#6A2420"
-    },
-    "shoes": {
-     "swatch": "ColumnWhite",
-     "hex": "#E4DDE6"
-    },
-    "shoes_trim": {
-     "swatch": "Stone",
-     "hex": "#7C7270"
-    },
-    "skin": {
-     "swatch": "Skin3",
-     "hex": "#D2A07A"
-    },
-    "top": {
-     "swatch": "Cream",
-     "hex": "#D9C9A6"
-    },
-    "top_trim": {
-     "swatch": "Cream",
-     "hex": "#D9C9A6"
-    }
-   },
-   "height_m": 1.6,
-   "height_vox": 32,
-   "head_top_vox": 31,
-   "tris": 272
-  },
-  {
-   "name": "patron_10",
-   "display": "Patron 10",
-   "role": "patron",
-   "slot": "PATRON",
-   "path": "res://assets/chars/presets/patron_10.glb",
-   "body": "broad",
-   "parts": {
-    "head": "round",
-    "hair": "long",
-    "eyes": "lashes",
-    "brows": "arched",
-    "mouth": "small",
-    "top": "shirt",
-    "bottom": "trousers",
-    "shoes": "boots",
-    "accessories": []
-   },
-   "colours": {
-    "bottom": {
-     "swatch": "StoolBlack",
-     "hex": "#221110"
-    },
-    "bottom_trim": {
-     "swatch": "Stone",
-     "hex": "#7C7270"
-    },
-    "eyes": {
-     "swatch": "Ink",
-     "hex": "#160B0A"
-    },
-    "hair": {
-     "swatch": "HairRose",
-     "hex": "#B05A64"
-    },
-    "mouth": {
-     "swatch": "Mouth",
-     "hex": "#6A2420"
-    },
-    "shoes": {
-     "swatch": "Charcoal",
-     "hex": "#403A3E"
-    },
-    "shoes_trim": {
-     "swatch": "Stone",
-     "hex": "#7C7270"
-    },
-    "skin": {
-     "swatch": "Skin2",
-     "hex": "#E4BA96"
-    },
-    "top": {
-     "swatch": "Rust",
-     "hex": "#A04A26"
-    },
-    "top_trim": {
-     "swatch": "Cream",
-     "hex": "#D9C9A6"
-    }
-   },
-   "height_m": 1.6,
-   "height_vox": 32,
-   "head_top_vox": 31,
-   "tris": 364
-  },
-  {
-   "name": "patron_11",
-   "display": "Patron 11",
-   "role": "patron",
-   "slot": "PATRON",
-   "path": "res://assets/chars/presets/patron_11.glb",
-   "body": "broad",
-   "parts": {
-    "head": "soft",
-    "hair": "buzz",
-    "eyes": "sleepy",
-    "brows": "flat",
-    "mouth": "flat",
-    "top": "blouse",
-    "bottom": "skirt",
-    "shoes": "loafers",
-    "accessories": [
-     "drink_beer"
-    ]
-   },
-   "colours": {
-    "bottom": {
-     "swatch": "Stone",
-     "hex": "#7C7270"
-    },
-    "bottom_trim": {
-     "swatch": "Stone",
-     "hex": "#7C7270"
-    },
-    "drink_beer": {
-     "swatch": "BottleAmber",
-     "hex": "#8A4A1A"
-    },
-    "drink_beer_2": {
-     "swatch": "Cream",
-     "hex": "#D9C9A6"
-    },
-    "eyes": {
-     "swatch": "Ink",
-     "hex": "#160B0A"
-    },
-    "hair": {
-     "swatch": "HairBrown",
-     "hex": "#6A4228"
-    },
-    "mouth": {
-     "swatch": "Mouth",
-     "hex": "#6A2420"
-    },
-    "shoes": {
-     "swatch": "WoodDark",
-     "hex": "#36241A"
-    },
-    "shoes_trim": {
-     "swatch": "Stone",
-     "hex": "#7C7270"
-    },
-    "skin": {
-     "swatch": "Skin5",
-     "hex": "#A06E4A"
-    },
-    "top": {
-     "swatch": "Sky",
-     "hex": "#86A8C6"
-    },
-    "top_trim": {
-     "swatch": "Cream",
-     "hex": "#D9C9A6"
-    }
-   },
-   "height_m": 1.6,
-   "height_vox": 32,
-   "head_top_vox": 31,
-   "tris": 332
-  },
-  {
-   "name": "patron_12",
-   "display": "Patron 12",
-   "role": "patron",
-   "slot": "PATRON",
-   "path": "res://assets/chars/presets/patron_12.glb",
-   "body": "broad",
-   "parts": {
-    "head": "heart",
-    "hair": "curly",
-    "eyes": "dot",
-    "brows": "none",
-    "mouth": "open",
-    "top": "hoodie",
-    "bottom": "trousers",
-    "shoes": "sneakers",
-    "accessories": []
-   },
-   "colours": {
-    "bottom": {
-     "swatch": "Moss",
-     "hex": "#4C5A30"
-    },
-    "bottom_trim": {
-     "swatch": "Stone",
-     "hex": "#7C7270"
-    },
-    "eyes": {
-     "swatch": "Ink",
-     "hex": "#160B0A"
-    },
-    "hair": {
-     "swatch": "HairBlack",
-     "hex": "#1E1616"
-    },
-    "mouth": {
-     "swatch": "Mouth",
-     "hex": "#6A2420"
-    },
-    "shoes": {
-     "swatch": "ColumnWhite",
-     "hex": "#E4DDE6"
-    },
-    "shoes_trim": {
-     "swatch": "Stone",
-     "hex": "#7C7270"
-    },
-    "skin": {
-     "swatch": "Skin6",
-     "hex": "#845636"
-    },
-    "top": {
-     "swatch": "FloorLit",
-     "hex": "#7A5248"
-    },
-    "top_trim": {
-     "swatch": "Cream",
-     "hex": "#D9C9A6"
-    }
-   },
-   "height_m": 1.75,
-   "height_vox": 35,
-   "head_top_vox": 31,
-   "tris": 920
+   "tris": 804,
+   "animations": [
+    "idle",
+    "walk",
+    "sit",
+    "sit_drink",
+    "sit_talk",
+    "sit_hold",
+    "sit_applaud",
+    "stand_drink",
+    "cheers",
+    "applaud",
+    "dance",
+    "idle_warm",
+    "idle_tipsy",
+    "idle_merry",
+    "walk_warm",
+    "walk_tipsy",
+    "walk_merry",
+    "idle_sad",
+    "idle_tray",
+    "walk_tray",
+    "pour"
+   ],
+   "bytes": 266776
   },
   {
    "name": "server",
@@ -5606,7 +5554,7 @@
     "eyes": "dot",
     "brows": "thick",
     "mouth": "smile",
-    "top": "shirt",
+    "top": "shirt_rolled",
     "bottom": "trousers",
     "shoes": "boots",
     "accessories": [
@@ -5625,12 +5573,12 @@
      "hex": "#221110"
     },
     "bottom_trim": {
-     "swatch": "Charcoal",
-     "hex": "#403A3E"
+     "swatch": "CymbalGold",
+     "hex": "#E8A030"
     },
     "eyes": {
      "swatch": "Ink",
-     "hex": "#160B0A"
+     "hex": "#120808"
     },
     "hair": {
      "swatch": "HairDarkBrown",
@@ -5653,45 +5601,545 @@
      "hex": "#E4BA96"
     },
     "top": {
-     "swatch": "ColumnWhite",
-     "hex": "#E4DDE6"
+     "swatch": "ShirtWhite",
+     "hex": "#ECE6E0"
+    },
+    "top_accent": {
+     "swatch": "Stone",
+     "hex": "#7C7270"
     },
     "top_trim": {
-     "swatch": "Cream",
-     "hex": "#D9C9A6"
+     "swatch": "ColumnWhite",
+     "hex": "#E4DDE6"
     },
     "tray": {
      "swatch": "StoolBlack",
      "hex": "#221110"
     },
     "tray_2": {
-     "swatch": "BottleAmber",
-     "hex": "#8A4A1A"
+     "swatch": "BeerAmber_emissive",
+     "hex": "#E8A23A"
     },
     "tray_3": {
-     "swatch": "Cream",
-     "hex": "#D9C9A6"
+     "swatch": "Foam",
+     "hex": "#F6EEDC"
     },
     "vest": {
      "swatch": "StoolBlack",
      "hex": "#221110"
     },
     "vest_2": {
+     "swatch": "CymbalGold",
+     "hex": "#E8A030"
+    }
+   },
+   "height_m": 1.7,
+   "height_vox": 34,
+   "head_top_vox": 31,
+   "tris": 1234,
+   "animations": [
+    "idle",
+    "walk",
+    "sit",
+    "sit_drink",
+    "sit_talk",
+    "sit_hold",
+    "sit_applaud",
+    "stand_drink",
+    "cheers",
+    "applaud",
+    "dance",
+    "idle_warm",
+    "idle_tipsy",
+    "idle_merry",
+    "walk_warm",
+    "walk_tipsy",
+    "walk_merry",
+    "idle_sad",
+    "idle_tray",
+    "walk_tray",
+    "pour"
+   ],
+   "bytes": 319960
+  },
+  {
+   "name": "jo",
+   "display": "Jo",
+   "role": "band",
+   "slot": "PERF_HOUSE_VOX",
+   "path": "res://assets/chars/presets/jo.glb",
+   "body": "petite",
+   "parts": {
+    "head": "round",
+    "hair": "long",
+    "eyes": "wide",
+    "brows": "arched",
+    "mouth": "open",
+    "top": "jacket",
+    "bottom": "skirt",
+    "shoes": "boots",
+    "accessories": [
+     "guitar"
+    ]
+   },
+   "colours": {
+    "bottom": {
+     "swatch": "StoolBlack",
+     "hex": "#221110"
+    },
+    "eyes": {
+     "swatch": "Ink",
+     "hex": "#120808"
+    },
+    "guitar": {
+     "swatch": "WoodMid",
+     "hex": "#5E3E2A"
+    },
+    "guitar_2": {
+     "swatch": "Cream",
+     "hex": "#D9C9A6"
+    },
+    "guitar_hole": {
+     "swatch": "StoolBlack",
+     "hex": "#221110"
+    },
+    "guitar_neck": {
+     "swatch": "WoodDark",
+     "hex": "#36241A"
+    },
+    "guitar_strap": {
+     "swatch": "StoolBlack",
+     "hex": "#221110"
+    },
+    "hair": {
+     "swatch": "HairBlack",
+     "hex": "#1E1616"
+    },
+    "mouth": {
+     "swatch": "Mouth",
+     "hex": "#6A2420"
+    },
+    "shoes": {
+     "swatch": "WoodDark",
+     "hex": "#36241A"
+    },
+    "shoes_trim": {
+     "swatch": "StoolBlack",
+     "hex": "#221110"
+    },
+    "skin": {
+     "swatch": "Skin4",
+     "hex": "#BC8860"
+    },
+    "top": {
+     "swatch": "Jacket",
+     "hex": "#262028"
+    },
+    "top_accent": {
+     "swatch": "Mustard",
+     "hex": "#C99430"
+    },
+    "top_trim": {
+     "swatch": "StoolBlack",
+     "hex": "#221110"
+    }
+   },
+   "height_m": 1.6,
+   "height_vox": 32,
+   "head_top_vox": 29,
+   "tris": 1042,
+   "animations": [
+    "idle",
+    "walk",
+    "sit",
+    "sit_drink",
+    "sit_talk",
+    "sit_hold",
+    "sit_applaud",
+    "stand_drink",
+    "cheers",
+    "applaud",
+    "dance",
+    "idle_warm",
+    "idle_tipsy",
+    "idle_merry",
+    "walk_warm",
+    "walk_tipsy",
+    "walk_merry",
+    "idle_sad",
+    "play_guitar",
+    "play_bass",
+    "sing",
+    "play_drums"
+   ],
+   "bytes": 302148
+  },
+  {
+   "name": "pete",
+   "display": "Pete",
+   "role": "band",
+   "slot": "PERF_HOUSE_BASS",
+   "path": "res://assets/chars/presets/pete.glb",
+   "body": "regular",
+   "parts": {
+    "head": "square",
+    "hair": "crop",
+    "eyes": "dot",
+    "brows": "flat",
+    "mouth": "smile",
+    "top": "shirt",
+    "bottom": "trousers",
+    "shoes": "boots",
+    "accessories": [
+     "bass",
+     "hat_fedora",
+     "beard"
+    ]
+   },
+   "colours": {
+    "bass": {
+     "swatch": "Mustard",
+     "hex": "#C99430"
+    },
+    "bass_2": {
+     "swatch": "StoolBlack",
+     "hex": "#221110"
+    },
+    "bass_3": {
+     "swatch": "MirrorGrey",
+     "hex": "#8C8892"
+    },
+    "beard": {
+     "swatch": "HairBlack",
+     "hex": "#1E1616"
+    },
+    "bottom": {
+     "swatch": "StoolBlack",
+     "hex": "#221110"
+    },
+    "bottom_trim": {
+     "swatch": "CymbalGold",
+     "hex": "#E8A030"
+    },
+    "eyes": {
+     "swatch": "Ink",
+     "hex": "#120808"
+    },
+    "guitar_neck": {
+     "swatch": "WoodDark",
+     "hex": "#36241A"
+    },
+    "guitar_strap": {
+     "swatch": "StoolBlack",
+     "hex": "#221110"
+    },
+    "hair": {
+     "swatch": "HairBlack",
+     "hex": "#1E1616"
+    },
+    "hat_fedora": {
+     "swatch": "StoolBlack",
+     "hex": "#221110"
+    },
+    "hat_fedora_2": {
+     "swatch": "Charcoal",
+     "hex": "#403A3E"
+    },
+    "mouth": {
+     "swatch": "Mouth",
+     "hex": "#6A2420"
+    },
+    "shoes": {
+     "swatch": "StoolBlack",
+     "hex": "#221110"
+    },
+    "shoes_trim": {
+     "swatch": "Charcoal",
+     "hex": "#403A3E"
+    },
+    "skin": {
+     "swatch": "Skin6",
+     "hex": "#845636"
+    },
+    "top": {
+     "swatch": "Jacket",
+     "hex": "#262028"
+    },
+    "top_accent": {
+     "swatch": "Stone",
+     "hex": "#7C7270"
+    },
+    "top_trim": {
      "swatch": "Charcoal",
      "hex": "#403A3E"
     }
    },
-   "height_m": 1.65,
-   "height_vox": 33,
-   "head_top_vox": 29,
-   "tris": 810
+   "height_m": 1.8,
+   "height_vox": 36,
+   "head_top_vox": 31,
+   "tris": 910,
+   "animations": [
+    "idle",
+    "walk",
+    "sit",
+    "sit_drink",
+    "sit_talk",
+    "sit_hold",
+    "sit_applaud",
+    "stand_drink",
+    "cheers",
+    "applaud",
+    "dance",
+    "idle_warm",
+    "idle_tipsy",
+    "idle_merry",
+    "walk_warm",
+    "walk_tipsy",
+    "walk_merry",
+    "idle_sad",
+    "play_guitar",
+    "play_bass",
+    "sing",
+    "play_drums"
+   ],
+   "bytes": 293444
   },
   {
-   "name": "patron_13",
-   "display": "Patron 13",
+   "name": "boy",
+   "display": "Boy",
+   "role": "band",
+   "slot": "PERF_HOUSE_DRUMS",
+   "path": "res://assets/chars/presets/boy.glb",
+   "body": "broad",
+   "parts": {
+    "head": "soft",
+    "hair": "shaggy",
+    "eyes": "happy",
+    "brows": "flat",
+    "mouth": "grin",
+    "top": "shirt_rolled",
+    "bottom": "jeans",
+    "shoes": "sneakers",
+    "accessories": [
+     "drumsticks",
+     "moustache"
+    ]
+   },
+   "colours": {
+    "bottom": {
+     "swatch": "Charcoal",
+     "hex": "#403A3E"
+    },
+    "bottom_trim": {
+     "swatch": "StoolBlack",
+     "hex": "#221110"
+    },
+    "drumsticks": {
+     "swatch": "Sand",
+     "hex": "#B49A76"
+    },
+    "drumsticks_2": {
+     "swatch": "Sand",
+     "hex": "#B49A76"
+    },
+    "eyes": {
+     "swatch": "Ink",
+     "hex": "#120808"
+    },
+    "hair": {
+     "swatch": "HairBlack",
+     "hex": "#1E1616"
+    },
+    "moustache": {
+     "swatch": "HairBlack",
+     "hex": "#1E1616"
+    },
+    "mouth": {
+     "swatch": "Mouth",
+     "hex": "#6A2420"
+    },
+    "shoes": {
+     "swatch": "ColumnWhite",
+     "hex": "#E4DDE6"
+    },
+    "shoes_trim": {
+     "swatch": "Stone",
+     "hex": "#7C7270"
+    },
+    "skin": {
+     "swatch": "Skin4",
+     "hex": "#BC8860"
+    },
+    "top": {
+     "swatch": "ShirtWhite",
+     "hex": "#ECE6E0"
+    },
+    "top_accent": {
+     "swatch": "Stone",
+     "hex": "#7C7270"
+    },
+    "top_trim": {
+     "swatch": "ColumnWhite",
+     "hex": "#E4DDE6"
+    }
+   },
+   "height_m": 1.75,
+   "height_vox": 35,
+   "head_top_vox": 32,
+   "tris": 970,
+   "animations": [
+    "idle",
+    "walk",
+    "sit",
+    "sit_drink",
+    "sit_talk",
+    "sit_hold",
+    "sit_applaud",
+    "stand_drink",
+    "cheers",
+    "applaud",
+    "dance",
+    "idle_warm",
+    "idle_tipsy",
+    "idle_merry",
+    "walk_warm",
+    "walk_tipsy",
+    "walk_merry",
+    "idle_sad",
+    "play_guitar",
+    "play_bass",
+    "sing",
+    "play_drums"
+   ],
+   "bytes": 293496
+  },
+  {
+   "name": "band_guitar",
+   "display": "Guest guitarist",
+   "role": "band",
+   "slot": "PERF_GUEST",
+   "path": "res://assets/chars/presets/band_guitar.glb",
+   "body": "regular",
+   "parts": {
+    "head": "square",
+    "hair": "shaggy",
+    "eyes": "dot",
+    "brows": "thick",
+    "mouth": "small",
+    "top": "jacket",
+    "bottom": "jeans",
+    "shoes": "boots",
+    "accessories": [
+     "guitar_electric",
+     "beard"
+    ]
+   },
+   "colours": {
+    "beard": {
+     "swatch": "HairBleach",
+     "hex": "#E8CF86"
+    },
+    "bottom": {
+     "swatch": "StoolBlack",
+     "hex": "#221110"
+    },
+    "bottom_trim": {
+     "swatch": "CymbalGold",
+     "hex": "#E8A030"
+    },
+    "eyes": {
+     "swatch": "Ink",
+     "hex": "#120808"
+    },
+    "guitar_electric": {
+     "swatch": "DrumRed",
+     "hex": "#9A2A1A"
+    },
+    "guitar_electric_2": {
+     "swatch": "ColumnWhite",
+     "hex": "#E4DDE6"
+    },
+    "guitar_electric_3": {
+     "swatch": "MirrorGrey",
+     "hex": "#8C8892"
+    },
+    "guitar_neck": {
+     "swatch": "WoodDark",
+     "hex": "#36241A"
+    },
+    "guitar_strap": {
+     "swatch": "StoolBlack",
+     "hex": "#221110"
+    },
+    "hair": {
+     "swatch": "HairBleach",
+     "hex": "#E8CF86"
+    },
+    "mouth": {
+     "swatch": "Mouth",
+     "hex": "#6A2420"
+    },
+    "shoes": {
+     "swatch": "StoolBlack",
+     "hex": "#221110"
+    },
+    "shoes_trim": {
+     "swatch": "Charcoal",
+     "hex": "#403A3E"
+    },
+    "skin": {
+     "swatch": "Skin1",
+     "hex": "#F0D2B6"
+    },
+    "top": {
+     "swatch": "Jacket",
+     "hex": "#262028"
+    },
+    "top_accent": {
+     "swatch": "StoolBlack",
+     "hex": "#221110"
+    },
+    "top_trim": {
+     "swatch": "StoolBlack",
+     "hex": "#221110"
+    }
+   },
+   "height_m": 1.7,
+   "height_vox": 34,
+   "head_top_vox": 31,
+   "tris": 1082,
+   "animations": [
+    "idle",
+    "walk",
+    "sit",
+    "sit_drink",
+    "sit_talk",
+    "sit_hold",
+    "sit_applaud",
+    "stand_drink",
+    "cheers",
+    "applaud",
+    "dance",
+    "idle_warm",
+    "idle_tipsy",
+    "idle_merry",
+    "walk_warm",
+    "walk_tipsy",
+    "walk_merry",
+    "idle_sad",
+    "play_guitar",
+    "play_bass",
+    "sing",
+    "play_drums"
+   ],
+   "bytes": 308552
+  },
+  {
+   "name": "patron_01",
+   "display": "Patron 1",
    "role": "patron",
    "slot": "PATRON",
-   "path": "res://assets/chars/presets/patron_13.glb",
+   "path": "res://assets/chars/presets/patron_01.glb",
    "body": "regular",
    "parts": {
     "head": "square",
@@ -5717,20 +6165,20 @@
      "hex": "#3F5878"
     },
     "bottom_trim": {
-     "swatch": "Stone",
-     "hex": "#7C7270"
+     "swatch": "CymbalGold",
+     "hex": "#E8A030"
     },
     "drink_beer": {
-     "swatch": "BottleAmber",
-     "hex": "#8A4A1A"
+     "swatch": "BeerAmber_emissive",
+     "hex": "#E8A23A"
     },
     "drink_beer_2": {
-     "swatch": "Cream",
-     "hex": "#D9C9A6"
+     "swatch": "Foam",
+     "hex": "#F6EEDC"
     },
     "eyes": {
      "swatch": "Ink",
-     "hex": "#160B0A"
+     "hex": "#120808"
     },
     "hair": {
      "swatch": "HairBlack",
@@ -5753,25 +6201,50 @@
      "hex": "#D2A07A"
     },
     "top": {
-     "swatch": "ColumnWhite",
-     "hex": "#E4DDE6"
+     "swatch": "ShirtWhite",
+     "hex": "#ECE6E0"
+    },
+    "top_accent": {
+     "swatch": "Stone",
+     "hex": "#7C7270"
     },
     "top_trim": {
-     "swatch": "Cream",
-     "hex": "#D9C9A6"
+     "swatch": "ColumnWhite",
+     "hex": "#E4DDE6"
     }
    },
-   "height_m": 1.65,
-   "height_vox": 33,
-   "head_top_vox": 29,
-   "tris": 664
+   "height_m": 1.7,
+   "height_vox": 34,
+   "head_top_vox": 31,
+   "tris": 966,
+   "animations": [
+    "idle",
+    "walk",
+    "sit",
+    "sit_drink",
+    "sit_talk",
+    "sit_hold",
+    "sit_applaud",
+    "stand_drink",
+    "cheers",
+    "applaud",
+    "dance",
+    "idle_warm",
+    "idle_tipsy",
+    "idle_merry",
+    "walk_warm",
+    "walk_tipsy",
+    "walk_merry",
+    "idle_sad"
+   ],
+   "bytes": 266884
   },
   {
-   "name": "patron_14",
-   "display": "Patron 14",
+   "name": "patron_02",
+   "display": "Patron 2",
    "role": "patron",
    "slot": "PATRON",
-   "path": "res://assets/chars/presets/patron_14.glb",
+   "path": "res://assets/chars/presets/patron_02.glb",
    "body": "petite",
    "parts": {
     "head": "soft",
@@ -5779,8 +6252,8 @@
     "eyes": "lashes",
     "brows": "arched",
     "mouth": "smile",
-    "top": "blouse",
-    "bottom": "jeans",
+    "top": "dress",
+    "bottom": "dress",
     "shoes": "loafers",
     "accessories": [
      "drink_beer"
@@ -5788,28 +6261,24 @@
    },
    "colours": {
     "bottom": {
-     "swatch": "Denim",
-     "hex": "#3F5878"
-    },
-    "bottom_trim": {
-     "swatch": "Stone",
-     "hex": "#7C7270"
+     "swatch": "DressRed",
+     "hex": "#B0141C"
     },
     "drink_beer": {
-     "swatch": "BottleAmber",
-     "hex": "#8A4A1A"
+     "swatch": "BeerAmber_emissive",
+     "hex": "#E8A23A"
     },
     "drink_beer_2": {
-     "swatch": "Cream",
-     "hex": "#D9C9A6"
+     "swatch": "Foam",
+     "hex": "#F6EEDC"
     },
     "eyes": {
      "swatch": "Ink",
-     "hex": "#160B0A"
+     "hex": "#120808"
     },
     "hair": {
      "swatch": "HairBleach",
-     "hex": "#E6D49A"
+     "hex": "#E8CF86"
     },
     "mouth": {
      "swatch": "Mouth",
@@ -5828,25 +6297,42 @@
      "hex": "#F0D2B6"
     },
     "top": {
-     "swatch": "Charcoal",
-     "hex": "#403A3E"
-    },
-    "top_trim": {
-     "swatch": "Cream",
-     "hex": "#D9C9A6"
+     "swatch": "DressRed",
+     "hex": "#B0141C"
     }
    },
-   "height_m": 1.45,
-   "height_vox": 29,
-   "head_top_vox": 26,
-   "tris": 580
+   "height_m": 1.6,
+   "height_vox": 32,
+   "head_top_vox": 29,
+   "tris": 1060,
+   "animations": [
+    "idle",
+    "walk",
+    "sit",
+    "sit_drink",
+    "sit_talk",
+    "sit_hold",
+    "sit_applaud",
+    "stand_drink",
+    "cheers",
+    "applaud",
+    "dance",
+    "idle_warm",
+    "idle_tipsy",
+    "idle_merry",
+    "walk_warm",
+    "walk_tipsy",
+    "walk_merry",
+    "idle_sad"
+   ],
+   "bytes": 271988
   },
   {
-   "name": "patron_15",
-   "display": "Patron 15",
+   "name": "patron_03",
+   "display": "Patron 3",
    "role": "patron",
    "slot": "PATRON",
-   "path": "res://assets/chars/presets/patron_15.glb",
+   "path": "res://assets/chars/presets/patron_03.glb",
    "body": "regular",
    "parts": {
     "head": "round",
@@ -5854,33 +6340,33 @@
     "eyes": "dot",
     "brows": "arched",
     "mouth": "grin",
-    "top": "blouse",
-    "bottom": "skirt",
+    "top": "dress",
+    "bottom": "dress",
     "shoes": "loafers",
     "accessories": [
-     "drink_beer"
+     "drink_mug"
     ]
    },
    "colours": {
     "bottom": {
-     "swatch": "StoolBlack",
-     "hex": "#221110"
+     "swatch": "DrumRed",
+     "hex": "#9A2A1A"
     },
-    "bottom_trim": {
-     "swatch": "Stone",
-     "hex": "#7C7270"
+    "drink_mug": {
+     "swatch": "BeerAmber_emissive",
+     "hex": "#E8A23A"
     },
-    "drink_beer": {
-     "swatch": "BottleAmber",
-     "hex": "#8A4A1A"
+    "drink_mug_2": {
+     "swatch": "Foam",
+     "hex": "#F6EEDC"
     },
-    "drink_beer_2": {
-     "swatch": "Cream",
-     "hex": "#D9C9A6"
+    "drink_mug_3": {
+     "swatch": "BottleClear",
+     "hex": "#A8A0A0"
     },
     "eyes": {
      "swatch": "Ink",
-     "hex": "#160B0A"
+     "hex": "#120808"
     },
     "hair": {
      "swatch": "HairBlack",
@@ -5903,25 +6389,42 @@
      "hex": "#6A432C"
     },
     "top": {
-     "swatch": "VelvetRed",
-     "hex": "#8C0610"
-    },
-    "top_trim": {
-     "swatch": "Cream",
-     "hex": "#D9C9A6"
+     "swatch": "DrumRed",
+     "hex": "#9A2A1A"
     }
    },
-   "height_m": 1.75,
-   "height_vox": 35,
-   "head_top_vox": 29,
-   "tris": 1886
+   "height_m": 1.8,
+   "height_vox": 36,
+   "head_top_vox": 31,
+   "tris": 1580,
+   "animations": [
+    "idle",
+    "walk",
+    "sit",
+    "sit_drink",
+    "sit_talk",
+    "sit_hold",
+    "sit_applaud",
+    "stand_drink",
+    "cheers",
+    "applaud",
+    "dance",
+    "idle_warm",
+    "idle_tipsy",
+    "idle_merry",
+    "walk_warm",
+    "walk_tipsy",
+    "walk_merry",
+    "idle_sad"
+   ],
+   "bytes": 330372
   },
   {
-   "name": "patron_16",
-   "display": "Patron 16",
+   "name": "patron_04",
+   "display": "Patron 4",
    "role": "patron",
    "slot": "PATRON",
-   "path": "res://assets/chars/presets/patron_16.glb",
+   "path": "res://assets/chars/presets/patron_04.glb",
    "body": "regular",
    "parts": {
     "head": "square",
@@ -5929,12 +6432,13 @@
     "eyes": "sleepy",
     "brows": "flat",
     "mouth": "small",
-    "top": "shirt",
+    "top": "jacket",
     "bottom": "trousers",
     "shoes": "boots",
     "accessories": [
      "hat_fedora",
-     "beard"
+     "beard",
+     "drink_beer"
     ]
    },
    "colours": {
@@ -5947,12 +6451,20 @@
      "hex": "#221110"
     },
     "bottom_trim": {
-     "swatch": "Stone",
-     "hex": "#7C7270"
+     "swatch": "CymbalGold",
+     "hex": "#E8A030"
+    },
+    "drink_beer": {
+     "swatch": "BeerAmber_emissive",
+     "hex": "#E8A23A"
+    },
+    "drink_beer_2": {
+     "swatch": "Foam",
+     "hex": "#F6EEDC"
     },
     "eyes": {
      "swatch": "Ink",
-     "hex": "#160B0A"
+     "hex": "#120808"
     },
     "hair": {
      "swatch": "HairBlack",
@@ -5983,25 +6495,50 @@
      "hex": "#BC8860"
     },
     "top": {
-     "swatch": "ColumnWhite",
-     "hex": "#E4DDE6"
+     "swatch": "Jacket",
+     "hex": "#262028"
+    },
+    "top_accent": {
+     "swatch": "ShirtWhite",
+     "hex": "#ECE6E0"
     },
     "top_trim": {
      "swatch": "Cream",
      "hex": "#D9C9A6"
     }
    },
-   "height_m": 1.75,
-   "height_vox": 35,
-   "head_top_vox": 29,
-   "tris": 684
+   "height_m": 1.8,
+   "height_vox": 36,
+   "head_top_vox": 31,
+   "tris": 910,
+   "animations": [
+    "idle",
+    "walk",
+    "sit",
+    "sit_drink",
+    "sit_talk",
+    "sit_hold",
+    "sit_applaud",
+    "stand_drink",
+    "cheers",
+    "applaud",
+    "dance",
+    "idle_warm",
+    "idle_tipsy",
+    "idle_merry",
+    "walk_warm",
+    "walk_tipsy",
+    "walk_merry",
+    "idle_sad"
+   ],
+   "bytes": 261280
   },
   {
-   "name": "patron_17",
-   "display": "Patron 17",
+   "name": "patron_05",
+   "display": "Patron 5",
    "role": "patron",
    "slot": "PATRON",
-   "path": "res://assets/chars/presets/patron_17.glb",
+   "path": "res://assets/chars/presets/patron_05.glb",
    "body": "petite",
    "parts": {
     "head": "heart",
@@ -6022,24 +6559,24 @@
      "hex": "#3F5878"
     },
     "bottom_trim": {
-     "swatch": "Stone",
-     "hex": "#7C7270"
+     "swatch": "Leather",
+     "hex": "#5A3020"
     },
     "drink_beer": {
-     "swatch": "BottleAmber",
-     "hex": "#8A4A1A"
+     "swatch": "BeerAmber_emissive",
+     "hex": "#E8A23A"
     },
     "drink_beer_2": {
-     "swatch": "Cream",
-     "hex": "#D9C9A6"
+     "swatch": "Foam",
+     "hex": "#F6EEDC"
     },
     "eyes": {
      "swatch": "Ink",
-     "hex": "#160B0A"
+     "hex": "#120808"
     },
     "hair": {
-     "swatch": "HairAuburn",
-     "hex": "#7E3220"
+     "swatch": "HairGinger",
+     "hex": "#C0602A"
     },
     "mouth": {
      "swatch": "Mouth",
@@ -6060,23 +6597,40 @@
     "top": {
      "swatch": "Stone",
      "hex": "#7C7270"
-    },
-    "top_trim": {
-     "swatch": "Cream",
-     "hex": "#D9C9A6"
     }
    },
-   "height_m": 1.45,
-   "height_vox": 29,
-   "head_top_vox": 26,
-   "tris": 580
+   "height_m": 1.6,
+   "height_vox": 32,
+   "head_top_vox": 29,
+   "tris": 1032,
+   "animations": [
+    "idle",
+    "walk",
+    "sit",
+    "sit_drink",
+    "sit_talk",
+    "sit_hold",
+    "sit_applaud",
+    "stand_drink",
+    "cheers",
+    "applaud",
+    "dance",
+    "idle_warm",
+    "idle_tipsy",
+    "idle_merry",
+    "walk_warm",
+    "walk_tipsy",
+    "walk_merry",
+    "idle_sad"
+   ],
+   "bytes": 270320
   },
   {
-   "name": "patron_18",
-   "display": "Patron 18",
+   "name": "patron_06",
+   "display": "Patron 6",
    "role": "patron",
    "slot": "PATRON",
-   "path": "res://assets/chars/presets/patron_18.glb",
+   "path": "res://assets/chars/presets/patron_06.glb",
    "body": "broad",
    "parts": {
     "head": "square",
@@ -6089,7 +6643,7 @@
     "shoes": "boots",
     "accessories": [
      "beard",
-     "drink_beer"
+     "drink_mug"
     ]
    },
    "colours": {
@@ -6102,20 +6656,24 @@
      "hex": "#403A3E"
     },
     "bottom_trim": {
-     "swatch": "Stone",
-     "hex": "#7C7270"
+     "swatch": "CymbalGold",
+     "hex": "#E8A030"
     },
-    "drink_beer": {
-     "swatch": "BottleAmber",
-     "hex": "#8A4A1A"
+    "drink_mug": {
+     "swatch": "BeerAmber_emissive",
+     "hex": "#E8A23A"
     },
-    "drink_beer_2": {
-     "swatch": "Cream",
-     "hex": "#D9C9A6"
+    "drink_mug_2": {
+     "swatch": "Foam",
+     "hex": "#F6EEDC"
+    },
+    "drink_mug_3": {
+     "swatch": "BottleClear",
+     "hex": "#A8A0A0"
     },
     "eyes": {
      "swatch": "Ink",
-     "hex": "#160B0A"
+     "hex": "#120808"
     },
     "hair": {
      "swatch": "HairDarkBrown",
@@ -6140,23 +6698,40 @@
     "top": {
      "swatch": "Moss",
      "hex": "#4C5A30"
-    },
-    "top_trim": {
-     "swatch": "Cream",
-     "hex": "#D9C9A6"
     }
    },
    "height_m": 1.75,
    "height_vox": 35,
-   "head_top_vox": 31,
-   "tris": 708
+   "head_top_vox": 32,
+   "tris": 1016,
+   "animations": [
+    "idle",
+    "walk",
+    "sit",
+    "sit_drink",
+    "sit_talk",
+    "sit_hold",
+    "sit_applaud",
+    "stand_drink",
+    "cheers",
+    "applaud",
+    "dance",
+    "idle_warm",
+    "idle_tipsy",
+    "idle_merry",
+    "walk_warm",
+    "walk_tipsy",
+    "walk_merry",
+    "idle_sad"
+   ],
+   "bytes": 270980
   },
   {
-   "name": "patron_19",
-   "display": "Patron 19",
+   "name": "patron_07",
+   "display": "Patron 7",
    "role": "patron",
    "slot": "PATRON",
-   "path": "res://assets/chars/presets/patron_19.glb",
+   "path": "res://assets/chars/presets/patron_07.glb",
    "body": "regular",
    "parts": {
     "head": "soft",
@@ -6176,25 +6751,21 @@
      "swatch": "StoolBlack",
      "hex": "#221110"
     },
-    "bottom_trim": {
-     "swatch": "Stone",
-     "hex": "#7C7270"
-    },
     "drink_beer": {
-     "swatch": "BottleAmber",
-     "hex": "#8A4A1A"
+     "swatch": "BeerAmber_emissive",
+     "hex": "#E8A23A"
     },
     "drink_beer_2": {
-     "swatch": "Cream",
-     "hex": "#D9C9A6"
+     "swatch": "Foam",
+     "hex": "#F6EEDC"
     },
     "eyes": {
      "swatch": "Ink",
-     "hex": "#160B0A"
+     "hex": "#120808"
     },
     "hair": {
      "swatch": "HairBleach",
-     "hex": "#E6D49A"
+     "hex": "#E8CF86"
     },
     "mouth": {
      "swatch": "Mouth",
@@ -6221,17 +6792,38 @@
      "hex": "#D9C9A6"
     }
    },
-   "height_m": 1.6,
-   "height_vox": 32,
-   "head_top_vox": 29,
-   "tris": 606
+   "height_m": 1.65,
+   "height_vox": 33,
+   "head_top_vox": 31,
+   "tris": 938,
+   "animations": [
+    "idle",
+    "walk",
+    "sit",
+    "sit_drink",
+    "sit_talk",
+    "sit_hold",
+    "sit_applaud",
+    "stand_drink",
+    "cheers",
+    "applaud",
+    "dance",
+    "idle_warm",
+    "idle_tipsy",
+    "idle_merry",
+    "walk_warm",
+    "walk_tipsy",
+    "walk_merry",
+    "idle_sad"
+   ],
+   "bytes": 259976
   },
   {
-   "name": "patron_20",
-   "display": "Patron 20",
+   "name": "patron_08",
+   "display": "Patron 8",
    "role": "patron",
    "slot": "PATRON",
-   "path": "res://assets/chars/presets/patron_20.glb",
+   "path": "res://assets/chars/presets/patron_08.glb",
    "body": "regular",
    "parts": {
     "head": "round",
@@ -6252,20 +6844,20 @@
      "hex": "#403A3E"
     },
     "bottom_trim": {
-     "swatch": "Stone",
-     "hex": "#7C7270"
+     "swatch": "CymbalGold",
+     "hex": "#E8A030"
     },
     "drink_beer": {
-     "swatch": "BottleAmber",
-     "hex": "#8A4A1A"
+     "swatch": "BeerAmber_emissive",
+     "hex": "#E8A23A"
     },
     "drink_beer_2": {
-     "swatch": "Cream",
-     "hex": "#D9C9A6"
+     "swatch": "Foam",
+     "hex": "#F6EEDC"
     },
     "eyes": {
      "swatch": "Ink",
-     "hex": "#160B0A"
+     "hex": "#120808"
     },
     "hair": {
      "swatch": "HairBlack",
@@ -6291,56 +6883,81 @@
      "swatch": "DenimLight",
      "hex": "#6C88A8"
     },
+    "top_accent": {
+     "swatch": "Cream",
+     "hex": "#D9C9A6"
+    },
     "top_trim": {
      "swatch": "Cream",
      "hex": "#D9C9A6"
     }
    },
-   "height_m": 1.75,
-   "height_vox": 35,
-   "head_top_vox": 29,
-   "tris": 1786
+   "height_m": 1.8,
+   "height_vox": 36,
+   "head_top_vox": 31,
+   "tris": 1486,
+   "animations": [
+    "idle",
+    "walk",
+    "sit",
+    "sit_drink",
+    "sit_talk",
+    "sit_hold",
+    "sit_applaud",
+    "stand_drink",
+    "cheers",
+    "applaud",
+    "dance",
+    "idle_warm",
+    "idle_tipsy",
+    "idle_merry",
+    "walk_warm",
+    "walk_tipsy",
+    "walk_merry",
+    "idle_sad"
+   ],
+   "bytes": 322508
   },
   {
-   "name": "patron_21",
-   "display": "Patron 21",
+   "name": "patron_09",
+   "display": "Patron 9",
    "role": "patron",
    "slot": "PATRON",
-   "path": "res://assets/chars/presets/patron_21.glb",
+   "path": "res://assets/chars/presets/patron_09.glb",
    "body": "petite",
    "parts": {
     "head": "soft",
-    "hair": "afro",
+    "hair": "curly",
     "eyes": "lashes",
     "brows": "arched",
     "mouth": "small",
-    "top": "blouse",
-    "bottom": "skirt",
+    "top": "dress",
+    "bottom": "dress",
     "shoes": "loafers",
     "accessories": [
-     "drink_beer"
+     "drink_mug"
     ]
    },
    "colours": {
     "bottom": {
-     "swatch": "StoolBlack",
-     "hex": "#221110"
+     "swatch": "VelvetRed",
+     "hex": "#8C0610"
     },
-    "bottom_trim": {
-     "swatch": "Stone",
-     "hex": "#7C7270"
+    "drink_mug": {
+     "swatch": "BeerAmber_emissive",
+     "hex": "#E8A23A"
     },
-    "drink_beer": {
-     "swatch": "BottleAmber",
-     "hex": "#8A4A1A"
+    "drink_mug_2": {
+     "swatch": "Foam",
+     "hex": "#F6EEDC"
     },
-    "drink_beer_2": {
-     "swatch": "Cream",
-     "hex": "#D9C9A6"
+    "drink_mug_3": {
+     "swatch": "BottleClear",
+     "hex": "#A8A0A0"
     },
     "eyes": {
      "swatch": "Ink",
-     "hex": "#160B0A"
+     "hex": "#120808"
     },
     "hair": {
      "swatch": "HairBlack",
@@ -6365,23 +6982,40 @@
     "top": {
      "swatch": "VelvetRed",
      "hex": "#8C0610"
-    },
-    "top_trim": {
-     "swatch": "Cream",
-     "hex": "#D9C9A6"
     }
    },
    "height_m": 1.6,
    "height_vox": 32,
-   "head_top_vox": 26,
-   "tris": 1904
+   "head_top_vox": 29,
+   "tris": 1248,
+   "animations": [
+    "idle",
+    "walk",
+    "sit",
+    "sit_drink",
+    "sit_talk",
+    "sit_hold",
+    "sit_applaud",
+    "stand_drink",
+    "cheers",
+    "applaud",
+    "dance",
+    "idle_warm",
+    "idle_tipsy",
+    "idle_merry",
+    "walk_warm",
+    "walk_tipsy",
+    "walk_merry",
+    "idle_sad"
+   ],
+   "bytes": 293732
   },
   {
-   "name": "patron_22",
-   "display": "Patron 22",
+   "name": "patron_10",
+   "display": "Patron 10",
    "role": "patron",
    "slot": "PATRON",
-   "path": "res://assets/chars/presets/patron_22.glb",
+   "path": "res://assets/chars/presets/patron_10.glb",
    "body": "regular",
    "parts": {
     "head": "square",
@@ -6402,20 +7036,20 @@
      "hex": "#3F5878"
     },
     "bottom_trim": {
-     "swatch": "Stone",
-     "hex": "#7C7270"
+     "swatch": "Leather",
+     "hex": "#5A3020"
     },
     "drink_beer": {
-     "swatch": "BottleAmber",
-     "hex": "#8A4A1A"
+     "swatch": "BeerAmber_emissive",
+     "hex": "#E8A23A"
     },
     "drink_beer_2": {
-     "swatch": "Cream",
-     "hex": "#D9C9A6"
+     "swatch": "Foam",
+     "hex": "#F6EEDC"
     },
     "eyes": {
      "swatch": "Ink",
-     "hex": "#160B0A"
+     "hex": "#120808"
     },
     "hair": {
      "swatch": "HairBrown",
@@ -6441,22 +7075,47 @@
      "swatch": "Charcoal",
      "hex": "#403A3E"
     },
+    "top_accent": {
+     "swatch": "Cream",
+     "hex": "#D9C9A6"
+    },
     "top_trim": {
      "swatch": "Cream",
      "hex": "#D9C9A6"
     }
    },
-   "height_m": 1.65,
-   "height_vox": 33,
-   "head_top_vox": 29,
-   "tris": 512
+   "height_m": 1.7,
+   "height_vox": 34,
+   "head_top_vox": 31,
+   "tris": 802,
+   "animations": [
+    "idle",
+    "walk",
+    "sit",
+    "sit_drink",
+    "sit_talk",
+    "sit_hold",
+    "sit_applaud",
+    "stand_drink",
+    "cheers",
+    "applaud",
+    "dance",
+    "idle_warm",
+    "idle_tipsy",
+    "idle_merry",
+    "walk_warm",
+    "walk_tipsy",
+    "walk_merry",
+    "idle_sad"
+   ],
+   "bytes": 246304
   },
   {
-   "name": "patron_23",
-   "display": "Patron 23",
+   "name": "patron_11",
+   "display": "Patron 11",
    "role": "patron",
    "slot": "PATRON",
-   "path": "res://assets/chars/presets/patron_23.glb",
+   "path": "res://assets/chars/presets/patron_11.glb",
    "body": "broad",
    "parts": {
     "head": "round",
@@ -6464,10 +7123,11 @@
     "eyes": "sleepy",
     "brows": "thick",
     "mouth": "smile",
-    "top": "shirt",
+    "top": "jacket",
     "bottom": "trousers",
     "shoes": "loafers",
     "accessories": [
+     "glasses_round",
      "drink_beer"
     ]
    },
@@ -6477,20 +7137,24 @@
      "hex": "#221110"
     },
     "bottom_trim": {
-     "swatch": "Stone",
-     "hex": "#7C7270"
+     "swatch": "CymbalGold",
+     "hex": "#E8A030"
     },
     "drink_beer": {
-     "swatch": "BottleAmber",
-     "hex": "#8A4A1A"
+     "swatch": "BeerAmber_emissive",
+     "hex": "#E8A23A"
     },
     "drink_beer_2": {
-     "swatch": "Cream",
-     "hex": "#D9C9A6"
+     "swatch": "Foam",
+     "hex": "#F6EEDC"
     },
     "eyes": {
      "swatch": "Ink",
-     "hex": "#160B0A"
+     "hex": "#120808"
+    },
+    "glasses_round": {
+     "swatch": "CymbalGold",
+     "hex": "#E8A030"
     },
     "hair": {
      "swatch": "HairWhite",
@@ -6516,26 +7180,51 @@
      "swatch": "Charcoal",
      "hex": "#403A3E"
     },
+    "top_accent": {
+     "swatch": "Cream",
+     "hex": "#D9C9A6"
+    },
     "top_trim": {
      "swatch": "Cream",
      "hex": "#D9C9A6"
     }
    },
-   "height_m": 1.65,
-   "height_vox": 33,
-   "head_top_vox": 31,
-   "tris": 344
+   "height_m": 1.75,
+   "height_vox": 35,
+   "head_top_vox": 32,
+   "tris": 734,
+   "animations": [
+    "idle",
+    "walk",
+    "sit",
+    "sit_drink",
+    "sit_talk",
+    "sit_hold",
+    "sit_applaud",
+    "stand_drink",
+    "cheers",
+    "applaud",
+    "dance",
+    "idle_warm",
+    "idle_tipsy",
+    "idle_merry",
+    "walk_warm",
+    "walk_tipsy",
+    "walk_merry",
+    "idle_sad"
+   ],
+   "bytes": 238028
   },
   {
-   "name": "patron_24",
-   "display": "Patron 24",
+   "name": "patron_12",
+   "display": "Patron 12",
    "role": "patron",
    "slot": "PATRON",
-   "path": "res://assets/chars/presets/patron_24.glb",
+   "path": "res://assets/chars/presets/patron_12.glb",
    "body": "regular",
    "parts": {
     "head": "heart",
-    "hair": "wavy",
+    "hair": "long",
     "eyes": "wide",
     "brows": "arched",
     "mouth": "smile",
@@ -6543,7 +7232,7 @@
     "bottom": "jeans",
     "shoes": "sneakers",
     "accessories": [
-     "drink_beer"
+     "drink_mug"
     ]
    },
    "colours": {
@@ -6552,20 +7241,24 @@
      "hex": "#3F5878"
     },
     "bottom_trim": {
-     "swatch": "Stone",
-     "hex": "#7C7270"
+     "swatch": "Leather",
+     "hex": "#5A3020"
     },
-    "drink_beer": {
-     "swatch": "BottleAmber",
-     "hex": "#8A4A1A"
+    "drink_mug": {
+     "swatch": "BeerAmber_emissive",
+     "hex": "#E8A23A"
     },
-    "drink_beer_2": {
-     "swatch": "Cream",
-     "hex": "#D9C9A6"
+    "drink_mug_2": {
+     "swatch": "Foam",
+     "hex": "#F6EEDC"
+    },
+    "drink_mug_3": {
+     "swatch": "BottleClear",
+     "hex": "#A8A0A0"
     },
     "eyes": {
      "swatch": "Ink",
-     "hex": "#160B0A"
+     "hex": "#120808"
     },
     "hair": {
      "swatch": "HairDarkBrown",
@@ -6588,8 +7281,210 @@
      "hex": "#D2A07A"
     },
     "top": {
-     "swatch": "VelvetRed",
-     "hex": "#8C0610"
+     "swatch": "DressRed",
+     "hex": "#B0141C"
+    }
+   },
+   "height_m": 1.7,
+   "height_vox": 34,
+   "head_top_vox": 31,
+   "tris": 884,
+   "animations": [
+    "idle",
+    "walk",
+    "sit",
+    "sit_drink",
+    "sit_talk",
+    "sit_hold",
+    "sit_applaud",
+    "stand_drink",
+    "cheers",
+    "applaud",
+    "dance",
+    "idle_warm",
+    "idle_tipsy",
+    "idle_merry",
+    "walk_warm",
+    "walk_tipsy",
+    "walk_merry",
+    "idle_sad"
+   ],
+   "bytes": 255212
+  },
+  {
+   "name": "patron_13",
+   "display": "Patron 13",
+   "role": "patron",
+   "slot": "PATRON",
+   "path": "res://assets/chars/presets/patron_13.glb",
+   "body": "regular",
+   "parts": {
+    "head": "square",
+    "hair": "crop",
+    "eyes": "dot",
+    "brows": "thick",
+    "mouth": "smile",
+    "top": "shirt_rolled",
+    "bottom": "jeans",
+    "shoes": "boots",
+    "accessories": [
+     "beard",
+     "drink_beer"
+    ]
+   },
+   "colours": {
+    "beard": {
+     "swatch": "HairBrown",
+     "hex": "#6A4228"
+    },
+    "bottom": {
+     "swatch": "Denim",
+     "hex": "#3F5878"
+    },
+    "bottom_trim": {
+     "swatch": "CymbalGold",
+     "hex": "#E8A030"
+    },
+    "drink_beer": {
+     "swatch": "BeerAmber_emissive",
+     "hex": "#E8A23A"
+    },
+    "drink_beer_2": {
+     "swatch": "Foam",
+     "hex": "#F6EEDC"
+    },
+    "eyes": {
+     "swatch": "Ink",
+     "hex": "#120808"
+    },
+    "hair": {
+     "swatch": "HairBrown",
+     "hex": "#6A4228"
+    },
+    "mouth": {
+     "swatch": "Mouth",
+     "hex": "#6A2420"
+    },
+    "shoes": {
+     "swatch": "Charcoal",
+     "hex": "#403A3E"
+    },
+    "shoes_trim": {
+     "swatch": "Stone",
+     "hex": "#7C7270"
+    },
+    "skin": {
+     "swatch": "Skin2",
+     "hex": "#E4BA96"
+    },
+    "top": {
+     "swatch": "ShirtWhite",
+     "hex": "#ECE6E0"
+    },
+    "top_accent": {
+     "swatch": "Stone",
+     "hex": "#7C7270"
+    },
+    "top_trim": {
+     "swatch": "ColumnWhite",
+     "hex": "#E4DDE6"
+    }
+   },
+   "height_m": 1.65,
+   "height_vox": 33,
+   "head_top_vox": 31,
+   "tris": 812,
+   "animations": [
+    "idle",
+    "walk",
+    "sit",
+    "sit_drink",
+    "sit_talk",
+    "sit_hold",
+    "sit_applaud",
+    "stand_drink",
+    "cheers",
+    "applaud",
+    "dance",
+    "idle_warm",
+    "idle_tipsy",
+    "idle_merry",
+    "walk_warm",
+    "walk_tipsy",
+    "walk_merry",
+    "idle_sad"
+   ],
+   "bytes": 249124
+  },
+  {
+   "name": "patron_14",
+   "display": "Patron 14",
+   "role": "patron",
+   "slot": "PATRON",
+   "path": "res://assets/chars/presets/patron_14.glb",
+   "body": "petite",
+   "parts": {
+    "head": "round",
+    "hair": "bob",
+    "eyes": "lashes",
+    "brows": "arched",
+    "mouth": "smile",
+    "top": "blouse",
+    "bottom": "jeans",
+    "shoes": "loafers",
+    "accessories": [
+     "glasses_round",
+     "drink_beer"
+    ]
+   },
+   "colours": {
+    "bottom": {
+     "swatch": "Denim",
+     "hex": "#3F5878"
+    },
+    "bottom_trim": {
+     "swatch": "Leather",
+     "hex": "#5A3020"
+    },
+    "drink_beer": {
+     "swatch": "BeerAmber_emissive",
+     "hex": "#E8A23A"
+    },
+    "drink_beer_2": {
+     "swatch": "Foam",
+     "hex": "#F6EEDC"
+    },
+    "eyes": {
+     "swatch": "Ink",
+     "hex": "#120808"
+    },
+    "glasses_round": {
+     "swatch": "CymbalGold",
+     "hex": "#E8A030"
+    },
+    "hair": {
+     "swatch": "HairBlack",
+     "hex": "#1E1616"
+    },
+    "mouth": {
+     "swatch": "Mouth",
+     "hex": "#6A2420"
+    },
+    "shoes": {
+     "swatch": "WoodDark",
+     "hex": "#36241A"
+    },
+    "shoes_trim": {
+     "swatch": "Stone",
+     "hex": "#7C7270"
+    },
+    "skin": {
+     "swatch": "Skin4",
+     "hex": "#BC8860"
+    },
+    "top": {
+     "swatch": "Mustard",
+     "hex": "#C99430"
     },
     "top_trim": {
      "swatch": "Cream",
@@ -6599,7 +7494,1028 @@
    "height_m": 1.6,
    "height_vox": 32,
    "head_top_vox": 29,
-   "tris": 562
+   "tris": 932,
+   "animations": [
+    "idle",
+    "walk",
+    "sit",
+    "sit_drink",
+    "sit_talk",
+    "sit_hold",
+    "sit_applaud",
+    "stand_drink",
+    "cheers",
+    "applaud",
+    "dance",
+    "idle_warm",
+    "idle_tipsy",
+    "idle_merry",
+    "walk_warm",
+    "walk_tipsy",
+    "walk_merry",
+    "idle_sad"
+   ],
+   "bytes": 261988
+  },
+  {
+   "name": "patron_15",
+   "display": "Patron 15",
+   "role": "patron",
+   "slot": "PATRON",
+   "path": "res://assets/chars/presets/patron_15.glb",
+   "body": "broad",
+   "parts": {
+    "head": "soft",
+    "hair": "buzz",
+    "eyes": "dot",
+    "brows": "thick",
+    "mouth": "flat",
+    "top": "tee",
+    "bottom": "jeans",
+    "shoes": "boots",
+    "accessories": [
+     "beard",
+     "drink_mug"
+    ]
+   },
+   "colours": {
+    "beard": {
+     "swatch": "HairBlack",
+     "hex": "#1E1616"
+    },
+    "bottom": {
+     "swatch": "Denim",
+     "hex": "#3F5878"
+    },
+    "bottom_trim": {
+     "swatch": "CymbalGold",
+     "hex": "#E8A030"
+    },
+    "drink_mug": {
+     "swatch": "BeerAmber_emissive",
+     "hex": "#E8A23A"
+    },
+    "drink_mug_2": {
+     "swatch": "Foam",
+     "hex": "#F6EEDC"
+    },
+    "drink_mug_3": {
+     "swatch": "BottleClear",
+     "hex": "#A8A0A0"
+    },
+    "eyes": {
+     "swatch": "Ink",
+     "hex": "#120808"
+    },
+    "hair": {
+     "swatch": "HairBlack",
+     "hex": "#1E1616"
+    },
+    "mouth": {
+     "swatch": "Mouth",
+     "hex": "#6A2420"
+    },
+    "shoes": {
+     "swatch": "StoolBlack",
+     "hex": "#221110"
+    },
+    "shoes_trim": {
+     "swatch": "Stone",
+     "hex": "#7C7270"
+    },
+    "skin": {
+     "swatch": "Skin6",
+     "hex": "#845636"
+    },
+    "top": {
+     "swatch": "StoolBlack",
+     "hex": "#221110"
+    }
+   },
+   "height_m": 1.65,
+   "height_vox": 33,
+   "head_top_vox": 32,
+   "tris": 524,
+   "animations": [
+    "idle",
+    "walk",
+    "sit",
+    "sit_drink",
+    "sit_talk",
+    "sit_hold",
+    "sit_applaud",
+    "stand_drink",
+    "cheers",
+    "applaud",
+    "dance",
+    "idle_warm",
+    "idle_tipsy",
+    "idle_merry",
+    "walk_warm",
+    "walk_tipsy",
+    "walk_merry",
+    "idle_sad"
+   ],
+   "bytes": 216664
+  },
+  {
+   "name": "patron_16",
+   "display": "Patron 16",
+   "role": "patron",
+   "slot": "PATRON",
+   "path": "res://assets/chars/presets/patron_16.glb",
+   "body": "regular",
+   "parts": {
+    "head": "soft",
+    "hair": "curly",
+    "eyes": "dot",
+    "brows": "flat",
+    "mouth": "smile",
+    "top": "shirt",
+    "bottom": "trousers",
+    "shoes": "sneakers",
+    "accessories": [
+     "drink_beer"
+    ]
+   },
+   "colours": {
+    "bottom": {
+     "swatch": "Charcoal",
+     "hex": "#403A3E"
+    },
+    "bottom_trim": {
+     "swatch": "CymbalGold",
+     "hex": "#E8A030"
+    },
+    "drink_beer": {
+     "swatch": "BeerAmber_emissive",
+     "hex": "#E8A23A"
+    },
+    "drink_beer_2": {
+     "swatch": "Foam",
+     "hex": "#F6EEDC"
+    },
+    "eyes": {
+     "swatch": "Ink",
+     "hex": "#120808"
+    },
+    "hair": {
+     "swatch": "HairDarkBrown",
+     "hex": "#3E2618"
+    },
+    "mouth": {
+     "swatch": "Mouth",
+     "hex": "#6A2420"
+    },
+    "shoes": {
+     "swatch": "Charcoal",
+     "hex": "#403A3E"
+    },
+    "shoes_trim": {
+     "swatch": "Stone",
+     "hex": "#7C7270"
+    },
+    "skin": {
+     "swatch": "Skin5",
+     "hex": "#A06E4A"
+    },
+    "top": {
+     "swatch": "Olive",
+     "hex": "#66703A"
+    },
+    "top_accent": {
+     "swatch": "Cream",
+     "hex": "#D9C9A6"
+    },
+    "top_trim": {
+     "swatch": "Cream",
+     "hex": "#D9C9A6"
+    }
+   },
+   "height_m": 1.7,
+   "height_vox": 34,
+   "head_top_vox": 31,
+   "tris": 1274,
+   "animations": [
+    "idle",
+    "walk",
+    "sit",
+    "sit_drink",
+    "sit_talk",
+    "sit_hold",
+    "sit_applaud",
+    "stand_drink",
+    "cheers",
+    "applaud",
+    "dance",
+    "idle_warm",
+    "idle_tipsy",
+    "idle_merry",
+    "walk_warm",
+    "walk_tipsy",
+    "walk_merry",
+    "idle_sad"
+   ],
+   "bytes": 299168
+  },
+  {
+   "name": "patron_17",
+   "display": "Patron 17",
+   "role": "patron",
+   "slot": "PATRON",
+   "path": "res://assets/chars/presets/patron_17.glb",
+   "body": "petite",
+   "parts": {
+    "head": "heart",
+    "hair": "ponytail",
+    "eyes": "lashes",
+    "brows": "arched",
+    "mouth": "open",
+    "top": "tee",
+    "bottom": "skirt",
+    "shoes": "sneakers",
+    "accessories": [
+     "drink_beer"
+    ]
+   },
+   "colours": {
+    "bottom": {
+     "swatch": "StoolBlack",
+     "hex": "#221110"
+    },
+    "drink_beer": {
+     "swatch": "BeerAmber_emissive",
+     "hex": "#E8A23A"
+    },
+    "drink_beer_2": {
+     "swatch": "Foam",
+     "hex": "#F6EEDC"
+    },
+    "eyes": {
+     "swatch": "Ink",
+     "hex": "#120808"
+    },
+    "hair": {
+     "swatch": "HairBlack",
+     "hex": "#1E1616"
+    },
+    "mouth": {
+     "swatch": "Mouth",
+     "hex": "#6A2420"
+    },
+    "shoes": {
+     "swatch": "WoodDark",
+     "hex": "#36241A"
+    },
+    "shoes_trim": {
+     "swatch": "Stone",
+     "hex": "#7C7270"
+    },
+    "skin": {
+     "swatch": "Skin3",
+     "hex": "#D2A07A"
+    },
+    "top": {
+     "swatch": "Cream",
+     "hex": "#D9C9A6"
+    }
+   },
+   "height_m": 1.65,
+   "height_vox": 33,
+   "head_top_vox": 29,
+   "tris": 858,
+   "animations": [
+    "idle",
+    "walk",
+    "sit",
+    "sit_drink",
+    "sit_talk",
+    "sit_hold",
+    "sit_applaud",
+    "stand_drink",
+    "cheers",
+    "applaud",
+    "dance",
+    "idle_warm",
+    "idle_tipsy",
+    "idle_merry",
+    "walk_warm",
+    "walk_tipsy",
+    "walk_merry",
+    "idle_sad"
+   ],
+   "bytes": 249764
+  },
+  {
+   "name": "patron_18",
+   "display": "Patron 18",
+   "role": "patron",
+   "slot": "PATRON",
+   "path": "res://assets/chars/presets/patron_18.glb",
+   "body": "regular",
+   "parts": {
+    "head": "square",
+    "hair": "side_part",
+    "eyes": "dot",
+    "brows": "flat",
+    "mouth": "small",
+    "top": "jacket",
+    "bottom": "trousers",
+    "shoes": "loafers",
+    "accessories": [
+     "drink_mug"
+    ]
+   },
+   "colours": {
+    "bottom": {
+     "swatch": "Charcoal",
+     "hex": "#403A3E"
+    },
+    "bottom_trim": {
+     "swatch": "CymbalGold",
+     "hex": "#E8A030"
+    },
+    "drink_mug": {
+     "swatch": "BeerAmber_emissive",
+     "hex": "#E8A23A"
+    },
+    "drink_mug_2": {
+     "swatch": "Foam",
+     "hex": "#F6EEDC"
+    },
+    "drink_mug_3": {
+     "swatch": "BottleClear",
+     "hex": "#A8A0A0"
+    },
+    "eyes": {
+     "swatch": "Ink",
+     "hex": "#120808"
+    },
+    "hair": {
+     "swatch": "HairBrown",
+     "hex": "#6A4228"
+    },
+    "mouth": {
+     "swatch": "Mouth",
+     "hex": "#6A2420"
+    },
+    "shoes": {
+     "swatch": "StoolBlack",
+     "hex": "#221110"
+    },
+    "shoes_trim": {
+     "swatch": "Stone",
+     "hex": "#7C7270"
+    },
+    "skin": {
+     "swatch": "Skin1",
+     "hex": "#F0D2B6"
+    },
+    "top": {
+     "swatch": "Denim",
+     "hex": "#3F5878"
+    },
+    "top_accent": {
+     "swatch": "ShirtWhite",
+     "hex": "#ECE6E0"
+    },
+    "top_trim": {
+     "swatch": "Cream",
+     "hex": "#D9C9A6"
+    }
+   },
+   "height_m": 1.7,
+   "height_vox": 34,
+   "head_top_vox": 31,
+   "tris": 630,
+   "animations": [
+    "idle",
+    "walk",
+    "sit",
+    "sit_drink",
+    "sit_talk",
+    "sit_hold",
+    "sit_applaud",
+    "stand_drink",
+    "cheers",
+    "applaud",
+    "dance",
+    "idle_warm",
+    "idle_tipsy",
+    "idle_merry",
+    "walk_warm",
+    "walk_tipsy",
+    "walk_merry",
+    "idle_sad"
+   ],
+   "bytes": 227332
+  },
+  {
+   "name": "patron_19",
+   "display": "Patron 19",
+   "role": "patron",
+   "slot": "PATRON",
+   "path": "res://assets/chars/presets/patron_19.glb",
+   "body": "regular",
+   "parts": {
+    "head": "round",
+    "hair": "shaggy",
+    "eyes": "sleepy",
+    "brows": "thick",
+    "mouth": "grin",
+    "top": "shirt_rolled",
+    "bottom": "jeans",
+    "shoes": "boots",
+    "accessories": [
+     "hat_flat_cap",
+     "drink_beer"
+    ]
+   },
+   "colours": {
+    "bottom": {
+     "swatch": "Denim",
+     "hex": "#3F5878"
+    },
+    "bottom_trim": {
+     "swatch": "CymbalGold",
+     "hex": "#E8A030"
+    },
+    "drink_beer": {
+     "swatch": "BeerAmber_emissive",
+     "hex": "#E8A23A"
+    },
+    "drink_beer_2": {
+     "swatch": "Foam",
+     "hex": "#F6EEDC"
+    },
+    "eyes": {
+     "swatch": "Ink",
+     "hex": "#120808"
+    },
+    "hair": {
+     "swatch": "HairBlack",
+     "hex": "#1E1616"
+    },
+    "hat_flat_cap": {
+     "swatch": "Stone",
+     "hex": "#7C7270"
+    },
+    "hat_flat_cap_2": {
+     "swatch": "Charcoal",
+     "hex": "#403A3E"
+    },
+    "mouth": {
+     "swatch": "Mouth",
+     "hex": "#6A2420"
+    },
+    "shoes": {
+     "swatch": "Charcoal",
+     "hex": "#403A3E"
+    },
+    "shoes_trim": {
+     "swatch": "Stone",
+     "hex": "#7C7270"
+    },
+    "skin": {
+     "swatch": "Skin4",
+     "hex": "#BC8860"
+    },
+    "top": {
+     "swatch": "Rust",
+     "hex": "#A04A26"
+    },
+    "top_accent": {
+     "swatch": "Cream",
+     "hex": "#D9C9A6"
+    },
+    "top_trim": {
+     "swatch": "Cream",
+     "hex": "#D9C9A6"
+    }
+   },
+   "height_m": 1.75,
+   "height_vox": 35,
+   "head_top_vox": 31,
+   "tris": 750,
+   "animations": [
+    "idle",
+    "walk",
+    "sit",
+    "sit_drink",
+    "sit_talk",
+    "sit_hold",
+    "sit_applaud",
+    "stand_drink",
+    "cheers",
+    "applaud",
+    "dance",
+    "idle_warm",
+    "idle_tipsy",
+    "idle_merry",
+    "walk_warm",
+    "walk_tipsy",
+    "walk_merry",
+    "idle_sad"
+   ],
+   "bytes": 244028
+  },
+  {
+   "name": "patron_20",
+   "display": "Patron 20",
+   "role": "patron",
+   "slot": "PATRON",
+   "path": "res://assets/chars/presets/patron_20.glb",
+   "body": "petite",
+   "parts": {
+    "head": "soft",
+    "hair": "long",
+    "eyes": "lashes",
+    "brows": "arched",
+    "mouth": "smile",
+    "top": "dress",
+    "bottom": "dress",
+    "shoes": "loafers",
+    "accessories": [
+     "drink_beer"
+    ]
+   },
+   "colours": {
+    "bottom": {
+     "swatch": "Teal",
+     "hex": "#2F6B6A"
+    },
+    "drink_beer": {
+     "swatch": "BeerAmber_emissive",
+     "hex": "#E8A23A"
+    },
+    "drink_beer_2": {
+     "swatch": "Foam",
+     "hex": "#F6EEDC"
+    },
+    "eyes": {
+     "swatch": "Ink",
+     "hex": "#120808"
+    },
+    "hair": {
+     "swatch": "HairDarkBrown",
+     "hex": "#3E2618"
+    },
+    "mouth": {
+     "swatch": "Mouth",
+     "hex": "#6A2420"
+    },
+    "shoes": {
+     "swatch": "WoodDark",
+     "hex": "#36241A"
+    },
+    "shoes_trim": {
+     "swatch": "Stone",
+     "hex": "#7C7270"
+    },
+    "skin": {
+     "swatch": "Skin2",
+     "hex": "#E4BA96"
+    },
+    "top": {
+     "swatch": "Teal",
+     "hex": "#2F6B6A"
+    }
+   },
+   "height_m": 1.6,
+   "height_vox": 32,
+   "head_top_vox": 29,
+   "tris": 836,
+   "animations": [
+    "idle",
+    "walk",
+    "sit",
+    "sit_drink",
+    "sit_talk",
+    "sit_hold",
+    "sit_applaud",
+    "stand_drink",
+    "cheers",
+    "applaud",
+    "dance",
+    "idle_warm",
+    "idle_tipsy",
+    "idle_merry",
+    "walk_warm",
+    "walk_tipsy",
+    "walk_merry",
+    "idle_sad"
+   ],
+   "bytes": 246928
+  },
+  {
+   "name": "patron_21",
+   "display": "Patron 21",
+   "role": "patron",
+   "slot": "PATRON",
+   "path": "res://assets/chars/presets/patron_21.glb",
+   "body": "broad",
+   "parts": {
+    "head": "square",
+    "hair": "sideburns",
+    "eyes": "dot",
+    "brows": "thick",
+    "mouth": "flat",
+    "top": "shirt",
+    "bottom": "jeans",
+    "shoes": "boots",
+    "accessories": [
+     "beard",
+     "glasses_tinted",
+     "drink_mug"
+    ]
+   },
+   "colours": {
+    "beard": {
+     "swatch": "HairGrey",
+     "hex": "#8E8890"
+    },
+    "bottom": {
+     "swatch": "Denim",
+     "hex": "#3F5878"
+    },
+    "bottom_trim": {
+     "swatch": "CymbalGold",
+     "hex": "#E8A030"
+    },
+    "drink_mug": {
+     "swatch": "BeerAmber_emissive",
+     "hex": "#E8A23A"
+    },
+    "drink_mug_2": {
+     "swatch": "Foam",
+     "hex": "#F6EEDC"
+    },
+    "drink_mug_3": {
+     "swatch": "BottleClear",
+     "hex": "#A8A0A0"
+    },
+    "eyes": {
+     "swatch": "Ink",
+     "hex": "#120808"
+    },
+    "glasses_tinted": {
+     "swatch": "CymbalGold",
+     "hex": "#E8A030"
+    },
+    "glasses_tinted_2": {
+     "swatch": "Lens",
+     "hex": "#2A1E1A"
+    },
+    "hair": {
+     "swatch": "HairGrey",
+     "hex": "#8E8890"
+    },
+    "mouth": {
+     "swatch": "Mouth",
+     "hex": "#6A2420"
+    },
+    "shoes": {
+     "swatch": "StoolBlack",
+     "hex": "#221110"
+    },
+    "shoes_trim": {
+     "swatch": "Stone",
+     "hex": "#7C7270"
+    },
+    "skin": {
+     "swatch": "Skin3",
+     "hex": "#D2A07A"
+    },
+    "top": {
+     "swatch": "Charcoal",
+     "hex": "#403A3E"
+    },
+    "top_accent": {
+     "swatch": "Stone",
+     "hex": "#7C7270"
+    },
+    "top_trim": {
+     "swatch": "Cream",
+     "hex": "#D9C9A6"
+    }
+   },
+   "height_m": 1.75,
+   "height_vox": 35,
+   "head_top_vox": 32,
+   "tris": 868,
+   "animations": [
+    "idle",
+    "walk",
+    "sit",
+    "sit_drink",
+    "sit_talk",
+    "sit_hold",
+    "sit_applaud",
+    "stand_drink",
+    "cheers",
+    "applaud",
+    "dance",
+    "idle_warm",
+    "idle_tipsy",
+    "idle_merry",
+    "walk_warm",
+    "walk_tipsy",
+    "walk_merry",
+    "idle_sad"
+   ],
+   "bytes": 258644
+  },
+  {
+   "name": "patron_22",
+   "display": "Patron 22",
+   "role": "patron",
+   "slot": "PATRON",
+   "path": "res://assets/chars/presets/patron_22.glb",
+   "body": "regular",
+   "parts": {
+    "head": "heart",
+    "hair": "wavy",
+    "eyes": "wide",
+    "brows": "arched",
+    "mouth": "smile",
+    "top": "blouse",
+    "bottom": "skirt",
+    "shoes": "loafers",
+    "accessories": [
+     "drink_beer"
+    ]
+   },
+   "colours": {
+    "bottom": {
+     "swatch": "StoolBlack",
+     "hex": "#221110"
+    },
+    "drink_beer": {
+     "swatch": "BeerAmber_emissive",
+     "hex": "#E8A23A"
+    },
+    "drink_beer_2": {
+     "swatch": "Foam",
+     "hex": "#F6EEDC"
+    },
+    "eyes": {
+     "swatch": "Ink",
+     "hex": "#120808"
+    },
+    "hair": {
+     "swatch": "HairAuburn",
+     "hex": "#8E3A1E"
+    },
+    "mouth": {
+     "swatch": "Mouth",
+     "hex": "#6A2420"
+    },
+    "shoes": {
+     "swatch": "Charcoal",
+     "hex": "#403A3E"
+    },
+    "shoes_trim": {
+     "swatch": "Stone",
+     "hex": "#7C7270"
+    },
+    "skin": {
+     "swatch": "Skin5",
+     "hex": "#A06E4A"
+    },
+    "top": {
+     "swatch": "ShirtWhite",
+     "hex": "#ECE6E0"
+    },
+    "top_trim": {
+     "swatch": "ColumnWhite",
+     "hex": "#E4DDE6"
+    }
+   },
+   "height_m": 1.65,
+   "height_vox": 33,
+   "head_top_vox": 31,
+   "tris": 1002,
+   "animations": [
+    "idle",
+    "walk",
+    "sit",
+    "sit_drink",
+    "sit_talk",
+    "sit_hold",
+    "sit_applaud",
+    "stand_drink",
+    "cheers",
+    "applaud",
+    "dance",
+    "idle_warm",
+    "idle_tipsy",
+    "idle_merry",
+    "walk_warm",
+    "walk_tipsy",
+    "walk_merry",
+    "idle_sad"
+   ],
+   "bytes": 267084
+  },
+  {
+   "name": "patron_23",
+   "display": "Patron 23",
+   "role": "patron",
+   "slot": "PATRON",
+   "path": "res://assets/chars/presets/patron_23.glb",
+   "body": "regular",
+   "parts": {
+    "head": "round",
+    "hair": "spiky",
+    "eyes": "dot",
+    "brows": "flat",
+    "mouth": "grin",
+    "top": "bomber",
+    "bottom": "jeans",
+    "shoes": "sneakers",
+    "accessories": [
+     "drink_beer"
+    ]
+   },
+   "colours": {
+    "bottom": {
+     "swatch": "Charcoal",
+     "hex": "#403A3E"
+    },
+    "bottom_trim": {
+     "swatch": "Leather",
+     "hex": "#5A3020"
+    },
+    "drink_beer": {
+     "swatch": "BeerAmber_emissive",
+     "hex": "#E8A23A"
+    },
+    "drink_beer_2": {
+     "swatch": "Foam",
+     "hex": "#F6EEDC"
+    },
+    "eyes": {
+     "swatch": "Ink",
+     "hex": "#120808"
+    },
+    "hair": {
+     "swatch": "HairBlack",
+     "hex": "#1E1616"
+    },
+    "mouth": {
+     "swatch": "Mouth",
+     "hex": "#6A2420"
+    },
+    "shoes": {
+     "swatch": "WoodDark",
+     "hex": "#36241A"
+    },
+    "shoes_trim": {
+     "swatch": "Stone",
+     "hex": "#7C7270"
+    },
+    "skin": {
+     "swatch": "Skin2",
+     "hex": "#E4BA96"
+    },
+    "top": {
+     "swatch": "Olive",
+     "hex": "#66703A"
+    },
+    "top_accent": {
+     "swatch": "Mustard",
+     "hex": "#C99430"
+    },
+    "top_trim": {
+     "swatch": "Cream",
+     "hex": "#D9C9A6"
+    }
+   },
+   "height_m": 1.8,
+   "height_vox": 36,
+   "head_top_vox": 31,
+   "tris": 728,
+   "animations": [
+    "idle",
+    "walk",
+    "sit",
+    "sit_drink",
+    "sit_talk",
+    "sit_hold",
+    "sit_applaud",
+    "stand_drink",
+    "cheers",
+    "applaud",
+    "dance",
+    "idle_warm",
+    "idle_tipsy",
+    "idle_merry",
+    "walk_warm",
+    "walk_tipsy",
+    "walk_merry",
+    "idle_sad"
+   ],
+   "bytes": 238140
+  },
+  {
+   "name": "patron_24",
+   "display": "Patron 24",
+   "role": "patron",
+   "slot": "PATRON",
+   "path": "res://assets/chars/presets/patron_24.glb",
+   "body": "petite",
+   "parts": {
+    "head": "round",
+    "hair": "afro",
+    "eyes": "dot",
+    "brows": "arched",
+    "mouth": "smile",
+    "top": "knit",
+    "bottom": "jeans",
+    "shoes": "sneakers",
+    "accessories": [
+     "drink_mug"
+    ]
+   },
+   "colours": {
+    "bottom": {
+     "swatch": "Denim",
+     "hex": "#3F5878"
+    },
+    "bottom_trim": {
+     "swatch": "Leather",
+     "hex": "#5A3020"
+    },
+    "drink_mug": {
+     "swatch": "BeerAmber_emissive",
+     "hex": "#E8A23A"
+    },
+    "drink_mug_2": {
+     "swatch": "Foam",
+     "hex": "#F6EEDC"
+    },
+    "drink_mug_3": {
+     "swatch": "BottleClear",
+     "hex": "#A8A0A0"
+    },
+    "eyes": {
+     "swatch": "Ink",
+     "hex": "#120808"
+    },
+    "hair": {
+     "swatch": "HairBlack",
+     "hex": "#1E1616"
+    },
+    "mouth": {
+     "swatch": "Mouth",
+     "hex": "#6A2420"
+    },
+    "shoes": {
+     "swatch": "StoolBlack",
+     "hex": "#221110"
+    },
+    "shoes_trim": {
+     "swatch": "Stone",
+     "hex": "#7C7270"
+    },
+    "skin": {
+     "swatch": "Skin7",
+     "hex": "#6A432C"
+    },
+    "top": {
+     "swatch": "Sky",
+     "hex": "#86A8C6"
+    },
+    "top_trim": {
+     "swatch": "Cream",
+     "hex": "#D9C9A6"
+    }
+   },
+   "height_m": 1.7,
+   "height_vox": 34,
+   "head_top_vox": 29,
+   "tris": 1566,
+   "animations": [
+    "idle",
+    "walk",
+    "sit",
+    "sit_drink",
+    "sit_talk",
+    "sit_hold",
+    "sit_applaud",
+    "stand_drink",
+    "cheers",
+    "applaud",
+    "dance",
+    "idle_warm",
+    "idle_tipsy",
+    "idle_merry",
+    "walk_warm",
+    "walk_tipsy",
+    "walk_merry",
+    "idle_sad"
+   ],
+   "bytes": 330592
   }
  ]
 }

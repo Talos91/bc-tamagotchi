@@ -40,82 +40,85 @@ prop). Material Preview, warm key, red fill, warm rim.
 
 | Path | What |
 |---|---|
-| `presets/<name>.glb` | 28 assembled characters: 8 regulars, 5 staff, 3 House Lights members, 12 patrons |
-| `parts/parts_<body>.glb` | every part (75) for `petite`, `regular` or `broad` on one rig, with all animations |
+| `presets/<name>.glb` | 42 assembled characters: 8 regulars, 6 staff (with the floor server), 3 House Lights members and a guest guitarist, 24 patrons |
+| `parts/parts_<body>.glb` | every part (91) for `petite`, `regular` or `broad` on one rig, with all animations |
 | `manifest.json` | presets, part lists, swatches, bones, animations (see below) |
 | `bc_chars.gd` | `BCChars`: loop setup, animation choice, recolouring, part visibility |
 | `chars_showcase.tscn` | every preset playing `idle`, under the kit showcase's environment plus a warm rim light |
 
-## Scale
+## Scale (v2, renders 05/06 parity)
 
-One voxel = 5 cm. Head 12 x 12 x 11 on top of the body, as in art bible section 2.
+One voxel = 5 cm; the venue draws every preset at `PatronFigure.FIG_SCALE` 0.75 (1.2-1.3 m on screen, as the
+figures in renders 05/06). Measurements and the pose plan: `docs/art/screens/chars/README.md`. Head 10 W x 9 D x
+9 H; with hair it is a third of the height and as wide as the shoulders.
 
-| Body | Torso (W x D) | Legs | Chest | Head top | With the usual 1-voxel hair cap |
-|---|---|---|---|---|---|
-| `petite` | 8 x 6 | 6 | 7 | 26 vox (1.30 m) | 27 (1.35 m) |
-| `regular` | 8 x 6 | 8 | 8 | 29 vox (1.45 m) | **30 (1.50 m), the bible's height** |
-| `broad` | 10 x 8 | 8 | 10 | 31 vox (1.55 m) | 32 (1.60 m) |
+| Body | Torso (W x D) | Legs (thigh / shin / shoe) | Chest | Arms (upper / fore / hand) | Head top | With hair |
+|---|---|---|---|---|---|---|
+| `petite` | 8 x 5 | 10 (5 / 3 / 2) | 8 | 4 / 3 / 2 | 29 vox | 30-32 |
+| `regular` | 8 x 5 | 11 (6 / 3 / 2) | 9 | 4 / 4 / 2 | 31 vox | 32-34 |
+| `broad` | 10 x 6 | 11 | 10 | 5 / 4 / 2 | 32 vox | 33-35 |
 
-Legs include the 2 shoe rows; the pelvis is always 2 rows. Against the kit: a cafe chair seat (9) is one voxel above
-a regular's hips (8), so `sit` lifts the hips by `9 - legs` voxels; the bar top (22, 1.1 m) sits between shoulder
-and chin, so a bartender shows head and shoulders over it; a seated regular's head top (1.50 m) clears a table
-lamp (table 15 + lamp 10 = 1.25 m). For a bar stool (seat 16) play `sit` with the root raised by
-7 voxels (0.35 m), i.e. root at seat height minus 0.45 m. `manifest.json` lists each preset's `height_vox` including hair
-and hats.
+Seated poses put the thigh undersides at `seat_vox` 9 (0.45 m at scale 1), so with the figure at FIG_SCALE the root
+goes `SEAT_H * FIG_SCALE` (0.3375 m) below the real seat: cafe chairs and drum stools 0.45 m, bar stools 0.8 m.
+Table tops (0.75) and the bar top (1.1) are both 0.30 m above their seats, which is where `sit_drink` and
+`sit_talk` rest the forearms.
 
 ## Rig
 
-Bones: `root` (floor) -> `hips` -> `spine` -> `head`, `arm_L`, `arm_R`; `hips` -> `leg_L`, `leg_R`. Every bone
-points up with roll 0, so in Godot every bone's rest rotation is identity: a `BoneAttachment3D` on `head` is
-upright and faces the character's front. Front is +Z in Godot, character left is +X. Every voxel is skinned to one
-bone at weight 1.0 (rigid), so tops span spine and both arms, bottoms span hips and both legs.
+Bones: `root` (floor) -> `hips` -> `spine` -> `head`, `arm_L` -> `forearm_L`, `arm_R` -> `forearm_R`; `hips` ->
+`leg_L` -> `shin_L`, `leg_R` -> `shin_R`. Every bone points up with roll 0, so in Godot every bone's rest rotation is
+identity: a `BoneAttachment3D` on `head` is upright and faces the character's front. Front is +Z in Godot,
+character left is +X. Every voxel is skinned to one bone at weight 1.0 (rigid); hands and held props ride the
+forearms, shoes the shins. Animation channels: rotation for every bone, translation for `root` and `hips` only,
+linear keys every 3 frames.
 
 ## Animations
 
-All in place (root never moves); the game moves the root. `manifest.json` gives each loop's length and the root
-speed that matches the stride.
+All in place (root never moves); the game moves the root. `manifest.json` lists every clip, its length and the root
+speed of the walks; each preset's own list is under `presets[].animations` (staff add the tray and pour, players of
+an instrument the band clips).
 
-| Name | Frames @24 | Loop | What |
+| Name | Frames @24 | Who | What |
 |---|---|---|---|
-| `idle` | 48 | yes | breathing, small look-around. Tipsiness 0 (Clear) |
-| `walk` | 16 | yes | 1.1 m/s. Clear |
-| `sit` | 48 | yes | cafe chair: hips at 9 voxels, legs forward, feet swing |
-| `cheers` | 36 | **no** | glass up, clink, down |
-| `applaud` | 24 | yes | two claps |
-| `dance` | 48 | yes | four beats: hop, alternating arm pumps, twist |
-| `idle_warm` / `walk_warm` | 48 / 16 | yes | 1 Warm: sways to the music / a bounce in the step |
-| `idle_tipsy` / `walk_tipsy` | 72 / 24 | yes | 2 Tipsy: leans, laughs, taps a foot / a loose half-step weave, 0.85 m/s |
-| `idle_merry` / `walk_merry` | 96 / 32 | yes | 3 Merry: big slow sway, sings with an arm up / slower, humming, arms wide, 0.7 m/s |
-| `idle_sad` | 72 | yes | low Vibe: slumped, head down, a slow sigh |
+| `idle` / `walk` | 48 / 16 | all | breathing, look-around / 1.1 m/s. Tipsiness 0 (Clear) |
+| `sit` | 48 | all | relaxed on a chair, hands on the thighs |
+| `sit_drink` | 96 | all | at a table or the bar: forearms on the top, glass in the right hand, one sip per loop |
+| `sit_talk` | 96 | all | leaning in, the free hand talks, head nods; glass stays on the table |
+| `sit_hold` | 96 | all | drum stool or lounge chair: glass at the chest, left hand on the knee, a sip |
+| `sit_applaud` | 24 | all | seated, two claps |
+| `stand_drink` | 96 | all | standing, hand on the hip, glass at the chest, a sip |
+| `cheers` | 36, one-shot | all | glass up, clink, down |
+| `applaud`, `dance` | 24, 48 | all | as kit v1 |
+| `idle_warm/tipsy/merry`, `walk_warm/tipsy/merry`, `idle_sad` | | all | cast bible 5.1 states, as kit v1 |
+| `idle_tray` / `walk_tray` | 48 / 16 | staff | tray of pints on a level left forearm beside the head (05/06 server), 1.0 m/s |
+| `pour` | 72 | staff | glass in the left hand, tips the bottle over it |
+| `play_guitar`, `play_bass` | 48 | band | strum at the body, fret hand walks the neck, sway |
+| `sing` | 48 | band | Jo: acoustic guitar, chin up to the mic |
+| `play_drums` | 48 | band | seated, sticks alternate on the snare, one crash per loop |
 
-The tipsiness names follow the cast bible section 5.1 (Clear, Warm, Tipsy, Merry). The commissioning brief said
-"sober, merry, tipsy, drunk"; the cast bible owns these states, so its names are used. No state leans more than
-8 degrees or leaves the floor by more than a hop.
-
-Loop flags are not stored in the GLB import settings (`*.import` is not committed), so call
-`BCChars.setup_animations(node)` after instancing; it sets every animation to loop except `cheers`.
-`BCChars.anim_for("idle", tipsy, vibe)` picks the name: Vibe under 50 (Meh, Homebody) gives `idle_sad` when sober.
-The cheek blush for Warm (cast bible: "cheek-blush decal at 30%") is the `blush` part in the libraries; it is not in
-the presets.
+Drinks (`drink_beer`, `drink_mug`, `glass_gold`) and the bartender's `beer_left` / `bottle` are modelled for a level
+forearm; `PatronFigure` shows them only in `sit_drink`, `sit_talk`, `sit_hold`, `stand_drink`, `cheers` (and `pour`
+for the bartender's pair), so walking figures never carry a sideways glass.
 
 ## Parts
 
 | Slot | Mesh node | Options |
 |---|---|---|
-| head | `head` | `square`, `round` (chamfered vertical and top edges), `soft` (top edges), `heart` (narrow jaw). All fit the bible's 12 x 12 x 11 box, so every hair, hat and face fits every head |
-| hair | `hair` | `crop`, `buzz`, `bob`, `bun`, `quiff`, `ponytail`, `side_part`, `swept`, `long`, `spiky`, `curly`, `sideburns`, `chignon` |
-| eyes | `eyes` | `dot`, `wide`, `sleepy`, `happy`, `lashes` (2-voxel pixel decals) |
-| brows | `brows` | `none`, `flat`, `arched`, `worried`, `thick` (use the hair colour) |
+| head | `head` | `square`, `round` (chamfered vertical and top edges), `soft` (top edges), `heart` (narrow jaw), each with a 2-voxel nose in relief. All fit the 10 x 9 x 9 box, so every hair, hat and face fits every head |
+| hair | `hair` | `shaggy`, `wavy`, `afro`, `curly`, `long`, `bob`, `crop`, `buzz`, `bun`, `quiff`, `ponytail`, `side_part`, `swept`, `spiky`, `sideburns`, `chignon` (16; all but `buzz` carry 2 x 2 clumps on the back, sides and crown) |
+| eyes | `eyes` | `dot`, `wide`, `sleepy`, `happy`, `lashes` (1 x 2 pixel decals halfway down the face) |
+| brows | `brows` | `none`, `flat`, `arched`, `worried`, `thick`: voxels in relief, hair colour |
 | mouth | `mouth` | `smile`, `small`, `flat`, `open`, `grin` |
-| top | `top` | `tee`, `hoodie`, `shirt`, `shirt_tie`, `cardigan`, `bomber`, `staff_shirt`, `blouse`, `blazer` |
-| bottom | `bottom` | `jeans`, `trousers`, `shorts`, `skirt` |
+| top | `top` | `tee`, `shirt` (collar points in relief, buttons, pocket), `shirt_rolled`, `shirt_tie`, `jacket` (open, lapels in relief, hem over the belt, shirt in `top_accent`), `hoodie`, `cardigan`, `bomber`, `staff_shirt`, `blouse`, `blazer`, `dress` (sleeveless), `knit` |
+| bottom | `bottom` | `jeans`, `trousers` (belt with a gold buckle), `shorts`, `skirt`, `dress` (to the knee, flared hem; colour it like the top) |
 | shoes | `shoes` | `sneakers`, `boots`, `loafers` |
 | hands | `hands` | one per body |
-| accessories | `<id>` | hats `hat_bucket`, `hat_flat_cap`, `hat_beanie`; `glasses_round`, `glasses_tinted`, `glasses_up`; `headphones`; hair `ribbon`, `pencil`; back `gig_bag`; `apron`, `bar_towel`, `gaffer_tape`; instruments `guitar`, `bass`, `drumsticks`, `mic`; held `drink_beer`, `glass_gold`, `shaker`, `notebook`, `torch`, `clicker`, `sketchbook`, `vinyl`; floor `wheelie_bag` |
+| accessories | `<id>` | hats `hat_bucket`, `hat_flat_cap`, `hat_beanie`, `hat_fedora` (a hat trims the hair above its brim); `glasses_round`, `glasses_tinted`, `glasses_up`; `headphones`; face `beard`, `moustache`; hair `ribbon`, `pencil`; `gig_bag`; `apron`, `vest`, `bar_towel`, `gaffer_tape`; instruments `guitar`, `guitar_electric`, `bass`, `drumsticks`; drinks `drink_beer`, `drink_mug`, `glass_gold`, `beer_left`, `bottle`; held `tray`, `shaker`, `notebook`, `torch`, `clicker`, `sketchbook`, `vinyl`; floor `wheelie_bag` |
 
-9 tops x 4 bottoms x 3 shoes = 108 outfits. Tops own the chest and sleeves (bare forearms are skin voxels in the
-top); bottoms own the pelvis and legs (bare legs are skin voxels in the bottom). Hats sit above the hair cap, so tall
-hair (`bun`, `quiff`, `spiky`, `curly`, `ponytail`) pokes through a hat: the creator should block those pairs.
+13 tops x 5 bottoms x 3 shoes. Tops own the chest and sleeves (bare forearms are skin voxels in the top); bottoms
+own the pelvis and legs (bare legs are skin voxels in the bottom). In a preset, overlapping parts are resolved at
+build time (later layers win: jacket hem over the belt, glasses over brows); a runtime creator assembling from a
+library should avoid the same pairs.
 
 In a library the mesh nodes are named by part id (`hair_bob`, `top_tee`, `eyes_dot`, `hands`, `drink_beer`); in a
 preset they are named by slot (`hair`, `top`, ...) and accessories keep their id.
@@ -201,9 +204,10 @@ to `idle` for unknown ones), so tipsiness and low Vibe are `figure.play(BCChars.
 
 ## Known gaps
 
-- Raised arms reach only eye level: 9-voxel arms against an 11-voxel head (bible proportions). `dance` and
-  `idle_merry` splay a raised arm outward so it clears the head.
-- Staff black (Cabin Dark) reads very dark in the red-lit room; the gold trim carries it. Check in the venue.
-- No turn, emote, wave, high-five or chatting animation yet (GDD 5.3 verbs, cast bible "chatting"); no seated
-  variants for Tipsy/Merry ("sits more, chin on hand").
-- Hats do not hide the hair under them.
+- Raised arms reach about the top of the head (10-row arms against a 9-row head); `dance` and `idle_merry` splay a
+  raised arm outward so it clears the hair.
+- Seated feet hang a little above the floor at cafe chairs: chibi shins (0.19 m drawn) are shorter than a 0.45 m
+  seat. Tables hide it from the game cameras.
+- Staff black (Cabin Dark) reads very dark in the red-lit room; the gold trim carries it.
+- No turn, emote, wave or high-five yet (GDD 5.3 verbs); no seated variants for Tipsy/Merry ("chin on hand").
+- Libraries carry every clip (including tray, pour and band) on every body; trim them when the creator lands.

@@ -8,20 +8,24 @@ extends Node3D
 ## palette-swapped box placeholders otherwise.
 
 const FIGURE := preload("res://scenes/venue/patron_figure.tscn")
-## patron_13..24 are styled after renders 05/06 (big hair, beards, fedoras, red tops) and come first; the older
-## anonymous patrons fill in. patron_06 is the player.
-const PATRON_PRESETS := ["patron_13", "patron_14", "patron_15", "patron_16", "patron_17", "patron_18", "patron_19",
-	"patron_20", "patron_21", "patron_22", "patron_23", "patron_24", "patron_01", "patron_04", "patron_08",
-	"patron_12", "patron_05", "patron_10"]
-## Band spots (pose band_*) -> house band preset and the animation it holds (renders 05/06: drums, guitar, bass, vocal)
-const BAND := {"band_drums": ["boy", "sit"], "band_guitar": ["jules", "idle_warm"], "band_bass": ["pete", "idle_warm"],
-	"band_vocal": ["jo", "idle_merry"]}
+## The 24 anonymous patrons (bc_chars.py PATRONS, styled after the crowd in renders 05/06). patron_06 is the player.
+const PATRON_PRESETS := ["patron_01", "patron_02", "patron_03", "patron_04", "patron_05", "patron_07", "patron_08",
+	"patron_09", "patron_10", "patron_11", "patron_12", "patron_13", "patron_14", "patron_15", "patron_16",
+	"patron_17", "patron_18", "patron_19", "patron_20", "patron_21", "patron_22", "patron_23", "patron_24"]
+## Band spots (pose band_*) -> preset and the animation it plays (renders 05/06: drums, two guitars, bass; Jo sings)
+const BAND := {"band_drums": ["boy", "play_drums"], "band_guitar": ["band_guitar", "play_guitar"],
+	"band_bass": ["pete", "play_bass"], "band_vocal": ["jo", "sing"]}
+## Seated pose by spot: at a table or the bar, forearms on the top with a glass, some chatting; on the drum-stool
+## poufs facing the stage and in lounge chairs, glass held at the chest; now and then the front row applauds.
+const TABLE_POSES := ["sit_drink", "sit_drink", "sit_talk"]
+const FREE_POSES := ["sit_hold", "sit_hold", "sit_applaud"]
 const SEAT_ZONES := ["Tables", "Bar", "CommunalTable", "Lounge"]
 const WALK_SPEED := 1.1
 const SERVER_START := Vector3(16.0, 0, 5.6)
-## Presets are 1.45-1.75 m; the renders' chibi patrons stand 1.2 m (docs/art/parity-measurements.md), so every
-## figure is drawn at this scale and lowered so its hips still land on the seat.
-const FIG_SCALE := 0.8
+## PatronFigure draws presets at its FIG_SCALE; seated figures are lowered so their thighs land on the seat.
+const FIG_SCALE := PatronFigure.FIG_SCALE
+## The bartender stands on the raised duckboard behind the counter (05/06 show them chest-up over the 1.1 m bar)
+const BARTENDER_LIFT := 0.3
 
 # Placeholder palette (art bible §3 and §7 wardrobe; reds avoided for tops so figures read against the room)
 const SKINS := ["f0d2b6", "e4ba96", "d2a07a", "bc8860", "a06e4a", "845636", "6a432c", "4e3022"]
@@ -71,7 +75,7 @@ func _ready() -> void:
 			chosen.append(s)
 	var n := 0
 	for s in chosen:
-		var f := _spawn(presets[n % presets.size()], "Patron%d_%s" % [n, s.name])
+		var f := _spawn(presets[n % presets.size()], "Patron%d_%s" % [n, s.name], {"sit": _seat_pose(s)})
 		f.position = s.position + Vector3(0, float(s.get_meta("seat_h", PatronFigure.SEAT_H)) - PatronFigure.SEAT_H * FIG_SCALE, 0)
 		f.rotation.y = s.rotation.y
 		f.play("sit")
@@ -79,16 +83,17 @@ func _ready() -> void:
 	for s in band:
 		var b: Array = BAND[s.get_meta("pose")]
 		var f := _spawn(b[0], "Band_" + str(b[0]))
-		f.position = s.position + Vector3(0, float(s.get_meta("seat_h", 0.0)) - (PatronFigure.SEAT_H * FIG_SCALE if b[1] == "sit" else 0.0), 0)
+		f.position = s.position + Vector3(0, float(s.get_meta("seat_h", 0.0)) - (PatronFigure.SEAT_H * FIG_SCALE if b[1] == "play_drums" else 0.0), 0)
 		f.rotation.y = s.rotation.y
 		f.play(b[1])
 	if staff:
-		_bartender = _spawn("nam", "Bartender")
-		_bartender.position = staff.position
+		_bartender = _spawn("nam", "Bartender", {"idle": "pour"})
+		_bartender.position = staff.position + Vector3(0, BARTENDER_LIFT, 0)
 		_bartender.rotation.y = staff.rotation.y
 		_bartender.set_meta("pace", 0.0)
 	for i in mini(wanderer_count, _wander_points.size()):
-		var f := _spawn("server" if i == 0 else presets[n % presets.size()], "Server" if i == 0 else "Wanderer%d" % i)
+		var f := _spawn("server" if i == 0 else presets[n % presets.size()], "Server" if i == 0 else "Wanderer%d" % i,
+			{"walk": "walk_tray", "idle": "idle_tray"} if i == 0 else {})
 		f.position = _wander_points[(i * 2) % _wander_points.size()]
 		if i == 0:   # the server starts in the aisle with the tray (renders 05/06)
 			for wp in _wander_points:
@@ -104,7 +109,13 @@ func _shuffle(a: Array) -> void:
 		a[i] = a[j]
 		a[j] = t
 
-func _spawn(preset: String, nm: String) -> PatronFigure:
+func _seat_pose(s: Node3D) -> String:
+	var nm := String(s.name)
+	if nm.begins_with("Tables_DrumStool") or nm.begins_with("Lounge_Chair") or nm.begins_with("Lounge_Banquette"):
+		return FREE_POSES[_rng.randi() % FREE_POSES.size()]
+	return TABLE_POSES[_rng.randi() % TABLE_POSES.size()]
+
+func _spawn(preset: String, nm: String, anims := {}) -> PatronFigure:
 	var f: PatronFigure = FIGURE.instantiate()
 	f.name = nm
 	f.look = {
@@ -115,8 +126,8 @@ func _spawn(preset: String, nm: String) -> PatronFigure:
 		"bottom": Color(BOTTOMS[_rng.randi() % BOTTOMS.size()]),
 		"shoes": Color("d9c9a6") if _rng.randf() < 0.5 else Color("221110"),
 		"height": _rng.randf_range(1.2, 1.4),
+		"anims": anims,
 	}
-	f.scale = Vector3.ONE * FIG_SCALE
 	add_child(f)
 	figures.append(f)
 	return f

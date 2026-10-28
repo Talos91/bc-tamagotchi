@@ -2,7 +2,7 @@ class_name BCChars
 extends RefCounted
 ## Runtime helpers for the voxel character kit (tools/blender/bc_chars.py, see README.md beside this file).
 ## A character is one glTF scene: Skeleton3D "Skeleton3D" with one MeshInstance3D per part, skinned to the bones
-## root, hips, spine, head, arm_L, arm_R, leg_L, leg_R, plus an AnimationPlayer. Materials are named
+## root, hips, spine, head, arm_L, forearm_L, arm_R, forearm_R, leg_L, shin_L, leg_R, shin_R, plus an AnimationPlayer. Materials are named
 ## <slot>__<Swatch> (skin__Skin4, top__Mustard, hat_bucket__Olive), so recolouring is by name prefix.
 
 const MANIFEST := "res://assets/chars/manifest.json"
