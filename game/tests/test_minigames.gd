@@ -265,12 +265,27 @@ func test_rhythm_play() -> void:
 		print("  %s: score %.2f, perfect %d good %d missed %d" % [mode, sc, g.perfect, g.good, g.missed])
 		if mode == "perfect":
 			check(sc >= 0.95, "perfect player scores >= 0.95")
+			check_rhythm_gain(sc, 18.0)
 		elif mode == "sloppy":
 			check(sc > 0.45 and sc < 0.75, "110 ms-late player lands in the good band")
+			check_rhythm_gain(sc, lerpf(12.0, 18.0, sc))
 		else:
 			check(sc == 0.0 and g.missed == g.notes.size(), "idle player misses everything and loses nothing else")
 		check(res[0]["action_id"] == "front_row_rhythm" and res[0]["need_id"] == "music", "%s: action and need" % mode)
 		g.queue_free()
+
+
+## GDD section 9 tuning: a song gives +12 to +18 Music by accuracy.
+func check_rhythm_gain(score: float, expected: float) -> void:
+	var def: Dictionary = Rules.ACTIONS["front_row_rhythm"]
+	check(def["gains"]["music"] == [12.0, 18.0], "Front Row Rhythm range is +12-18 Music")
+	var n := fresh_needs()
+	n.meters["music"] = 20.0
+	n.apply_action("front_row_rhythm", score)
+	var got: float = n.meters["music"] - 20.0
+	check(got >= 12.0 - 0.01 and got <= 18.0 + 0.01, "rhythm gain %.2f within 12-18" % got)
+	check(absf(got - expected) < 0.5 or score < 0.95, "rhythm gain %.2f matches score %.2f" % [got, score])
+	n.free()
 
 
 # --- Candle Talk ---------------------------------------------------------------------------------

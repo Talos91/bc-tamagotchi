@@ -148,7 +148,7 @@ func test_sample_visit() -> void:
 	n.apply_action("pinball", 0.5)  # +15
 	n.apply_action("dance_30s")
 	n.apply_action("dance_30s")  # +6
-	var want := {"music": 25.0, "friends": 23.0, "drinks": 40.0, "nightlife": 26.0}
+	var want := {"music": 30.0, "friends": 23.0, "drinks": 40.0, "nightlife": 26.0}
 	var got := []
 	for m in Rules.METERS:
 		var g: float = n.meters[m] - before[m]

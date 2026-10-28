@@ -107,7 +107,7 @@ const ACTIONS := {
 	"try_new_drink": {"label": "Try a drink you've never had", "zone": "Bar", "gains": {"drinks": 5.0}},
 	"listen_song": {"label": "Listen to one song", "zone": "Stage", "gains": {"music": 5.0}},
 	"finish_set": {"label": "Finish a full set (4 songs)", "zone": "Stage", "gains": {"music": 5.0, "nightlife": 5.0}},
-	"front_row_rhythm": {"label": "Front Row Rhythm (per song)", "zone": "Stage", "gains": {"music": [8.0, 12.0]}},
+	"front_row_rhythm": {"label": "Front Row Rhythm (per song)", "zone": "Stage", "gains": {"music": [12.0, 18.0]}},
 	"applaud": {"label": "Applaud / request a song", "zone": "Stage", "gains": {"music": 2.0}, "cap_per_visit": 6.0},
 	"headline_set": {"label": "Headline Night set (70%+)", "zone": "Stage", "gains": {"music": 40.0, "nightlife": 20.0}},
 	"candle_talk": {"label": "Candle Talk with a regular", "zone": "Candle Floor", "gains": {"friends": [10.0, 20.0]}, "daily_once": true},

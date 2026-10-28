@@ -1,5 +1,5 @@
 extends "res://scripts/minigames/minigame_base.gd"
-## Front Row Rhythm (GDD section 9 #3, Stage, Music +8-12 per song). Two clap lanes scroll down to a hit
+## Front Row Rhythm (GDD section 9 #3, Stage, Music +12-18 per song). Two clap lanes scroll down to a hit
 ## line; tap the left or right half of the screen on the beat. Misses only lose the bonus.
 ##
 ## Beat map format (JSON, one file per song in scenes/minigames/front_row_rhythm/beatmaps/):
