@@ -48,3 +48,18 @@ place actually looks").
   the right with a bartender, backlit bottle cubbies, stools; a disco ball;
   cyan exit signs; dense, warm, glossy floor; characters with hair, clothes,
   glasses in hand, a server carrying a tray.
+
+## Real-place photo (2026-10-28)
+
+- `07-main-room-photo-from-bar-end.webp` — a real photograph of the main
+  room taken from the bar end, looking toward the stage. Daniele's two
+  layout corrections from it, after parity iteration 8:
+  1. **The entrance lounge faces the wrong way.** Rotate the lounge 90°
+     to the left so the curtain into the main room is on the opposite side
+     of the lounge from the stairs (as render 02 shows: stairs left,
+     curtain right).
+  2. **The stage does not reach the end wall.** The stage ends before the
+     end of the room. The whole end wall is a line of tables, and between
+     that line and the stage there are more drum stools with short tables.
+  Graphic target unchanged: as close as possible to 05/06. Iteration 8 was
+  judged "too empty and not crisp".
