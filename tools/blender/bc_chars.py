@@ -28,9 +28,9 @@ MEASUREMENTS (renders 05/06 at their own camera, ~35-40 deg elevation; full tabl
   Seated: thighs level on the seat, shins down, the table top at chest height; forearms flat on the table with a
   glass in hand. Server: vest over a white shirt, tray at chest height on a forward forearm.
 So, in voxels (1 voxel = 5 cm in this file; the venue draws figures at FIG_SCALE 0.75, 3.75 cm on screen):
-  regular  legs 11 (thigh 6, shin 3, shoe 2) + pelvis 2 + chest 9 + head 9 + hair 1-3 = 32-34 (1.2-1.27 m drawn),
-           head + hair 10-12 of 33 = 31-35 %
-  head 10 W x 9 D x 9 H on an 8 x 5 torso, arms 3 x 3 (upper 4, forearm 4, hand 2; hands hang at the hips)
+  regular  legs 11 (thigh 6, shin 3, shoe 2) + pelvis 2 + chest 9 + head 7 + hair 1-2 = 30-31 (1.13-1.16 m drawn),
+           head + hair 8-9 of 31 = 27-30 % (9- and 8-row heads measured 37-43 % against the 05 server's 27-29 %)
+  head 8 W x 7 D x 7 H on an 8 x 5 torso, arms 3 x 3 (upper 4, forearm 4, hand 2; hands hang at the hips)
   petite   legs 10, chest 8;   broad  torso 10 x 6, chest 10.
 
 Rig: root, hips, spine, head, arm_L, forearm_L, arm_R, forearm_R, leg_L, shin_L, leg_R, shin_R. Every bone points
@@ -77,7 +77,7 @@ WARDROBE_ADDED = {
     "Cream": "#D9C9A6", "Sand": "#B49A76", "Stone": "#7C7270", "Charcoal": "#403A3E",
     "Denim": "#3F5878", "DenimLight": "#6C88A8", "Sky": "#86A8C6", "Teal": "#2F6B6A",
     "Olive": "#66703A", "Moss": "#4C5A30", "Mustard": "#C99430", "Rust": "#A04A26",
-    "Jacket": "#262028", "ShirtWhite": "#ECE6E0", "DressRed": "#B0141C", "Leather": "#5A3020",
+    "Jacket": "#3A3444", "ShirtWhite": "#ECE6E0", "DressRed": "#B0141C", "Leather": "#5A3020",
 }
 FACE = {"Ink": "#120808", "Mouth": "#6A2420", "Blush": "#E0786E", "Lens": "#2A1E1A", "Beer": "#E8A23A"}
 ROUGH = {"skin": 0.55, "hair": 0.6, "eyes": 0.3, "mouth": 0.5, "blush": 0.6, "lens": 0.1}
@@ -120,8 +120,8 @@ BODIES = {   # torso width/depth, leg rows (incl. 2 shoe rows), chest rows; pelv
     "regular": dict(tw=8, td=5, leg=11, chest=9),
     "broad":   dict(tw=10, td=6, leg=11, chest=10),
 }
-HEAD_W, HEAD_D, HEAD_H = 10, 9, 9
-HX0, HX1, HY0, HY1 = -5, 4, -4, 4
+HEAD_W, HEAD_D, HEAD_H = 8, 7, 7
+HX0, HX1, HY0, HY1 = -4, 3, -3, 3
 BONES = ("root", "hips", "spine", "head", "arm_L", "forearm_L", "arm_R", "forearm_R",
          "leg_L", "shin_L", "leg_R", "shin_R")
 PARENT = {"hips": "root", "spine": "hips", "head": "spine", "arm_L": "spine", "arm_R": "spine",
@@ -200,7 +200,7 @@ def mirror(x):
     return -1 - x
 
 
-# ---- head shapes: all inside the 10 x 9 x 9 box, so every hair, hat and face fits every head
+# ---- head shapes: all inside the 8 x 7 x 7 box, so every hair, hat and face fits every head
 HEADS = ("square", "round", "soft", "heart")
 
 
@@ -225,20 +225,20 @@ def build_head(shape, D, C):
 
 # ---- face. Eyes and mouth are pixel decals on the front plane; brows are voxels in relief (they read from the
 # high camera as a dark line over the eyes, as in 05/06). Offsets are (dx, dz) for the left eye (+X); mirrored.
-EYE_X, EYE_Z, BROW_Z, MOUTH_Z, BLUSH_Z = 2, 3, 5, 1, 2
+EYE_X, EYE_Z, BROW_Z, MOUTH_Z, BLUSH_Z = 1, 3, 5, 1, 2
 EYES = {
     "dot":    [(0, 0), (0, 1)],
     "wide":   [(0, 0), (1, 0), (0, 1), (1, 1)],
     "sleepy": [(0, 0), (1, 0)],
-    "happy":  [(-1, 0), (0, 1), (1, 0)],
+    "happy":  [(0, 1), (1, 0)],
     "lashes": [(0, 0), (0, 1), (1, 1)],
 }
 BROWS = {
     "none":    [],
     "flat":    [(0, 0), (1, 0)],
-    "arched":  [(-1, 0), (0, 1), (1, 0)],
-    "worried": [(-1, 1), (0, 1), (1, 0)],
-    "thick":   [(-1, 0), (0, 0), (1, 0)],
+    "arched":  [(0, 0), (1, 1), (2, 0)],
+    "worried": [(0, 1), (1, 0), (2, 0)],
+    "thick":   [(0, 0), (1, 0), (2, 0)],
 }
 MOUTHS = {     # absolute x (symmetric about the centre line), dz
     "smile": [(-2, 1), (-1, 0), (0, 0), (1, 1)],
@@ -329,8 +329,7 @@ def build_hair(style, D, C):
     if style == "shaggy":
         # 05/06, the most common look: a thick messy mop over the ears, jagged fringe, clumps on top
         b((HX0 - 1, HX1 + 1), (HY0 - 1, HY1 + 1), (T + 1, T + 1))
-        lumpy(HX0 - 1, HX1 + 1, HY0 - 1, HY1 + 1, T + 2, "shag", 0.6)
-        lumpy(HX0 + 1, HX1 - 1, HY0 + 1, HY1 - 1, T + 3, "shag2", 0.2)
+        lumpy(HX0 - 1, HX1 + 1, HY0 - 1, HY1 + 1, T + 2, "shag", 0.45)
         b((HX0 - 2, HX0 - 1), (HY0, HY1 + 1), (Z + 3, T))
         b((HX1 + 1, HX1 + 2), (HY0, HY1 + 1), (Z + 3, T))
         b((HX0 - 1, HX1 + 1), (HY1 + 1, HY1 + 2), (Z + 1, T))
@@ -358,7 +357,7 @@ def build_hair(style, D, C):
                 return False
             if y < HY0 and z < T - 1:
                 return False
-            d = ((x + 0.5) / 8.4) ** 2 + ((y + 0.5) / 8.2) ** 2 + ((z + 0.5 - cz) / 6.6) ** 2
+            d = ((x + 0.5) / 6.8) ** 2 + ((y + 0.5) / 6.6) ** 2 + ((z + 0.5 - cz) / 5.0) ** 2
             if d > 1.0:
                 return False
             return d < 0.84 or zlib.crc32(("afro%d,%d,%d" % (x, y, z)).encode()) % 3 > 0   # tufted edge
@@ -372,7 +371,7 @@ def build_hair(style, D, C):
                 return False
             if y < HY0 and z < T - 1:
                 return False                                         # keep the face clear
-            d = ((x + 0.5) / 7.2) ** 2 + ((y + 0.5) / 7.0) ** 2 + ((z + 0.5 - cz) / 5.6) ** 2
+            d = ((x + 0.5) / 6.0) ** 2 + ((y + 0.5) / 5.8) ** 2 + ((z + 0.5 - cz) / 4.6) ** 2
             return d <= 1.0 and (d < 0.8 or zlib.crc32(("cu%d,%d,%d" % (x, y, z)).encode()) % 4 > 0)
         b((HX0 - 2, HX1 + 2), (HY0 - 2, HY1 + 2), (T - 5, T + 4), keep)
     elif style == "long":
@@ -432,12 +431,12 @@ def build_hair(style, D, C):
 
 
 def tufts(p, m, seed, Z):
-    """Clumps on the back, sides and crown: 2 x 2 tufts on a 2-voxel grid stand one voxel out of about a third of
+    """Clumps on the back and sides: 2 x 2 tufts on a 2-voxel grid stand one voxel out of about a third of
     the surface, so a head seen from behind or above reads as hair, not as a box (05/06). The face side is left
     alone. Grid-aligned clumps merge into few quads (the kit's size budget)."""
     cells = set(p.cells)
     add = []
-    for d, (ia, ib) in (((0, 1, 0), (0, 2)), ((1, 0, 0), (1, 2)), ((-1, 0, 0), (1, 2)), ((0, 0, 1), (0, 1))):
+    for d, (ia, ib) in (((0, 1, 0), (0, 2)), ((1, 0, 0), (1, 2)), ((-1, 0, 0), (1, 2))):
         for c in sorted(cells):
             if c[ia] % 2 or c[ib] % 2 or c[2] < Z + 2 or (d[0] and c[1] < HY0 + 1):
                 continue
@@ -652,7 +651,7 @@ ACC = {
     "bar_towel":      ("arm_acc", "ColumnWhite", "Cream"),
     "gaffer_tape":    ("belt", "Stone", "Charcoal"),
     "guitar":         ("instrument", "WoodMid", "Cream"),
-    "guitar_electric": ("instrument", "DrumRed", "ColumnWhite"),
+    "guitar_electric": ("instrument", "DressRed", "ColumnWhite"),
     "bass":           ("instrument", "Mustard", "StoolBlack"),
     "drumsticks":     ("held", "Sand", "Sand"),
     "drink_beer":     ("drink", "BeerAmber_emissive", "Foam"),
@@ -787,9 +786,9 @@ def build_acc(aid, D, C):
     elif aid in ("guitar", "guitar_electric", "bass"):
         # slung on the strap in front of the belly, neck up to the character's left (+X) for a right-hander
         y0 = D["y0"] - 2
-        wide = {"guitar": 7, "guitar_electric": 6, "bass": 6}[aid]
+        wide = {"guitar": 8, "guitar_electric": 8, "bass": 8}[aid]
         tall = {"guitar": 8, "guitar_electric": 7, "bass": 8}[aid]
-        x0 = -6
+        x0 = -7
         zb = leg
 
         def body_keep(x, y, z):
@@ -804,12 +803,12 @@ def build_acc(aid, D, C):
         else:
             bx((x0 + 2, x0 + 4), (y0 - 1, y0 - 1), (zb + 1, zb + 3), b2, "spine")    # pickguard
             bx((x0 + 1, x0 + 3), (y0 - 1, y0 - 1), (zb + 4, zb + 4), (aid + "_3", "MirrorGrey"), "spine")
-        nl = {"guitar": 4, "guitar_electric": 4, "bass": 5}[aid]
-        neck = ("guitar_neck", "WoodDark")                                          # 2 across per 1 up: clears the head
+        nl = {"guitar": 5, "guitar_electric": 6, "bass": 7}[aid]
+        neck = ("guitar_neck", "WoodDark")                                          # up at 45 deg, under the chin line
         for i in range(nl):
             zz = zb + tall - 2 + i
-            bx((x0 + wide + 2 * i - 1, x0 + wide + 2 * i), (y0, y0), (zz, zz), neck, "spine")
-        hx = x0 + wide + 2 * nl - 1
+            bx((x0 + wide + i - 1, x0 + wide + i), (y0, y0), (zz, zz), neck, "spine")
+        hx = x0 + wide + nl - 1
         bx((hx, hx + 1), (y0, y0), (zb + tall - 2 + nl, zb + tall - 1 + nl), a, "spine")    # headstock
         bx((D["x0"], D["x1"]), (D["y1"] + 1, D["y1"] + 1), (h - 1, h - 1), ("guitar_strap", "StoolBlack"), "spine")
     elif aid == "drumsticks":
@@ -1531,12 +1530,12 @@ def strum(t, D, inst="guitar", rate=4, sing=False):
     y = D["y0"] - 3.0                                   # just in front of the strings
     st = S(t, rate)
     fret = S(t, 1, 0.1)
-    neck = {"guitar": (4.0, 17.5), "guitar_electric": (3.0, 16.5), "bass": (4.0, 17.5)}[inst]
+    neck = {"guitar": (3.0, 18.0), "guitar_electric": (3.0, 18.0), "bass": (3.0, 18.5)}[inst]
     sway = S(t, 2)
     return pose(hips=((0, 6, 0), (0, 0.25 * (1 - C_(t, 4)) / 2, 0)), spine=((9 + sway, -6, 2 * sway),),
                 head=((-14 if sing else 2, 10 if not sing else -6, 3 * S(t, 2, 0.2)),),
                 armR=("ik", (-3.0, y, leg + 3.5 + 1.0 * st), (-1, 0.6, -0.2)),
-                armL=("ik", (neck[0] + 1.5 * fret, y, neck[1] + 0.7 * fret), (0.6, 0.3, -1)),
+                armL=("ik", (neck[0] + fret, y, neck[1] + fret), (0.6, 0.3, -1)),
                 leg_R=((0, 0, -4),), leg_L=((0, 0, 4),), shin_L=((3 * (1 - C_(t, 4)) / 2, 0, 0),))
 
 

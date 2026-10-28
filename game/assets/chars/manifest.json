@@ -28,7 +28,7 @@
    "h": 20,
    "elbow": 16,
    "knee": 5,
-   "T": 28
+   "T": 26
   },
   "regular": {
    "tw": 8,
@@ -38,7 +38,7 @@
    "h": 22,
    "elbow": 18,
    "knee": 5,
-   "T": 30
+   "T": 28
   },
   "broad": {
    "tw": 10,
@@ -48,7 +48,7 @@
    "h": 23,
    "elbow": 18,
    "knee": 5,
-   "T": 31
+   "T": 29
   }
  },
  "animations": [
@@ -282,7 +282,7 @@
    "Moss": "#4C5A30",
    "Mustard": "#C99430",
    "Rust": "#A04A26",
-   "Jacket": "#262028",
+   "Jacket": "#3A3444",
    "ShirtWhite": "#ECE6E0",
    "DressRed": "#B0141C",
    "Leather": "#5A3020"
@@ -497,7 +497,7 @@
    "guitar_electric": {
     "slot": "instrument",
     "colours": [
-     "DrumRed",
+     "DressRed",
      "ColumnWhite"
     ]
    },
@@ -611,7 +611,7 @@
  "libraries": {
   "petite": {
    "path": "res://assets/chars/parts/parts_petite.glb",
-   "height_vox": 29,
+   "height_vox": 27,
    "parts": [
     {
      "id": "head_square",
@@ -666,7 +666,7 @@
      "materials": [
       "hair__HairDarkBrown"
      ],
-     "tris": 390
+     "tris": 256
     },
     {
      "id": "hair_wavy",
@@ -677,7 +677,7 @@
      "materials": [
       "hair__HairDarkBrown"
      ],
-     "tris": 524
+     "tris": 344
     },
     {
      "id": "hair_afro",
@@ -688,7 +688,7 @@
      "materials": [
       "hair__HairDarkBrown"
      ],
-     "tris": 1088
+     "tris": 660
     },
     {
      "id": "hair_curly",
@@ -699,7 +699,7 @@
      "materials": [
       "hair__HairDarkBrown"
      ],
-     "tris": 768
+     "tris": 502
     },
     {
      "id": "hair_long",
@@ -710,7 +710,7 @@
      "materials": [
       "hair__HairDarkBrown"
      ],
-     "tris": 330
+     "tris": 204
     },
     {
      "id": "hair_bob",
@@ -721,7 +721,7 @@
      "materials": [
       "hair__HairDarkBrown"
      ],
-     "tris": 312
+     "tris": 194
     },
     {
      "id": "hair_crop",
@@ -732,7 +732,7 @@
      "materials": [
       "hair__HairDarkBrown"
      ],
-     "tris": 296
+     "tris": 186
     },
     {
      "id": "hair_buzz",
@@ -754,7 +754,7 @@
      "materials": [
       "hair__HairDarkBrown"
      ],
-     "tris": 244
+     "tris": 212
     },
     {
      "id": "hair_quiff",
@@ -765,7 +765,7 @@
      "materials": [
       "hair__HairDarkBrown"
      ],
-     "tris": 250
+     "tris": 136
     },
     {
      "id": "hair_ponytail",
@@ -776,7 +776,7 @@
      "materials": [
       "hair__HairDarkBrown"
      ],
-     "tris": 346
+     "tris": 202
     },
     {
      "id": "hair_side_part",
@@ -787,7 +787,7 @@
      "materials": [
       "hair__HairDarkBrown"
      ],
-     "tris": 248
+     "tris": 152
     },
     {
      "id": "hair_swept",
@@ -798,7 +798,7 @@
      "materials": [
       "hair__HairDarkBrown"
      ],
-     "tris": 198
+     "tris": 82
     },
     {
      "id": "hair_spiky",
@@ -809,7 +809,7 @@
      "materials": [
       "hair__HairDarkBrown"
      ],
-     "tris": 334
+     "tris": 246
     },
     {
      "id": "hair_sideburns",
@@ -820,7 +820,7 @@
      "materials": [
       "hair__HairDarkBrown"
      ],
-     "tris": 224
+     "tris": 164
     },
     {
      "id": "hair_chignon",
@@ -831,7 +831,7 @@
      "materials": [
       "hair__HairDarkBrown"
      ],
-     "tris": 288
+     "tris": 208
     },
     {
      "id": "eyes_dot",
@@ -875,7 +875,7 @@
      "materials": [
       "eyes__Ink"
      ],
-     "tris": 12
+     "tris": 8
     },
     {
      "id": "eyes_lashes",
@@ -1413,7 +1413,7 @@
      "materials": [
       "glasses_round__CymbalGold"
      ],
-     "tris": 100
+     "tris": 72
     },
     {
      "id": "glasses_tinted",
@@ -1425,7 +1425,7 @@
       "glasses_tinted_2__Lens",
       "glasses_tinted__CymbalGold"
      ],
-     "tris": 92
+     "tris": 64
     },
     {
      "id": "glasses_up",
@@ -1437,7 +1437,7 @@
       "glasses_up_2__Lens",
       "glasses_up__StoolBlack"
      ],
-     "tris": 60
+     "tris": 44
     },
     {
      "id": "headphones",
@@ -1460,7 +1460,7 @@
      "materials": [
       "beard__HairBlack"
      ],
-     "tris": 120
+     "tris": 80
     },
     {
      "id": "moustache",
@@ -1569,7 +1569,7 @@
       "guitar_neck__WoodDark",
       "guitar_strap__StoolBlack"
      ],
-     "tris": 150
+     "tris": 162
     },
     {
      "id": "guitar_electric",
@@ -1580,11 +1580,11 @@
      "materials": [
       "guitar_electric_2__ColumnWhite",
       "guitar_electric_3__MirrorGrey",
-      "guitar_electric__DrumRed",
+      "guitar_electric__DressRed",
       "guitar_neck__WoodDark",
       "guitar_strap__StoolBlack"
      ],
-     "tris": 146
+     "tris": 170
     },
     {
      "id": "bass",
@@ -1599,7 +1599,7 @@
       "guitar_neck__WoodDark",
       "guitar_strap__StoolBlack"
      ],
-     "tris": 160
+     "tris": 186
     },
     {
      "id": "drumsticks",
@@ -1779,7 +1779,7 @@
   },
   "regular": {
    "path": "res://assets/chars/parts/parts_regular.glb",
-   "height_vox": 31,
+   "height_vox": 29,
    "parts": [
     {
      "id": "head_square",
@@ -1834,7 +1834,7 @@
      "materials": [
       "hair__HairDarkBrown"
      ],
-     "tris": 388
+     "tris": 236
     },
     {
      "id": "hair_wavy",
@@ -1845,7 +1845,7 @@
      "materials": [
       "hair__HairDarkBrown"
      ],
-     "tris": 454
+     "tris": 300
     },
     {
      "id": "hair_afro",
@@ -1856,7 +1856,7 @@
      "materials": [
       "hair__HairDarkBrown"
      ],
-     "tris": 1076
+     "tris": 618
     },
     {
      "id": "hair_curly",
@@ -1867,7 +1867,7 @@
      "materials": [
       "hair__HairDarkBrown"
      ],
-     "tris": 884
+     "tris": 524
     },
     {
      "id": "hair_long",
@@ -1878,7 +1878,7 @@
      "materials": [
       "hair__HairDarkBrown"
      ],
-     "tris": 364
+     "tris": 236
     },
     {
      "id": "hair_bob",
@@ -1889,7 +1889,7 @@
      "materials": [
       "hair__HairDarkBrown"
      ],
-     "tris": 324
+     "tris": 200
     },
     {
      "id": "hair_crop",
@@ -1900,7 +1900,7 @@
      "materials": [
       "hair__HairDarkBrown"
      ],
-     "tris": 266
+     "tris": 188
     },
     {
      "id": "hair_buzz",
@@ -1922,7 +1922,7 @@
      "materials": [
       "hair__HairDarkBrown"
      ],
-     "tris": 330
+     "tris": 154
     },
     {
      "id": "hair_quiff",
@@ -1933,7 +1933,7 @@
      "materials": [
       "hair__HairDarkBrown"
      ],
-     "tris": 256
+     "tris": 136
     },
     {
      "id": "hair_ponytail",
@@ -1944,7 +1944,7 @@
      "materials": [
       "hair__HairDarkBrown"
      ],
-     "tris": 308
+     "tris": 186
     },
     {
      "id": "hair_side_part",
@@ -1955,7 +1955,7 @@
      "materials": [
       "hair__HairDarkBrown"
      ],
-     "tris": 192
+     "tris": 132
     },
     {
      "id": "hair_swept",
@@ -1966,7 +1966,7 @@
      "materials": [
       "hair__HairDarkBrown"
      ],
-     "tris": 174
+     "tris": 98
     },
     {
      "id": "hair_spiky",
@@ -1977,7 +1977,7 @@
      "materials": [
       "hair__HairDarkBrown"
      ],
-     "tris": 314
+     "tris": 260
     },
     {
      "id": "hair_sideburns",
@@ -1988,7 +1988,7 @@
      "materials": [
       "hair__HairDarkBrown"
      ],
-     "tris": 212
+     "tris": 172
     },
     {
      "id": "hair_chignon",
@@ -1999,7 +1999,7 @@
      "materials": [
       "hair__HairDarkBrown"
      ],
-     "tris": 320
+     "tris": 190
     },
     {
      "id": "eyes_dot",
@@ -2043,7 +2043,7 @@
      "materials": [
       "eyes__Ink"
      ],
-     "tris": 12
+     "tris": 8
     },
     {
      "id": "eyes_lashes",
@@ -2581,7 +2581,7 @@
      "materials": [
       "glasses_round__CymbalGold"
      ],
-     "tris": 100
+     "tris": 72
     },
     {
      "id": "glasses_tinted",
@@ -2593,7 +2593,7 @@
       "glasses_tinted_2__Lens",
       "glasses_tinted__CymbalGold"
      ],
-     "tris": 92
+     "tris": 64
     },
     {
      "id": "glasses_up",
@@ -2605,7 +2605,7 @@
       "glasses_up_2__Lens",
       "glasses_up__StoolBlack"
      ],
-     "tris": 60
+     "tris": 44
     },
     {
      "id": "headphones",
@@ -2628,7 +2628,7 @@
      "materials": [
       "beard__HairBlack"
      ],
-     "tris": 120
+     "tris": 80
     },
     {
      "id": "moustache",
@@ -2737,7 +2737,7 @@
       "guitar_neck__WoodDark",
       "guitar_strap__StoolBlack"
      ],
-     "tris": 150
+     "tris": 162
     },
     {
      "id": "guitar_electric",
@@ -2748,11 +2748,11 @@
      "materials": [
       "guitar_electric_2__ColumnWhite",
       "guitar_electric_3__MirrorGrey",
-      "guitar_electric__DrumRed",
+      "guitar_electric__DressRed",
       "guitar_neck__WoodDark",
       "guitar_strap__StoolBlack"
      ],
-     "tris": 146
+     "tris": 170
     },
     {
      "id": "bass",
@@ -2767,7 +2767,7 @@
       "guitar_neck__WoodDark",
       "guitar_strap__StoolBlack"
      ],
-     "tris": 160
+     "tris": 186
     },
     {
      "id": "drumsticks",
@@ -2947,7 +2947,7 @@
   },
   "broad": {
    "path": "res://assets/chars/parts/parts_broad.glb",
-   "height_vox": 32,
+   "height_vox": 30,
    "parts": [
     {
      "id": "head_square",
@@ -3002,7 +3002,7 @@
      "materials": [
       "hair__HairDarkBrown"
      ],
-     "tris": 448
+     "tris": 240
     },
     {
      "id": "hair_wavy",
@@ -3013,7 +3013,7 @@
      "materials": [
       "hair__HairDarkBrown"
      ],
-     "tris": 418
+     "tris": 292
     },
     {
      "id": "hair_afro",
@@ -3024,7 +3024,7 @@
      "materials": [
       "hair__HairDarkBrown"
      ],
-     "tris": 1124
+     "tris": 642
     },
     {
      "id": "hair_curly",
@@ -3035,7 +3035,7 @@
      "materials": [
       "hair__HairDarkBrown"
      ],
-     "tris": 854
+     "tris": 522
     },
     {
      "id": "hair_long",
@@ -3046,7 +3046,7 @@
      "materials": [
       "hair__HairDarkBrown"
      ],
-     "tris": 340
+     "tris": 198
     },
     {
      "id": "hair_bob",
@@ -3057,7 +3057,7 @@
      "materials": [
       "hair__HairDarkBrown"
      ],
-     "tris": 278
+     "tris": 178
     },
     {
      "id": "hair_crop",
@@ -3068,7 +3068,7 @@
      "materials": [
       "hair__HairDarkBrown"
      ],
-     "tris": 316
+     "tris": 202
     },
     {
      "id": "hair_buzz",
@@ -3090,7 +3090,7 @@
      "materials": [
       "hair__HairDarkBrown"
      ],
-     "tris": 246
+     "tris": 142
     },
     {
      "id": "hair_quiff",
@@ -3101,7 +3101,7 @@
      "materials": [
       "hair__HairDarkBrown"
      ],
-     "tris": 238
+     "tris": 128
     },
     {
      "id": "hair_ponytail",
@@ -3112,7 +3112,7 @@
      "materials": [
       "hair__HairDarkBrown"
      ],
-     "tris": 306
+     "tris": 184
     },
     {
      "id": "hair_side_part",
@@ -3123,7 +3123,7 @@
      "materials": [
       "hair__HairDarkBrown"
      ],
-     "tris": 234
+     "tris": 152
     },
     {
      "id": "hair_swept",
@@ -3134,7 +3134,7 @@
      "materials": [
       "hair__HairDarkBrown"
      ],
-     "tris": 182
+     "tris": 104
     },
     {
      "id": "hair_spiky",
@@ -3145,7 +3145,7 @@
      "materials": [
       "hair__HairDarkBrown"
      ],
-     "tris": 316
+     "tris": 258
     },
     {
      "id": "hair_sideburns",
@@ -3156,7 +3156,7 @@
      "materials": [
       "hair__HairDarkBrown"
      ],
-     "tris": 236
+     "tris": 164
     },
     {
      "id": "hair_chignon",
@@ -3167,7 +3167,7 @@
      "materials": [
       "hair__HairDarkBrown"
      ],
-     "tris": 294
+     "tris": 182
     },
     {
      "id": "eyes_dot",
@@ -3211,7 +3211,7 @@
      "materials": [
       "eyes__Ink"
      ],
-     "tris": 12
+     "tris": 8
     },
     {
      "id": "eyes_lashes",
@@ -3749,7 +3749,7 @@
      "materials": [
       "glasses_round__CymbalGold"
      ],
-     "tris": 100
+     "tris": 72
     },
     {
      "id": "glasses_tinted",
@@ -3761,7 +3761,7 @@
       "glasses_tinted_2__Lens",
       "glasses_tinted__CymbalGold"
      ],
-     "tris": 92
+     "tris": 64
     },
     {
      "id": "glasses_up",
@@ -3773,7 +3773,7 @@
       "glasses_up_2__Lens",
       "glasses_up__StoolBlack"
      ],
-     "tris": 60
+     "tris": 44
     },
     {
      "id": "headphones",
@@ -3796,7 +3796,7 @@
      "materials": [
       "beard__HairBlack"
      ],
-     "tris": 120
+     "tris": 80
     },
     {
      "id": "moustache",
@@ -3905,7 +3905,7 @@
       "guitar_neck__WoodDark",
       "guitar_strap__StoolBlack"
      ],
-     "tris": 150
+     "tris": 162
     },
     {
      "id": "guitar_electric",
@@ -3916,11 +3916,11 @@
      "materials": [
       "guitar_electric_2__ColumnWhite",
       "guitar_electric_3__MirrorGrey",
-      "guitar_electric__DrumRed",
+      "guitar_electric__DressRed",
       "guitar_neck__WoodDark",
       "guitar_strap__StoolBlack"
      ],
-     "tris": 146
+     "tris": 170
     },
     {
      "id": "bass",
@@ -3935,7 +3935,7 @@
       "guitar_neck__WoodDark",
       "guitar_strap__StoolBlack"
      ],
-     "tris": 160
+     "tris": 186
     },
     {
      "id": "drumsticks",
@@ -4199,10 +4199,10 @@
      "hex": "#C99430"
     }
    },
-   "height_m": 1.75,
-   "height_vox": 35,
-   "head_top_vox": 31,
-   "tris": 718,
+   "height_m": 1.65,
+   "height_vox": 33,
+   "head_top_vox": 29,
+   "tris": 650,
    "animations": [
     "idle",
     "walk",
@@ -4223,7 +4223,7 @@
     "walk_merry",
     "idle_sad"
    ],
-   "bytes": 239680
+   "bytes": 231904
   },
   {
    "name": "ploy",
@@ -4304,10 +4304,10 @@
      "hex": "#D9C9A6"
     }
    },
-   "height_m": 1.7,
-   "height_vox": 34,
-   "head_top_vox": 29,
-   "tris": 690,
+   "height_m": 1.55,
+   "height_vox": 31,
+   "head_top_vox": 27,
+   "tris": 708,
    "animations": [
     "idle",
     "walk",
@@ -4328,7 +4328,7 @@
     "walk_merry",
     "idle_sad"
    ],
-   "bytes": 235668
+   "bytes": 238120
   },
   {
    "name": "jules",
@@ -4404,10 +4404,10 @@
      "hex": "#C99430"
     }
    },
-   "height_m": 1.8,
-   "height_vox": 36,
-   "head_top_vox": 31,
-   "tris": 682,
+   "height_m": 1.65,
+   "height_vox": 33,
+   "head_top_vox": 29,
+   "tris": 546,
    "animations": [
     "idle",
     "walk",
@@ -4428,7 +4428,7 @@
     "walk_merry",
     "idle_sad"
    ],
-   "bytes": 233336
+   "bytes": 217896
   },
   {
    "name": "mali",
@@ -4513,10 +4513,10 @@
      "hex": "#D9C9A6"
     }
    },
-   "height_m": 1.75,
-   "height_vox": 35,
-   "head_top_vox": 32,
-   "tris": 1304,
+   "height_m": 1.6,
+   "height_vox": 32,
+   "head_top_vox": 30,
+   "tris": 1124,
    "animations": [
     "idle",
     "walk",
@@ -4537,7 +4537,7 @@
     "walk_merry",
     "idle_sad"
    ],
-   "bytes": 304232
+   "bytes": 284508
   },
   {
    "name": "dougie",
@@ -4627,10 +4627,10 @@
      "hex": "#D9C9A6"
     }
    },
-   "height_m": 1.8,
-   "height_vox": 36,
-   "head_top_vox": 32,
-   "tris": 662,
+   "height_m": 1.7,
+   "height_vox": 34,
+   "head_top_vox": 30,
+   "tris": 656,
    "animations": [
     "idle",
     "walk",
@@ -4651,7 +4651,7 @@
     "walk_merry",
     "idle_sad"
    ],
-   "bytes": 235068
+   "bytes": 234488
   },
   {
    "name": "lung_nop",
@@ -4736,10 +4736,10 @@
      "hex": "#221110"
     }
    },
-   "height_m": 1.7,
-   "height_vox": 34,
-   "head_top_vox": 31,
-   "tris": 658,
+   "height_m": 1.55,
+   "height_vox": 31,
+   "head_top_vox": 29,
+   "tris": 560,
    "animations": [
     "idle",
     "walk",
@@ -4760,7 +4760,7 @@
     "walk_merry",
     "idle_sad"
    ],
-   "bytes": 233072
+   "bytes": 222320
   },
   {
    "name": "bow",
@@ -4841,10 +4841,10 @@
      "hex": "#8C8892"
     }
    },
-   "height_m": 1.65,
-   "height_vox": 33,
-   "head_top_vox": 29,
-   "tris": 1018,
+   "height_m": 1.55,
+   "height_vox": 31,
+   "head_top_vox": 27,
+   "tris": 898,
    "animations": [
     "idle",
     "walk",
@@ -4865,7 +4865,7 @@
     "walk_merry",
     "idle_sad"
    ],
-   "bytes": 272200
+   "bytes": 259028
   },
   {
    "name": "hiro",
@@ -4941,10 +4941,10 @@
      "hex": "#D9C9A6"
     }
    },
-   "height_m": 1.7,
-   "height_vox": 34,
-   "head_top_vox": 31,
-   "tris": 578,
+   "height_m": 1.55,
+   "height_vox": 31,
+   "head_top_vox": 29,
+   "tris": 518,
    "animations": [
     "idle",
     "walk",
@@ -4965,7 +4965,7 @@
     "walk_merry",
     "idle_sad"
    ],
-   "bytes": 222444
+   "bytes": 215904
   },
   {
    "name": "nam",
@@ -5068,10 +5068,10 @@
      "hex": "#E8A030"
     }
    },
-   "height_m": 1.65,
-   "height_vox": 33,
-   "head_top_vox": 31,
-   "tris": 852,
+   "height_m": 1.55,
+   "height_vox": 31,
+   "head_top_vox": 29,
+   "tris": 724,
    "animations": [
     "idle",
     "walk",
@@ -5095,7 +5095,7 @@
     "walk_tray",
     "pour"
    ],
-   "bytes": 278500
+   "bytes": 264284
   },
   {
    "name": "fern",
@@ -5176,10 +5176,10 @@
      "hex": "#E8A030"
     }
    },
-   "height_m": 1.6,
-   "height_vox": 32,
-   "head_top_vox": 29,
-   "tris": 944,
+   "height_m": 1.45,
+   "height_vox": 29,
+   "head_top_vox": 27,
+   "tris": 830,
    "animations": [
     "idle",
     "walk",
@@ -5203,7 +5203,7 @@
     "walk_tray",
     "pour"
    ],
-   "bytes": 284084
+   "bytes": 271592
   },
   {
    "name": "big",
@@ -5293,10 +5293,10 @@
      "hex": "#8A7444"
     }
    },
-   "height_m": 1.65,
-   "height_vox": 33,
-   "head_top_vox": 32,
-   "tris": 542,
+   "height_m": 1.55,
+   "height_vox": 31,
+   "head_top_vox": 30,
+   "tris": 506,
    "animations": [
     "idle",
     "walk",
@@ -5320,7 +5320,7 @@
     "walk_tray",
     "pour"
    ],
-   "bytes": 240288
+   "bytes": 236400
   },
   {
    "name": "golf",
@@ -5405,10 +5405,10 @@
      "hex": "#E8A030"
     }
    },
-   "height_m": 1.8,
-   "height_vox": 36,
-   "head_top_vox": 31,
-   "tris": 788,
+   "height_m": 1.65,
+   "height_vox": 33,
+   "head_top_vox": 29,
+   "tris": 752,
    "animations": [
     "idle",
     "walk",
@@ -5432,7 +5432,7 @@
     "walk_tray",
     "pour"
    ],
-   "bytes": 267672
+   "bytes": 263796
   },
   {
    "name": "khun_joy",
@@ -5512,10 +5512,10 @@
      "hex": "#E8A030"
     }
    },
-   "height_m": 1.65,
-   "height_vox": 33,
-   "head_top_vox": 31,
-   "tris": 804,
+   "height_m": 1.5,
+   "height_vox": 30,
+   "head_top_vox": 29,
+   "tris": 710,
    "animations": [
     "idle",
     "walk",
@@ -5539,7 +5539,7 @@
     "walk_tray",
     "pour"
    ],
-   "bytes": 266776
+   "bytes": 256500
   },
   {
    "name": "server",
@@ -5633,10 +5633,10 @@
      "hex": "#E8A030"
     }
    },
-   "height_m": 1.7,
-   "height_vox": 34,
-   "head_top_vox": 31,
-   "tris": 1234,
+   "height_m": 1.55,
+   "height_vox": 31,
+   "head_top_vox": 29,
+   "tris": 1002,
    "animations": [
     "idle",
     "walk",
@@ -5660,7 +5660,7 @@
     "walk_tray",
     "pour"
    ],
-   "bytes": 319960
+   "bytes": 294180
   },
   {
    "name": "jo",
@@ -5733,7 +5733,7 @@
     },
     "top": {
      "swatch": "Jacket",
-     "hex": "#262028"
+     "hex": "#3A3444"
     },
     "top_accent": {
      "swatch": "Mustard",
@@ -5744,10 +5744,10 @@
      "hex": "#221110"
     }
    },
-   "height_m": 1.6,
-   "height_vox": 32,
-   "head_top_vox": 29,
-   "tris": 1042,
+   "height_m": 1.45,
+   "height_vox": 29,
+   "head_top_vox": 27,
+   "tris": 940,
    "animations": [
     "idle",
     "walk",
@@ -5772,7 +5772,7 @@
     "sing",
     "play_drums"
    ],
-   "bytes": 302148
+   "bytes": 291060
   },
   {
    "name": "pete",
@@ -5818,8 +5818,8 @@
      "hex": "#221110"
     },
     "bottom_trim": {
-     "swatch": "CymbalGold",
-     "hex": "#E8A030"
+     "swatch": "Charcoal",
+     "hex": "#403A3E"
     },
     "eyes": {
      "swatch": "Ink",
@@ -5863,7 +5863,7 @@
     },
     "top": {
      "swatch": "Jacket",
-     "hex": "#262028"
+     "hex": "#3A3444"
     },
     "top_accent": {
      "swatch": "Stone",
@@ -5874,10 +5874,10 @@
      "hex": "#403A3E"
     }
    },
-   "height_m": 1.8,
-   "height_vox": 36,
-   "head_top_vox": 31,
-   "tris": 910,
+   "height_m": 1.7,
+   "height_vox": 34,
+   "head_top_vox": 29,
+   "tris": 834,
    "animations": [
     "idle",
     "walk",
@@ -5902,7 +5902,7 @@
     "sing",
     "play_drums"
    ],
-   "bytes": 293444
+   "bytes": 284488
   },
   {
    "name": "boy",
@@ -5983,10 +5983,10 @@
      "hex": "#E4DDE6"
     }
    },
-   "height_m": 1.75,
-   "height_vox": 35,
-   "head_top_vox": 32,
-   "tris": 970,
+   "height_m": 1.6,
+   "height_vox": 32,
+   "head_top_vox": 30,
+   "tris": 744,
    "animations": [
     "idle",
     "walk",
@@ -6011,7 +6011,7 @@
     "sing",
     "play_drums"
    ],
-   "bytes": 293496
+   "bytes": 268860
   },
   {
    "name": "band_guitar",
@@ -6043,17 +6043,13 @@
      "swatch": "StoolBlack",
      "hex": "#221110"
     },
-    "bottom_trim": {
-     "swatch": "CymbalGold",
-     "hex": "#E8A030"
-    },
     "eyes": {
      "swatch": "Ink",
      "hex": "#120808"
     },
     "guitar_electric": {
-     "swatch": "DrumRed",
-     "hex": "#9A2A1A"
+     "swatch": "DressRed",
+     "hex": "#B0141C"
     },
     "guitar_electric_2": {
      "swatch": "ColumnWhite",
@@ -6093,7 +6089,7 @@
     },
     "top": {
      "swatch": "Jacket",
-     "hex": "#262028"
+     "hex": "#3A3444"
     },
     "top_accent": {
      "swatch": "StoolBlack",
@@ -6104,10 +6100,10 @@
      "hex": "#221110"
     }
    },
-   "height_m": 1.7,
-   "height_vox": 34,
-   "head_top_vox": 31,
-   "tris": 1082,
+   "height_m": 1.55,
+   "height_vox": 31,
+   "head_top_vox": 29,
+   "tris": 882,
    "animations": [
     "idle",
     "walk",
@@ -6132,7 +6128,7 @@
     "sing",
     "play_drums"
    ],
-   "bytes": 308552
+   "bytes": 285032
   },
   {
    "name": "patron_01",
@@ -6213,10 +6209,10 @@
      "hex": "#E4DDE6"
     }
    },
-   "height_m": 1.7,
-   "height_vox": 34,
-   "head_top_vox": 31,
-   "tris": 966,
+   "height_m": 1.55,
+   "height_vox": 31,
+   "head_top_vox": 29,
+   "tris": 758,
    "animations": [
     "idle",
     "walk",
@@ -6237,7 +6233,7 @@
     "walk_merry",
     "idle_sad"
    ],
-   "bytes": 266884
+   "bytes": 243488
   },
   {
    "name": "patron_02",
@@ -6301,10 +6297,10 @@
      "hex": "#B0141C"
     }
    },
-   "height_m": 1.6,
-   "height_vox": 32,
-   "head_top_vox": 29,
-   "tris": 1060,
+   "height_m": 1.45,
+   "height_vox": 29,
+   "head_top_vox": 27,
+   "tris": 888,
    "animations": [
     "idle",
     "walk",
@@ -6325,7 +6321,7 @@
     "walk_merry",
     "idle_sad"
    ],
-   "bytes": 271988
+   "bytes": 253120
   },
   {
    "name": "patron_03",
@@ -6393,10 +6389,10 @@
      "hex": "#9A2A1A"
     }
    },
-   "height_m": 1.8,
-   "height_vox": 36,
-   "head_top_vox": 31,
-   "tris": 1580,
+   "height_m": 1.6,
+   "height_vox": 32,
+   "head_top_vox": 29,
+   "tris": 1196,
    "animations": [
     "idle",
     "walk",
@@ -6417,7 +6413,7 @@
     "walk_merry",
     "idle_sad"
    ],
-   "bytes": 330372
+   "bytes": 288204
   },
   {
    "name": "patron_04",
@@ -6496,7 +6492,7 @@
     },
     "top": {
      "swatch": "Jacket",
-     "hex": "#262028"
+     "hex": "#3A3444"
     },
     "top_accent": {
      "swatch": "ShirtWhite",
@@ -6507,10 +6503,10 @@
      "hex": "#D9C9A6"
     }
    },
-   "height_m": 1.8,
-   "height_vox": 36,
-   "head_top_vox": 31,
-   "tris": 910,
+   "height_m": 1.7,
+   "height_vox": 34,
+   "head_top_vox": 29,
+   "tris": 778,
    "animations": [
     "idle",
     "walk",
@@ -6531,7 +6527,7 @@
     "walk_merry",
     "idle_sad"
    ],
-   "bytes": 261280
+   "bytes": 246244
   },
   {
    "name": "patron_05",
@@ -6599,10 +6595,10 @@
      "hex": "#7C7270"
     }
    },
-   "height_m": 1.6,
-   "height_vox": 32,
-   "head_top_vox": 29,
-   "tris": 1032,
+   "height_m": 1.45,
+   "height_vox": 29,
+   "head_top_vox": 27,
+   "tris": 858,
    "animations": [
     "idle",
     "walk",
@@ -6623,7 +6619,7 @@
     "walk_merry",
     "idle_sad"
    ],
-   "bytes": 270320
+   "bytes": 250652
   },
   {
    "name": "patron_06",
@@ -6700,10 +6696,10 @@
      "hex": "#4C5A30"
     }
    },
-   "height_m": 1.75,
-   "height_vox": 35,
-   "head_top_vox": 32,
-   "tris": 1016,
+   "height_m": 1.6,
+   "height_vox": 32,
+   "head_top_vox": 30,
+   "tris": 750,
    "animations": [
     "idle",
     "walk",
@@ -6724,7 +6720,7 @@
     "walk_merry",
     "idle_sad"
    ],
-   "bytes": 270980
+   "bytes": 240792
   },
   {
    "name": "patron_07",
@@ -6792,10 +6788,10 @@
      "hex": "#D9C9A6"
     }
    },
-   "height_m": 1.65,
-   "height_vox": 33,
-   "head_top_vox": 31,
-   "tris": 938,
+   "height_m": 1.55,
+   "height_vox": 31,
+   "head_top_vox": 29,
+   "tris": 788,
    "animations": [
     "idle",
     "walk",
@@ -6816,7 +6812,7 @@
     "walk_merry",
     "idle_sad"
    ],
-   "bytes": 259976
+   "bytes": 242948
   },
   {
    "name": "patron_08",
@@ -6892,10 +6888,10 @@
      "hex": "#D9C9A6"
     }
    },
-   "height_m": 1.8,
-   "height_vox": 36,
-   "head_top_vox": 31,
-   "tris": 1486,
+   "height_m": 1.6,
+   "height_vox": 32,
+   "head_top_vox": 29,
+   "tris": 1054,
    "animations": [
     "idle",
     "walk",
@@ -6916,7 +6912,7 @@
     "walk_merry",
     "idle_sad"
    ],
-   "bytes": 322508
+   "bytes": 275052
   },
   {
    "name": "patron_09",
@@ -6984,10 +6980,10 @@
      "hex": "#8C0610"
     }
    },
-   "height_m": 1.6,
-   "height_vox": 32,
-   "head_top_vox": 29,
-   "tris": 1248,
+   "height_m": 1.45,
+   "height_vox": 29,
+   "head_top_vox": 27,
+   "tris": 1046,
    "animations": [
     "idle",
     "walk",
@@ -7008,7 +7004,7 @@
     "walk_merry",
     "idle_sad"
    ],
-   "bytes": 293732
+   "bytes": 271564
   },
   {
    "name": "patron_10",
@@ -7084,10 +7080,10 @@
      "hex": "#D9C9A6"
     }
    },
-   "height_m": 1.7,
-   "height_vox": 34,
-   "head_top_vox": 31,
-   "tris": 802,
+   "height_m": 1.55,
+   "height_vox": 31,
+   "head_top_vox": 29,
+   "tris": 634,
    "animations": [
     "idle",
     "walk",
@@ -7108,7 +7104,7 @@
     "walk_merry",
     "idle_sad"
    ],
-   "bytes": 246304
+   "bytes": 227860
   },
   {
    "name": "patron_11",
@@ -7189,10 +7185,10 @@
      "hex": "#D9C9A6"
     }
    },
-   "height_m": 1.75,
-   "height_vox": 35,
-   "head_top_vox": 32,
-   "tris": 734,
+   "height_m": 1.6,
+   "height_vox": 32,
+   "head_top_vox": 30,
+   "tris": 650,
    "animations": [
     "idle",
     "walk",
@@ -7213,7 +7209,7 @@
     "walk_merry",
     "idle_sad"
    ],
-   "bytes": 238028
+   "bytes": 229640
   },
   {
    "name": "patron_12",
@@ -7285,10 +7281,10 @@
      "hex": "#B0141C"
     }
    },
-   "height_m": 1.7,
-   "height_vox": 34,
-   "head_top_vox": 31,
-   "tris": 884,
+   "height_m": 1.55,
+   "height_vox": 31,
+   "head_top_vox": 29,
+   "tris": 784,
    "animations": [
     "idle",
     "walk",
@@ -7309,7 +7305,7 @@
     "walk_merry",
     "idle_sad"
    ],
-   "bytes": 255212
+   "bytes": 244252
   },
   {
    "name": "patron_13",
@@ -7390,10 +7386,10 @@
      "hex": "#E4DDE6"
     }
    },
-   "height_m": 1.65,
-   "height_vox": 33,
-   "head_top_vox": 31,
-   "tris": 812,
+   "height_m": 1.55,
+   "height_vox": 31,
+   "head_top_vox": 29,
+   "tris": 680,
    "animations": [
     "idle",
     "walk",
@@ -7414,7 +7410,7 @@
     "walk_merry",
     "idle_sad"
    ],
-   "bytes": 249124
+   "bytes": 235108
   },
   {
    "name": "patron_14",
@@ -7491,10 +7487,10 @@
      "hex": "#D9C9A6"
     }
    },
-   "height_m": 1.6,
-   "height_vox": 32,
-   "head_top_vox": 29,
-   "tris": 932,
+   "height_m": 1.45,
+   "height_vox": 29,
+   "head_top_vox": 27,
+   "tris": 776,
    "animations": [
     "idle",
     "walk",
@@ -7515,7 +7511,7 @@
     "walk_merry",
     "idle_sad"
    ],
-   "bytes": 261988
+   "bytes": 245128
   },
   {
    "name": "patron_15",
@@ -7592,10 +7588,10 @@
      "hex": "#221110"
     }
    },
-   "height_m": 1.65,
-   "height_vox": 33,
-   "head_top_vox": 32,
-   "tris": 524,
+   "height_m": 1.55,
+   "height_vox": 31,
+   "head_top_vox": 30,
+   "tris": 486,
    "animations": [
     "idle",
     "walk",
@@ -7616,7 +7612,7 @@
     "walk_merry",
     "idle_sad"
    ],
-   "bytes": 216664
+   "bytes": 211636
   },
   {
    "name": "patron_16",
@@ -7692,10 +7688,10 @@
      "hex": "#D9C9A6"
     }
    },
-   "height_m": 1.7,
-   "height_vox": 34,
-   "head_top_vox": 31,
-   "tris": 1274,
+   "height_m": 1.55,
+   "height_vox": 31,
+   "head_top_vox": 29,
+   "tris": 938,
    "animations": [
     "idle",
     "walk",
@@ -7716,7 +7712,7 @@
     "walk_merry",
     "idle_sad"
    ],
-   "bytes": 299168
+   "bytes": 262244
   },
   {
    "name": "patron_17",
@@ -7780,10 +7776,10 @@
      "hex": "#D9C9A6"
     }
    },
-   "height_m": 1.65,
-   "height_vox": 33,
-   "head_top_vox": 29,
-   "tris": 858,
+   "height_m": 1.5,
+   "height_vox": 30,
+   "head_top_vox": 27,
+   "tris": 736,
    "animations": [
     "idle",
     "walk",
@@ -7804,7 +7800,7 @@
     "walk_merry",
     "idle_sad"
    ],
-   "bytes": 249764
+   "bytes": 236364
   },
   {
    "name": "patron_18",
@@ -7884,10 +7880,10 @@
      "hex": "#D9C9A6"
     }
    },
-   "height_m": 1.7,
-   "height_vox": 34,
-   "head_top_vox": 31,
-   "tris": 630,
+   "height_m": 1.55,
+   "height_vox": 31,
+   "head_top_vox": 29,
+   "tris": 570,
    "animations": [
     "idle",
     "walk",
@@ -7908,7 +7904,7 @@
     "walk_merry",
     "idle_sad"
    ],
-   "bytes": 227332
+   "bytes": 220800
   },
   {
    "name": "patron_19",
@@ -7993,10 +7989,10 @@
      "hex": "#D9C9A6"
     }
    },
-   "height_m": 1.75,
-   "height_vox": 35,
-   "head_top_vox": 31,
-   "tris": 750,
+   "height_m": 1.65,
+   "height_vox": 33,
+   "head_top_vox": 29,
+   "tris": 662,
    "animations": [
     "idle",
     "walk",
@@ -8017,7 +8013,7 @@
     "walk_merry",
     "idle_sad"
    ],
-   "bytes": 244028
+   "bytes": 234372
   },
   {
    "name": "patron_20",
@@ -8081,10 +8077,10 @@
      "hex": "#2F6B6A"
     }
    },
-   "height_m": 1.6,
-   "height_vox": 32,
-   "head_top_vox": 29,
-   "tris": 836,
+   "height_m": 1.45,
+   "height_vox": 29,
+   "head_top_vox": 27,
+   "tris": 720,
    "animations": [
     "idle",
     "walk",
@@ -8105,7 +8101,7 @@
     "walk_merry",
     "idle_sad"
    ],
-   "bytes": 246928
+   "bytes": 234216
   },
   {
    "name": "patron_21",
@@ -8199,10 +8195,10 @@
      "hex": "#D9C9A6"
     }
    },
-   "height_m": 1.75,
-   "height_vox": 35,
-   "head_top_vox": 32,
-   "tris": 868,
+   "height_m": 1.6,
+   "height_vox": 32,
+   "head_top_vox": 30,
+   "tris": 758,
    "animations": [
     "idle",
     "walk",
@@ -8223,7 +8219,7 @@
     "walk_merry",
     "idle_sad"
    ],
-   "bytes": 258644
+   "bytes": 245736
   },
   {
    "name": "patron_22",
@@ -8291,10 +8287,10 @@
      "hex": "#E4DDE6"
     }
    },
-   "height_m": 1.65,
-   "height_vox": 33,
-   "head_top_vox": 31,
-   "tris": 1002,
+   "height_m": 1.55,
+   "height_vox": 31,
+   "head_top_vox": 29,
+   "tris": 886,
    "animations": [
     "idle",
     "walk",
@@ -8315,7 +8311,7 @@
     "walk_merry",
     "idle_sad"
    ],
-   "bytes": 267084
+   "bytes": 254392
   },
   {
    "name": "patron_23",
@@ -8391,10 +8387,10 @@
      "hex": "#D9C9A6"
     }
    },
-   "height_m": 1.8,
-   "height_vox": 36,
-   "head_top_vox": 31,
-   "tris": 728,
+   "height_m": 1.65,
+   "height_vox": 33,
+   "head_top_vox": 29,
+   "tris": 682,
    "animations": [
     "idle",
     "walk",
@@ -8415,7 +8411,7 @@
     "walk_merry",
     "idle_sad"
    ],
-   "bytes": 238140
+   "bytes": 233160
   },
   {
    "name": "patron_24",
@@ -8491,10 +8487,10 @@
      "hex": "#D9C9A6"
     }
    },
-   "height_m": 1.7,
-   "height_vox": 34,
-   "head_top_vox": 29,
-   "tris": 1566,
+   "height_m": 1.5,
+   "height_vox": 30,
+   "head_top_vox": 27,
+   "tris": 1212,
    "animations": [
     "idle",
     "walk",
@@ -8515,7 +8511,7 @@
     "walk_merry",
     "idle_sad"
    ],
-   "bytes": 330592
+   "bytes": 291712
   }
  ]
 }

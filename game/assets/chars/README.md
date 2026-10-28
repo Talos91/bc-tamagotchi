@@ -48,15 +48,15 @@ prop). Material Preview, warm key, red fill, warm rim.
 
 ## Scale (v2, renders 05/06 parity)
 
-One voxel = 5 cm; the venue draws every preset at `PatronFigure.FIG_SCALE` 0.75 (1.2-1.3 m on screen, as the
-figures in renders 05/06). Measurements and the pose plan: `docs/art/screens/chars/README.md`. Head 10 W x 9 D x
-9 H; with hair it is a third of the height and as wide as the shoulders.
+One voxel = 5 cm; the venue draws every preset at `PatronFigure.FIG_SCALE` 0.75 (1.1-1.2 m on screen, as the
+figures in renders 05/06). Measurements, the pose plan and the review sheets: `docs/art/screens/chars/`. Head
+8 W x 7 D x 7 H; with hair it is close to a third of the height and a little narrower than the shoulders.
 
 | Body | Torso (W x D) | Legs (thigh / shin / shoe) | Chest | Arms (upper / fore / hand) | Head top | With hair |
 |---|---|---|---|---|---|---|
-| `petite` | 8 x 5 | 10 (5 / 3 / 2) | 8 | 4 / 3 / 2 | 29 vox | 30-32 |
-| `regular` | 8 x 5 | 11 (6 / 3 / 2) | 9 | 4 / 4 / 2 | 31 vox | 32-34 |
-| `broad` | 10 x 6 | 11 | 10 | 5 / 4 / 2 | 32 vox | 33-35 |
+| `petite` | 8 x 5 | 10 (5 / 3 / 2) | 8 | 4 / 3 / 2 | 27 vox | 28-30 |
+| `regular` | 8 x 5 | 11 (6 / 3 / 2) | 9 | 4 / 4 / 2 | 29 vox | 30-31 |
+| `broad` | 10 x 6 | 11 | 10 | 5 / 4 / 2 | 30 vox | 31-33 |
 
 Seated poses put the thigh undersides at `seat_vox` 9 (0.45 m at scale 1), so with the figure at FIG_SCALE the root
 goes `SEAT_H * FIG_SCALE` (0.3375 m) below the real seat: cafe chairs and drum stools 0.45 m, bar stools 0.8 m.
@@ -104,7 +104,7 @@ for the bartender's pair), so walking figures never carry a sideways glass.
 
 | Slot | Mesh node | Options |
 |---|---|---|
-| head | `head` | `square`, `round` (chamfered vertical and top edges), `soft` (top edges), `heart` (narrow jaw), each with a 2-voxel nose in relief. All fit the 10 x 9 x 9 box, so every hair, hat and face fits every head |
+| head | `head` | `square`, `round` (chamfered vertical and top edges), `soft` (top edges), `heart` (narrow jaw), each with a 2-voxel nose in relief. All fit the 8 x 7 x 7 box, so every hair, hat and face fits every head |
 | hair | `hair` | `shaggy`, `wavy`, `afro`, `curly`, `long`, `bob`, `crop`, `buzz`, `bun`, `quiff`, `ponytail`, `side_part`, `swept`, `spiky`, `sideburns`, `chignon` (16; all but `buzz` carry 2 x 2 clumps on the back, sides and crown) |
 | eyes | `eyes` | `dot`, `wide`, `sleepy`, `happy`, `lashes` (1 x 2 pixel decals halfway down the face) |
 | brows | `brows` | `none`, `flat`, `arched`, `worried`, `thick`: voxels in relief, hair colour |
@@ -204,7 +204,7 @@ to `idle` for unknown ones), so tipsiness and low Vibe are `figure.play(BCChars.
 
 ## Known gaps
 
-- Raised arms reach about the top of the head (10-row arms against a 9-row head); `dance` and `idle_merry` splay a
+- Raised arms reach above the head (10-row arms against a 7-row head); `dance` and `idle_merry` splay a
   raised arm outward so it clears the hair.
 - Seated feet hang a little above the floor at cafe chairs: chibi shins (0.19 m drawn) are shorter than a 0.45 m
   seat. Tables hide it from the game cameras.

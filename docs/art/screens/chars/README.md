@@ -31,14 +31,17 @@ Read-offs that drive the kit:
 
 ## Kit proportions chosen (voxels of 5 cm, drawn at FIG_SCALE 0.75 in the venue)
 
+Iterated against the sheet: a 9-row head measured 37-40 % of the figure and an 8-row head 34-43 % against the 05
+server's 27-29 %, so the final head is 8 x 7 x 7, narrower than the shoulders with the arms, as in the renders.
+
 | | regular | petite | broad |
 |---|---|---|---|
-| Legs (thigh / shin / shoe) | 11 (6 / 3 / 2) | 10 | 11 |
+| Legs (thigh / shin / shoe) | 11 (6 / 3 / 2) | 10 (5 / 3 / 2) | 11 |
 | Pelvis + chest | 2 + 9 | 2 + 8 | 2 + 10 |
-| Head (W x D x H) | 10 x 9 x 9 | same | same |
-| Hair | +1 to +3 (afro more) | | |
-| Total, drawn | 32-34 vox, 1.2-1.27 m | 30-32 | 33-35 |
-| Head + hair share | 31-35 % | | |
+| Head (W x D x H) | 8 x 7 x 7 | same | same |
+| Hair | +1 to +2 (afro, curly more) | | |
+| Total, drawn | 30-31 vox, 1.13-1.16 m | 28-30 | 31-33 |
+| Head + hair share | 27-30 % (about a third with the tufted sides seen from above) | | |
 | Torso W x D, arms | 8 x 5, arms 3 x 3 (upper 4, forearm 4, hand 2) | 8 x 5 | 10 x 6 |
 
 ## Pose plan
@@ -55,3 +58,23 @@ Read-offs that drive the kit:
 | `pour` | bartender (Nam) | behind the bar, bottle over a glass |
 | `play_guitar`, `play_bass`, `sing`, `play_drums` | guest guitarist, Pete, Jo, Boy | the four stage spots |
 | `idle`, `walk`, `dance`, `applaud`, `idle_warm/tipsy/merry`, `walk_warm/tipsy/merry`, `idle_sad` | everyone | kept from kit v1, now with elbows and knees |
+
+## Results
+
+| File | What |
+|---|---|
+| `chars-03-sheet.png` | **review sheet**: seven render figures next to the kit figure in the same role at the same pixel height (server, two guitarists, bassist, drummer, seated patrons with glasses), then the band and table regions of 05/06 next to the game at the same camera |
+| `chars-03-R05-game.png`, `chars-03-R06-game.png` | the venue at the R05 / R06 parity cameras with the v2 crowd (87 figures) |
+| `chars-01-*`, `chars-02-*` | earlier captures of the same session (9-row and 8-row heads) |
+
+Still open after sheet 03:
+- Figures read darker than in the renders: the renders light every figure with a warm key and rim; the room's
+  lighting belongs to the room-polish session.
+- From R05 many seated patrons show their backs (four chairs round each table, as in the layout); the renders
+  favour faces. A crowd-only fix would be to fill the chairs that face the camera first.
+- The 05 "tables and server" region does not line up with the game layout (the render has a table where the game
+  has the aisle), so that pair compares density, not the same figures.
+- The render bassist plays an upright bass; the cast bible gives Pete a yellow electric bass, which the kit keeps.
+  05/06 show a four-piece and the House Lights are a trio: the fourth spot is an anonymous guest guitarist
+  (`band_guitar`), to be confirmed.
+- Hair is voxel-exact blocks with clumps; the renders' hair is softer and more sculpted.
