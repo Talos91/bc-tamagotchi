@@ -86,7 +86,14 @@ Running: 🎮 3b-M mechanical (Sonnet) — fonts + theme, `rules.gd` fixes (floo
 04-coins §10.1 and 06-stakes §5, Noi/Nam fix, tuning proposals. Owns
 `game/scripts/rules.gd|needs.gd|save.gd`, `game/tests/`, `game/assets/fonts/`,
 UI theme, `game/i18n/strings.csv`, `02-gdd.md`, `03-cast.md`.
-Waiting for room polish to finish: 🎮 zone wiring (touches `game/scenes/venue/`).
+Running: 🎮 3b-Z zone wiring + first-playable assembly (Opus) — zones built at
+runtime from `layout.json` so it never edits `game/scenes/venue/`; owns
+`main.tscn`, `main.gd`, `player.gd`, `camera_rig.gd`, `touch_joystick.gd`,
+`game/scripts/zones/`, `game/scenes/ui/` (HUD, prompt, result card, walk-out),
+`game/i18n/strings_venue.csv`, `game/tests/smoke_loop.gd`,
+`docs/tech/02-playtest-guide.md`, `docs/art/screens/loop/`.
+Changelog: `docs/CHANGELOG.md`, regenerated with `python tools/changelog.py`
+by the orchestrator after each wave; workers write descriptive commit titles.
 Waiting for characters to be accepted: 🎭 creator + the Flat.
 
 Inputs carried over from 3a reports (add to the relevant 3b brief):
