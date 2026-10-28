@@ -68,7 +68,17 @@ Wave 1 has no file overlap, so all three start together.
 | 3C | 🎨 Character kit | `tools/blender/bc_chars.py`, `game/assets/chars` | Chibi voxel avatar kit per art bible §7 and cast bible: 3 bodies × 4 heads, hair, outfits, skin palette; the 8 regulars and staff as presets; idle/walk/tipsy animation set; showcase scene |
 | 3D | 🎮 Minigames | `game/scenes/minigames`, `game/scripts/minigames` | Pour Perfect, Front Row Rhythm, Candle Talk, Neon Pinball as standalone portrait scenes with the shared frame and result card from the wireframes, each calling `Needs.apply_action` |
 
-### Wave 3b — depends on 3a
+### Wave 3-parity — reach the quality bar (renders 05/06)
+
+| # | Session | Owns | Deliverable |
+|---|---------|------|-------------|
+| P0 | 🎨 Visual parity pass (done, archived) | all visual paths | Measurements, kit v3, venue re-laid to 05/06 and photo 07, lounge turned, iterations 0–10 in `docs/art/screens/parity/`, plan sheet |
+| P1 | 🎨 Characters | `tools/blender/bc_chars.py`, `game/assets/chars/`, `game/scripts/venue_patron*`, `blender/BlackCabinChars.blend`, `docs/art/screens/chars/` | Head and body proportions, faces visible from the game camera, seated / glass-holding / tray / band poses, clothing detail, matched against the figures in 05/06 |
+| P2 | 🎨 Room polish | `tools/blender/bc_kit.py`, `game/assets/kit/`, `game/scenes/venue/`, `game/tools/`, WorldEnvironment lighting, `blender/BlackCabin.blend`, `docs/art/screens/parity/`, `docs/art/parity-measurements.md` | Stage as dark platform under a red wash, lighting balance, crisp edges and contact shadows, material contrast; iterations 11+ |
+
+Layout is frozen at `game/assets/kit/layout.json` (146d334, plan confirmed by Daniele). Neither session edits the other's paths; characters may run `capture_parity.gd` but not edit it.
+
+### Wave 3b — depends on 3a and 3-parity
 
 Inputs carried over from 3a reports (add to the relevant 3b brief):
 - Fonts: Kanit and IBM Plex Sans Thai Looped are not in the repo; add them
