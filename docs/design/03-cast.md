@@ -148,10 +148,10 @@ appear only in the album credits and the localization table (§6).
 **Window:** Early = 18:00–23:00, Late = 21:00 to close. On a usual night a
 regular is present 90% of the time, otherwise 25% (GDD §5.1).
 
-**Feeds (proposal):** Candle Talk always gives Friends +10–20 (GDD §2.3). A
-*good* Candle Talk (candle fully lit) also gives **+5 to the regular's Feeds
-meter**: Tong talks you into the front row, Hiro gets you to try something. This
-spreads regulars across all four needs. It lives in `needs_config` as
+**Feeds:** Candle Talk always gives Friends +10–20 (GDD §2.3). A *good* Candle
+Talk (candle fully lit) also gives the player **+5 Friends** (the lean bonus), on
+top. The regular's own Feeds need shapes the conversation and the lines they
+offer, not a second meter bonus. It lives in `needs_config` as
 `candle_talk_lean_bonus`.
 
 ### 3.2 Weekly schedule (home zone; † = second-zone drift likely)
@@ -289,6 +289,11 @@ future line.
 | **Soi Dog Blues** | Delta and Chicago blues | Duo: **P'Daeng** (Thai, 50s, slide guitar and vocals) and **Mick** (Australian, harmonica, stomp box) | Headline Fri/Sat, rotating; guest set on Sun | Music + Friends | `PERF_HEAD_C` |
 | **Fah** (ฟ้า) | Singer-songwriter, Thai and English | Solo: voice, nylon guitar, loop pedal | Sun, Slow Sunday | Music + Friends | `PERF_SUN` |
 | **DJ Moo Krob** (หมูกรอบ, "crispy pork") | Vinyl: Thai funk, city pop, disco | Solo, in the lounge | Fri/Sat 23:00 to close, after the headline; the after-party | Nightlife | `PERF_DJ` |
+
+**Guest performer slot.** The House Lights stay a trio (Jo, Pete, Boy). The
+fourth stage spot rotates guest acts (the visiting musician at an Open Mic, a
+guest set on a Sunday); until real guests exist it is modelled by the anonymous
+`band_guitar` preset. **Pete keeps the yellow electric bass.**
 
 Six non-house acts at launch cover six months of the "one new performer a month"
 cadence (GDD §11) if they are released one at a time. More likely they launch
@@ -436,9 +441,8 @@ use it.
 
 ## 7. Open questions for the orchestrator
 
-1. **Candle Talk lean bonus** (§3.1): approve +5 to the regular's Feeds meter on
-   a good Candle Talk? It adds a `needs_config` key and slightly raises the §2.3
-   sample totals.
+1. **Candle Talk lean bonus** (§3.1): settled 2026-10-28, +5 Friends to the
+   player on a good Candle Talk.
 2. **Venue hours and daytime.** The real clock means players will open the game
    at 14:00. Is the bar "open" all day in-game (staff and one or two regulars
    only), or does it show "Doors at 18:00" with the Flat only? Black Cabin's real
