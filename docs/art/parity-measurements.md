@@ -99,12 +99,12 @@ mean luminance 0.17-0.23, R/G 2.3-3.0, p90 0.40-0.48.
 ## Cameras
 
 Game coordinates: x east from the lounge, z south, y up; main room x 10..28, z -0.5..14
-(`game/tools/capture_parity.gd`, tuned over five iterations against the renders).
+(`game/tools/capture_parity.gd`, tuned over eight iterations against the renders).
 
 | View | Camera position | Look at | Vertical FOV | Aspect |
 |---|---|---|---|---|
-| 05 from the entrance | (9.4, 7.2, 7.0), entrance wall cut away | (20.5, 0.3, 6.6) | 48 | 1672 x 941 |
-| 06 from the bar end | (27.2, 6.8, 9.6), backdrop wall cut away | (16.0, 0.3, 6.6) | 54 | 1446 x 1087 |
+| 05 from the entrance | (10.4, 6.0, 7.0), entrance wall cut away | (21.0, 0.6, 6.4) | 46 | 1672 x 941 |
+| 06 from the bar end | (29.4, 6.4, 10.6), backdrop wall cut away | (17.0, 0.4, 5.6) | 46 | 1446 x 1087 |
 
 ## Iterations (`docs/art/screens/parity/<n>-R0x-twoup.png`)
 
@@ -117,3 +117,6 @@ Game coordinates: x east from the lounge, z south, y up; main room x 10..28, z -
 | 3 | figures at 0.8 scale, truss to the wall, no floating track rails | 0.236 / 3.37 / 3.6 % | 0.202 / 3.49 / 2.5 % |
 | 4 | red wash halved, lamp pools lifted and softened | 0.207 / 3.17 / 3.1 % | 0.192 / 3.19 / 2.3 % |
 | 5 | camera framing | 0.212 / 2.92 / 3.3 % | 0.208 / 2.73 / 3.3 % |
+| 6 | orchestrator review: cool dark glossy floor, dark wood walls, pilasters, cornice, soft curtain folds, dark-wood stage skirt, calmer red wash, small amber lamps, 0.8 m ball near the back, heads 0.86 and chin up, 66 seated; interior ReflectionProbe | 0.113 / 3.84 / 2.0 % | 0.118 / 3.46 / 1.3 % |
+| 7 | probe removed (it darkened the room under Compatibility), floor pool quads removed (rendered as flat rectangles) | 0.169 / 3.37 / 2.0 % | 0.187 / 2.82 / 1.6 % |
+| 8 | 06 camera pulled back from the disco ball | 0.169 / 3.37 / 2.0 % | 0.176 / 3.02 / 1.2 % |

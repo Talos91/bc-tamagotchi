@@ -77,6 +77,8 @@ PALETTE = {
     # v3 (renders 05/06): chairs, stools and table frames are a red-brown stained wood, lighter than WoodMid
     "ChairWood":    ("#6E3220", 0.45, 0.0, 0),
     "ChairWoodDark": ("#4A2016", 0.55, 0.0, 0),
+    "LanternAmber": ("#FFB04A", 0.40, 0.0, 1.6),                 # v3 lamp shades / tealights: small, warm, no white-out
+    "VelvetCrest":  ("#A8141C", 0.95, 0.0, 0),                   # v3 curtain fold highlight
     "BeerAmber":    ("#E8A23A", 0.15, 0.0, 1.2),                 # derived: lit beer, glows faintly as in 05/06
     "Foam":         ("#F6EEDC", 0.60, 0.0, 0),
     "LabelCream":   ("#E8DCC0", 0.60, 0.0, 0),
@@ -709,16 +711,16 @@ def drum_stool(v):
 
 
 def table_lamp(v, shade):
-    """v3 (renders 05/06): gold base 3x3, stem, square 5x5x5 glowing shade with a gold cap. H10."""
+    """v3 (renders 05/06): gold base 3x3, stem, square 3x3x4 glowing shade with a gold cap and foot. H10."""
     v.box(0, 0, 0, 2, 2, 0, "CymbalGold")
-    v.box(1, 1, 1, 1, 1, 3, "CymbalGold")
-    v.box(-1, -1, 4, 3, 3, 8, shade)
+    v.box(1, 1, 1, 1, 1, 4, "CymbalGold")
+    v.box(0, 0, 5, 2, 2, 8, shade)
     v.box(0, 0, 9, 2, 2, 9, "CymbalGold")
 
 
 @kit("table_lamp_lit", "tables", "S")
 def table_lamp_lit(v):
-    table_lamp(v, E("LampGold"))
+    table_lamp(v, E("LanternAmber"))
 
 
 @kit("table_lamp_unlit", "tables", "S")
@@ -730,7 +732,7 @@ def table_lamp_unlit(v):
 def tealight_lantern(v):
     """v3: 3 x 3 x 3 glass cube, glowing, on a dark gold foot."""
     v.box(0, 0, 0, 2, 2, 0, "CymbalGold")
-    v.box(0, 0, 1, 2, 2, 3, E("Tealight"))
+    v.box(0, 0, 1, 2, 2, 2, E("LanternAmber"))
 
 
 @kit("napkin_cup", "tables", "XS")
@@ -763,9 +765,11 @@ def stage_platform(v):
     """2 m x 1 m riser module, H11; a carpet tile on top makes the 0.6 m stage of renders 05/06."""
     W, D, H = 40, 20, 11
     v.box(0, 0, 0, W - 1, D - 1, H - 1, "BeamBlack")
-    v.box(0, 0, H - 1, W - 1, 0, H - 1, "StoolBlack")                # lighter front edge highlight
-    for x in range(0, W, 10):                                        # riser panel joints
-        v.box(x, 0, 0, x, 0, H - 2, "StoolBlack")
+    v.box(0, 0, 1, W - 1, 0, H - 2, "WoodDark")                     # v3: dark wood skirt (renders 05/06)
+    v.box(0, 0, H - 1, W - 1, 0, H - 1, "WoodMid")                   # nosing
+    v.box(0, 0, 0, W - 1, 0, 0, "BeamBlack")                         # kick
+    for x in range(0, W, 5):                                         # board joints
+        v.box(x, 0, 1, x, 0, H - 2, "BarFront")
 
 
 @kit("stage_carpet_tile", "stage", "Architecture")
@@ -794,16 +798,17 @@ def slatted_backdrop(v):
 @kit("curtain_panel", "stage", "Architecture")
 def curtain_panel(v):
     """One 20-voxel curtain bay, floor to ceiling: 4 m / 80 voxels (DECISIONS 2026-10-27 (j); v1 was 3.5 m).
-    Folds: 1-voxel depth steps on a 2-voxel rhythm."""
+    v3 (renders 05/06): soft folds, four per metre: a 5-voxel rhythm stepping 0-1-2-2-1 voxels deep, crest
+    highlight, mid red, shadow in the troughs; a darker hem and a black header."""
     W, H = 20, ROOM_H
+    depth = (0, 1, 2, 2, 1)
+    shade = ("VelvetCrest", "VelvetRed", "VelvetShadow", "VelvetShadow", "VelvetRed")
     for x in range(W):
-        crest = (x // 2) % 2 == 0
-        v.box(x, 2, 0, x, 2, H - 2, "VelvetShadow")
-        if crest:
-            v.box(x, 0, 0, x, 1, H - 2, "VelvetRed")
-        else:
-            v.box(x, 1, 0, x, 1, H - 2, "VelvetShadow")
-    v.box(0, 0, H - 1, W - 1, 2, H - 1, "BeamBlack")                 # rod / header
+        d = depth[x % 5]
+        v.box(x, d, 0, x, 3, H - 2, "VelvetShadow")
+        v.box(x, d, 2, x, d, H - 2, shade[x % 5])
+        v.box(x, d, 0, x, d, 1, "VelvetShadow")                     # hem
+    v.box(0, 0, H - 1, W - 1, 3, H - 1, "BeamBlack")                 # rod / header
 
 
 @kit("drum_kit", "stage", "M")
@@ -980,11 +985,11 @@ def monitor_wedge(v):
 
 @kit("disco_ball", "stage", "S", anchor="ceiling")
 def disco_ball(v):
-    """v3 (renders 05/06): diameter 20 (1 m) stepped sphere of mirror tiles on a drop rod and a cap. Some tiles
+    """v3 (renders 05/06): diameter 16 (0.8 m) stepped sphere of mirror tiles on a drop rod and a cap. Some tiles
     lit white, amber, red."""
     # Every tile a separate mirror value (dark / mid / light) so the ball reads as a mosaic even unlit;
     # reflections cluster: red on the stage side (-x) and below, amber on the bar side (+x), white glints.
-    R = 10
+    R = 8
 
     def tile(p):
         h = zlib.crc32(("disco|%d,%d,%d" % p).encode()) % 100
@@ -998,8 +1003,8 @@ def disco_ball(v):
         return ("MirrorDark", "MirrorGrey", "MirrorGrey", "MirrorLight")[h % 4]
     v.sphere((R, R, R), 2 * R, tile)
     v.box(R - 1, R - 1, 2 * R, R, R, 2 * R + 1, "MirrorGrey")        # cap
-    v.box(R - 1, R - 1, 2 * R + 2, R - 1, R - 1, 2 * R + 12, "BeamBlack")
-    v.box(R - 2, R - 2, 2 * R + 13, R, R, 2 * R + 13, "BeamBlack")
+    v.box(R - 1, R - 1, 2 * R + 2, R - 1, R - 1, 2 * R + 6, "BeamBlack")
+    v.box(R - 2, R - 2, 2 * R + 7, R, R, 2 * R + 7, "BeamBlack")
 
 
 @kit("stage_steps", "stage", "M")

@@ -43,13 +43,13 @@ const BAR_SEAT_H := 0.8       # kit bar_stool seat top; chairs, drum stools and 
 # Palette (art bible §3, game values)
 const CABIN_DARK := Color("1c0d0c")
 const BEAM_BLACK := Color("160a0c")
-const FLOOR_GREY := Color("5a4a4e")       # v3: renders 05/06 floor reads mid grey-mauve, not brown
+const FLOOR_GREY := Color("47434b")       # v3: renders 05/06 floor is a dark cool grey tile, glossy
 const VELVET_SHADOW := Color("3e0408")
 const VELVET_RED := Color("8c0610")
 const CARPET_RED := Color("9a0a12")
 const PANEL_RED := Color("b80a10")
 const NEON_RED := Color("ff2a14")
-const LAMP_GOLD := Color("ffdd78")
+const LAMP_GOLD := Color("ffb860")        # v3: warm amber pools, renders 05/06
 const TEALIGHT := Color("f7db71")
 const SHELF_AMBER := Color("ff8a30")
 const SOFFIT_PEACH := Color("e8814a")
@@ -144,8 +144,8 @@ func _floor_mat() -> StandardMaterial3D:
 	m.uv1_triplanar = true
 	m.uv1_world_triplanar = true
 	m.uv1_scale = Vector3(0.25, 0.25, 0.25)   # texture spans 4 m, 16 tiles
-	m.roughness = 0.16
-	m.metallic_specular = 0.9
+	m.roughness = 0.18
+	m.metallic_specular = 0.75
 	mats.floor = m
 	return m
 
@@ -313,16 +313,16 @@ func _environment() -> void:
 	env.background_mode = Environment.BG_COLOR
 	env.background_color = Color("0b0505")
 	env.ambient_light_source = Environment.AMBIENT_SOURCE_COLOR
-	env.ambient_light_color = Color(0.74, 0.54, 0.50)
-	env.ambient_light_energy = 1.75
+	env.ambient_light_color = Color(0.66, 0.50, 0.50)
+	env.ambient_light_energy = 1.7
 	env.tonemap_mode = Environment.TONE_MAPPER_FILMIC
 	env.tonemap_exposure = 1.15
 	env.tonemap_white = 6.0
 	env.glow_enabled = true
-	env.glow_intensity = 0.35
+	env.glow_intensity = 0.22
 	env.glow_strength = 1.0
 	env.glow_bloom = 0.0
-	env.glow_hdr_threshold = 1.3
+	env.glow_hdr_threshold = 1.5
 	env.glow_blend_mode = Environment.GLOW_BLEND_MODE_SCREEN
 	env.set_glow_level(0, 0.0)
 	env.set_glow_level(1, 1.0)
@@ -443,7 +443,7 @@ func _curtain() -> void:
 
 func _main_room() -> void:
 	var g := _group("MainRoom")
-	var wall := _mat("main_wall", Color("3a1612"), 0.9)
+	var wall := _mat("main_wall", Color("23150f"), 0.85)   # v3: dark wood / brick, not red (renders 05/06)
 	var w := MAIN_X1 - 10.0
 	var d := MAIN_Z1 - MAIN_Z0
 	_floor(g, 10, MAIN_Z0, w, d)
@@ -465,11 +465,29 @@ func _main_room() -> void:
 	_kit(g, "exit_sign", Vector3(MAIN_X1 - 0.05, 3.1, 10.9), -90.0, "ExitSignEast2")
 	_kit(g, "exit_sign", Vector3(10.25, 3.45, 6.0), 90.0, "ExitSignWest")
 	# Disco ball over the centre of the room (05/06), 1 m, its centre 2.8 m up
-	var ball := _kit(g, "disco_ball", Vector3(21.0, ROOM_H, 7.9), 0.0, "DiscoBall")
+	var ball := _kit(g, "disco_ball", Vector3(23.6, ROOM_H, 8.3), 0.0, "DiscoBall")
 	ball.set_meta("occluder_center", Vector3(0, -1.2, 0))
 	ball.set_meta("occluder_radius", 1.8)
 	ball.add_to_group("occluder", true)
-	_omni(g, "DiscoGlint", Color("ffe2c0"), 0.8, 3.0, Vector3(21.0, 2.4, 7.9))
+	_omni(g, "DiscoGlint", Color("ffe2c0"), 0.6, 3.0, Vector3(23.6, 2.6, 8.3))
+	_frame(g)
+
+## Dark wood framing of the main room (renders 05/06): pilasters between the curtain bays and along the plain wall,
+## and a ceiling cornice round the walls so the cutaway reads as a room with a dark ceiling, not an open box.
+func _frame(g: Node) -> void:
+	var wood := _mat("frame_wood", Color("2a1810"), 0.55)
+	var ceil := _mat("ceiling_edge", Color("120a0a"), 0.9)
+	for x in [10.0, 12.0, 14.0, 16.0, 18.0, 20.5, 23.0, 25.5, MAIN_X1 - 0.25]:
+		_cut(_box(g, "PilasterN_%d" % int(x * 10), Vector3(x, 0, MAIN_Z0), Vector3(0.25, ROOM_H, 0.32), wood, false), Vector3.FORWARD)
+	for z in [STAGE_Z1, 6.2, 9.0, 12.0]:
+		_cut(_box(g, "PilasterE_%d" % int(z * 10), Vector3(MAIN_X1 - 0.32, 0, z - 0.12), Vector3(0.32, ROOM_H, 0.25), wood, false), Vector3.RIGHT)
+	_cut(_box(g, "CorniceN", Vector3(10, ROOM_H - 0.3, MAIN_Z0), Vector3(MAIN_X1 - 10, 0.3, 0.9), ceil, false), Vector3.FORWARD)
+	_cut(_box(g, "CorniceE", Vector3(MAIN_X1 - 0.9, ROOM_H - 0.3, MAIN_Z0), Vector3(0.9, 0.3, MAIN_Z1 - MAIN_Z0), ceil, false), Vector3.RIGHT)
+	_cut(_box(g, "CorniceS", Vector3(10, ROOM_H - 0.3, MAIN_Z1 - 0.9), Vector3(MAIN_X1 - 10, 0.3, 0.9), ceil, false), Vector3.BACK)
+	_cut(_box(g, "BeamN", Vector3(10, ROOM_H - 0.45, MAIN_Z0 + 0.85), Vector3(MAIN_X1 - 10, 0.15, 0.12), wood, false), Vector3.FORWARD)
+	_cut(_box(g, "BeamS", Vector3(10, ROOM_H - 0.45, MAIN_Z1 - 0.97), Vector3(MAIN_X1 - 10, 0.15, 0.12), wood, false), Vector3.BACK)
+	# No ReflectionProbe: under Compatibility an interior probe darkened the whole room (iteration 6, mean
+	# luminance 0.21 -> 0.11); the floor's gloss comes from low roughness and the lamps' specular instead.
 
 func _bar() -> void:
 	var g := _group("Bar")
@@ -650,13 +668,12 @@ func _stage() -> void:
 	var pars := [[19.0, "red"], [21.0, "red"], [23.0, "blue"], [25.0, "red"], [27.0, "amber"]]
 	for i in pars.size():
 		_kit(truss, "par_light_" + pars[i][1], Vector3(pars[i][0], ROOM_H - 0.5, MAIN_Z0 + 0.45), 0.0, "Par%d" % i)
-	_spot(g, "RedWashL", NEON_RED, 3.2, 9.0, 45.0, Vector3(20.5, 3.4, STAGE_Z1 + 0.4), Vector3(21.0, 0.5, 0.8), true)
-	_spot(g, "RedWashR", NEON_RED, 3.2, 9.0, 45.0, Vector3(25.5, 3.4, STAGE_Z1 + 0.4), Vector3(25.0, 0.5, 0.8), true)
+	_spot(g, "RedWashL", NEON_RED, 2.2, 9.0, 45.0, Vector3(20.5, 3.4, STAGE_Z1 + 0.4), Vector3(21.0, 0.5, 0.8), true)
+	_spot(g, "RedWashR", NEON_RED, 2.2, 9.0, 45.0, Vector3(25.5, 3.4, STAGE_Z1 + 0.4), Vector3(25.0, 0.5, 0.8), true)
 	_spot(g, "BluePar", STAGE_BLUE, 2.0, 7.0, 16.0, Vector3(23.0, 3.4, STAGE_Z1 + 0.3), Vector3(23.4, 1.0, 1.0))
-	_omni(g, "CarpetGlow", Color("e0201c"), 0.9, 5.0, Vector3(23.0, 1.6, 2.6))
 	_omni(g, "BackdropGlowA", Color("e0261c"), 2.6, 4.5, Vector3(MAIN_X1 - 1.0, 2.2, 6.0))
 	_omni(g, "BackdropGlowB", Color("e0261c"), 2.6, 4.5, Vector3(MAIN_X1 - 1.0, 2.2, 10.0))
-	_omni(g, "StageFrontRed", Color("d01818"), 1.0, 5.0, Vector3(19.0, 1.0, STAGE_Z1 + 1.4))
+	_omni(g, "StageFrontRed", Color("d01818"), 0.6, 5.0, Vector3(19.0, 1.0, STAGE_Z1 + 1.4))
 
 ## Camera framings, one per zone, read by camera_rig.gd. rect = membership (x, z, w, d); clamp = where the look
 ## target may go inside the zone; yaw 0 looks north (-z), -90 looks east. A "fallback" zone (floor) covers the

@@ -7,8 +7,8 @@ extends SceneTree
 ## normal faces the camera are hidden, as in the renders. game/tools/parity_compose.py makes the two-up.
 
 const SHOTS := {
-	"R05": {"from": Vector3(9.4, 7.2, 7.0), "at": Vector3(20.5, 0.3, 6.6), "fov": 48.0, "player": Vector3(12.8, 0, 6.0)},
-	"R06": {"from": Vector3(27.2, 6.8, 9.6), "at": Vector3(16.0, 0.3, 6.6), "fov": 54.0, "player": Vector3(17.0, 0, 7.6)},
+	"R05": {"from": Vector3(10.4, 6.0, 7.0), "at": Vector3(21.0, 0.6, 6.4), "fov": 46.0, "player": Vector3(12.8, 0, 6.0)},
+	"R06": {"from": Vector3(29.4, 6.4, 10.6), "at": Vector3(17.0, 0.4, 5.6), "fov": 46.0, "player": Vector3(17.0, 0, 7.6)},
 }
 
 func _init() -> void:

@@ -31,14 +31,18 @@ var _turn := 0.0
 var _turn_goal := 0.0
 var _next_turn := 0.0
 
-## Turns the head bone of a preset on top of its animation.
+## Turns the head bone of a preset on top of its animation. Renders 05/06: heads a little smaller than the kit's
+## 12-voxel cube and tipped up so faces read from the high diorama camera.
 class HeadTurn extends SkeletonModifier3D:
+	const HEAD_SCALE := 0.86
+	const CHIN_UP := -0.22
 	var yaw := 0.0
 	var bone := -1
 	func _process_modification() -> void:
 		var sk := get_skeleton()
 		if sk and bone >= 0:
-			sk.set_bone_pose_rotation(bone, Quaternion(Vector3.UP, yaw) * sk.get_bone_pose_rotation(bone))
+			sk.set_bone_pose_rotation(bone, Quaternion(Vector3.UP, yaw) * Quaternion(Vector3.RIGHT, CHIN_UP) * sk.get_bone_pose_rotation(bone))
+			sk.set_bone_pose_scale(bone, Vector3.ONE * HEAD_SCALE)
 
 func _ready() -> void:
 	_t = randf() * 10.0
