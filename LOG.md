@@ -19,3 +19,7 @@ Append-only. One dated line per event, newest last. Never edit earlier lines.
 - 2026-10-28 — Session started: 🎲 apply-decisions (local_17e445ab), GDD §2/§9, Rhythm gain, cast, manual.
 - 2026-10-28 — Method adopted (Daniele: "i accept all for now we will tweak later"); session started: 🧹 method-setup (local_d1485b13).
 - 2026-10-28 — Setup done: PROJECT.md, STATE.md, LOG.md, handoffs/, Method section in ORCHESTRATION.md; vault profiles voxel-art and social-features added.
+- 2026-11-01 — zone-wiring done: first playable loop on main (068949a, cfa7c72, 5fbe25b, 42cec51), smoke_loop added; 11 provisional calls logged in DECISIONS; archived.
+- 2026-11-01 — apply-decisions done: GDD §2/§9, Rhythm +12–18 (b891f3b), cast, high concept, manual, ORCHESTRATION 3b list; archived.
+- 2026-11-01 — method-setup done: PROJECT/STATE/LOG/handoffs (ae5e543), vault profiles voxel-art + social-features; archived.
+- 2026-11-01 — orchestrator re-ran all six suites, pushed main, rewrote STATE; waiting on Daniele's first hand playtest.

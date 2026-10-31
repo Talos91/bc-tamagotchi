@@ -32,6 +32,30 @@ iteration in `docs/art/parity-measurements.md`; what each wave delivered in `ORC
 - `f5ae8a8` Characters v2 to renders 05/06: proportions, faces, clothing, elbows and knees, seated/drink/tray/pour/band poses (P1 steps 2-3)
 - `94c6413` Characters: regenerated presets showcase, BlackCabinChars.blend lit and labelled with every clip on stand-in furniture (P1 step 4)
 - `4c38ee6` Room accepted at parity 17 pending 18; wave 3b mechanical session started
+- `8a6c305` Changelog: docs/CHANGELOG.md generated from git history by tools/changelog.py
+- `db7871e` Rules: soft floor 0.3, Welcome Back replaces the daily multiplier, Candle Talk lean bonus (+5 Friends), tests
+- `8db3ee0` Orchestration: zone wiring session running; changelog rule
+- `f82a5c1` GDD: start value 75 (§2.1), soft floor, Welcome Back, lean bonus, coin and Last Call amendments applied in place
+- `60d934d` Bartender is Nam (น้ำ): fix Noi in wireframes and the Pour Perfect hint string
+- `73886af` Fonts: bundle Kanit and IBM Plex Sans Thai Looped (OFL), project theme with the style-guide scale, Thai layout check in smoke_hud
+- `ae9decf` Characters: 8x7x7 heads after the first sheet, 45-degree guitar necks; review sheet and R05/R06 captures (P1 steps 4-5)
+- `3a4d81c` GDD §9: proposed tuning for Pour Perfect length, pinball mapping and Rhythm gain (for approval, no code change)
+- `6dc9f5d` Parity iteration 18: cooler darker floor, red back, graded backdrop, one phone-sized shadow map, lounge camera unblocked
+- `ba5285d` DECISIONS: room accepted at iteration 18; open calls from parity and 3b sessions with recommendations
+- `f7510f0` DECISIONS: characters v2 accepted; guest slot, electric bass, 6-10 day Drinks window, lean bonus to Friends, tuning approved
+- `068949a` Zones: interaction zones built at runtime from layout.json, visit session, house band loop, tipsiness, venue strings EN/TH
+- `cfa7c72` Venue HUD, zone prompt and sheets, action card, Welcome Back, walk-out totals; minigames from their zones
+- `5fbe25b` Tests: smoke_loop walks the player to every zone from main.tscn, plays all four minigames, ends the visit with totals
+- `05f0e99` GDD §2/§9: Drinks window 6-10 days, tuning applied, Rhythm +12-18 Music
+- `b891f3b` Front Row Rhythm gain +12-18 Music per song; tests assert the range
+- `a072ef9` 03-cast: lean bonus goes to player Friends, guest performer slot, Pete keeps electric bass
+- `5132722` 01-high-concept: apply 06-stakes §5.2 amendments (Pillar 2, Tamagotchi row and hook)
+- `ae5e543` Adopt orchestration method: PROJECT.md, STATE.md, LOG.md, handoffs/, Method section
+- `24c4e30` MANUAL: Nam not Noi, floor 0.3, Welcome Back replaces, lean bonus, status per DECISIONS
+- `1ca4a30` ORCHESTRATION: mark wave 3b inputs done
+- `42cec51` Playtest guide and in-game HUD screenshots (portrait at the bar, landscape at the stage)
+- `fcf99d5` Handoff: zone wiring + first playable, commits, suites, calls made for DECISIONS, open items
+- `3b0d553` Handoff: all six suites green
 
 ## 2026-10-27
 
