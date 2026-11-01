@@ -1,0 +1,27 @@
+key,en,th,context,max
+nightlife.prompt.toilet,Psst… tap to check the plumbing,ชู่ว์… แตะเพื่อเช็กท่อ,"Zone prompt pill, only inside the toilets vestibule behind the bar (secret action); appears nowhere else",40
+nightlife.sheet.toilet.head,THE TOILETS,ห้องน้ำ,Toilets sheet header,26
+nightlife.sheet.toilet.greet,Nobody can see you back here.,ตรงนี้ไม่มีใครเห็นคุณหรอก,Line on the toilets sheet,90
+nightlife.row.plumbing,Check the plumbing,เช็กท่อหน่อย,Secret row in the toilets: the drink need resets to 0 (the character pees),28
+nightlife.row.plumbing_sub,Drinks back to empty: room for a fresh round,ค่าเครื่องดื่มกลับเป็นศูนย์ พร้อมรับรอบใหม่,Sub line of Check the plumbing,60
+nightlife.card.plumbing,Ahh. Ready to drink all over again.,อ่าาา โล่ง พร้อมดื่มใหม่อีกรอบ,Action card after Check the plumbing,60
+nightlife.row.smoke,Light one up,จุดบุหรี่สักมวน,Smoking room row: a cigarette by the window,28
+nightlife.row.smoke_sub,"A smoke by the window, a chat with whoever's there",สูบข้างหน้าต่าง คุยกับใครก็ได้ที่อยู่ตรงนั้น,Sub line of Light one up,60
+nightlife.row.smoking,Still smoking,ยังสูบอยู่,Light one up disabled while a cigarette is lit,28
+nightlife.card.smoke,You share a light and a story by the window.,แบ่งไฟแช็กกัน แล้วก็แลกเรื่องเล่ากันข้างหน้าต่าง,Action card when the cigarette is finished,60
+nightlife.hud.smoking,Smoking · {s}s,กำลังสูบ · {s} วิ,"HUD status line while the cigarette burns; {s} = seconds left",24
+nightlife.bar.warn,"Nam: ""Water's free, you know.""",น้ำ: “น้ำเปล่าฟรีนะ รู้ใช่ไหม”,"Sub line of the Order row from 8 alcoholic drinks (a warning, never a refusal)",60
+nightlife.wasted.title,WASTED,WASTED,"WASTED screen title, red Kristi, in capitals as Daniele wrote it; kept in English in Thai",10
+nightlife.wasted.note,Out cold for {h} hours. Every need is back to empty.,สลบไป {h} ชั่วโมง ทุกความต้องการกลับเป็นศูนย์,Line under the funny line on the WASTED screen; {h} = lockout hours,70
+nightlife.wasted.try,Try again,ลองใหม่,WASTED screen button once the lockout is over,20
+nightlife.wasted.wait,Try again in {time},ลองใหม่ได้ใน {time},WASTED screen button while locked out; {time} = h:mm:ss,28
+nightlife.wasted.line.0,You blacked out. The night didn't.,คุณวูบไปแล้ว แต่ค่ำคืนยังไม่จบ,"WASTED funny line (one of 10, at random): about blacking out, never cruel",70
+nightlife.wasted.line.1,Memory card full. Please try again later.,เมมโมรี่เต็ม กรุณาลองใหม่ภายหลัง,WASTED funny line,70
+nightlife.wasted.line.2,You and the floor are now on a first-name basis.,ตอนนี้คุณกับพื้นสนิทกันจนเรียกชื่อเล่นได้แล้ว,WASTED funny line,70
+nightlife.wasted.line.3,Nam says you sang the whole set. The band says it was a different set.,น้ำบอกว่าคุณร้องตามทั้งเซ็ต วงบอกว่ามันคนละเซ็ตกัน,WASTED funny line,70
+nightlife.wasted.line.4,"Last thing you remember: ""Just one more.""",สิ่งสุดท้ายที่จำได้: “อีกแก้วเดียว”,WASTED funny line,70
+nightlife.wasted.line.5,Your brain is buffering. Please hold.,สมองกำลังบัฟเฟอร์ กรุณารอสักครู่,WASTED funny line,70
+nightlife.wasted.line.6,"Tonight's highlights: ask your friends, not your memory.",ไฮไลต์ของคืนนี้ ถามเพื่อนเอา อย่าถามความจำ,WASTED funny line,70
+nightlife.wasted.line.7,Lost property has your dignity. Collect it tomorrow.,ศักดิ์ศรีของคุณอยู่ที่แผนกของหาย มารับได้พรุ่งนี้,WASTED funny line,70
+nightlife.wasted.line.8,The night took a group photo. You were the rug.,คืนนี้มีรูปหมู่ ส่วนคุณเป็นพรมเช็ดเท้า,WASTED funny line,70
+nightlife.wasted.line.9,Your legs went home early without you.,ขาของคุณกลับบ้านไปก่อนโดยไม่รอคุณ,WASTED funny line,70

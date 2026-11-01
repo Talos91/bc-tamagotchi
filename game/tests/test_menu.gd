@@ -88,8 +88,8 @@ func test_effects() -> void:
 	var fx: Dictionary = BarMenu.data()["effects"]
 	for e in ["alcohol", "soft", "water", "none"]:
 		check(fx.has(e), "effect %s defined" % e)
-	check(fx["alcohol"]["action"] == "order_drink" and int(fx["alcohol"]["tipsy"]) == 1 and fx["alcohol"]["merry_blocked"],
-		"alcohol = order_drink, +1 tipsy, blocked while Merry")
+	check(fx["alcohol"]["action"] == "order_drink" and int(fx["alcohol"]["tipsy"]) == 1 and not fx["alcohol"]["merry_blocked"],
+		"alcohol = order_drink, +1 tipsy, served while Merry (nightlife: drunk to 10, WASTED past 10)")
 	check(fx["soft"]["action"] == "order_drink" and int(fx["soft"]["tipsy"]) == 0, "soft = order_drink, no tipsy")
 	check(fx["water"]["action"] == "order_drink" and int(fx["water"]["tipsy"]) == -1, "water = order_drink, drops a state")
 	check(fx["none"]["action"] == "", "kitchen does nothing yet")
@@ -351,10 +351,10 @@ func test_bar_sheet() -> void:
 	var d2: float = needs.meters["drinks"]
 	check(not s.order_item("black_cabin_burger_and_fries"), "kitchen item is not orderable yet")
 	check(needs.meters["drinks"] == d2, "kitchen item changes nothing")
-	# Merry blocks alcohol from the menu as it did the Order row.
+	# Merry no longer stops alcohol (DECISIONS playtest of 33dc5b9: drunk to 10, WASTED past 10; tests/test_nightlife.gd)
 	while s.tipsy.state() != Tipsiness.MERRY:
 		s.order_item("house_shooter")
-	check(not s.order_item("guinness_draught"), "Merry: alcohol refused")
+	check(s.order_item("guinness_draught"), "Merry: alcohol still served")
 	check(s.order_item("coke"), "Merry: soft drink still served")
 	main.queue_free()
 	await process_frame

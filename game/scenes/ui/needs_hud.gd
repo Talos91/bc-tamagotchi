@@ -13,6 +13,7 @@ signal hint_pressed(kind: String)
 const UI = preload("res://scripts/minigames/mg_ui.gd")
 const S = preload("res://scripts/minigames/strings.gd")
 const T = preload("res://scripts/zones/venue_strings.gd")
+const N = preload("res://scripts/zones/nightlife_strings.gd")
 const Rules = preload("res://scripts/rules.gd")
 const Ring = preload("res://scenes/ui/meter_ring.gd")
 const PromptScene = preload("res://scenes/ui/zone_prompt.tscn")
@@ -233,6 +234,8 @@ func _refresh_status() -> void:
 	if st > 0:
 		_tipsy.text = T.t("venue.tipsy.%d" % st)
 	_status.text = T.t("venue.hud.sitting", {"s": ceili(session.sitting["left"])}) if not session.sitting.is_empty() else ""
+	if not session.smoking.is_empty():
+		_status.text = N.t("nightlife.hud.smoking", {"s": ceili(session.smoking["left"])})
 
 
 func _on_action(c: Dictionary) -> void:

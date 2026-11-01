@@ -10,6 +10,9 @@ extends Node3D
 ## once inside. Leaving plays the exit shot (scripts/exit_shot.gd) before the walk-out card. Both only when main.tscn
 ## runs as the game, not in screenshot mode or with `-- --skip-intro`; tests and tools that instance main.tscn start
 ## straight in the venue and leave straight to the card unless they set `intro` first.
+## Nightlife (DECISIONS "Playtest of 33dc5b9"): the drunk overlay (scripts/ui/drunk_overlay.gd) on its own layer; past
+## Rules.WASTED_AFTER drinks the WASTED shot (scripts/wasted_shot.gd) instead of the walk-out card; opened during the
+## 12 h lockout, the game goes straight to the WASTED screen (F2 / F3 on the debug clock skip the lockout).
 
 const S = preload("res://scripts/minigames/strings.gd")
 const T = preload("res://scripts/zones/venue_strings.gd")
@@ -20,6 +23,9 @@ const WelcomeScene = preload("res://scenes/ui/welcome_back.tscn")
 const StartScreen = preload("res://scripts/start_screen.gd")
 const ExitShot = preload("res://scripts/exit_shot.gd")
 const MenuList = preload("res://scripts/menu/menu_list.gd")
+const Nightlife = preload("res://scripts/zones/nightlife.gd")
+const WastedShot = preload("res://scripts/wasted_shot.gd")
+const DrunkOverlay = preload("res://scripts/ui/drunk_overlay.gd")
 
 @onready var player: Player = $Player
 @onready var zones: VenueZones = $Zones
@@ -44,6 +50,9 @@ var intro := false          ## force the start screen and exit shot (tests); see
 var street_shots := false   ## start screen and exit shot on
 var start_screen: Node      ## the start screen while it runs
 var exit_shot: Node         ## the exit shot while it runs
+var wasted_shot: Node       ## the WASTED shot and screen while they run
+var drunk: CanvasLayer      ## the drunk overlay
+var _wasted_line := -1      ## WASTED during a minigame: the shot waits for the frame to close
 
 
 func _ready() -> void:
@@ -65,6 +74,12 @@ func _ready() -> void:
 	session.menu_requested.connect(open_menu)
 	session.visit_finished.connect(_on_visit_finished)
 	session.welcome_back.connect(_on_welcome_back)
+	session.wasted.connect(_on_wasted)
+	drunk = DrunkOverlay.new()
+	drunk.name = "DrunkOverlay"
+	add_child(drunk)
+	move_child(drunk, $Post.get_index() + 1)
+	drunk.setup(session)
 	# Needs debug panel: F1 only (its on-screen button would sit on the HUD). Debug builds only.
 	var dbg: Control = $UI/NeedsDebug
 	if not OS.is_debug_build():
@@ -72,7 +87,9 @@ func _ready() -> void:
 	else:
 		dbg._toggle.visible = false
 	_parse_capture()
-	if intro or (get_tree().current_scene == self and _capture.is_empty() and not "--skip-intro" in OS.get_cmdline_user_args()):
+	if Nightlife.locked(needs) and _capture.is_empty():
+		_show_wasted(-1)
+	elif intro or (get_tree().current_scene == self and _capture.is_empty() and not "--skip-intro" in OS.get_cmdline_user_args()):
 		street_shots = true
 		start_screen = StartScreen.new()
 		start_screen.name = "StartScreenRun"
@@ -100,7 +117,7 @@ func _process(_delta: float) -> void:
 
 
 func _blocked() -> bool:
-	return is_instance_valid(start_screen) or is_instance_valid(exit_shot) or is_instance_valid(sheet) or is_instance_valid(menu_list) or is_instance_valid(frame) or is_instance_valid(walk_out) or is_instance_valid(welcome)
+	return is_instance_valid(start_screen) or is_instance_valid(exit_shot) or is_instance_valid(wasted_shot) or is_instance_valid(sheet) or is_instance_valid(menu_list) or is_instance_valid(frame) or is_instance_valid(walk_out) or is_instance_valid(welcome)
 
 
 func _sync_block() -> void:
@@ -108,7 +125,7 @@ func _sync_block() -> void:
 	player.input_enabled = not b
 	session.busy = b
 	hud.prompt.visible = not b
-	hud.visible = not (is_instance_valid(frame) or is_instance_valid(walk_out) or is_instance_valid(start_screen) or is_instance_valid(exit_shot))
+	hud.visible = not (is_instance_valid(frame) or is_instance_valid(walk_out) or is_instance_valid(start_screen) or is_instance_valid(exit_shot) or is_instance_valid(wasted_shot))
 	$UI/Joystick.visible = not b
 
 
@@ -188,7 +205,7 @@ func open_menu(tab: String) -> void:
 		return
 	menu_list = MenuList.new()
 	overlay.add_child(menu_list)
-	menu_list.open(tab, session.tipsy.state() == VenueSession.Tipsiness.MERRY)
+	menu_list.open(tab, false)   # Merry no longer stops alcohol (nightlife: drunk to 10, WASTED past 10)
 	menu_list.item_chosen.connect(func(id):
 		close_menu()
 		session.order_item(id))
@@ -227,6 +244,8 @@ func _on_minigame_closed(_result: Dictionary) -> void:
 	frame = null
 	_sync_block()
 	_on_zone_changed(zones.current)
+	if _wasted_line >= 0:
+		_show_wasted(_wasted_line)
 
 
 # --- Visit ---------------------------------------------------------------------------------------
@@ -249,6 +268,8 @@ func _on_visit_finished(summary: Dictionary) -> void:
 	close_menu()
 	sheet = null
 	pending_zone = ""
+	if summary.get("reason", "") == "wasted":
+		return   # the WASTED shot takes over (_on_wasted)
 	if street_shots and summary.get("reason", "") == "left" and not is_instance_valid(exit_shot):
 		exit_shot = ExitShot.new()
 		exit_shot.name = "ExitShotRun"
@@ -273,6 +294,46 @@ func _show_walk_out(summary: Dictionary) -> void:
 	walk_out.open(summary)
 	walk_out.go_out.connect(_go_out)
 	_sync_block()
+
+
+# --- Nightlife: WASTED ---------------------------------------------------------------------------
+
+## Past Rules.WASTED_AFTER drinks (the rules are applied already): the shot, once a running minigame has closed.
+func _on_wasted(line: int) -> void:
+	close_sheet()
+	close_menu()
+	if is_instance_valid(welcome):
+		welcome.queue_free()
+		welcome = null
+	if is_instance_valid(frame):
+		_wasted_line = line
+		return
+	_show_wasted(line)
+
+
+## line -1: the game opened during a lockout, straight to the screen.
+func _show_wasted(line: int) -> void:
+	_wasted_line = -1
+	if is_instance_valid(wasted_shot):
+		return
+	pending_zone = ""
+	wasted_shot = WastedShot.new()
+	wasted_shot.name = "WastedRun"
+	add_child(wasted_shot)
+	if line < 0:
+		wasted_shot.begin_locked(self)
+	else:
+		wasted_shot.begin(self, line)
+	_sync_block()
+
+
+## Try again, the lockout over: from the street door as a fresh start when this is the game, else back in at the spawn.
+func end_wasted() -> void:
+	wasted_shot = null
+	if get_tree().current_scene == self:
+		get_tree().reload_current_scene()
+		return
+	_go_out()
 
 
 ## GO OUT on the Flat stand-in: back in through the street door, a new visit.

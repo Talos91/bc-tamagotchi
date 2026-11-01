@@ -6,6 +6,9 @@ extends Node
 ## Sitting takes a real seat (find_seat): the player walks to a free chair, couch place or stool of the zone's table
 ## and sits on it; the minute runs once seated and stops when they stand up. Zones without seats (the game cabinet)
 ## keep the old stand-still minute. "Take a stool" at the bar seats the player for a minute's chat (bar_chat).
+## Nightlife (DECISIONS "Playtest of 33dc5b9", scripts/zones/nightlife.gd): Light one up in the smoking room (a
+## cigarette, Rules.SMOKE_SECONDS, then light_one_up), the secret Check the plumbing in the toilets, and alcohol counted
+## past Merry: from Rules.DRUNK_FROM the drunk overlay shows, past Rules.WASTED_AFTER the character is WASTED.
 ## UI-free: the HUD and sheets read rows_for() and listen to the signals; main.gd opens minigames on request.
 
 signal action_done(card: Dictionary)  ## {line, gains, tab, ok, reason, quiet}; quiet = passive, chips only
@@ -15,12 +18,15 @@ signal visit_finished(summary: Dictionary)  ## Needs' summary + start_meters, en
 signal welcome_back(reason: String)
 signal state_changed  ## tipsiness, sitting or band state the HUD shows
 signal menu_requested(tab: String)  ## main.gd opens the real menu list (scripts/menu/menu_list.gd) on this tab
+signal wasted(line: int)  ## past Rules.WASTED_AFTER drinks; the rules are applied already, main.gd plays the shot
 
 const Rules = preload("res://scripts/rules.gd")
 const Tipsiness = preload("res://scripts/zones/tipsiness.gd")
 const HouseBand = preload("res://scripts/zones/house_band.gd")
 const T = preload("res://scripts/zones/venue_strings.gd")
 const BarMenu = preload("res://scripts/menu/bar_menu.gd")
+const Nightlife = preload("res://scripts/zones/nightlife.gd")
+const N = preload("res://scripts/zones/nightlife_strings.gd")
 
 const BARTENDER := "nam"
 const HOUSE_DRINK := "house_shooter"  ## what Order a drink pours (real menu, scripts/menu/bar_menu.gd)
@@ -29,6 +35,7 @@ const SIT_SECONDS := 60.0          ## GDD §2.3 "Sit at a table ... for 60 s"
 const HEARD_FRACTION := 0.6        ## share of a song spent within earshot for it to count as heard
 const EARSHOT_ZONES := ["stage", "floor"]  ## camera zones within earshot of the stage (Stage, Candle Floor)
 const TRIED_KEY := "drinks_tried"  ## Needs.ext[TRIED_KEY][drink_id] = true (persists with the save)
+const CIGARETTE_AT := Vector3(0.2, 1.05, 0.22)  ## in the player's Body: the drink hand of the stand_drink pose
 const GAMES := {
 	"pour_perfect": "res://scenes/minigames/pour_perfect/pour_perfect.tscn",
 	"front_row_rhythm": "res://scenes/minigames/front_row_rhythm/front_row_rhythm.tscn",
@@ -47,6 +54,10 @@ var pours_this_visit := 0  ## rotates Pour Perfect through tonight's drink famil
 var songs_heard := 0
 var start_meters := {}
 var sitting := {}              ## {zone, key, left, seat (bool)} from "sit" until the minute is up or they stand
+var smoking := {}              ## {zone, left} while a cigarette burns (Light one up)
+var rng := RandomNumberGenerator.new()   ## picks the WASTED line; tests seed it
+var _pour_drink := ""          ## what the running Pour Perfect pours (alcoholic or not)
+var _cigarette: Node3D
 var _heard := 0.0
 var _quiet_end := false
 
@@ -81,7 +92,7 @@ func leave() -> void:
 
 func _on_visit_started(info: Dictionary) -> void:
 	start_meters = needs.meters.duplicate()
-	tipsy.reset(needs.real_now())
+	tipsy.reset(needs.clock)
 	drinks_this_visit = 0
 	pours_this_visit = 0
 	songs_heard = 0
@@ -92,6 +103,7 @@ func _on_visit_started(info: Dictionary) -> void:
 
 func _on_visit_ended(summary: Dictionary) -> void:
 	cancel_sit()
+	cancel_smoke()
 	if _quiet_end:
 		return
 	var s := summary.duplicate()
@@ -115,19 +127,20 @@ func debug_week_away() -> void:
 ## Things you'd do in this zone (wireframes §4): {id, title, sub, need, game, enabled, reason}.
 func rows_for(zone: Dictionary) -> Array[Dictionary]:
 	var rows: Array[Dictionary] = []
-	var merry := tipsy.state() == Tipsiness.MERRY
 	match zone.get("kind", ""):
 		"bar":
-			var no_alc := T.t("venue.sheet.bar.merry") if merry else ""
-			rows.append(_row("order", "venue.sheet.bar.order",
-				T.t("venue.sheet.bar.order_free") if drinks_this_visit == 0 else BarMenu.t("menu.bar.order_sub", {"drink": BarMenu.name_of(HOUSE_DRINK)}), "drinks", false, no_alc))
+			# Nam no longer refuses at Merry (drunk to 10, WASTED past 10: DECISIONS playtest of 33dc5b9); she warns
+			var order_sub := T.t("venue.sheet.bar.order_free") if drinks_this_visit == 0 else BarMenu.t("menu.bar.order_sub", {"drink": BarMenu.name_of(HOUSE_DRINK)})
+			if tipsy.drinks >= Rules.DRUNK_WARN_FROM:
+				order_sub = N.t("nightlife.bar.warn")
+			rows.append(_row("order", "venue.sheet.bar.order", order_sub, "drinks"))
 			rows.append(_row("menu", "menu.bar.menu", BarMenu.t("menu.bar.menu_sub", {"n": BarMenu.items("drinks").size()}), "drinks"))
 			rows.append(_row("pour", "venue.sheet.bar.pour", T.t("venue.sheet.bar.pour_sub", {"best": _best("pour_perfect")}), "drinks", true))
 			var nxt := next_new_drink()
 			if nxt == "":
 				rows.append(_row("try", "venue.sheet.bar.try", "", "drinks", false, T.t("venue.sheet.bar.try_done")))
 			else:
-				rows.append(_row("try", "venue.sheet.bar.try", T.t("venue.sheet.bar.try_sub", {"drink": BarMenu.name_of(nxt)}), "drinks", false, no_alc))
+				rows.append(_row("try", "venue.sheet.bar.try", T.t("venue.sheet.bar.try_sub", {"drink": BarMenu.name_of(nxt)}), "drinks"))
 			rows.append(_row("mocktail", "menu.bar.soft", BarMenu.t("menu.bar.soft_sub", {"drink": BarMenu.name_of(SOFT_DRINK)}), "drinks"))
 			rows.append(_row("water", "venue.sheet.bar.water", T.t("venue.sheet.bar.water_sub"), "drinks"))
 			var on_stool: bool = player != null and player.seated and str(player.seat.get("table", "")) == "Bar"
@@ -164,8 +177,17 @@ func rows_for(zone: Dictionary) -> Array[Dictionary]:
 			var msit := _row("sit", "venue.sheet.table.sit", T.t("venue.sheet.table.sit_sub"), "friends", false,
 				T.t("venue.sheet.table.sat") if needs.daily_keys.has("sit_with|" + sit_key(zone)) else "")
 			rows.append(msit)
-		"cabinet", "tall", "smoking":
-			# Plan v4 stubs (game cabinet, tall tables, smoking room): the generic table sheet until their own content lands
+		"toilet":
+			# The secret: offered here only, the one zone out of the camera's view (nightlife)
+			rows.append(_nrow("plumbing", "nightlife.row.plumbing", N.t("nightlife.row.plumbing_sub"), "drinks"))
+		"smoking":
+			rows.append(_nrow("smoke", "nightlife.row.smoke", N.t("nightlife.row.smoke_sub"), "friends", false,
+				N.t("nightlife.row.smoking") if not smoking.is_empty() else ""))
+			var ssit := _row("sit", "venue.sheet.table.sit", T.t("venue.sheet.table.sit_sub"), "friends", false,
+				T.t("venue.sheet.table.sat") if needs.daily_keys.has("sit_with|" + sit_key(zone)) else "")
+			rows.append(ssit)
+		"cabinet", "tall":
+			# Plan v4 stubs (game cabinet, tall tables): the generic table sheet until their own content lands
 			var sit := _row("sit", "venue.sheet.table.sit", T.t("venue.sheet.table.sit_sub"), "friends", false,
 				T.t("venue.sheet.table.sat") if needs.daily_keys.has("sit_with|" + sit_key(zone)) else "")
 			rows.append(sit)
@@ -193,6 +215,8 @@ func header_for(zone: Dictionary) -> Array[String]:
 			return [T.t("venue.sheet.%s.head" % zone["kind"]), T.t("venue.sheet.%s.greet" % zone["kind"])]
 		"exit":
 			return [T.t("venue.sheet.exit.head"), T.t("venue.sheet.exit.greet")]
+		"toilet":
+			return [N.t("nightlife.sheet.toilet.head"), N.t("nightlife.sheet.toilet.greet")]
 	return ["", ""]
 
 
@@ -204,6 +228,8 @@ func prompt_for(zone: Dictionary) -> String:
 			return T.t("venue.prompt.table")
 		"":
 			return ""
+		"toilet":
+			return N.t("nightlife.prompt.toilet")
 	return T.t("venue.prompt." + str(zone["kind"]))
 
 
@@ -216,6 +242,13 @@ func band_text() -> String:
 func _row(id: String, title_key: String, sub: String, need: String, game := false, reason := "") -> Dictionary:
 	return {"id": id, "title": T.t(title_key) if title_key != "" else "", "sub": sub, "need": need, "game": game,
 		"enabled": reason == "", "reason": reason}
+
+
+## A row whose title is a nightlife string.
+func _nrow(id: String, title_key: String, sub: String, need: String, game := false, reason := "") -> Dictionary:
+	var r := _row(id, "", sub, need, game, reason)
+	r["title"] = N.t(title_key)
+	return r
 
 
 func _name(id: String) -> String:
@@ -259,7 +292,7 @@ func do_row(zone: Dictionary, row_id: String) -> bool:
 			row = r
 	if row.is_empty() or not row["enabled"]:
 		return false
-	var now: float = needs.real_now()
+	var now: float = needs.clock
 	match row_id:
 		"order":
 			_drink(now, true, BarMenu.t("menu.card.order", {"who": _name(BARTENDER), "drink": BarMenu.name_of(HOUSE_DRINK)}))
@@ -278,7 +311,8 @@ func do_row(zone: Dictionary, row_id: String) -> bool:
 			_count_drink(now, true)
 			_card(_merge(r, bonus), T.t("venue.card.try", {"drink": BarMenu.name_of(d)}))
 		"pour":
-			_request("pour_perfect", {"drink": BarMenu.pour_pick(pours_this_visit, tipsy.state() == Tipsiness.MERRY, BarMenu.night_of(needs.real_now()))})
+			_pour_drink = BarMenu.pour_pick(pours_this_visit, tipsy.state() == Tipsiness.MERRY, BarMenu.night_of(needs.real_now()))
+			_request("pour_perfect", {"drink": _pour_drink})
 			pours_this_visit += 1
 		"menu":
 			menu_requested.emit("drinks")
@@ -312,23 +346,28 @@ func do_row(zone: Dictionary, row_id: String) -> bool:
 			_request("neon_pinball", {})
 		"leave":
 			leave()
+		"smoke":
+			smoking = {"zone": zone["id"], "left": Rules.SMOKE_SECONDS}
+			_apply_mood()
+			state_changed.emit()
+		"plumbing":
+			Nightlife.check_plumbing(needs)
+			action_done.emit({"line": N.t("nightlife.card.plumbing"), "gains": {}, "tab": 0.0, "ok": true, "reason": "", "quiet": false})
 	return true
 
 
 func _drink(now: float, alcoholic: bool, line: String) -> void:
 	var r: Dictionary = needs.apply_action("order_drink")
-	_count_drink(now, alcoholic)
 	_card(r, line)
+	_count_drink(now, alcoholic)
 
 
 ## Orders one item from the real menu (main.gd, menu list). Same effects as the rows: alcohol = Order a drink,
 ## soft = the soft-drink row, water = the water row; kitchen items do nothing yet. False if refused.
 func order_item(id: String) -> bool:
-	var now: float = needs.real_now()
+	var now: float = needs.clock
 	match BarMenu.effect(id):
 		"alcohol":
-			if tipsy.state() == Tipsiness.MERRY:
-				return false
 			_drink(now, true, BarMenu.t("menu.card.order", {"who": _name(BARTENDER), "drink": BarMenu.name_of(id)}))
 		"soft":
 			_drink(now, false, BarMenu.t("menu.card.soft", {"drink": BarMenu.name_of(id)}))
@@ -342,10 +381,21 @@ func order_item(id: String) -> bool:
 
 func _count_drink(now: float, alcoholic: bool) -> void:
 	drinks_this_visit += 1
-	if alcoholic and tipsy.state() != Tipsiness.MERRY:
+	if alcoholic:
 		tipsy.add_alcohol(now)
 	_apply_mood()
 	state_changed.emit()
+	if Nightlife.is_wasted(tipsy.drinks) and needs.visit_active:
+		_get_wasted()
+
+
+## Past Rules.WASTED_AFTER: off the seat, cigarette out, the rules applied (meters, lockout, visit ended, saved),
+## then main.gd plays the shot.
+func _get_wasted() -> void:
+	cancel_smoke()
+	cancel_sit()
+	var line := Nightlife.get_wasted(needs, rng)
+	wasted.emit(line)
 
 
 func _request(game_id: String, config: Dictionary) -> void:
@@ -353,10 +403,11 @@ func _request(game_id: String, config: Dictionary) -> void:
 	minigame_requested.emit(game_id, config)
 
 
-## A Pour Perfect landed (every attempt, AGAIN included): it is a drink. Nam pours a mocktail while Merry.
+## A Pour Perfect landed (every attempt, AGAIN included): it is a drink, alcoholic when what Nam pours is (she
+## swaps in a soft drink while Merry, BarMenu.pour_pick).
 func _on_action_applied(action_id: String, result: Dictionary) -> void:
 	if action_id == "pour_perfect" and result.get("ok", false):
-		_count_drink(needs.real_now(), true)
+		_count_drink(needs.clock, _pour_drink == "" or BarMenu.effect(_pour_drink) == "alcohol")
 
 
 func _merge(a: Dictionary, b: Dictionary) -> Dictionary:
@@ -421,7 +472,15 @@ func tick(delta: float) -> void:
 				var action: String = sitting.get("action", "sit_with")
 				cancel_sit(false)   # the minute is up; the player keeps the seat until they move
 				_card(needs.apply_action(action, 1.0, key), T.t("venue.card.bar_chat" if action == "bar_chat" else "venue.card.sit"))
-	if tipsy.update(needs.real_now()):
+	if not smoking.is_empty():
+		if player.walking_to or player.velocity.length() > 0.5 or zones.current.get("id", "") != smoking["zone"]:
+			cancel_smoke()
+		else:
+			smoking["left"] -= delta
+			if smoking["left"] <= 0.0:
+				cancel_smoke()
+				_card(needs.apply_action("light_one_up"), N.t("nightlife.card.smoke"))
+	if tipsy.update(needs.clock):
 		_apply_mood()
 		state_changed.emit()
 
@@ -449,7 +508,86 @@ func _apply_mood() -> void:
 	if not is_instance_valid(player):
 		return
 	player.anim_suffix = Tipsiness.ANIM_SUFFIX[tipsy.state()]
-	player.pose_override = "stand_drink" if not sitting.is_empty() and not sitting["seat"] else ""
+	var holding: bool = (not sitting.is_empty() and not sitting["seat"]) or not smoking.is_empty()
+	player.pose_override = "stand_drink" if holding else ""
+	_show_cigarette(not smoking.is_empty())
+
+
+# --- Light one up --------------------------------------------------------------------------------
+
+## Puts the cigarette out early (walked off, left, WASTED): no gain.
+func cancel_smoke() -> void:
+	if smoking.is_empty():
+		return
+	smoking = {}
+	_apply_mood()
+	state_changed.emit()
+
+
+## The cigarette in the drink hand (the stand_drink pose holds it near the chest) with smoke curling up from its
+## tip; built on the player at runtime, freed when it is put out.
+func _show_cigarette(on: bool) -> void:
+	if not on:
+		if is_instance_valid(_cigarette):
+			_cigarette.queue_free()
+		_cigarette = null
+		return
+	if is_instance_valid(_cigarette) or not is_instance_valid(player):
+		return
+	_cigarette = Node3D.new()
+	_cigarette.name = "Cigarette"
+	var body: Node3D = player.get_node_or_null("Body")
+	(body if body != null else player).add_child(_cigarette)
+	_cigarette.position = CIGARETTE_AT
+	_cigarette.add_child(_box(Vector3(0.022, 0.022, 0.13), Vector3.ZERO, Color("F2EEE6"), 0.0))
+	_cigarette.add_child(_box(Vector3(0.026, 0.026, 0.024), Vector3(0, 0, 0.075), Color("FF6A1A"), 3.0))
+	var smoke := CPUParticles3D.new()
+	smoke.name = "Smoke"
+	smoke.position = Vector3(0, 0.02, 0.08)
+	smoke.amount = 28
+	smoke.lifetime = 2.6
+	smoke.local_coords = false
+	smoke.direction = Vector3(0, 1, 0)
+	smoke.spread = 18.0
+	smoke.gravity = Vector3(0.05, 0.28, 0)
+	smoke.initial_velocity_min = 0.08
+	smoke.initial_velocity_max = 0.2
+	var grow := Curve.new()
+	grow.add_point(Vector2(0, 0.35))
+	grow.add_point(Vector2(1, 1.0))
+	smoke.scale_amount_curve = grow
+	smoke.scale_amount_min = 1.0
+	smoke.scale_amount_max = 2.2
+	var fade := Gradient.new()
+	fade.set_color(0, Color(0.85, 0.85, 0.88, 0.55))
+	fade.set_color(1, Color(0.7, 0.7, 0.75, 0.0))
+	smoke.color_ramp = fade
+	var q := QuadMesh.new()
+	q.size = Vector2(0.09, 0.09)
+	var sm := StandardMaterial3D.new()
+	sm.shading_mode = BaseMaterial3D.SHADING_MODE_UNSHADED
+	sm.transparency = BaseMaterial3D.TRANSPARENCY_ALPHA
+	sm.vertex_color_use_as_albedo = true
+	sm.billboard_mode = BaseMaterial3D.BILLBOARD_PARTICLES
+	q.material = sm
+	smoke.mesh = q
+	_cigarette.add_child(smoke)
+
+
+static func _box(size: Vector3, at: Vector3, c: Color, glow: float) -> MeshInstance3D:
+	var mi := MeshInstance3D.new()
+	var bm := BoxMesh.new()
+	bm.size = size
+	mi.mesh = bm
+	mi.position = at
+	var m := StandardMaterial3D.new()
+	m.albedo_color = c
+	if glow > 0.0:
+		m.emission_enabled = true
+		m.emission = c
+		m.emission_energy_multiplier = glow
+	mi.material_override = m
+	return mi
 
 
 # --- Seats ---------------------------------------------------------------------------------------

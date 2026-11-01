@@ -331,6 +331,17 @@ func apply_action(action_id: String, score := 1.0, key := "") -> Dictionary:
 	return result
 
 
+## Sets a meter outright (nightlife: Check the plumbing, WASTED). `fresh` also forgets the points this visit already
+## counted for it, so the next gains land in full again (§2.4 tiers).
+func force_meter(meter: String, value: float, fresh := false) -> void:
+	sync()
+	meters[meter] = clampf(value, Rules.METER_MIN, Rules.METER_MAX)
+	if fresh and visit_points.has(meter):
+		visit_points[meter] = 0.0
+	_dirty = true
+	_refresh()
+
+
 ## Diminishing returns (§2.4): of `raw` new points after `before` already counted this visit, how many land.
 static func _tiered(before: float, raw: float) -> float:
 	var edges := [Rules.DIMINISH_TIER_1_END, Rules.DIMINISH_TIER_2_END, INF]

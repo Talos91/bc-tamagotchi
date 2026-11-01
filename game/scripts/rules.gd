@@ -123,7 +123,26 @@ const ACTIONS := {
 	"pinball": {"label": "Pinball (one game)", "zone": "Lounge", "gains": {"nightlife": [10.0, 20.0]}},
 	"enter_lounge": {"label": "First time in the Lounge", "zone": "Lounge", "gains": {"nightlife": 5.0}, "once_per_visit": true},
 	"last_song": {"label": "Stay until the last song", "zone": "Any", "gains": {"nightlife": 10.0}, "once_per_visit": true},
+	## Provisional (DECISIONS "Playtest of 33dc5b9", BACKLOG B12): a cigarette by the smoking-room window is a chat
+	## with whoever is there, so it feeds Friends a little; two count per visit. Call for Daniele on the Questions tab.
+	"light_one_up": {"label": "Light one up (a cigarette)", "zone": "Smoking room", "gains": {"friends": 3.0}, "cap_per_visit": 6.0},
 }
+
+# --- Nightlife (DECISIONS "Playtest of 33dc5b9", BACKLOG B12; scripts/zones/nightlife.gd) -------------
+## Counted in alcoholic drinks this visit (scripts/zones/tipsiness.gd: menu category "alcohol", Order a drink, Try
+## something new, an alcoholic Pour Perfect). DRUNK_FROM, DRUNK_FULL, WASTED_AFTER and the lockout are Daniele's;
+## every other number here is provisional, for Daniele to confirm on the Questions tab.
+const DRUNK_FROM := 3                 ## the drunk screen effect starts at this many drinks...
+const DRUNK_FULL := 10                ## ...and grows to its strongest here
+const WASTED_AFTER := 10              ## one more than this: WASTED
+const DRUNK_SOBER_MINUTES := 20.0     ## provisional: one drink wears off per 20 game minutes (03-cast §5.1 had a state per 30)
+const WATER_SOBER_DRINKS := 2         ## provisional: a glass of water takes two drinks off (it used to drop a state)
+const DRUNK_WARN_FROM := 8            ## provisional: from here Nam's line on the Order row is a warning
+const WASTED_LOCKOUT_HOURS := 12.0    ## on the game clock, saved; the debug clock (F2, F3) skips it
+const WASTED_METER_VALUE := 0.0       ## provisional: "all minor needs unfulfilled" = the four meters to this
+const WASTED_LINES := 10              ## nightlife.wasted.line.0..9 in i18n/strings_nightlife.csv, one at random
+const SMOKE_SECONDS := 8.0            ## one cigarette; light_one_up lands when it is finished
+const PLUMBING_DRINKS_TO := 0.0       ## Daniele: Check the plumbing resets the drink need to 0
 
 
 ## Vibe state for a Vibe value (§2.2).

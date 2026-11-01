@@ -6,7 +6,7 @@
   "alcohol": {
    "action": "order_drink",
    "tipsy": 1,
-   "merry_blocked": true,
+   "merry_blocked": false,
    "was": "the Order a drink row and the six invented Try something new drinks"
   },
   "soft": {

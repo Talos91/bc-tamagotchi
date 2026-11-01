@@ -51,7 +51,7 @@ ALCOHOL = {"beer", "sparkling", "white_wine", "red_wine", "single_malt", "blende
            "irish_whiskey", "japanese_whisky", "tequila_mezcal", "vodka", "rum", "liqueur", "brandy_cognac", "gin",
            "shooter"}
 EFFECTS = {
-    "alcohol": {"action": "order_drink", "tipsy": 1, "merry_blocked": True,
+    "alcohol": {"action": "order_drink", "tipsy": 1, "merry_blocked": False,  # nightlife: drunk to 10, WASTED past 10
                 "was": "the Order a drink row and the six invented Try something new drinks"},
     "soft": {"action": "order_drink", "tipsy": 0, "merry_blocked": False, "was": "the Thai iced tea (mocktail) row"},
     "water": {"action": "order_drink", "tipsy": -1, "merry_blocked": False, "was": "the A glass of water row"},
