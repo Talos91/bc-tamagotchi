@@ -19,7 +19,7 @@ a layout plan are coming from Daniele; until then the layout stays frozen.
 |---|------|--------|-------|--------|
 | A1 | Baseline map of the club corrected to the new photos + plan (unfreeze `layout.json`, re-run parity) | M | direction 08–22 (received) | in progress |
 | A2 | Bar-counter strip connected to the walkable floor (known navmesh gap) | S | — | queued |
-| A3 | Playtest fixes from the alpha (list to come as Daniele plays) | S–M | Daniele's notes | collecting |
+| A3 | Playtest fixes: walk-through doors, real sitting on tap-to-sit, stairs reoriented (2026-11-01 notes) | M | — | in progress |
 
 ## B. The playable world
 

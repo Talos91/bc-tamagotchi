@@ -39,6 +39,8 @@ GDD is updated.
 
 | 2026-11-01 | **Playtest calls given directly to the venue worker.** Mali is renamed **Prae** (Thai แพร) in all player-facing text; internal id stays `mali`. Camera: any cutaway wall or closed-room box between camera and player is hidden (fixes the camera stuck behind walls, smoking room included). Input: a held stick or key keeps its direction while the camera swings between zones. Landed in 68d9ff5 (strings, `camera_rig.gd`, `player.gd`); cast docs, chars manifest display name and showcase still say Mali (housekeeping). |
 
+| 2026-11-01 | **Playtest of venue v4: doors, sitting, stairs.** Daniele: "doors are currently not doors there should be doors that the player can pass through and you should be able to actually sit when you press tap to sit". Stairs: "the start of the stair should be facing the game machine and its side should be on the wall where the entrance to lounge is; second half of the stair should go up in an (unreachable for now) area going to the right of the lounge entrance wall". Read as: first flight along the lounge's south wall (the Sticker-door wall), bottom step facing the game cabinet, rising west; the second half turns and climbs out of the lounge into a non-walkable upper area. To be confirmed on the worker's stair capture. |
+
 ## Still open
 
 - Black Cabin's real opening hours (drives what the game shows at 14:00: open all day with staff only, or "Doors at 18:00" with the Flat only).
