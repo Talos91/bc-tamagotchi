@@ -60,18 +60,15 @@ GDD is updated.
 
 | 2026-11-02 | **Brand fonts** (Daniele, checked on blackcabin.bar's stylesheet): **Lato** for all interface text (the site uses weights 300–700; Daniele: "all bold"), **Kristi** (handwritten script) for stylish titles only. Both are free Google Fonts. Lato has no Thai glyphs, so Thai keeps IBM Plex Sans Thai Looped as the fallback. Replaces Kanit in the theme. The site also confirms "every night of the week except Mondays"; its Find Us block gives 33/1 Soi Farmwattana while Google listings give 466 Soi Thong Lo 16 (question on the tab). |
 
+| 2026-11-02 | **Questions tab, third batch** (answered 2026-11-01 18:41–19:34 UTC, folded in by the new orchestrator). **Address:** 466 Soi Thong Lo 16 (Google), not the website's 33/1 Soi Farmwattana. **Lettering:** Kristi script for both the corridor end-wall neon and the memory-corner light box (not the recommended match-the-photos option). **Corridor camera:** keep the view looking east down the corridor at the sign. **Memory-corner props:** model them properly in a later kit pass. **Menu prices:** show THB prices, dimmed. **Pour Perfect:** a rotation of 12 drinks, one per drink family. Still unanswered on the tab: cocktail page, misprints, "Try something new", soft-drink row, Thai brand names. |
+
 ## Still open
 
-- Black Cabin's real opening hours (drives what the game shows at 14:00: open all day with staff only, or "Doors at 18:00" with the Flat only).
-- Staff turnover policy if a real person leaves (proposal: goodbye postcard, then the slot's working name).
-- Brand typeface: does Black Cabin have one, or do we keep Kanit + IBM Plex Sans Thai Looped.
-- The asks to Black Cabin listed at the end of `03-cast.md` (consent, house band, staff packs).
-
-- Death rules: how long at zero, warnings, which interactions are mandatory per week, what survives (needs a GDD chapter).
+- The asks to Black Cabin listed at the end of `03-cast.md` (consent, house band, staff packs); band consent (Daniele is asking).
+- Death rules in detail: how long at zero, warnings, what "go to Black Cabin" means in play, how friend revival works (the stakes chapter, from Daniele's base proposal above).
 - Real-world bridge design: redemption flow, staff-side verification, what a booking or song request needs from Black Cabin's systems.
-- Orientation: landscape vs portrait primary (see above).
-- Coin economy design (earn/spend, no decor).
-- Chat policy for multiplayer (phrase wheel vs free text, now that the game is 21+).
-- The Flat home screen: keep minimal or cut.
-- Real photos of the entrance corridor (dim for now); a day version of the outside (night only for now).
+- Coin economy: one-page summary for Daniele, then sign-off.
+- The Flat as a rented second-floor room bought with coins (design pending; minimal now).
+- Menu: cocktail page, misprints, "Try something new" list, soft-drink row, Thai brand names (Questions tab).
+- Real photos of the street front, street door and entrance corridor (next visit); a day version of the outside (night only for now).
 

@@ -1,0 +1,28 @@
+# 🎛️ Orchestrator — state 2026-11-02 (new version)
+
+Session local_78d0c67d (Opus, high effort, detached, top level). It replaced local_d1485b13 / fdaed712 after a closed
+handover. Read `PROJECT.md`, then `STATE.md`, then this note.
+
+## Old orchestrator's handover answers (things not in the other files)
+- **Clean-worktree verify:** `git worktree add` with an absolute path (a relative one once landed inside the repo);
+  `Godot --headless --path game --import` first; `git worktree remove` fails with "Filename too long" in the scratchpad,
+  so `rm -rf` the folder and then `git worktree prune`. Push by SHA only (`git push origin <sha>:main`).
+- **Shared index:** a worker's commit once swept already-staged files into itself (0dc0b68). Stage right before
+  committing; wait on `.git/index.lock`.
+- **Hub db (`items`):** fields order, kind (now|design|facts), ref, date, title, context (paragraphs split on blank
+  lines), options [{key,text,rec}], multi, images [{url,alt}], answer, note, answered_at. Writes to existing docs need
+  `if_version`; Daniele edits cards live, so expect version mismatches and re-read. Screenshots: `Artifact` publish
+  with the hub url, `asset: true`, `file_paths`; put the returned `/_blob/<id>` url in `images`. The page source is
+  `docs/design/backlog-board.html` (capabilities db + user + assets); `Artifact read` it once before republishing.
+- **How Daniele works:** sometimes messages workers directly, and they act and report it. Answers come both on the tab
+  and in chat; a chat answer with an image becomes a direction file in the repo, and the tab card is marked answered
+  with a note. Explain game-dev jargon, use emoji session titles and they/them, keep status messages short.
+  Cross-project rules arrive through the Ooze orchestrator (local_ee0811d3). A ctx-guard hook nags at 40 % context.
+- **App limits:** `start_session` "user_asked" is refused on turns started by events or cross-session messages, so
+  propose own_initiative cards; Daniele starts them. Workers often cannot archive themselves (it needs Daniele's OK in
+  their session), so the orchestrator archives them after verification.
+- **Vault:** recaps only at releases (no release yet).
+
+## This version so far
+- Six answers given after the close are folded into DECISIONS ("Questions tab, third batch"); "Still open" pruned.
+- Workers: see STATE.md IN FLIGHT.
