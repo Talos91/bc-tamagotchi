@@ -53,3 +53,4 @@ Append-only. One dated line per event, newest last. Never edit earlier lines.
 - 2026-11-02 — process slip: orchestrator's push of 128ddfb also pushed venue-notes' 29f95b4 (spawn/ENTRANCE label) before verification; eight suites run on it immediately after. Rule going forward: push only a verified SHA (`git push origin <sha>:main`), never a bare `git push` while workers commit.
 - 2026-11-02 — eight suites PASS on 128ddfb (incl. venue-notes' 29f95b4); the unverified push turned out clean.
 - 2026-11-02 — 🏗️ venue-notes: Daniele's answers built: raised-edge neon red, Prae without surname, every seat sittable (tiny, long, counter, rectangular, smoking tables), Take a stool gives provisional bar_chat (+3 Friends, cap 6/visit); eight suites PASS.
+- 2026-11-02 — Daniele: TV memory corner (direction 25), corridor end-wall neon (direction 24), cutaway rule; logged; sent to venue-notes. Refreeze deferred to after this round.

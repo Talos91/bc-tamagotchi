@@ -129,3 +129,18 @@ ashtrays, EXIT signs); 14 the buffer zone's south side (mirror wall, red curtain
 BLACK CABIN in a serif face (CABIN smaller, centred under BLACK), drawn as outlined neon tubes (each stroke a
 double line), the tubes pale pink-white, a strong deep-red glow around them, set against dark foliage lit red from
 behind. It replaces the pixel-font stand-in on the start screen.
+
+### Corridor sign, TV memory corner, cutaway rule (Daniele, 2026-11-02)
+
+- `24-corridor-end-neon-now-open.jpg`: the east end of the entrance corridor, beside the Sticker door. It is a brick end
+  wall carrying a white handwritten-style neon reading "BLACK" over a line, "— CABIN —" below, and a lit "NOW OPEN" arrow
+  pointing left (toward the Sticker door). The ceiling is open grid. The right-hand wall has two small windows. It is all
+  bathed in red.
+- `25-lounge-tv-memory-corner.jpg`: the lounge's north-west (top-left on the plan) corner, which must be added. It has a
+  small CRT TV on a side table with a camera next to it, a floor lamp with a shade, a red disc lamp on a stand, a potted
+  plant, two upholstered chairs, and a lit BLACK CABIN box on a stool. In the real bar people take stylish photos of the
+  TV with themselves in it. In the game this is **where you share a memory: upload a real photo taken at Black
+  Cabin** (ties to BACKLOG D5 and the memories album in the stakes design). The white BLACK CABIN wordmark in this photo
+  is the brand logo style.
+- Camera rule: walls must not turn invisible before the door is passed. The entrance corridor (future regulars' photo
+  wall) stays solid and visible until the character crosses the Sticker door into the lounge.

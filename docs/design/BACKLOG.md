@@ -52,7 +52,7 @@ a layout plan are coming from Daniele; until then the layout stays frozen.
 | D2 | "Tonight" tab with the band lineup | S | tonight's lineup source | idea |
 | D3 | Table booking: scaffold only, not wired to a real system | M | later: Black Cabin's booking flow | idea |
 | D4 | Band info and band pages: follower count, past set lists, "bands you've seen" passport filled by check-ins | L | band data, check-ins | idea |
-| D5 | Post a picture taken at the club; counts as the monthly refill of one need | M | photo upload, moderation, consent for faces | idea |
+| D5 | Post a picture taken at the club, shared at the lounge's TV memory corner (direction 25); counts as the monthly refill of one need and goes into the memories album | M | photo upload, moderation, consent for faces | idea |
 | D6 | Tip a band through the app | L | payments provider, legal, band payout | idea |
 | D7 | Ride-home button at last call (Grab link; Grab could sponsor) | S | Grab deep link | idea |
 | D8 | Guest list and tickets for special nights: RSVP and a QR that works at the door | L | door-side scanner app, ticketing | idea |
