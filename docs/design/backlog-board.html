@@ -76,6 +76,12 @@ code { font-family: ui-monospace, Consolas, monospace; font-size: 13px; }
 .qbtn[disabled] { opacity: .5; cursor: default; }
 .qanswer { font-size: 14px; color: var(--muted); } .qanswer b { color: var(--fg); font-weight: 500; }
 .qempty { color: var(--muted); padding: 16px; border: 1px dashed var(--line); border-radius: 8px; text-align: center; font-size: 14px; }
+.csec { padding-block: 22px 4px; }
+.crow td { vertical-align: middle; }
+.crow input { width: 100%; min-width: 70px; background: var(--bg); color: var(--fg); border: 1px solid var(--line); border-radius: 6px; padding: 6px 8px; font: 14px/1.3 var(--body); }
+.crow input.val { font-variant-numeric: tabular-nums; max-width: 220px; }
+.crow .qbtn { padding: 6px 12px; font-size: 13px; }
+.crow .edited { font-size: 11px; color: var(--accent); white-space: nowrap; }
 @media (max-width: 560px) { td, th { padding-inline: 6px; } td.needs { min-width: 120px; } }
 </style>
 <div class="wrap">
@@ -83,7 +89,7 @@ code { font-family: ui-monospace, Consolas, monospace; font-size: 13px; }
   <h1>Black Cabin Backlog<small>Ideas, requests and open questions for the Tamagotchi. Lives in the repo as <code>docs/design/BACKLOG.md</code>.</small></h1>
   <div class="verdict"><b>Alpha verdict, 1 Nov 2026:</b> “fun, fucked up but fine, good alpha.” First job is the baseline map of the club. Everything else waits for it, because a community game needs the real room right.</div>
 </header>
-<nav class="tabs" role="tablist" aria-label="Board sections"><button class="tab" role="tab" id="t-backlog" aria-controls="p-backlog" aria-selected="true">Backlog</button><button class="tab" role="tab" id="t-questions" aria-controls="p-questions" aria-selected="false">Questions <span class="badge zero" id="q-badge">…</span></button></nav>
+<nav class="tabs" role="tablist" aria-label="Board sections"><button class="tab" role="tab" id="t-backlog" aria-controls="p-backlog" aria-selected="true">Backlog</button><button class="tab" role="tab" id="t-questions" aria-controls="p-questions" aria-selected="false">Questions <span class="badge zero" id="q-badge">…</span></button><button class="tab" role="tab" id="t-coins" aria-controls="p-coins" aria-selected="false">Coins</button></nav>
 <div id="p-backlog" role="tabpanel" aria-labelledby="t-backlog">
 <div class="legend"><span class="s-plan">planned / in STATE</span><span class="s-wait">waiting on an input</span><span class="s-idea">idea, not scheduled</span><span class="s-ok">done</span><span>Effort: S a day · M a wave · L several waves</span></div>
 
@@ -96,8 +102,8 @@ code { font-family: ui-monospace, Consolas, monospace; font-size: 13px; }
 <tr><td class="id">A2</td><td>Bar-counter strip connected to the walkable floor (known navmesh gap)</td><td class="eff">S</td><td class="needs">nothing</td><td><span class="pill ok">done</span></td></tr>
 <tr><td class="id">A3</td><td>Playtest fixes: doors you can walk through, real sitting at every seat, stairs reoriented, memory corner, corridor sign, walls solid until the door</td><td class="eff">M</td><td class="needs">nothing</td><td><span class="pill ok">done</span></td></tr>
 <tr><td class="id">A4</td><td>Real Black Cabin menu at the bar and in Pour Perfect; brand fonts Lato + Kristi; portrait first with a landscape toggle</td><td class="eff">M</td><td class="needs">your answers on the Questions tab</td><td><span class="pill ok">done</span></td></tr>
-<tr><td class="id">A5</td><td>Playtest fixes: smoother camera, walls see-through but their bottom 10 % (corridor excepted), fluid movement, facing bug, seats facing the right way; Prae as an owner with her real look</td><td class="eff">M</td><td class="needs">nothing</td><td><span class="pill plan">in progress</span></td></tr>
-<tr><td class="id">A6</td><td>Version number in the game (v0.2.0 plus the build), changelog by version</td><td class="eff">S</td><td class="needs">nothing</td><td><span class="pill plan">in verification</span></td></tr>
+<tr><td class="id">A5</td><td>Playtest fixes: smoother camera, walls see-through but their bottom 10 % (corridor excepted), fluid movement, facing bug, seats facing the right way; Prae as an owner with her real look</td><td class="eff">M</td><td class="needs">nothing</td><td><span class="pill plan">landed; area views coming back</span></td></tr>
+<tr><td class="id">A6</td><td>Version number in the game (v0.2.0 plus the build), changelog by version</td><td class="eff">S</td><td class="needs">nothing</td><td><span class="pill ok">done (v0.2.0)</span></td></tr>
 </table></div>
 </section>
 
@@ -116,7 +122,7 @@ code { font-family: ui-monospace, Consolas, monospace; font-size: 13px; }
 <tr><td class="id">B9</td><td>Lounge revamp: merch shop top right, memory corner and the game machine top left, a top-patrons leaderboard under the stairs (left), decorations around the room</td><td class="eff">M</td><td class="needs">the lounge layout reopened (your decision)</td><td><span class="pill plan">queued after the camera pass</span></td></tr>
 <tr><td class="id">B10</td><td>Top-patrons board under the lounge stairs: placeholder names now, real customers later</td><td class="eff">S</td><td class="needs">accounts and check-ins for real names</td><td><span class="pill plan">queued with B9</span></td></tr>
 <tr><td class="id">B11</td><td>Merch shop in the lounge: what is sold, prices, coins or real money</td><td class="eff">M</td><td class="needs">Black Cabin's merch list</td><td><span class="pill wait">stand with B9; contents open</span></td></tr>
-<tr><td class="id">B12</td><td>Nightlife actions: "Light one up" in the smoking room, secret "Check the plumbing" in the toilet, drunk from 3 drinks, WASTED screen with a 12 h lockout</td><td class="eff">M</td><td class="needs">nothing</td><td><span class="pill plan">queued</span></td></tr>
+<tr><td class="id">B12</td><td>Nightlife actions: "Light one up" in the smoking room, secret "Check the plumbing" in the toilet, drunk from 3 drinks, WASTED screen with a 12 h lockout</td><td class="eff">M</td><td class="needs">nothing</td><td><span class="pill ok">done</span></td></tr>
 </table></div>
 </section>
 
@@ -172,13 +178,19 @@ code { font-family: ui-monospace, Consolas, monospace; font-size: 13px; }
 <section><h2><span class="letter">✓</span>Answered</h2><div class="qgroup" id="g-done"><div class="qempty">Nothing answered yet.</div></div></section>
 </div>
 
-<p class="foot">Updated 2 Nov 2026 by the orchestrator. Backlog items are never silently deleted: shipped ones get the commit, dropped ones get the reason. Answers on the Questions tab are copied into <code>docs/design/DECISIONS.md</code>.</p>
+<div id="p-coins" role="tabpanel" aria-labelledby="t-coins" hidden>
+<p class="qlead">The coin economy, signed off 2 Nov 2026. Change any number or note and press Save: the orchestrator copies your edits into <code>docs/design/04-coins.md</code> and the game's rules. Edited rows show when they were changed.</p>
+<p class="qstatus" id="c-status"></p>
+<div id="c-body"><div class="qempty">Loading the economy…</div></div>
+</div>
+
+<p class="foot">Updated 2 Nov 2026 by the orchestrator (Coins tab added). Backlog items are never silently deleted: shipped ones get the commit, dropped ones get the reason. Answers on the Questions tab are copied into <code>docs/design/DECISIONS.md</code>.</p>
 </div>
 <script>
 (function(){
   const $ = s => document.querySelector(s);
-  // Tabs: two views, bookmarkable as #backlog and #questions
-  const tabs = { backlog: [$('#t-backlog'), $('#p-backlog')], questions: [$('#t-questions'), $('#p-questions')] };
+  // Tabs: three views, bookmarkable as #backlog, #questions and #coins
+  const tabs = { backlog: [$('#t-backlog'), $('#p-backlog')], questions: [$('#t-questions'), $('#p-questions')], coins: [$('#t-coins'), $('#p-coins')] };
   function show(name){
     if(!tabs[name]) name = 'backlog';
     for(const k in tabs){ const on = k === name; tabs[k][0].setAttribute('aria-selected', String(on)); tabs[k][1].hidden = !on; }
@@ -258,6 +270,43 @@ code { font-family: ui-monospace, Consolas, monospace; font-size: 13px; }
       if(!items.length){ for(const k in groups) groups[k].innerHTML = '<div class="qempty">No questions yet. New ones appear here as the orchestrator adds them.</div>'; badge.textContent = '0'; return; }
       render();
     }, e => { clearTimeout(timer); status.textContent = 'Could not load the questions (' + e.code + ').'; });
+    startCoins();
+  }
+
+  // Coins: one document per number in the "coins" collection, grouped by section, editable in place
+  const cbody = $('#c-body'), cstatus = $('#c-status');
+  const SECTIONS = [['caps', 'Caps'], ['earn', 'Earn'], ['spend', 'Spend'], ['bridge', 'Real-life bridge (later, needs Black Cabin)']];
+  function coinRow(it){
+    const tr = document.createElement('tr'); tr.className = 'crow';
+    tr.innerHTML = `<td>${esc(it.item)}</td><td><input class="val" aria-label="Value for ${esc(it.item)}" value="${esc(it.value)}"></td><td><input aria-label="Note for ${esc(it.item)}" placeholder="Note" value="${esc(it.note || '')}"></td><td><button class="qbtn">Save</button> <span class="edited">${it.edited_at ? 'edited ' + esc(it.edited_at) : ''}</span></td>`;
+    const [val, note] = tr.querySelectorAll('input'), btn = tr.querySelector('button'), mark = tr.querySelector('.edited');
+    if(canWrite === false){ val.disabled = note.disabled = btn.disabled = true; }
+    btn.addEventListener('click', async () => {
+      mark.textContent = 'Saving…';
+      try { await db.doc('coins/' + it.id).update({ value: val.value.trim(), note: note.value.trim(), edited_at: new Date().toISOString().slice(0, 16).replace('T', ' ') }); }
+      catch(e) { mark.textContent = 'Could not save (' + ((e && e.code) || 'error') + ')'; }
+    });
+    return tr;
+  }
+  function renderCoins(rows){
+    cbody.innerHTML = '';
+    for(const [key, label] of SECTIONS){
+      const list = rows.filter(r => r.section === key);
+      if(!list.length) continue;
+      const sec = document.createElement('section'); sec.className = 'csec';
+      sec.innerHTML = `<h2>${esc(label)}</h2><div class="tablewrap"><table><thead><tr><th>Item</th><th>Value</th><th>Note</th><th></th></tr></thead><tbody></tbody></table></div>`;
+      const tb = sec.querySelector('tbody'); list.forEach(r => tb.appendChild(coinRow(r)));
+      cbody.appendChild(sec);
+    }
+    if(!cbody.children.length) cbody.innerHTML = '<div class="qempty">No coin rows yet.</div>';
+    if(canWrite === false) cstatus.textContent = 'Read-only view: only the owner can edit.';
+  }
+  function startCoins(){
+    db.collection('coins').orderBy('order').limit(200).onSnapshot(snap => {
+      const active = document.activeElement;
+      if(active && cbody.contains(active) && active.tagName === 'INPUT') return; // don't wipe a field being typed in
+      renderCoins(snap.docs.filter(d => d.exists).map(d => ({ id: d.id, ...d.data() })));
+    }, e => { cstatus.textContent = 'Could not load the coins (' + e.code + ').'; });
   }
   start();
 })();

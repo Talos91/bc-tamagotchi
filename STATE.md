@@ -7,11 +7,12 @@
 
 ## IN FLIGHT
 - New orchestrator: session local_78d0c67d (detached, top level). Handover checked: origin/main 51603f0, no workers were running; the old orchestrator's answers to "what is not in the files" are in `handoffs/orchestrator-2026-11-02.md`.
-- Workers running: none (lounge revamp starting next).
+- Workers running: 🎮 area-camera (Opus, local_553204b4: per-area views + area buttons back, smoking room visible, bigger version label); 🎭 cast-tt (Opus, local_55005b20: Prae straight long hair + spots every other day, new regular Tt with Prae's old duties, Khun Joy retired, name strings for all regulars).
 - Queued (max three workers):
-  when feel-pass closes (both edit `build_venue.gd` / the venue scene), 🏗️ lounge revamp + corridor portraits (BACKLOG B7, B9–B11; DECISIONS "Lounge revamp" row; `layout.json` unfrozen for the lounge and corridor walls only, refreeze on Daniele's acceptance).
+  when area-camera closes (both edit `build_venue.gd` / the venue scene), 🏗️ lounge revamp + corridor portraits + the curtain seen from the main room + Raised3 approach (BACKLOG B7, B9–B11; DECISIONS "Lounge revamp" row; `layout.json` unfrozen for the lounge and corridor walls only, refreeze on Daniele's acceptance).
 
 ## WAITING ON OWNER (Questions tab: https://claude.ai/artifact/BbpBxVWVVXMjz7TgJ7aFBW#questions)
+- **Coins signed off**; the hub has a **Coins tab** (db collection `coins`, one row per number): Daniele edits there, the orchestrator copies edits (rows with `edited_at`) into `04-coins.md` and the rules.
 - **Stakes answered** (DECISIONS row of 2026-11-02, 14 of 15; several differ from the recommendations: 21-day timer, 14-day ghost, real-bar revival only, any refill resets, stronger annoyances). Still open: **C1 coin sign-off** (`docs/design/04-coins-summary.md`) and **S13** (game visit vs real visit as the fatal need). Then a design worker folds the answers into `06-stakes.md`. Original cards: S1–S10 stakes, S11–S12 Flat rent, C1 coin sign-off, C2 drink pricing, F1 what is really upstairs. Source: `handoffs/stakes-design-2026-11-02.md`. After the answers: fold into `06-stakes.md` / `04-coins*.md`, apply the §12 amendments to the GDD and high concept, then a needs worker builds `06-stakes.md` §10 (also fix the stale `START_VALUE` comment in `rules.gd`).
 - **Prae cards:** her look (accept?), who takes her old regular duties, retire Khun Joy?, ask Prae for her nights/spot/lines. Interim: her table keeps the old quiz-captain Candle Talk lines.
 - **Camera card:** before/after pictures, one main-room view (rec) vs per-area views.
