@@ -18,7 +18,7 @@ mg.result.plenty,That's plenty for tonight,คืนนี้พอแล้ว�
 mg.result.nothing_daily,Already caught up today,วันนี้คุยกันแล้วนะ,Result card caption for a once-a-day action already used,40
 mg.result.tab,The bar is full. The rest goes on your Tab,เต็มแล้ว ส่วนที่เหลือเข้าบิลของคุณ,Result card note when part of the gain overflowed to Tab,50
 mg.result.hearts,Hearts with {regular}: {count} of {max},หัวใจกับ{regular}: {count} จาก {max},Result card under Candle Talk. {regular} = regular's display name; {count} 0-3; {max} = 3,40
-cast.mali.name,Prae,แพร,Display name of the regular Prae (id mali; renamed by Daniele 2026-11-01) (cast table 6.2),16
+cast.mali.name,Prae,แพร,Display name of Prae, an owner (id mali; renamed by Daniele 2026-11-01; owner, not a regular, 2026-11-02) (cast table 6.2),16
 mg.pour_perfect.title,Pour Perfect,Pour Perfect,Minigame name (stays English in both languages per strings guidelines 5),18
 mg.pour_perfect.subtitle,Fill each layer to its line,รินให้พอดีทุกชั้น,Subtitle under the name in the lab menu,34
 mg.pour_perfect.how_to,Hold to pour. Let go on the line. Three layers. Overflow only foams.,กดค้างเพื่อริน ปล่อยเมื่อถึงเส้น มีสามชั้น ล้นก็แค่ฟอง,Pause sheet help text,150

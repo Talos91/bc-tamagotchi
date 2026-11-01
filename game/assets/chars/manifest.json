@@ -285,7 +285,11 @@
    "Jacket": "#3A3444",
    "ShirtWhite": "#ECE6E0",
    "DressRed": "#B0141C",
-   "Leather": "#5A3020"
+   "Leather": "#5A3020",
+   "LeatherBlack": "#241E26",
+   "LeatherSheen": "#4A4250",
+   "Silver": "#B4B0B8",
+   "JeansBlue": "#4C6EA6"
   },
   "face": {
    "Ink": "#120808",
@@ -353,7 +357,8 @@
    "blouse",
    "blazer",
    "dress",
-   "knit"
+   "knit",
+   "leather"
   ],
   "bottoms": [
    "jeans",
@@ -1222,6 +1227,26 @@
       "top_trim__Cream"
      ],
      "tris": 96
+    },
+    {
+     "id": "top_leather",
+     "slot": "top",
+     "bones": [
+      "arm_L",
+      "arm_R",
+      "forearm_L",
+      "forearm_R",
+      "hips",
+      "spine"
+     ],
+     "materials": [
+      "skin__Skin3",
+      "top__Stone",
+      "top_accent__Cream",
+      "top_sheen__LeatherSheen",
+      "top_trim__Cream"
+     ],
+     "tris": 174
     },
     {
      "id": "bottom_jeans",
@@ -2392,6 +2417,26 @@
      "tris": 96
     },
     {
+     "id": "top_leather",
+     "slot": "top",
+     "bones": [
+      "arm_L",
+      "arm_R",
+      "forearm_L",
+      "forearm_R",
+      "hips",
+      "spine"
+     ],
+     "materials": [
+      "skin__Skin3",
+      "top__Stone",
+      "top_accent__Cream",
+      "top_sheen__LeatherSheen",
+      "top_trim__Cream"
+     ],
+     "tris": 174
+    },
+    {
      "id": "bottom_jeans",
      "slot": "bottom",
      "bones": [
@@ -3560,6 +3605,26 @@
      "tris": 96
     },
     {
+     "id": "top_leather",
+     "slot": "top",
+     "bones": [
+      "arm_L",
+      "arm_R",
+      "forearm_L",
+      "forearm_R",
+      "hips",
+      "spine"
+     ],
+     "materials": [
+      "skin__Skin3",
+      "top__Stone",
+      "top_accent__Cream",
+      "top_sheen__LeatherSheen",
+      "top_trim__Cream"
+     ],
+     "tris": 174
+    },
+    {
      "id": "bottom_jeans",
      "slot": "bottom",
      "bones": [
@@ -4431,115 +4496,6 @@
    "bytes": 217896
   },
   {
-   "name": "mali",
-   "display": "Prae",
-   "role": "regular",
-   "slot": "REG_MALI",
-   "path": "res://assets/chars/presets/mali.glb",
-   "body": "broad",
-   "parts": {
-    "head": "round",
-    "hair": "bob",
-    "eyes": "dot",
-    "brows": "arched",
-    "mouth": "grin",
-    "top": "cardigan",
-    "bottom": "skirt",
-    "shoes": "loafers",
-    "accessories": [
-     "glasses_up",
-     "drink_mug"
-    ]
-   },
-   "colours": {
-    "bottom": {
-     "swatch": "FloorGrey",
-     "hex": "#3A2C30"
-    },
-    "drink_mug": {
-     "swatch": "BeerAmber_emissive",
-     "hex": "#E8A23A"
-    },
-    "drink_mug_2": {
-     "swatch": "Foam",
-     "hex": "#F6EEDC"
-    },
-    "drink_mug_3": {
-     "swatch": "BottleClear",
-     "hex": "#A8A0A0"
-    },
-    "eyes": {
-     "swatch": "Ink",
-     "hex": "#120808"
-    },
-    "glasses_up": {
-     "swatch": "StoolBlack",
-     "hex": "#221110"
-    },
-    "glasses_up_2": {
-     "swatch": "Lens",
-     "hex": "#2A1E1A"
-    },
-    "hair": {
-     "swatch": "HairDarkBrown",
-     "hex": "#3E2618"
-    },
-    "mouth": {
-     "swatch": "Mouth",
-     "hex": "#6A2420"
-    },
-    "shoes": {
-     "swatch": "WoodDark",
-     "hex": "#36241A"
-    },
-    "shoes_trim": {
-     "swatch": "Sand",
-     "hex": "#B49A76"
-    },
-    "skin": {
-     "swatch": "Skin5",
-     "hex": "#A06E4A"
-    },
-    "top": {
-     "swatch": "Rust",
-     "hex": "#A04A26"
-    },
-    "top_accent": {
-     "swatch": "Cream",
-     "hex": "#D9C9A6"
-    },
-    "top_dust": {
-     "swatch": "Cream",
-     "hex": "#D9C9A6"
-    }
-   },
-   "height_m": 1.6,
-   "height_vox": 32,
-   "head_top_vox": 30,
-   "tris": 1124,
-   "animations": [
-    "idle",
-    "walk",
-    "sit",
-    "sit_drink",
-    "sit_talk",
-    "sit_hold",
-    "sit_applaud",
-    "stand_drink",
-    "cheers",
-    "applaud",
-    "dance",
-    "idle_warm",
-    "idle_tipsy",
-    "idle_merry",
-    "walk_warm",
-    "walk_tipsy",
-    "walk_merry",
-    "idle_sad"
-   ],
-   "bytes": 284508
-  },
-  {
    "name": "dougie",
    "display": "Dougie",
    "role": "regular",
@@ -4966,6 +4922,100 @@
     "idle_sad"
    ],
    "bytes": 215904
+  },
+  {
+   "name": "mali",
+   "display": "Prae",
+   "role": "owner",
+   "slot": "OWNER_PRAE",
+   "path": "res://assets/chars/presets/mali.glb",
+   "body": "regular",
+   "parts": {
+    "head": "soft",
+    "hair": "wavy",
+    "eyes": "lashes",
+    "brows": "arched",
+    "mouth": "smile",
+    "top": "leather",
+    "bottom": "jeans",
+    "shoes": "boots",
+    "accessories": []
+   },
+   "colours": {
+    "bottom": {
+     "swatch": "JeansBlue",
+     "hex": "#4C6EA6"
+    },
+    "bottom_trim": {
+     "swatch": "CymbalGold",
+     "hex": "#E8A030"
+    },
+    "eyes": {
+     "swatch": "Ink",
+     "hex": "#120808"
+    },
+    "hair": {
+     "swatch": "HairBlack",
+     "hex": "#1E1616"
+    },
+    "mouth": {
+     "swatch": "Mouth",
+     "hex": "#6A2420"
+    },
+    "shoes": {
+     "swatch": "StoolBlack",
+     "hex": "#221110"
+    },
+    "shoes_trim": {
+     "swatch": "Charcoal",
+     "hex": "#403A3E"
+    },
+    "skin": {
+     "swatch": "Skin3",
+     "hex": "#D2A07A"
+    },
+    "top": {
+     "swatch": "LeatherBlack",
+     "hex": "#241E26"
+    },
+    "top_accent": {
+     "swatch": "ShirtWhite",
+     "hex": "#ECE6E0"
+    },
+    "top_sheen": {
+     "swatch": "LeatherSheen",
+     "hex": "#4A4250"
+    },
+    "top_trim": {
+     "swatch": "Silver",
+     "hex": "#B4B0B8"
+    }
+   },
+   "height_m": 1.55,
+   "height_vox": 31,
+   "head_top_vox": 29,
+   "tris": 832,
+   "animations": [
+    "idle",
+    "walk",
+    "sit",
+    "sit_drink",
+    "sit_talk",
+    "sit_hold",
+    "sit_applaud",
+    "stand_drink",
+    "cheers",
+    "applaud",
+    "dance",
+    "idle_warm",
+    "idle_tipsy",
+    "idle_merry",
+    "walk_warm",
+    "walk_tipsy",
+    "walk_merry",
+    "idle_sad"
+   ],
+   "bytes": 248448
   },
   {
    "name": "nam",
@@ -5437,7 +5487,7 @@
   {
    "name": "khun_joy",
    "display": "Khun Joy",
-   "role": "staff",
+   "role": "owner",
    "slot": "OWNER",
    "path": "res://assets/chars/presets/khun_joy.glb",
    "body": "regular",
@@ -5534,12 +5584,9 @@
     "walk_warm",
     "walk_tipsy",
     "walk_merry",
-    "idle_sad",
-    "idle_tray",
-    "walk_tray",
-    "pour"
+    "idle_sad"
    ],
-   "bytes": 256500
+   "bytes": 236556
   },
   {
    "name": "server",

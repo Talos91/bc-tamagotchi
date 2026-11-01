@@ -32,6 +32,9 @@ const STAFF_DOOR_Z := 12.75
 const FIG_SCALE := PatronFigure.FIG_SCALE
 ## The bartender stands on the raised duckboard behind the counter (05/06 show them chest-up over the 1.1 m bar)
 const BARTENDER_LIFT := 0.3
+## The host of the hosted table (VenueZones.REGULAR at REGULAR_TABLE: Prae, an owner) stands this far from its centre:
+## past the corner between its west and south chairs (clear of their backs), on the side the main room's camera sees
+const HOST_OFFSET := Vector3(-0.9, 0, 0.9)
 
 # Placeholder palette (art bible §3 and §7 wardrobe; reds avoided for tops so figures read against the room)
 const SKINS := ["f0d2b6", "e4ba96", "d2a07a", "bc8860", "a06e4a", "845636", "6a432c", "4e3022"]
@@ -106,6 +109,7 @@ func _ready() -> void:
 		_bartender.position = staff.position + Vector3(0, BARTENDER_LIFT, 0)
 		_bartender.rotation.y = staff.rotation.y
 		_bartender.set_meta("pace", 0.0)
+	_place_host(seats)
 	if hatch:   # staff member behind the order hatch of the walled staff room (plan v4)
 		var h := _spawn("fern", "HatchStaff")
 		h.position = hatch.position
@@ -126,6 +130,23 @@ func _ready() -> void:
 		_wanderers.append({"fig": f, "path": PackedVector3Array(), "idx": 0, "wait": _rng.randf_range(0.5, 4.0)})
 		f.add_to_group("door_user")
 		n += 1
+
+## The owner who hosts a table stands at its edge facing the room, greeting whoever comes over: working the floor, not
+## seated as a guest (03-cast §2.3; Prae, Daniele 2026-11-02).
+func _place_host(seats: Array[Node3D]) -> void:
+	var c := Vector3.ZERO
+	var k := 0
+	for s in seats:
+		if s.get_meta("table", "") == VenueZones.REGULAR_TABLE:
+			c += s.position
+			k += 1
+	if k == 0:
+		return
+	c /= k
+	var f := _spawn(VenueZones.REGULAR, "Host_" + VenueZones.REGULAR)
+	f.position = Vector3(c.x, 0, c.z) + HOST_OFFSET
+	f.rotation.y = atan2(HOST_OFFSET.x, HOST_OFFSET.z)
+	f.play("idle")
 
 func is_taken(seat: Node3D) -> bool:
 	return taken.has(seat)

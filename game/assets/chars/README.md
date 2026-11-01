@@ -109,7 +109,7 @@ for the bartender's pair), so walking figures never carry a sideways glass.
 | eyes | `eyes` | `dot`, `wide`, `sleepy`, `happy`, `lashes` (1 x 2 pixel decals halfway down the face) |
 | brows | `brows` | `none`, `flat`, `arched`, `worried`, `thick`: voxels in relief, hair colour |
 | mouth | `mouth` | `smile`, `small`, `flat`, `open`, `grin` |
-| top | `top` | `tee`, `shirt` (collar points in relief, buttons, pocket), `shirt_rolled`, `shirt_tie`, `jacket` (open, lapels in relief, hem over the belt, shirt in `top_accent`), `hoodie`, `cardigan`, `bomber`, `staff_shirt`, `blouse`, `blazer`, `dress` (sleeveless), `knit` |
+| top | `top` | `tee`, `shirt` (collar points in relief, buttons, pocket), `shirt_rolled`, `shirt_tie`, `jacket` (open, lapels in relief, hem over the belt, shirt in `top_accent`), `hoodie`, `cardigan`, `bomber`, `staff_shirt`, `blouse`, `blazer`, `dress` (sleeveless), `knit`, `leather` (biker jacket open over a tee, lapels in `top_sheen`, silver zip in `top_trim`) |
 | bottom | `bottom` | `jeans`, `trousers` (belt with a gold buckle), `shorts`, `skirt`, `dress` (to the knee, flared hem; colour it like the top) |
 | shoes | `shoes` | `sneakers`, `boots`, `loafers` |
 | hands | `hands` | one per body |
@@ -156,11 +156,13 @@ In `manifest.json` each preset carries `name`, `display`, `role` (`regular`, `st
 (slot -> swatch and hex, only the slots it uses), `height_m` / `height_vox` (top of hair or hat), `head_top_vox`
 and `tris`.
 
-Who is who: regulars Tong, Ploy, Jules, Mali, Dougie, Lung Nop, Bow, Hiro (each with a different head silhouette and
-their cast bible signature item: gig bag, pencil bun and sketchbook, bleached quiff and bomber, reading glasses
-pushed up, flat cap, tinted round glasses and a record, ribbon and wheelie bag, loosened tie and notebook). Staff
+Who is who: regulars Tong, Ploy, Jules, Dougie, Lung Nop, Bow, Hiro (each with a different head silhouette and
+their cast bible signature item: gig bag, pencil bun and sketchbook, bleached quiff and bomber, flat cap, tinted
+round glasses and a record, ribbon and wheelie bag, loosened tie and notebook). Owners (role `owner`, never
+befriended, no hearts: `game/scripts/cast.gd`): Prae (id `mali`, a real owner: wavy black hair, black leather jacket
+over a white tee, blue jeans) and `OWNER` Khun Joy (the gold-rim glass). Staff
 `BAR_1` Nam (apron, towel), `BAR_2` Fern (shaker), `DOOR` Big (torch, clicker), `SOUND` Golf (headphones,
-gaffer tape), `OWNER` Khun Joy (the gold-rim glass); all in Cabin Dark with Cymbal Gold trim. House Lights: Jo
+gaffer tape); all in Cabin Dark with Cymbal Gold trim. House Lights: Jo
 (acoustic guitar), Pete (yellow bass), Boy (sticks). Patrons `patron_01`-`patron_12`: 3 bodies x 4 heads (square
 crop, round long, soft buzz, heart curly), generic outfits, palette swaps, no signature items.
 

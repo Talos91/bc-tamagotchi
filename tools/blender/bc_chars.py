@@ -12,7 +12,8 @@ Run headless from the repo root:
     blender --background --factory-startup --python tools/blender/bc_chars.py -- --no-review
     blender --background --factory-startup --python tools/blender/bc_chars.py -- --only tong,nam --no-blend
 `--no-review` skips the combined blender/BlackCabin.blend (bc_review.py), which a full run rebuilds last;
-`--no-render` keeps the .blend but skips the PNG; `--review-only` rebuilds just the .blend and the PNG. `--only` runs
+`--no-render` keeps the .blend but skips the PNG; `--review-only` rebuilds just the .blend and the PNG.
+`--focus <name>` builds one preset's turnaround card: blender/BlackCabinChars_<name>.blend and two renders. `--only` runs
 never write the manifest, libraries or .blend.
 
 Reuses bc_kit (imported, never edited): the voxel scale, the face tables, per-voxel jitter, the seam texture and
@@ -78,7 +79,9 @@ WARDROBE_ADDED = {
     "Denim": "#3F5878", "DenimLight": "#6C88A8", "Sky": "#86A8C6", "Teal": "#2F6B6A",
     "Olive": "#66703A", "Moss": "#4C5A30", "Mustard": "#C99430", "Rust": "#A04A26",
     "Jacket": "#3A3444", "ShirtWhite": "#ECE6E0", "DressRed": "#B0141C", "Leather": "#5A3020",
+    "LeatherBlack": "#241E26", "LeatherSheen": "#4A4250", "Silver": "#B4B0B8", "JeansBlue": "#4C6EA6",
 }
+GLOSS = {"LeatherBlack": (0.32, 0.0), "LeatherSheen": (0.25, 0.0), "Silver": (0.25, 0.6)}   # swatch: (roughness, metallic); leather catches the light
 FACE = {"Ink": "#120808", "Mouth": "#6A2420", "Blush": "#E0786E", "Lens": "#2A1E1A", "Beer": "#E8A23A"}
 ROUGH = {"skin": 0.55, "hair": 0.6, "eyes": 0.3, "mouth": 0.5, "blush": 0.6, "lens": 0.1}
 
@@ -109,6 +112,8 @@ def material(m):
             rough = max(rough, 0.5) if slot in ("top", "bottom", "top_trim", "bottom_trim") else rough
         else:
             rough, metal, strength = ROUGH.get(slot, 0.85), 0.0, 0
+        if base_sw in GLOSS:
+            rough, metal = GLOSS[base_sw]
         K.PALETTE[base_key] = (hexof(base_sw), rough, metal, strength if emissive else 0)
     return K.material(K.E(base_key) if emissive else base_key)
 
@@ -461,7 +466,7 @@ def tufts(p, m, seed, Z):
 TOPS = {   # style: sleeve length
     "tee": "short", "shirt": "full", "shirt_rolled": "rolled", "shirt_tie": "full", "jacket": "full",
     "hoodie": "full", "cardigan": "full", "bomber": "full", "staff_shirt": "short", "blouse": "short",
-    "blazer": "full", "dress": "none", "knit": "full",
+    "blazer": "full", "dress": "none", "knit": "full", "leather": "full",
 }
 BOTTOMS = ("jeans", "trousers", "shorts", "skirt", "dress")
 SHOES = ("sneakers", "boots", "loafers")
@@ -540,7 +545,7 @@ def build_top(style, D, C):
             front(-1, z, aa); front(0, z, aa)                       # open front shows the shirt
         for (x, y, z), (m, bone) in list(p.cells.items()):
             if m == mm and zlib.crc32(("chalk%d,%d,%d" % (x, y, z)).encode()) % 11 == 0:
-                p.set(x, y, z, ("top_dust", "Cream"), bone)          # Mali's chalk dust
+                p.set(x, y, z, ("top_dust", "Cream"), bone)          # chalk dust
     elif style == "bomber":
         p.box((x0, x1), (y0 - 1, y1 + 1), (zb, zb), tt, "spine")      # ribbed hem
         p.box((x0, x1), (y0 - 1, y0 - 1), (zb + 1, zt - 1), mm, "spine")
@@ -554,6 +559,24 @@ def build_top(style, D, C):
         front(-1, zt - 1, sk); front(0, zt - 1, sk)                 # V neck
         for x in range(x0, x1 + 1):
             front(x, zb, tt, 1)                                     # tie hem
+    elif style == "leather":
+        # black leather biker jacket open over a tee (top_accent): wide lapels in relief, a silver zip (top_trim)
+        # down one front edge, a belted hem with a side buckle (Prae)
+        for z in range(zb, zt + 1):
+            front(-1, z, aa); front(0, z, aa)
+        front(-1, zt, sk); front(0, zt, sk)                         # round neck of the tee
+        p.box((x0, x1), (y0 - 1, y0 - 1), (zb, zt - 3), mm, "spine",
+              keep=lambda x, y, z: x not in (-1, 0))                # jacket fronts stand off the tee
+        sheen = ("top_sheen", "LeatherSheen")                      # lit edges: the lapels catch the light
+        for z in range(zt - 3, zt + 1):
+            front(-2, z, sheen, 1); front(1, z, sheen, 1)           # lapels
+        for z in (zt - 1, zt):
+            front(-3, z, sheen, 1); front(2, z, sheen, 1)           # the collar's wide points
+        for z in range(zb + 1, zt - 3):
+            front(1, z, tt, 1)                                      # zip
+        p.box((x0, x1), (y0 - 1, y1), (D["leg"] + 1, D["leg"] + 1), mm, "hips",
+              keep=lambda x, y, z: not (y == y0 - 1 and x in (-1, 0)))   # belted hem
+        p.set(x0, y0 - 1, D["leg"] + 1, tt, "hips")                 # side buckle
     elif style == "blazer":
         for z in range(zt - 4, zt + 1):
             front(-2, z, tt, 1); front(1, z, tt, 1)                 # lapels
@@ -910,10 +933,6 @@ PRESETS = [
       "bomber", "jeans", "boots", ["drink_beer"],
       skin="Skin1", hair="HairBleach", top="Olive", top_trim="Mustard", top_accent="Cream", bottom="Charcoal",
       bottom_trim="Stone", shoes="WoodDark", shoes_trim="StoolBlack"),
-    P("mali", "Mali", "regular", "REG_MALI", "broad", "round", "bob", ("dot", "arched", "grin"),
-      "cardigan", "skirt", "loafers", ["glasses_up", "drink_mug"],
-      skin="Skin5", hair="HairDarkBrown", top="Rust", top_trim="Cream", top_accent="Cream",
-      bottom="FloorGrey", bottom_trim="Charcoal", shoes="WoodDark", shoes_trim="Sand"),
     P("dougie", "Dougie", "regular", "REG_DOUGIE", "broad", "square", "sideburns", ("sleepy", "thick", "flat"),
       "shirt", "jeans", "boots", ["hat_flat_cap", "moustache", "drink_beer"],
       skin="Skin1", hair="HairGrey", top="Moss", top_trim="Cream", top_accent="Cream", shoes="WoodDark",
@@ -930,6 +949,12 @@ PRESETS = [
       "shirt_tie", "trousers", "loafers", ["notebook"],
       skin="Skin2", hair="HairBlack", top="ShirtWhite", top_trim="Cream", top_accent="DrumRed", bottom="Charcoal",
       bottom_trim="StoolBlack", shoes="StoolBlack", shoes_trim="Charcoal"),
+    # owners (cast bible section 2.3): Prae, a real owner of Black Cabin and Daniele's friend (2026-11-02): female,
+    # black hair, black leather jacket, blue jeans; internal id stays mali
+    P("mali", "Prae", "owner", "OWNER_PRAE", "regular", "soft", "wavy", ("lashes", "arched", "smile"),
+      "leather", "jeans", "boots", [],
+      skin="Skin3", hair="HairBlack", top="LeatherBlack", top_trim="Silver", top_accent="ShirtWhite",
+      bottom="JeansBlue", bottom_trim="StoolBlack", shoes="StoolBlack", shoes_trim="Charcoal"),
     # staff slots (cast bible section 2)
     P("nam", "Nam", "staff", "BAR_1", "regular", "round", "crop", ("happy", "flat", "smile"),
       "staff_shirt", "trousers", "loafers", ["apron", "bar_towel", "bottle", "beer_left"],
@@ -947,7 +972,7 @@ PRESETS = [
       "staff_shirt", "jeans", "sneakers", ["headphones", "gaffer_tape"],
       skin="Skin4", hair="HairBlack", top_accent="CymbalGold", bottom="Charcoal", bottom_trim="Stone",
       shoes="Charcoal", shoes_trim="ColumnWhite", **STAFF_TOP),
-    P("khun_joy", "Khun Joy", "staff", "OWNER", "regular", "heart", "chignon", ("lashes", "arched", "smile"),
+    P("khun_joy", "Khun Joy", "owner", "OWNER", "regular", "heart", "chignon", ("lashes", "arched", "smile"),
       "blazer", "trousers", "loafers", ["glass_gold"],
       skin="Skin3", hair="HairBlack", top="CabinDark", top_trim="CymbalGold", top_accent="Cream",
       bottom="CabinDark", bottom_trim="CymbalGold", shoes="StoolBlack", shoes_trim="CymbalGold"),
@@ -1761,7 +1786,7 @@ def write_manifest(presets, libs):
 
 # ------------------------------------------------------------------ review .blend + showcase render
 
-ROWS = [("Regulars", "regular"), ("Staff and band", ("staff", "band")), ("Anonymous patrons", "patron")]
+ROWS = [("Regulars", "regular"), ("Owners, staff and band", ("owner", "staff", "band")), ("Anonymous patrons", "patron")]
 SPACING = 0.9
 ROW_GAP = 2.0
 POSE_FRAME = 12                # the still shows every armature at this frame
@@ -2002,6 +2027,106 @@ def build_review(render=True):
         print("BC_CHARS showcase -> %s (%s)" % (SHOWCASE, scene.render.engine))
 
 
+def build_focus(name, render=True):
+    """One preset turned four ways (front, three-quarter, side, back) at full size on a lit floor, labelled: a review
+    card for a single character (Prae, 2026-11-02). Saves blender/BlackCabinChars_<name>.blend and, with render,
+    docs/art/screens/<display>/<display>-blender-review-{landscape,portrait}.png."""
+    spec = next(p for p in PRESETS if p["name"] == name)
+    reset()
+    scene = bpy.context.scene
+    scene.name = "Black Cabin Chars: " + spec["display"]
+    lab = K.label_material()
+    coll = bpy.data.collections.new(spec["display"])
+    scene.collection.children.link(coll)
+    views = (("front", 0), ("three-quarter", 35), ("side", 90), ("back", 180))
+    gap = 0.95
+    figs = []
+    for i, (label, yaw) in enumerate(views):
+        x = (i - 1.5) * gap
+        arm, objs, _, top, acts = build_character(spec, coll, prefix="%s.%s." % (name, label))
+        arm.location = (x, 0, 0)
+        arm.rotation_euler = (0, 0, math.radians(yaw))
+        set_action(arm, acts["idle"])
+        hide_props(objs, "idle")
+        tag = text(coll, "%s_view" % label, label, (x, -0.42, 0.002), 0.07, lab)
+        figs.append((arm, objs, tag, x))
+    c = spec["colours"]
+    text(coll, "title", "%s  ·  %s" % (spec["display"], spec["role"]), (0, 0.55, 1.75), 0.16, lab,
+         rot=(math.radians(90), 0, 0))
+    text(coll, "caption", "id %s  ·  hair %s %s\ntop %s %s over %s  ·  %s %s  ·  %s %s" % (
+        name, spec["hair"], c["hair"], spec["top"], c["top"], c["top_accent"], spec["bottom"], c["bottom"],
+        spec["shoes"], c["shoes"]), (0, 0.55, 1.6), 0.045, lab, rot=(math.radians(90), 0, 0))
+    setup = bpy.data.collections.new("review_setup")
+    scene.collection.children.link(setup)
+    me = bpy.data.meshes.new("Floor")
+    me.from_pydata([(-4, -3, 0), (4, -3, 0), (4, 3, 0), (-4, 3, 0)], [], [(0, 1, 2, 3)])
+    me.materials.append(K.material("FloorGrey"))
+    fl = bpy.data.objects.new("Floor", me)
+    setup.objects.link(fl)
+    world = bpy.data.worlds.new("CabinDark")
+    world.use_nodes = True
+    dark = K.hex_linear(K.PALETTE["CabinDark"][0])
+    world.node_tree.nodes["Background"].inputs["Color"].default_value = (*dark, 1.0)
+    world.color = dark
+    scene.world = world
+    K.review_light(setup, "WarmKey", "SUN", (0, 0, 10), 2.4, (1.0, 0.76, 0.56), rot=(math.radians(50), 0, math.radians(20)))
+    K.review_light(setup, "RedFill", "SUN", (0, 0, 10), 0.6, (1.0, 0.15, 0.1), rot=(math.radians(60), 0, math.radians(200)))
+    K.review_light(setup, "WarmRim", "SUN", (0, 0, 10), 1.2, (1.0, 0.6, 0.3), rot=(math.radians(-60), 0, math.radians(-20)))
+    K.review_light(setup, "Front", "AREA", (0, -3.0, 2.2), 120.0, (1.0, 0.85, 0.7), size=2.0, rot=(math.radians(60), 0, 0))
+    cam = bpy.data.objects.new("ReviewCamera", bpy.data.cameras.new("ReviewCamera"))
+    cam.data.lens = 50
+    setup.objects.link(cam)
+    scene.camera = cam
+    scene.frame_set(POSE_FRAME)
+    for screen in bpy.data.screens:
+        for area in screen.areas:
+            for sp in area.spaces:
+                if sp.type == "VIEW_3D":
+                    sp.shading.type = "MATERIAL"
+                    sp.shading.use_scene_world = True
+                    sp.shading.use_scene_lights = True
+                    if sp.region_3d:
+                        sp.region_3d.view_perspective = "CAMERA"
+
+    def frame(w, h, aim, dist):
+        scene.render.resolution_x, scene.render.resolution_y = w, h
+        elev = math.radians(14)
+        cam.location = aim + Vector((0.0, -dist * math.cos(elev), dist * math.sin(elev)))
+        cam.rotation_euler = (aim - cam.location).to_track_quat("-Z", "Y").to_euler()
+
+    frame(1920, 1080, Vector((0.0, 0.0, 0.9)), 6.6)
+    path = os.path.join(K.REPO, "blender", "BlackCabinChars_%s.blend" % name)
+    bpy.ops.wm.save_as_mainfile(filepath=path, compress=True)
+    print("BC_CHARS focus blend -> %s (%.1f MB)" % (path, os.path.getsize(path) / 1e6))
+    if not render:
+        return
+    for engine in ("BLENDER_EEVEE", "BLENDER_EEVEE_NEXT"):
+        try:
+            scene.render.engine = engine
+            break
+        except TypeError:
+            continue
+    scene.render.image_settings.file_format = "PNG"
+    scene.render.image_settings.color_mode = "RGB"
+    scene.view_settings.view_transform = "AgX" if "AgX" in [i.identifier for i in scene.view_settings.bl_rna.properties["view_transform"].enum_items] else "Filmic"
+    out = os.path.join(K.REPO, "docs", "art", "screens", spec["display"].lower())
+    os.makedirs(out, exist_ok=True)
+    for orient, w, h, aim, dist in (("landscape", 1920, 1080, Vector((0.0, 0.0, 0.9)), 6.6),
+                                    ("portrait", 1080, 1920, Vector((0.0, 0.0, 1.0)), 6.4)):
+        # portrait shows the front and three-quarter views only, closer together
+        for i, (arm, objs, tag, x) in enumerate(figs):
+            keep = orient == "landscape" or i < 2
+            nx = x if orient == "landscape" else (i - 0.5) * 0.9
+            arm.location.x = nx
+            tag.location.x = nx
+            for ob in [arm, tag] + objs:
+                ob.hide_render = not keep
+        frame(w, h, aim, dist)
+        scene.render.filepath = os.path.join(out, "%s-blender-review-%s.png" % (spec["display"].lower(), orient))
+        bpy.ops.render.render(write_still=True)
+        print("BC_CHARS focus render -> %s" % scene.render.filepath)
+
+
 # ------------------------------------------------------------------ run
 
 def run(only=None, blend=True, render=True, review=True):
@@ -2024,7 +2149,9 @@ def run(only=None, blend=True, render=True, review=True):
 if __name__ == "__main__":
     argv = sys.argv[sys.argv.index("--") + 1:] if "--" in sys.argv else []
     only = set(argv[argv.index("--only") + 1].split(",")) if "--only" in argv else None
-    if "--review-only" in argv:
+    if "--focus" in argv:
+        build_focus(argv[argv.index("--focus") + 1], "--no-render" not in argv)
+    elif "--review-only" in argv:
         build_review("--no-render" not in argv)
     else:
         run(only, blend="--no-blend" not in argv, render="--no-render" not in argv, review="--no-review" not in argv)

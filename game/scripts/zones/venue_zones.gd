@@ -8,27 +8,31 @@ extends Node3D
 ##   bar      the bar_counter run (zone Bar), approached from the stool side; Nam is the bartender (spawn Bar_Bartender)
 ##   stage    the stage_carpet_tile bounds (zone Stage: the stage is at floor level, marked by carpets) plus the
 ##            floor in front, approached at spawn Wander_StageFront
-##   table    every round_table of zones Tables, Raised and Lounge; REGULAR_TABLE hosts the regular (id mali, shown
-##            as Prae since 2026-11-01); the raised strip's small tables reach their couch seats (radius x 0.95 at least)
+##   table    every round_table of zones Tables, Raised and Lounge; REGULAR_TABLE is hosted by the cast member REGULAR
+##            (id mali, shown as Prae, an owner since 2026-11-02); the raised strip's small tables reach their couch
+##            seats (radius x 0.95 at least)
 ##   arcade   the pinball (pinball_machine, or arcade_cabinet while the kit lacked it) on the lounge's west wall
 ##   cabinet  the Black Cabin game machine (game_cabinet_bc) by the stairs: stub, generic sheet for now
 ##   memory   the memory corner in the lounge's north-west (around its crt_monitor): share a photo (coming soon), sit
 ##   tall     every tall_table_square (buffer zone and the main room's west opening): stub, generic sheet
-##   smoking  the smoking room, one zone over its tables: stub, generic sheet
+##   smoking  the smoking room, one zone over its tables: Light one up (nightlife) and the generic sit
+##   toilet   the toilets vestibule behind the bar's west end (Vestibule kit at floor level): the secret
+##            Check the plumbing, offered nowhere else
 ##   table    also every other group of seats (spawns' "table": tiny tables, the lounge long table and counter, the
 ##            rectangular tables, the smoking-room tables; Daniele 2026-11-02: every seat is sittable), centred on its
 ##            table (or its seats) and reaching just past the farthest seat
 ##   exit     the street door under exit_sign ExitSignStreet (lobby west wall), approached from its front; it reaches
 ##            out over the step of street beyond the door
 ## A zone is a Dictionary: id, kind, shape ("rect" | "circle"), rect (Rect2 in x,z), center (Vector2 x,z), radius,
-## approach (Vector3 on the floor), regular ("" or a cast id). Where zones overlap, circles (a table, the cabinet)
+## approach (Vector3 on the floor), regular ("" or the cast id of the table's host, of any role: see cast.gd). Where zones overlap, circles (a table, the cabinet)
 ## win over the big rects (bar, stage, smoking), then the nearest centre.
 
 signal zone_changed(zone: Dictionary)
 
 const S = preload("res://scripts/minigames/strings.gd")
+const Cast = preload("res://scripts/cast.gd")
 const LAYOUT_PATH := "res://assets/kit/layout.json"
-const REGULAR := "mali"           ## only regular with Candle Talk content (scenes/minigames/candle_talk/mali.json)
+const REGULAR := "mali"           ## the table host; only cast member with Candle Talk content (candle_talk/mali.json)
 const REGULAR_TABLE := "Table2"   ## her table: the round one in the middle of the row of five, facing the stage
 const TRIGGER_HEIGHT := 2.4
 const TABLE_RADIUS := 1.15        ## metres around a round table's centre (x its scale)
@@ -168,6 +172,13 @@ static func defs_from_layout(path: String) -> Array[Dictionary]:
 		z["radius"] = reach + SEAT_MARGIN
 		out.append(z)
 
+	# The toilets vestibule left behind the bar (its curtain, doors and picture), roofed, so the character is out of
+	# view there: home of the secret Check the plumbing (nightlife, DECISIONS "Playtest of 33dc5b9")
+	var loo := _bounds(kit.filter(func(k): return k["zone"] == "Vestibule" and float(k["position"][1]) < 0.5))
+	if loo.size != Vector2.ZERO:
+		var r := loo.grow(0.1)
+		out.append(_zone("toilet", "toilet", r, spots.get("Wander_Toilets", Vector3(r.get_center().x, 0, r.get_center().y))))
+
 	var smoke := _bounds(kit.filter(func(k): return k["object"] == "smoke_table_square"))
 	if smoke.size != Vector2.ZERO:
 		var r := smoke.grow(1.0)
@@ -238,11 +249,11 @@ func build(defs: Array[Dictionary]) -> void:
 			_add_tag(z)
 
 
-## Floating name over the regular's table so testers can find her.
+## Floating name over the host's table so testers can find her.
 func _add_tag(z: Dictionary) -> void:
 	var tag := Label3D.new()
 	tag.name = "Tag_" + str(z["regular"])
-	tag.text = "%s  ♥" % _regular_name(z["regular"])
+	tag.text = tag_text(z["regular"])
 	tag.billboard = BaseMaterial3D.BILLBOARD_ENABLED
 	tag.pixel_size = 0.004
 	tag.font_size = 48
@@ -257,6 +268,11 @@ func _add_tag(z: Dictionary) -> void:
 
 static func _regular_name(id: String) -> String:
 	return S.t("cast.%s.name" % id)
+
+
+## The name over a host's table; a heart only for a regular you befriend (owners have none, Daniele 2026-11-02).
+static func tag_text(id: String) -> String:
+	return "%s  ♥" % _regular_name(id) if Cast.befriends(id) else _regular_name(id)
 
 
 func _on_body(body: Node3D, id: String, entered: bool) -> void:

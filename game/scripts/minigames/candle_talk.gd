@@ -2,7 +2,8 @@ extends "res://scripts/minigames/minigame_base.gd"
 ## Candle Talk (GDD section 9 #5, Candle Floor, Friends +10-20, hearts). Five turns: the regular says a
 ## line, you play one of three topic cards. The best card lights the candle fully, a near card half, a
 ## miss not at all. Branching: line 3 (a story beat) only comes up if the candle is already at 2+;
-## otherwise the talk turns to food. Score = candle light / turns. Hearts (0-3) are stored by the result card.
+## otherwise the talk turns to food. Score = candle light / turns. Hearts (0-3) are stored by the result card,
+## for regulars only (cast.gd): a talk with an owner (Prae, id mali) refills Friends and keeps no hearts.
 ## Content: scenes/minigames/candle_talk/<regular>.json; strings in i18n/strings.csv (npc.<id>.talk.N).
 ## config: {"regular": "mali", "seed": int}.
 

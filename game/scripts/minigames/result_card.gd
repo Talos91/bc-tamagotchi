@@ -11,9 +11,10 @@ const S = preload("res://scripts/minigames/strings.gd")
 const Glyph = preload("res://scripts/minigames/need_glyph.gd")
 const Base = preload("res://scripts/minigames/minigame_base.gd")
 const Rules = preload("res://scripts/rules.gd")
+const Cast = preload("res://scripts/cast.gd")
 
 const BEST_KEY := "minigame_best"  # Needs.ext[BEST_KEY][game_id] = best points (0..100)
-const HEARTS_KEY := "hearts"  # Needs.ext[HEARTS_KEY][regular_id] = 0..MAX_HEARTS (DECISIONS: hearts 0-3)
+const HEARTS_KEY := "hearts"  # Needs.ext[HEARTS_KEY][regular_id] = 0..MAX_HEARTS (DECISIONS: hearts 0-3), regulars only
 const MAX_HEARTS := 3
 const LEAN_ACTION := "candle_talk_lean"  # Rules.ACTIONS key for the extra.lean bonus
 const GAIN_EPSILON := 0.05
@@ -31,7 +32,7 @@ func _get_needs() -> Node:
 	return needs
 
 
-## Records best/hearts, applies the refill and returns the outcome. No UI; safe to call off-tree.
+## Records best/hearts (regulars only), applies the refill and returns the outcome. No UI; safe to call off-tree.
 func apply(result: Dictionary) -> Dictionary:
 	var n := _get_needs()
 	var points := int(result.get("points", 0))
@@ -46,15 +47,15 @@ func apply(result: Dictionary) -> Dictionary:
 		new_best = points > prev and prev > 0
 		bests[game_id] = best
 		n.ext[BEST_KEY] = bests
-		var extra: Dictionary = result.get("extra", {})
-		if extra.has("regular") and float(result.get("score", 0.0)) >= Base.TIER_GREAT:
-			var hs: Dictionary = n.ext.get(HEARTS_KEY, {})
-			var reg := str(extra["regular"])
-			hearts = mini(MAX_HEARTS, int(hs.get(reg, 0)) + 1)
-			hs[reg] = hearts
-			n.ext[HEARTS_KEY] = hs
-		elif extra.has("regular"):
-			hearts = int(n.ext.get(HEARTS_KEY, {}).get(str(extra["regular"]), 0))
+		# Hearts for regulars only: a talk with an owner (Prae) refills Friends, but no hearts are kept or shown.
+		var reg := str(result.get("extra", {}).get("regular", ""))
+		if reg != "" and Cast.befriends(reg):
+			hearts = int(n.ext.get(HEARTS_KEY, {}).get(reg, 0))
+			if float(result.get("score", 0.0)) >= Base.TIER_GREAT:
+				var hs: Dictionary = n.ext.get(HEARTS_KEY, {})
+				hearts = mini(MAX_HEARTS, hearts + 1)
+				hs[reg] = hearts
+				n.ext[HEARTS_KEY] = hs
 	var applied := {"ok": false, "reason": "no_needs", "gains": {}, "tab": 0.0}
 	if n != null:
 		applied = n.apply_action(str(result.get("action_id", "")), float(result.get("score", 0.0)), str(result.get("key", "")))
@@ -156,7 +157,7 @@ func _build(result: Dictionary, o: Dictionary) -> void:
 		col.add_child(UI.wrap(UI.label(S.t("mg.result.tab"), 13, UI.SMOKE)))
 
 	var extra: Dictionary = result.get("extra", {})
-	if extra.has("regular"):
+	if extra.has("regular") and int(o.get("hearts", -1)) >= 0:
 		var hrow := HBoxContainer.new()
 		hrow.add_theme_constant_override("separation", int(UI.dp(4)))
 		col.add_child(hrow)

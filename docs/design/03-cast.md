@@ -1,6 +1,6 @@
 # Black Cabin Tamagotchi — Cast Bible
 
-Status: draft v1 (session 2A, 2026-10-27). Read `DECISIONS.md`, `01-high-concept.md`
+Status: draft v1 (session 2A, 2026-10-27); v1.1 2026-11-02: Prae is an owner, not a regular (§2.3), slot #4 open. Read `DECISIONS.md`, `01-high-concept.md`
 and `02-gdd.md` §5–§7 first. This file owns names, personalities, schedules,
 dialogue voice and the asks to Black Cabin. The GDD owns the numbers; where a
 number appears here it repeats the GDD or is marked **proposal**.
@@ -25,7 +25,7 @@ one of three jobs:
 
 | Job | Who | What it means in play |
 |---|---|---|
-| **Hosts** | Staff | They run the room. Every refill passes through them or their space: the drink, the stage, the door. They never need you; they're glad you came. |
+| **Hosts** | Staff and owners | They run the room. Every refill passes through them or their space: the drink, the stage, the door. They never need you; they're glad you came. |
 | **Regulars** | 8 NPCs | They are the "I have a local" fantasy. They remember you, save you a seat, and give the Friends meter a face. Each one also points at one other need, so talking to them nudges you around the room. |
 | **Performers** | House band + 6 acts | They make the Music meter and the weekly calendar. They are the live-ops content unit (GDD §6.3). |
 
@@ -52,7 +52,7 @@ bodies feel like a night, not a crowd sim:
 |---|---|---|
 | Ambient work loops: polishing glasses, restocking the shelf, cutting limes | Nam, Fern | Always, when not serving |
 | Soundcheck between sets: taps a mic, plays one bar of a riff, adjusts a stand | Golf, house band | During the 2-minute break |
-| **Regular-to-regular moments**: a 10–20 s scripted beat between two regulars present at once (Dougie and Lung Nop argue whether vinyl is "warm" or "honest"; Bow drags Jules to dance; Prae recruits Hiro for the quiz; Lung Nop tells Tong the bass holds the floor up) | Any pair present | Once per pair per visit, when the player is in the same zone |
+| **Regular-to-regular moments**: a 10–20 s scripted beat between two regulars present at once (Dougie and Lung Nop argue whether vinyl is "warm" or "honest"; Bow drags Jules to dance; regular #4 recruits Hiro for the quiz; Lung Nop tells Tong the bass holds the floor up) | Any pair present | Once per pair per visit, when the player is in the same zone |
 | Zone drift: a regular walks to their second zone once per visit (bar run, smoke-break walk to the Entrance Lounge, front row for a favourite song) | All regulars | Random, 1× per visit |
 | Door check-ins: Big waves new arrivals in, so the room visibly fills on event nights | Big | Each time an anonymous patron spawns |
 | Callouts: a regular shouts the next thing ("Last song!", "Quiz in five!") | Whoever is in the zone | Schedule events |
@@ -90,7 +90,8 @@ name ships as a fictional character.
 | `BAR_2` | **Fern** (เฟิร์น) | Second bartender on Fri/Sat. Runs the featured drink and Shake & Serve orders on busy nights. | Bar, Fri–Sat from 20:00 | Cocktail shaker, always mid-shake | "Something sour, something orange?" / "Trust me on this one." | |
 | `DOOR` | **Big** (บิ๊ก) | Door host. First face of every visit: greets, points at the notice board and the guestbook, announces tonight's lineup. | Entrance Lounge, by the curtain | Clicker counter and a torch | "Band's on in two. Go, go." / "You again? Good." | Post-FP (FP uses a static board) |
 | `SOUND` | **Golf** (กอล์ฟ) | Sound engineer. Runs soundchecks in the quiet room, hosts Setlist Shuffle, curates CRT Channel Surf clips, and lights the disco ball. | Stage-side desk | Headphones around the neck, gaffer tape on the belt | "Check, check… perfect." / "Too loud? No such thing." | Ambient only |
-| `OWNER` | **Khun Joy** (คุณจอย) | Owner figure. Rare: Headline Nights, the anniversary, and the rank-up to "Part of the Furniture". Raises the house toast. | Walks the room; ends at the bar | Their own glass, the only one with a gold rim | "Welcome to my living room." | |
+| `OWNER` | **Khun Joy** (คุณจอย) | Owner figure. Rare: Headline Nights, the anniversary, and the rank-up to "Part of the Furniture". Raises the house toast. Fictional; whether Prae (§2.3) takes this slot is open. | Walks the room; ends at the bar | Their own glass, the only one with a gold rim | "Welcome to my living room." | |
+| `OWNER_PRAE` | **Prae** (แพร; id `mali`) | One of Black Cabin's real owners and Daniele's friend. Hosts, never befriended: see §2.3. | Main room, her table and the floor | Black leather jacket | From her, once she agrees (§2.1) | ★ (in the build) |
 
 ### 2.1 What to ask Black Cabin, per staff slot
 
@@ -123,6 +124,24 @@ Extra asks for specific slots:
 | Welcome Back | "There you are. Back where you belong. This one's on me." | "มาแล้ว ๆ กลับมาที่เดิมนะ แก้วนี้พี่เลี้ยง" |
 | Merry state (§5) | "Water's on me too. House rule." | "น้ำเปล่าพี่ก็เลี้ยง กฎของร้าน" |
 
+### 2.3 Owners: Prae
+
+Daniele, 2026-11-02: Prae is **one of Black Cabin's owners and Daniele's friend**, a real person. She is not a
+regular to befriend. Look: female, black hair, black leather jacket, blue jeans (model: `bc_chars.py` preset
+`mali`, role `owner`; review card `docs/art/screens/prae/`). Internal id stays `mali`.
+
+| | Prae (owner) |
+|---|---|
+| **Role in code** | Cast role `owner` (`game/scripts/cast.gd`, read from the character manifest): **no heart by her name, no hearts, no heart beats, no memory gift.** Regulars keep all three. |
+| **Where** | Main room. In the build she stands at **Table2** (the middle round table of the row of five, facing the stage), at its edge between two chairs, facing the room: the owner greeting whoever comes over, not a guest in a seat. Later (proposal): a slow loop between that table, the bar end and the lounge. |
+| **When** | Proposal: most open nights (Tue–Sun 19:00–02:00), early to late. Her real nights are a question for her. |
+| **What she does** | Greets you when you reach her table ("Prae waves you over"), works the floor, checks on the bar. A chat at her table is a Candle Talk that refills Friends with no hearts (the build's only Candle Talk, kept working until slot #4 is decided). |
+| **Voice and lines** | None invented: she is real. Her old quiz-captain lines (§3.5, slot #4) stand in until she gives her own catchphrases and one story through the §2.1 pack. |
+
+Her old regular duties (quiz captain, the Tuesday anchor, the "Second Is First" memory, the Candle Talk lines,
+the regular-to-regular moments, the §5.3 reaction) now belong to **slot #4**, which is open. Who takes them is
+Daniele's call (DECISIONS "Still open"); until then they are listed under "#4 (open)" below.
+
 ---
 
 ## 3. Regulars
@@ -139,7 +158,7 @@ appear only in the album credits and the localization table (§6).
 | 1 | **Tong** (ต้อง) | Music nerd who never plays | 24–28 | To watch hands. He studies every bassist. | Stage front-row poufs (Bar) | Wed Thu Fri | Late | Music | Leo beer, one, nursed | Gig bag on his back / bucket hat | ★ |
 | 2 | **Ploy** (พลอย) | Architect who sketches the room | 28–34 | The light. Third table from the curtain. | Candle Floor, by the orange wall lamp (Banquette) | Mon Tue Thu Sun | Early | Friends | Glass of red | Sketchbook / high bun with a pencil through it | ★ |
 | 3 | **Jules** | Night-owl pinball champion | 30–36 | Came for three months, six years ago | Entrance Lounge, pinball cabinet (Dance Floor) | Thu Fri Sat | Late | Nightlife | Gin and tonic, lots of lime | Oversized bomber / bleached quiff | ★ |
-| 4 | **Prae** (แพร; id `mali`) | Quiz captain, adopts everyone | 36–42 | Somewhere she doesn't need a form to make friends | Long Table (Candle Floor) | Tue Thu Sat | Early | Friends | Thai iced tea (no alcohol) | Chalk-dusted cardigan / short bob with reading glasses pushed up | |
+| 4 | **(open)**: was Prae, now an owner (§2.3) | Quiz captain, adopts everyone | 36–42 | Somewhere she doesn't need a form to make friends | Long Table (Candle Floor) | Tue Thu Sat | Early | Friends | Thai iced tea (no alcohol) | Chalk-dusted cardigan / short bob with reading glasses pushed up (the old design, free to reuse: nobody real wore it) | |
 | 5 | **Dougie** | Retired touring roadie | 60–68 | "Best room I've stood in." | Bar, end stool (Stage edge) | Mon Wed Fri Sun | Early | Drinks | Lager, always | Flat cap / grey sideburns | |
 | 6 | **Lung Nop** (ลุงนพ) | Retired FM radio DJ, jazz and *luk krung* | 64–70 | Thursday jazz, Sunday slow songs | Velvet Banquette (Front Row on Thu) | Thu Sun | Early | Music | Whisky soda, small | Vinyl record under the arm / round tinted glasses, white side-part | |
 | 7 | **Bow** (โบว์) | Flight attendant on a crazy roster | 26–30 | To dance off the jet lag | Dance Floor (Bar) | Fri Sat + 1 random weekday | Late | Nightlife | Mojito, then water | Wheelie cabin bag / big ribbon in a high ponytail | |
@@ -161,7 +180,7 @@ offer, not a second meter bonus. It lives in `needs_config` as
 | Tong ★ | | | Front Row | Front Row | Front Row | | |
 | Ploy ★ | Candle Floor | Candle Floor | | Candle Floor | | | Banquette† |
 | Jules ★ | | | | Lounge | Lounge | Lounge → Dance† | |
-| Prae | | Long Table (Quiz) | | Long Table | | Long Table | |
+| #4 (open) | | Long Table (Quiz) | | Long Table | | Long Table | |
 | Dougie | Bar | | Bar | | Bar | | Bar |
 | Lung Nop | | | | Front Row† | | | Banquette |
 | Bow | | (random) | (random) | (random) | Dance Floor | Dance Floor | |
@@ -170,8 +189,8 @@ offer, not a second meter bonus. It lives in `needs_config` as
 
 **First-playable check:** with only Tong, Ploy and Jules, every day has at least
 one usual (Ploy covers Mon/Tue/Sun, Tong covers Wed, all three are in on Thu).
-Ploy's Tue night exists for this reason. Prae is the Tuesday anchor when she
-ships.
+Ploy's Tue night exists for this reason. Regular #4 is the Tuesday anchor when
+the slot is filled.
 
 ### 3.3 Heart arcs (hearts 1–3)
 
@@ -185,7 +204,7 @@ memory (§3.4). Hearts 4–5 come with the live-ops story chapters.
 | Tong ★ | Uses your name. Shows you the bass in the bag, borrowed from his brother five years ago and never given back. | Saves you a front-row pouf. Makes you watch his signature on the Open Mic list. He crosses it out. | Golf lets him play one song during a break. You're the only one clapping, then everyone is. **Memory.** |
 | Ploy ★ | Asks if she can draw you. Says no to showing you. | Shows you the bar she designs in her sketchbook and will never build. "It's this one, but with my lamp." | Gives you the sketch of you, framed. **Memory.** |
 | Jules ★ | Challenges you to beat his pinball initials. | Teaches you the nudge trick, and admits he never sleeps before 3. | You both spell BLACK CABIN on one table; he insists on sharing the high score. **Memory.** |
-| Prae | Chalks your name on the quiz team board. | Lets you pick the team name for one week ("Second Is First" wins). | Team tee cosmetic, plus the scoreboard polaroid. **Memory.** |
+| #4 (open) | Chalks your name on the quiz team board. | Lets you pick the team name for one week ("Second Is First" wins). | Team tee cosmetic, plus the scoreboard polaroid. **Memory.** |
 | Dougie | Recommends a drink you haven't tried. Its coaster glows on the menu. | Tells you the broken-wrist blues band story at the banquette. | Gives you his 1994 tour laminate. **Memory.** |
 | Lung Nop | Gives you a "song of the week" on your next visit. | Brings records in and tells you about his last broadcast, the night the station went off air. | Hands you a mixtape labelled "For Lan". **Memory.** |
 | Bow | Teaches you her move, which becomes a dance emote. | Sends a postcard from wherever she's flying this week. | Gives you a wing pin (accessory cosmetic). **Memory.** |
@@ -198,7 +217,7 @@ memory (§3.4). Hearts 4–5 come with the live-ops story chapters.
 | Tong | "Tong's First Song" | Polaroid | "Wednesday, the break. One song. Front row of one." |
 | Ploy | "Ploy's Sketch of You" | Polaroid (drawn); also unlocks a wall frame | "Third table from the curtain. Best light." |
 | Jules | "Co-Signed High Score" | Polaroid under red neon | "1:12 am. Shared initials. He insisted." |
-| Prae | "Second Is First" | Polaroid of the chalk scoreboard | "Tuesday. Came second. Celebrated anyway." |
+| #4 (open) | "Second Is First" | Polaroid of the chalk scoreboard | "Tuesday. Came second. Celebrated anyway." |
 | Dougie | "All Access '94" | Ticket stub (laminate) | "Forty years of amps. One good stool." |
 | Lung Nop | "For Lan" | Postcard with a cassette | "Side A: Thursday. Side B: Sunday." |
 | Bow | "Disco Ball, Ground Control" | Polaroid | "Landed at 6. Dancing by 10." |
@@ -234,7 +253,7 @@ future line.
 5. "Bow says I dance like a fan with one blade missing. She is correct. I dance anyway."
 6. "Spell BLACK CABIN and the neon gets brighter. I've done it four times. I am unbearable about it."
 
-**Prae.** *Bossy-warm team captain, lists and plans, calls the player "nong".*
+**#4 (open; these were Prae's, and stand in at her table until her own lines arrive).** *Bossy-warm team captain, lists and plans, calls the player "nong".*
 1. "Sit, sit. Long table is for everyone. That's the point of a long table."
 2. "Tuesday quiz, seven o'clock, my team. You know one thing about eighties music? You're in."
 3. "I do HR all day. Here nobody needs a form to be my friend."
@@ -370,7 +389,7 @@ A Homebody character never holds a drink at home.
 | Tong ★ | "You're singing louder than Jo. I support this." | Stays at Warm: one beer, nursed |
 | Ploy ★ | "Hold still, this is a good face. I'm drawing it." | Warm by 21:00, stays there |
 | Jules ★ | "Pinball is harder now. More fun. Allez." | Merry by 01:00 on Sat; dances worse, happier |
-| Prae | "Have you eaten? I'm ordering fries. Don't argue." | Clear all night; Thai iced tea only |
+| #4 (open) | "Have you eaten? I'm ordering fries. Don't argue." | Clear all night; Thai iced tea only |
 | Dougie | "Pace yourself, pal. It's a marathon, not a sprint." | Warm from the first lager, never past it |
 | Lung Nop | Just smiles and turns his chair to the stage. | Warm after one whisky soda; goes home at 23:00 |
 | Bow | Grabs you for a dance. | Tipsy on Fri, Clear if she flies the next day ("Flying tomorrow, water tonight, na") |
@@ -389,7 +408,7 @@ English. They are never translated from the English drafts above.
 
 | Line group | Why |
 |---|---|
-| All Thai regulars' Candle Talk (Tong, Ploy, Prae, Lung Nop, Bow) | Their voice lives in particles and register: Bow's "na" (นะ), Lung Nop's polite radio Thai, Prae's big-sister "nong" |
+| All Thai regulars' Candle Talk (Tong, Ploy, #4, Lung Nop, Bow) | Their voice lives in particles and register: Bow's "na" (นะ), Lung Nop's polite radio Thai, #4's big-sister "nong" |
 | All staff lines and real staff catchphrases | Black Cabin staff speak Thai on shift; their real words are the source |
 | Plaa Thong and Fah's banter and lyrics | Thai-language acts |
 | Seasonal content (Loy Krathong, Songkran) | Cultural accuracy |
@@ -413,7 +432,7 @@ use it.
 | Tong ★ | Tong | ต้อง | Thanakorn Wongsawat | ธนกร วงศ์สวัสดิ์ | |
 | Ploy ★ | Ploy | พลอย | Ploypailin Chaiyaporn | พลอยไพลิน ชัยพร | |
 | Jules ★ | Jules | จูลส์ | Jules Moreau | จูลส์ โมโร | |
-| Prae | Prae | แพร | — | — | Renamed from Mali 2026-11-01 (Daniele); just "Prae", no surname (2026-11-02); internal id stays `mali` |
+| Prae (owner) | Prae | แพร | — | — | Renamed from Mali 2026-11-01 (Daniele); just "Prae", no surname (2026-11-02); an owner, not a regular (2026-11-02); internal id stays `mali` |
 | Dougie | Dougie | ดักกี้ | Douglas McLeod | ดักลาส แมคลาวด์ | |
 | Lung Nop | Lung Nop | ลุงนพ | Noppadol Rattanakul | นพดล รัตนกุล | "Lung" = uncle |
 | Bow | Bow | โบว์ | Benjawan Kaewmanee | เบญจวรรณ แก้วมณี | |

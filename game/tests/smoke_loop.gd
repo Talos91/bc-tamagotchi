@@ -1,6 +1,6 @@
 extends SceneTree
 ## Headless smoke test of the whole visit loop from main.tscn: Welcome Back on arrival, the Lounge entry bonus, then
-## the player walks to the bar, the stage, Mali's table and the arcade, opens each zone's sheet and does its rows
+## the player walks to the bar, the stage, Prae's table and the arcade, opens each zone's sheet and does its rows
 ## (plain actions and all four minigames, finished through the shared frame and result card), listens to a song,
 ## sits a minute on a chair, and leaves through the street door; the walk-out summary must show the visit's gains.
 ##   godot --headless --path . --script res://tests/smoke_loop.gd
@@ -84,12 +84,18 @@ func _init() -> void:
 
 	print("table")
 	await walk_to("table")
-	check(main.zones.current.get("regular", "") == "mali", "at Mali's table")
+	check(main.zones.current.get("regular", "") == "mali", "at Prae's table (id mali)")
+	# Prae is an owner (Daniele 2026-11-02): her name tag has no heart and she stands at her table
+	var tag: Label3D = main.zones.get_node_or_null("Tag_mali")
+	check(tag != null and tag.text == "Prae" and not tag.text.contains("♥"), "owner's name tag shows no heart (%s)" % (tag.text if tag else "missing"))
+	check(main.find_child("Host_mali", true, false) != null, "Prae stands at her table")
+	var hearts_before: Dictionary = needs.ext.get("hearts", {}).duplicate()
 	var f0: float = needs.meters["friends"]
 	await row("talk")
 	await play_minigame("candle_talk", 0.9)
 	var f1: float = needs.meters["friends"]
 	check(f1 > f0, "Candle Talk refills Friends (%.1f -> %.1f)" % [f0, f1])
+	check(not needs.ext.get("hearts", {}).has("mali") and needs.ext.get("hearts", {}) == hearts_before, "a talk with an owner keeps no hearts")
 	await row("sit")
 	for i in 900:   # the player walks to a free chair at the table and sits; the minute starts once seated
 		if p.seated:

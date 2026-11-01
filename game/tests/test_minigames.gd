@@ -12,6 +12,9 @@ const Rhythm = preload("res://scripts/minigames/front_row_rhythm.gd")
 const Candle = preload("res://scripts/minigames/candle_talk.gd")
 const Pinball = preload("res://scripts/minigames/neon_pinball.gd")
 const CardScript = preload("res://scripts/minigames/result_card.gd")
+const Glyph = preload("res://scripts/minigames/need_glyph.gd")
+const Cast = preload("res://scripts/cast.gd")
+const Zones = preload("res://scripts/zones/venue_zones.gd")
 
 const T0 := 1_800_000_000.0
 const TEST_SAVE := "user://test_minigames_save.json"
@@ -418,6 +421,15 @@ func test_pinball() -> void:
 
 # --- Result card ---------------------------------------------------------------------------------
 
+## Heart glyphs on a result card.
+func _heart_glyphs(card: Control) -> int:
+	var k := 0
+	for g in card.find_children("*", "Control", true, false):
+		if g.get_script() == Glyph and g.need == "heart":
+			k += 1
+	return k
+
+
 func test_result_card() -> void:
 	print("[result card] calls Needs.apply_action with the game's action id")
 	var cases := [
@@ -469,20 +481,39 @@ func test_result_card() -> void:
 	n3.meters["friends"] = 30.0
 	var card3: Control = CardScript.new()
 	card3.needs = n3
-	var talk := {"game_id": "candle_talk", "action_id": "candle_talk", "key": "mali", "score": 0.9, "points": 90, "tier": 2, "extra": {"regular": "mali"}}
+	var talk := {"game_id": "candle_talk", "action_id": "candle_talk", "key": "tong", "score": 0.9, "points": 90, "tier": 2, "extra": {"regular": "tong"}}
 	var t1: Dictionary = card3.apply(talk)
 	check(t1["ok"] and t1["hearts"] == 1, "good talk earns Friends and the first heart")
 	check(not t1["again_ok"], "no AGAIN for a once-a-day action")
 	var t2: Dictionary = card3.apply(talk)
-	check(not t2["ok"] and t2["reason"] == "daily_once", "second talk with Mali the same day earns nothing")
+	check(not t2["ok"] and t2["reason"] == "daily_once", "second talk with Tong the same day earns nothing")
 	var weak := talk.duplicate()
 	weak["key"] = "ploy"
 	weak["score"] = 0.3
 	weak["extra"] = {"regular": "ploy"}
 	var t3: Dictionary = card3.apply(weak)
 	check(t3["ok"] and t3["hearts"] == 0, "weak talk: still earns, no heart")
+	# An owner (Prae, id mali; Daniele 2026-11-02): the talk refills Friends, but no hearts are kept or shown.
+	var owner := talk.duplicate()
+	owner["key"] = "mali"
+	owner["extra"] = {"regular": "mali"}
+	var t4: Dictionary = card3.apply(owner)
+	check(t4["ok"] and t4["gains"].get("friends", 0.0) > 0.0, "a good talk with the owner still refills Friends")
+	check(t4["hearts"] == -1 and not n3.ext.get(CardScript.HEARTS_KEY, {}).has("mali"), "owner: no hearts kept (%s)" % t4["hearts"])
+	card3._build(talk, t1)
+	check(_heart_glyphs(card3) == CardScript.MAX_HEARTS, "a regular's result card draws the hearts row (%d)" % _heart_glyphs(card3))
+	for c in card3.get_children():
+		c.free()   # _build only queues the old card for deletion
+	card3._build(owner, t4)
+	check(_heart_glyphs(card3) == 0, "owner: the result card draws no hearts (%d)" % _heart_glyphs(card3))
 	card3.free()
 	n3.free()
+
+	# Cast roles: owners are never befriended, regulars are; the venue tag carries a heart for regulars only.
+	check(Cast.role("mali") == Cast.OWNER and Cast.is_owner("mali") and not Cast.befriends("mali"), "Prae (id mali) is an owner, not befriended")
+	check(Cast.befriends("tong") and Cast.befriends("ploy"), "regulars are befriended")
+	check(Zones.tag_text("mali") == "Prae", "owner's tag is her name, no heart (%s)" % Zones.tag_text("mali"))
+	check(Zones.tag_text("tong").ends_with("♥"), "a regular's tag carries the heart (%s)" % Zones.tag_text("tong"))
 
 	# Lean bonus: extra.lean adds candle_talk_lean (+5 Friends) on top of the talk, and only then.
 	var n5 := fresh_needs()
