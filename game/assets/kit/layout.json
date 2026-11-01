@@ -2,12 +2,28 @@
  "axes": "godot: x east, y up, z south",
  "kit": [
   {
+   "name": "StreetDoorLeaf",
+   "object": "staff_door",
+   "position": [
+    -0.1,
+    0.0,
+    7.2
+   ],
+   "rotation_y": 90.0,
+   "scale": [
+    1.2,
+    1.0,
+    1.0
+   ],
+   "zone": "Lobby"
+  },
+  {
    "name": "ExitSignStreet",
    "object": "exit_sign",
    "position": [
     0.06,
     2.6,
-    7.175
+    7.2
    ],
    "rotation_y": 90.0,
    "scale": [
@@ -117,13 +133,13 @@
    "name": "StickerDoorLeaf",
    "object": "sticker_door",
    "position": [
-    12.25,
+    13.65,
     0.0,
-    13.35
+    13.15
    ],
    "rotation_y": 0.0,
    "scale": [
-    1.0,
+    1.2,
     1.0,
     1.0
    ],
@@ -725,7 +741,7 @@
    "name": "GameCabinet",
    "object": "game_cabinet_bc",
    "position": [
-    9.4,
+    10.3,
     0.0,
     12.65
    ],
@@ -2770,18 +2786,34 @@
    "zone": "Lounge"
   },
   {
-   "name": "StairRun",
+   "name": "StairRunLower",
    "object": "stair_run",
    "position": [
-    3.25,
+    6.05,
     0.0,
-    10.1
+    12.25
    ],
-   "rotation_y": -180.0,
+   "rotation_y": 90.0,
    "scale": [
     1.0,
+    0.485,
+    1.096
+   ],
+   "zone": "Stairs"
+  },
+  {
+   "name": "StairRunUpper",
+   "object": "stair_run",
+   "position": [
+    3.15,
+    1.6,
+    9.55
+   ],
+   "rotation_y": 0.0,
+   "scale": [
     1.0,
-    1.0
+    0.727,
+    0.986
    ],
    "zone": "Stairs"
   },
@@ -3426,7 +3458,7 @@
    "zone": "MainRoom"
   },
   {
-   "name": "StaffDoorBar",
+   "name": "StaffDoorBarLeaf",
    "object": "staff_door",
    "position": [
     37.55,
@@ -3442,16 +3474,16 @@
    "zone": "MainRoom"
   },
   {
-   "name": "RedDoor",
+   "name": "RedDoorLeaf",
    "object": "red_door",
    "position": [
-    38.4,
+    39.6,
     0.0,
-    13.4
+    12.75
    ],
-   "rotation_y": 90.0,
+   "rotation_y": -180.0,
    "scale": [
-    1.0,
+    1.2,
     1.0,
     1.0
    ],
@@ -12474,7 +12506,7 @@
    ],
    "preset_slot": "PATRON",
    "rotation_y": 90.0,
-   "seat_h": 0.6,
+   "seat_h": 0.45,
    "spot": "Raised_T0_C",
    "zone": "Raised"
   },
@@ -12487,7 +12519,7 @@
    ],
    "preset_slot": "PATRON",
    "rotation_y": -90.0,
-   "seat_h": 0.6,
+   "seat_h": 0.45,
    "spot": "Raised_T0_S0",
    "zone": "Raised"
   },
@@ -12500,7 +12532,7 @@
    ],
    "preset_slot": "PATRON",
    "rotation_y": -90.0,
-   "seat_h": 0.6,
+   "seat_h": 0.45,
    "spot": "Raised_T0_S1",
    "zone": "Raised"
   },
@@ -12513,7 +12545,7 @@
    ],
    "preset_slot": "PATRON",
    "rotation_y": 90.0,
-   "seat_h": 0.6,
+   "seat_h": 0.45,
    "spot": "Raised_T1_C",
    "zone": "Raised"
   },
@@ -12526,7 +12558,7 @@
    ],
    "preset_slot": "PATRON",
    "rotation_y": -90.0,
-   "seat_h": 0.6,
+   "seat_h": 0.45,
    "spot": "Raised_T1_S0",
    "zone": "Raised"
   },
@@ -12539,7 +12571,7 @@
    ],
    "preset_slot": "PATRON",
    "rotation_y": -90.0,
-   "seat_h": 0.6,
+   "seat_h": 0.45,
    "spot": "Raised_T1_S1",
    "zone": "Raised"
   },
@@ -12552,7 +12584,7 @@
    ],
    "preset_slot": "PATRON",
    "rotation_y": 90.0,
-   "seat_h": 0.6,
+   "seat_h": 0.45,
    "spot": "Raised_T2_C",
    "zone": "Raised"
   },
@@ -12565,7 +12597,7 @@
    ],
    "preset_slot": "PATRON",
    "rotation_y": -90.0,
-   "seat_h": 0.6,
+   "seat_h": 0.45,
    "spot": "Raised_T2_S0",
    "zone": "Raised"
   },
@@ -12578,7 +12610,7 @@
    ],
    "preset_slot": "PATRON",
    "rotation_y": -90.0,
-   "seat_h": 0.6,
+   "seat_h": 0.45,
    "spot": "Raised_T2_S1",
    "zone": "Raised"
   },
@@ -12591,7 +12623,7 @@
    ],
    "preset_slot": "PATRON",
    "rotation_y": 90.0,
-   "seat_h": 0.6,
+   "seat_h": 0.45,
    "spot": "Raised_T3_C",
    "zone": "Raised"
   },
@@ -12604,7 +12636,7 @@
    ],
    "preset_slot": "PATRON",
    "rotation_y": -90.0,
-   "seat_h": 0.6,
+   "seat_h": 0.45,
    "spot": "Raised_T3_S0",
    "zone": "Raised"
   },
@@ -12617,7 +12649,7 @@
    ],
    "preset_slot": "PATRON",
    "rotation_y": -90.0,
-   "seat_h": 0.6,
+   "seat_h": 0.45,
    "spot": "Raised_T3_S1",
    "zone": "Raised"
   },
@@ -12630,7 +12662,7 @@
    ],
    "preset_slot": "PATRON",
    "rotation_y": 90.0,
-   "seat_h": 0.6,
+   "seat_h": 0.45,
    "spot": "Raised_T4_C",
    "zone": "Raised"
   },
@@ -12643,7 +12675,7 @@
    ],
    "preset_slot": "PATRON",
    "rotation_y": -90.0,
-   "seat_h": 0.6,
+   "seat_h": 0.45,
    "spot": "Raised_T4_S0",
    "zone": "Raised"
   },
@@ -12656,7 +12688,7 @@
    ],
    "preset_slot": "PATRON",
    "rotation_y": -90.0,
-   "seat_h": 0.6,
+   "seat_h": 0.45,
    "spot": "Raised_T4_S1",
    "zone": "Raised"
   },

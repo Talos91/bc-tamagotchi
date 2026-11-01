@@ -5,7 +5,10 @@ extends CharacterBody3D
 ## input cancels a tap-walk. The camera is the CameraRig child (camera_rig.gd); the body is a PatronFigure
 ## (scenes/venue/patron_figure.tscn) with the `look` below, and a warm ring on the floor marks the player.
 ## main.gd sets `tap_handler` (a tap on a zone walks there and opens it), `input_enabled` (off under sheets and
-## minigames), `anim_suffix` (tipsiness: "_warm" plays idle_warm / walk_warm) and `pose_override` (seated at a table).
+## minigames), `anim_suffix` (tipsiness: "_warm" plays idle_warm / walk_warm) and `pose_override` (played standing still).
+## Seats: `sit_at(seat)` walks to a seat spot of the venue (VenueSession.find_seat) and, on arrival, puts the
+## character on it facing the table, at the seat's height, in the seated pose; any stick / key input or a walk
+## stands them up where they were. The player is in group "door_user", so swing doors open for them.
 
 @export var speed := 3.6
 @export var accel := 18.0
@@ -14,6 +17,7 @@ extends CharacterBody3D
 
 const TAP_MAX_MOVE := 24.0      ## pixels a touch may travel and still count as a tap
 const TAP_MAX_TIME := 0.35      ## seconds
+const SEAT_REACH := 1.0         ## metres from a seat spot at which a walk to it ends in sitting down
 
 var joystick: TouchJoystick   ## set by main.gd; null = keyboard only
 var walking_to := false       ## true while following a tap-to-move path
@@ -27,6 +31,9 @@ var _press_pos := Vector2.ZERO
 var _press_time := 0
 var _move_yaw := 0.0            ## camera yaw latched when a stick / key press starts (see input_to_world)
 var _moving := false
+var seated := false             ## on a seat (sit_at arrived)
+var seat := {}                  ## the seat taken or being walked to: {node, pos, yaw, h, couch, pose}
+var _stand_pos := Vector3.ZERO  ## where the player stood before sitting down (they stand up there)
 
 @onready var rig: CameraRig = $CameraRig
 @onready var _agent: NavigationAgent3D = $NavigationAgent3D
@@ -35,6 +42,7 @@ var _moving := false
 
 func _ready() -> void:
 	figure.set_look(look)
+	add_to_group("door_user")
 
 func _unhandled_input(event: InputEvent) -> void:
 	if not input_enabled:
@@ -68,8 +76,39 @@ func tap_at(screen_pos: Vector2) -> bool:
 ## The agent's path query snaps the target to the navmesh, so off-mesh taps (a table top) walk to the nearest
 ## reachable point.
 func walk_to(world_pos: Vector3) -> void:
+	stand_up()
 	_agent.target_position = world_pos
 	walking_to = true
+
+## Walk to a seat spot and sit on it (the seat's spot is inside the chair's collider, so the walk ends next to it).
+func sit_at(s: Dictionary) -> void:
+	stand_up()
+	var fwd := Basis(Vector3.UP, float(s["yaw"])) * Vector3(0, 0, 1)
+	# Approach from behind the chair, or in front of a couch / banquette (backs to the wall)
+	walk_to(s["pos"] + fwd * (0.7 if s.get("couch", false) else -0.45))
+	seat = s
+
+## True while walking to a seat taken with sit_at.
+func seat_pending() -> bool:
+	return not seat.is_empty() and not seated
+
+func stand_up() -> void:
+	if seated:
+		global_position = _stand_pos
+		figure.position.y = 0.0
+		velocity = Vector3.ZERO
+	seated = false
+	seat = {}
+
+func _take_seat() -> void:
+	_stand_pos = global_position
+	var p: Vector3 = seat["pos"]
+	global_position = p
+	velocity = Vector3.ZERO
+	_body.rotation.y = float(seat["yaw"])
+	# As venue_patrons.gd seats the crowd: the preset's thighs sit SEAT_H * FIG_SCALE above its root
+	figure.position.y = float(seat["h"]) - PatronFigure.SEAT_H * PatronFigure.FIG_SCALE
+	seated = true
 
 func _input_vector() -> Vector2:
 	var v := Vector2(
@@ -81,6 +120,23 @@ func _input_vector() -> Vector2:
 
 func _physics_process(delta: float) -> void:
 	var iv := _input_vector()
+	if seated:
+		if iv.length() > 0.1:
+			stand_up()
+		else:
+			figure.move_speed = 0.0
+			figure.play(str(seat.get("pose", "sit")))
+			return
+	elif seat_pending() and iv.length() <= 0.1:
+		# Next to the seat, or the walk ended as close as the navmesh goes: sit if it is within reach, else give up
+		var d: Vector3 = seat["pos"] - global_position
+		var reach := Vector2(d.x, d.z).length()
+		if reach < SEAT_REACH or (not walking_to and reach < 1.6):
+			walking_to = false
+			_take_seat()
+			return
+		if not walking_to:
+			seat = {}
 	var dir := Vector3.ZERO
 	if iv.length() > 0.1:
 		walking_to = false

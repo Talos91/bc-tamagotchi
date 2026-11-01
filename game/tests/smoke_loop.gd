@@ -2,7 +2,7 @@ extends SceneTree
 ## Headless smoke test of the whole visit loop from main.tscn: Welcome Back on arrival, the Lounge entry bonus, then
 ## the player walks to the bar, the stage, Mali's table and the arcade, opens each zone's sheet and does its rows
 ## (plain actions and all four minigames, finished through the shared frame and result card), listens to a song,
-## sits a minute, and leaves through the street door; the walk-out summary must show the visit's gains.
+## sits a minute on a chair, and leaves through the street door; the walk-out summary must show the visit's gains.
 ##   godot --headless --path . --script res://tests/smoke_loop.gd
 
 const HouseBand = preload("res://scripts/zones/house_band.gd")
@@ -91,7 +91,11 @@ func _init() -> void:
 	var f1: float = needs.meters["friends"]
 	check(f1 > f0, "Candle Talk refills Friends (%.1f -> %.1f)" % [f0, f1])
 	await row("sit")
-	check(not s.sitting.is_empty(), "sitting down")
+	for i in 900:   # the player walks to a free chair at the table and sits; the minute starts once seated
+		if p.seated:
+			break
+		await physics_frame
+	check(not s.sitting.is_empty() and p.seated, "sitting down on a chair at the table")
 	s.tick(VenueSession.SIT_SECONDS + 1.0)
 	check(s.sitting.is_empty() and needs.meters["friends"] > f1, "a minute seated refills Friends (%.1f -> %.1f)" % [f1, needs.meters["friends"]])
 	await open_here()

@@ -8,12 +8,14 @@ extends Node3D
 ##   bar      the bar_counter run (zone Bar), approached from the stool side; Nam is the bartender (spawn Bar_Bartender)
 ##   stage    the stage_carpet_tile bounds (zone Stage: the stage is at floor level, marked by carpets) plus the
 ##            floor in front, approached at spawn Wander_StageFront
-##   table    every round_table of zones Tables, Raised and Lounge; REGULAR_TABLE hosts the regular Mali
+##   table    every round_table of zones Tables, Raised and Lounge; REGULAR_TABLE hosts the regular (id mali, shown
+##            as Prae since 2026-11-01); the raised strip's small tables reach their couch seats (radius x 0.95 at least)
 ##   arcade   the pinball (pinball_machine, or arcade_cabinet while the kit lacked it) on the lounge's west wall
 ##   cabinet  the Black Cabin game machine (game_cabinet_bc) by the stairs: stub, generic sheet for now
 ##   tall     every tall_table_square (buffer zone and the main room's west opening): stub, generic sheet
 ##   smoking  the smoking room, one zone over its tables: stub, generic sheet
-##   exit     the street door under exit_sign ExitSignStreet (lobby west wall), approached from its front
+##   exit     the street door under exit_sign ExitSignStreet (lobby west wall), approached from its front; it reaches
+##            out over the step of street beyond the door
 ## A zone is a Dictionary: id, kind, shape ("rect" | "circle"), rect (Rect2 in x,z), center (Vector2 x,z), radius,
 ## approach (Vector3 on the floor), regular ("" or a cast id). Where zones overlap, circles (a table, the cabinet)
 ## win over the big rects (bar, stage, smoking), then the nearest centre.
@@ -78,7 +80,7 @@ static func defs_from_layout(path: String) -> Array[Dictionary]:
 			var z := _zone("table:" + str(k["name"]), "table", Rect2(), p)
 			z["shape"] = "circle"
 			z["center"] = Vector2(p.x, p.z)
-			z["radius"] = TABLE_RADIUS * float(k["scale"][0])
+			z["radius"] = TABLE_RADIUS * maxf(float(k["scale"][0]), 0.95)
 			z["regular"] = REGULAR if str(k["name"]) == REGULAR_TABLE else ""
 			out.append(z)
 
@@ -131,6 +133,8 @@ static func defs_from_layout(path: String) -> Array[Dictionary]:
 			var w := 2.0 if absf(fwd.x) < 0.5 else EXIT_DEPTH
 			var dd := EXIT_DEPTH if absf(fwd.x) < 0.5 else 2.0
 			var r := Rect2(c.x - w * 0.5, c.z - dd * 0.5, w, dd)
+			var out_pt := p - fwd * (EXIT_DEPTH + 0.2)   # the step of street outside the open door
+			r = r.expand(Vector2(out_pt.x, out_pt.z))
 			out.append(_zone("exit", "exit", r, p + fwd * 0.9))
 	return out
 

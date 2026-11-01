@@ -4,6 +4,9 @@ extends Node3D
 ## Lounge_Chair0, Bar_Bartender, Wander_Aisle, ...) with metas zone, pose ("sit" | "stand" | "staff" | "wander")
 ## and seat_h. On ready it seats `seated_count` patrons (at least one per seating zone), puts the bartender behind
 ## the bar and sends `wanderer_count` patrons walking between the Wander_* spots on the navmesh.
+## The player takes seats from the same spots (VenueSession.find_seat): is_taken() tells which have a patron, and
+## vacate() gets that patron up to wander. Walkers are in group "door_user" (swing doors open for them); the staff
+## member at the order hatch now and then steps out through the staff door (group "staff_door_user") and back.
 ## Figures are PatronFigure scenes (scenes/venue/patron_figure.tscn): character presets when they are imported,
 ## palette-swapped box placeholders otherwise.
 
@@ -22,6 +25,9 @@ const FREE_POSES := ["sit_hold", "sit_hold", "sit_applaud"]
 const SEAT_ZONES := ["Tables", "Bar", "Lounge", "Buffer", "Raised", "Smoking"]
 const WALK_SPEED := 1.1
 const SERVER_START := Vector3(30.0, 0, 6.7)
+## Staff door of the walled bar area (build_venue.gd STAFF_DOOR_BAR, wall z MAIN_SE_Z + 0.1)
+const STAFF_DOOR_X := 37.55
+const STAFF_DOOR_Z := 12.75
 ## PatronFigure draws presets at its FIG_SCALE; seated figures are lowered so their thighs land on the seat.
 const FIG_SCALE := PatronFigure.FIG_SCALE
 ## The bartender stands on the raised duckboard behind the counter (05/06 show them chest-up over the 1.1 m bar)
@@ -42,9 +48,15 @@ var _wanderers: Array[Dictionary] = []
 var _wander_points: Array[Vector3] = []
 var _bartender: PatronFigure
 var _bar_x := Vector2(22.6, 35.0)   # plan v4 bar, x 21.8..35.75
+var taken := {}                     # seat spot -> the patron on it
+var _runner: PatronFigure           # hatch staff on errands through the staff door
+var _errand: Array[Vector3] = []
+var _errand_wait := 0.0
+var _hatch_pos := Vector3.ZERO
 var _rng := RandomNumberGenerator.new()
 
 func _ready() -> void:
+	add_to_group("venue_patrons")
 	_rng.seed = crowd_seed
 	var seats: Array[Node3D] = []
 	var staff: Node3D = null
@@ -81,6 +93,7 @@ func _ready() -> void:
 		f.position = s.position + Vector3(0, float(s.get_meta("seat_h", PatronFigure.SEAT_H)) - PatronFigure.SEAT_H * FIG_SCALE, 0)
 		f.rotation.y = s.rotation.y
 		f.play("sit")
+		taken[s] = f
 		n += 1
 	for s in band:
 		var b: Array = BAND[s.get_meta("pose")]
@@ -98,6 +111,10 @@ func _ready() -> void:
 		h.position = hatch.position
 		h.rotation.y = hatch.rotation.y
 		h.play("idle")
+		h.add_to_group("staff_door_user")
+		_runner = h
+		_hatch_pos = h.position
+		_errand_wait = _rng.randf_range(6.0, 12.0)
 	for i in mini(wanderer_count, _wander_points.size()):
 		var f := _spawn("server" if i == 0 else presets[n % presets.size()], "Server" if i == 0 else "Wanderer%d" % i,
 			{"walk": "walk_tray", "idle": "idle_tray"} if i == 0 else {})
@@ -107,7 +124,21 @@ func _ready() -> void:
 				if wp.distance_to(SERVER_START) < f.position.distance_to(SERVER_START):
 					f.position = wp
 		_wanderers.append({"fig": f, "path": PackedVector3Array(), "idx": 0, "wait": _rng.randf_range(0.5, 4.0)})
+		f.add_to_group("door_user")
 		n += 1
+
+func is_taken(seat: Node3D) -> bool:
+	return taken.has(seat)
+
+## The patron on `seat` gets up and wanders off, so the player can sit there.
+func vacate(seat: Node3D) -> void:
+	var f: PatronFigure = taken.get(seat)
+	taken.erase(seat)
+	if f == null:
+		return
+	f.position = seat.position
+	f.add_to_group("door_user")
+	_wanderers.append({"fig": f, "path": PackedVector3Array(), "idx": 0, "wait": 0.3})
 
 func _shuffle(a: Array) -> void:
 	for i in range(a.size() - 1, 0, -1):
@@ -142,6 +173,41 @@ func _spawn(preset: String, nm: String, anims := {}) -> PatronFigure:
 func _process(delta: float) -> void:
 	_walk_wanderers(delta)
 	_pace_bartender(delta)
+	_run_errand(delta)
+
+## Hatch staff: wait at the hatch, walk to the staff door, out a step into the main room, pause, and back (straight
+## lines: the staff room is off the navmesh). The door swings for them (venue_doors.gd); the player never passes.
+func _run_errand(delta: float) -> void:
+	if _runner == null:
+		return
+	if _errand.is_empty():
+		_errand_wait -= delta
+		_runner.play("idle")
+		_runner.rotation.y = lerp_angle(_runner.rotation.y, PI, 1.0 - exp(-6.0 * delta))
+		if _errand_wait <= 0.0:
+			var inside := Vector3(STAFF_DOOR_X, 0, STAFF_DOOR_Z + 0.6)
+			var outside := Vector3(STAFF_DOOR_X, 0, STAFF_DOOR_Z - 1.3)
+			_errand = [inside, outside, outside, inside, _hatch_pos]
+			_errand_wait = 2.5   # pause outside
+		return
+	var goal: Vector3 = _errand[0]
+	var d := goal - _runner.position
+	d.y = 0.0
+	if d.length() < 0.05:
+		_errand.pop_front()
+		if _errand.size() == 3:   # the pause outside, then back in
+			_errand_wait -= delta
+			if _errand_wait > 0.0:
+				_errand.push_front(goal)
+				_runner.play("idle")
+				return
+		if _errand.is_empty():
+			_errand_wait = _rng.randf_range(10.0, 20.0)
+		return
+	_runner.position += d.normalized() * minf(WALK_SPEED * delta, d.length())
+	_runner.rotation.y = lerp_angle(_runner.rotation.y, atan2(d.x, d.z), 1.0 - exp(-8.0 * delta))
+	_runner.move_speed = WALK_SPEED
+	_runner.play("walk")
 
 func _walk_wanderers(delta: float) -> void:
 	var map := get_world_3d().navigation_map

@@ -3,6 +3,9 @@ extends Node
 ## What the player can do in each zone and what it earns: the GDD §2.3 refill table, applied only through
 ## Needs.apply_action with the existing action ids (rules.gd). Owns the visit lifecycle in the room (arrive, leave),
 ## passive listening to the house band, the one-minute sit, tipsiness (03-cast §5.1) and the drink menu.
+## Sitting takes a real seat (find_seat): the player walks to a free chair, couch place or stool of the zone's table
+## and sits on it; the minute runs once seated and stops when they stand up. Zones without seats (the game cabinet)
+## keep the old stand-still minute. "Take a stool" at the bar only seats the player (no need effect).
 ## UI-free: the HUD and sheets read rows_for() and listen to the signals; main.gd opens minigames on request.
 
 signal action_done(card: Dictionary)  ## {line, gains, tab, ok, reason, quiet}; quiet = passive, chips only
@@ -40,7 +43,7 @@ var tipsy := Tipsiness.new()
 var drinks_this_visit := 0
 var songs_heard := 0
 var start_meters := {}
-var sitting := {}              ## {zone, key, left} while seated
+var sitting := {}              ## {zone, key, left, seat (bool)} from "sit" until the minute is up or they stand
 var _heard := 0.0
 var _quiet_end := false
 
@@ -122,6 +125,9 @@ func rows_for(zone: Dictionary) -> Array[Dictionary]:
 				rows.append(_row("try", "venue.sheet.bar.try", T.t("venue.sheet.bar.try_sub", {"drink": T.t("venue.drink." + nxt)}), "drinks", false, no_alc))
 			rows.append(_row("mocktail", "venue.sheet.bar.mocktail", T.t("venue.sheet.bar.mocktail_sub"), "drinks"))
 			rows.append(_row("water", "venue.sheet.bar.water", T.t("venue.sheet.bar.water_sub"), "drinks"))
+			var on_stool: bool = player != null and player.seated and str(player.seat.get("table", "")) == "Bar"
+			rows.append(_row("stool", "venue.sheet.bar.stool", T.t("venue.sheet.bar.stool_sub"), "", false,
+				T.t("venue.sheet.bar.on_stool") if on_stool else ""))
 		"stage":
 			rows.append(_row("front", "venue.sheet.stage.front", T.t("venue.sheet.stage.front_sub"), "music"))
 			rows.append(_row("rhythm", "venue.sheet.stage.rhythm", T.t("venue.sheet.stage.rhythm_sub", {"best": _best("front_row_rhythm")}), "music", true))
@@ -269,9 +275,16 @@ func do_row(zone: Dictionary, row_id: String) -> bool:
 		"talk":
 			_request("candle_talk", {"regular": zone["regular"]})
 		"sit":
-			sitting = {"zone": zone["id"], "key": sit_key(zone), "left": SIT_SECONDS}
+			var seat := find_seat(zone)
+			sitting = {"zone": zone["id"], "key": sit_key(zone), "left": SIT_SECONDS, "seat": not seat.is_empty()}
+			if not seat.is_empty() and seat["node"] != player.seat.get("node"):
+				player.sit_at(seat)
 			_apply_mood()
 			state_changed.emit()
+		"stool":
+			var seat := find_seat(zone)
+			if not seat.is_empty():
+				player.sit_at(seat)
 		"pinball":
 			_request("neon_pinball", {})
 		"leave":
@@ -294,7 +307,7 @@ func _count_drink(now: float, alcoholic: bool) -> void:
 
 
 func _request(game_id: String, config: Dictionary) -> void:
-	cancel_sit()
+	cancel_sit(false)   # the minute stops; a seated player stays on the seat through the minigame
 	minigame_requested.emit(game_id, config)
 
 
@@ -323,7 +336,10 @@ func _card(r: Dictionary, line: String, quiet := false) -> void:
 		"reason": r.get("reason", ""), "quiet": quiet})
 
 
-func cancel_sit() -> void:
+## Ends the sit. `stand` also gets the player off the seat (leaving, the visit ending).
+func cancel_sit(stand := true) -> void:
+	if stand and is_instance_valid(player):
+		player.stand_up()
 	if sitting.is_empty():
 		return
 	sitting = {}
@@ -347,13 +363,20 @@ func tick(delta: float) -> void:
 	if needs.visit_active and player.rig.zone in ["lounge", "lobby", "corridor"] and not needs.visit_once.has("enter_lounge"):
 		_card(needs.apply_action("enter_lounge"), T.t("venue.card.lounge"), true)
 	if not sitting.is_empty():
-		if player.walking_to or player.velocity.length() > 0.5 or zones.current.get("id", "") != sitting["zone"]:
-			cancel_sit()
+		var off := false
+		var counting := true
+		if sitting["seat"]:
+			off = not player.seated and not player.seat_pending()   # stood up, or never got to the seat
+			counting = player.seated
 		else:
+			off = player.walking_to or player.velocity.length() > 0.5 or zones.current.get("id", "") != sitting["zone"]
+		if off:
+			cancel_sit()
+		elif counting:
 			sitting["left"] -= delta
 			if sitting["left"] <= 0.0:
 				var key: String = sitting["key"]
-				cancel_sit()
+				cancel_sit(false)   # the minute is up; the player keeps the seat until they move
 				_card(needs.apply_action("sit_with", 1.0, key), T.t("venue.card.sit"))
 	if tipsy.update(needs.real_now()):
 		_apply_mood()
@@ -383,4 +406,54 @@ func _apply_mood() -> void:
 	if not is_instance_valid(player):
 		return
 	player.anim_suffix = Tipsiness.ANIM_SUFFIX[tipsy.state()]
-	player.pose_override = "stand_drink" if not sitting.is_empty() else ""
+	player.pose_override = "stand_drink" if not sitting.is_empty() and not sitting["seat"] else ""
+
+
+# --- Seats ---------------------------------------------------------------------------------------
+
+## The seat spot the player takes at this zone (spots of Venue/Patrons/Spots in group "seat", tagged with their
+## table by tools/build_venue.gd; patrons sit on the same spots): the player's own seat if they already sit there,
+## else the free seat nearest to them, else the nearest taken one, whose patron gets up to make room.
+## {} where the zone has no seats. {node, pos, yaw, h, couch, table, pose}
+func find_seat(zone: Dictionary) -> Dictionary:
+	var crowd := get_tree().get_first_node_in_group("venue_patrons")
+	var mine: Variant = player.seat.get("node")
+	var best: Node3D = null
+	var best_d := INF
+	var taken_best: Node3D = null
+	var taken_d := INF
+	for s in get_tree().get_nodes_in_group("seat"):
+		if not _seat_of(s, zone):
+			continue
+		if s == mine:
+			return player.seat
+		var d := (s as Node3D).global_position.distance_to(player.global_position)
+		if crowd != null and crowd.is_taken(s):
+			if d < taken_d:
+				taken_d = d
+				taken_best = s
+		elif d < best_d:
+			best_d = d
+			best = s
+	if best == null and taken_best != null:
+		crowd.vacate(taken_best)
+		best = taken_best
+	if best == null:
+		return {}
+	var couch: bool = best.get_meta("couch", false)
+	var table: String = best.get_meta("table", "")
+	return {"node": best, "pos": best.global_position, "yaw": best.global_rotation.y, "h": float(best.get_meta("seat_h", 0.45)),
+		"couch": couch, "table": table, "pose": "sit_hold" if couch or table == "HighCounter" else "sit_drink"}
+
+
+## A table zone's seats are its table's (zone id "table:<name>" / "tall:<name>"), the bar's are the counter stools,
+## the smoking room's are all its chairs.
+static func _seat_of(s: Node, zone: Dictionary) -> bool:
+	match zone.get("kind", ""):
+		"table", "tall":
+			return str(s.get_meta("table", "")) == str(zone["id"]).get_slice(":", 1)
+		"bar":
+			return str(s.get_meta("table", "")) == "Bar"
+		"smoking":
+			return str(s.get_meta("zone", "")) == "Smoking"
+	return false

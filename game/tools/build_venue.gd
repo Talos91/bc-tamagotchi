@@ -51,11 +51,23 @@ const VESTIBULE := Rect2(20.2, 15.0, 4.15, 1.7)
 const SMOKING := Rect2(38.3, 12.85, 3.5, 5.05)
 const STAGE := Rect2(27.6, 0.0, 6.3, 4.15)
 const BACKSTAGE := Rect2(24.3, -3.2, 3.2, 3.2)
-const STAIRS_LEG := Rect2(2.35, 8.5, 1.8, 3.0)
-const STAIRS_BLOCK := Rect2(2.35, 11.5, 6.3, 1.55)
-const STICKER_DOOR := Vector2(12.8, 14.5)   # x range on the lounge south wall
-const STREET_DOOR := Vector2(6.25, 8.1)     # z range on the lobby west wall
-const SMOKE_DOOR := Vector2(38.9, 40.3)     # x range on the wall z MAIN_SE_Z
+# Stairs (Daniele, playtest of v4): the first flight along the lounge's south wall (the Sticker-door wall), its bottom
+# step facing the game machine, rising west to a landing in the SW corner; the second flight turns right and climbs
+# north along the west wall into the floor above (closed: the player can climb to it, not into it).
+const STAIR_LOWER := Rect2(4.05, 11.45, 4.0, 1.6)     # first flight, foot at its east end
+const STAIR_LANDING := Rect2(2.35, 11.35, 1.7, 1.7)
+const STAIR_UPPER := Rect2(2.35, 7.75, 1.6, 3.6)      # second flight, foot at its south end (the landing)
+const STAIR_H1 := 1.6                                 # landing height
+const STAIR_TOP := 4.0                                # the floor above
+const STAIR_STOP_Z := 10.05                           # rope across the second flight: as high as the player climbs
+const CABINET_X := 10.3                               # game machine, ~1.9 m east of the bottom step
+const DOOR_W := 1.2                                   # walk-through doors: kit leaf (1 m) stretched to this opening
+const STICKER_DOOR := Vector2(13.05, 14.25)  # x range on the lounge south wall
+const STREET_DOOR := Vector2(6.6, 7.8)       # z range on the lobby west wall
+const SMOKE_DOOR := Vector2(39.0, 40.2)      # x range on the wall z MAIN_SE_Z
+const STAFF_DOOR_BAR := Vector2(37.05, 38.05)
+const DOOR_USERS := "door_user"              # groups whose members open a door (player, crowd; staff_door_user)
+const STAFF_USERS := "staff_door_user"
 const STAFF_PASS := Vector2(36.05, 36.95)   # half wall for orders in the staff room's north wall, beside the staff door
 const TINY_ROW_Z := 5.1
 const TINY_ROW_X := [27.0, 28.45, 30.05, 31.55, 33.1, 34.6]
@@ -155,6 +167,10 @@ func _init() -> void:
 	looks.name = "Looks"
 	looks.set_script(load("res://scenes/venue/venue_looks.gd"))
 	_own(looks, vroot)
+	var doors := Node.new()
+	doors.name = "Doors"
+	doors.set_script(load("res://scenes/venue/venue_doors.gd"))
+	_own(doors, vroot)
 	patrons.set_script(load("res://scripts/venue_patrons.gd"))
 	patrons.set("seated_count", 64)   # more seats than before (118); 64 seated + band + staff + wanderers stays under the draw budget
 	vroot.set_script(load("res://scripts/venue.gd"))
@@ -435,6 +451,30 @@ func _ceiling_group(n: Node) -> void:
 func _door(parent: Node, nm: String, kname: String, c: Vector3, rot: float, normal: Vector3, solid := true) -> void:
 	_cut(_ph(parent, kname, c, rot, nm, solid), normal)
 
+## Door that swings (Daniele, playtest of v4): the kit piece (frame and leaf are one mesh, room side +z) is the leaf,
+## hung from a hinge pivot at the +x jamb of a `w` m opening centred on `c`. scenes/venue/venue_doors.gd swings it
+## away from whoever of group `users` comes near and closes it after they pass. No collider on the leaf, so the
+## opening stays in the navmesh; a staff-only door gets a blocker in its opening instead (`block`).
+func _swing_door(parent: Node, nm: String, kname: String, c: Vector3, rot: float, normal: Vector3, w := DOOR_W,
+		users := DOOR_USERS, block := false) -> Node3D:
+	var pivot := Node3D.new()
+	pivot.name = nm
+	pivot.position = c + Basis(Vector3.UP, deg_to_rad(rot)) * Vector3(w * 0.5, 0, 0)
+	pivot.rotation_degrees.y = rot
+	pivot.set_meta("center", c)
+	pivot.set_meta("users", users)
+	pivot.add_to_group("swing_door", true)
+	_own(pivot, parent)
+	var kw: float = kit[kname].footprint_m[0] if kit.has(kname) else 1.0
+	_kit(pivot, kname, Vector3(-w * 0.5, 0, 0), 0.0, nm + "Leaf", Vector3(w / kw, 1, 1))
+	if block:
+		_collider(parent, nm + "Blocker", c + Vector3(0, 1.2, 0), Vector3(w, 2.4, 0.2), Vector3(0, deg_to_rad(rot), 0))
+	# Not hidden with its wall (a door left standing in a cut-away wall still reads as the way through); only when
+	# it crosses the sight line to the player. `normal` stays for reference.
+	pivot.set_meta("wall_normal", normal)
+	_cut(pivot, Vector3.ZERO)
+	return pivot
+
 ## Table dressing: a lit lamp and/or tealights (emissive); the light is shared by the caller.
 func _table_dressing(parent: Node, nm: String, top: Vector3, lamp: bool, tealights: int, glasses := 2) -> void:
 	if lamp:
@@ -447,7 +487,9 @@ func _table_dressing(parent: Node, nm: String, top: Vector3, lamp: bool, tealigh
 	_kit(parent, "napkin_cup", top + Vector3(0.06, 0, -0.2), 0.0, nm + "Napkins")
 
 ## Spot for scripts/venue_patrons.gd, named by zone so a later cast can be placed without moving the layout.
-func _seat(zone: String, nm: String, pos: Vector3, yaw_deg: float, seat_h := 0.45, pose := "sit") -> void:
+## `table` names the table (kit instance) a seat belongs to, so the player can take a free seat at the table they
+## tapped (scripts/zones/venue_session.gd); `couch` marks seats with their backs to a wall (stand up forward).
+func _seat(zone: String, nm: String, pos: Vector3, yaw_deg: float, seat_h := 0.45, pose := "sit", table := "", couch := false) -> void:
 	var m := Marker3D.new()
 	m.name = nm
 	m.position = pos
@@ -455,6 +497,10 @@ func _seat(zone: String, nm: String, pos: Vector3, yaw_deg: float, seat_h := 0.4
 	m.set_meta("zone", zone)
 	m.set_meta("pose", pose)
 	m.set_meta("seat_h", seat_h)
+	if pose == "sit":
+		m.set_meta("table", table)
+		m.set_meta("couch", couch)
+		m.add_to_group("seat", true)
 	_own(m, spots)
 
 func _wander_spots() -> void:
@@ -533,13 +579,24 @@ func _lobby_and_corridor() -> void:
 	_floor(g, CORRIDOR, _concrete_mat(), 0.0, "CorridorFloor")
 	_ceiling(g, Rect2(LOBBY.position.x, LOBBY.position.y, CORRIDOR.end.x - LOBBY.position.x, LOBBY.size.y))
 	# West (street) wall with the door, north wall, the long south wall, the corridor's east end
-	_wall_z(g, "WallWest", 0.0, LOBBY.position.y, LOBBY.end.y, wall, Vector3.LEFT)
+	_wall_z(g, "WallWest", 0.0, LOBBY.position.y, LOBBY.end.y, wall, Vector3.LEFT, [STREET_DOOR], 2.3)
 	_wall_x(g, "WallNorth", LOBBY.position.y, -0.2, LOUNGE.position.x, wall, Vector3.FORWARD)
 	_wall_x(g, "WallSouth", CORRIDOR.end.y, -0.2, CORRIDOR.end.x + 0.2, wall, Vector3.BACK)
 	_wall_z(g, "WallEast", CORRIDOR.end.x, CORRIDOR.position.y, CORRIDOR.end.y, wall, Vector3.RIGHT)
-	# Street door: a dark leaf in the west wall, exit sign above, facing east into the lobby
-	_box(g, "StreetDoor", Vector3(-0.06, 0, STREET_DOOR.x), Vector3(0.08, 2.4, STREET_DOOR.y - STREET_DOOR.x), _mat("door_dark", Color("120808"), 0.6), false)
-	_cut(_kit(g, "exit_sign", Vector3(0.06, 2.6, (STREET_DOOR.x + STREET_DOOR.y) * 0.5), 90.0, "ExitSignStreet"), Vector3.LEFT)
+	# Street door (where you come in and leave): a dark wooden leaf (kit staff_door; no photo of the real one yet)
+	# that swings open when someone comes near, exit sign above, front facing east into the lobby
+	var sz := (STREET_DOOR.x + STREET_DOOR.y) * 0.5
+	_swing_door(g, "StreetDoor", "staff_door", Vector3(-0.1, 0, sz), 90.0, Vector3.LEFT)
+	_cut(_kit(g, "exit_sign", Vector3(0.06, 2.6, sz), 90.0, "ExitSignStreet"), Vector3.LEFT)
+	# A step of night street outside it, so the open door shows the pavement; invisible kerb walls stop the player
+	var pave := _mat("pavement", Color("16171c"), 0.95)
+	_floor(g, Rect2(-1.8, sz - 1.6, 1.6, 3.2), pave, 0.0, "StreetStep")
+	_box(g, "StreetSill", Vector3(-0.2, -0.2, STREET_DOOR.x), Vector3(0.2, 0.2, STREET_DOOR.y - STREET_DOOR.x), _concrete_mat())
+	_collider(g, "StreetKerbW", Vector3(-1.85, 1.2, sz), Vector3(0.1, 2.4, 3.2))
+	_collider(g, "StreetKerbN", Vector3(-1.0, 1.2, sz - 1.65), Vector3(1.8, 2.4, 0.1))
+	_collider(g, "StreetKerbS", Vector3(-1.0, 1.2, sz + 1.65), Vector3(1.8, 2.4, 0.1))
+	_box(g, "StreetFacade", Vector3(-6.0, 0, sz - 4.0), Vector3(0.5, 6.0, 8.0), _mat("building", Color("0c0d12"), 0.95), false)
+	_box(g, "StreetWindow", Vector3(-5.52, 2.2, sz - 0.6), Vector3(0.04, 1.0, 1.2), _mat("lit_window", Color("ffd9a0"), 0.6, 1.2), false)
 	# Lobby and corridor are one L corridor (Daniele, corrections on plan v4): no door between them. Framed pictures
 	# of regular customers on its walls later; wall_picture_framed placeholders for now.
 	for i in 2:
@@ -547,8 +604,9 @@ func _lobby_and_corridor() -> void:
 	for i in 4:
 		_cut(_ph(g, "wall_picture_framed" if i % 2 == 0 else "wall_picture_framed_b", Vector3(3.6 + i * 2.6, 1.4, CORRIDOR.end.y - 0.06), 180.0, "RegularPictureS%d" % i, false), Vector3.BACK)
 	# None on the corridor's lounge side: that wall hides on the sight line and its pictures would float
-	# Sticker door (open all night): the door leaf stands open against the corridor wall, stickers on it
-	_door(g, "StickerDoorLeaf", "sticker_door", Vector3(STICKER_DOOR.x - 0.55, 0, CORRIDOR.position.y + 0.1), 0.0, Vector3.FORWARD, false)
+	# Sticker door between the corridor and the lounge: swings open for whoever comes through, stickers on the
+	# corridor side (front +z)
+	_swing_door(g, "StickerDoor", "sticker_door", Vector3((STICKER_DOOR.x + STICKER_DOOR.y) * 0.5, 0, LOUNGE.end.y + 0.1), 0.0, Vector3.BACK)
 	_omni(g, "LobbyLight", Color("ffc890"), 0.9, 5.0, Vector3(1.1, 3.2, 8.0))
 	_omni(g, "CorridorLight", Color("ff9a60"), 0.8, 6.0, Vector3(9.0, 3.3, 14.1))
 	for x in [4.0, 10.0]:
@@ -585,8 +643,8 @@ func _lounge() -> void:
 		var z := 2.6 + i * 1.0
 		_table_dressing(g, "LongTable%d" % i, Vector3(3.9, 0.75, z), i != 1, 1 if i == 1 else 0, 1)
 		_kit_solid(g, "cafe_chair", Vector3(4.75, 0, z), -90.0, "Chair%d" % i)
-		_seat("Lounge", "Lounge_Chair%d" % i, Vector3(4.75, 0, z), -90.0)
-		_seat("Lounge", "Lounge_Banquette%d" % i, Vector3(LOUNGE.position.x + 0.3, 0, z), 90.0)
+		_seat("Lounge", "Lounge_Chair%d" % i, Vector3(4.75, 0, z), -90.0, 0.45, "sit", "LongTable")
+		_seat("Lounge", "Lounge_Banquette%d" % i, Vector3(LOUNGE.position.x + 0.3, 0, z), 90.0, 0.45, "sit", "LongTable", true)
 	_omni(g, "LongTableLightA", LAMP_GOLD, 2.2, 3.4, Vector3(3.9, 1.5, 2.8))
 	_omni(g, "LongTableLightB", LAMP_GOLD, 1.8, 3.2, Vector3(3.9, 1.5, 4.6))
 	# Pinball on the west wall between the banquette and the stairs (Daniele 2026-11-01); the kit's arcade cabinet
@@ -597,7 +655,7 @@ func _lounge() -> void:
 		_kit_solid(g, "arcade_cabinet", Vector3(LOUNGE.position.x + 0.45, 0, 7.2), 90.0, "ArcadeCabinet")
 	_omni(g, "PinballGlow", SCREEN_CYAN, 0.6, 2.4, Vector3(LOUNGE.position.x + 1.2, 1.4, 7.2))
 	# Black Cabin game machine by the stairs, near the Sticker door (flappy-bird style; zone stub "cabinet")
-	_ph(g, "game_cabinet_bc", Vector3(9.4, 0, LOUNGE.end.y - 0.4), 180.0, "GameCabinet")
+	_ph(g, "game_cabinet_bc", Vector3(CABINET_X, 0, LOUNGE.end.y - 0.4), 180.0, "GameCabinet")
 	# Two white columns where the map shows them
 	for i in 2:
 		var p: Vector3 = [Vector3(8.95, 0, 3.9), Vector3(8.95, 0, 9.75)][i]
@@ -610,7 +668,7 @@ func _lounge() -> void:
 	_box(g, "HighCounter", Vector3(12.65, 0, 1.0), Vector3(1.9, 0.95, 0.5), _mat("wood_mid", WOOD_MID, 0.4))
 	for i in 2:
 		_kit_solid(g, "bar_stool", Vector3(13.15 + i * 0.9, 0, 1.85), 180.0, "CounterStool%d" % i)
-		_seat("Lounge", "Lounge_Stool%d" % i, Vector3(13.15 + i * 0.9, 0, 1.85), 180.0, BAR_SEAT_H)
+		_seat("Lounge", "Lounge_Stool%d" % i, Vector3(13.15 + i * 0.9, 0, 1.85), 180.0, BAR_SEAT_H, "sit", "HighCounter")
 	_cut(_kit(g, "wall_lamp", Vector3(10.2, 1.7, 0.1), 0.0, "RedDiscLamp"), Vector3.FORWARD)
 	_cut(_kit(g, "ac_unit", Vector3(7.0, 3.3, 0.15), 0.0, "ACUnit"), Vector3.FORWARD)
 	_cut(_kit(g, "painting_a", Vector3(6.0, 1.4, 0.05), 0.0, "LoungePainting"), Vector3.FORWARD)
@@ -633,18 +691,82 @@ func _lounge() -> void:
 	_kit(g, "track_light", Vector3(6.0, ROOM_H, 7.0), 0.0, "TrackLight0")
 	_kit(g, "track_light", Vector3(12.0, ROOM_H, 11.0), 0.0, "TrackLight1")
 
-## Stairs in the lounge's south-west: the flight up along the west wall (rising south) onto the solid block in the
-## corner, which is the landing / the way upstairs (closed). Map: grey L.
+## Stairs in the lounge's south-west (Daniele, playtest of v4; map: grey L): the first flight along the south wall,
+## its bottom step facing the game machine, rises west to a landing in the corner; the second flight turns right and
+## climbs north along the west wall into the floor above, a dark bulkhead the steps disappear under. A velvet rope
+## across the second flight is as far as the player goes (upstairs is closed for now). The flights are kit stair_run
+## pieces stretched to fit; solid wedges under them carry the walk surface and the navmesh.
 func _stairs() -> void:
 	var g := _group("Stairs")
-	var run := 3.6
-	var rise := 2.4
-	var cx := STAIRS_LEG.get_center().x
-	_kit(g, "stair_run", Vector3(cx, 0, STAIRS_LEG.position.y + 1.6), 180.0, "StairRun")
-	_cut(_box(g, "Block", Vector3(STAIRS_BLOCK.position.x, 0, STAIRS_BLOCK.position.y), Vector3(STAIRS_BLOCK.size.x, rise, STAIRS_BLOCK.size.y), _mat("beam_black", BEAM_BLACK, 0.7)), Vector3.ZERO)
-	_box(g, "BlockWall", Vector3(STAIRS_BLOCK.position.x, rise, STAIRS_BLOCK.position.y), Vector3(STAIRS_BLOCK.size.x, ROOM_H - rise, 0.2), _mat("lounge_wall", Color("4a0c10"), 0.9), false)
-	_collider(g, "StairRamp", Vector3(cx, rise * 0.5 - 0.1, STAIRS_LEG.position.y + run * 0.5), Vector3(1.5, 0.2, sqrt(run * run + rise * rise)), Vector3(-atan2(rise, run), 0, 0))
-	_collider(g, "StairSide", Vector3(STAIRS_LEG.end.x, 1.2, STAIRS_LEG.get_center().y), Vector3(0.1, 2.4, STAIRS_LEG.size.y))
+	var dark := _mat("beam_black", BEAM_BLACK, 0.7)
+	var kh: float = kit.stair_run.height_m if kit.has("stair_run") else 3.3
+	var kl: float = kit.stair_run.footprint_m[1] if kit.has("stair_run") else 3.65
+	# First flight: kit rotated 90 (high end west), stretched to the run, squashed to the landing height
+	var lo := STAIR_LOWER
+	_kit(g, "stair_run", Vector3(lo.get_center().x, 0, lo.get_center().y), 90.0, "StairRunLower", Vector3(1, STAIR_H1 / kh, lo.size.x / kl))
+	_wedge(g, "LowerWedge", Vector3(lo.end.x, 0, lo.position.y), Vector3(lo.position.x, STAIR_H1, lo.end.y), Vector3.LEFT)
+	# Landing: a solid block in the corner
+	var la := STAIR_LANDING
+	_box(g, "Landing", Vector3(la.position.x, 0, la.position.y), Vector3(la.size.x, STAIR_H1, la.size.y), dark)
+	# Second flight on a plinth the height of the landing, rising north to the floor above
+	var up := STAIR_UPPER
+	_box(g, "UpperPlinth", Vector3(up.position.x, 0, up.position.y), Vector3(up.size.x, STAIR_H1, up.size.y), dark, false)
+	_kit(g, "stair_run", Vector3(up.get_center().x, STAIR_H1, up.get_center().y), 0.0, "StairRunUpper", Vector3(1, (STAIR_TOP - STAIR_H1) / kh, up.size.y / kl))
+	_wedge(g, "UpperWedge", Vector3(up.position.x, STAIR_H1, up.end.y), Vector3(up.end.x, STAIR_TOP, up.position.y), Vector3.FORWARD)
+	# Side rails on the open sides (the kit's own rail is on one side only): colliders up to above head height
+	_collider(g, "RailLower", Vector3(lo.get_center().x, 1.5, lo.position.y - 0.05), Vector3(lo.size.x, 3.0, 0.1))
+	_collider(g, "RailUpper", Vector3(up.end.x + 0.05, 2.2, (up.position.y + lo.position.y) * 0.5), Vector3(0.1, 4.4, lo.position.y - up.position.y))
+	_rail(g, "RailLowerBar", Vector3(lo.end.x, 0.9, lo.position.y), Vector3(lo.position.x, STAIR_H1 + 0.9, lo.position.y))
+	_rail(g, "RailUpperBar", Vector3(up.end.x, STAIR_H1 + 0.9, up.end.y), Vector3(up.end.x, STAIR_TOP + 0.9, up.position.y))
+	# The floor above: a dark bulkhead over the top of the second flight (cut away when it hides the player)
+	var bz := STAIR_STOP_Z - 0.1
+	var bulk := _box(g, "UpperFloor", Vector3(up.position.x, 2.9, up.position.y - 0.4), Vector3(up.size.x + 0.25, ROOM_H - 2.9, bz - up.position.y + 0.4), dark, false)
+	_cut(_nocast(bulk), Vector3.ZERO)
+	_box(g, "UpperFloorLip", Vector3(up.position.x, 2.75, bz - 0.12), Vector3(up.size.x + 0.25, 0.15, 0.12), _mat("lounge_wall", Color("4a0c10"), 0.9), false)
+	# Velvet rope across the second flight where the climb stops; the blocker keeps the player below the bulkhead
+	var sy := STAIR_H1 + (up.end.y - STAIR_STOP_Z) / up.size.y * (STAIR_TOP - STAIR_H1)
+	var velvet := _mat("velvet_red", VELVET_RED, 0.95)
+	for x in [up.position.x + 0.12, up.end.x - 0.12]:
+		_box(g, "RopePost_%d" % int(x * 10), Vector3(x - 0.04, sy - 0.1, STAIR_STOP_Z - 0.04), Vector3(0.08, 1.0, 0.08), _mat("cymbal_gold", Color("c8a050"), 0.35), false)
+	_box(g, "Rope", Vector3(up.position.x + 0.12, sy + 0.7, STAIR_STOP_Z - 0.03), Vector3(up.size.x - 0.24, 0.06, 0.06), velvet, false)
+	_collider(g, "StairStop", Vector3(up.get_center().x, 2.2, STAIR_STOP_Z - 0.05), Vector3(up.size.x, 4.4, 0.1))
+
+## Solid ramp from `lo` (its foot edge corner, floor height lo.y) to `hi` (opposite corner at the top height hi.y);
+## `up_dir` is the climbing direction (along x or z). Collider only: a convex wedge, solid down to the floor.
+func _wedge(g: Node, nm: String, lo: Vector3, hi: Vector3, up_dir: Vector3) -> void:
+	var a := Vector2(minf(lo.x, hi.x), minf(lo.z, hi.z))
+	var b := Vector2(maxf(lo.x, hi.x), maxf(lo.z, hi.z))
+	var pts := PackedVector3Array()
+	for x in [a.x, b.x]:
+		for z in [a.y, b.y]:
+			pts.append(Vector3(x, 0.0, z))
+			# Height at this corner: the top where the corner is at the high end of the climb
+			var t := (Vector2(x, z) - Vector2(lo.x, lo.z)).dot(Vector2(up_dir.x, up_dir.z)) / absf((Vector2(hi.x, hi.z) - Vector2(lo.x, lo.z)).dot(Vector2(up_dir.x, up_dir.z)))
+			pts.append(Vector3(x, lerpf(lo.y, hi.y, clampf(t, 0.0, 1.0)), z))
+	var body := StaticBody3D.new()
+	body.name = nm
+	_own(body, g)
+	var cs := CollisionShape3D.new()
+	cs.name = "Shape"
+	var shape := ConvexPolygonShape3D.new()
+	shape.points = pts
+	cs.shape = shape
+	_own(cs, body)
+
+## Hand rail: a thin dark bar from `a` to `b` with posts down to the stair line every metre or so.
+func _rail(g: Node, nm: String, a: Vector3, b: Vector3) -> void:
+	var mi := MeshInstance3D.new()
+	mi.name = nm
+	var bm := BoxMesh.new()
+	bm.size = Vector3(0.05, 0.05, a.distance_to(b))
+	mi.mesh = bm
+	mi.material_override = _mat("beam_black", BEAM_BLACK, 0.7)
+	mi.transform = Transform3D(Basis.looking_at(b - a, Vector3.UP), (a + b) * 0.5)
+	_own(mi, g)
+	var n := int(ceil(a.distance_to(b) / 1.1))
+	for i in n + 1:
+		var p := a.lerp(b, float(i) / n)
+		_box(g, "%sPost%d" % [nm, i], Vector3(p.x - 0.025, p.y - 0.9, p.z - 0.025), Vector3(0.05, 0.9, 0.05), mi.material_override, false)
 
 ## Buffer zone between lounge and main room: curtains both ends (open), window wall north with the night and a
 ## bare tree outside, mirror wall south, four tall tables with two tall stools each, a PAR on a stand.
@@ -688,7 +810,7 @@ func _tall_table(g: Node, nm: String, zone: String, c: Vector3, east_west: bool)
 		var off: Vector3 = offs[k]
 		var face := rad_to_deg(atan2(-off.x, -off.z))
 		_ph(g, "tall_stool", c + off, face, nm + "Stool%d" % k)
-		_seat(zone, "%s_%s_S%d" % [zone, nm, k], c + off, face, TALL_SEAT_H)
+		_seat(zone, "%s_%s_S%d" % [zone, nm, k], c + off, face, TALL_SEAT_H, "sit", nm)
 
 func _main_room() -> void:
 	var g := _group("MainRoom")
@@ -701,15 +823,17 @@ func _main_room() -> void:
 	_wall_z(g, "WallWest", MAIN_X0, -0.2, MAIN_Z1, wall, Vector3.LEFT, [Vector2(BUFFER.position.y, BUFFER.end.y)], 3.4)
 	# South: behind the bar (z MAIN_Z1) from the bar's west end to the staff area; east of it the wall at MAIN_SE_Z
 	_wall_x(g, "WallSouthBar", MAIN_Z1, BAR_X0, BAR_X1 + 0.2, wall, Vector3.BACK)
-	_wall_x(g, "WallSouthEast", MAIN_SE_Z, BAR_X1, MAIN_X1 + 0.2, wall, Vector3.BACK, [STAFF_PASS, Vector2(37.05, 38.05), SMOKE_DOOR], 2.2)
+	_wall_x(g, "WallSouthEast", MAIN_SE_Z, BAR_X1, MAIN_X1 + 0.2, wall, Vector3.BACK, [STAFF_PASS, STAFF_DOOR_BAR, SMOKE_DOOR], 2.2)
 	_staff_room(g, wall)
 	# Staff door north wall into the backstage, staff door into the walled bar area (both closed)
 	_door(g, "StaffDoorBackstage", "staff_door", Vector3(25.9, 0, -0.1), 0.0, Vector3.FORWARD)
 	_cut(_kit(g, "exit_sign", Vector3(25.9, 2.5, 0.05), 0.0, "ExitSignStaff"), Vector3.FORWARD)
-	_door(g, "StaffDoorBar", "staff_door", Vector3(37.55, 0, MAIN_SE_Z + 0.1), 180.0, Vector3.BACK)
-	# Red door to the smoking room (open all night): the leaf stands open flat against the smoking room's west wall
-	_cut(_ph(g, "red_door", Vector3(SMOKING.position.x + 0.1, 0, MAIN_SE_Z + 0.75), 90.0, "RedDoor", false), Vector3.LEFT)
-	_cut(_kit(g, "exit_sign", Vector3(39.6, 2.45, MAIN_SE_Z - 0.05), 0.0, "ExitSignSmoke"), Vector3.BACK)
+	# Staff door into the walled bar area: closed to the player (blocker in the opening), staff swing it open
+	_swing_door(g, "StaffDoorBar", "staff_door", Vector3((STAFF_DOOR_BAR.x + STAFF_DOOR_BAR.y) * 0.5, 0, MAIN_SE_Z + 0.1), 180.0, Vector3.BACK,
+		STAFF_DOOR_BAR.y - STAFF_DOOR_BAR.x, STAFF_USERS, true)
+	# Red door to the smoking room: swings open for whoever comes through (front, the red side, faces the main room)
+	_swing_door(g, "RedDoor", "red_door", Vector3((SMOKE_DOOR.x + SMOKE_DOOR.y) * 0.5, 0, MAIN_SE_Z + 0.1), 180.0, Vector3.BACK)
+	_cut(_kit(g, "exit_sign", Vector3((SMOKE_DOOR.x + SMOKE_DOOR.y) * 0.5, 2.45, MAIN_SE_Z - 0.05), 0.0, "ExitSignSmoke"), Vector3.BACK)
 	# South-east corner at floor level: wine fridge, Black Cabin light box over the door (photo 12)
 	_ph(g, "wine_fridge", Vector3(41.4, 0, MAIN_SE_Z - 0.35), 0.0, "WineFridge")
 	_ph(g, "lightbox_bc", Vector3(41.4, 1.0, MAIN_SE_Z - 0.35), 0.0, "LightboxBC", false)   # sits on the fridge (kit note)
@@ -856,7 +980,7 @@ func _round_table(g: Node, nm: String, zone: String, c: Vector3, rot: float, lam
 		var off := Vector3(sin(a) * 0.66 * (0.9 if scl < 1.0 else 1.0), 0, -cos(a) * 0.66 * (0.9 if scl < 1.0 else 1.0))
 		var face := rad_to_deg(atan2(-off.x, -off.z))
 		_kit_solid(g, "cafe_chair", c + off, face, "%sChair%d" % [nm, k])
-		_seat(zone, "%s_%s_C%d" % [zone, nm, k], c + off, face)
+		_seat(zone, "%s_%s_C%d" % [zone, nm, k], c + off, face, 0.45, "sit", nm)
 
 ## Rectangular four-chair table (the map's rectangles): a communal_table scaled along its length, two chairs a side.
 func _rect_table(g: Node, nm: String, zone: String, c: Vector3, length: float) -> void:
@@ -872,8 +996,8 @@ func _rect_table(g: Node, nm: String, zone: String, c: Vector3, length: float) -
 		_kit(g, "beer_glass", top + Vector3(0.25, 0, z - c.z + 0.1), 0.0, nm + "GlassE%d" % k)
 		_kit_solid(g, "cafe_chair", Vector3(c.x - 0.75, 0, z), 90.0, nm + "ChairW%d" % k)
 		_kit_solid(g, "cafe_chair", Vector3(c.x + 0.75, 0, z), -90.0, nm + "ChairE%d" % k)
-		_seat(zone, "%s_%s_W%d" % [zone, nm, k], Vector3(c.x - 0.75, 0, z), 90.0)
-		_seat(zone, "%s_%s_E%d" % [zone, nm, k], Vector3(c.x + 0.75, 0, z), -90.0)
+		_seat(zone, "%s_%s_W%d" % [zone, nm, k], Vector3(c.x - 0.75, 0, z), 90.0, 0.45, "sit", nm)
+		_seat(zone, "%s_%s_E%d" % [zone, nm, k], Vector3(c.x + 0.75, 0, z), -90.0, 0.45, "sit", nm)
 
 ## Tiny table with two drum stools (map: gold circles): the stools face the stage.
 func _tiny_table(g: Node, nm: String, c: Vector3, stools_south: bool) -> void:
@@ -884,7 +1008,7 @@ func _tiny_table(g: Node, nm: String, c: Vector3, stools_south: bool) -> void:
 		var off := Vector3(-0.32 + k * 0.64, 0, 0.5) if stools_south else Vector3(0.5, 0, -0.32 + k * 0.64)
 		var face := 180.0 if stools_south else -90.0   # toward the table and the stage (yaw 0 faces +z, south)
 		_kit_solid(g, "drum_stool", c + off, k * 37.0, nm + "Stool%d" % k)
-		_seat("Tables", "Tables_%s_S%d" % [nm, k], c + off, face)
+		_seat("Tables", "Tables_%s_S%d" % [nm, k], c + off, face, 0.45, "sit", nm)
 
 func _tables() -> void:
 	var g := _group("Tables")
@@ -950,10 +1074,10 @@ func _raised() -> void:
 		_collider(t, "Collider", Vector3(0, 0.375, 0), Vector3(0.9, 0.75, 0.9))
 		_table_dressing(g, "Raised%d" % i, c + Vector3(0, 0.75, 0), i % 2 == 0, 1, 2)
 		_kit_solid(g, "cafe_chair", c + Vector3(-0.6, 0, 0), 90.0, "Raised%dChair" % i)   # west of the table, facing east
-		_seat("Raised", "Raised_T%d_C" % i, c + Vector3(-0.6, 0, 0), 90.0, 0.45 + RAISED_H)
+		_seat("Raised", "Raised_T%d_C" % i, c + Vector3(-0.6, 0, 0), 90.0, 0.45, "sit", "Raised%d" % i)
 		for k in 2:
 			# On the couch, backs to the wall, facing west across the table (yaw -90; +90 faced the couch back)
-			_seat("Raised", "Raised_T%d_S%d" % [i, k], Vector3(MAIN_X1 - 0.45, RAISED_H, c.z - 0.35 + k * 0.7), -90.0, 0.45 + RAISED_H)
+			_seat("Raised", "Raised_T%d_S%d" % [i, k], Vector3(MAIN_X1 - 0.45, RAISED_H, c.z - 0.35 + k * 0.7), -90.0, 0.45, "sit", "Raised%d" % i, true)
 	_omni(g, "RaisedLightA", LAMP_GOLD, 2.0, 4.0, Vector3(RAISED_TABLE_X, 1.9, 2.2))
 	_omni(g, "RaisedLightB", LAMP_GOLD, 2.0, 4.0, Vector3(RAISED_TABLE_X, 1.9, 7.9))
 	# Mirror ceiling panels over the strip (photo 11): glossy dark tiles on the ceiling layer
@@ -987,7 +1111,7 @@ func _bar() -> void:
 	for i in COUNTER_STOOLS_X.size():
 		var x: float = COUNTER_STOOLS_X[i]
 		_kit_solid(g, "bar_stool", Vector3(x, 0, COUNTER_STOOL_Z), 0.0, "Stool%d" % i)
-		_seat("Bar", "Bar_Stool%d" % i, Vector3(x, 0, COUNTER_STOOL_Z), 0.0, BAR_SEAT_H)
+		_seat("Bar", "Bar_Stool%d" % i, Vector3(x, 0, COUNTER_STOOL_Z), 0.0, BAR_SEAT_H, "sit", "Bar")
 	_seat("Bar", "Bar_Bartender", Vector3(CASHIER_X, 0, 13.9), 180.0, 0.0, "staff")
 	# Red-lit back bar (photos 09, 16): red LED strips under the soffit and along the top of the cabinets (emissive
 	# boxes, no lights), the cubbies and bottles recoloured red at load (scenes/venue/venue_looks.gd), dark joinery
@@ -1070,7 +1194,7 @@ func _smoking() -> void:
 			var off := Vector3(0, 0, -0.7 + k * 1.4)
 			var face := 0.0 if k == 0 else 180.0   # north chair faces south (+z) to the table, south chair faces north
 			_ph(g, "wishbone_chair", p + off, face, "Smoke%dChair%d" % [i, k])
-			_seat("Smoking", "Smoking_T%d_C%d" % [i, k], p + off, face)
+			_seat("Smoking", "Smoking_T%d_C%d" % [i, k], p + off, face, 0.45, "sit", "Smoke%d" % i)
 	_ph(g, "air_purifier", Vector3(41.45, 0, 13.1), 0.0, "AirPurifier")
 	# Cool blue-white spill from the street through the glass, one small warm bulb by the pictures (photos 20/21)
 	_omni(g, "StreetSpill", Color("a8c4e8"), 1.2, 5.0, Vector3(SMOKING.end.x + 0.6, 2.2, 15.4))
@@ -1197,13 +1321,15 @@ func _contact_shadows() -> void:
 
 ## Camera framings, one per zone, read by camera_rig.gd. rect = membership (x, z, w, d); clamp = where the look
 ## target may go; yaw 0 looks north (-z), -90 looks east, 90 west, 180 south. "fallback" covers the main room.
-## The old-corridor alcove has no zone of its own: it is entered only from the lounge, whose framing stays.
+## The lobby reaches out over the step of street beyond the street door. The old-corridor alcove off the lounge has its
+## own framing, looking south into it over the old toilets' closed box (hidden on the sight line).
 func _camera_zones() -> void:
 	var g := _group("CameraZones")
 	var zones := [
-		{"name": "lobby", "rect": Rect2(-0.2, 5.05, 2.35, 8.2), "clamp": Rect2(1.1, 7.0, 0.1, 5.0), "yaw": 0.0, "pitch": -36.0, "dist": 6.5, "look_y": 1.2},
+		{"name": "lobby", "rect": Rect2(-2.0, 5.05, 4.15, 8.2), "clamp": Rect2(1.1, 7.0, 0.1, 5.0), "yaw": 0.0, "pitch": -36.0, "dist": 6.5, "look_y": 1.2},
 		{"name": "corridor", "rect": Rect2(-0.2, 13.25, 15.65, 1.65), "clamp": Rect2(3.5, 13.6, 9.5, 0.1), "yaw": 0.0, "pitch": -42.0, "dist": 7.0, "look_y": 1.0},
 		{"name": "buffer", "rect": Rect2(BUFFER.position.x, BUFFER.position.y, BUFFER.size.x, BUFFER.size.y), "clamp": Rect2(17.7, 4.6, 0.3, 1.5), "yaw": 0.0, "pitch": -32.0, "dist": 7.0, "look_y": 1.3},
+		{"name": "alcove", "rect": Rect2(STUB.position.x, STUB.position.y, STUB.size.x, STUB.size.y), "clamp": Rect2(16.4, 11.3, 2.2, 0.1), "yaw": 180.0, "pitch": -48.0, "dist": 5.5, "look_y": 1.0},
 		{"name": "lounge", "rect": Rect2(LOUNGE.position.x, LOUNGE.position.y, LOUNGE.size.x, LOUNGE.size.y), "clamp": Rect2(5.0, 2.8, 5.0, 7.5), "yaw": 90.0, "pitch": -34.0, "dist": 8.0, "look_y": 1.3},
 		{"name": "bar", "rect": Rect2(BAR_X0, 9.6, BAR_X1 - BAR_X0, MAIN_Z1 - 9.6), "clamp": Rect2(23.5, 10.6, 10.5, 0.6), "yaw": 180.0, "pitch": -32.0, "dist": 7.0, "look_y": 1.0},
 		{"name": "stage", "rect": Rect2(26.4, 0.0, 9.6, 6.6), "clamp": Rect2(29.0, 1.6, 3.5, 0.6), "yaw": 0.0, "pitch": -26.0, "dist": 7.5, "look_y": 1.4},
