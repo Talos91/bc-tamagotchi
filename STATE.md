@@ -8,6 +8,7 @@
 ## IN FLIGHT
 - New orchestrator: session local_78d0c67d (detached, top level). Handover checked: origin/main 51603f0, no workers were running; the old orchestrator's answers to "what is not in the files" are in `handoffs/orchestrator-2026-11-02.md`.
 - Workers running: 🎮 area-camera (Opus, local_553204b4: per-area views + area buttons back, smoking room visible, bigger version label).
+- **Handover decided (2026-11-02, context 40 %):** no new workers from this orchestrator; after area-camera is verified, pushed and archived, a new orchestrator takes over from `C:/Users/itisf/.claude/handoffs/442902c3-f019-4eb1-9441-d2ea598bdc70.md` and starts the queue.
 - Queued (max three workers):
   when area-camera closes (both edit `build_venue.gd` / the venue scene), 🏗️ lounge revamp + corridor portraits + the curtain seen from the main room + Raised3 approach (BACKLOG B7, B9–B11; DECISIONS "Lounge revamp" row; `layout.json` unfrozen for the lounge and corridor walls only, refreeze on Daniele's acceptance).
 
