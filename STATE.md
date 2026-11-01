@@ -12,7 +12,9 @@
 ## WORKERS ALIVE (max 3)
 - 🎛️ orchestrator fdaed712-5416-430d-b3a7-7174cf46699f (Opus 5.5); 🏗️ venue-notes (spawn + label fix); 🎬 start-screen idle, kept for follow-ups.
 
-## WAITING ON OWNER (answer on the Questions tab: https://claude.ai/artifact/BbpBxVWVVXMjz7TgJ7aFBW#questions)
+## WAITING ON OWNER
+- All Questions-tab items answered 2026-11-02 (see DECISIONS). Outstanding: entrance/street photos (next visit), band consent (Daniele asking Black Cabin).
+## (older) (answer on the Questions tab: https://claude.ai/artifact/BbpBxVWVVXMjz7TgJ7aFBW#questions)
 - Confirm the stair reading on the venue-notes capture; accept venue v4 after this round (then refreeze layout.json); real entrance-corridor photos later.
 - Orientation; Black Cabin opening hours; brand typeface; staff turnover; resident band + consent packs; stakes numbers; coin sign-off; chat policy; real drinks menu.
 
@@ -25,3 +27,8 @@
 ## POINTERS
 - Worker rules `PROJECT.md`; history `LOG.md`; owner decisions `docs/design/DECISIONS.md` ("Still open"); waves `ORCHESTRATION.md`; changelog `docs/CHANGELOG.md` (`python tools/changelog.py`).
 - Handoffs `handoffs/` (orchestrator, zone-wiring). Method: vault `wiki/concepts/claude-orchestration-method.md`, profiles `wiki/agents/`.
+
+## QUEUED (start when a worker slot frees)
+- 🎲 stakes + economy design (Opus): stakes chapter from Daniele's base proposal (total deletion, friend revival e.g. zombie stage act, fatal = not going to Black Cabin, others minor annoyances), one-page coin summary, Flat-as-rented-room unlock note.
+- Orientation toggle: portrait first + landscape button top-right (give to start-screen session or a UI worker).
+- 🍸 real-menu (local_b0e3443e) running: menu.json from docs/venue/menu, replaces six invented drinks; needs orchestrator go-ahead before editing game/scripts/zones/.

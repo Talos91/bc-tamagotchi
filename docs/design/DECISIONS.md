@@ -52,6 +52,12 @@ GDD is updated.
 
 | 2026-11-02 | **Memories at the lounge TV; corridor sign; cutaway rule.** Note added to the stakes question: the mini TV in the lounge's NW corner (direction 25) is where a player shares a memory by uploading a real photo taken at Black Cabin; in the real bar people take stylish photos of the TV with themselves in it. The corner gets built. The entrance corridor's east end gets the "BLACK — CABIN — / NOW OPEN ←" neon on a brick wall (direction 24). Camera: walls stay solid until the door is passed; the corridor stays visible until the character crosses the Sticker door. Layout refreeze waits for this round. |
 
+| 2026-11-02 | **Real menu.** Daniele supplied Black Cabin's full menu (11 pages, `docs/venue/menu/`) with the venue's express authorization to use the pictures and to recreate it in the game. It replaces the six invented drinks. Kept in the repo as reference. |
+
+| 2026-11-02 | **Questions tab, second batch.** **Orientation:** portrait first, with landscape available through a simple toggle button at the top right of the interface. **Opening hours** (Daniele: "check the one in Google"; public listings agree): Tuesday–Sunday 19:00–02:00, closed Mondays; address 466 Soi Thong Lo 16. Daniele also allows sourcing other venue facts from the public listings. **Typeface:** keep Kanit + IBM Plex Sans Thai Looped for now. **Staff turnover:** the proposal (goodbye postcard, then the slot's working name). **Band and consent:** Daniele will ask Black Cabin. **Chat:** phrase wheel only. **Coins:** send a one-page summary first. **Thai review:** Black Cabin staff check the Thai. **Entrance photos:** next visit. **Drinks menu:** supplied (row above). |
+| 2026-11-02 | **The Flat:** keep it minimal now; later it becomes an unlock: with in-game currency you rent a room (an instanced area) on the second floor, and the game starts there. |
+| 2026-11-02 | **Stakes (Daniele's base proposal, open to tweaks).** Goal: players grow attached to their character. **Death is total:** the character is deleted from the game, including leaderboard positions and achievements; a new game starts from scratch. **Revival:** a way back exists: "a friend needs to do something and they come back to life", e.g. a zombie act on stage. **Needs that matter:** drink, listen to music, have a chat, do a memory, play a minigame, check the event calendar, go to Black Cabin. **Only "go to Black Cabin" is fatal**; neglecting the others brings minor annoyances. "This is not an everyday job; keep it light but give people a reason to open it." A design worker turns this into the stakes chapter. |
+
 ## Still open
 
 - Black Cabin's real opening hours (drives what the game shows at 14:00: open all day with staff only, or "Doors at 18:00" with the Flat only).
@@ -65,6 +71,5 @@ GDD is updated.
 - Coin economy design (earn/spend, no decor).
 - Chat policy for multiplayer (phrase wheel vs free text, now that the game is 21+).
 - The Flat home screen: keep minimal or cut.
-- Black Cabin's real drinks menu (six placeholder drinks in the game today).
 - Real photos of the entrance corridor (dim for now); a day version of the outside (night only for now).
 
