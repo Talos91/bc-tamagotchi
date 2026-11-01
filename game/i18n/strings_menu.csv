@@ -1,0 +1,44 @@
+key,en,th,context,max
+menu.head,THE MENU,เมนู,"Menu list header (bar sheet → The menu)",26
+menu.tab.drinks,Drinks,เครื่องดื่ม,Menu list tab,14
+menu.tab.kitchen,Kitchen,ครัว,Menu list tab: food from the real menu (does nothing yet),14
+menu.kitchen_soon,Kitchen orders open soon,เปิดรับออร์เดอร์อาหารเร็ว ๆ นี้,Note at the top of the Kitchen tab; food rows are not orderable yet,40
+menu.merry,Water or a soft drink for now,ตอนนี้ขอเป็นน้ำหรือซอฟต์ดริงก์ก่อน,Disabled reason on alcoholic menu rows while Merry,40
+menu.price_note,Prices in THB as printed at Black Cabin,ราคาเป็นบาทตามเมนูของ Black Cabin,Footer of the menu list,48
+menu.price.serve,{n},{n},Price on a menu row (THB); {n} = price with thousands separators,10
+menu.price.glass,{n} / glass,{n} / แก้ว,Spirit price per glass; {n} = price,16
+menu.price.bottle,{n} / bottle,{n} / ขวด,Wine price per bottle; {n} = price,16
+menu.price.deal,5 + 1 free · {n},5 แถม 1 · {n},House shooters deal price; {n} = price,18
+menu.close,Close,ปิด,Close button on the menu list,10
+menu.bar.menu,The menu,ดูเมนู,"Bar sheet row title: opens the real menu (drinks, then kitchen)",26
+menu.bar.menu_sub,"Beer, wine, whisky, gin · {n} drinks","เบียร์ ไวน์ วิสกี้ จิน · {n} รายการ",Bar sheet row sub-line; {n} = number of drinks,34
+menu.bar.kitchen,Kitchen,ครัว,Bar sheet row title: opens the Kitchen list (food does nothing yet),26
+menu.bar.kitchen_sub,{n} dishes · orders open soon,{n} เมนู · เปิดรับเร็ว ๆ นี้,Bar sheet row sub-line; {n} = number of dishes,34
+menu.bar.order_sub,A {drink},{drink} หนึ่งแก้ว,"Order a drink sub-line after the first drink; {drink} = drink name (was ""The house cocktail"")",34
+menu.bar.soft,A soft drink,ซอฟต์ดริงก์,"Bar row title for the non-alcoholic drink (was ""Thai iced tea"")",26
+menu.bar.soft_sub,"{drink}, no alcohol, same refill",{drink} ไม่มีแอลกอฮอล์ อิ่มเท่ากัน,Bar row sub-line; {drink} = soft drink name,34
+menu.card.order,{who} pours you a {drink}.,{who}รินเครื่องดื่มให้ {drink},Action card line after ordering a drink; {who} = bartender; {drink} = drink name,40
+menu.card.soft,"{drink}, extra ice.",{drink} เพิ่มน้ำแข็ง,Action card line after a soft drink; {drink} = drink name,40
+menu.card.water,A tall glass of water. Cheers.,น้ำเย็นแก้วใหญ่ ชนแก้ว,Action card line after water from the menu,40
+menu.pour.pouring,Pouring: {drink},กำลังริน: {drink},Pour Perfect line above the glass; {drink} = drink name,36
+menu.section.house_shooters,House Shooters,ช็อตประจำร้าน,Menu section heading,24
+menu.section.beer,Beer,เบียร์,Menu section heading,24
+menu.section.other,Soft Drinks & Water,ซอฟต์ดริงก์และน้ำ,"Menu section heading (printed ""OTHER"")",24
+menu.section.champagne_sparkling,Champagne & Sparkling,แชมเปญและสปาร์กลิง,Menu section heading,24
+menu.section.whites,Whites,ไวน์ขาว,Menu section heading,24
+menu.section.reds,Reds,ไวน์แดง,Menu section heading,24
+menu.section.single_malt,Single Malt Whisky,ซิงเกิลมอลต์วิสกี้,Menu section heading,24
+menu.section.blended_scotch,Blended Scotch Whisky,เบลนเด็ดสก๊อตช์วิสกี้,"Menu section heading (printed ""BLENDED SCOTH WHISKY"")",24
+menu.section.american_whiskey,American Whiskey,วิสกี้อเมริกัน,Menu section heading,24
+menu.section.irish_whiskey,Irish Whiskey,วิสกี้ไอริช,Menu section heading,24
+menu.section.japanese_whisky,Japanese Whisky,วิสกี้ญี่ปุ่น,Menu section heading,24
+menu.section.tequila_mezcal,Tequila & Mezcal,เตกีลาและเมซคาล,Menu section heading,24
+menu.section.vodka,Vodka,วอดก้า,Menu section heading,24
+menu.section.rum,Rum,รัม,Menu section heading,24
+menu.section.liqueur,Liqueur,ลิเคียวร์,Menu section heading,24
+menu.section.brandy_cognac,Brandy & Cognac,บรั่นดีและคอนยัค,Menu section heading,24
+menu.section.gin,Gin,จิน,Menu section heading,24
+menu.section.aperitifs,Aperitifs,อาเปริทีฟ,Menu section heading (Kitchen),24
+menu.section.sharing,Sharing,จานแชร์,Menu section heading (Kitchen),24
+menu.section.mains,Mains,จานหลัก,Menu section heading (Kitchen),24
+menu.section.pasta,Pasta,พาสต้า,Menu section heading (Kitchen),24

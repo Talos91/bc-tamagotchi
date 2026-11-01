@@ -1,0 +1,1140 @@
+{
+ "title": "Black Cabin menu (transcription)",
+ "source": "docs/venue/menu/01..11 *.jpg, supplied by Daniele 2026-11-02 with Black Cabin's authorization",
+ "transcribed": "2026-11-02",
+ "currency": "THB",
+ "price_footer": "PRICES EXCLUDE 10% SERVICE CHARGE AND APPLICABLE GOVERNMENT TAX",
+ "conventions": {
+  "names": "Copied exactly as printed (case, punctuation, spellings); misprints are listed in print_errata, never fixed in place.",
+  "star": "Black star before the name: recommended.",
+  "chilli": "Chilli before the name: spicy.",
+  "price_bottle / price_glass": "Spirits print 'bottle / glass'; Campari and Aperol print one price, recorded as glass.",
+  "name_th_printed": "Thai text exactly as printed next to the English name (only two items carry one).",
+  "not_printed": "There is no cocktail page in this set."
+ },
+ "sections": [
+  {
+   "id": "aperitifs",
+   "title": "APERITIFS",
+   "page": "01-aperitifs.jpg",
+   "kind": "food",
+   "items": [
+    {
+     "name": "ITALIAN SAUSAGE SALAD",
+     "price": 190
+    },
+    {
+     "name": "SMOKED SALMON CANAPE, HOUSE TARTAR (3 PCS)",
+     "price": 180
+    },
+    {
+     "name": "CHICKEN LIVER PATE",
+     "price": 250,
+     "star": true
+    },
+    {
+     "name": "RIBEYE BEEF JERKY MALA",
+     "price": 160,
+     "star": true,
+     "chilli": true
+    },
+    {
+     "name": "CHEESE & COLD CUTS BOARD",
+     "price": 490
+    },
+    {
+     "name": "SHRIMP TARTARE",
+     "price": 280,
+     "star": true
+    },
+    {
+     "name": "THAI CAVIER (YUM)",
+     "price": 280,
+     "name_th_printed": "ยำไข่มดแดง",
+     "star": true,
+     "chilli": true
+    },
+    {
+     "name": "BEEF TARTARE W/ BAGUETTE",
+     "price": 290
+    }
+   ]
+  },
+  {
+   "id": "sharing",
+   "title": "SHARING",
+   "page": "02-sharing.jpg",
+   "kind": "food",
+   "items": [
+    {
+     "name": "MIXED NUTS",
+     "price": 120
+    },
+    {
+     "name": "FRENCH FRIES",
+     "price": 120
+    },
+    {
+     "name": "FRIED CHICKEN TENDONS",
+     "price": 120
+    },
+    {
+     "name": "CHICKEN NUGGETS",
+     "price": 160
+    },
+    {
+     "name": "CHICKEN POPS",
+     "price": 160
+    },
+    {
+     "name": "FRIED DUCK EGGS (YUM)",
+     "price": 180,
+     "name_th_printed": "ยำไข่เป็ดดาว"
+    },
+    {
+     "name": "PORK / AUS RIBEYE BEEF WATERFALL",
+     "variants": [
+      {
+       "name": "PORK",
+       "price": 240
+      },
+      {
+       "name": "AUS RIBEYE BEEF",
+       "price": 320
+      }
+     ],
+     "chilli": true
+    },
+    {
+     "name": "BEEF NACHOS",
+     "price": 240,
+     "star": true
+    },
+    {
+     "name": "BLACK CABIN QUESADILLA",
+     "price": 250,
+     "star": true
+    },
+    {
+     "name": "CRISPY FRIED SHRIMPS",
+     "price": 250
+    },
+    {
+     "name": "CALAMARI",
+     "price": 250
+    },
+    {
+     "name": "MORTADELLA SANDWICH (BOURDAIN SANDWICH)",
+     "price": 250
+    },
+    {
+     "name": "PULLED PORK ON FRIES",
+     "price": 240
+    }
+   ]
+  },
+  {
+   "id": "mains",
+   "title": "MAINS",
+   "page": "03-mains.jpg",
+   "kind": "food",
+   "items": [
+    {
+     "name": "AUS RIBEYE STEAK W/ FRITTES & TRUFFLE MAYO",
+     "price": 990,
+     "star": true
+    },
+    {
+     "name": "PORK/BEEF KRAPAO ON RICE WITH FRIED DUCK EGG",
+     "price": 240,
+     "star": true,
+     "chilli": true
+    },
+    {
+     "name": "BLACK CABIN BURGER & FRIES",
+     "price": 320,
+     "star": true
+    },
+    {
+     "name": "SPICY CHICKEN POPS ON RICE",
+     "price": 200,
+     "chilli": true
+    },
+    {
+     "name": "PAD WAIWAI (STIR FRIED NOODLES WITH PORK)",
+     "price": 180
+    },
+    {
+     "name": "HAM SCRAMBLED EGG ON RICE",
+     "price": 200
+    }
+   ]
+  },
+  {
+   "id": "pasta",
+   "title": "PASTA",
+   "page": "04-pasta.jpg",
+   "kind": "food",
+   "items": [
+    {
+     "name": "LINGUINE VONGOLE",
+     "price": 350,
+     "star": true
+    },
+    {
+     "name": "SPAGHETTI BOLOGNESE",
+     "price": 280
+    },
+    {
+     "name": "SPAGHETTI AGLIO E OLIO W/ BACON",
+     "price": 260
+    },
+    {
+     "name": "SPAGHETTI CARBONARA",
+     "price": 300
+    },
+    {
+     "name": "SPAGHETTI ITALIAN SAUSAGE",
+     "price": 300,
+     "star": true
+    },
+    {
+     "name": "LINGUINE SHRIMP BISQUE",
+     "price": 320,
+     "star": true
+    }
+   ]
+  },
+  {
+   "id": "beer",
+   "title": "BEER",
+   "page": "05-shooters-beer-other.jpg",
+   "kind": "drink",
+   "items": [
+    {
+     "name": "HEINEKEN DRAUGHT",
+     "price": 295
+    },
+    {
+     "name": "GUINNESS DRAUGHT",
+     "price": 390
+    },
+    {
+     "name": "HEINEKEN SILVER",
+     "price": 270
+    },
+    {
+     "name": "CORONA",
+     "price": 275
+    }
+   ]
+  },
+  {
+   "id": "other",
+   "title": "OTHER",
+   "page": "05-shooters-beer-other.jpg",
+   "kind": "drink",
+   "items": [
+    {
+     "name": "SINGHA SODA",
+     "price": 98
+    },
+    {
+     "name": "WATER",
+     "price": 98
+    },
+    {
+     "name": "ACQUA PANNA MINERAL WATER",
+     "price": 149
+    },
+    {
+     "name": "COKE",
+     "price": 98
+    },
+    {
+     "name": "COKE ZERO",
+     "price": 98
+    },
+    {
+     "name": "SPRITE",
+     "price": 98
+    },
+    {
+     "name": "TONIC",
+     "price": 98
+    },
+    {
+     "name": "RED BULL CAN",
+     "price": 149
+    },
+    {
+     "name": "FEVER TREE INDIAN",
+     "price": 149
+    },
+    {
+     "name": "FEVER TREE MEDITERRANEAN",
+     "price": 149
+    },
+    {
+     "name": "FEVER TREE ELDERFLOWER",
+     "price": 149
+    },
+    {
+     "name": "FEVER TREE GINGER ALE",
+     "price": 149
+    },
+    {
+     "name": "FEVER TREE GINGER BEER",
+     "price": 149
+    },
+    {
+     "name": "ICE BUCKET",
+     "price": 99
+    }
+   ]
+  },
+  {
+   "id": "champagne_sparkling",
+   "title": "CHAMPAGNE & SPARKLING",
+   "page": "06-champagne-whites.jpg",
+   "kind": "drink",
+   "items": [
+    {
+     "name": "NV FILLIPPO, SPARKLING",
+     "abv": 9.5,
+     "region": "SOUTH EASTERN AUSTRALIA, AUS",
+     "price_bottle": 1890,
+     "notes": null
+    },
+    {
+     "name": "CORVEZZO FAMILY COLLECTION VALDOBBIADENE PROSECCO DOCG",
+     "abv": 11.5,
+     "region": "VENETO, ITALY",
+     "price_bottle": 1990,
+     "notes": null
+    },
+    {
+     "name": "DOM PERIGNON",
+     "abv": 12.5,
+     "region": "CHAMPAGNE, FRANCE",
+     "price_bottle": 19900,
+     "notes": "awesome choice"
+    },
+    {
+     "name": "VEUVE CLICQUOT YELLOW",
+     "abv": 12,
+     "region": "REIMS, FRANCE",
+     "price_bottle": 5990,
+     "notes": "great choice"
+    },
+    {
+     "name": "MOËT & CHANDON BRUT",
+     "abv": 12,
+     "region": "CHAMPAGNE, FRANCE",
+     "price_bottle": 4990,
+     "notes": "good choice"
+    }
+   ],
+   "price_columns": "bottle"
+  },
+  {
+   "id": "whites",
+   "title": "WHITES",
+   "page": "06-champagne-whites.jpg",
+   "kind": "drink",
+   "items": [
+    {
+     "name": "PETE'S PURE SAUVIGNON BLANC 2023",
+     "abv": 12.5,
+     "region": "MURRAY DARLING / AUS",
+     "price_bottle": 1990,
+     "notes": "passionfruit, gooseberry, zesty fragrance, tropical fruits"
+    },
+    {
+     "name": "CHATEAU LES VERENES SIMPLEMENT SAUVIGNON BLANC 2022",
+     "abv": 12.5,
+     "region": "AOP BORDEAUX, FRANCE",
+     "price_bottle": 2890,
+     "notes": "tropical & citrus fruits, stunning acidity"
+    },
+    {
+     "name": "THE HUNGRY WASP, CHARDONNAY 2023",
+     "abv": 12,
+     "region": "SOUTH EASTERN AUSTRALIA, AUS",
+     "price_bottle": 2390,
+     "notes": "passionfruit, peach & nectarine, citrus zing, fresh finish"
+    },
+    {
+     "name": "THE BLIND PIG, CHARDONNAY 2023",
+     "abv": 12,
+     "region": "SOUTH EASTERN AUSTRALIA, AUS",
+     "price_bottle": 2290,
+     "notes": "lemon curd, white flowers, balanced oak, crisp acidity"
+    },
+    {
+     "name": "KI RARO BLOCKS, SAUVIGNON BLANC 2023",
+     "abv": 12,
+     "region": "MALBOUROUGH, NZ",
+     "price_bottle": 2390,
+     "notes": "ripe guava, pineapple, passionfruit aromas"
+    },
+    {
+     "name": "CAPE OF GOOD HOPE RIEBBEKSREVIER CHENIN BLANC 2023",
+     "abv": 13.5,
+     "region": "SWARTLAND, SOUTH AFRICA",
+     "price_bottle": 2190,
+     "notes": "vanilla, peach, butterscotch, creamy oak"
+    }
+   ],
+   "price_columns": "bottle"
+  },
+  {
+   "id": "reds",
+   "title": "REDS",
+   "page": "07-reds.jpg",
+   "kind": "drink",
+   "items": [
+    {
+     "name": "PETE'S PURE CABERNET SAUVIGNON 2022",
+     "abv": 13.5,
+     "region": "MURRAY DARLING, AUS",
+     "price_bottle": 1990,
+     "notes": "blueberries, blackcurrant, mint, fine tannin finish"
+    },
+    {
+     "name": "CHATEAU LES VERGES SIMPLEMENT MERLOT 2022",
+     "abv": 14.5,
+     "region": "BORDEAUX, FRANCE",
+     "price_bottle": 2890,
+     "notes": "strawberries, raspberries, structured finish"
+    },
+    {
+     "name": "THE BLIND PIG, MERLOT 2022",
+     "abv": 13,
+     "region": "SOUTH EASTERN AUSTRALIA, AUS",
+     "price_bottle": 2290,
+     "notes": "black cherry, dark chocolate, vanilla hint, smooth finish"
+    },
+    {
+     "name": "CASTELLO DEL TREBBIO CHIANTI SUPERIORE DOGC 2022",
+     "abv": 13,
+     "region": "TUSCANY, ITALY",
+     "price_bottle": 2390,
+     "notes": "small red berries, spices, flowers, velvety tannins"
+    },
+    {
+     "name": "THE WILY FOX, SHIRAZ 2023",
+     "abv": 13,
+     "region": "SOUTH EASTERN AUSTRALIA, AUS",
+     "price_bottle": 2290,
+     "notes": "plum & blackcurrant, spice & pepper, soft tannins, velvety finish"
+    },
+    {
+     "name": "LOGANN'S HOLLOW, SHIRAZ 2019",
+     "abv": 15,
+     "region": "BAROSSA VALLEY, AUS",
+     "price_bottle": 3490,
+     "notes": "dark cherry, mocha & plum, rich body, long finish"
+    }
+   ],
+   "price_columns": "bottle"
+  },
+  {
+   "id": "single_malt",
+   "title": "SINGLE MALT WHISKY",
+   "page": "08-scotch-single-malt-blended.jpg",
+   "kind": "drink",
+   "items": [
+    {
+     "name": "ARDBEG 10Y",
+     "price_bottle": 6990,
+     "price_glass": 520
+    },
+    {
+     "name": "ARRAN BARREL RESERVE",
+     "price_bottle": 4490,
+     "price_glass": 340
+    },
+    {
+     "name": "THE MACALLAN 12Y SHERRY OAK",
+     "price_bottle": 13990,
+     "price_glass": 990
+    },
+    {
+     "name": "THE MACALLAN 12Y DOUBLE CASK",
+     "price_bottle": 12590,
+     "price_glass": 890
+    },
+    {
+     "name": "THE MACALLAN 15Y DOUBLE CASK",
+     "price_bottle": 19900,
+     "price_glass": 1490
+    },
+    {
+     "name": "HIGHLAND PARK 10Y",
+     "price_bottle": 6490,
+     "price_glass": 490
+    },
+    {
+     "name": "PRAKAAN PEATED MALT",
+     "price_bottle": 5290,
+     "price_glass": 400
+    },
+    {
+     "name": "THE BALVENIE DOUBLE WOOD 12Y",
+     "price_bottle": 7990,
+     "price_glass": 650
+    },
+    {
+     "name": "GLENFIDDICH 12Y",
+     "price_bottle": 5990,
+     "price_glass": 420
+    },
+    {
+     "name": "GLENFIDDICH ASTON MARTIN 16Y LIMITED",
+     "price_bottle": 11990,
+     "price_glass": 890
+    }
+   ],
+   "price_columns": "bottle / glass"
+  },
+  {
+   "id": "blended_scotch",
+   "title": "BLENDED SCOTH WHISKY",
+   "page": "08-scotch-single-malt-blended.jpg",
+   "kind": "drink",
+   "items": [
+    {
+     "name": "MONKEY SHOULDER",
+     "price_bottle": 3590,
+     "price_glass": 290
+    },
+    {
+     "name": "COMPASS BOX THE SPICE TREE",
+     "price_bottle": 7290,
+     "price_glass": 550
+    },
+    {
+     "name": "COMPASS BOX THE STORY OF THE SPANIARD",
+     "price_bottle": 7290,
+     "price_glass": 550
+    },
+    {
+     "name": "COMPASS BOX HEDONISM 2024",
+     "price_bottle": 10990,
+     "price_glass": 790
+    },
+    {
+     "name": "COMPASS BOX THE PEAT MONSTER",
+     "price_bottle": 6490,
+     "price_glass": 490
+    },
+    {
+     "name": "COMPASS BOX CRIMSON CASKS",
+     "price_bottle": 8790,
+     "price_glass": 650
+    },
+    {
+     "name": "COMPASS BOX ORCHARD HOUSE",
+     "price_bottle": 5990,
+     "price_glass": 450
+    },
+    {
+     "name": "COMPASS BOX NECTAROSITY",
+     "price_bottle": 6490,
+     "price_glass": 490
+    },
+    {
+     "name": "DANDY CLASSIC",
+     "price_bottle": 2490,
+     "price_glass": 250
+    },
+    {
+     "name": "JOHNNIE WALKER GOLD RESERVE",
+     "price_bottle": 4990,
+     "price_glass": 390
+    }
+   ],
+   "price_columns": "bottle / glass"
+  },
+  {
+   "id": "american_whiskey",
+   "title": "AMERICAN WHISKEY",
+   "page": "09-american-irish-japanese-whisky.jpg",
+   "kind": "drink",
+   "items": [
+    {
+     "name": "JIM BEAM",
+     "price_bottle": 2590,
+     "price_glass": 260
+    },
+    {
+     "name": "JACK DANIEL'S NO.7",
+     "price_bottle": 2990,
+     "price_glass": 290
+    },
+    {
+     "name": "MAKER'S MARK",
+     "price_bottle": 3990,
+     "price_glass": 350
+    },
+    {
+     "name": "MICHTER'S BOURBON",
+     "price_bottle": 6490,
+     "price_glass": 460
+    },
+    {
+     "name": "MICHTER'S RYE",
+     "price_bottle": 6490,
+     "price_glass": 460
+    },
+    {
+     "name": "BUFFALO TRACE",
+     "price_bottle": 3690,
+     "price_glass": 320
+    },
+    {
+     "name": "BULLEIT RYE",
+     "price_bottle": 5590,
+     "price_glass": 380
+    },
+    {
+     "name": "WOODFORD RESERVE BOURBON",
+     "price_bottle": 5990,
+     "price_glass": 420
+    }
+   ],
+   "price_columns": "bottle / glass"
+  },
+  {
+   "id": "irish_whiskey",
+   "title": "IRISH WHISKEY",
+   "page": "09-american-irish-japanese-whisky.jpg",
+   "kind": "drink",
+   "items": [
+    {
+     "name": "JAMESON",
+     "price_bottle": 2690,
+     "price_glass": 260
+    },
+    {
+     "name": "JAMESON BLACK BARREL",
+     "price_bottle": 3990,
+     "price_glass": 300
+    }
+   ],
+   "price_columns": "bottle / glass"
+  },
+  {
+   "id": "japanese_whisky",
+   "title": "JAPANESE WHISKY",
+   "page": "09-american-irish-japanese-whisky.jpg",
+   "kind": "drink",
+   "items": [
+    {
+     "name": "SUNTORY KAKUBIN",
+     "price_bottle": 2590,
+     "price_glass": 250
+    },
+    {
+     "name": "SUNTORY TOKI",
+     "price_bottle": 3590,
+     "price_glass": 340
+    },
+    {
+     "name": "HIBIKI HARMONY",
+     "price_bottle": 13990,
+     "price_glass": 990
+    },
+    {
+     "name": "HAKUSHU RESERVE",
+     "price_bottle": 12990,
+     "price_glass": 990
+    },
+    {
+     "name": "YAMAZAKI RESERVE",
+     "price_bottle": 13990,
+     "price_glass": 990
+    }
+   ],
+   "price_columns": "bottle / glass"
+  },
+  {
+   "id": "tequila_mezcal",
+   "title": "TEQUILA & MEZCAL",
+   "page": "10-tequila-vodka-rum-liqueur.jpg",
+   "kind": "drink",
+   "items": [
+    {
+     "name": "ORENDAIN BLANCO",
+     "price_bottle": 2590,
+     "price_glass": 250
+    },
+    {
+     "name": "EL JIMADOR BLANCO",
+     "price_bottle": 2890,
+     "price_glass": 270
+    },
+    {
+     "name": "DON JULIO BLANCO",
+     "price_bottle": 5590,
+     "price_glass": 450
+    },
+    {
+     "name": "MONTELOBOS ESPADIN",
+     "price_bottle": 6390,
+     "price_glass": 470
+    },
+    {
+     "name": "CODIGO 1530 BLANCO",
+     "price_bottle": 6290,
+     "price_glass": 460
+    },
+    {
+     "name": "DON JULIO REPOSADO",
+     "price_bottle": 8490,
+     "price_glass": 600
+    },
+    {
+     "name": "818 REPOSADO",
+     "price_bottle": 8590,
+     "price_glass": 650
+    },
+    {
+     "name": "CLASE AZUL REPOSADO",
+     "price_bottle": 29000,
+     "price_glass": 2290
+    },
+    {
+     "name": "PATRON REPOSADO",
+     "price_bottle": 8590,
+     "price_glass": 620
+    },
+    {
+     "name": "PATRON ANEJO",
+     "price_bottle": 9390,
+     "price_glass": 670
+    },
+    {
+     "name": "ORENDAIN REPOSADO",
+     "price_bottle": 2790,
+     "price_glass": 220
+    },
+    {
+     "name": "PATRON SILVER",
+     "price_bottle": 4990,
+     "price_glass": 350
+    },
+    {
+     "name": "TAPATIO BLANCO",
+     "price_bottle": 3590,
+     "price_glass": 360
+    },
+    {
+     "name": "TAPATIO REPOSADO",
+     "price_bottle": 3890,
+     "price_glass": 390
+    }
+   ],
+   "price_columns": "bottle / glass"
+  },
+  {
+   "id": "vodka",
+   "title": "VODKA",
+   "page": "10-tequila-vodka-rum-liqueur.jpg",
+   "kind": "drink",
+   "items": [
+    {
+     "name": "ABSOLUT",
+     "price_bottle": 2890,
+     "price_glass": 280
+    },
+    {
+     "name": "FINLANDIA ORIGINAL",
+     "price_bottle": 2990,
+     "price_glass": 260
+    },
+    {
+     "name": "FINLANDIA CRANBERRY",
+     "price_bottle": 2990,
+     "price_glass": 260
+    },
+    {
+     "name": "GREY GOOSE",
+     "price_bottle": 5590,
+     "price_glass": 450
+    },
+    {
+     "name": "CIROC",
+     "price_bottle": 5490,
+     "price_glass": 400
+    }
+   ],
+   "price_columns": "bottle / glass"
+  },
+  {
+   "id": "rum",
+   "title": "RUM",
+   "page": "10-tequila-vodka-rum-liqueur.jpg",
+   "kind": "drink",
+   "items": [
+    {
+     "name": "FLOR DE CANA 4Y",
+     "price_bottle": 2490,
+     "price_glass": 250
+    },
+    {
+     "name": "SAILOR JERRY",
+     "price_bottle": 2790,
+     "price_glass": 250
+    },
+    {
+     "name": "DIPLOMATICO RESERVA EXCLUSIVA",
+     "price_bottle": 3990,
+     "price_glass": 320
+    },
+    {
+     "name": "ISSAN",
+     "price_bottle": 2590,
+     "price_glass": 250
+    },
+    {
+     "name": "PHRAYA RUM 8Y",
+     "price_bottle": 3790,
+     "price_glass": 300
+    },
+    {
+     "name": "ZACAPA 23",
+     "price_bottle": 7290,
+     "price_glass": 550
+    }
+   ],
+   "price_columns": "bottle / glass"
+  },
+  {
+   "id": "liqueur",
+   "title": "LIQUEUR",
+   "page": "10-tequila-vodka-rum-liqueur.jpg",
+   "kind": "drink",
+   "items": [
+    {
+     "name": "JAGERMEISTER",
+     "price_bottle": 2490,
+     "price_glass": 200
+    },
+    {
+     "name": "FERNET BRANCA",
+     "price_bottle": 3990,
+     "price_glass": 290
+    },
+    {
+     "name": "MONTENEGRO AMARO",
+     "price_bottle": 2990,
+     "price_glass": 250
+    },
+    {
+     "name": "CAMPARI",
+     "price_glass": 350
+    },
+    {
+     "name": "APEROL",
+     "price_glass": 350
+    }
+   ],
+   "price_columns": "bottle / glass"
+  },
+  {
+   "id": "brandy_cognac",
+   "title": "BRANDY & COGNAC",
+   "page": "11-brandy-bundles-gin.jpg",
+   "kind": "drink",
+   "items": [
+    {
+     "name": "VECCHIA ROMAGNA CLASSIC BRANDY",
+     "price_bottle": 1790,
+     "price_glass": 250
+    },
+    {
+     "name": "H BY HINE VSOP",
+     "price_bottle": 5490,
+     "price_glass": 400
+    },
+    {
+     "name": "HENNESSY VS",
+     "price_bottle": 3690,
+     "price_glass": 320
+    },
+    {
+     "name": "HENNESSY VSOP",
+     "price_bottle": 6990,
+     "price_glass": 540
+    },
+    {
+     "name": "HENNESSY XO",
+     "price_bottle": 19990,
+     "price_glass": 1690
+    },
+    {
+     "name": "REGENCY 500ML.",
+     "price_bottle": 1990,
+     "price_glass": 250
+    },
+    {
+     "name": "MARTELL VSOP",
+     "price_bottle": 6890,
+     "price_glass": 520
+    }
+   ],
+   "price_columns": "bottle / glass"
+  },
+  {
+   "id": "gin",
+   "title": "GIN",
+   "page": "11-brandy-bundles-gin.jpg",
+   "kind": "drink",
+   "items": [
+    {
+     "name": "SHORT STORY",
+     "price_bottle": 2890,
+     "price_glass": 250
+    },
+    {
+     "name": "TANQUERAY",
+     "price_bottle": 3990,
+     "price_glass": 320
+    },
+    {
+     "name": "TANQUERAY NO.10",
+     "price_bottle": 4990,
+     "price_glass": 380
+    },
+    {
+     "name": "ROKU",
+     "price_bottle": 3990,
+     "price_glass": 340
+    },
+    {
+     "name": "GIN MARE",
+     "price_bottle": 4990,
+     "price_glass": 380
+    },
+    {
+     "name": "NO.3 LONDON DRY GIN",
+     "price_bottle": 7490,
+     "price_glass": 570
+    },
+    {
+     "name": "MALFY ROSA",
+     "price_bottle": 4290,
+     "price_glass": 320
+    },
+    {
+     "name": "HENDRICK'S",
+     "price_bottle": 4990,
+     "price_glass": 380
+    },
+    {
+     "name": "ANOTHER HENDRICK'S",
+     "price_bottle": 4990,
+     "price_glass": 380
+    },
+    {
+     "name": "MONKEY 47",
+     "price_bottle": 5490,
+     "price_glass": 400
+    },
+    {
+     "name": "ROCK ROSE ORIGINAL",
+     "price_bottle": 5490,
+     "price_glass": 320
+    },
+    {
+     "name": "THE BOTANIST",
+     "price_bottle": 6490,
+     "price_glass": 470
+    },
+    {
+     "name": "L'ACROBATE ORGANIC",
+     "price_bottle": 5990,
+     "price_glass": 450
+    },
+    {
+     "name": "BUSS 509 ELDERFLOWER",
+     "price_bottle": 5990,
+     "price_glass": 450
+    }
+   ],
+   "price_columns": "bottle / glass"
+  }
+ ],
+ "deals": [
+  {
+   "id": "house_shooters",
+   "page": "05-shooters-beer-other.jpg",
+   "printed": "HOUSE SHOOTERS 5 FREE 1!  590.-",
+   "buy": 5,
+   "free": 1,
+   "price": 590,
+   "note": "Printed as a deal only; no single-shooter price and no list of which shooters are poured."
+  }
+ ],
+ "bundles": [
+  {
+   "name": "SEPPUKU",
+   "page": "09-american-irish-japanese-whisky.jpg",
+   "bottles": [
+    "HIBIKI HARMONY",
+    "HAKUSHU RESERVE",
+    "YAMAZAKI RESERVE"
+   ],
+   "was": 40970,
+   "now": 34990
+  },
+  {
+   "name": "WHISKEY & WILDFLOWERS",
+   "page": "11-brandy-bundles-gin.jpg",
+   "bottles": [
+    "GLENFIDDICH 12Y",
+    "HENDRICK'S"
+   ],
+   "was": 10980,
+   "now": 7990
+  },
+  {
+   "name": "ROCKSTAR BREAKFAST",
+   "page": "11-brandy-bundles-gin.jpg",
+   "bottles": [
+    "HENNESSY VS",
+    "HENNESSY VS"
+   ],
+   "was": 7180,
+   "now": 6590
+  },
+  {
+   "name": "SHOGUN'S POTION",
+   "page": "11-brandy-bundles-gin.jpg",
+   "bottles": [
+    "HIBIKI HARMONY",
+    "ROKU GIN"
+   ],
+   "was": 16980,
+   "now": 12990
+  },
+  {
+   "name": "MONKEY BUSINESS",
+   "page": "11-brandy-bundles-gin.jpg",
+   "bottles": [
+    "MARTELL VSOP",
+    "MONKEY 47"
+   ],
+   "was": 12380,
+   "now": 9690
+  },
+  {
+   "name": "BIGMAC",
+   "page": "11-brandy-bundles-gin.jpg",
+   "bottles": [
+    "MACALLAN 12Y SHERRY CASK",
+    "NO.3 LONDON DRY GIN"
+   ],
+   "was": 20480,
+   "now": 16990
+  }
+ ],
+ "bundles_note": "“ALL BUNDLES ARE LIMITED PER DAY BASED ON OUR MOOD AND STAR POSITION / PLEASE SECRETLY WHISPER SWEET WORDS AND INQUIRE WITH OUR CREW” (page 11; applies to the five bundles on that page)",
+ "print_errata": [
+  {
+   "page": "01-aperitifs.jpg",
+   "printed": "THAI CAVIER (YUM)",
+   "likely": "THAI CAVIAR (YUM)",
+   "note": "Spelling. The Thai line ยำไข่มดแดง is a red-ant-egg salad."
+  },
+  {
+   "page": "03-mains.jpg",
+   "printed": "AUS RIBEYE STEAK W/ FRITTES & TRUFFLE MAYO",
+   "likely": "FRITES",
+   "note": "Spelling."
+  },
+  {
+   "page": "06-champagne-whites.jpg",
+   "printed": "NV FILLIPPO, SPARKLING",
+   "likely": "FILIPPO?",
+   "note": "Possibly a misspelling; unverified, confirm with the bar."
+  },
+  {
+   "page": "06-champagne-whites.jpg",
+   "printed": "CHATEAU LES VERENES SIMPLEMENT SAUVIGNON BLANC 2022",
+   "likely": "CHATEAU LES VERGES?",
+   "note": "The red on page 07 prints the same range as CHATEAU LES VERGES; one of the two is likely wrong. Unverified."
+  },
+  {
+   "page": "06-champagne-whites.jpg",
+   "printed": "MALBOUROUGH, NZ",
+   "likely": "MARLBOROUGH, NZ",
+   "note": "Spelling of the region."
+  },
+  {
+   "page": "06-champagne-whites.jpg",
+   "printed": "CAPE OF GOOD HOPE RIEBBEKSREVIER CHENIN BLANC 2023",
+   "likely": "RIEBEEKSRIVIER",
+   "note": "Spelling."
+  },
+  {
+   "page": "07-reds.jpg",
+   "printed": "CASTELLO DEL TREBBIO CHIANTI SUPERIORE DOGC 2022",
+   "likely": "DOCG",
+   "note": "Letters swapped."
+  },
+  {
+   "page": "07-reds.jpg",
+   "printed": "LOGANN'S HOLLOW, SHIRAZ 2019",
+   "likely": "LOGAN'S HOLLOW?",
+   "note": "Possibly a doubled letter; unverified."
+  },
+  {
+   "page": "08-scotch-single-malt-blended.jpg",
+   "printed": "BLENDED SCOTH WHISKY",
+   "likely": "BLENDED SCOTCH WHISKY",
+   "note": "Section heading spelling."
+  },
+  {
+   "page": "11-brandy-bundles-gin.jpg",
+   "printed": "BIGMAC: MACALLAN 12Y SHERRY CASK",
+   "likely": "THE MACALLAN 12Y SHERRY OAK",
+   "note": "The single-malt list (page 08) calls it SHERRY OAK; the bundle says SHERRY CASK."
+  }
+ ],
+ "price_notes": [
+  {
+   "page": "11-brandy-bundles-gin.jpg",
+   "item": "ROCKSTAR BREAKFAST",
+   "printed_was": 7180,
+   "list_sum": 7380,
+   "note": "Struck-through price is 200 below 2 x HENNESSY VS (3,690)."
+  },
+  {
+   "page": "11-brandy-bundles-gin.jpg",
+   "item": "SHOGUN'S POTION",
+   "printed_was": 16980,
+   "list_sum": 17980,
+   "note": "Struck-through price is 1,000 below HIBIKI HARMONY (13,990) + ROKU (3,990)."
+  },
+  {
+   "page": "11-brandy-bundles-gin.jpg",
+   "item": "BIGMAC",
+   "printed_was": 20480,
+   "list_sum": 21480,
+   "note": "Struck-through price is 1,000 below THE MACALLAN 12Y SHERRY OAK (13,990) + NO.3 LONDON DRY GIN (7,490)."
+  },
+  {
+   "page": "10-tequila-vodka-rum-liqueur.jpg",
+   "item": "CAMPARI, APEROL",
+   "note": "One price only (350), in the glass column."
+  },
+  {
+   "page": "06-champagne-whites.jpg / 07-reds.jpg",
+   "item": "all wines",
+   "note": "Bottle prices only; no wine by the glass is printed."
+  }
+ ]
+}

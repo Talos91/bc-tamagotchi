@@ -2,9 +2,12 @@ extends "res://scripts/minigames/minigame_base.gd"
 ## Pour Perfect (GDD section 9 #1, Bar, Drinks +20-30). Hold to pour; release to lock the layer on its
 ## target line. Three layers, one glass. Overfilling only foams: it costs a little score, never the reward.
 ## Controls: press and hold anywhere, release. Feeds action "pour_perfect".
+## config.drink: a real menu item id (scripts/menu/bar_menu.gd); its name shows above the glass and its pour style
+## colours the layers. Without one (the minigame lab) the glass is the plain amber/gold/cream pour.
 
 const UI = preload("res://scripts/minigames/mg_ui.gd")
 const S = preload("res://scripts/minigames/strings.gd")
+const BarMenu = preload("res://scripts/menu/bar_menu.gd")
 
 ## Cumulative fill (0 = empty, 1 = rim) each layer must reach.
 const TARGETS: Array[float] = [0.30, 0.58, 0.82]
@@ -30,6 +33,8 @@ var elapsed := 0.0  # time since the glass arrived
 var _pour_t := 0.0
 var _state_t := 0.0
 var _pressed := false
+var drink_id := ""
+var layer_colors: Array[Color] = LAYER_COLORS
 
 
 func _init() -> void:
@@ -54,6 +59,9 @@ func _on_start() -> void:
 	_pour_t = 0.0
 	_state_t = 0.0
 	_pressed = false
+	drink_id = str(config.get("drink", ""))
+	var cols := BarMenu.pour_colors(drink_id) if drink_id != "" else ([] as Array[Color])
+	layer_colors = cols if cols.size() == TARGETS.size() else LAYER_COLORS
 	_update_status()
 	queue_redraw()
 
@@ -184,13 +192,13 @@ func _draw() -> void:
 	var prev := 0.0
 	for i in locked.size():
 		var top_y := y_bottom - locked[i] * inner_h
-		draw_rect(Rect2(inner_x, top_y, inner_w, (locked[i] - prev) * inner_h), LAYER_COLORS[i])
+		draw_rect(Rect2(inner_x, top_y, inner_w, (locked[i] - prev) * inner_h), layer_colors[i])
 		prev = locked[i]
 	if state == State.POURING or (state == State.READY and level > prev):
-		var li := mini(layer, LAYER_COLORS.size() - 1)
-		draw_rect(Rect2(inner_x, y_bottom - level * inner_h, inner_w, (level - prev) * inner_h), LAYER_COLORS[li])
+		var li := mini(layer, layer_colors.size() - 1)
+		draw_rect(Rect2(inner_x, y_bottom - level * inner_h, inner_w, (level - prev) * inner_h), layer_colors[li])
 		if state == State.POURING:
-			draw_rect(Rect2(g.position.x + g.size.x * 0.5 - 8, g.position.y - 120, 16, 120 + (1.0 - level) * inner_h), LAYER_COLORS[li])
+			draw_rect(Rect2(g.position.x + g.size.x * 0.5 - 8, g.position.y - 120, 16, 120 + (1.0 - level) * inner_h), layer_colors[li])
 	if spill > 0.0:
 		var foam := minf(1.0, spill * 4.0)
 		for k in 6:
@@ -208,6 +216,9 @@ func _draw() -> void:
 		draw_line(Vector2(g.position.x - 30, ty), Vector2(g.end.x + 30, ty), col, 4.0 if active else 2.0)
 		if i < locked.size():
 			UI.draw_text(self, str(roundi(layer_score(locked[i], TARGETS[i]) * 100.0)), Vector2(g.end.x + 90, ty + 12), 36, UI.CREAM)
+	# The drink being poured.
+	if drink_id != "" and BarMenu.has(drink_id):
+		UI.draw_text(self, BarMenu.t("menu.pour.pouring", {"drink": BarMenu.name_of(drink_id)}), Vector2(size.x * 0.5, g.position.y - 150), 40, UI.GOLD)
 	# Hint.
 	var hint := ""
 	match state:
