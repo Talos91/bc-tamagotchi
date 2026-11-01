@@ -4,7 +4,8 @@ extends SceneTree
 ##   godot --headless --path . --script res://tools/export_layout.gd
 ## Kit entries: {"object", "zone", "name", "position": [x, y, z], "rotation_y": degrees, "scale": [x, y, z]}.
 ## Spawn entries: {"preset_slot", "spot", "zone", "pose", "seat_h", "position", "rotation_y"}; preset_slot is
-## PLAYER, BAR_1 (bartender), PATRON (seats) or PATRON_WANDER (wander points). Units are metres, x east, z south,
+## PLAYER, BAR_1 (bartender), PATRON (seats), PATRON_STAND (standing spots), PATRON_WANDER (wander points) or
+## NPC_SPAWN (band backstage, staff in the kitchen and the walled bar area). Units are metres, x east, z south,
 ## y up (Godot axes; Blender is x, -z, y).
 
 const OUT := "res://assets/kit/layout.json"
@@ -17,11 +18,11 @@ func _init() -> void:
 	_collect(venue, venue, kit)
 	var spawns := []
 	var player: Node3D = main.get_node("Player")
-	spawns.append({"preset_slot": "PLAYER", "spot": "Player", "zone": "Lounge", "pose": "stand", "seat_h": 0.0,
+	spawns.append({"preset_slot": "PLAYER", "spot": "Player", "zone": "Lobby", "pose": "stand", "seat_h": 0.0,
 		"position": _v(player.position * Vector3(1, 0, 1)), "rotation_y": snappedf(player.rotation_degrees.y, 0.01)})
 	for s in venue.get_node("Patrons/Spots").get_children():
 		var pose: String = s.get_meta("pose")
-		var slot: String = {"staff": "BAR_1", "wander": "PATRON_WANDER"}.get(pose, "PATRON")
+		var slot: String = {"staff": "BAR_1", "wander": "PATRON_WANDER", "spawn": "NPC_SPAWN", "stand": "PATRON_STAND"}.get(pose, "PATRON")
 		spawns.append({"preset_slot": slot, "spot": str(s.name), "zone": s.get_meta("zone"), "pose": pose,
 			"seat_h": s.get_meta("seat_h"), "position": _v(s.position), "rotation_y": snappedf(s.rotation_degrees.y, 0.01)})
 	var data := {"source": "res://scenes/venue/venue.tscn", "units": "m", "axes": "godot: x east, y up, z south",

@@ -144,6 +144,11 @@ func rows_for(zone: Dictionary) -> Array[Dictionary]:
 			rows.append(sit)
 		"arcade":
 			rows.append(_row("pinball", "venue.sheet.arcade.play", T.t("venue.sheet.arcade.play_sub", {"best": _best("neon_pinball")}), "nightlife", true))
+		"cabinet", "tall", "smoking":
+			# Plan v4 stubs (game cabinet, tall tables, smoking room): the generic table sheet until their own content lands
+			var sit := _row("sit", "venue.sheet.table.sit", T.t("venue.sheet.table.sit_sub"), "friends", false,
+				T.t("venue.sheet.table.sat") if needs.daily_keys.has("sit_with|" + sit_key(zone)) else "")
+			rows.append(sit)
 		"exit":
 			rows.append(_row("leave", "venue.sheet.exit.leave", T.t("venue.sheet.exit.leave_sub"), ""))
 	return rows
@@ -164,6 +169,8 @@ func header_for(zone: Dictionary) -> Array[String]:
 			return [T.t("venue.sheet.table.head"), T.t("venue.sheet.table.greet")]
 		"arcade":
 			return [T.t("venue.sheet.arcade.head"), T.t("venue.sheet.arcade.greet")]
+		"cabinet", "tall", "smoking":
+			return [T.t("venue.sheet.%s.head" % zone["kind"]), T.t("venue.sheet.%s.greet" % zone["kind"])]
 		"exit":
 			return [T.t("venue.sheet.exit.head"), T.t("venue.sheet.exit.greet")]
 	return ["", ""]
@@ -336,7 +343,8 @@ func tick(delta: float) -> void:
 		return
 	if not busy and band.playing and in_earshot():
 		_heard += delta
-	if needs.visit_active and player.rig.zone == "lounge" and not needs.visit_once.has("enter_lounge"):
+	# Plan v4: the street door opens into the lobby / L corridor, the lounge's entrance: the bonus still lands on arrival
+	if needs.visit_active and player.rig.zone in ["lounge", "lobby", "corridor"] and not needs.visit_once.has("enter_lounge"):
 		_card(needs.apply_action("enter_lounge"), T.t("venue.card.lounge"), true)
 	if not sitting.is_empty():
 		if player.walking_to or player.velocity.length() > 0.5 or zones.current.get("id", "") != sitting["zone"]:

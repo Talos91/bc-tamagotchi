@@ -16,7 +16,7 @@ func _init() -> void:
 		needs.autosave = false
 	main.get_node("UI").visible = false
 	var p: Player = main.get_node("Player")
-	p.global_position = Vector3(16.0, 0, 5.5)
+	p.global_position = Vector3(30.0, 0, 6.7)   # plan v4 floor view (main room aisle in front of the stage)
 	p.rig.snap()
 	var key: DirectionalLight3D = main.get_node("Venue/KeyLight")
 	var spots: Array = []

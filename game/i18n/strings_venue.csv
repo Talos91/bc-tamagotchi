@@ -109,3 +109,17 @@ venue.drink.mekhong_mule,Mekhong Mule,แม่โขงมิวล์,Drink na
 venue.drink.butterfly_gin,Butterfly Pea Gin,จินอัญชัน,Drink name,20
 venue.drink.pandan_colada,Pandan Colada,ใบเตยโคลาดา,Drink name,20
 venue.drink.smoky_old_fashioned,Smoky Old Fashioned,สโมกกี้โอลด์แฟชั่น,Drink name,20
+venue.zone.lobby,THE ENTRANCE,ทางเข้า,"HUD zone name, camera zone Lobby (plan v4)",16
+venue.zone.corridor,ENTRANCE CORRIDOR,ทางเดินเข้า,"HUD zone name, camera zone Corridor (plan v4)",20
+venue.zone.buffer,THE BUFFER,ห้องกันชน,"HUD zone name, camera zone Buffer between lounge and main room (plan v4)",16
+venue.zone.toilets,TOILET CORRIDOR,ทางไปห้องน้ำ,"HUD zone name, camera zone Toilets (plan v4)",20
+venue.zone.smoking,SMOKING ROOM,ห้องสูบบุหรี่,"HUD zone name, camera zone Smoking (plan v4)",16
+venue.prompt.cabinet,Tap to try the Black Cabin game,แตะเพื่อลองเกม Black Cabin,Zone prompt pill at the game cabinet by the stairs (stub),40
+venue.prompt.tall,Tap to lean on the table,แตะเพื่อยืนพิงโต๊ะ,Zone prompt pill at a tall table (stub),40
+venue.prompt.smoking,Tap to step outside,แตะเพื่อออกไปสูบบุหรี่,Zone prompt pill in the smoking room (stub),40
+venue.sheet.cabinet.head,THE LOUNGE · Game machine,เลานจ์ · ตู้เกม,Game cabinet sheet header (stub),26
+venue.sheet.cabinet.greet,A skull blinks on the marquee. Coming soon.,หัวกะโหลกกะพริบบนป้าย เร็ว ๆ นี้,Line on the game cabinet sheet (stub),90
+venue.sheet.tall.head,TALL TABLE,โต๊ะสูง,Tall table sheet header (stub),26
+venue.sheet.tall.greet,A candle and a free stool.,เทียนหนึ่งเล่มกับเก้าอี้ว่าง,Line on the tall table sheet (stub),90
+venue.sheet.smoking.head,SMOKING ROOM,ห้องสูบบุหรี่,Smoking room sheet header (stub),26
+venue.sheet.smoking.greet,Glass to the street; the city hums outside.,กระจกมองเห็นถนน เสียงเมืองดังแว่วอยู่ข้างนอก,Line on the smoking room sheet (stub),90

@@ -3,28 +3,36 @@ extends SceneTree
 ##   godot --path . --resolution 540x960 --script res://tools/capture_venue.gd -- --tag=portrait
 ##   godot --path . --resolution 960x540 --script res://tools/capture_venue.gd -- --tag=landscape
 ## (half of 1080x1920 and 1920x1080; orientation is undecided, so both are captured.)
-## Writes <tag>-<shot>.png to docs/art/screens/2026-10-27-integration/ (override with --out=DIR): the diorama
+## Writes <tag>-<shot>.png to docs/art/screens/v4/ (override with --out=DIR): the diorama
 ## gameplay camera in each zone, then eye-level cameras that show the ceiling, placed like the direction renders.
 ## The player and the patron crowd (Venue/Patrons) are in every shot.
 ## Prints the average frame rate per gameplay shot (vsync off).
 
 const SHOTS := [
-	{"name": "lounge", "player": Vector3(4.5, 0, 6.0)},
-	{"name": "entrance", "player": Vector3(11.0, 0, 6.0)},
-	{"name": "floor", "player": Vector3(16.0, 0, 5.5)},
-	{"name": "bar", "player": Vector3(16.6, 0, 7.4)},
-	{"name": "stage", "player": Vector3(25.5, 0.5, 2.6)},
+	{"name": "lobby", "player": Vector3(1.2, 0, 7.2)},
+	{"name": "corridor", "player": Vector3(8.0, 0, 14.1)},
+	{"name": "lounge", "player": Vector3(7.5, 0, 6.5)},
+	{"name": "buffer", "player": Vector3(17.7, 0, 5.3)},
+	{"name": "floor", "player": Vector3(30.0, 0, 6.7)},
+	{"name": "bar", "player": Vector3(29.6, 0, 11.3)},
+	{"name": "stage", "player": Vector3(30.75, 0, 6.3)},
+	{"name": "raised", "player": Vector3(40.4, 0.15, 6.1)},
+	{"name": "toilets", "player": Vector3(22.3, 0, 15.8)},
+	{"name": "smoking", "player": Vector3(40.0, 0, 15.2)},
 ]
-## Eye-level views matched to R01 (main room from the entrance), R02 (lounge), R03 (main room from the stage end)
+## Eye-level views matched to the real photos (docs/art/direction): 09 bar from the west end, 11 the raised east
+## side from its south end, 14 the buffer zone's south (mirror) side looking at the window, 20 the smoking room's
+## window side looking at the emergency exit.
 const EYE := [
-	{"name": "eye-R01-entrance", "from": Vector3(10.7, 1.9, 6.2), "at": Vector3(30.0, 1.3, 4.4), "fov": 64.0, "player": Vector3(14.5, 0, 5.6)},
-	{"name": "eye-R02-lounge", "from": Vector3(6.6, 1.7, 9.6), "at": Vector3(3.4, 1.6, 0.0), "fov": 66.0, "player": Vector3(4.6, 0, 4.4)},
-	{"name": "eye-R03-from-stage", "from": Vector3(29.2, 3.1, 6.0), "at": Vector3(11.0, 0.3, 6.6), "fov": 66.0, "player": Vector3(20.0, 0, 5.4)},
+	{"name": "eye-P09-bar", "from": Vector3(22.6, 1.5, 11.6), "at": Vector3(33.0, 0.9, 13.6), "fov": 62.0, "player": Vector3(27.0, 0, 10.8)},
+	{"name": "eye-P11-raised", "from": Vector3(40.2, 1.5, 10.6), "at": Vector3(38.6, 1.3, 1.0), "fov": 64.0, "player": Vector3(38.0, 0, 7.0)},
+	{"name": "eye-P14-buffer", "from": Vector3(17.8, 1.4, 7.4), "at": Vector3(17.8, 1.1, 2.6), "fov": 66.0, "player": Vector3(16.6, 0, 5.4)},
+	{"name": "eye-P20-smoking", "from": Vector3(39.4, 1.6, 13.2), "at": Vector3(40.2, 1.0, 18.0), "fov": 66.0, "player": Vector3(39.9, 0, 15.3)},
 ]
 
 func _init() -> void:
 	var tag := "shot"
-	var out := "res://../docs/art/screens/2026-10-27-integration"
+	var out := "res://../docs/art/screens/v4"
 	for a in OS.get_cmdline_user_args():
 		if a.begins_with("--tag="):
 			tag = a.substr(6)
@@ -64,7 +72,7 @@ func _init() -> void:
 			RenderingServer.get_rendering_info(RenderingServer.RENDERING_INFO_TOTAL_DRAW_CALLS_IN_FRAME)])
 	# HUD check: joystick and needs debug HUD over the floor view
 	main.get_node("UI").visible = true
-	p.global_position = Vector3(15.0, 0, 5.5)
+	p.global_position = Vector3(30.0, 0, 6.7)
 	p.rig.snap()
 	for i in 30:
 		await process_frame

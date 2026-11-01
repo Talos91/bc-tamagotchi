@@ -1,12 +1,14 @@
 ## Top-down orthographic renders of the built venue (the real voxel room, not the diagram).
 ##   godot --path . --resolution 1920x1080 --script res://tools/capture_plan.gd -- --out=../docs/art/screens/plan
-## Writes plan-render-venue.png (lounge + main room) and plan-render-main.png (main room only). North (-z) is up.
+## Writes plan-render-venue.png (everything), plan-render-main.png, plan-render-lounge.png (lobby, corridor, lounge,
+## buffer) and plan-render-southeast.png (bar end, toilets, smoking room). North (-z) is up.
 extends SceneTree
 
 const SHOTS := [
-	{"name": "plan-render-venue", "centre": Vector3(13.5, 0, 6.75), "width": 31.0},
-	{"name": "plan-render-main", "centre": Vector3(19.0, 0, 6.75), "width": 19.5},
-	{"name": "plan-render-lounge", "centre": Vector3(5.0, 0, 5.0), "width": 12.5},
+	{"name": "plan-render-venue", "centre": Vector3(21.5, 0, 7.5), "width": 48.0},
+	{"name": "plan-render-main", "centre": Vector3(31.0, 0, 8.0), "width": 24.0},
+	{"name": "plan-render-lounge", "centre": Vector3(9.0, 0, 7.0), "width": 20.0},
+	{"name": "plan-render-southeast", "centre": Vector3(37.0, 0, 13.0), "width": 14.0},
 ]
 
 func _init() -> void:
@@ -24,7 +26,7 @@ func _init() -> void:
 		needs.autosave = false
 	main.get_node("UI").visible = false
 	var p: Node3D = main.get_node("Player")
-	p.global_position = Vector3(15.0, 0, 5.5)
+	p.global_position = Vector3(1.2, 0, 7.2)
 	# Hide anything above head height so the camera sees the floor (ceiling, roof, upper fixtures)
 	for n in main.find_children("*", "VisualInstance3D", true, false):
 		if n.global_position.y > 3.6:

@@ -11,7 +11,7 @@ tools/build_venue.gd. Keep the two in step: build_venue.gd is the geometry of re
 S = 15.0 / 453.0   # metres per map pixel
 
 ROOMS = {  # walkable rooms: name -> (x0, z0, x1, z1, level_y)
-    "lobby":     (0.0, 5.05, 2.3, 14.9, 0.0),
+    "lobby":     (0.0, 5.05, 2.3, 14.9, 0.0),         # lobby + corridor = one L corridor, no door between them
     "corridor":  (2.3, 13.25, 15.45, 14.9, 0.0),
     "lounge":    (2.35, 0.0, 15.45, 13.15, 0.0),
     "stub":      (15.45, 10.1, 19.95, 12.4, 0.0),      # old corridor to the old toilets: alcove off the lounge, unused
@@ -39,7 +39,6 @@ BAR = {"counter": (21.8, 12.7, 35.75, 13.35), "back": (21.8, 13.35, 35.75, 15.0)
 STAGE = (27.6, 0.0, 33.9, 4.15)                        # floor level, carpet tiles
 DOORS = {  # name -> (x0, z0, x1, z1, kind)  kind: open | door | curtain | window | exit
     "street_door":   (-0.1, 6.25, 0.1, 8.1, "exit"),           # west wall of the lobby: spawn and leave
-    "lobby_threshold": (0.0, 11.25, 2.3, 11.35, "open"),
     "sticker_door":  (12.8, 13.15, 14.5, 13.3, "door"),        # lounge south wall -> entrance corridor
     "lounge_buffer": (15.4, 3.0, 15.5, 7.6, "curtain"),
     "lounge_stub":   (15.4, 10.1, 15.5, 12.4, "open"),
@@ -48,8 +47,9 @@ DOORS = {  # name -> (x0, z0, x1, z1, kind)  kind: open | door | curtain | windo
     "buffer_main":   (20.0, 3.0, 20.15, 7.6, "curtain"),
     "buffer_window": (15.45, 2.9, 20.1, 3.05, "window"),
     "staff_door_n":  (25.35, -0.1, 26.45, 0.1, "door"),        # backstage
-    "staff_door_bar": (37.0, 12.6, 38.1, 12.7, "door"),        # walled staff area
-    "smoke_door":    (38.6, 12.6, 39.8, 12.85, "door"),        # red door
+    "staff_door_bar": (37.0, 12.6, 38.1, 12.7, "door"),        # walled staff room
+    "staff_pass":    (36.05, 12.6, 36.95, 12.7, "pass"),       # half wall for orders beside the staff door
+    "smoke_door":    (38.9, 12.6, 40.3, 12.85, "door"),        # red door
     "emergency_exit": (39.5, 17.85, 40.5, 18.0, "exit"),
     "smoking_glass": (41.75, 12.85, 41.9, 17.85, "window"),
     "kitchen_curtain": (20.15, 15.1, 20.25, 16.6, "curtain"),
@@ -75,7 +75,7 @@ COUNTER_STOOLS_X = [24.65, 25.9, 27.1, 28.3, 30.95, 31.95, 32.95, 33.95, 34.95]
 COUNTER_STOOL_Z = 12.2
 BUFFER_TALL = [(16.7, 3.9), (18.7, 3.9), (16.7, 6.7), (18.7, 6.7)]
 OPENING_TALL = [(20.5, 9.05), (20.5, 11.5)]
-SMOKE_TABLES = [(41.2, 14.05), (38.75, 14.1), (38.75, 16.3), (41.2, 16.4)]
+SMOKE_TABLES = [(41.2, 14.05), (38.85, 14.45), (38.85, 16.55), (41.2, 16.4)]
 TREE = (37.2, 0.7)
 TREE_OUTSIDE = (17.7, 1.0)
 
@@ -201,5 +201,5 @@ def planned_objects():
         add("smoke_table_square", x, z, 0, "Smoke%d" % i)
         add("wishbone_chair", x, z - 0.7, 180, "Smoke%dChairN" % i)
         add("wishbone_chair", x, z + 0.7, 0, "Smoke%dChairS" % i)
-    add("air_purifier", 40.3, 13.05, 0, "AirPurifier")
+    add("air_purifier", 41.45, 13.1, 0, "AirPurifier")
     return out

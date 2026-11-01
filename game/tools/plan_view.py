@@ -75,6 +75,8 @@ def main(out, planned):
     for name, r in P.ROOMS.items():
         if ROOM_FILL.get(name):
             rect(d, r, ROOM_FILL[name], (40, 30, 30), 3)
+    v = P.ROOMS["vestibule"]                                   # the strip west of the bar is open to the main room
+    d.line([px(v[0] + 0.05, v[1]), px(P.BAR["back"][0] - 0.05, v[1])], fill=ROOM_FILL["main"], width=5)
     rect(d, P.BAR["back"], (235, 220, 40))
     rect(d, P.BAR["counter"], (110, 70, 40))
     rect(d, P.BAR["cashier"], (130, 90, 50))
@@ -83,7 +85,7 @@ def main(out, planned):
     rect(d, P.STAIRS["block"], (95, 95, 100))
     for name, (x0, z0, x1, z1, kind) in P.DOORS.items():
         col = {"open": (255, 255, 255), "door": (20, 20, 20), "curtain": (190, 20, 40), "window": (120, 190, 240),
-               "exit": (20, 160, 90)}[kind]
+               "exit": (20, 160, 90), "pass": (240, 170, 40)}[kind]
         d.rectangle([px(x0, z0), px(x1, z1)], fill=col, outline=col, width=2)
     for i, (x, z) in enumerate(P.LOUNGE_COLUMNS):
         rect(d, (x - 0.2, z - 0.2, x + 0.2, z + 0.2), (255, 255, 255), (20, 20, 20), 2)
@@ -148,7 +150,8 @@ def main(out, planned):
     label("neon under edge", 39.5, 5.6, col=(200, 20, 20))
     label("BAR (red back bar)", 28.8, 14.2)
     label("cashier + reindeer head", 29.65, 11.7)
-    label("staff area", 37.0, 13.8)
+    label("staff room", 37.0, 13.8)
+    label("half wall", 36.5, 12.2, col=(160, 100, 0))
     label("red door", 39.2, 12.2, col=(180, 10, 20))
     label("SMOKING ROOM", 40.05, 15.3, big)
     label("emergency exit", 40.0, 18.4)

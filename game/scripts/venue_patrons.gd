@@ -19,7 +19,7 @@ const BAND := {"band_drums": ["boy", "play_drums"], "band_guitar": ["band_guitar
 ## poufs facing the stage and in lounge chairs, glass held at the chest; now and then the front row applauds.
 const TABLE_POSES := ["sit_drink", "sit_drink", "sit_talk"]
 const FREE_POSES := ["sit_hold", "sit_hold", "sit_applaud"]
-const SEAT_ZONES := ["Tables", "Bar", "CommunalTable", "Lounge"]
+const SEAT_ZONES := ["Tables", "Bar", "Lounge", "Buffer", "Raised", "Smoking"]
 const WALK_SPEED := 1.1
 const SERVER_START := Vector3(16.0, 0, 5.6)
 ## PatronFigure draws presets at its FIG_SCALE; seated figures are lowered so their thighs land on the seat.

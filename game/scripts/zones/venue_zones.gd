@@ -1,33 +1,40 @@
 class_name VenueZones
 extends Node3D
-## Interaction zones, built at runtime from the frozen layout (res://assets/kit/layout.json), so nothing is placed
+## Interaction zones, built at runtime from the layout of record (res://assets/kit/layout.json), so nothing is placed
 ## in scenes/venue/. One Area3D trigger per zone; while the player stands in one or more, `current` is the one whose
 ## centre is nearest and `zone_changed` fires when it changes. `zone_at(point)` answers floor taps.
 ##
-## Zone kinds and where they come from in layout.json:
-##   bar     the bar_counter run (zone Bar), approached from the stool side; Nam is the bartender (spawn Bar_Bartender)
-##   stage   stage_platform + stage_steps (zone Stage) and the floor in front, approached at spawn Wander_StageFront
-##   table   every round_table of zone Tables (the Candle Floor); REGULAR_TABLE hosts the regular Mali
-##   arcade  the arcade_cabinet in the Lounge, approached at spawn Wander_Arcade
-##   exit    the street door under exit_sign ExitSignStreet (lounge north wall)
+## Zone kinds and where they come from in layout.json (plan v4, docs/art/plan-v4.md):
+##   bar      the bar_counter run (zone Bar), approached from the stool side; Nam is the bartender (spawn Bar_Bartender)
+##   stage    the stage_carpet_tile bounds (zone Stage: the stage is at floor level, marked by carpets) plus the
+##            floor in front, approached at spawn Wander_StageFront
+##   table    every round_table of zones Tables, Raised and Lounge; REGULAR_TABLE hosts the regular Mali
+##   arcade   the pinball (pinball_machine, or arcade_cabinet while the kit lacked it) on the lounge's west wall
+##   cabinet  the Black Cabin game machine (game_cabinet_bc) by the stairs: stub, generic sheet for now
+##   tall     every tall_table_square (buffer zone and the main room's west opening): stub, generic sheet
+##   smoking  the smoking room, one zone over its tables: stub, generic sheet
+##   exit     the street door under exit_sign ExitSignStreet (lobby west wall), approached from its front
 ## A zone is a Dictionary: id, kind, shape ("rect" | "circle"), rect (Rect2 in x,z), center (Vector2 x,z), radius,
 ## approach (Vector3 on the floor), regular ("" or a cast id). Where zones overlap, circles (a table, the cabinet)
-## win over the big rects (bar, stage), then the nearest centre.
+## win over the big rects (bar, stage, smoking), then the nearest centre.
 
 signal zone_changed(zone: Dictionary)
 
 const S = preload("res://scripts/minigames/strings.gd")
 const LAYOUT_PATH := "res://assets/kit/layout.json"
 const REGULAR := "mali"           ## only regular with Candle Talk content (scenes/minigames/candle_talk/mali.json)
-const REGULAR_TABLE := "Table2"   ## her table: mid-row on the Candle Floor, between the bar and the stage
+const REGULAR_TABLE := "Table2"   ## her table: the round one in the middle of the row of five, facing the stage
 const TRIGGER_HEIGHT := 2.4
 const TABLE_RADIUS := 1.15        ## metres around a round table's centre (x its scale)
-const ARCADE_RADIUS := 1.5
-## Trigger depth in front of the counter's centre line. The navmesh strip by the stools is cut off by the first
-## row of tables, so the bar is ordered from the aisle in front of them (BAR_APPROACH metres from the counter).
+const TALL_RADIUS := 1.0
+const FRONT_RADIUS := 1.1        ## around the floor point in front of a wall machine (pinball, game cabinet)
+const TABLE_ZONES := ["Tables", "Raised", "Lounge"]
+## Trigger depth in front of the counter's centre line; the floor by the stools is open now, so the player orders
+## from right behind them (BAR_APPROACH metres from the counter line).
 const BAR_DEPTH := 3.4
-const BAR_APPROACH := 2.85
-const STAGE_FRONT := 2.0          ## metres of floor in front of the steps that count as the front row
+const BAR_APPROACH := 1.6
+const STAGE_FRONT := 2.2          ## metres of floor south of the carpet that count as the front row
+const EXIT_DEPTH := 1.8           ## metres in front of the street door
 
 var zones: Array[Dictionary] = []
 var current: Dictionary = {}
@@ -60,13 +67,13 @@ static func defs_from_layout(path: String) -> Array[Dictionary]:
 		var tender: Vector3 = spots.get("Bar_Bartender", Vector3(r.get_center().x, 0, front))
 		out.append(_zone("bar", "bar", r, Vector3(tender.x, 0, front - BAR_APPROACH)))
 
-	var stage := _bounds(kit.filter(func(k): return k["zone"] == "Stage" and k["object"] in ["stage_platform", "stage_steps"]))
+	var stage := _bounds(kit.filter(func(k): return k["zone"] == "Stage" and k["object"] == "stage_carpet_tile"))
 	if stage.size != Vector2.ZERO:
-		var r := Rect2(stage.position.x - 1.0, stage.position.y - 1.0, stage.size.x + 2.0, stage.size.y + 1.0 + STAGE_FRONT)
+		var r := Rect2(stage.position.x - 0.8, stage.position.y - 0.5, stage.size.x + 1.6, stage.size.y + 0.5 + STAGE_FRONT + 0.5)
 		out.append(_zone("stage", "stage", r, spots.get("Wander_StageFront", Vector3(r.get_center().x, 0, r.end.y - 0.6))))
 
 	for k in kit:
-		if k["object"] == "round_table" and k["zone"] == "Tables":
+		if k["object"] == "round_table" and k["zone"] in TABLE_ZONES:
 			var p := _v3(k["position"])
 			var z := _zone("table:" + str(k["name"]), "table", Rect2(), p)
 			z["shape"] = "circle"
@@ -76,20 +83,55 @@ static func defs_from_layout(path: String) -> Array[Dictionary]:
 			out.append(z)
 
 	for k in kit:
-		if k["object"] == "arcade_cabinet":
+		if k["object"] in ["pinball_machine", "arcade_cabinet"]:
 			var p := _v3(k["position"])
-			var z := _zone("arcade", "arcade", Rect2(), spots.get("Wander_Arcade", p))
+			# The machine stands against a wall: the zone is the floor in front of it (its front is +z turned by
+			# rotation_y), so it never reaches through the wall into the room behind.
+			var fwd := Vector3(0, 0, 1).rotated(Vector3.UP, deg_to_rad(float(k["rotation_y"])))
+			var a: Vector3 = spots.get("Wander_Arcade", p + fwd * 1.2)
+			var z := _zone("arcade", "arcade", Rect2(), a)
 			z["shape"] = "circle"
-			z["center"] = Vector2(p.x, p.z)
-			z["radius"] = ARCADE_RADIUS
+			z["center"] = Vector2(a.x, a.z)
+			z["radius"] = FRONT_RADIUS
 			out.append(z)
 			break
 
 	for k in kit:
+		if k["object"] == "game_cabinet_bc":
+			var p := _v3(k["position"])
+			var fwd := Vector3(0, 0, 1).rotated(Vector3.UP, deg_to_rad(float(k["rotation_y"])))
+			var a := p + fwd * 1.0
+			var z := _zone("cabinet", "cabinet", Rect2(), a)
+			z["shape"] = "circle"
+			z["center"] = Vector2(a.x, a.z)
+			z["radius"] = FRONT_RADIUS
+			out.append(z)
+			break
+
+	for k in kit:
+		if k["object"] == "tall_table_square":
+			var p := _v3(k["position"])
+			var z := _zone("tall:" + str(k["name"]), "tall", Rect2(), p)
+			z["shape"] = "circle"
+			z["center"] = Vector2(p.x, p.z)
+			z["radius"] = TALL_RADIUS
+			out.append(z)
+
+	var smoke := _bounds(kit.filter(func(k): return k["object"] == "smoke_table_square"))
+	if smoke.size != Vector2.ZERO:
+		var r := smoke.grow(1.0)
+		out.append(_zone("smoking", "smoking", r, spots.get("Wander_Smoking", Vector3(r.get_center().x, 0, r.get_center().y))))
+
+	for k in kit:
 		if k["object"] == "exit_sign" and str(k["name"]) == "ExitSignStreet":
 			var p := _v3(k["position"])
-			var r := Rect2(p.x - 1.0, p.z - 0.2, 2.0, 1.6)
-			out.append(_zone("exit", "exit", r, Vector3(p.x, 0, p.z + 0.9)))
+			# The sign faces the room: rotation 90 = +x (lobby west wall), 0 = +z (a north wall)
+			var fwd := Vector3(0, 0, 1).rotated(Vector3.UP, deg_to_rad(float(k["rotation_y"])))
+			var c := p + fwd * EXIT_DEPTH * 0.5
+			var w := 2.0 if absf(fwd.x) < 0.5 else EXIT_DEPTH
+			var dd := EXIT_DEPTH if absf(fwd.x) < 0.5 else 2.0
+			var r := Rect2(c.x - w * 0.5, c.z - dd * 0.5, w, dd)
+			out.append(_zone("exit", "exit", r, p + fwd * 0.9))
 	return out
 
 

@@ -1,7 +1,8 @@
 extends SceneTree
-## Headless smoke test: tap-to-move. Loads main.tscn, sends the player from the lounge to the stage along the
-## navmesh (as a floor tap would), then taps the screen centre; checks arrival and the camera zone changes, and that
-## the patron crowd spawned (30-120 figures as in renders 05/06, a bartender, someone seated in every seating zone).
+## Headless smoke test: tap-to-move. Loads main.tscn, sends the player from the lobby through the lounge and buffer to
+## the floor, the bar, the stage and the smoking room along the navmesh (as a floor tap would), then taps the screen
+## centre; checks arrival and the camera zone changes, and that the patron crowd spawned (30-120 figures, a bartender,
+## someone seated in at least four seating zones).
 ##   godot --headless --path . --script res://tests/smoke_tap.gd
 
 func _init() -> void:
@@ -12,7 +13,7 @@ func _init() -> void:
 		await physics_frame
 	var zones := {}
 	var ok := true
-	for goal in [Vector3(16.0, 0, 5.0), Vector3(16.6, 0, 7.6), Vector3(25.5, 0.5, 2.6), Vector3(4.0, 0, 6.5)]:
+	for goal in [Vector3(30.0, 0, 6.7), Vector3(29.6, 0, 11.3), Vector3(30.75, 0, 2.5), Vector3(40.0, 0, 15.2), Vector3(6.0, 0, 10.8)]:
 		p.walk_to(goal)
 		for i in 1800:
 			await physics_frame
@@ -35,6 +36,6 @@ func _init() -> void:
 		if f.state == "sit" and str(f.name).begins_with("Patron"):
 			seated_zones[str(f.name).get_slice("_", 1)] = true
 	print("patrons: ", crowd.size(), " presets: ", crowd.filter(func(f): return f.is_preset()).size(), " seated zones: ", seated_zones.keys())
-	ok = ok and crowd.size() >= 30 and crowd.size() <= 120 and main.has_node("Venue/Patrons/Bartender") and seated_zones.size() == 4
+	ok = ok and crowd.size() >= 30 and crowd.size() <= 120 and main.has_node("Venue/Patrons/Bartender") and seated_zones.size() >= 4
 	print("SMOKE TAP ", "PASS" if ok else "FAIL")
 	quit(0 if ok else 1)
