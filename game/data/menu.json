@@ -36,16 +36,106 @@
   "phraya_rum_8y",
   "jagermeister"
  ],
+ "pour_families": [
+  {
+   "id": "beer",
+   "categories": [
+    "beer"
+   ],
+   "drink": "heineken_draught"
+  },
+  {
+   "id": "house_shooter",
+   "categories": [
+    "shooter"
+   ],
+   "drink": "house_shooter"
+  },
+  {
+   "id": "sparkling",
+   "categories": [
+    "sparkling"
+   ],
+   "drink": "moet_and_chandon_brut"
+  },
+  {
+   "id": "white_wine",
+   "categories": [
+    "white_wine"
+   ],
+   "drink": "petes_pure_sauvignon_blanc_2023"
+  },
+  {
+   "id": "red_wine",
+   "categories": [
+    "red_wine"
+   ],
+   "drink": "the_wily_fox_shiraz_2023"
+  },
+  {
+   "id": "whisky",
+   "categories": [
+    "single_malt",
+    "blended_scotch",
+    "american_whiskey",
+    "irish_whiskey",
+    "japanese_whisky"
+   ],
+   "drink": "monkey_shoulder"
+  },
+  {
+   "id": "gin",
+   "categories": [
+    "gin"
+   ],
+   "drink": "roku"
+  },
+  {
+   "id": "tequila_mezcal",
+   "categories": [
+    "tequila_mezcal"
+   ],
+   "drink": "don_julio_blanco"
+  },
+  {
+   "id": "vodka",
+   "categories": [
+    "vodka"
+   ],
+   "drink": "absolut"
+  },
+  {
+   "id": "rum",
+   "categories": [
+    "rum"
+   ],
+   "drink": "phraya_rum_8y"
+  },
+  {
+   "id": "brandy_cognac",
+   "categories": [
+    "brandy_cognac"
+   ],
+   "drink": "hennessy_vs"
+  },
+  {
+   "id": "liqueur",
+   "categories": [
+    "liqueur"
+   ],
+   "drink": "jagermeister"
+  }
+ ],
  "pour_featured": [
   "heineken_draught",
   "house_shooter",
-  "guinness_draught",
+  "moet_and_chandon_brut",
   "petes_pure_sauvignon_blanc_2023",
   "the_wily_fox_shiraz_2023",
   "monkey_shoulder",
-  "jameson",
   "roku",
   "don_julio_blanco",
+  "absolut",
   "phraya_rum_8y",
   "hennessy_vs",
   "jagermeister"

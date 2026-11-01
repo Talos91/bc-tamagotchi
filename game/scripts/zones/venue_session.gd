@@ -43,7 +43,7 @@ var band: HouseBand
 var busy := false              ## a sheet, minigame or dialogue is open: passive listening pauses
 var tipsy := Tipsiness.new()
 var drinks_this_visit := 0
-var pours_this_visit := 0  ## rotates Pour Perfect through the menu's featured drinks
+var pours_this_visit := 0  ## rotates Pour Perfect through tonight's drink families (BarMenu.pour_pick)
 var songs_heard := 0
 var start_meters := {}
 var sitting := {}              ## {zone, key, left, seat (bool)} from "sit" until the minute is up or they stand
@@ -278,7 +278,7 @@ func do_row(zone: Dictionary, row_id: String) -> bool:
 			_count_drink(now, true)
 			_card(_merge(r, bonus), T.t("venue.card.try", {"drink": BarMenu.name_of(d)}))
 		"pour":
-			_request("pour_perfect", {"drink": BarMenu.pour_pick(pours_this_visit, tipsy.state() == Tipsiness.MERRY)})
+			_request("pour_perfect", {"drink": BarMenu.pour_pick(pours_this_visit, tipsy.state() == Tipsiness.MERRY, BarMenu.night_of(needs.real_now()))})
 			pours_this_visit += 1
 		"menu":
 			menu_requested.emit("drinks")

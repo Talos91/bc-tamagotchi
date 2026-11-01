@@ -26,6 +26,9 @@ extends SceneTree
 ## camera_rig.gd's cutaway: the outward normal of the room whose camera looks through them.
 
 const MANIFEST := "res://assets/kit/manifest.json"
+const KRISTI := "res://assets/fonts/Kristi-Regular.ttf"
+const CORRIDOR_NEON_TEX := "res://assets/venue/corridor_neon.png"   # tools/venue_neon.py
+const CORRIDOR_NEON_SIZE := Vector2(1.2, 1.12)
 const OUT := "res://scenes/venue/venue.tscn"
 const ROOM_H := 4.0
 const CEILING_LAYER := 2
@@ -846,7 +849,10 @@ func _memory_corner(g: Node) -> void:
 		_seat("Lounge", "Memory_Chair%d" % i, p, 0.0, 0.45, "sit", "memory")
 	_ph(c, "tall_stool", Vector3(6.32, 0, 0.4), 0.0, "BoxStool")
 	_box(c, "CabinBox", Vector3(6.1, 0.75, 0.22), Vector3(0.44, 0.44, 0.36), _mat("cabin_box", Color("ff6a5a"), 0.7, 1.3), false)
-	_wordmark(c, "CabinBoxWord", "BLACK\nCABIN", Vector3(6.32, 0.97, 0.585), 0.0, 0.0028, Color(2.2, 2.1, 2.0), 34)
+	# Printed in dark ink on the lit box (photo 25), lettered in Kristi (Daniele, Questions tab third batch)
+	var word := _wordmark(c, "CabinBoxWord", "Black\nCabin", Vector3(6.32, 0.97, 0.585), 0.0, 0.0034, Color("1c0604"), 64)
+	word.font = load(KRISTI)
+	word.line_spacing = -26.0
 
 ## White wordmark (the Black Cabin logo style, photos 24/25): a Label3D in the default font, glowing when `col` is
 ## over 1, facing +z turned by `yaw` degrees.
@@ -880,8 +886,9 @@ func _tube(g: Node, nm: String, a: Vector3, b: Vector3, w: float, mat: Material)
 	return mi
 
 ## Corridor end wall (Daniele 2026-11-02, photo 24): red-washed brick at the corridor's east end beside the Sticker
-## door, a dark panel with the white neon "BLACK" over a line and "- CABIN -", and a lit NOW OPEN arrow pointing
-## left (north, to the Sticker door). Emissive only, no light.
+## door, a dark panel with the neon "Black" over a line and "— Cabin —", and a lit Now Open arrow pointing left
+## (north, to the Sticker door). Lettered in Kristi (Daniele, Questions tab third batch): one additive quad with the
+## texture drawn by tools/venue_neon.py (tube core plus glow, the street sign's recipe). Emissive only, no light.
 func _corridor_end(g: Node) -> void:
 	var x := CORRIDOR.end.x
 	var brick: StandardMaterial3D = _bond_mat("red_brick", Color("6a2620"), 0.06, 0.9, 0.2)
@@ -893,28 +900,34 @@ func _corridor_end(g: Node) -> void:
 	_box(e, "Brick", Vector3(x - 0.06, 0, CORRIDOR.position.y), Vector3(0.06, ROOM_H, CORRIDOR.size.y), brick, false)
 	var zc := CORRIDOR.get_center().y
 	_box(e, "SignPanel", Vector3(x - 0.09, 1.3, zc - 0.62), Vector3(0.03, 1.4, 1.24), _mat("sign_panel", Color("2a0806"), 0.6, 0.6), false)
-	var white := Color(2.6, 2.45, 2.3)
-	var tube := _mat("neon_white", Color("fff4ea"), 0.3, 3.0)
-	_wordmark(e, "SignBlack", "BLACK", Vector3(x - 0.11, 2.32, zc), -90.0, 0.0042, white, 64)
-	_tube(e, "SignLine", Vector3(x - 0.11, 2.13, zc - 0.36), Vector3(x - 0.11, 2.13, zc + 0.36), 0.025, tube)
-	_wordmark(e, "SignCabin", "— CABIN —", Vector3(x - 0.11, 1.98, zc), -90.0, 0.0028, white, 64)
-	# NOW OPEN in an arrow outline pointing north (left as you face the wall)
-	_wordmark(e, "SignNowOpen", "NOW OPEN", Vector3(x - 0.11, 1.6, zc + 0.05), -90.0, 0.0018, Color(2.4, 2.4, 1.9), 64)
-	var t := _mat("neon_green_white", Color("f0ffd8"), 0.3, 2.4)
-	var y0 := 1.5
-	var y1 := 1.7
-	var z0 := zc - 0.22
-	var z1 := zc + 0.38
-	var xs := x - 0.11
-	var segs := [[Vector3(xs, y0, z0), Vector3(xs, y0, z1)], [Vector3(xs, y1, z0), Vector3(xs, y1, z1)],
-		[Vector3(xs, y0, z1), Vector3(xs, y1, z1)], [Vector3(xs, y0 - 0.06, z0), Vector3(xs, (y0 + y1) * 0.5, z0 - 0.16)],
-		[Vector3(xs, y1 + 0.06, z0), Vector3(xs, (y0 + y1) * 0.5, z0 - 0.16)], [Vector3(xs, y0 - 0.06, z0), Vector3(xs, y0, z0)],
-		[Vector3(xs, y1, z0), Vector3(xs, y1 + 0.06, z0)]]
-	for i in segs.size():
-		_tube(e, "Arrow%d" % i, segs[i][0], segs[i][1], 0.02, t)
+	_neon_quad(e, "SignNeon", CORRIDOR_NEON_TEX, CORRIDOR_NEON_SIZE, Vector3(x - 0.11, 2.0, zc), -90.0)
 	for n in e.get_children():
 		if n is Node3D:
 			_cut(n, Vector3.RIGHT)
+
+## A neon texture (black = nothing) on a quad facing +z turned by `yaw` degrees, drawn additively and HDR-bright so
+## the environment's glow blooms it (as scenes/street/street_front.gd draws the street sign).
+func _neon_quad(parent: Node, nm: String, tex_path: String, size: Vector2, pos: Vector3, yaw: float) -> MeshInstance3D:
+	var m := StandardMaterial3D.new()
+	m.resource_name = nm.to_snake_case()
+	m.shading_mode = BaseMaterial3D.SHADING_MODE_UNSHADED
+	m.blend_mode = BaseMaterial3D.BLEND_MODE_ADD
+	m.transparency = BaseMaterial3D.TRANSPARENCY_ALPHA
+	m.albedo_texture = load(tex_path)
+	m.albedo_color = Color(2.2, 2.2, 2.2)
+	m.texture_filter = BaseMaterial3D.TEXTURE_FILTER_LINEAR_WITH_MIPMAPS_ANISOTROPIC
+	m.disable_fog = true
+	var q := QuadMesh.new()
+	q.size = size
+	var mi := MeshInstance3D.new()
+	mi.name = nm
+	mi.mesh = q
+	mi.material_override = m
+	mi.cast_shadow = GeometryInstance3D.SHADOW_CASTING_SETTING_OFF
+	mi.position = pos
+	mi.rotation_degrees.y = yaw
+	_own(mi, parent)
+	return mi
 
 ## Camera zones in which the cutaway may hide this room's walls and wall pieces (camera_rig.gd meta cut_rooms):
 ## Daniele 2026-11-02, a room's walls stay solid until the character is inside it.

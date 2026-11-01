@@ -130,10 +130,26 @@ NOT_IN_GAME = {"ICE BUCKET"}  # a service item, not a drink
 
 # Try something new: six real drinks in order (the old list was six invented ones). One per family.
 TRY_ORDER = ["guinness_draught", "monkey_shoulder", "roku", "don_julio_blanco", "phraya_rum_8y", "jagermeister"]
-# Pour Perfect rotates through these (alcohol, pourable): beer, the house shooters, wine, one spirit per family.
-POUR_FEATURED = ["heineken_draught", "house_shooter", "guinness_draught", "petes_pure_sauvignon_blanc_2023",
-                 "the_wily_fox_shiraz_2023", "monkey_shoulder", "jameson", "roku", "don_julio_blanco",
-                 "phraya_rum_8y", "hennessy_vs", "jagermeister"]
+# Pour Perfect (Daniele 2026-11-02, Questions tab third batch: "a rotation of 12 drinks, one per drink family").
+# The twelve families cover every pourable menu category exactly once (the five whisky lists are one family); each
+# features one drink. The order is the rotation: bar_menu.gd pour_pick() starts tonight's pours at family
+# (night % 12) and moves one family per pour, so each bar night opens on the next family.
+POUR_FAMILIES = [
+    {"id": "beer", "categories": ["beer"], "drink": "heineken_draught"},
+    {"id": "house_shooter", "categories": ["shooter"], "drink": "house_shooter"},
+    {"id": "sparkling", "categories": ["sparkling"], "drink": "moet_and_chandon_brut"},
+    {"id": "white_wine", "categories": ["white_wine"], "drink": "petes_pure_sauvignon_blanc_2023"},
+    {"id": "red_wine", "categories": ["red_wine"], "drink": "the_wily_fox_shiraz_2023"},
+    {"id": "whisky", "categories": ["single_malt", "blended_scotch", "american_whiskey", "irish_whiskey",
+                                    "japanese_whisky"], "drink": "monkey_shoulder"},
+    {"id": "gin", "categories": ["gin"], "drink": "roku"},
+    {"id": "tequila_mezcal", "categories": ["tequila_mezcal"], "drink": "don_julio_blanco"},
+    {"id": "vodka", "categories": ["vodka"], "drink": "absolut"},
+    {"id": "rum", "categories": ["rum"], "drink": "phraya_rum_8y"},
+    {"id": "brandy_cognac", "categories": ["brandy_cognac"], "drink": "hennessy_vs"},
+    {"id": "liqueur", "categories": ["liqueur"], "drink": "jagermeister"},
+]
+POUR_FEATURED = [f["drink"] for f in POUR_FAMILIES]
 # Pour Perfect layer colours per pour style, bottom to top.
 POUR_COLORS = {
     "lager": ["E39A2D", "F2BE4A", "F6EBDD"],
@@ -276,6 +292,7 @@ def build():
         "price_note": src["price_footer"],
         "effects": EFFECTS,
         "try_order": TRY_ORDER,
+        "pour_families": POUR_FAMILIES,
         "pour_featured": POUR_FEATURED,
         "pour_merry": POUR_MERRY,
         "pour_colors": POUR_COLORS,

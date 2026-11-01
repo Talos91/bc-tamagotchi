@@ -12,6 +12,7 @@ const BarMenu = preload("res://scripts/menu/bar_menu.gd")
 
 const MAX_W := 430.0  ## dp; phone width in landscape too, like the zone sheet
 const MAX_H := 0.78   ## share of the viewport height the sheet may take
+const PRICE_COLOR := UI.SMOKE  ## THB prices as printed, dimmed in the secondary colour (Daniele 2026-11-02)
 
 var tab := "drinks"
 var merry := false
@@ -164,6 +165,9 @@ func _row(it: Dictionary) -> Control:
 	inner.mouse_filter = Control.MOUSE_FILTER_IGNORE
 	inner.add_theme_constant_override("separation", int(UI.dp(8)))
 	root.add_child(inner)
+	if not kitchen:   # a Button does not grow with its children: follow the content when a long name wraps
+		inner.minimum_size_changed.connect(func():
+			root.custom_minimum_size.y = maxf(UI.dp(44), inner.get_combined_minimum_size().y + UI.dp(8)))
 	var marks := ("★ " if it.get("star", false) else "") + ("🌶 " if it.get("chilli", false) else "")
 	var texts := VBoxContainer.new()
 	texts.alignment = BoxContainer.ALIGNMENT_CENTER
@@ -182,7 +186,8 @@ func _row(it: Dictionary) -> Control:
 		sub = str(it["region"])
 	if sub != "":
 		texts.add_child(UI.label(sub, 12, UI.ASH))
-	var price := UI.label(BarMenu.price_text(id), 13, UI.ASH if dim else UI.SMOKE, HORIZONTAL_ALIGNMENT_RIGHT)
+	var price := UI.label(BarMenu.price_text(id), 13, UI.ASH if dim else PRICE_COLOR, HORIZONTAL_ALIGNMENT_RIGHT)
+	price.name = "Price"
 	price.size_flags_vertical = Control.SIZE_SHRINK_CENTER
 	inner.add_child(price)
 	return root

@@ -92,16 +92,40 @@ static func try_order() -> Array:
 	return data().get("try_order", [])
 
 
+## Pour Perfect's twelve drink families in rotation order: [{id, categories, drink}], one featured drink each
+## (Daniele 2026-11-02: "a rotation of 12 drinks, one per drink family"; defined in tools/menu_build.py).
+static func pour_families() -> Array:
+	return data().get("pour_families", [])
+
+
+## The featured drinks, one per family, in rotation order.
 static func pour_featured() -> Array:
 	return data().get("pour_featured", [])
 
 
-## The drink Pour Perfect features on the n-th pour (rotates through pour_featured); a soft drink while Merry.
-static func pour_pick(n: int, merry := false) -> String:
+## The family an item belongs to ("" for kitchen, soft drinks and water).
+static func family_of(id: String) -> String:
+	var cat := str(item(id).get("category", ""))
+	for f in pour_families():
+		if cat in f["categories"]:
+			return str(f["id"])
+	return ""
+
+
+## The bar night a moment belongs to: whole days on Bangkok time (UTC+7) turning over at 06:00, so a night out
+## (Tue-Sun 19:00-02:00) is one night and every player sees the same drink of the night.
+static func night_of(unix_time: float) -> int:
+	return floori((unix_time + (7 - 6) * 3600.0) / 86400.0)
+
+
+## The drink Pour Perfect features on the n-th pour of a visit on bar night `night`: tonight's rotation starts at
+## family (night % 12) and each further pour moves on one family, so every night opens on the next one and twelve
+## pours in a row cover all twelve families. A soft drink while Merry.
+static func pour_pick(n: int, merry := false, night := 0) -> String:
 	if merry:
 		return str(data().get("pour_merry", ""))
 	var f := pour_featured()
-	return "" if f.is_empty() else str(f[posmod(n, f.size())])
+	return "" if f.is_empty() else str(f[posmod(night + n, f.size())])
 
 
 ## Three layer colours (bottom to top) for Pour Perfect, or [] if the drink has no pour style.

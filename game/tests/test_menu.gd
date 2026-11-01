@@ -9,6 +9,7 @@ extends SceneTree
 
 const BarMenu = preload("res://scripts/menu/bar_menu.gd")
 const MenuList = preload("res://scripts/menu/menu_list.gd")
+const UI = preload("res://scripts/minigames/mg_ui.gd")
 const Rules = preload("res://scripts/rules.gd")
 const Tipsiness = preload("res://scripts/zones/tipsiness.gd")
 const PourScene := "res://scenes/minigames/pour_perfect/pour_perfect.tscn"
@@ -114,6 +115,45 @@ func test_effects() -> void:
 		check(BarMenu.pour_colors(id).size() == 3, "featured pour %s has three layer colours" % id)
 	check(BarMenu.pour_pick(0) == BarMenu.pour_featured()[0], "pour pick rotates from the first")
 	check(BarMenu.pour_pick(BarMenu.pour_featured().size()) == BarMenu.pour_featured()[0], "pour pick wraps")
+	_check_pour_families()
+
+
+## Pour Perfect: a rotation of 12 drinks, one per drink family (Daniele 2026-11-02, Questions tab third batch).
+func _check_pour_families() -> void:
+	var fams := BarMenu.pour_families()
+	check(fams.size() == 12, "Pour Perfect has 12 drink families (got %d)" % fams.size())
+	check(BarMenu.pour_featured().size() == 12, "Pour Perfect features 12 drinks")
+	var fam_ids := {}
+	var cat_family := {}
+	for i in fams.size():
+		var f: Dictionary = fams[i]
+		check(not fam_ids.has(f["id"]), "family %s listed once" % f["id"])
+		fam_ids[f["id"]] = true
+		for c in f["categories"]:
+			check(not cat_family.has(c), "category %s in one family only" % c)
+			cat_family[c] = f["id"]
+		check(BarMenu.has(f["drink"]), "family %s drink %s is on the menu" % [f["id"], f["drink"]])
+		check(BarMenu.family_of(f["drink"]) == f["id"], "family %s features its own drink (%s)" % [f["id"], f["drink"]])
+		check(BarMenu.pour_featured()[i] == f["drink"], "featured pour %d is family %s's drink" % [i, f["id"]])
+	# Every pourable drink belongs to exactly one family; nothing else does
+	for it in BarMenu.items("drinks"):
+		var fam := BarMenu.family_of(it["id"])
+		if it.get("pourable", false):
+			check(fam != "", "pourable %s (%s) has a family" % [it["id"], it["category"]])
+		else:
+			check(fam == "", "%s (not pourable) has no family" % it["id"])
+	# One drink per family in any 12 pours in a row, from any night; each night opens on the next family
+	for night in [0, 1, 7, 11, 12, 20398]:
+		var seen := {}
+		for n in 12:
+			seen[BarMenu.family_of(BarMenu.pour_pick(n, false, night))] = true
+		check(seen.size() == 12, "night %d: 12 pours cover all 12 families" % night)
+		check(BarMenu.pour_pick(0, false, night + 1) == BarMenu.pour_pick(1, false, night), "night %d: tomorrow opens on the next family" % night)
+	# Bar nights turn over at 06:00 Bangkok (UTC+7) = 23:00 UTC: 02:00 and 05:59 belong to the night before
+	var evening := 1793707200.0  # 2026-11-03 19:00 Bangkok (12:00 UTC)
+	check(BarMenu.night_of(evening) == BarMenu.night_of(evening + 7 * 3600.0), "02:00 is still the same night")
+	check(BarMenu.night_of(evening) == BarMenu.night_of(evening + 10 * 3600.0 + 3599.0), "05:59 is still the same night")
+	check(BarMenu.night_of(evening + 11 * 3600.0) == BarMenu.night_of(evening) + 1, "06:00 starts the next night")
 	check(BarMenu.effect(BarMenu.pour_pick(3, true)) == "soft", "Merry pours a soft drink")
 	check(BarMenu.pour_colors(BarMenu.pour_pick(0, true)).size() == 3, "the Merry soft drink has colours")
 
@@ -183,6 +223,27 @@ func test_strings() -> void:
 	check(BarMenu.name_of("water") == "Water", "EN item name in English locale")
 
 
+## Every row shows its THB price as printed, dimmed: the secondary colour, not the name's cream (Daniele 2026-11-02).
+## Rows also fit their content: a long name wraps and its row grows, no row draws over the next.
+func _check_prices(ml: Control, tab: String) -> void:
+	for i in 3:
+		await process_frame
+	var dimmed := 0
+	var short := []
+	for it in BarMenu.items(tab):
+		var row: Control = ml.buttons.get(it["id"])
+		var price: Label = row.find_child("Price", true, false) if row else null
+		check(price != null and price.text == BarMenu.price_text(it["id"]) and price.text != "",
+			"%s row shows its price %s" % [it["id"], BarMenu.price_text(it["id"])])
+		if price and price.get_theme_color("font_color") == MenuList.PRICE_COLOR:
+			dimmed += 1
+		if row and row.size.y + 0.5 < row.get_child(0).get_combined_minimum_size().y:
+			short.append(it["id"])
+	check(short.is_empty(), "%s: every row fits its text (too short: %s)" % [tab, ", ".join(short)])
+	check(dimmed == BarMenu.items(tab).size(), "%s: every price in the secondary colour (%d)" % [tab, dimmed])
+	check(MenuList.PRICE_COLOR.get_luminance() < UI.CREAM.get_luminance(), "prices dimmer than item names")
+
+
 func test_menu_list() -> void:
 	print("[menu list] every drink tappable; Merry blocks alcohol; kitchen listed, not orderable")
 	var ml: Control = MenuList.new()
@@ -198,6 +259,10 @@ func test_menu_list() -> void:
 	if b:
 		b.pressed.emit()
 	check(chosen == ["guinness_draught"], "tapping a drink emits its id")
+	await _check_prices(ml, "drinks")
+	ml.show_tab("kitchen")
+	await process_frame
+	await _check_prices(ml, "kitchen")
 	ml.open("drinks", true)
 	await process_frame
 	check(ml.buttons["guinness_draught"].disabled, "Merry: alcohol disabled")
