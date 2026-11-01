@@ -27,3 +27,4 @@ Append-only. One dated line per event, newest last. Never edit earlier lines.
 - 2026-11-01 — Daniele supplied the real floor map and nine photos; filed as direction 08–16 (116aa23); orchestrator asking scale/route questions before briefing A1.
 - 2026-11-01 — Daniele answered the layout questions (direction 17–22, README); layout unfrozen; sessions started: 🧱 kit-real-room (local_33603a64), 🏗️ venue-rebuild.
 - 2026-11-01 — 🏗️ venue-rebuild: plan v4 written (docs/art/plan-v4.md, game/tools/plan_v4.py, plan_view.py --planned → docs/art/screens/plan/plan-v4.png); uniform scale from the map's depth (main room 21.7 × 15 m), 30 m width flagged for Daniele; build starts.
+- 2026-11-01 — venue-rebuild plan v4 approved (78c55ef): uniform scale, main room 21.7 × 15 m (owner's 30 m was rough; one constant to switch); minimal edits to main.tscn, smoke tests, venue_patrons approved.
