@@ -26,7 +26,7 @@ If the folder you are in is not this root, stop and tell the orchestrator.
 
 ## Tests
 - Headless suites, run from `game/`: `smoke_stairs`, `smoke_tap`, `smoke_hud`, `test_needs`, `test_minigames`, `smoke_loop`, `smoke_doors_sit`, `smoke_start`, `test_menu`, `smoke_version`, `test_nightlife` (eleven as of 2026-11-02; new suites add themselves here through the orchestrator). Files are `game/tests/<name>.gd`, run as `Godot --headless --path game -s tests/<name>.gd` using the Godot exe above.
-- Orchestrator verification runs in a clean `git worktree` of the exact SHA (import first), never the shared tree, then pushes that SHA only.
+- Orchestrator verification runs in a clean `git worktree` of the exact SHA (import first), never the shared tree, then pushes that SHA only. Run suites with `APPDATA` pointed at an empty folder: the real `user://save.json` may hold a WASTED lockout (smoke_tap hangs on it).
 - Full-suite rule: run all suites once per assembled wave before the orchestrator regenerates the changelog; role suites (needs, minigames, loop) run on every change to their paths.
 - **Playtest launches for Daniele** open in a phone-sized portrait window, never full desktop: `Godot --path game --resolution 450x800` (from a clean worktree of the pushed SHA, stamped with `python tools/version.py`). Daniele 2026-11-02: "the game is mobile only".
 - Windowed runs: omit `--headless`; screenshots go next to the renders they are compared with. Known slow: `test_minigames` (hundreds of checks).
