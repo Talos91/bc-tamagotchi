@@ -39,3 +39,4 @@ Append-only. One dated line per event, newest last. Never edit earlier lines.
 - 2026-11-01 — Daniele playtested v4: doors must open and be passable, tap-to-sit must seat the character, stairs reoriented; logged in DECISIONS, new Opus venue session briefed.
 - 2026-11-01 — Session started: 🏗️ venue-notes (local_545c7c14, Opus 5.5).
 - 2026-11-01 — Daniele: start B8 (front-door start screen) after the venue-notes round, same workflow; queued as STATE job 2.
+- 2026-11-01 — 🏗️ venue-notes: Daniele's v4 notes built (4452080 Prae leftovers, 676a6a8 swing doors, real seats, stair turned, alcove camera, smoke_doors_sit); six suites + new test PASS; 42 lights; captures in docs/art/screens/v4; stair reading awaits Daniele.

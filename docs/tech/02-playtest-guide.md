@@ -1,6 +1,7 @@
 # Playtest guide: the first playable loop
 
-Status: 2026-10-28, wave 3b zone wiring. One page on how to play a visit end to end.
+Status: 2026-11-01, venue v4 with walk-through doors, real seats and the turned stair. One page on how to play a
+visit end to end.
 
 ## Run it
 
@@ -9,17 +10,26 @@ Status: 2026-10-28, wave 3b zone wiring. One page on how to play a visit end to 
   `scenes/main.tscn` is the main scene.
 - **Command line:** `Godot_v4.6.1-stable_win64.exe --path game` (portrait 1080×1920, shrunk to fit the screen).
   For landscape add `--resolution 1920x1080`, or press **F7** in game to swap.
-- You arrive in the Lounge by the street door, and the visit starts at once.
+- You arrive in the entrance lobby, just inside the street door (west end of the L corridor), and the visit starts
+  at once. The corridor runs east along the lounge to the Sticker door; through it is the lounge, then the buffer
+  zone and the main room.
+- **Doors.** The street door, the Sticker door and the red door to the smoking room swing open when you (or a
+  patron) come within about a metre, and close behind you. The emergency exit, toilet, kitchen and staff doors stay
+  shut; the bar staff sometimes step out through the staff door by the order hatch.
+- **Stairs.** In the lounge's south-west corner: the first flight runs along the Sticker-door wall from beside the
+  game machine up to a landing, the second turns right and climbs along the west wall into the floor above. You
+  can climb to the velvet rope; upstairs is closed for now.
 
 ## Controls
 
 | Do | Mouse / keyboard | Touch |
 |---|---|---|
 | Walk | WASD or arrows; click the floor | joystick bottom left; tap the floor |
-| Go to a zone | click the bar, stage, a table or the cabinet; or a chip on the right edge (Bar, Stage, Mali's table, Pinball) | same, tap |
+| Go to a zone | click the bar, stage, a table or the cabinet; or a chip on the right edge (Bar, Stage, Prae's table, Pinball) | same, tap |
 | Open what's here | click the prompt pill at the bottom, or **E** / Space / Enter | tap the pill |
 | Close a sheet | Esc, or click the room above it | tap the room |
-| Leave | **Leave** (top left), or the street door | same |
+| Leave | **Leave** (top left), or the street door (its sheet opens inside it or on the step outside) | same |
+| Stand up | any move key or the joystick, or click / tap somewhere to walk | same |
 
 The top row shows the four needs as rings (Music, Friends, Drinks, Nightlife). The lowest one breathes, and its
 zone's chip gets the same colour edge. Gains rise from the rings as "+N".
@@ -31,12 +41,17 @@ zone's chip gets the same colour edge. Gains rise from the rings as "+N".
 | **Bar** (Nam) | Order a drink (first one's on the house) · Pour it yourself (**Pour Perfect**) · Try something new (+5 bonus, 6 drinks) · Thai iced tea · Water | Drinks |
 | **Stage** front | Find a spot · Play along (**Front Row Rhythm**, the song playing now) · Applaud (between songs only, capped) | Music |
 | Anywhere on the Candle Floor or at the stage (not the bar or Lounge) | every song you hear most of (60 s songs) is +5 Music; 4 songs also earn the set bonus (+5 Music, +5 Nightlife) | Music |
-| **Mali's table** (gold "Mali ♥" tag) | **Candle Talk** (once a day) · Sit with Mali (stand still 60 s, once a day) | Friends |
-| Other Candle Floor tables | Sit here a while (60 s, once per table per day) | Friends |
+| **Prae's table** (gold "Prae ♥" tag) | **Candle Talk** (once a day) · Sit with Prae (60 s seated, once a day) | Friends |
+| Other tables (Candle Floor, raised strip, lounge), tall tables, smoking room | Sit here a while (60 s seated, once per table per day) | Friends |
+| **Bar** | Take a stool: sit at the counter (no need effect; order from the stool) | — |
 | **Lounge** | first time in each visit: +5 | Nightlife |
 | **Pinball cabinet** (Lounge) | **Neon Pinball** | Nightlife |
 | **Street door** | Head home: the walk-out summary | — |
 
+- **Sitting.** "Sit" walks you to a free chair at that table (a couch place on the raised strip, a stool at a tall
+  table or the bar) and sits you down facing the table; if every seat is taken, a patron gets up to make room. The
+  minute starts once you are seated and the HUD counts it down; you stay seated after it until you move. The game
+  machine has no seat: there "Sit here a while" still means standing still a minute.
 - Drink 3–5 alcoholic drinks and watch the chip next to the rings go Warm → Tipsy → Merry; the walk changes, and
   once Merry, Nam pours only water or mocktails. Water drops one state.
 - Repeat an action: diminishing returns (§2.4) make each one land a little less; at zero the card says "That's
@@ -65,7 +80,7 @@ Press **F5** in game, or delete
 ## Tests and screenshots
 
 From `game/`: `Godot --headless --path . --script res://tests/smoke_loop.gd` (the whole visit), plus
-`smoke_stairs`, `smoke_tap`, `smoke_hud`, `test_needs`, `test_minigames`.
+`smoke_stairs`, `smoke_tap`, `smoke_hud`, `test_needs`, `test_minigames`, and `smoke_doors_sit` (doors, seats, stair).
 Screenshots: `Godot --path . -- --capture=<png> --capture-size=1080x1920 --capture-at=bar [--capture-sheet]`;
 the current ones are in `docs/art/screens/loop/`.
 
