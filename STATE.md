@@ -6,7 +6,8 @@
 
 ## IN FLIGHT (shared checkout, branch main only)
 - Venue notes round on main (676a6a8, a08065e): doors, seating, stair, alcove camera, Prae leftovers; seven suites pass (incl. new smoke_doors_sit). venue-notes session idle, kept for venue follow-ups. Stair confirmed by Daniele 2026-11-02.
-- B8 start screen on main (0dc0b68, cf0555f): night street front, BLACK CABIN neon, tap to enter, walk-in, pull-back; eight suites pass incl. smoke_start. 🏗️ venue-notes (local_545c7c14) fixing spawn-in-exit-zone and the corridor zone label.
+- B8 start screen on main (0dc0b68, cf0555f). Round 2 running in 🎬 start-screen (local_d2ed3aae): sign from direction 23, no title, eased camera sequence, exit shot.
+- 🏗️ venue-notes (local_545c7c14): spawn out of exit zone, Entrance zone label, red neon edge, Prae no surname, every seat sittable, bar_chat +3 Friends (provisional). Then REFREEZE layout.json (Daniele accepted v4).
 
 ## WORKERS ALIVE (max 3)
 - 🎛️ orchestrator fdaed712-5416-430d-b3a7-7174cf46699f (Opus 5.5); 🏗️ venue-notes (spawn + label fix); 🎬 start-screen idle, kept for follow-ups.
@@ -16,7 +17,7 @@
 - Orientation; Black Cabin opening hours; brand typeface; staff turnover; resident band + consent packs; stakes numbers; coin sign-off; chat policy; real drinks menu.
 
 ## NEXT THREE JOBS
-1. Daniele: remaining calls (street door model, Prae's full name, bar-stool row, neon colour) and venue v4 acceptance → refreeze layout.json, regenerate the changelog. Venue tweaks go to venue-notes (local_545c7c14).
+1. Verify venue-notes round → refreeze layout.json (PROJECT never-list), regenerate the changelog. Verify start-screen round 2.
 2. B8 start screen DONE pending Daniele's calls on the Questions tab (camera, sign, title, exit shot); was: outside street facade at night with lit Black Cabin neon, still first-person camera on the street door, tap to enter → door opens → camera follows the character in → door closes → pull back to game camera → play. Reuses venue-notes' door code; title/menu UI and save load stay as now.
 3. Performance pass (42 lights, phone measurement before any phone build), then figure lighting/proportion pass and character creator.
 - Later: everything in `docs/design/BACKLOG.md` (ideas, real-life bridge, online, debt). Shared board: https://claude.ai/artifact/BbpBxVWVVXMjz7TgJ7aFBW

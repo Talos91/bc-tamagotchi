@@ -47,6 +47,9 @@ GDD is updated.
 
 | 2026-11-02 | **Street sign.** On the Questions tab Daniele answered the sign question with a photo (direction 23): serif BLACK CABIN in outlined pale pink-white neon tubes with a deep red glow, over red-lit dark foliage. The start-screen sign is rebuilt to match. |
 
+| 2026-11-02 | **Answers from the Questions tab (answered 2026-11-01 18:02–18:06).** **Venue v4 accepted**: layout.json refreezes once the in-flight spawn/label fix lands. **Street door**: keep the staff-door stand-in until a photo. **Prae**: just "Prae", no surname (drop the invented Praewa Srisuk). **Neon under the raised edge**: red, as the photo. **Seats**: sitting at the bar gives a small Friends gain, and every seat in the club becomes sittable (tiny tables, long table, lounge counter, buffer and smoking room). Provisional number, orchestrator's call: new action `bar_chat` +3 Friends per seated minute at the bar, capped +6 per visit. |
+| 2026-11-02 | **Start screen answers.** Camera: over the shoulder, sequenced as Daniele wrote it: "start first (when you see the door) tapping and camera ease to over the shoulder, character open the door enters and while the door is closing camera ease to game view, interface appear and its playable". **No title** on the start screen, the neon carries it; prompt only. **Exit shot** on leaving: yes, add it. **Sign**: the photo (direction 23). |
+
 ## Still open
 
 - Black Cabin's real opening hours (drives what the game shows at 14:00: open all day with staff only, or "Doors at 18:00" with the Flat only).
