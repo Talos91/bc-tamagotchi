@@ -2,7 +2,7 @@ extends SceneTree
 ## Headless smoke test of Daniele's v4 playtest notes (doors, sitting, stairs), from main.tscn:
 ##   doors   the navmesh runs through the street door, the Sticker door and the red door; each leaf swings open as
 ##           the player walks through and closes after; the staff door stays shut to the player and blocks them
-##   sitting "sit" at Prae's table (id mali) walks the player to a chair and seats them on it, facing the table at
+##   sitting "sit" at a round table (Table2) walks the player to a chair and seats them on it, facing the table at
 ##           the seat's height; a minute seated refills Friends as before; stick input stands them up; the same on a
 ##           raised-strip couch, a tall-table stool and a bar stool ("Take a stool": a minute gives bar_chat); and at
 ##           each new kind of seat zone (tiny tables, long table, lounge counter, rectangular and smoking tables)
@@ -96,9 +96,9 @@ func _init() -> void:
 
 	print("sitting")
 	var f0: float = needs.meters["friends"]
-	var prae: Dictionary = main.zones.first_of("table", true)
-	var seat := await sit_at(prae, "sit")
-	check(not seat.is_empty() and not seat.get("couch", true), "at Prae's table (%s): seated on a chair" % prae.get("id", "?"))
+	var round_t: Dictionary = main.zones.by_id("table:Table2")
+	var seat := await sit_at(round_t, "sit")
+	check(not seat.is_empty() and not seat.get("couch", true), "at a round table (%s): seated on a chair" % round_t.get("id", "?"))
 	s.tick(VenueSession.SIT_SECONDS + 1.0)
 	check(s.sitting.is_empty() and needs.meters["friends"] > f0, "a minute seated refills Friends (%.1f -> %.1f)" % [f0, needs.meters["friends"]])
 	check(p.seated, "still seated after the minute")
@@ -138,6 +138,9 @@ func _init() -> void:
 		var ff: float = needs.meters["friends"]
 		seat = await sit_at(tz, "sit")
 		check(str(seat.get("table", "")) == id.get_slice(":", 1), "%s: seated at its table (%s)" % [id, seat.get("node", null)])
+		if id == "table:LongTable":   # Tt's chair is his: the player never sits on him
+			var tt: Node3D = main.find_child("Host_tt", true, false)
+			check(tt != null and not seat.is_empty() and Vector2(tt.position.x - seat["pos"].x, tt.position.z - seat["pos"].z).length() > 0.3, "Long Table: a free chair, not Tt's")
 		s.tick(VenueSession.SIT_SECONDS + 1.0)
 		check(needs.meters["friends"] > ff, "%s: a seated minute refills Friends" % id)
 		await stand_with_stick()

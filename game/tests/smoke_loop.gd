@@ -1,11 +1,13 @@
 extends SceneTree
 ## Headless smoke test of the whole visit loop from main.tscn: Welcome Back on arrival, the Lounge entry bonus, then
-## the player walks to the bar, the stage, Prae's table and the arcade, opens each zone's sheet and does its rows
+## the player walks to the bar, the stage, Tt's table (the Long Table) and the arcade, opens each zone's sheet and does its rows
 ## (plain actions and all four minigames, finished through the shared frame and result card), listens to a song,
 ## sits a minute on a chair, and leaves through the street door; the walk-out summary must show the visit's gains.
 ##   godot --headless --path . --script res://tests/smoke_loop.gd
+## The night is pinned to an even one (Cast.night_override = 0), so Prae is in, at her first spot (WestTable0).
 
 const HouseBand = preload("res://scripts/zones/house_band.gd")
+const Cast = preload("res://scripts/cast.gd")
 
 var main: Node
 var needs: Node
@@ -30,6 +32,7 @@ func _init() -> void:
 	for m in needs.meters:
 		needs.meters[m] = 20.0  # low, so no gain is lost to a full meter
 	needs.homebody_flag = true  # Vibe was below 25 since the last visit: Welcome Back is due
+	Cast.night_override = 0
 	main = load("res://scenes/main.tscn").instantiate()
 	root.add_child(main)
 	for i in 5:
@@ -84,18 +87,25 @@ func _init() -> void:
 
 	print("table")
 	await walk_to("table")
-	check(main.zones.current.get("regular", "") == "mali", "at Prae's table (id mali)")
-	# Prae is an owner (Daniele 2026-11-02): her name tag has no heart and she stands at her table
-	var tag: Label3D = main.zones.get_node_or_null("Tag_mali")
-	check(tag != null and tag.text == "Prae" and not tag.text.contains("♥"), "owner's name tag shows no heart (%s)" % (tag.text if tag else "missing"))
+	check(main.zones.current.get("id", "") == "table:LongTable" and main.zones.current.get("regular", "") == "tt", "at Tt's table, the Long Table (%s)" % main.zones.current.get("id", ""))
+	# Tt is regular #4 (Daniele 2026-11-02): a heart by his name, seated at his table, and hearts from a good talk
+	var tag: Label3D = main.zones.get_node_or_null("Tag_tt")
+	check(tag != null and tag.text == "Tt  ♥", "a regular's name tag carries the heart (%s)" % (tag.text if tag else "missing"))
+	var tt: PatronFigure = main.find_child("Host_tt", true, false)
+	check(tt != null and tt.state == "sit", "Tt sits at the Long Table")
+	# Prae (an owner) is in on even nights, silent: her tag has no heart and her table offers no talk
+	var prae_z: Dictionary = main.zones.by_id("table:WestTable0")
+	var ptag: Label3D = main.zones.get_node_or_null("Tag_mali")
+	check(prae_z.get("host", "") == "mali" and prae_z.get("regular", "x") == "", "Prae hosts WestTable0 tonight, with no talk")
+	check(ptag != null and ptag.text == "Prae" and not ptag.text.contains("♥"), "owner's name tag shows no heart (%s)" % (ptag.text if ptag else "missing"))
 	check(main.find_child("Host_mali", true, false) != null, "Prae stands at her table")
-	var hearts_before: Dictionary = needs.ext.get("hearts", {}).duplicate()
+	check(not s.rows_for(prae_z).any(func(r): return r["id"] == "talk"), "Prae's sheet has no Candle Talk")
 	var f0: float = needs.meters["friends"]
 	await row("talk")
 	await play_minigame("candle_talk", 0.9)
 	var f1: float = needs.meters["friends"]
 	check(f1 > f0, "Candle Talk refills Friends (%.1f -> %.1f)" % [f0, f1])
-	check(not needs.ext.get("hearts", {}).has("mali") and needs.ext.get("hearts", {}) == hearts_before, "a talk with an owner keeps no hearts")
+	check(needs.ext.get("hearts", {}).has("tt"), "a good talk with a regular keeps hearts (%s)" % [needs.ext.get("hearts", {})])
 	await row("sit")
 	for i in 900:   # the player walks to a free chair at the table and sits; the minute starts once seated
 		if p.seated:

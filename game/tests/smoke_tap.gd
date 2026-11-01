@@ -28,7 +28,7 @@ func _init() -> void:
 	var tapped := p.tap_at(root.get_visible_rect().size * 0.5)
 	print("tap at screen centre: ", tapped, " walking ", p.walking_to)
 	ok = ok and tapped and p.walking_to
-	# A tap on a table (or the chip that walks to Prae's) must end with its sheet open. The agent stops short of a table's
+	# A tap on a table (or the walk to the regular's) must end with its sheet open. The agent stops short of a table's
 	# nav hole and the feet can stay just outside the zone circle: that still counts as arrived (main.ARRIVE_SLACK).
 	if is_instance_valid(main.welcome):
 		main.welcome.ok_button.pressed.emit()
@@ -64,14 +64,14 @@ func _init() -> void:
 	main.pending_zone = ""
 	for i in 3:
 		await physics_frame
-	main.walk_to_kind("table")   # the "Prae's table" chip
+	main.walk_to_kind("table")   # the regular's table: Tt at the Long Table
 	for i in 1800:
 		await physics_frame
 		if is_instance_valid(main.sheet) or not p.walking_to:
 			break
 	await process_frame
-	var chip_up: bool = is_instance_valid(main.sheet) and main.sheet_zone.get("regular", "") == "mali" and main.sheet.buttons.has("talk")
-	print("Prae's table chip: Candle Talk sheet open ", chip_up)
+	var chip_up: bool = is_instance_valid(main.sheet) and main.sheet_zone.get("regular", "") == "tt" and main.sheet.buttons.has("talk")
+	print("Tt's table: Candle Talk sheet open ", chip_up)
 	ok = ok and chip_up
 	main.close_sheet()
 	await process_frame

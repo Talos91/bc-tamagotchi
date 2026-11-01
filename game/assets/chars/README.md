@@ -41,7 +41,7 @@ prop). Material Preview, warm key, red fill, warm rim.
 | Path | What |
 |---|---|
 | `presets/<name>.glb` | 42 assembled characters: 8 regulars, 6 staff (with the floor server), 3 House Lights members and a guest guitarist, 24 patrons |
-| `parts/parts_<body>.glb` | every part (91) for `petite`, `regular` or `broad` on one rig, with all animations |
+| `parts/parts_<body>.glb` | every part (94) for `petite`, `regular`, `broad` or `tall` on one rig, with all animations |
 | `manifest.json` | presets, part lists, swatches, bones, animations (see below) |
 | `bc_chars.gd` | `BCChars`: loop setup, animation choice, recolouring, part visibility |
 | `chars_showcase.tscn` | every preset playing `idle`, under the kit showcase's environment plus a warm rim light |
@@ -57,6 +57,7 @@ figures in renders 05/06). Measurements, the pose plan and the review sheets: `d
 | `petite` | 8 x 5 | 10 (5 / 3 / 2) | 8 | 4 / 3 / 2 | 27 vox | 28-30 |
 | `regular` | 8 x 5 | 11 (6 / 3 / 2) | 9 | 4 / 4 / 2 | 29 vox | 30-31 |
 | `broad` | 10 x 6 | 11 | 10 | 5 / 4 / 2 | 30 vox | 31-33 |
+| `tall` | 8 x 5 | 13 (6 / 5 / 2) | 10 | 5 / 4 / 2 | 32 vox | 34-35 (Tt, 2026-11-02) |
 
 Seated poses put the thigh undersides at `seat_vox` 9 (0.45 m at scale 1), so with the figure at FIG_SCALE the root
 goes `SEAT_H * FIG_SCALE` (0.3375 m) below the real seat: cafe chairs and drum stools 0.45 m, bar stools 0.8 m.
@@ -105,17 +106,17 @@ for the bartender's pair), so walking figures never carry a sideways glass.
 | Slot | Mesh node | Options |
 |---|---|---|
 | head | `head` | `square`, `round` (chamfered vertical and top edges), `soft` (top edges), `heart` (narrow jaw), each with a 2-voxel nose in relief. All fit the 8 x 7 x 7 box, so every hair, hat and face fits every head |
-| hair | `hair` | `shaggy`, `wavy`, `afro`, `curly`, `long`, `bob`, `crop`, `buzz`, `bun`, `quiff`, `ponytail`, `side_part`, `swept`, `spiky`, `sideburns`, `chignon` (16; all but `buzz` carry 2 x 2 clumps on the back, sides and crown) |
+| hair | `hair` | `shaggy`, `wavy`, `afro`, `curly`, `long`, `bob`, `crop`, `buzz`, `bun`, `quiff`, `ponytail`, `side_part`, `swept`, `spiky`, `sideburns`, `chignon`, `two_block` (17; Korean two-block with a curtain fringe parted off centre, sleek sides; all but `buzz`, `afro`, `curly` and `two_block` carry 2 x 2 clumps on the back, sides and crown) |
 | eyes | `eyes` | `dot`, `wide`, `sleepy`, `happy`, `lashes` (1 x 2 pixel decals halfway down the face) |
 | brows | `brows` | `none`, `flat`, `arched`, `worried`, `thick`: voxels in relief, hair colour |
 | mouth | `mouth` | `smile`, `small`, `flat`, `open`, `grin` |
-| top | `top` | `tee`, `shirt` (collar points in relief, buttons, pocket), `shirt_rolled`, `shirt_tie`, `jacket` (open, lapels in relief, hem over the belt, shirt in `top_accent`), `hoodie`, `cardigan`, `bomber`, `staff_shirt`, `blouse`, `blazer`, `dress` (sleeveless), `knit`, `leather` (biker jacket open over a tee, lapels in `top_sheen`, silver zip in `top_trim`) |
+| top | `top` | `tee`, `shirt` (collar points in relief, buttons, pocket), `shirt_rolled`, `shirt_tie`, `jacket` (open, lapels in relief, hem over the belt, shirt in `top_accent`), `hoodie`, `cardigan`, `bomber`, `staff_shirt`, `blouse`, `blazer`, `dress` (sleeveless), `knit`, `leather` (biker jacket open over a tee, lapels in `top_sheen`, silver zip in `top_trim`), `denim_jacket` (jeans jacket open over a tee, collar, pocket flaps and waistband in `top_trim`, copper `top_button` buttons) |
 | bottom | `bottom` | `jeans`, `trousers` (belt with a gold buckle), `shorts`, `skirt`, `dress` (to the knee, flared hem; colour it like the top) |
 | shoes | `shoes` | `sneakers`, `boots`, `loafers` |
 | hands | `hands` | one per body |
 | accessories | `<id>` | hats `hat_bucket`, `hat_flat_cap`, `hat_beanie`, `hat_fedora` (a hat trims the hair above its brim); `glasses_round`, `glasses_tinted`, `glasses_up`; `headphones`; face `beard`, `moustache`; hair `ribbon`, `pencil`; `gig_bag`; `apron`, `vest`, `bar_towel`, `gaffer_tape`; instruments `guitar`, `guitar_electric`, `bass`, `drumsticks`; drinks `drink_beer`, `drink_mug`, `glass_gold`, `beer_left`, `bottle`; held `tray`, `shaker`, `notebook`, `torch`, `clicker`, `sketchbook`, `vinyl`; floor `wheelie_bag` |
 
-13 tops x 5 bottoms x 3 shoes. Tops own the chest and sleeves (bare forearms are skin voxels in the top); bottoms
+15 tops x 5 bottoms x 3 shoes. Tops own the chest and sleeves (bare forearms are skin voxels in the top); bottoms
 own the pelvis and legs (bare legs are skin voxels in the bottom). In a preset, overlapping parts are resolved at
 build time (later layers win: jacket hem over the belt, glasses over brows); a runtime creator assembling from a
 library should avoid the same pairs.
@@ -156,11 +157,12 @@ In `manifest.json` each preset carries `name`, `display`, `role` (`regular`, `st
 (slot -> swatch and hex, only the slots it uses), `height_m` / `height_vox` (top of hair or hat), `head_top_vox`
 and `tris`.
 
-Who is who: regulars Tong, Ploy, Jules, Dougie, Lung Nop, Bow, Hiro (each with a different head silhouette and
-their cast bible signature item: gig bag, pencil bun and sketchbook, bleached quiff and bomber, flat cap, tinted
-round glasses and a record, ribbon and wheelie bag, loosened tie and notebook). Owners (role `owner`, never
-befriended, no hearts: `game/scripts/cast.gd`): Prae (id `mali`, a real owner: wavy black hair, black leather jacket
-over a white tee, blue jeans) and `OWNER` Khun Joy (the gold-rim glass). Staff
+Who is who: regulars Tong, Ploy, Jules, Tt, Dougie, Lung Nop, Bow, Hiro (each with a different head silhouette and
+their cast bible signature item: gig bag, pencil bun and sketchbook, bleached quiff and bomber, jeans jacket and
+white pants with dark silver two-block hair on the `tall` body, flat cap, tinted round glasses and a record, ribbon
+and wheelie bag, loosened tie and notebook). Owners (role `owner`, never befriended, no hearts:
+`game/scripts/cast.gd`): Prae (id `mali`, a real owner: straight long black hair, black leather jacket over a white
+tee, blue jeans). The fictional owner Khun Joy was retired on 2026-11-02 (no preset). Staff
 `BAR_1` Nam (apron, towel), `BAR_2` Fern (shaker), `DOOR` Big (torch, clicker), `SOUND` Golf (headphones,
 gaffer tape); all in Cabin Dark with Cymbal Gold trim. House Lights: Jo
 (acoustic guitar), Pete (yellow bass), Boy (sticks). Patrons `patron_01`-`patron_12`: 3 bodies x 4 heads (square

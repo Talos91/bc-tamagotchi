@@ -1,0 +1,15 @@
+{
+  "version": 1,
+  "regular": "dougie",
+  "feeds": "friends",
+  "turns": 5,
+  "note": "Sequence: lines 1, 2, then line 3 if the candle is at 2+ (a story beat), else line 4; then 5 and 6. 'cards' are the topic cards offered; 'best' lights the candle fully, 'ok' half.",
+  "lines": [
+    {"id": 1, "key": "npc.dougie.talk.1", "cards": ["story", "bangkok", "music"], "best": "story", "ok": ["music"]},
+    {"id": 2, "key": "npc.dougie.talk.2", "cards": ["drinks", "gossip", "music"], "best": "drinks", "ok": ["gossip"]},
+    {"id": 3, "key": "npc.dougie.talk.3", "cards": ["story", "music", "drinks"], "best": "story", "ok": ["music"], "needs_candle": 2},
+    {"id": 4, "key": "npc.dougie.talk.4", "cards": ["drinks", "gossip", "bangkok"], "best": "drinks", "ok": ["gossip"]},
+    {"id": 5, "key": "npc.dougie.talk.5", "cards": ["music", "gossip", "story"], "best": "music", "ok": ["gossip"]},
+    {"id": 6, "key": "npc.dougie.talk.6", "cards": ["story", "drinks", "bangkok"], "best": "story", "ok": ["drinks"]}
+  ]
+}

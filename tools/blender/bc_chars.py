@@ -13,7 +13,8 @@ Run headless from the repo root:
     blender --background --factory-startup --python tools/blender/bc_chars.py -- --only tong,nam --no-blend
 `--no-review` skips the combined blender/BlackCabin.blend (bc_review.py), which a full run rebuilds last;
 `--no-render` keeps the .blend but skips the PNG; `--review-only` rebuilds just the .blend and the PNG.
-`--focus <name>` builds one preset's turnaround card: blender/BlackCabinChars_<name>.blend and two renders. `--only` runs
+`--focus <name>` builds one preset's turnaround card: blender/BlackCabinChars_<name>.blend and two renders (`--out <dir>`
+under the repo to put them elsewhere than docs/art/screens/<display>/). `--only` runs
 never write the manifest, libraries or .blend.
 
 Reuses bc_kit (imported, never edited): the voxel scale, the face tables, per-voxel jitter, the seam texture and
@@ -70,7 +71,7 @@ SKIN = {
 HAIR = {
     "HairBlack": "#1E1616", "HairDarkBrown": "#3E2618", "HairBrown": "#6A4228", "HairAuburn": "#8E3A1E",
     "HairBleach": "#E8CF86", "HairGrey": "#8E8890", "HairWhite": "#E4E0DC", "HairRose": "#B05A64",
-    "HairGinger": "#C0602A",
+    "HairGinger": "#C0602A", "HairSilver": "#50545F",
 }
 WARDROBE_BIBLE = ("CabinDark", "StoolBlack", "FloorGrey", "FloorLit", "ColumnWhite", "VelvetRed", "DrumRed",
                   "CymbalGold", "TableWoodLit", "WoodMid", "WoodDark", "PlantGreen")
@@ -81,7 +82,8 @@ WARDROBE_ADDED = {
     "Jacket": "#3A3444", "ShirtWhite": "#ECE6E0", "DressRed": "#B0141C", "Leather": "#5A3020",
     "LeatherBlack": "#241E26", "LeatherSheen": "#4A4250", "Silver": "#B4B0B8", "JeansBlue": "#4C6EA6",
 }
-GLOSS = {"LeatherBlack": (0.32, 0.0), "LeatherSheen": (0.25, 0.0), "Silver": (0.25, 0.6)}   # swatch: (roughness, metallic); leather catches the light
+GLOSS = {"LeatherBlack": (0.32, 0.0), "LeatherSheen": (0.25, 0.0), "Silver": (0.25, 0.6),
+         "HairSilver": (0.38, 0.3)}   # swatch: (roughness, metallic); leather catches the light, Tt's silver hair a little
 FACE = {"Ink": "#120808", "Mouth": "#6A2420", "Blush": "#E0786E", "Lens": "#2A1E1A", "Beer": "#E8A23A"}
 ROUGH = {"skin": 0.55, "hair": 0.6, "eyes": 0.3, "mouth": 0.5, "blush": 0.6, "lens": 0.1}
 
@@ -124,6 +126,7 @@ BODIES = {   # torso width/depth, leg rows (incl. 2 shoe rows), chest rows; pelv
     "petite":  dict(tw=8, td=5, leg=10, chest=8),
     "regular": dict(tw=8, td=5, leg=11, chest=9),
     "broad":   dict(tw=10, td=6, leg=11, chest=10),
+    "tall":    dict(tw=8, td=5, leg=13, chest=10),       # Tt (2026-11-02, "tall"): 34 voxels, 3 more than regular
 }
 HEAD_W, HEAD_D, HEAD_H = 8, 7, 7
 HX0, HX1, HY0, HY1 = -4, 3, -3, 3
@@ -291,7 +294,7 @@ def build_mouth(v, D, C):
 # ---- hair. T = top row of the head; hair adds a cap above it and may rise up to 5. Below the head (z < Z) long
 # hair only falls behind the shoulders (y >= 2), so it never cuts through the arms.
 HAIRS = ("shaggy", "wavy", "afro", "curly", "long", "bob", "crop", "buzz", "bun", "quiff", "ponytail", "side_part",
-         "swept", "spiky", "sideburns", "chignon")
+         "swept", "spiky", "sideburns", "chignon", "two_block")
 
 
 def build_hair(style, D, C):
@@ -425,12 +428,24 @@ def build_hair(style, D, C):
         b((HX0 - 1, HX0 - 1), (HY0 + 1, HY0 + 2), (Z + 2, T))
         b((HX1 + 1, HX1 + 1), (HY0 + 1, HY0 + 2), (Z + 2, T))
         b((HX0 + 1, HX1 - 1), (HY0, HY1), (T + 2, T + 2))
+    elif style == "two_block":
+        # Korean two-block (Tt): a full, textured top with a curtain fringe parted just off centre, the fringe ends
+        # dropping past the brow line at the temples; short sides and back under the overhang (the undercut)
+        b((HX0 - 1, HX1 + 1), (HY0 - 1, HY1 + 1), (T + 1, T + 1))
+        b((HX0, HX1), (HY0 - 1, HY1), (T + 2, T + 2))
+        lumpy(HX0, HX1 - 1, HY0, HY1 - 2, T + 3, "tb", 0.3)
+        sides(T - 2, HY0 + 1); back(Z + 3)
+        fringe(T, (HX0, -2)); fringe(T, (0, HX1))                  # the part at x -1 shows the forehead
+        b((HX0 - 1, HX0), (HY0 - 1, HY0 - 1), (T - 1, T))          # curtain ends over the temples
+        b((HX1, HX1 + 1), (HY0 - 1, HY0 - 1), (T - 1, T))
+        b((HX0 + 1, -2), (HY0 - 2, HY0 - 2), (T + 1, T + 1))        # the fringe lifts forward off the part
+        b((0, HX1 - 1), (HY0 - 2, HY0 - 2), (T + 1, T + 1))
     elif style == "chignon":
         cap(); sides(T - 5, HY0 + 1); back(Z + 2); fringe(T, (HX0, 1))
         b((-2, 1), (HY1 + 2, HY1 + 4), (Z + 1, Z + 4))              # low bun at the nape
     else:
         raise KeyError(style)
-    if style not in ("buzz", "afro", "curly"):
+    if style not in ("buzz", "afro", "curly", "two_block"):     # two-block stays sleek on the sides
         tufts(p, m, style, Z)
     return p
 
@@ -466,7 +481,7 @@ def tufts(p, m, seed, Z):
 TOPS = {   # style: sleeve length
     "tee": "short", "shirt": "full", "shirt_rolled": "rolled", "shirt_tie": "full", "jacket": "full",
     "hoodie": "full", "cardigan": "full", "bomber": "full", "staff_shirt": "short", "blouse": "short",
-    "blazer": "full", "dress": "none", "knit": "full", "leather": "full",
+    "blazer": "full", "dress": "none", "knit": "full", "leather": "full", "denim_jacket": "full",
 }
 BOTTOMS = ("jeans", "trousers", "shorts", "skirt", "dress")
 SHOES = ("sneakers", "boots", "loafers")
@@ -577,6 +592,25 @@ def build_top(style, D, C):
         p.box((x0, x1), (y0 - 1, y1), (D["leg"] + 1, D["leg"] + 1), mm, "hips",
               keep=lambda x, y, z: not (y == y0 - 1 and x in (-1, 0)))   # belted hem
         p.set(x0, y0 - 1, D["leg"] + 1, tt, "hips")                 # side buckle
+    elif style == "denim_jacket":
+        # jeans jacket open over a tee (top_accent): pointed collar and seams in a lighter denim (top_trim), two
+        # chest pockets with flaps and copper buttons, a banded waist (Tt: "always a jeans jacket")
+        for z in range(zb, zt + 1):
+            front(-1, z, aa); front(0, z, aa)
+        p.box((x0, x1), (y0 - 1, y0 - 1), (zb, zt - 2), mm, "spine",
+              keep=lambda x, y, z: x not in (-1, 0))                # jacket fronts stand off the tee
+        for z in (zt - 1, zt):
+            front(-2, z, tt, 1); front(1, z, tt, 1)                 # collar
+        front(-3, zt, tt, 1); front(2, zt, tt, 1)                   # collar points
+        copper = ("top_button", "CymbalGold")
+        for xs in ((x0, -2), (1, x1)):
+            for x in range(xs[0], xs[1] + 1):
+                p.set(x, y0 - 2, zt - 3, tt, "spine")                # pocket flaps
+            p.set(xs[0] + 1 if xs[0] == x0 else xs[1] - 1, y0 - 2, zt - 4, copper, "spine")
+        for z in range(zb + 1, zt - 4, 2):
+            p.set(-2, y0 - 2, z, copper, "spine")                    # button stand
+        p.box((x0, x1), (y0 - 1, y1), (zb, zb), tt, "spine",
+              keep=lambda x, y, z: not (y == y0 - 1 and x in (-1, 0)))   # waistband
     elif style == "blazer":
         for z in range(zt - 4, zt + 1):
             front(-2, z, tt, 1); front(1, z, tt, 1)                 # lapels
@@ -949,9 +983,16 @@ PRESETS = [
       "shirt_tie", "trousers", "loafers", ["notebook"],
       skin="Skin2", hair="HairBlack", top="ShirtWhite", top_trim="Cream", top_accent="DrumRed", bottom="Charcoal",
       bottom_trim="StoolBlack", shoes="StoolBlack", shoes_trim="Charcoal"),
+    # regular #4, Tt (Daniele 2026-11-02; takes Prae's old regular duties: quiz captain at the Long Table): male,
+    # tall, always a jeans jacket and white pants, dark silver Korean-style hair. Thai iced tea, no alcohol.
+    P("tt", "Tt", "regular", "REG_TT", "tall", "heart", "two_block", ("dot", "flat", "smile"),
+      "denim_jacket", "trousers", "sneakers", ["drink_mug"],
+      skin="Skin2", hair="HairSilver", top="DenimLight", top_trim="Sky", top_accent="StoolBlack",
+      bottom="ShirtWhite", bottom_trim="StoolBlack", shoes="StoolBlack", shoes_trim="ColumnWhite"),
     # owners (cast bible section 2.3): Prae, a real owner of Black Cabin and Daniele's friend (2026-11-02): female,
-    # black hair, black leather jacket, blue jeans; internal id stays mali
-    P("mali", "Prae", "owner", "OWNER_PRAE", "regular", "soft", "wavy", ("lashes", "arched", "smile"),
+    # black hair, black leather jacket, blue jeans; straight long hair (Daniele chose the alternative, 2026-11-02);
+    # internal id stays mali
+    P("mali", "Prae", "owner", "OWNER_PRAE", "regular", "soft", "long", ("lashes", "arched", "smile"),
       "leather", "jeans", "boots", [],
       skin="Skin3", hair="HairBlack", top="LeatherBlack", top_trim="Silver", top_accent="ShirtWhite",
       bottom="JeansBlue", bottom_trim="StoolBlack", shoes="StoolBlack", shoes_trim="Charcoal"),
@@ -972,10 +1013,6 @@ PRESETS = [
       "staff_shirt", "jeans", "sneakers", ["headphones", "gaffer_tape"],
       skin="Skin4", hair="HairBlack", top_accent="CymbalGold", bottom="Charcoal", bottom_trim="Stone",
       shoes="Charcoal", shoes_trim="ColumnWhite", **STAFF_TOP),
-    P("khun_joy", "Khun Joy", "owner", "OWNER", "regular", "heart", "chignon", ("lashes", "arched", "smile"),
-      "blazer", "trousers", "loafers", ["glass_gold"],
-      skin="Skin3", hair="HairBlack", top="CabinDark", top_trim="CymbalGold", top_accent="Cream",
-      bottom="CabinDark", bottom_trim="CymbalGold", shoes="StoolBlack", shoes_trim="CymbalGold"),
     # 05/06: the floor server, white shirt with rolled sleeves, black vest and belt, tray of pints
     P("server", "Server", "staff", "FLOOR", "regular", "square", "shaggy", ("dot", "thick", "smile"),
       "shirt_rolled", "trousers", "boots", ["vest", "tray", "beard"],
@@ -2027,10 +2064,10 @@ def build_review(render=True):
         print("BC_CHARS showcase -> %s (%s)" % (SHOWCASE, scene.render.engine))
 
 
-def build_focus(name, render=True):
+def build_focus(name, render=True, out=None):
     """One preset turned four ways (front, three-quarter, side, back) at full size on a lit floor, labelled: a review
     card for a single character (Prae, 2026-11-02). Saves blender/BlackCabinChars_<name>.blend and, with render,
-    docs/art/screens/<display>/<display>-blender-review-{landscape,portrait}.png."""
+    docs/art/screens/<display>/<display>-blender-review-{landscape,portrait}.png (`out`: another folder under the repo)."""
     spec = next(p for p in PRESETS if p["name"] == name)
     reset()
     scene = bpy.context.scene
@@ -2109,10 +2146,10 @@ def build_focus(name, render=True):
     scene.render.image_settings.file_format = "PNG"
     scene.render.image_settings.color_mode = "RGB"
     scene.view_settings.view_transform = "AgX" if "AgX" in [i.identifier for i in scene.view_settings.bl_rna.properties["view_transform"].enum_items] else "Filmic"
-    out = os.path.join(K.REPO, "docs", "art", "screens", spec["display"].lower())
+    out = os.path.join(K.REPO, out) if out else os.path.join(K.REPO, "docs", "art", "screens", spec["display"].lower())
     os.makedirs(out, exist_ok=True)
     for orient, w, h, aim, dist in (("landscape", 1920, 1080, Vector((0.0, 0.0, 0.9)), 6.6),
-                                    ("portrait", 1080, 1920, Vector((0.0, 0.0, 1.0)), 6.4)):
+                                    ("portrait", 1080, 1920, Vector((0.0, 0.0, 1.05)), 5.0)):
         # portrait shows the front and three-quarter views only, closer together
         for i, (arm, objs, tag, x) in enumerate(figs):
             keep = orient == "landscape" or i < 2
@@ -2120,7 +2157,7 @@ def build_focus(name, render=True):
             arm.location.x = nx
             tag.location.x = nx
             for ob in [arm, tag] + objs:
-                ob.hide_render = not keep
+                ob.hide_render = not keep or ob.hide_viewport       # props hide_props put away stay away
         frame(w, h, aim, dist)
         scene.render.filepath = os.path.join(out, "%s-blender-review-%s.png" % (spec["display"].lower(), orient))
         bpy.ops.render.render(write_still=True)
@@ -2150,7 +2187,8 @@ if __name__ == "__main__":
     argv = sys.argv[sys.argv.index("--") + 1:] if "--" in sys.argv else []
     only = set(argv[argv.index("--only") + 1].split(",")) if "--only" in argv else None
     if "--focus" in argv:
-        build_focus(argv[argv.index("--focus") + 1], "--no-render" not in argv)
+        build_focus(argv[argv.index("--focus") + 1], "--no-render" not in argv,
+                    argv[argv.index("--out") + 1] if "--out" in argv else None)
     elif "--review-only" in argv:
         build_review("--no-render" not in argv)
     else:

@@ -9,6 +9,9 @@ extends Node3D
 ## member at the order hatch now and then steps out through the staff door (group "staff_door_user") and back.
 ## Figures are PatronFigure scenes (scenes/venue/patron_figure.tscn): character presets when they are imported,
 ## palette-swapped box placeholders otherwise.
+## The cast placed tonight (Cast.hosts(): Tt at the Long Table, Prae every other night) come first: a regular takes a
+## seat of their table, which leaves group "seat" so neither patrons nor the player take it; an owner stands at the
+## edge of hers, facing the room.
 
 const FIGURE := preload("res://scenes/venue/patron_figure.tscn")
 ## The 24 anonymous patrons (bc_chars.py PATRONS, styled after the crowd in renders 05/06). patron_06 is the player.
@@ -32,9 +35,19 @@ const STAFF_DOOR_Z := 12.75
 const FIG_SCALE := PatronFigure.FIG_SCALE
 ## The bartender stands on the raised duckboard behind the counter (05/06 show them chest-up over the 1.1 m bar)
 const BARTENDER_LIFT := 0.3
-## The host of the hosted table (VenueZones.REGULAR at REGULAR_TABLE: Prae, an owner) stands this far from its centre:
-## past the corner between its west and south chairs (clear of their backs), on the side the main room's camera sees
+const Cast = preload("res://scripts/cast.gd")
+## Where an owner stands at each of her spots: offset from the table's centre (past the corner between two chairs, clear
+## of their backs) and the yaw she faces, turned west toward whoever arrives from the lounge side. WestTable0 is 1.8 m
+## from the main room's west wall, so she takes its south-east corner there; at the buffer's tall table (stools east and
+## west, a mirror wall south) she stands on its north side, in the lane. Other tables: HOST_OFFSET, facing away.
 const HOST_OFFSET := Vector3(-0.9, 0, 0.9)
+const OWNER_SPOTS := {
+	"table:WestTable0": [Vector3(0.9, 0, 0.9), -PI * 0.25],
+	"table:Table0": [Vector3(-0.9, 0, 0.9), -PI * 0.25],
+	"tall:BufferTall3": [Vector3(0, 0, -0.8), -PI * 0.5],
+}
+## A regular's chair at their table, by preference: Tt on the Long Table's banquette, facing the lounge.
+const HOST_SEATS := {"tt": ["Lounge_Banquette1", "Lounge_Banquette0", "Lounge_Banquette2"]}
 
 # Placeholder palette (art bible §3 and §7 wardrobe; reds avoided for tops so figures read against the room)
 const SKINS := ["f0d2b6", "e4ba96", "d2a07a", "bc8860", "a06e4a", "845636", "6a432c", "4e3022"]
@@ -75,6 +88,7 @@ func _ready() -> void:
 			_:
 				if BAND.has(pose):
 					band.append(s)
+	_place_hosts(seats)
 	var presets := PATRON_PRESETS.duplicate()
 	_shuffle(presets)
 	# One seat per seating zone first, then fill at random
@@ -109,7 +123,6 @@ func _ready() -> void:
 		_bartender.position = staff.position + Vector3(0, BARTENDER_LIFT, 0)
 		_bartender.rotation.y = staff.rotation.y
 		_bartender.set_meta("pace", 0.0)
-	_place_host(seats)
 	if hatch:   # staff member behind the order hatch of the walled staff room (plan v4)
 		var h := _spawn("fern", "HatchStaff")
 		h.position = hatch.position
@@ -131,22 +144,44 @@ func _ready() -> void:
 		f.add_to_group("door_user")
 		n += 1
 
-## The owner who hosts a table stands at its edge facing the room, greeting whoever comes over: working the floor, not
-## seated as a guest (03-cast §2.3; Prae, Daniele 2026-11-02).
-func _place_host(seats: Array[Node3D]) -> void:
-	var c := Vector3.ZERO
-	var k := 0
-	for s in seats:
-		if s.get_meta("table", "") == VenueZones.REGULAR_TABLE:
+## Tonight's cast (Cast.hosts()): figures named Host_<id>. A regular sits in one of their table's chairs (03-cast §3.1:
+## Tt chatting at the Long Table); an owner works the floor at the edge of hers, greeting whoever comes over (§2.3).
+## Chairs taken here are removed from `seats` and from group "seat".
+func _place_hosts(seats: Array[Node3D]) -> void:
+	var hosts := Cast.hosts()
+	for zid in hosts:
+		var id: String = hosts[zid]
+		var table := str(zid).get_slice(":", 1)
+		var mine: Array[Node3D] = []
+		for s in seats:
+			if s.get_meta("table", "") == table:
+				mine.append(s)
+		if mine.is_empty():
+			continue
+		var f := _spawn(id, "Host_" + id, {"sit": "sit_talk"})
+		if Cast.befriends(id):
+			var seat: Node3D = mine[0]
+			for want in HOST_SEATS.get(id, []):
+				for s in mine:
+					if s.name == want:
+						seat = s
+						break
+				if seat.name == want:
+					break
+			f.position = seat.position + Vector3(0, float(seat.get_meta("seat_h", PatronFigure.SEAT_H)) - PatronFigure.SEAT_H * FIG_SCALE, 0)
+			f.rotation.y = seat.rotation.y
+			f.play("sit")
+			seats.erase(seat)
+			seat.remove_from_group("seat")
+			continue
+		var c := Vector3.ZERO
+		for s in mine:
 			c += s.position
-			k += 1
-	if k == 0:
-		return
-	c /= k
-	var f := _spawn(VenueZones.REGULAR, "Host_" + VenueZones.REGULAR)
-	f.position = Vector3(c.x, 0, c.z) + HOST_OFFSET
-	f.rotation.y = atan2(HOST_OFFSET.x, HOST_OFFSET.z)
-	f.play("idle")
+		c /= mine.size()
+		var spot: Array = OWNER_SPOTS.get(zid, [HOST_OFFSET, atan2(HOST_OFFSET.x, HOST_OFFSET.z)])
+		f.position = Vector3(c.x, 0, c.z) + spot[0]
+		f.rotation.y = spot[1]
+		f.play("idle")
 
 func is_taken(seat: Node3D) -> bool:
 	return taken.has(seat)

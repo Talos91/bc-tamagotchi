@@ -3,9 +3,11 @@ extends "res://scripts/minigames/minigame_base.gd"
 ## line, you play one of three topic cards. The best card lights the candle fully, a near card half, a
 ## miss not at all. Branching: line 3 (a story beat) only comes up if the candle is already at 2+;
 ## otherwise the talk turns to food. Score = candle light / turns. Hearts (0-3) are stored by the result card,
-## for regulars only (cast.gd): a talk with an owner (Prae, id mali) refills Friends and keeps no hearts.
-## Content: scenes/minigames/candle_talk/<regular>.json; strings in i18n/strings.csv (npc.<id>.talk.N).
-## config: {"regular": "mali", "seed": int}.
+## for regulars only (cast.gd): a talk with an owner refills Friends and keeps no hearts (Prae, id mali, has no lines
+## yet, so no talk is offered at her spot).
+## Content: scenes/minigames/candle_talk/<regular>.json; strings in i18n/strings.csv (npc.<id>.talk.N). Reactions and
+## closings are shared (mg.candle_talk.react.*, .close.*) unless the regular has their own (npc.<id>.react.*, .close.*).
+## config: {"regular": "tt", "seed": int}.
 
 const UI = preload("res://scripts/minigames/mg_ui.gd")
 const S = preload("res://scripts/minigames/strings.gd")
@@ -13,15 +15,16 @@ const S = preload("res://scripts/minigames/strings.gd")
 const Cast = preload("res://scripts/cast.gd")
 
 const DATA_DIR := "res://scenes/minigames/candle_talk/"
-## A cast member with no lines of their own yet (only Prae has a file) talks with this set, so a chat always starts.
-const FALLBACK := "mali"
+## An id with no lines of its own (a test id, a cast member added without a file) talks with this set, so a chat
+## always starts. Every regular has a set (2026-11-02).
+const FALLBACK := "tt"
 const REACT_SECONDS := 1.8
 const FULL := 1.0
 const HALF := 0.5
 
 enum Phase { ASK, REACT, CLOSE }
 
-var regular := "mali"
+var regular := "tt"
 var data: Dictionary = {}
 var turn := 0  # 0-based
 var turns := 5
@@ -143,7 +146,7 @@ func _build_ui() -> void:
 func _on_start() -> void:
 	if _bubble == null:
 		_build_ui()
-	regular = str(config.get("regular", "mali"))
+	regular = str(config.get("regular", "tt"))
 	action_key = regular
 	data = load_data(regular)
 	if data.is_empty():
@@ -201,7 +204,7 @@ func choose(card: String) -> void:
 	history.append(light)
 	candle += light
 	var kind := "best" if light == FULL else ("ok" if light == HALF else "off")
-	_reaction = S.t("mg.candle_talk.react.%s_%d" % [kind, 1 + _rng.randi() % 2])
+	_reaction = _voice("react.%s_%d" % [kind, 1 + _rng.randi() % 2])
 	_bubble.text = _reaction
 	phase = Phase.REACT
 	_phase_t = 0.0
@@ -213,7 +216,7 @@ func _close() -> void:
 	phase = Phase.CLOSE
 	_phase_t = 0.0
 	var tier := tier_for(score_from(candle, turns))
-	_bubble.text = S.t("mg.candle_talk.close.tier_%d" % (tier + 1))
+	_bubble.text = _voice("close.tier_%d" % (tier + 1))
 	_fill_cards(false)
 	_hint.text = ""
 	queue_redraw()
@@ -277,3 +280,10 @@ func _draw() -> void:
 		if i < history.size():
 			col = UI.GOLD if history[i] == FULL else (UI.AMBER if history[i] == HALF else UI.ASH)
 		draw_circle(Vector2(size.x * 0.5 + (i - (turns - 1) * 0.5) * 50.0, size.y * 0.69), 14.0, col)
+
+
+## The regular's own reaction or closing (npc.<id>.<suffix>), else the shared one (mg.candle_talk.<suffix>).
+func _voice(suffix: String) -> String:
+	var key := "npc.%s.%s" % [regular, suffix]
+	var own := S.t(key)
+	return own if own != key else S.t("mg.candle_talk." + suffix)

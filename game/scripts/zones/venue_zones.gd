@@ -8,8 +8,7 @@ extends Node3D
 ##   bar      the bar_counter run (zone Bar), approached from the stool side; Nam is the bartender (spawn Bar_Bartender)
 ##   stage    the stage_carpet_tile bounds (zone Stage: the stage is at floor level, marked by carpets) plus the
 ##            floor in front, approached at spawn Wander_StageFront
-##   table    every round_table of zones Tables, Raised and Lounge; REGULAR_TABLE is hosted by the cast member REGULAR
-##            (id mali, shown as Prae, an owner since 2026-11-02); the raised strip's small tables reach their couch
+##   table    every round_table of zones Tables, Raised and Lounge; the raised strip's small tables reach their couch
 ##            seats (radius x 0.95 at least)
 ##   arcade   the pinball (pinball_machine, or arcade_cabinet while the kit lacked it) on the lounge's west wall
 ##   cabinet  the Black Cabin game machine (game_cabinet_bc) by the stairs: stub, generic sheet for now
@@ -24,16 +23,17 @@ extends Node3D
 ##   exit     the street door under exit_sign ExitSignStreet (lobby west wall), approached from its front; it reaches
 ##            out over the step of street beyond the door
 ## A zone is a Dictionary: id, kind, shape ("rect" | "circle"), rect (Rect2 in x,z), center (Vector2 x,z), radius,
-## approach (Vector3 on the floor), regular ("" or the cast id of the table's host, of any role: see cast.gd). Where zones overlap, circles (a table, the cabinet)
-## win over the big rects (bar, stage, smoking), then the nearest centre.
+## approach (Vector3 on the floor), host ("" or the cast id placed there tonight, of any role: Cast.hosts()), regular
+## (the host when they have Candle Talk lines, so the zone offers a talk; else ""). Tonight Tt (a regular) hosts the
+## lounge's Long Table and Prae (an owner, silent for now) is at one of her spots every other night (cast.gd).
+## Where zones overlap, circles (a table, the cabinet) win over the big rects (bar, stage, smoking), then the nearest
+## centre.
 
 signal zone_changed(zone: Dictionary)
 
 const S = preload("res://scripts/minigames/strings.gd")
 const Cast = preload("res://scripts/cast.gd")
 const LAYOUT_PATH := "res://assets/kit/layout.json"
-const REGULAR := "mali"           ## the table host; only cast member with Candle Talk content (candle_talk/mali.json)
-const REGULAR_TABLE := "Table2"   ## her table: the round one in the middle of the row of five, facing the stage
 const TRIGGER_HEIGHT := 2.4
 const TABLE_RADIUS := 1.15        ## metres around a round table's centre (x its scale)
 const TALL_RADIUS := 1.0
@@ -92,7 +92,6 @@ static func defs_from_layout(path: String) -> Array[Dictionary]:
 			z["shape"] = "circle"
 			z["center"] = Vector2(p.x, p.z)
 			z["radius"] = TABLE_RADIUS * maxf(float(k["scale"][0]), 0.95)
-			z["regular"] = REGULAR if str(k["name"]) == REGULAR_TABLE else ""
 			out.append(z)
 
 	for k in kit:
@@ -196,12 +195,18 @@ static func defs_from_layout(path: String) -> Array[Dictionary]:
 			var out_pt := p - fwd * EXIT_OUTSIDE
 			r = r.expand(Vector2(out_pt.x, out_pt.z))
 			out.append(_zone("exit", "exit", r, p + fwd * EXIT_DEPTH * 0.6))
+
+	var hosts := Cast.hosts()
+	for z in out:
+		var who: String = hosts.get(z["id"], "")
+		z["host"] = who
+		z["regular"] = who if who != "" and Cast.has_lines(who) else ""
 	return out
 
 
 static func _zone(id: String, kind: String, r: Rect2, approach: Vector3) -> Dictionary:
 	return {"id": id, "kind": kind, "shape": "rect", "rect": r, "center": r.get_center(), "radius": 0.0,
-		"approach": Vector3(approach.x, 0, approach.z), "regular": ""}
+		"approach": Vector3(approach.x, 0, approach.z), "host": "", "regular": ""}
 
 
 static func _v3(a: Array) -> Vector3:
@@ -245,15 +250,15 @@ func build(defs: Array[Dictionary]) -> void:
 		add_child(area)
 		area.body_entered.connect(_on_body.bind(z["id"], true))
 		area.body_exited.connect(_on_body.bind(z["id"], false))
-		if z["regular"] != "":
+		if z.get("host", "") != "":
 			_add_tag(z)
 
 
-## Floating name over the host's table so testers can find her.
+## Floating name over a host's table so players find them.
 func _add_tag(z: Dictionary) -> void:
 	var tag := Label3D.new()
-	tag.name = "Tag_" + str(z["regular"])
-	tag.text = tag_text(z["regular"])
+	tag.name = "Tag_" + str(z["host"])
+	tag.text = tag_text(z["host"])
 	tag.billboard = BaseMaterial3D.BILLBOARD_ENABLED
 	tag.pixel_size = 0.004
 	tag.font_size = 48

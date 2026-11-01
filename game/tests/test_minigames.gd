@@ -36,6 +36,7 @@ func _initialize() -> void:
 	test_candle_logic()
 	test_candle_play()
 	await test_chat_cast()
+	test_cast()
 	test_pinball()
 	test_result_card()
 	print("")
@@ -119,8 +120,9 @@ func test_strings() -> void:
 			need_keys.append("mg.%s.%s" % [g, suffix])
 	for m in Rules.METERS:
 		need_keys.append("need.%s.name" % m)
-	for i in range(1, 7):
-		need_keys.append("npc.mali.talk.%d" % i)
+	for id in ["tt", "tong", "ploy", "jules", "dougie", "lung_nop", "bow", "hiro"]:
+		for i in range(1, 7):
+			need_keys.append("npc.%s.talk.%d" % [id, i])
 	for k in need_keys:
 		check(seen.has(k), "scene uses missing key: " + k)
 	S.install()
@@ -298,8 +300,8 @@ func check_rhythm_gain(score: float, expected: float) -> void:
 
 func test_candle_logic() -> void:
 	print("[candle] data, card light, branching")
-	var d := Candle.load_data("mali")
-	check(not d.is_empty() and d["lines"].size() >= 6 and d["lines"].size() <= 8, "Mali has 6-8 lines")
+	var d := Candle.load_data("tt")
+	check(not d.is_empty() and d["lines"].size() >= 6 and d["lines"].size() <= 8, "Tt has 6-8 lines")
 	for l in d["lines"]:
 		check(l["best"] in l["cards"], "line %d best card is offered" % l["id"])
 		for o in l["ok"]:
@@ -320,7 +322,7 @@ func test_candle_play() -> void:
 	print("[candle] full conversations")
 	for mode in ["best", "off"]:
 		var g: Control = spawn(Candle)
-		g.config = {"regular": "mali", "seed": 7}
+		g.config = {"regular": "tt", "seed": 7}
 		var res := []
 		g.finished.connect(func(r): res.append(r))
 		g.start()
@@ -341,7 +343,7 @@ func test_candle_play() -> void:
 		check(res.size() == 1, "%s: conversation ends with a result" % mode)
 		check(turns_seen == 5, "%s: five turns" % mode)
 		check(res[0]["action_id"] == "candle_talk" and res[0]["need_id"] == "friends", "%s: action and need" % mode)
-		check(res[0]["key"] == "mali", "%s: daily_once key is the regular's id" % mode)
+		check(res[0]["key"] == "tt", "%s: daily_once key is the regular's id" % mode)
 		if mode == "best":
 			check(res[0]["score"] == 1.0 and res[0]["tier"] == 2, "best cards light the candle fully")
 			check(res[0]["extra"]["lean"] == true and 3 in g.used_lines, "best path takes the story branch and earns the lean bonus")
@@ -350,16 +352,16 @@ func test_candle_play() -> void:
 		g.queue_free()
 
 
-## A chat with every cast member that can host one (Prae, an owner, and each regular: only Prae has lines of her own, the
-## others fall back to the shared set), through the real frame: it starts, the five turns play out, the result card
-## applies the talk, DONE closes the frame and hands control back. Hearts only for regulars, never for the owner.
+## A chat with every regular (each has a set of their own since 2026-11-02; Prae, an owner, is silent for now and offers
+## no talk), through the real frame: it starts with the regular's own lines, the five turns play out, the result card
+## applies the talk, DONE closes the frame and hands control back. Hearts for regulars.
 func test_chat_cast() -> void:
-	print("[chat] every cast member's talk starts, finishes and gives control back")
-	var ids := ["mali"]
+	print("[chat] every regular's talk starts, finishes and gives control back")
+	var ids := []
 	for p in Chars.manifest().get("presets", []):
 		if str(p.get("role", "")) == "regular":
 			ids.append(str(p["name"]))
-	check(ids.size() >= 8, "Prae and the seven regulars are in the manifest (%d ids)" % ids.size())
+	check(ids.size() == 8, "eight regulars in the manifest (%s)" % [ids])
 	for id in ids:
 		var n := fresh_needs()
 		n.meters["friends"] = 30.0
@@ -371,7 +373,7 @@ func test_chat_cast() -> void:
 		fr.closed.connect(func(r): closed.append(r))
 		fr.open(load("res://scenes/minigames/candle_talk/candle_talk.tscn"), {"regular": id, "seed": 3})
 		var g: Control = fr.game
-		check(g.running and g.phase == Candle.Phase.ASK and not g.data.is_empty(), "%s: the talk starts with lines to say" % id)
+		check(g.running and g.phase == Candle.Phase.ASK and str(g.data.get("regular", "")) == id, "%s: the talk starts with their own lines" % id)
 		check(g._name_label.text != "" and not g._name_label.text.begins_with("cast."), "%s: a real name over the bubble (%s)" % [id, g._name_label.text])
 		var guard := 0
 		while not g.done and guard < 400:
@@ -389,6 +391,58 @@ func test_chat_cast() -> void:
 		check(kept == Cast.befriends(id), "%s: hearts kept only for regulars (kept %s)" % [id, kept])
 		fr.free()
 		n.free()
+
+
+## Cast after Daniele's answers of 2026-11-01/02: Tt is regular #4 (hearts, lines, a name), Prae is a silent owner,
+## Khun Joy is retired, every regular has a name string and a well-formed Candle Talk set, and the nightly placement
+## (Cast.hosts) keeps Tt at the Long Table and brings Prae every other night to each of her three spots.
+func test_cast() -> void:
+	print("[cast] Tt, Prae, no Khun Joy, regulars' names and lines, tonight's hosts")
+	check(Cast.role("tt") == Cast.REGULAR and Cast.befriends("tt") and Cast.has_lines("tt"), "Tt is a regular with hearts and lines")
+	check(S.t("cast.tt.name") == "Tt" and Zones.tag_text("tt") == "Tt  ♥", "Tt's name and heart tag (%s)" % Zones.tag_text("tt"))
+	var tt_preset: Dictionary = {}
+	for p in Chars.manifest().get("presets", []):
+		if str(p["name"]) == "tt":
+			tt_preset = p
+	check(str(tt_preset.get("body", "")) == "tall" and ResourceLoader.exists("res://assets/chars/presets/tt.glb"), "Tt has a model preset (tall body, tt.glb)")
+	check(Cast.is_owner("mali") and not Cast.befriends("mali") and not Cast.has_lines("mali"), "Prae is an owner with no hearts and no lines")
+	check(S.t("npc.mali.talk.1") == "npc.mali.talk.1", "Prae's old quiz-captain lines are gone")
+	var joy := false
+	for p in Chars.manifest().get("presets", []):
+		joy = joy or str(p["name"]).contains("joy") or str(p.get("display", "")).contains("Joy")
+	for r in S.rows():
+		joy = joy or str(r["en"]).contains("Khun Joy") or str(r["key"]).contains("joy")
+	joy = joy or ResourceLoader.exists("res://assets/chars/presets/khun_joy.glb")
+	check(not joy, "no Khun Joy in presets, models or strings")
+	for p in Chars.manifest().get("presets", []):
+		if str(p.get("role", "")) != "regular":
+			continue
+		var id := str(p["name"])
+		var key := "cast.%s.name" % id
+		check(S.t(key) != key and Cast.name_of(id) == S.t(key), "%s has a name string (%s)" % [id, S.t(key)])
+		var d := Candle.load_data(id)
+		check(d.get("regular", "") == id and d.get("lines", []).size() == 6, "%s has a Candle Talk set of six lines" % id)
+		for l in d.get("lines", []):
+			check(l["best"] in l["cards"] and l["ok"].all(func(o): return o in l["cards"]) and S.t(l["key"]) != l["key"], "%s line %d: cards and text" % [id, l["id"]])
+		check(Candle.pick_line(d["lines"], 2, 2.0, [1, 2])["id"] == 3 and Candle.pick_line(d["lines"], 2, 1.0, [1, 2])["id"] == 4, "%s: story line 3 behind the candle, line 4 otherwise" % id)
+	var spots := {}
+	for n in 6:
+		var h: Dictionary = Cast.hosts(n)
+		check(h.get(Cast.TT_ZONE, "") == "tt", "night %d: Tt at the Long Table" % n)
+		var prae := h.keys().filter(func(k): return h[k] == "mali")
+		check(prae.size() == (1 if n % 2 == 0 else 0), "night %d: Prae %s" % [n, "in" if n % 2 == 0 else "out"])
+		for k in prae:
+			spots[k] = true
+	check(spots.size() == 3 and spots.has("table:WestTable0") and spots.has("table:Table0") and spots.has("tall:BufferTall3"), "Prae's three spots in turn (%s)" % [spots.keys()])
+	Cast.night_override = 4
+	var defs := Zones.defs_from_layout(Zones.LAYOUT_PATH)
+	Cast.night_override = -1
+	var by := {}
+	for z in defs:
+		by[z["id"]] = z
+	check(by.has("table:LongTable") and by["table:LongTable"]["regular"] == "tt" and by["table:LongTable"]["host"] == "tt", "Long Table zone: Tt hosts it and offers the talk")
+	check(by.has("tall:BufferTall3") and by["tall:BufferTall3"]["host"] == "mali" and by["tall:BufferTall3"]["regular"] == "", "night 4: Prae at the buffer tall table, no talk")
+	check(defs.filter(func(z): return z["regular"] != "").size() == 1, "one zone offers a Candle Talk")
 
 
 # --- Pinball -------------------------------------------------------------------------------------

@@ -3,12 +3,12 @@ extends SceneTree
 ## Generates res://assets/chars/chars_showcase.tscn from res://assets/chars/manifest.json. Run from game/:
 ##   godot --headless --path . --import
 ##   godot --headless --path . --script res://assets/chars/build_showcase.gd
-## Re-run after tools/blender/bc_chars.py re-exports. Three rows (regulars; staff and house band; patrons), every
+## Re-run after tools/blender/bc_chars.py re-exports. Three rows (regulars; owners, staff and house band; patrons), every
 ## preset labelled, under the kit showcase's dark WorldEnvironment plus a warm rim light (art bible section 7).
 
 const MANIFEST := "res://assets/chars/manifest.json"
 const OUT := "res://assets/chars/chars_showcase.tscn"
-const ROWS := [["regular"], ["staff", "band"], ["patron"]]
+const ROWS := [["regular"], ["owner", "staff", "band"], ["patron"]]
 const SPACING := 0.95
 const ROW_GAP := 2.7
 const CABIN_DARK := Color("1c0d0c")

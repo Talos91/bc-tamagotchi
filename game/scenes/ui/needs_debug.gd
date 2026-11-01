@@ -137,7 +137,7 @@ func _build() -> void:
 	box.add_child(kr)
 	_label(kr, "Target key:")
 	_key_edit = LineEdit.new()
-	_key_edit.text = "mali"
+	_key_edit.text = "tt"
 	_key_edit.size_flags_horizontal = Control.SIZE_EXPAND_FILL
 	_key_edit.add_theme_font_size_override("font_size", FONT)
 	kr.add_child(_key_edit)

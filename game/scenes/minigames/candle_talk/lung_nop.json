@@ -1,0 +1,15 @@
+{
+  "version": 1,
+  "regular": "lung_nop",
+  "feeds": "friends",
+  "turns": 5,
+  "note": "Sequence: lines 1, 2, then line 3 if the candle is at 2+ (a story beat), else line 4; then 5 and 6. 'cards' are the topic cards offered; 'best' lights the candle fully, 'ok' half.",
+  "lines": [
+    {"id": 1, "key": "npc.lung_nop.talk.1", "cards": ["music", "story", "gossip"], "best": "music", "ok": ["story"]},
+    {"id": 2, "key": "npc.lung_nop.talk.2", "cards": ["story", "music", "bangkok"], "best": "story", "ok": ["music"]},
+    {"id": 3, "key": "npc.lung_nop.talk.3", "cards": ["story", "music", "drinks"], "best": "story", "ok": ["music"], "needs_candle": 2},
+    {"id": 4, "key": "npc.lung_nop.talk.4", "cards": ["music", "drinks", "gossip"], "best": "music", "ok": ["drinks"]},
+    {"id": 5, "key": "npc.lung_nop.talk.5", "cards": ["music", "gossip", "bangkok"], "best": "music", "ok": ["gossip"]},
+    {"id": 6, "key": "npc.lung_nop.talk.6", "cards": ["story", "music", "drinks"], "best": "story", "ok": ["music"]}
+  ]
+}

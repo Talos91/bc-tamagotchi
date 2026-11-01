@@ -1,5 +1,10 @@
 # Prae as an owner (2026-11-02)
 
+**Superseded look:** Daniele chose the straight long hair (`prae-alt-long-hair-*`) on 2026-11-02; the current
+pictures are in `../cast-tt/`. Her table moved too: she is in every other night at one of three spots (03-cast §2.3).
+The review card here (`prae-blender-review-*`) still shows the wavy hair; `blender/BlackCabinChars_mali.blend` is now
+the long-hair one.
+
 Daniele's playtest of 33dc5b9: Prae is female, with black hair, a black leather jacket and blue jeans, and **no heart
 in her name**. She is one of Black Cabin's owners and Daniele's friend. Internal id stays `mali`.
 

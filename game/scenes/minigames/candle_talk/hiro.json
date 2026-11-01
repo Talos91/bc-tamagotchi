@@ -1,0 +1,15 @@
+{
+  "version": 1,
+  "regular": "hiro",
+  "feeds": "friends",
+  "turns": 5,
+  "note": "Sequence: lines 1, 2, then line 3 if the candle is at 2+ (a story beat), else line 4; then 5 and 6. 'cards' are the topic cards offered; 'best' lights the candle fully, 'ok' half.",
+  "lines": [
+    {"id": 1, "key": "npc.hiro.talk.1", "cards": ["drinks", "story", "gossip"], "best": "drinks", "ok": ["story"]},
+    {"id": 2, "key": "npc.hiro.talk.2", "cards": ["drinks", "gossip", "music"], "best": "gossip", "ok": ["drinks"]},
+    {"id": 3, "key": "npc.hiro.talk.3", "cards": ["story", "bangkok", "drinks"], "best": "story", "ok": ["bangkok"], "needs_candle": 2},
+    {"id": 4, "key": "npc.hiro.talk.4", "cards": ["drinks", "gossip", "story"], "best": "drinks", "ok": ["story"]},
+    {"id": 5, "key": "npc.hiro.talk.5", "cards": ["story", "drinks", "music"], "best": "drinks", "ok": ["story"]},
+    {"id": 6, "key": "npc.hiro.talk.6", "cards": ["gossip", "story", "bangkok"], "best": "gossip", "ok": ["story"]}
+  ]
+}

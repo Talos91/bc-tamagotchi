@@ -18,7 +18,15 @@ mg.result.plenty,That's plenty for tonight,คืนนี้พอแล้ว�
 mg.result.nothing_daily,Already caught up today,วันนี้คุยกันแล้วนะ,Result card caption for a once-a-day action already used,40
 mg.result.tab,The bar is full. The rest goes on your Tab,เต็มแล้ว ส่วนที่เหลือเข้าบิลของคุณ,Result card note when part of the gain overflowed to Tab,50
 mg.result.hearts,Hearts with {regular}: {count} of {max},หัวใจกับ{regular}: {count} จาก {max},Result card under Candle Talk. {regular} = regular's display name; {count} 0-3; {max} = 3,40
-cast.mali.name,Prae,แพร,Display name of Prae, an owner (id mali; renamed by Daniele 2026-11-01; owner, not a regular, 2026-11-02) (cast table 6.2),16
+cast.mali.name,Prae,แพร,"Display name of Prae, an owner (id mali; renamed by Daniele 2026-11-01; owner, not a regular, 2026-11-02; silent until she gives her own lines) (cast table 6.2)",16
+cast.tt.name,Tt,ทีที,"Display name of Tt, regular #4 (Daniele 2026-11-02). TH is a draft transliteration: staff check needed (cast table 6.2)",16
+cast.tong.name,Tong,ต้อง,Display name of the regular Tong (cast table 6.2),16
+cast.ploy.name,Ploy,พลอย,Display name of the regular Ploy (cast table 6.2),16
+cast.jules.name,Jules,จูลส์,Display name of the regular Jules (cast table 6.2),16
+cast.dougie.name,Dougie,ดักกี้,Display name of the regular Dougie (cast table 6.2),16
+cast.lung_nop.name,Lung Nop,ลุงนพ,Display name of the regular Lung Nop; Lung = uncle (cast table 6.2),16
+cast.bow.name,Bow,โบว์,Display name of the regular Bow (cast table 6.2),16
+cast.hiro.name,Hiro,ฮิโระ,Display name of the regular Hiro (cast table 6.2),16
 mg.pour_perfect.title,Pour Perfect,Pour Perfect,Minigame name (stays English in both languages per strings guidelines 5),18
 mg.pour_perfect.subtitle,Fill each layer to its line,รินให้พอดีทุกชั้น,Subtitle under the name in the lab menu,34
 mg.pour_perfect.how_to,Hold to pour. Let go on the line. Three layers. Overflow only foams.,กดค้างเพื่อริน ปล่อยเมื่อถึงเส้น มีสามชั้น ล้นก็แค่ฟอง,Pause sheet help text,150
@@ -45,7 +53,7 @@ mg.front_row_rhythm.song_3,Rainy Soi,ซอยฝนตก,Placeholder song titl
 mg.front_row_rhythm.song_4,Last Call Boogie,บูกี้คอลสุดท้าย,Placeholder song title 4,22
 mg.candle_talk.title,Candle Talk,Candle Talk,Minigame name (stays English),18
 mg.candle_talk.subtitle,Chat with a regular,คุยกับขาประจำ,Subtitle under the name in the lab menu,34
-mg.candle_talk.how_to,Prae says something. Tap the topic card that fits best. The candle brightens with each good match.,แพรพูดอะไรบางอย่าง แตะการ์ดหัวข้อที่เหมาะที่สุด เทียนจะสว่างขึ้นทุกครั้งที่ตอบถูกใจ,Pause sheet help text,150
+mg.candle_talk.how_to,A regular says something. Tap the topic card that fits best. The candle brightens with each good match.,ขาประจำพูดอะไรบางอย่าง แตะการ์ดหัวข้อที่เหมาะที่สุด เทียนจะสว่างขึ้นทุกครั้งที่ตอบถูกใจ,Pause sheet help text,150
 mg.candle_talk.tier_1,Pleasant chat,คุยกันสบาย ๆ,Result card tier word,18
 mg.candle_talk.tier_2,Warm chat,คุยกันอบอุ่น,Result card tier word,18
 mg.candle_talk.tier_3,Candle lit,เทียนสว่างเต็มดวง,Result card tier word,18
@@ -56,21 +64,70 @@ mg.candle_talk.card.drinks,Drinks,เรื่องเครื่องดื�
 mg.candle_talk.card.gossip,Gossip,เรื่องซุบซิบ,Topic card label (Candle Talk),22
 mg.candle_talk.card.bangkok,Bangkok,เรื่องกรุงเทพฯ,Topic card label (Candle Talk),22
 mg.candle_talk.card.story,Your story,เรื่องของคุณ,Topic card label (Candle Talk),22
-mg.candle_talk.react.best_1,"Mmm, yes. Exactly that.",อื้ม ใช่เลย ตรงนั้นแหละ,Mali's reaction when the card fits best (variant 1),90
-mg.candle_talk.react.best_2,"Ha! You get it, nong.",ฮ่า! เข้าใจนี่นา น้อง,Mali's reaction when the card fits best (variant 2),90
-mg.candle_talk.react.ok_1,"Mm, that works too.",อืม แบบนั้นก็ได้เหมือนกัน,Mali's reaction when the card is near (variant 1),90
-mg.candle_talk.react.ok_2,"Fair enough. Go on.",ก็ได้ ๆ เล่าต่อเลย,Mali's reaction when the card is near (variant 2),90
-mg.candle_talk.react.off_1,"Hm. Okay. Drink some water, nong.",หืม โอเค ดื่มน้ำหน่อยนะน้อง,Mali's reaction when the card misses (variant 1),90
-mg.candle_talk.react.off_2,"Sure, sure. We'll get there.",ได้ ๆ เดี๋ยวก็เข้าใจกัน,Mali's reaction when the card misses (variant 2),90
-mg.candle_talk.close.tier_1,"Good talk, nong. Come sit with me again.",คุยสนุกนะน้อง มานั่งกับพี่อีกนะ,Mali's closing line at the lowest tier,90
-mg.candle_talk.close.tier_2,"That was lovely. You can sit here any day.",เมื่อกี้ดีมากเลย มานั่งตรงนี้ได้ทุกวันนะ,Mali's closing line at the middle tier,90
-mg.candle_talk.close.tier_3,"Look at that candle! You are officially on my team.",ดูเทียนนั่นสิ! น้องเป็นคนในทีมพี่แล้วนะ,Mali's closing line at the top tier,90
-npc.mali.talk.1,"Sit, sit. Long table is for everyone. That's the point of a long table.",นั่งสิน้อง นั่ง โต๊ะยาวมีไว้ให้ทุกคน ก็เพราะอย่างนี้แหละ,Mali's Candle Talk opening line 1. Cast bible 3.5. Needs a native Thai writer pass,90
-npc.mali.talk.2,"Tuesday quiz, seven o'clock, my team. You know one thing about eighties music? You're in.",ควิซวันอังคาร หนึ่งทุ่ม ทีมพี่ รู้เรื่องเพลงยุค 80 สักเรื่องไหม ถ้ารู้ก็เข้าทีมได้เลย,Mali's Candle Talk opening line 2 (cast bible 3.5),90
-npc.mali.talk.3,"I do HR all day. Here nobody needs a form to be my friend.",พี่ทำงานฝ่ายบุคคลทั้งวัน ที่นี่ไม่ต้องกรอกฟอร์มก็เป็นเพื่อนพี่ได้,Mali's Candle Talk line 3. Story beat: only comes up if the candle is already lit at 2+,90
-npc.mali.talk.4,"Have you eaten? Eat before the third drink, nong. I'm serious.",กินข้าวหรือยัง กินก่อนแก้วที่สามนะน้อง พี่พูดจริง,Mali's Candle Talk line 4. Replaces line 3 when the candle is low,90
-npc.mali.talk.5,"Lung Nop knows every jazz record ever made and still loses the music round. Beautiful.",ลุงนพรู้จักแผ่นแจ๊สทุกแผ่นในโลก แต่ก็ยังแพ้รอบดนตรี น่ารักดี,Mali's Candle Talk line 5 (cast bible 3.5),90
-npc.mali.talk.6,"We came second last week. Second is just first with homework.",สัปดาห์ก่อนเราได้ที่สอง ที่สองก็คือที่หนึ่งที่มีการบ้านไง,Mali's Candle Talk line 6 (cast bible 3.5),90
+mg.candle_talk.react.best_1,"Mmm, yes. Exactly that.",อื้ม ใช่เลย ตรงนั้นแหละ,"A regular's reaction when the card fits best (variant 1); shared, a regular may override it with npc.<id>.react.best_1",90
+mg.candle_talk.react.best_2,Ha! You get it.,ฮ่า! เข้าใจนี่นา,"A regular's reaction when the card fits best (variant 2); shared, overridable per regular",90
+mg.candle_talk.react.ok_1,"Mm, that works too.",อืม แบบนั้นก็ได้เหมือนกัน,"A regular's reaction when the card is near (variant 1); shared, overridable per regular",90
+mg.candle_talk.react.ok_2,Fair enough. Go on.,ก็ได้ ๆ เล่าต่อเลย,"A regular's reaction when the card is near (variant 2); shared, overridable per regular",90
+mg.candle_talk.react.off_1,Hm. Okay. Drink some water.,หืม โอเค ดื่มน้ำหน่อยนะ,"A regular's reaction when the card misses (variant 1); shared, overridable per regular",90
+mg.candle_talk.react.off_2,"Sure, sure. We'll get there.",ได้ ๆ เดี๋ยวก็เข้าใจกัน,"A regular's reaction when the card misses (variant 2); shared, overridable per regular",90
+mg.candle_talk.close.tier_1,Good talk. Come sit with me again.,คุยสนุกนะ มานั่งด้วยกันอีกนะ,"A regular's closing line at the lowest tier; shared, overridable per regular (npc.<id>.close.tier_1)",90
+mg.candle_talk.close.tier_2,That was lovely. You can sit here any day.,เมื่อกี้ดีมากเลย มานั่งตรงนี้ได้ทุกวันนะ,"A regular's closing line at the middle tier; shared, overridable per regular",90
+mg.candle_talk.close.tier_3,Look at that candle! That was a proper talk.,ดูเทียนนั่นสิ! คุยกันถูกคอจริง ๆ,"A regular's closing line at the top tier; shared, overridable per regular",90
+npc.tt.react.best_2,"Ha! You get it, nong.",ฮ่า! เข้าใจนี่นา น้อง,"Tt's own reaction when the card fits best (variant 2; was the shared line, Prae's old set)",90
+npc.tt.react.off_1,"Hm. Okay. Drink some water, nong.",หืม โอเค ดื่มน้ำหน่อยนะน้อง,Tt's own reaction when the card misses (variant 1),90
+npc.tt.close.tier_1,"Good talk, nong. Come sit with me again.",คุยสนุกนะน้อง มานั่งกับพี่อีกนะ,Tt's closing line at the lowest tier,90
+npc.tt.close.tier_3,Look at that candle! You are officially on my team.,ดูเทียนนั่นสิ! น้องเป็นคนในทีมพี่แล้วนะ,Tt's closing line at the top tier (the quiz team),90
+npc.lung_nop.react.best_2,"Ha. You hear it too, lan.",ฮะ หลานก็ได้ยินเหมือนกันสินะ,Lung Nop's reaction when the card fits best (variant 2): he says lan (niece/nephew). TH draft: native writer,90
+npc.bow.react.best_2,"Yes! You get it, na.",ใช่เลย! เข้าใจกันนะ,Bow's reaction when the card fits best (variant 2): she ends lines with na. TH draft: native writer,90
+npc.dougie.react.best_2,"Ha! Now you're talking, pal.",ฮ่า! อย่างนี้สิเพื่อน,Dougie's reaction when the card fits best (variant 2): he calls everyone pal. TH draft: native writer,90
+npc.tt.talk.1,"Sit, sit. Long table is for everyone. That's the point of a long table.",นั่งสิน้อง นั่ง โต๊ะยาวมีไว้ให้ทุกคน ก็เพราะอย่างนี้แหละ,Tt's Candle Talk line 1; moved from Prae's old set (cast bible 3.5). TH is a draft: needs a native Thai writer (cast bible 6.1),90
+npc.tt.talk.2,"Tuesday quiz, seven o'clock, my team. You know one thing about eighties music? You're in.",ควิซวันอังคาร หนึ่งทุ่ม ทีมพี่ รู้เรื่องเพลงยุค 80 สักเรื่องไหม ถ้ารู้ก็เข้าทีมได้เลย,Tt's Candle Talk line 2; moved from Prae's old set (cast bible 3.5). TH is a draft: needs a native Thai writer (cast bible 6.1),90
+npc.tt.talk.3,I do HR all day. Here nobody needs a form to be my friend.,พี่ทำงานฝ่ายบุคคลทั้งวัน ที่นี่ไม่ต้องกรอกฟอร์มก็เป็นเพื่อนพี่ได้,"Tt's Candle Talk line 3, story beat: only if the candle is lit at 2+; moved from Prae's old set (cast bible 3.5). TH is a draft: needs a native Thai writer (cast bible 6.1)",90
+npc.tt.talk.4,"Have you eaten? Eat before the third drink, nong. I'm serious.",กินข้าวหรือยัง กินก่อนแก้วที่สามนะน้อง พี่พูดจริง,"Tt's Candle Talk line 4, replaces line 3 when the candle is low; moved from Prae's old set (cast bible 3.5). TH is a draft: needs a native Thai writer (cast bible 6.1)",90
+npc.tt.talk.5,Lung Nop knows every jazz record ever made and still loses the music round. Beautiful.,ลุงนพรู้จักแผ่นแจ๊สทุกแผ่นในโลก แต่ก็ยังแพ้รอบดนตรี น่ารักดี,Tt's Candle Talk line 5; moved from Prae's old set (cast bible 3.5). TH is a draft: needs a native Thai writer (cast bible 6.1),90
+npc.tt.talk.6,We came second last week. Second is just first with homework.,สัปดาห์ก่อนเราได้ที่สอง ที่สองก็คือที่หนึ่งที่มีการบ้านไง,Tt's Candle Talk line 6; moved from Prae's old set (cast bible 3.5). TH is a draft: needs a native Thai writer (cast bible 6.1),90
+npc.tong.talk.1,Watch Boy's left hand on the hi-hat. Nobody watches the hi-hat. Tragic.,ดูมือซ้ายของบอยที่ไฮแฮทสิ ไม่มีใครดูไฮแฮทเลย น่าเศร้า,Tong's Candle Talk line 1; cast bible 3.5. TH is a draft: needs a native Thai writer (cast bible 6.1),90
+npc.tong.talk.2,Two years this bass has lived in the bag. Stage time: zero. Very well travelled though.,เบสตัวนี้อยู่ในกระเป๋ามาสองปี ขึ้นเวทีศูนย์ครั้ง แต่เดินทางมาเยอะมากนะ,Tong's Candle Talk line 2; cast bible 3.5. TH is a draft: needs a native Thai writer (cast bible 6.1),90
+npc.tong.talk.3,Wednesday's open mic. I'm signing up. I say this every Wednesday.,โอเพนไมค์วันพุธ ผมจะลงชื่อ ผมพูดแบบนี้ทุกวันพุธแหละ,"Tong's Candle Talk line 3, story beat: only if the candle is lit at 2+; cast bible 3.5. TH is a draft: needs a native Thai writer (cast bible 6.1)",90
+npc.tong.talk.4,"That chord just now? Borrowed from the minor key. Don't tell anyone, they'll want it back.",คอร์ดเมื่อกี้ยืมมาจากไมเนอร์ อย่าบอกใครนะ เดี๋ยวเขามาขอคืน,"Tong's Candle Talk line 4, replaces line 3 when the candle is low; cast bible 3.5. TH is a draft: needs a native Thai writer (cast bible 6.1)",90
+npc.tong.talk.5,"Back there you hear the room. Front row, you hear the amp breathe.",ข้างหลังได้ยินเสียงห้อง แถวหน้าได้ยินแอมป์หายใจ,Tong's Candle Talk line 5; cast bible 3.5. TH is a draft: needs a native Thai writer (cast bible 6.1),90
+npc.tong.talk.6,You were clapping on two and four tonight. I noticed. Respect.,คืนนี้ปรบมือจังหวะสองกับสี่ ผมสังเกตนะ นับถือเลย,Tong's Candle Talk line 6; cast bible 3.5. TH is a draft: needs a native Thai writer (cast bible 6.1),90
+npc.ploy.talk.1,Third table from the curtain. Best light in the room. I measured. Professionally.,โต๊ะที่สามจากม่าน แสงดีที่สุดในห้อง ฉันวัดมาแล้ว แบบมืออาชีพ,Ploy's Candle Talk line 1; cast bible 3.5. TH is a draft: needs a native Thai writer (cast bible 6.1),90
+npc.ploy.talk.2,"I draw everyone who sits here. Don't worry, I'm kinder with a pencil.",ฉันวาดทุกคนที่มานั่งตรงนี้ ไม่ต้องห่วง ดินสอฉันใจดีกว่าปาก,Ploy's Candle Talk line 2; cast bible 3.5. TH is a draft: needs a native Thai writer (cast bible 6.1),90
+npc.ploy.talk.3,"Bangkok is concrete and traffic, then you walk through a curtain and it's 1962.",กรุงเทพฯ มีแต่ปูนกับรถติด แล้วเดินผ่านม่านเข้ามาก็กลายเป็นปี 1962,"Ploy's Candle Talk line 3, story beat: only if the candle is lit at 2+; cast bible 3.5. TH is a draft: needs a native Thai writer (cast bible 6.1)",90
+npc.ploy.talk.4,Tuesday is for people who survived Monday. Cheers to us.,วันอังคารมีไว้ให้คนที่รอดจากวันจันทร์มาได้ ชนแก้วให้พวกเรา,"Ploy's Candle Talk line 4, replaces line 3 when the candle is low; cast bible 3.5. TH is a draft: needs a native Thai writer (cast bible 6.1)",90
+npc.ploy.talk.5,The man at the bar has read that menu for ten minutes. He's going to order a beer.,ผู้ชายที่บาร์อ่านเมนูมาสิบนาทีแล้ว เดี๋ยวเขาก็สั่งเบียร์,Ploy's Candle Talk line 5; cast bible 3.5. TH is a draft: needs a native Thai writer (cast bible 6.1),90
+npc.ploy.talk.6,You look less tired than last week. I'd know. I drew you.,ดูเหนื่อยน้อยกว่าอาทิตย์ก่อนนะ ฉันรู้ ฉันวาดเธอไว้,Ploy's Candle Talk line 6; cast bible 3.5. TH is a draft: needs a native Thai writer (cast bible 6.1),90
+npc.jules.talk.1,The pinball has a soul. A cruel soul. I respect it.,พินบอลมีวิญญาณ วิญญาณที่โหดร้าย ผมเคารพมัน,Jules's Candle Talk line 1; cast bible 3.5. TH is a draft: needs a native Thai writer (cast bible 6.1),90
+npc.jules.talk.2,My initials are on that machine. Yours could be underneath. Ambition is healthy.,ชื่อย่อผมอยู่บนเครื่องนั้น ของคุณอาจอยู่ข้างล่าง ความทะเยอทะยานดีต่อสุขภาพ,Jules's Candle Talk line 2; cast bible 3.5. TH is a draft: needs a native Thai writer (cast bible 6.1),90
+npc.jules.talk.3,I came to Bangkok for three months. That was six years ago. The lounge is why.,ผมมากรุงเทพฯ สามเดือน นั่นคือหกปีที่แล้ว เพราะเลานจ์นี่แหละ,"Jules's Candle Talk line 3, story beat: only if the candle is lit at 2+; cast bible 3.5. TH is a draft: needs a native Thai writer (cast bible 6.1)",90
+npc.jules.talk.4,"Nobody goes home before the last song. It is the law. Thai law, I think. Maybe French.",ไม่มีใครกลับบ้านก่อนเพลงสุดท้าย เป็นกฎหมาย กฎหมายไทยมั้ง หรือฝรั่งเศส,"Jules's Candle Talk line 4, replaces line 3 when the candle is low; cast bible 3.5. TH is a draft: needs a native Thai writer (cast bible 6.1)",90
+npc.jules.talk.5,Bow says I dance like a fan with one blade missing. She is correct. I dance anyway.,โบว์บอกว่าผมเต้นเหมือนพัดลมใบพัดหาย เธอพูดถูก แต่ผมก็เต้นต่อ,Jules's Candle Talk line 5; cast bible 3.5. TH is a draft: needs a native Thai writer (cast bible 6.1),90
+npc.jules.talk.6,Spell BLACK CABIN and the neon flares. I've done it four times. I'm unbearable about it.,สะกด BLACK CABIN แล้วนีออนจะสว่างขึ้น ผมทำได้สี่ครั้งแล้ว ผมอวดไม่หยุดเลย,Jules's Candle Talk line 6; cast bible 3.5. TH is a draft: needs a native Thai writer (cast bible 6.1),90
+npc.dougie.talk.1,"Forty years carrying amps, and this is the best room I've stood in. Don't tell Glasgow.",แบกแอมป์มาสี่สิบปี ห้องนี้ดีที่สุดที่เคยยืนมา อย่าบอกกลาสโกว์นะ,Dougie's Candle Talk line 1; cast bible 3.5. TH is a draft: needs a native Thai writer (cast bible 6.1),90
+npc.dougie.talk.2,"Try the one with the smoke on it. I won't, I'm a lager man. But you should.",ลองแก้วที่มีควันสิ ผมไม่ลองหรอก ผมคนเบียร์ลาเกอร์ แต่คุณควรลอง,Dougie's Candle Talk line 2; cast bible 3.5. TH is a draft: needs a native Thai writer (cast bible 6.1),90
+npc.dougie.talk.3,In '89 I saw a band play a whole set with a broken wrist. Worst set ever. Best night.,ปี 89 เคยเห็นวงเล่นทั้งเซ็ตทั้งที่ข้อมือหัก เซ็ตแย่ที่สุด แต่คืนนั้นดีที่สุด,"Dougie's Candle Talk line 3, story beat: only if the candle is lit at 2+; cast bible 3.5. TH is a draft: needs a native Thai writer (cast bible 6.1)",90
+npc.dougie.talk.4,"Nam pours my order before I sit down. That's not service, pal. That's friendship.",น้ำรินให้ผมก่อนผมจะนั่งอีก นั่นไม่ใช่บริการนะเพื่อน นั่นคือมิตรภาพ,"Dougie's Candle Talk line 4, replaces line 3 when the candle is low; cast bible 3.5. TH is a draft: needs a native Thai writer (cast bible 6.1)",90
+npc.dougie.talk.5,Golf's got that desk running sweeter than any tour I did. Don't tell him either.,กอล์ฟคุมโต๊ะเสียงได้ดีกว่าทุกทัวร์ที่ผมเคยไป อย่าบอกเขาด้วยนะ,Dougie's Candle Talk line 5; cast bible 3.5. TH is a draft: needs a native Thai writer (cast bible 6.1),90
+npc.dougie.talk.6,Every bar's got a stool that's yours. Find yours. That one's mine.,ทุกบาร์มีเก้าอี้ที่เป็นของคุณ หาของตัวเองให้เจอ ตัวนั้นของผม,Dougie's Candle Talk line 6; cast bible 3.5. TH is a draft: needs a native Thai writer (cast bible 6.1),90
+npc.lung_nop.talk.1,"Listen to the bass. He is not playing notes, lan. He is holding the floor up.",ฟังเบสนะหลาน เขาไม่ได้เล่นโน้ต เขากำลังพยุงพื้นไว้,Lung Nop's Candle Talk line 1; cast bible 3.5. TH is a draft: needs a native Thai writer (cast bible 6.1),90
+npc.lung_nop.talk.2,On the radio we had one rule: never talk over the intro. Let the song walk in.,สมัยจัดรายการวิทยุมีกฎข้อเดียว อย่าพูดทับอินโทร ให้เพลงเดินเข้ามาเอง,Lung Nop's Candle Talk line 2; cast bible 3.5. TH is a draft: needs a native Thai writer (cast bible 6.1),90
+npc.lung_nop.talk.3,My wife and I danced to this one in 1979. She danced better. She still does.,ลุงกับป้าเคยเต้นเพลงนี้ปี 1979 ป้าเต้นเก่งกว่า ทุกวันนี้ก็ยังเก่งกว่า,"Lung Nop's Candle Talk line 3, story beat: only if the candle is lit at 2+; cast bible 3.5. TH is a draft: needs a native Thai writer (cast bible 6.1)",90
+npc.lung_nop.talk.4,Thursday is jazz. Sunday is slow songs. The other nights I rest my ears.,วันพฤหัสฯ แจ๊ส วันอาทิตย์เพลงช้า คืนอื่นลุงพักหู,"Lung Nop's Candle Talk line 4, replaces line 3 when the candle is low; cast bible 3.5. TH is a draft: needs a native Thai writer (cast bible 6.1)",90
+npc.lung_nop.talk.5,Young people say vinyl is warm. It is not warm. It is honest.,เด็ก ๆ ชอบบอกว่าแผ่นเสียงอบอุ่น มันไม่ได้อบอุ่นหรอก มันซื่อตรง,Lung Nop's Candle Talk line 5; cast bible 3.5. TH is a draft: needs a native Thai writer (cast bible 6.1),90
+npc.lung_nop.talk.6,You came. Good. A song is better with one more person listening.,มาแล้วเหรอ ดีแล้ว เพลงจะเพราะขึ้นเมื่อมีคนฟังเพิ่มอีกคน,Lung Nop's Candle Talk line 6; cast bible 3.5. TH is a draft: needs a native Thai writer (cast bible 6.1),90
+npc.bow.talk.1,Landed from Osaka three hours ago. My body thinks it's breakfast. Let's dance.,เพิ่งบินกลับจากโอซาก้าสามชั่วโมงก่อน ร่างกายคิดว่าเป็นมื้อเช้า ไปเต้นกันนะ,Bow's Candle Talk line 1; cast bible 3.5. TH is a draft: needs a native Thai writer (cast bible 6.1),90
+npc.bow.talk.2,Disco ball on? Then I'm on.,ดิสโก้บอลเปิดแล้วเหรอ งั้นโบว์ก็เปิดด้วย,Bow's Candle Talk line 2; cast bible 3.5. TH is a draft: needs a native Thai writer (cast bible 6.1),90
+npc.bow.talk.3,"Next week is Dubai, Paris, Dubai. So tonight counts double, na.",อาทิตย์หน้าดูไบ ปารีส ดูไบ คืนนี้เลยต้องนับสองเท่านะ,"Bow's Candle Talk line 3, story beat: only if the candle is lit at 2+; cast bible 3.5. TH is a draft: needs a native Thai writer (cast bible 6.1)",90
+npc.bow.talk.4,Please fasten your seatbelts. The headliner is about to start.,กรุณารัดเข็มขัดนิรภัย วงหลักกำลังจะเริ่มแล้วค่ะ,"Bow's Candle Talk line 4, replaces line 3 when the candle is low; cast bible 3.5. TH is a draft: needs a native Thai writer (cast bible 6.1)",90
+npc.bow.talk.5,"Jules dances like a broken fan. I love him. Don't tell him, na.",จูลส์เต้นเหมือนพัดลมพัง โบว์รักเขานะ อย่าบอกเขานะ,Bow's Candle Talk line 5; cast bible 3.5. TH is a draft: needs a native Thai writer (cast bible 6.1),90
+npc.bow.talk.6,"If you see me sitting down, check my pulse.",ถ้าเห็นโบว์นั่งเมื่อไหร่ ช่วยจับชีพจรให้ด้วย,Bow's Candle Talk line 6; cast bible 3.5. TH is a draft: needs a native Thai writer (cast bible 6.1),90
+npc.hiro.talk.1,"A highball is three things: ice, whisky, patience. Most bars skip the patience.",ไฮบอลมีสามอย่าง น้ำแข็ง วิสกี้ ความอดทน บาร์ส่วนใหญ่ข้ามความอดทนไป,Hiro's Candle Talk line 1; cast bible 3.5. TH is a draft: needs a native Thai writer (cast bible 6.1),90
+npc.hiro.talk.2,Nam's lime cut is correct. I checked. I always check.,น้ำหั่นมะนาวถูกต้อง ผมเช็กแล้ว ผมเช็กเสมอ,Hiro's Candle Talk line 2; cast bible 3.5. TH is a draft: needs a native Thai writer (cast bible 6.1),90
+npc.hiro.talk.3,"In Tokyo I drank alone. Here, somehow, never.",ที่โตเกียวผมดื่มคนเดียว ที่นี่ ไม่รู้ทำไม ไม่เคยเลย,"Hiro's Candle Talk line 3, story beat: only if the candle is lit at 2+; cast bible 3.5. TH is a draft: needs a native Thai writer (cast bible 6.1)",90
+npc.hiro.talk.4,You ordered something new. Brave. Tell me everything.,สั่งอะไรใหม่มาเหรอ กล้าดี เล่ามาให้หมดเลย,"Hiro's Candle Talk line 4, replaces line 3 when the candle is low; cast bible 3.5. TH is a draft: needs a native Thai writer (cast bible 6.1)",90
+npc.hiro.talk.5,I keep notes on every drink. Page forty-two is all Black Cabin.,ผมจดโน้ตทุกแก้ว หน้าสี่สิบสองเป็นของ Black Cabin ทั้งหน้า,Hiro's Candle Talk line 5; cast bible 3.5. TH is a draft: needs a native Thai writer (cast bible 6.1),90
+npc.hiro.talk.6,"My boss thinks I'm at a networking event. Technically, I am networking.",หัวหน้าคิดว่าผมไปงานสร้างคอนเนกชัน ก็จริงนะ ผมกำลังสร้างอยู่,Hiro's Candle Talk line 6; cast bible 3.5. TH is a draft: needs a native Thai writer (cast bible 6.1),90
 mg.neon_pinball.title,Neon Pinball,Neon Pinball,Minigame name (stays English),18
 mg.neon_pinball.subtitle,The lounge arcade cabinet,ตู้เกมในเลานจ์,Subtitle under the name in the lab menu,34
 mg.neon_pinball.how_to,Hold the left or right half for that flipper. Swipe up on the right to launch. Swipe sideways to nudge. Light every letter of BLACK CABIN.,กดค้างซ้ายหรือขวาเพื่อตีฟลิปเปอร์ ปัดขึ้นทางขวาเพื่อยิงลูก ปัดข้างเพื่อเขย่าโต๊ะ จุดตัวอักษร BLACK CABIN ให้ครบ,Pause sheet help text. BLACK CABIN is brand-fixed,150

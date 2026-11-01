@@ -1,0 +1,15 @@
+{
+  "version": 1,
+  "regular": "bow",
+  "feeds": "friends",
+  "turns": 5,
+  "note": "Sequence: lines 1, 2, then line 3 if the candle is at 2+ (a story beat), else line 4; then 5 and 6. 'cards' are the topic cards offered; 'best' lights the candle fully, 'ok' half.",
+  "lines": [
+    {"id": 1, "key": "npc.bow.talk.1", "cards": ["bangkok", "music", "story"], "best": "music", "ok": ["bangkok"]},
+    {"id": 2, "key": "npc.bow.talk.2", "cards": ["music", "drinks", "gossip"], "best": "music", "ok": ["drinks"]},
+    {"id": 3, "key": "npc.bow.talk.3", "cards": ["story", "bangkok", "drinks"], "best": "story", "ok": ["bangkok"], "needs_candle": 2},
+    {"id": 4, "key": "npc.bow.talk.4", "cards": ["music", "drinks", "gossip"], "best": "music", "ok": ["gossip"]},
+    {"id": 5, "key": "npc.bow.talk.5", "cards": ["gossip", "music", "story"], "best": "gossip", "ok": ["music"]},
+    {"id": 6, "key": "npc.bow.talk.6", "cards": ["drinks", "gossip", "music"], "best": "music", "ok": ["drinks"]}
+  ]
+}
