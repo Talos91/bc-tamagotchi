@@ -5,17 +5,17 @@
 - `layout.json` unfrozen until Daniele accepts v4. Play it: `docs/tech/02-playtest-guide.md` (spawn is now the west lobby).
 
 ## IN FLIGHT (shared checkout, branch main only)
-- Nothing running. Venue v4 + fix round on main (68d9ff5, 4cb4bf3): red back bar, cool smoking room, camera cutaway, held-input latch, Mali → Prae. Venue session retired at its context limit; resume prompt in its handoff `C:/Users/itisf/.claude/handoffs/f0b20610-ad70-427d-a81a-2ba2c6d97e04.md`.
+- 🏗️ venue-notes (local_545c7c14, Opus 5.5): walk-through doors, real sitting, stairs reoriented, Prae rename leftovers, neon check, alcove camera. Venue v4 + fix round on main (68d9ff5, 4cb4bf3): red back bar, cool smoking room, camera cutaway, held-input latch, Mali → Prae. Venue session retired at its context limit; resume prompt in its handoff `C:/Users/itisf/.claude/handoffs/f0b20610-ad70-427d-a81a-2ba2c6d97e04.md`.
 
 ## WORKERS ALIVE (max 3)
-- 🎛️ orchestrator fdaed712-5416-430d-b3a7-7174cf46699f only (now on Opus 5.5). Workers run on Opus 5.5 or Sonnet; never Fable without Daniele's OK.
+- 🎛️ orchestrator fdaed712-5416-430d-b3a7-7174cf46699f (Opus 5.5); 🏗️ venue-notes. Old venue-rebuild session idle, archive once the game window it opened is closed. Workers run on Opus 5.5 or Sonnet; never Fable without Daniele's OK.
 
 ## WAITING ON OWNER
-- Playtest verdict on venue v4 (game open on Daniele's PC) → accept and refreeze layout.json, or a notes list for the next venue session; real entrance-corridor photos later.
+- Confirm the stair reading on the venue-notes capture; accept venue v4 after this round (then refreeze layout.json); real entrance-corridor photos later.
 - Orientation; Black Cabin opening hours; brand typeface; staff turnover; resident band + consent packs; stakes numbers; coin sign-off; chat policy; real drinks menu.
 
 ## NEXT THREE JOBS
-1. Venue v4 notes round (fresh Opus venue session from the handoff prompt): Daniele's notes, repo handoff update, Prae rename in 03-cast/02-gdd/06-stakes/playtest guide + chars manifest display + chars_showcase, neon-edge check, old-corridor camera zone. Then refreeze layout.json and regenerate the changelog.
+1. Venue-notes round (running): verify, six suites + door/sit test, show Daniele the stair; then refreeze layout.json and regenerate the changelog.
 2. Performance pass: 42 lights, ~1,850 draw calls, 24 ms GPU desktop; phone measurement before any phone build.
 3. Figure lighting and proportion pass (warm key/rim, heads 27–34 %); then character creator + the Flat.
 - Later: everything in `docs/design/BACKLOG.md` (ideas, real-life bridge, online, debt). Shared board: https://claude.ai/artifact/BbpBxVWVVXMjz7TgJ7aFBW
