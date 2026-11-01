@@ -122,3 +122,10 @@ ashtrays, EXIT signs); 14 the buffer zone's south side (mirror wall, red curtain
 - There is **no wall** between the main room and the toilet corridor strip west of the bar; it is open floor.
 - The entrance lobby and the entrance corridor are **one L-shaped corridor**: no line, no door between them. Idea for
   later: framed pictures of regular customers on its walls.
+
+### Street sign (Daniele, 2026-11-02)
+
+`23-street-sign-neon.png` is the sign over the street door, answered on the Questions tab ("answer is this image"):
+BLACK CABIN in a serif face (CABIN smaller, centred under BLACK), drawn as outlined neon tubes (each stroke a
+double line), the tubes pale pink-white, a strong deep-red glow around them, set against dark foliage lit red from
+behind. It replaces the pixel-font stand-in on the start screen.

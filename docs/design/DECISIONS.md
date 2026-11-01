@@ -45,6 +45,8 @@ GDD is updated.
 
 | 2026-11-02 | **Stair confirmed.** Daniele on the stair captures: "Stair is right" (south-wall flight from the game cabinet rising west, landing, west-wall flight north to the closed upper floor). Still open from that round: street door model, Prae's full name, bar-stool row, neon edge colour. |
 
+| 2026-11-02 | **Street sign.** On the Questions tab Daniele answered the sign question with a photo (direction 23): serif BLACK CABIN in outlined pale pink-white neon tubes with a deep red glow, over red-lit dark foliage. The start-screen sign is rebuilt to match. |
+
 ## Still open
 
 - Black Cabin's real opening hours (drives what the game shows at 14:00: open all day with staff only, or "Doors at 18:00" with the Flat only).
