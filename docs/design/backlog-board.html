@@ -61,6 +61,8 @@ code { font-family: ui-monospace, Consolas, monospace; font-size: 13px; }
 .qeyebrow .ref { color: var(--accent); }
 .qcard h3 { font-family: var(--display); font-weight: 500; font-size: 18px; line-height: 1.3; margin: 0; text-wrap: balance; }
 .qctx { font-size: 14px; max-width: 70ch; } .qctx p { margin: 0 0 6px; }
+.qimgs { display: flex; gap: 8px; overflow-x: auto; padding-bottom: 4px; }
+.qimgs img { height: 180px; width: auto; max-width: none; border-radius: 6px; border: 1px solid var(--line); display: block; }
 .qopts { display: grid; gap: 6px; }
 .qopt { display: flex; gap: 10px; align-items: flex-start; padding: 8px 10px; border: 1px solid var(--line); border-radius: 6px; cursor: pointer; font-size: 14px; }
 .qopt.rec { border-color: var(--accent); }
@@ -200,6 +202,7 @@ code { font-family: ui-monospace, Consolas, monospace; font-size: 13px; }
       <div class="qeyebrow">${it.ref ? `<span class="ref">${esc(it.ref)}</span>` : ''}<span>${esc(it.date || '')}</span>${done ? '<span>answered</span>' : ''}</div>
       <h3>${esc(it.title)}</h3>
       <div class="qctx">${ctx}</div>
+      ${(it.images || []).length ? `<div class="qimgs">${it.images.map(im => `<a href="${esc(im.url)}" target="_blank" rel="noopener"><img src="${esc(im.url)}" alt="${esc(im.alt || '')}" loading="lazy"></a>`).join('')}</div>` : ''}
       ${done ? `<div class="qanswer"><b>${esc(optText(it, it.answer))}</b>${it.note ? ' · ' + esc(it.note) : ''}<br><span class="qstatus">${esc(it.answered_at || '')}</span></div>` : ''}
       <div class="qopts" ${done ? 'hidden' : ''}>${opts}</div>
       <textarea id="n-${id}" aria-label="Note" placeholder="${(it.options || []).length ? 'Note (optional)' : 'Your answer'}" ${done ? 'hidden' : ''}>${esc(it.note || '')}</textarea>
