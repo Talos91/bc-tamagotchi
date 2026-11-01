@@ -48,3 +48,4 @@ Append-only. One dated line per event, newest last. Never edit earlier lines.
 - 2026-11-02 — note: the board/PROJECT/STATE edits landed inside start-screen commit 0dc0b68 (shared index, simultaneous commit); content as intended.
 - 2026-11-02 — start-screen done (0dc0b68, cf0555f); orchestrator re-ran eight suites (all PASS), pushed; 11 calls triaged: 5 on the Questions tab (camera, sign, title, exit shot; facade folded into the photos question) + Thai review; spawn-in-exit-zone and corridor label sent to venue-notes as fixes.
 - 2026-11-02 — Daniele answered the sign question with a photo (direction 23); sign rebuild sent to start-screen.
+- 2026-11-02 — 🏗️ venue-notes: spawn moved to lobby x 1.5 and the exit zone shrunk to the doorway + street step (no "head home" prompt at start); lobby and corridor both named ENTRANCE / ทางเข้า (exit zone no longer says THE LOUNGE); eight suites PASS.

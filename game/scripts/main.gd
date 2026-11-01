@@ -26,7 +26,7 @@ const StartScreen = preload("res://scripts/start_screen.gd")
 @onready var needs: Node = get_node("/root/Needs")
 
 ## HUD zone name for an interaction zone; elsewhere the camera framing's name is used.
-const ZONE_TITLES := {"bar": "bar", "stage": "stage", "table": "floor", "arcade": "lounge", "exit": "lounge"}
+const ZONE_TITLES := {"bar": "bar", "stage": "stage", "table": "floor", "arcade": "lounge", "exit": "lobby"}
 
 var sheet: Control
 var sheet_zone: Dictionary = {}

@@ -42,6 +42,12 @@ func _init() -> void:
 	js = main.get_node("UI/Joystick")
 	doors = main.get_node("Venue/Doors")
 
+	print("spawn")
+	for i in 20:   # HUD title and navigation map settle
+		await physics_frame
+	check(main.zones.current.is_empty() and not main.hud.prompt.is_showing(), "spawn in the lobby is outside the exit zone: no prompt at the start (%s)" % p.global_position)
+	check(main.hud._title.text == "ENTRANCE", "HUD zone name in the lobby: %s" % main.hud._title.text)
+
 	print("doors")
 	var names := []
 	for d in doors.doors:

@@ -36,7 +36,8 @@ const TABLE_ZONES := ["Tables", "Raised", "Lounge"]
 const BAR_DEPTH := 3.4
 const BAR_APPROACH := 1.6
 const STAGE_FRONT := 2.2          ## metres of floor south of the carpet that count as the front row
-const EXIT_DEPTH := 1.8           ## metres in front of the street door
+const EXIT_DEPTH := 0.9           ## metres in front of the street door (the doorway only: the spawn at x 1.5 is outside it)
+const EXIT_OUTSIDE := 2.0         ## metres beyond it: the step of street outside the open door
 
 var zones: Array[Dictionary] = []
 var current: Dictionary = {}
@@ -133,9 +134,9 @@ static func defs_from_layout(path: String) -> Array[Dictionary]:
 			var w := 2.0 if absf(fwd.x) < 0.5 else EXIT_DEPTH
 			var dd := EXIT_DEPTH if absf(fwd.x) < 0.5 else 2.0
 			var r := Rect2(c.x - w * 0.5, c.z - dd * 0.5, w, dd)
-			var out_pt := p - fwd * (EXIT_DEPTH + 0.2)   # the step of street outside the open door
+			var out_pt := p - fwd * EXIT_OUTSIDE
 			r = r.expand(Vector2(out_pt.x, out_pt.z))
-			out.append(_zone("exit", "exit", r, p + fwd * 0.9))
+			out.append(_zone("exit", "exit", r, p + fwd * EXIT_DEPTH * 0.6))
 	return out
 
 
