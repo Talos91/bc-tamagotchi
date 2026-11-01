@@ -70,7 +70,7 @@ func _ready() -> void:
 	zones.zone_changed.connect(_on_zone_changed)
 	hud.prompt_pressed.connect(func(): open_sheet(zones.current))
 	hud.leave_pressed.connect(_on_leave)
-	hud.hint_pressed.connect(walk_to_kind)
+	hud.area_pressed.connect(walk_to_area)
 	session.minigame_requested.connect(open_minigame)
 	session.menu_requested.connect(open_menu)
 	session.visit_finished.connect(_on_visit_finished)
@@ -105,6 +105,9 @@ func _ready() -> void:
 
 func _process(_delta: float) -> void:
 	hud.set_zone_name(ZONE_TITLES.get(zones.current.get("kind", ""), player.rig.zone))
+	hud.set_area(player.rig.zone)
+	if player.rig.focus != "" and not player.walking_to:
+		player.rig.release_focus()   # an area button's walk is over (arrived, or cancelled by the stick or a tap)
 	if pending_zone != "":
 		if zones.current.get("id", "") == pending_zone and not _blocked():
 			var z := zones.current
@@ -150,7 +153,6 @@ func start_play() -> void:
 
 func _on_zone_changed(z: Dictionary) -> void:
 	hud.prompt.show_text(session.prompt_for(z))
-	hud.set_here(z.get("kind", ""))
 
 
 ## A floor or object tap inside a zone walks there and opens its sheet; elsewhere the player just walks.
@@ -167,7 +169,31 @@ func _on_world_tap(pos: Vector3) -> bool:
 	return true
 
 
-## Walk hint chip: walk to the first zone of that kind (the regular's table for "table").
+## Area button (hud AREAS): walk to that area's zone and open its sheet on arrival, while the camera turns to the area's framing at once and settles on it
+## when the player gets there (CameraRig.focus_on). Daniele, Questions tab 2026-11-01.
+func walk_to_area(area: String) -> void:
+	if _blocked():
+		return
+	var z := area_zone(area)
+	if z.is_empty():
+		return
+	player.walk_to(z["approach"])
+	pending_zone = z["id"]
+	player.rig.focus_on(area)
+
+
+## The zone an area button walks to: the zone named in AREAS, or the first of its kind whose approach is in the area.
+func area_zone(area: String) -> Dictionary:
+	for a in hud.AREAS:
+		if a[0] != area:
+			continue
+		for z in zones.zones:
+			if (z["id"] == a[2] or z["kind"] == a[2]) and player.rig.area_at(z["approach"]) == area:
+				return z
+	return {}
+
+
+## Walk to the first zone of that kind (a regular's table for "table") and open its sheet on arrival.
 func walk_to_kind(kind: String) -> void:
 	if _blocked():
 		return

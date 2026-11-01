@@ -1,14 +1,15 @@
 extends Control
 ## Venue HUD (wireframes §3): Leave (door), the four need rings with the lowest breathing, Welcome Back x2 chip,
-## tipsiness chip, zone name (large on entry, small after 2 s), band caption, walk-hint chips on the right edge
-## (the lowest meter's zone gets its colour edge), the zone prompt at the bottom, rising +N chips and the action
+## tipsiness chip, zone name (large on entry, small after 2 s), band caption, area buttons on the right edge (one per
+## area, AREAS: a tap walks there and the camera focuses on it, main.walk_to_area; the area of the lowest meter gets
+## its colour edge, the area the player is in is dimmed), the zone prompt at the bottom, rising +N chips and the action
 ## card after each plain action, and the orientation toggle at the top right, under the bar's right end on the zone
 ## name's row (scripts/ui/orientation.gd). Drops to 60% while walking. Built in code with the minigame UI helpers;
 ## the project theme supplies the fonts (zone names in Kristi, the brand script).
 
 signal leave_pressed
 signal prompt_pressed
-signal hint_pressed(kind: String)
+signal area_pressed(area: String)
 
 const UI = preload("res://scripts/minigames/mg_ui.gd")
 const S = preload("res://scripts/minigames/strings.gd")
@@ -22,9 +23,15 @@ const Orientation = preload("res://scripts/ui/orientation.gd")
 const OrientationToggle = preload("res://scenes/ui/orientation_toggle.gd")
 const VersionInfo = preload("res://scripts/version_info.gd")
 
-## Walk hints: zone kind, label key, the need that zone refills.
-const HINTS := [["bar", "venue.hint.bar", "drinks"], ["stage", "venue.hint.stage", "music"],
-	["table", "venue.hint.table", "friends"], ["arcade", "venue.hint.arcade", "nightlife"]]
+## Area buttons, top to bottom: camera area, label key, the zone walked to in that area (a zone id, or the first zone
+## of that kind whose approach is in the area; main.walk_to_area), the need it refills ("" none). The floor's is the
+## round table in the middle of the row of five, facing the stage (the hosts move from night to night, cast.gd). Daniele (Questions tab 2026-11-01): "press the area
+## button, your character walks there and the scene focuses there". The entrance has Leave; the old-corridor alcove
+## has nothing to do.
+const AREAS := [["lounge", "venue.area.lounge", "arcade", "nightlife"], ["buffer", "venue.area.buffer", "tall", ""],
+	["floor", "venue.area.floor", "table:Table2", "friends"], ["stage", "venue.area.stage", "stage", "music"],
+	["bar", "venue.area.bar", "bar", "drinks"], ["toilets", "venue.area.toilets", "toilet", ""],
+	["smoking", "venue.area.smoking", "smoking", ""]]
 
 var session: VenueSession
 var needs: Node
@@ -36,7 +43,8 @@ var _caption: Label
 var _status: Label
 var _x2: Label
 var _tipsy: Label
-var _hints := {}
+var _areas := {}      ## area -> its button
+var _here := ""
 var _top: Control
 var orientation_toggle: Button
 var _zone_name := ""
@@ -143,20 +151,22 @@ func _build() -> void:
 	_status = UI.label("", 14, UI.GOLD)
 	_top.add_child(_status)
 
-	var hints := VBoxContainer.new()
-	hints.set_anchors_preset(Control.PRESET_CENTER_RIGHT)
-	hints.grow_horizontal = Control.GROW_DIRECTION_BEGIN
-	hints.grow_vertical = Control.GROW_DIRECTION_BOTH
-	hints.offset_right = -UI.dp(8)
-	hints.add_theme_constant_override("separation", int(UI.dp(8)))
-	add_child(hints)
-	for h in HINTS:
-		var b := UI.button(T.t(h[1]) + "  ›", "secondary")
-		b.custom_minimum_size = Vector2(UI.dp(110), UI.dp(48))
+	var col := VBoxContainer.new()
+	col.name = "Areas"
+	col.set_anchors_preset(Control.PRESET_CENTER_RIGHT)
+	col.grow_horizontal = Control.GROW_DIRECTION_BEGIN
+	col.grow_vertical = Control.GROW_DIRECTION_BOTH
+	col.offset_right = -UI.dp(8)
+	col.add_theme_constant_override("separation", int(UI.dp(6)))
+	add_child(col)
+	for a in AREAS:
+		var b := UI.button(T.t(a[1]) + "  ›", "secondary")
+		b.name = "Area_" + a[0]
+		b.custom_minimum_size = Vector2(UI.dp(96), UI.dp(42))
 		b.add_theme_font_size_override("font_size", int(UI.dp(13)))
-		b.pressed.connect(func(): hint_pressed.emit(h[0]))
-		hints.add_child(b)
-		_hints[h[0]] = b
+		b.pressed.connect(func(): area_pressed.emit(a[0]))
+		col.add_child(b)
+		_areas[a[0]] = b
 
 	add_child(VersionInfo.label())  # build version, bottom right, dim
 
@@ -193,9 +203,13 @@ func retitle() -> void:
 	orientation_toggle.refresh()
 
 
-func set_here(kind: String) -> void:
-	for k in _hints:
-		_hints[k].visible = k != kind
+## The area the player is in: its button dims (it stays in place, so the column never shifts under a thumb).
+func set_area(area: String) -> void:
+	if area == _here:
+		return
+	_here = area
+	for k in _areas:
+		_areas[k].modulate.a = 0.5 if k == area else 1.0
 
 
 func _process(delta: float) -> void:
@@ -217,11 +231,11 @@ func _refresh_status() -> void:
 	var low: String = needs.lowest_meter()
 	for m in rings:
 		rings[m].low = m == low
-	for h in HINTS:
-		var b: Button = _hints[h[0]]
-		var edge: Color = UI.need_color(h[2]) if h[2] == low else UI.LINE
-		b.add_theme_stylebox_override("normal", UI.box(UI.BG_RAISED, 14, edge, 3.0 if h[2] == low else 2.0))
-		b.add_theme_stylebox_override("hover", UI.box(UI.BG_RAISED, 14, edge, 3.0 if h[2] == low else 2.0))
+	for a in AREAS:
+		var b: Button = _areas[a[0]]
+		var edge: Color = UI.need_color(a[3]) if a[3] == low else UI.LINE
+		b.add_theme_stylebox_override("normal", UI.box(UI.BG_RAISED, 14, edge, 3.0 if a[3] == low else 2.0))
+		b.add_theme_stylebox_override("hover", UI.box(UI.BG_RAISED, 14, edge, 3.0 if a[3] == low else 2.0))
 	_caption.text = session.band_text()
 	_caption.add_theme_color_override("font_color", UI.RED_HI if session.band.playing else UI.SMOKE)
 	if needs.welcome_active():

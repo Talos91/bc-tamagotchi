@@ -1004,8 +1004,9 @@ func _main_room() -> void:
 	_swing_door(g, "RedDoor", "red_door", Vector3((SMOKE_DOOR.x + SMOKE_DOOR.y) * 0.5, 0, MAIN_SE_Z + 0.1), 180.0, Vector3.BACK)
 	_cut(_kit(g, "exit_sign", Vector3((SMOKE_DOOR.x + SMOKE_DOOR.y) * 0.5, 2.45, MAIN_SE_Z - 0.05), 0.0, "ExitSignSmoke"), Vector3.BACK)
 	# South-east corner at floor level: wine fridge, Black Cabin light box over the door (photo 12)
-	_ph(g, "wine_fridge", Vector3(41.4, 0, MAIN_SE_Z - 0.35), 0.0, "WineFridge")
-	_ph(g, "lightbox_bc", Vector3(41.4, 1.0, MAIN_SE_Z - 0.35), 0.0, "LightboxBC", false)   # sits on the fridge (kit note)
+	# Both hidden only on the sight line (they stand in front of the smoking room's north-east corner, seen from its view)
+	_cut(_ph(g, "wine_fridge", Vector3(41.4, 0, MAIN_SE_Z - 0.35), 0.0, "WineFridge"), Vector3.ZERO)
+	_cut(_ph(g, "lightbox_bc", Vector3(41.4, 1.0, MAIN_SE_Z - 0.35), 0.0, "LightboxBC", false), Vector3.ZERO)   # sits on the fridge (kit note)
 	_omni(g, "LightboxGlow", Color("ffd0b0"), 0.9, 3.5, Vector3(41.0, 1.6, MAIN_SE_Z - 0.9))
 	# Vinyl records and a framed picture on the west wall of the strip to the toilets (photo 10)
 	for i in 3:
@@ -1493,10 +1494,13 @@ func _contact_shadows() -> void:
 ## The corridor looks east down its length at the end-wall sign (photo 24), so its walls never cut away and the lounge
 ## stays hidden until the Sticker door is passed. The lobby reaches out over the step of street beyond the street door. The old-corridor alcove off the lounge has its
 ## own framing, looking south into it over the old toilets' closed box (hidden on the sight line).
-## The main room is one framing (Daniele's playtest of 33dc5b9: no swings between zones unless at a door): floor, bar,
-## stage and toilets all look east with the same pitch and distance and a clamp wide enough to reach the corners, so
-## the camera only follows inside the room; the zones stay for their names (HUD title, band earshot). The view turns
-## at thresholds only: lobby, corridor, Sticker door, lounge, buffer, main room, red door to the smoking room.
+## The main room has a view per area again (Daniele, Questions tab 2026-11-01, over the feel pass's one view): the
+## floor looks east with a clamp wide enough for the corner tables, the bar and the toilets south, the stage north, as
+## before 45a6dbf (the bar's area starts 1.2 m east of the counter's west end, so the south-west corner by the west
+## opening keeps the floor's view); camera_rig.gd eases between them (a short dwell inside the room, a longer swing for a bigger turn).
+## The smoking room's view looks south through the red door and takes over in front of it (its rect reaches north to
+## the raised strip and west to the bar's east end), seeing through the main room's south-east wall (see_through), so
+## the room is in sight from any approach; inside, its clamp keeps the whole narrow room in frame.
 func _camera_zones() -> void:
 	const MAIN_CLAMP := Rect2(21.6, 1.6, 17.6, 10.6)   # look target x 21.6..39.2, z 1.6..12.2: every corner table in frame
 	const MAIN_PITCH := -32.0
@@ -1509,10 +1513,11 @@ func _camera_zones() -> void:
 		{"name": "buffer", "rect": Rect2(BUFFER.position.x, BUFFER.position.y, BUFFER.size.x, BUFFER.size.y), "clamp": Rect2(17.7, 4.6, 0.3, 1.5), "yaw": 0.0, "pitch": -32.0, "dist": 7.0, "look_y": 1.3},
 		{"name": "alcove", "rect": Rect2(STUB.position.x, STUB.position.y, STUB.size.x, STUB.size.y), "clamp": Rect2(16.4, 11.3, 2.2, 0.1), "yaw": 180.0, "pitch": -48.0, "dist": 5.5, "look_y": 1.0},
 		{"name": "lounge", "rect": Rect2(LOUNGE.position.x, LOUNGE.position.y, LOUNGE.size.x, LOUNGE.size.y), "clamp": Rect2(4.5, 1.6, 5.5, 9.4), "yaw": 90.0, "pitch": -34.0, "dist": 8.0, "look_y": 1.3},
-		{"name": "bar", "rect": Rect2(BAR_X0, 9.6, BAR_X1 - BAR_X0, MAIN_Z1 - 9.6), "clamp": MAIN_CLAMP, "yaw": -90.0, "pitch": MAIN_PITCH, "dist": MAIN_DIST, "look_y": MAIN_LOOK_Y},
-		{"name": "stage", "rect": Rect2(26.4, 0.0, 9.6, 6.6), "clamp": MAIN_CLAMP, "yaw": -90.0, "pitch": MAIN_PITCH, "dist": MAIN_DIST, "look_y": MAIN_LOOK_Y},
-		{"name": "toilets", "rect": Rect2(MAIN_X0, 12.0, BAR_X0 - MAIN_X0 + 2.6, 4.7), "clamp": Rect2(MAIN_CLAMP.position.x, MAIN_CLAMP.position.y, MAIN_CLAMP.size.x, 15.6 - MAIN_CLAMP.position.y), "yaw": -90.0, "pitch": MAIN_PITCH, "dist": MAIN_DIST, "look_y": MAIN_LOOK_Y},
-		{"name": "smoking", "rect": Rect2(SMOKING.position.x, MAIN_SE_Z, SMOKING.size.x, SMOKING.end.y - MAIN_SE_Z), "clamp": Rect2(40.0, 14.2, 0.1, 2.0), "yaw": 180.0, "pitch": -34.0, "dist": 6.0, "look_y": 1.2},
+		{"name": "bar", "rect": Rect2(BAR_X0 + 1.2, 9.6, BAR_X1 - BAR_X0 - 1.2, MAIN_Z1 - 9.6), "clamp": Rect2(23.5, 10.6, 10.5, 0.6), "yaw": 180.0, "pitch": -32.0, "dist": 7.0, "look_y": 1.0},
+		{"name": "stage", "rect": Rect2(26.4, 0.0, 9.6, 6.6), "clamp": Rect2(29.0, 1.6, 3.5, 3.2), "yaw": 0.0, "pitch": -28.0, "dist": 7.5, "look_y": 1.3},
+		{"name": "toilets", "rect": Rect2(MAIN_X0, 12.0, BAR_X0 - MAIN_X0 + 2.6, 4.7), "clamp": Rect2(21.0, 13.5, 0.6, 2.0), "yaw": 180.0, "pitch": -34.0, "dist": 6.0, "look_y": 1.2},
+		{"name": "smoking", "rect": Rect2(BAR_X1, RAISED.end.y, MAIN_X1 - BAR_X1, SMOKING.end.y - RAISED.end.y), "clamp": Rect2(37.8, 13.4, 3.2, 3.0), "yaw": 180.0, "pitch": -40.0, "dist": 6.5, "look_y": 1.0,
+			"see_through": [Rect2(BAR_X1 + 0.25, MAIN_SE_Z - 0.03, MAIN_X1 - BAR_X1 - 0.3, 0.2)]},
 		{"name": "floor", "rect": Rect2(MAIN_X0, 0.0, MAIN_X1 - MAIN_X0, MAIN_Z1), "clamp": MAIN_CLAMP, "yaw": -90.0, "pitch": MAIN_PITCH, "dist": MAIN_DIST, "look_y": MAIN_LOOK_Y, "fallback": true},
 	]
 	for z in zones:

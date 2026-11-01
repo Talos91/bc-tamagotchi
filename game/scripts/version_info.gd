@@ -38,10 +38,11 @@ static func compose(ver: String, b: Dictionary) -> String:
 	return s
 
 
-## The small dim label for a bottom corner (bottom right, clear of the zone prompt and the walk hints), named
-## "VersionLabel". Lato from the project theme.
+## The label for a bottom corner (bottom right, clear of the zone prompt and the area buttons), named
+## "VersionLabel". Lato from the project theme. 13 dp, readable on a phone in portrait (Daniele, Questions tab
+## 2026-11-01: "make it bigger"; it was 9 dp and dimmer).
 static func label() -> Label:
-	var l := UI.label(text(), 9.0, Color(UI.ASH, 0.7), HORIZONTAL_ALIGNMENT_RIGHT)
+	var l := UI.label(text(), 13.0, Color(UI.SMOKE, 0.85), HORIZONTAL_ALIGNMENT_RIGHT)
 	l.name = "VersionLabel"
 	l.set_anchors_preset(Control.PRESET_BOTTOM_RIGHT)
 	l.grow_horizontal = Control.GROW_DIRECTION_BEGIN

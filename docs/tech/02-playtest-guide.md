@@ -1,7 +1,7 @@
 # Playtest guide: the first playable loop
 
 Status: 2026-11-02, venue v4 with walk-through doors, real seats, the turned stair, the front-door start screen and the
-feel pass (camera, walls, movement, facing, seats). One page on how to play a
+feel pass (camera, walls, movement, facing, seats) and the area camera (a view per area, area buttons). One page on how to play a
 visit end to end.
 
 ## Run it
@@ -33,10 +33,16 @@ visit end to end.
 - **Walls.** In the entrance corridor the walls stay solid until you are through the Sticker door (camera looking east
   at the BLACK CABIN / NOW OPEN sign; you don't see into the lounge). Everywhere else any wall between the camera and
   your character sinks to a low stub (its bottom 10 %), so the corners and the buffer zone stay in view; walls
-  beyond you stay up.
-- **Camera.** It follows you smoothly and looks a little ahead of where you walk. The whole main room (floor, bar,
-  stage, toilets corridor) is one view looking east; the view only turns at a door or threshold (lobby, corridor,
-  Sticker door, lounge, buffer, main room, red door).
+  beyond you stay up. The smoking room is seen through the main room's south-east wall and red door once you are
+  in front of it.
+- **Camera.** It follows you smoothly and looks a little ahead of where you walk. Every area has its own view
+  (Daniele, 2026-11-01): the Candle Floor looks east, the bar and the toilets corridor south, the stage north, the
+  smoking room south through its door (from the main room in front of it too). Inside the main room a new area's view
+  takes over after a moment (0.3 s), so brushing past an edge never turns it; a bigger turn is a slower, even swing.
+- **Area buttons** (right edge): Lounge, Buffer, Floor, Stage, Bar, Toilets, Smoking. Tap one: the camera turns to that
+  area at once, your character walks there (Floor goes to the middle round table of the row of five, Lounge to the pinball), the camera settles on
+  the area and its sheet opens. The button of the area you are in is dimmed; the one whose need is lowest has that
+  need's colour edge.
 - **Stairs.** In the lounge's south-west corner: the first flight runs along the Sticker-door wall from beside the
   game machine up to a landing, the second turns right and climbs along the west wall into the floor above. You
   can climb to the velvet rope; upstairs is closed for now.
@@ -46,7 +52,8 @@ visit end to end.
 | Do | Mouse / keyboard | Touch |
 |---|---|---|
 | Walk | WASD or arrows; click the floor | joystick bottom left; tap the floor |
-| Go to a zone | click the bar, stage, a table or the cabinet; or a chip on the right edge (Bar, Stage, Prae's table, Pinball) | same, tap |
+| Go to a zone | click the bar, stage, a table or the cabinet | same, tap |
+| Go to an area | an area button on the right edge (Lounge, Buffer, Floor, Stage, Bar, Toilets, Smoking) | same, tap |
 | Open what's here | click the prompt pill at the bottom, or **E** / Space / Enter | tap the pill |
 | Close a sheet | Esc, or click the room above it | tap the room |
 | Leave | **Leave** (top left), or the street door (its sheet opens inside it or on the step outside) | same |
@@ -54,7 +61,7 @@ visit end to end.
 | Portrait / landscape | the round button at the top right, under the rings (remembered in the save; portrait by default) | same |
 
 The top row shows the four needs as rings (Music, Friends, Drinks, Nightlife). The lowest one breathes, and its
-zone's chip gets the same colour edge. Gains rise from the rings as "+N".
+area's button gets the same colour edge. Gains rise from the rings as "+N".
 
 ## What to try
 
@@ -105,12 +112,14 @@ Press **F5** in game, or delete
 From `game/`: `Godot --headless --path . --script res://tests/smoke_loop.gd` (the whole visit), plus
 `smoke_stairs`, `smoke_tap`, `smoke_hud`, `test_needs`, `test_minigames`, `smoke_doors_sit` (doors, seats, stair) and
 `smoke_start` (start screen, entry and exit shot), `test_seats` (every seat faces its table; the seated player faces the
-seat's way in the world) and `test_feel` (facing, movement, tap paths, stairs, camera, walls). Suites that load `main.tscn` themselves start straight in the venue; only
+seat's way in the world) and `test_feel` (facing, movement, tap paths, stairs, the view per area, every area button, the smoking room, walls). Suites that load `main.tscn` themselves start straight in the venue; only
 running the game (main scene) shows the start screen.
 Screenshots: `Godot --path . -- --capture=<png> --capture-size=1080x1920 --capture-at=bar [--capture-sheet]`;
 the current ones are in `docs/art/screens/loop/` (screenshot mode skips the start screen). Start screen, entry and exit shot:
 `Godot --path . --resolution 540x960 --script res://tests/capture_start.gd -- --tag=portrait` (and `960x540`,
-`--tag=landscape`) → `docs/art/screens/start/`.
+`--tag=landscape`) → `docs/art/screens/start/`. Area views, the smoking room and the version label:
+`Godot --path . --resolution 1080x1920 --script res://tests/capture_areas.gd -- --tag=portrait` (and `1920x1080`,
+`--tag=landscape`) → `docs/art/screens/area-camera/`.
 
 ## Not in yet
 

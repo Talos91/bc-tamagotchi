@@ -126,3 +126,10 @@ venue.sheet.memory.greet,Photos taken at Black Cabin will be shared here.,รู
 venue.sheet.memory.share,Share a photo,แชร์รูป,Memory corner row title (upload is BACKLOG D5),26
 venue.sheet.memory.share_sub,A real photo from a night here,รูปจริงจากคืนหนึ่งที่นี่,Memory corner row sub-line,34
 venue.sheet.memory.soon,Coming soon,เร็ว ๆ นี้,"Disabled reason on Share a photo, until uploads land",40
+venue.area.lounge,Lounge,เลานจ์,"Area button (right edge): walks to the pinball in the Lounge, camera focuses there",16
+venue.area.buffer,Buffer,ห้องกันชน,Area button: walks to a tall table in the Buffer between lounge and main room,16
+venue.area.floor,Floor,โซนเทียน,Area button: walks to the middle round table of the Candle Floor,16
+venue.area.stage,Stage,เวที,Area button: walks to the stage front,16
+venue.area.bar,Bar,บาร์,Area button: walks to the bar,16
+venue.area.toilets,Toilets,ห้องน้ำ,Area button: walks to the toilets behind the bar's west end,16
+venue.area.smoking,Smoking,ห้องสูบบุหรี่,Area button: walks into the smoking room,16
