@@ -1,6 +1,7 @@
 extends Node3D
-## The club's front on the night street (BACKLOG B8, start screen): the building face around the venue's street door,
-## the BLACK CABIN neon above it, pavement, kerb and road, a streetlight on a utility pole with Bangkok's cable
+## The club's front on the night street (BACKLOG B8, start screen and exit shot): the building face around the
+## venue's street door, the BLACK CABIN neon above it (Daniele's photo, direction 23: outlined serif tubes in pale
+## pink-white with a deep red glow, on dark foliage lit red from behind; texture drawn by tools/street_sign.py), pavement, kerb and road, a streetlight on a utility pole with Bangkok's cable
 ## bundle, a potted plant, a parked scooter, the neighbouring shophouses and the dark sky above. No photo of the
 ## real front yet: everything here is a plausible stand-in, built in code from plain boxes and kit pieces so it is
 ## easy to replace.
@@ -8,7 +9,8 @@ extends Node3D
 ## Placed from the venue's StreetDoor (meta `center`, the middle of the opening on the lobby's west wall, whose
 ## outer face is 0.1 m west of it); the street runs north-south along -x. Not part of build_venue.gd: the start
 ## screen (scripts/start_screen.gd) adds it at runtime and hides it, lights included, once the player is inside, so
-## the venue keeps its light count.
+## the venue keeps its light count; the exit shot (scripts/exit_shot.gd) turns it back on. `view_transform` is the
+## still camera of both: eye height on the opposite pavement, looking at the door and the sign.
 
 const DOOR_W := 1.2          ## opening of the street door (build_venue.gd DOOR_W)
 const DOOR_H := 2.3          ## its lintel height (build_venue.gd `_wall_z(... [STREET_DOOR], 2.3)`)
@@ -16,7 +18,9 @@ const SLAB := 0.3            ## facade thickness, in front of the lobby wall
 const PAVE_W := 2.2          ## pavement from the facade to the kerb
 const ROAD_W := 2.4          ## a narrow soi
 const FAR_PAVE := 0.34       ## the opposite pavement (the start camera stands on it), up to build_venue.gd's StreetFacade across
-const NEON := "res://assets/kit/lounge/neon_sign.glb"
+const SIGN_TEX := "res://assets/street/street_sign.png"
+const SIGN_SIZE := Vector2(3.6, 1.8)   ## the texture is 2:1; BLACK is about 2.6 m wide
+const VIEW_EYE := 1.6                  ## the still camera's eye height
 
 const C_FACADE := Color("17141a")      ## black-painted render, a little warm
 const C_TRIM := Color("2c1d17")        ## dark wood / steel round the door
@@ -54,11 +58,9 @@ func build(center: Vector3) -> void:
 	_box("JambS", Vector3(x0 - 0.08, 0, cz + DOOR_W * 0.5), Vector3(0.08, DOOR_H + 0.14, 0.14), trim)
 	_box("DoorHead", Vector3(x0 - 0.08, DOOR_H, cz - DOOR_W * 0.5 - 0.14), Vector3(0.08, 0.14, DOOR_W + 0.28), trim)
 	_box("DoorSill", Vector3(x0 - 0.25, -0.05, cz - DOOR_W * 0.5 - 0.1), Vector3(0.25 + SLAB, 0.07, DOOR_W + 0.2), _mat("sill", Color("34343a"), 0.8))
-	# Sign board above the door with the kit neon (BLACK over CABIN, red tubes) on it, facing the street
-	_box("SignBoard", Vector3(x0 - 0.06, DOOR_H + 0.3, cz - 1.35), Vector3(0.06, 1.55, 2.7), _mat("signboard", Color("0a090b"), 0.95))
-	var neon := _scene(NEON, "NeonSign", Vector3(x0 - 0.1, DOOR_H + 0.4, cz), -90.0, Vector3(1.5, 1.4, 1.0))
-	if neon:
-		_boost_emission(neon, 3.0)
+	# The sign over the door: foliage lit red from behind, the neon lettering in front of it
+	_foliage(Vector3(x0, DOOR_H + 1.15, cz), Vector2(2.15, 1.05))
+	_sign(Vector3(x0 - 0.34, DOOR_H + 1.15, cz))
 	# Red spill of the neon on the face, the door and the pavement (one light)
 	lights.append(_omni("NeonWash", NEON_RED, 1.5, 4.6, Vector3(fx - 1.1, DOOR_H + 1.0, cz)))
 	# Door-side plaque: a small lit menu box north of the door
@@ -74,12 +76,12 @@ func build(center: Vector3) -> void:
 		_box("UpWin%d" % i, Vector3(x0 - 0.06, 4.6, wz), Vector3(0.02, 1.2, 1.4),
 			_mat("win_lit", Color("7a2a1c"), 0.6, 0.45) if lit else _mat("win_dark", Color("0d1118"), 0.25))
 		_box("UpWinBar%d" % i, Vector3(x0 - 0.07, 5.18, wz), Vector3(0.02, 0.04, 1.4), trim)
-	# Wall AC unit under the dark window: grey box, grille slats, a pipe down the wall
+	# Wall AC unit north of the sign: grey box, grille slats, a pipe down the wall
 	var ac := _mat("ac", Color("8c8a86"), 0.6)
-	_box("AcUnit", Vector3(x0 - 0.3, 4.05, cz - 2.0), Vector3(0.3, 0.5, 0.8), ac)
+	_box("AcUnit", Vector3(x0 - 0.3, 3.0, cz - 3.3), Vector3(0.3, 0.5, 0.8), ac)
 	for s in 5:
-		_box("AcSlat%d" % s, Vector3(x0 - 0.31, 4.12 + s * 0.08, cz - 1.95), Vector3(0.01, 0.025, 0.7), _mat("ac_slat", Color("4a4a4c"), 0.6))
-	_box("AcPipe", Vector3(x0 - 0.06, 2.3, cz - 1.75), Vector3(0.05, 1.75, 0.05), _mat("pipe", Color("3a3a40"), 0.6))
+		_box("AcSlat%d" % s, Vector3(x0 - 0.31, 3.07 + s * 0.08, cz - 3.25), Vector3(0.01, 0.025, 0.7), _mat("ac_slat", Color("4a4a4c"), 0.6))
+	_box("AcPipe", Vector3(x0 - 0.06, 0.9, cz - 2.65), Vector3(0.05, 2.1, 0.05), _mat("pipe", Color("3a3a40"), 0.6))
 	_box("Drainpipe", Vector3(x0 - 0.1, 0, cz + 3.2), Vector3(0.08, 6.3, 0.08), _mat("pipe", Color("3a3a40"), 0.6))
 	# --- neighbours: a taller grey shophouse north, a low shop with a roller shutter south ---
 	var nl := _mat("next_l", C_NEXT_L, 0.9)
@@ -127,7 +129,105 @@ func set_on(on: bool) -> void:
 		l.visible = on
 
 
+## The still camera (start screen, exit shot): eye height on the opposite pavement, looking up at the door and sign.
+## Portrait frames width (a tall view up to the cables and the sky), landscape frames height (door and sign).
+func view_transform(portrait: bool) -> Transform3D:
+	return Transform3D(Basis.from_euler(Vector3(deg_to_rad(view_pitch(portrait)), -PI * 0.5, 0)),
+		Vector3(far_pave_x, VIEW_EYE, door_center.z))
+
+
+func view_pitch(portrait: bool) -> float:
+	return 14.0 if portrait else 10.0
+
+
+func view_fov(portrait: bool) -> float:
+	return 62.0 if portrait else 54.0
+
+
 # --- pieces ----------------------------------------------------------------------------------------------------
+
+## The neon lettering: one quad facing the street, drawn additively (the texture's black adds nothing), bright
+## enough (HDR) for the environment's glow to bloom it.
+func _sign(c: Vector3) -> void:
+	var tex: Texture2D = load(SIGN_TEX) if ResourceLoader.exists(SIGN_TEX) else null
+	if tex == null:   # not imported yet (a fresh checkout run from the command line): read the PNG itself
+		var img := Image.load_from_file(ProjectSettings.globalize_path(SIGN_TEX))
+		tex = ImageTexture.create_from_image(img) if img else null
+	var m := StandardMaterial3D.new()
+	m.resource_name = "street_sign"
+	m.shading_mode = BaseMaterial3D.SHADING_MODE_UNSHADED
+	m.blend_mode = BaseMaterial3D.BLEND_MODE_ADD
+	m.transparency = BaseMaterial3D.TRANSPARENCY_ALPHA
+	m.albedo_texture = tex
+	m.albedo_color = Color(2.4, 2.4, 2.4)
+	m.texture_filter = BaseMaterial3D.TEXTURE_FILTER_LINEAR_WITH_MIPMAPS_ANISOTROPIC
+	m.disable_fog = true
+	var q := QuadMesh.new()
+	q.size = SIGN_SIZE
+	var mi := MeshInstance3D.new()
+	mi.name = "NeonSign"
+	mi.mesh = q
+	mi.material_override = m
+	mi.cast_shadow = GeometryInstance3D.SHADOW_CASTING_SETTING_OFF
+	mi.position = c
+	mi.rotation.y = -PI * 0.5      # the quad faces +z; turn it to face the street (-x)
+	add_child(mi)
+
+
+## Dark foliage behind the sign, lit red from behind (photo 23): voxel leaf clumps in an oval round `c` on the facade
+## (half size `r` along z and y), the back layer glowing deep red towards the middle, near-black ones in front and at
+## the edges. Three merged meshes (one per material), not a box each.
+func _foliage(c: Vector3, r: Vector2) -> void:
+	var layers := [
+		[_mat("foliage_glow", Color("c0101c"), 0.9, 2.2), SurfaceTool.new()],
+		[_mat("foliage_mid", Color("50080e"), 0.9, 0.7), SurfaceTool.new()],
+		[_mat("foliage_dark", Color("070304"), 1.0), SurfaceTool.new()],
+	]
+	for l in layers:
+		var m: StandardMaterial3D = l[0]
+		m.cull_mode = BaseMaterial3D.CULL_DISABLED   # either winding reads
+		m.metallic_specular = 0.0                    # no tan glints from the streetlight
+		if m.emission_enabled:   # the red is their own (backlight): no tan from the streetlight on top faces
+			m.albedo_color = Color(0.04, 0.0, 0.01)
+		(l[1] as SurfaceTool).begin(Mesh.PRIMITIVE_TRIANGLES)
+	var rng := RandomNumberGenerator.new()
+	rng.seed = 2311
+	for i in 520:
+		var a := rng.randf() * TAU
+		var d := sqrt(rng.randf())                       # even over the oval
+		var dz := cos(a) * d * r.x
+		var dy := sin(a) * d * r.y * (1.0 + 0.15 * rng.randf_range(-1, 1))
+		var depth := rng.randf()                         # 0 back (against the wall) .. 1 front
+		var glow := (1.0 - d * 0.8) * (1.0 - depth) + rng.randf_range(-0.15, 0.15)
+		var k := 0 if glow > 0.42 else (1 if glow > 0.2 else 2)
+		var sz := Vector3(rng.randf_range(0.05, 0.1), rng.randf_range(0.1, 0.24), rng.randf_range(0.12, 0.28))
+		var p := Vector3(c.x - 0.04 - depth * 0.22, c.y + dy, c.z + dz)   # all behind the sign (0.34 out)
+		_add_box(layers[k][1], p, sz)
+	for l in layers:
+		var mi := MeshInstance3D.new()
+		mi.name = "Foliage_" + (l[0] as StandardMaterial3D).resource_name
+		mi.mesh = (l[1] as SurfaceTool).commit()
+		mi.material_override = l[0]
+		mi.cast_shadow = GeometryInstance3D.SHADOW_CASTING_SETTING_OFF
+		add_child(mi)
+
+
+## Six faces of an axis-aligned box centred on `p` into `st`.
+func _add_box(st: SurfaceTool, p: Vector3, size: Vector3) -> void:
+	var h := size * 0.5
+	for f in [[Vector3.RIGHT, Vector3.UP, Vector3.BACK], [Vector3.LEFT, Vector3.UP, Vector3.FORWARD],
+			[Vector3.UP, Vector3.BACK, Vector3.RIGHT], [Vector3.DOWN, Vector3.FORWARD, Vector3.RIGHT],
+			[Vector3.BACK, Vector3.UP, Vector3.LEFT], [Vector3.FORWARD, Vector3.UP, Vector3.RIGHT]]:
+		var n: Vector3 = f[0]
+		var u: Vector3 = f[1]
+		var v: Vector3 = f[2]
+		var o := p + n * h
+		var du := u * h
+		var dv := v * h
+		var q := [o - du - dv, o - du + dv, o + du + dv, o + du - dv]
+		for idx in [0, 2, 1, 0, 3, 2]:
+			st.set_normal(n)
+			st.add_vertex(q[idx])
 
 ## Concrete utility pole at the kerb with a sodium streetlight on an arm over the pavement and the cable bundle
 ## sagging north and south along the street.
@@ -238,35 +338,6 @@ func _line(nm: String, a: Vector3, b: Vector3, w: float, mat: Material) -> void:
 	add_child(mi)
 	var up := Vector3.UP if absf((b - a).normalized().y) < 0.95 else Vector3.RIGHT
 	mi.transform = Transform3D(Basis.looking_at(b - a, up), (a + b) * 0.5)
-
-
-func _scene(path: String, nm: String, pos: Vector3, rot_deg: float, scl := Vector3.ONE) -> Node3D:
-	var ps: PackedScene = load(path) if ResourceLoader.exists(path) else null
-	if ps == null:
-		push_warning("street_front: missing " + path)
-		return null
-	var n: Node3D = ps.instantiate()
-	n.name = nm
-	n.position = pos
-	n.rotation_degrees.y = rot_deg
-	n.scale = scl
-	add_child(n)
-	return n
-
-
-## Raises the emission of every emissive surface under `n` (the kit neon is tuned for the dim lounge; out on the
-## street it is the brightest thing in view and should bloom).
-func _boost_emission(n: Node, mult: float) -> void:
-	if n is MeshInstance3D:
-		var mi := n as MeshInstance3D
-		for i in mi.mesh.get_surface_count():
-			var m := mi.get_active_material(i) as StandardMaterial3D
-			if m and m.emission_enabled:
-				var c := m.duplicate() as StandardMaterial3D
-				c.emission_energy_multiplier *= mult
-				mi.set_surface_override_material(i, c)
-	for c in n.get_children():
-		_boost_emission(c, mult)
 
 
 func _omni(nm: String, col: Color, energy: float, rng: float, pos: Vector3) -> OmniLight3D:
