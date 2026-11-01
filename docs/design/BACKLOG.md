@@ -48,7 +48,7 @@ a layout plan are coming from Daniele; until then the layout stays frozen.
 
 | # | Item | Effort | Needs | Status |
 |---|------|--------|-------|--------|
-| D1 | Upcoming events list | S–M | events feed from Black Cabin (even a spreadsheet) | idea |
+| D1 | Upcoming events list | S–M | real October 2026 calendar in `docs/venue/events/` (monthly posters + JSON) | idea |
 | D2 | "Tonight" tab with the band lineup | S | tonight's lineup source | idea |
 | D3 | Table booking: scaffold only, not wired to a real system | M | later: Black Cabin's booking flow | idea |
 | D4 | Band info and band pages: follower count, past set lists, "bands you've seen" passport filled by check-ins | L | band data, check-ins | idea |

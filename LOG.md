@@ -62,3 +62,4 @@ Append-only. One dated line per event, newest last. Never edit earlier lines.
 - 2026-11-02 — start-screen round 2 verified in a clean worktree (eight suites PASS on 8024f54) and pushed with 9c12840; clean-checkout break fixed. Verification now always runs in a clean git worktree.
 - 2026-11-02 — New rules from Daniele via the Ooze orchestrator (vault method §5): one hub artifact, questions carry screenshots, workers archive themselves, model rules, handover checklist. Added to PROJECT.md; handoffs/ORCHESTRATOR-HANDOVER.md written.
 - 2026-11-02 — Brand fonts from Daniele + blackcabin.bar CSS: Lato (UI) + Kristi (titles), Thai fallback IBM Plex Sans Thai Looped; address discrepancy put on the Questions tab; 🖼️ UI worker (fonts + orientation toggle) proposed.
+- 2026-11-02 — Real October 2026 event calendar filed: docs/venue/events/ (poster + 2026-10.json, 9 events); BACKLOG D1 points to it.

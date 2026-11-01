@@ -1,0 +1,3 @@
+# Black Cabin events (real calendars)
+
+Monthly posters from Black Cabin (@blackcabinbar), supplied by Daniele, with a JSON transcription per month. Feeds BACKLOG D1 (upcoming events), D2 (Tonight tab), the "check the event calendar" need in the stakes proposal, and the performances schedule. Format: `YYYY-MM.json` next to the poster image. Kinds of night seen so far: tribute nights ("Coldplay & Oasis Night", "Charlie Puth Night", "Damien Rice Night"), concerts by named Thai acts (Moderndog, Noi Pru), "The Cabin Jam" with a listed lineup, "Cabin's Visitor" guest sets, anniversary and Halloween parties. Showtimes 20:00–23:45.
