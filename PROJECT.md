@@ -3,7 +3,7 @@ PROJECT: Black Cabin Tamagotchi — root H:\My Drive\PROJECTS\Black Cabin Tamago
 If the folder you are in is not this root, stop and tell the orchestrator.
 
 ## Basics
-- What it is: a voxel-art Tamagotchi-style game commissioned by the real Black Cabin bar (Bangkok): the player's character lives a needs loop (four meters, real-time decay) in a voxel replica of the venue, with minigames, coins and, later, a bridge to the real venue. Mode: single-player first playable, desktop first, phone portrait later; multiplayer (wave 4) is not started. Legacy / never to build from: direction render 04 (style reference only) and the first greybox integration.
+- What it is: a voxel-art Tamagotchi-style game commissioned by the real Black Cabin bar (Bangkok): the player's character lives a needs loop (four meters, real-time decay) in a voxel replica of the venue, with minigames, coins and, later, a bridge to the real venue. Mode: **mobile only** (phone, portrait first; Daniele 2026-11-02), single-player first playable; multiplayer (wave 4) is not started. Legacy / never to build from: direction render 04 (style reference only) and the first greybox integration.
 - Owner: Daniele (they/them). Start pages to read: `docs/design/DECISIONS.md` (binding, newest rows at the bottom), `ORCHESTRATION.md`, `docs/MANUAL.md`, `docs/art/direction/README.md`. Design package: `docs/design/` (`00-brief.md`, `01-high-concept.md`, `02-gdd.md`, `03-cast.md`, `04-coins`, `06-stakes`); open-questions file: the "Still open" list at the bottom of `docs/design/DECISIONS.md`.
 - Working memory: `STATE.md` (read first), `LOG.md`, this file, `handoffs/`, all at the repo root. Write UTF-8 text. Git on this Google Drive mount is slow: wait on `.git/index.lock`, never delete it while a git process runs.
 - Questions to the owner: the **Questions tab** of the Black Cabin Backlog artifact (https://claude.ai/artifact/BbpBxVWVVXMjz7TgJ7aFBW#questions; database collection `items`, one doc per question with kind now/design/facts, options with one `rec`, `answer`, `note`). Workers never ask Daniele directly: they report calls to the orchestrator, who adds them to the tab, reads answers back, copies each into `docs/design/DECISIONS.md` as a dated row and removes it from "Still open". The owner decides rules, balance, art acceptance, money and venue facts.
@@ -28,11 +28,12 @@ If the folder you are in is not this root, stop and tell the orchestrator.
 - Headless suites, run from `game/`: `smoke_stairs`, `smoke_tap`, `smoke_hud`, `test_needs`, `test_minigames`, `smoke_loop`, `smoke_doors_sit`, `smoke_start`, `test_menu`, `smoke_version` (ten as of 2026-11-02; new suites add themselves here through the orchestrator). Files are `game/tests/<name>.gd`, run as `Godot --headless --path game -s tests/<name>.gd` using the Godot exe above.
 - Orchestrator verification runs in a clean `git worktree` of the exact SHA (import first), never the shared tree, then pushes that SHA only.
 - Full-suite rule: run all suites once per assembled wave before the orchestrator regenerates the changelog; role suites (needs, minigames, loop) run on every change to their paths.
+- **Playtest launches for Daniele** open in a phone-sized portrait window, never full desktop: `Godot --path game --resolution 450x800` (from a clean worktree of the pushed SHA, stamped with `python tools/version.py`). Daniele 2026-11-02: "the game is mobile only".
 - Windowed runs: omit `--headless`; screenshots go next to the renders they are compared with. Known slow: `test_minigames` (hundreds of checks).
 
 ## Release path
 - Versioning (2026-11-02, `docs/tech/versioning.md`): the version lives in `application/config/version` in `game/project.godot` (0.1.0 closed 2026-11-02; 0.2.0 in progress). The orchestrator bumps MINOR when it closes a version and PATCH for a hotfix; workers never bump it. The game shows `v<version> · <sha>` bottom right (`game/scripts/version_info.gd`). Stamp a build with `python tools/version.py` before handing it to Daniele; add the closed version to `RELEASES` in `tools/changelog.py` when cutting one.
-- No build, export or publish path exists yet. First playable is desktop; phone later (web export untested).
+- No build, export or publish path exists yet. The game is mobile only (Daniele 2026-11-02); no phone export exists yet (web export untested).
 - Docs updated together after a wave: `ORCHESTRATION.md` wave status, `docs/MANUAL.md` section 15, `STATE.md`, `LOG.md`, and `docs/CHANGELOG.md` via `python tools/changelog.py` (orchestrator only).
 
 ## Never
