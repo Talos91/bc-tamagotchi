@@ -4,6 +4,9 @@
 - No release yet (no build/publish path). `main` = design docs, needs system, four minigames, kit v4 (90 objects), characters v2, VENUE V4 rebuilt to the real floor map (228eb2e, daf76b6; plan `docs/art/plan-v4.md`, 21.7 × 15 m main room), first playable loop re-wired to it; six headless suites green (orchestrator re-ran on daf76b6).
 - `layout.json` unfrozen until Daniele accepts v4. Play it: `docs/tech/02-playtest-guide.md` (spawn is now the west lobby).
 
+## HANDOVER DECIDED (Daniele 2026-11-02)
+- No new orchestrator until all work is closed: follow handoffs/ORCHESTRATOR-HANDOVER.md. No new workers. Running: venue-notes (local_545c7c14), real-menu (local_b0e3443e, waits for go after venue-notes commits), fonts+orientation (local_6cdfb9ab).
+
 ## IN FLIGHT (shared checkout, branch main only)
 - Venue notes round on main (676a6a8, a08065e): doors, seating, stair, alcove camera, Prae leftovers; seven suites pass (incl. new smoke_doors_sit). venue-notes session idle, kept for venue follow-ups. Stair confirmed by Daniele 2026-11-02.
 - B8 start screen on main (0dc0b68, cf0555f). Round 2 running in 🎬 start-screen (local_d2ed3aae): sign from direction 23, no title, eased camera sequence, exit shot.

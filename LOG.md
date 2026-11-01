@@ -63,3 +63,5 @@ Append-only. One dated line per event, newest last. Never edit earlier lines.
 - 2026-11-02 — New rules from Daniele via the Ooze orchestrator (vault method §5): one hub artifact, questions carry screenshots, workers archive themselves, model rules, handover checklist. Added to PROJECT.md; handoffs/ORCHESTRATOR-HANDOVER.md written.
 - 2026-11-02 — Brand fonts from Daniele + blackcabin.bar CSS: Lato (UI) + Kristi (titles), Thai fallback IBM Plex Sans Thai Looped; address discrepancy put on the Questions tab; 🖼️ UI worker (fonts + orientation toggle) proposed.
 - 2026-11-02 — Real October 2026 event calendar filed: docs/venue/events/ (poster + 2026-10.json, 9 events); BACKLOG D1 points to it.
+- 2026-11-02 — real-menu asked to edit venue_session.gd/main.gd/strings_venue.csv; held until venue-notes commits (it has uncommitted edits in all three); go-ahead to follow.
+- 2026-11-02 — Handover decided; rule adopted: no new orchestrator until all workers finish and the version is closed (handoffs/ORCHESTRATOR-HANDOVER.md rewritten from the Ooze checklist). Session started by Daniele from card: 🖼️ fonts+orientation (local_6cdfb9ab). real-menu own files committed 800ef9d.
