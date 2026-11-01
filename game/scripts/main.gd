@@ -19,6 +19,7 @@ const WalkOutScene = preload("res://scenes/ui/walk_out.tscn")
 const WelcomeScene = preload("res://scenes/ui/welcome_back.tscn")
 const StartScreen = preload("res://scripts/start_screen.gd")
 const ExitShot = preload("res://scripts/exit_shot.gd")
+const MenuList = preload("res://scripts/menu/menu_list.gd")
 
 @onready var player: Player = $Player
 @onready var zones: VenueZones = $Zones
@@ -32,6 +33,7 @@ const ZONE_TITLES := {"bar": "bar", "stage": "stage", "arcade": "lounge", "exit"
 
 var sheet: Control
 var sheet_zone: Dictionary = {}
+var menu_list: Control
 var frame: Control
 var walk_out: Control
 var welcome: Control
@@ -60,6 +62,7 @@ func _ready() -> void:
 	hud.leave_pressed.connect(_on_leave)
 	hud.hint_pressed.connect(walk_to_kind)
 	session.minigame_requested.connect(open_minigame)
+	session.menu_requested.connect(open_menu)
 	session.visit_finished.connect(_on_visit_finished)
 	session.welcome_back.connect(_on_welcome_back)
 	# Needs debug panel: F1 only (its on-screen button would sit on the HUD). Debug builds only.
@@ -97,7 +100,7 @@ func _process(_delta: float) -> void:
 
 
 func _blocked() -> bool:
-	return is_instance_valid(start_screen) or is_instance_valid(exit_shot) or is_instance_valid(sheet) or is_instance_valid(frame) or is_instance_valid(walk_out) or is_instance_valid(welcome)
+	return is_instance_valid(start_screen) or is_instance_valid(exit_shot) or is_instance_valid(sheet) or is_instance_valid(menu_list) or is_instance_valid(frame) or is_instance_valid(walk_out) or is_instance_valid(welcome)
 
 
 func _sync_block() -> void:
@@ -179,6 +182,27 @@ func _on_row(row_id: String) -> void:
 	_sync_block()
 
 
+## The real menu list (bar sheet → The menu / Kitchen). A tapped drink is ordered by VenueSession.order_item().
+func open_menu(tab: String) -> void:
+	if is_instance_valid(menu_list):
+		return
+	menu_list = MenuList.new()
+	overlay.add_child(menu_list)
+	menu_list.open(tab, session.tipsy.state() == VenueSession.Tipsiness.MERRY)
+	menu_list.item_chosen.connect(func(id):
+		close_menu()
+		session.order_item(id))
+	menu_list.closed.connect(close_menu)
+	_sync_block()
+
+
+func close_menu() -> void:
+	if is_instance_valid(menu_list):
+		menu_list.queue_free()
+	menu_list = null
+	_sync_block.call_deferred()
+
+
 func _on_leave() -> void:
 	if not _blocked():
 		session.leave()
@@ -222,6 +246,7 @@ func _on_welcome_back(_reason: String) -> void:
 
 func _on_visit_finished(summary: Dictionary) -> void:
 	close_sheet()
+	close_menu()
 	sheet = null
 	pending_zone = ""
 	if street_shots and summary.get("reason", "") == "left" and not is_instance_valid(exit_shot):

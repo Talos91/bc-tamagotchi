@@ -22,7 +22,7 @@ var _scroll: ScrollContainer
 
 
 func _ready() -> void:
-	set_anchors_preset(Control.PRESET_FULL_RECT)
+	set_anchors_and_offsets_preset(Control.PRESET_FULL_RECT)
 	mouse_filter = Control.MOUSE_FILTER_STOP
 
 
@@ -141,7 +141,10 @@ func _row(it: Dictionary) -> Control:
 	var root: Control
 	if kitchen:
 		root = PanelContainer.new()
-		root.add_theme_stylebox_override("panel", UI.box(Color(0, 0, 0, 0), 0))
+		var pb := UI.box(Color(0, 0, 0, 0), 0)
+		pb.content_margin_left = UI.dp(10)
+		pb.content_margin_right = UI.dp(18)  # clear of the scrollbar
+		root.add_theme_stylebox_override("panel", pb)
 	else:
 		var b := Button.new()
 		b.focus_mode = Control.FOCUS_NONE

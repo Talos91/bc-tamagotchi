@@ -25,12 +25,9 @@ venue.prompt.arcade,Tap to play pinball,แตะเพื่อเล่นพ�
 venue.prompt.exit,Tap to head home,แตะเพื่อกลับบ้าน,Zone prompt pill at the street door,40
 venue.sheet.bar.head,THE BAR · {who},บาร์ · {who},Sheet header; {who} = bartender name,26
 venue.sheet.bar.greet,Evening! What are we having?,สวัสดีค่ะ วันนี้รับอะไรดีคะ,Nam's greeting line on the bar sheet,90
-venue.sheet.bar.greet_merry,"Water or a mocktail for now, na?",ตอนนี้ขอเป็นน้ำเปล่าหรือม็อกเทลก่อนนะคะ,Nam's line when the player is Merry (03-cast 5.1),90
+venue.sheet.bar.greet_merry,"Water or a soft drink for now, na?",ตอนนี้ขอเป็นน้ำเปล่าหรือซอฟต์ดริงก์ก่อนนะคะ,Nam's line when the player is Merry (03-cast 5.1),90
 venue.sheet.bar.order,Order a drink,สั่งเครื่องดื่ม,Bar sheet row title,26
 venue.sheet.bar.order_free,First one's on the house,แก้วแรกร้านเลี้ยง,"Bar row sub-line, first drink of the visit",34
-venue.sheet.bar.order_sub,The house cocktail,ค็อกเทลประจำร้าน,Bar row sub-line after the first drink,34
-venue.sheet.bar.mocktail,Thai iced tea,ชาเย็น,"Bar row title, a non-alcoholic drink",26
-venue.sheet.bar.mocktail_sub,"No alcohol, same refill",ไม่มีแอลกอฮอล์ อิ่มเท่ากัน,Bar row sub-line,34
 venue.sheet.bar.water,A glass of water,น้ำเปล่าหนึ่งแก้ว,Bar row title,26
 venue.sheet.bar.water_sub,Takes the edge off,ช่วยให้สร่างขึ้นหน่อย,Bar row sub-line: water lowers tipsiness one state,34
 venue.sheet.bar.try,Try something new,ลองอะไรใหม่ ๆ,Bar row title,26
@@ -38,7 +35,7 @@ venue.sheet.bar.try_sub,New for you: {drink},ใหม่สำหรับค�
 venue.sheet.bar.try_done,You've tried the whole menu,คุณลองครบทั้งเมนูแล้ว,"Disabled reason, all drinks tried",40
 venue.sheet.bar.pour,Pour it yourself,ชงเอง,"Bar row title, opens Pour Perfect",26
 venue.sheet.bar.pour_sub,Pour Perfect · {best},Pour Perfect · {best},Bar row sub-line; {best} = best score text,34
-venue.sheet.bar.merry,Water or a mocktail for now,ตอนนี้ขอเป็นน้ำหรือม็อกเทลก่อน,Disabled reason on alcoholic rows while Merry,40
+venue.sheet.bar.merry,Water or a soft drink for now,ตอนนี้ขอเป็นน้ำหรือซอฟต์ดริงก์ก่อน,Disabled reason on alcoholic rows while Merry,40
 venue.sheet.best,best {score},สูงสุด {score},Best score inside a sheet sub-line,14
 venue.sheet.no_best,first try,ครั้งแรก,Sub-line text when the game was never played,14
 venue.sheet.game,GAME,เกม,Chip on minigame rows,6
@@ -71,7 +68,6 @@ venue.sheet.exit.greet,Calling it a night?,จะกลับแล้วเห�
 venue.sheet.exit.leave,Head home,กลับบ้าน,Exit row title,26
 venue.sheet.exit.leave_sub,See tonight's totals,ดูสรุปของคืนนี้,Exit row sub-line,34
 venue.card.order,{who} slides one over.,{who}ยื่นแก้วมาให้,Action card line after ordering; {who} = bartender,40
-venue.card.mocktail,"Thai iced tea, extra ice.",ชาเย็น เพิ่มน้ำแข็ง,Action card line after a mocktail,40
 venue.card.water,A tall glass of water. Cheers.,น้ำเย็นแก้วใหญ่ ชนแก้ว,Action card line after water,40
 venue.card.try,New for you: {drink},ใหม่สำหรับคุณ: {drink},Action card line after trying a new drink,40
 venue.card.applaud,The band nods back.,วงพยักหน้าตอบ,Action card line after applauding,40
@@ -103,12 +99,6 @@ venue.day.3,Wednesday,วันพุธ,Weekday name,12
 venue.day.4,Thursday,วันพฤหัสบดี,Weekday name,12
 venue.day.5,Friday,วันศุกร์,Weekday name,12
 venue.day.6,Saturday,วันเสาร์,Weekday name,12
-venue.drink.lychee_fizz,Lychee Fizz,ลิ้นจี่ฟิซ,Drink name on the Try something new row,20
-venue.drink.thai_tea_sour,Thai Tea Sour,ชาไทยซาวร์,Drink name,20
-venue.drink.mekhong_mule,Mekhong Mule,แม่โขงมิวล์,Drink name,20
-venue.drink.butterfly_gin,Butterfly Pea Gin,จินอัญชัน,Drink name,20
-venue.drink.pandan_colada,Pandan Colada,ใบเตยโคลาดา,Drink name,20
-venue.drink.smoky_old_fashioned,Smoky Old Fashioned,สโมกกี้โอลด์แฟชั่น,Drink name,20
 venue.zone.lobby,ENTRANCE,ทางเข้า,"HUD zone name, camera zone Lobby and the exit zone (plan v4)",16
 venue.zone.corridor,ENTRANCE,ทางเข้า,"HUD zone name, camera zone Corridor (plan v4); same as the lobby, one L corridor",20
 venue.zone.buffer,THE BUFFER,ห้องกันชน,"HUD zone name, camera zone Buffer between lounge and main room (plan v4)",16

@@ -14,19 +14,21 @@ signal visit_begun(info: Dictionary)
 signal visit_finished(summary: Dictionary)  ## Needs' summary + start_meters, end_meters, tipsy
 signal welcome_back(reason: String)
 signal state_changed  ## tipsiness, sitting or band state the HUD shows
+signal menu_requested(tab: String)  ## main.gd opens the real menu list (scripts/menu/menu_list.gd) on this tab
 
 const Rules = preload("res://scripts/rules.gd")
 const Tipsiness = preload("res://scripts/zones/tipsiness.gd")
 const HouseBand = preload("res://scripts/zones/house_band.gd")
 const T = preload("res://scripts/zones/venue_strings.gd")
+const BarMenu = preload("res://scripts/menu/bar_menu.gd")
 
 const BARTENDER := "nam"
+const HOUSE_DRINK := "house_shooter"  ## what Order a drink pours (real menu, scripts/menu/bar_menu.gd)
+const SOFT_DRINK := "coke"            ## what the soft-drink row pours
 const SIT_SECONDS := 60.0          ## GDD §2.3 "Sit at a table ... for 60 s"
 const HEARD_FRACTION := 0.6        ## share of a song spent within earshot for it to count as heard
 const EARSHOT_ZONES := ["stage", "floor"]  ## camera zones within earshot of the stage (Stage, Candle Floor)
 const TRIED_KEY := "drinks_tried"  ## Needs.ext[TRIED_KEY][drink_id] = true (persists with the save)
-## Try-something-new menu, in order. All alcoholic; the Thai iced tea and water rows are the non-alcoholic ones.
-const MENU := ["lychee_fizz", "thai_tea_sour", "mekhong_mule", "butterfly_gin", "pandan_colada", "smoky_old_fashioned"]
 const GAMES := {
 	"pour_perfect": "res://scenes/minigames/pour_perfect/pour_perfect.tscn",
 	"front_row_rhythm": "res://scenes/minigames/front_row_rhythm/front_row_rhythm.tscn",
@@ -41,6 +43,7 @@ var band: HouseBand
 var busy := false              ## a sheet, minigame or dialogue is open: passive listening pauses
 var tipsy := Tipsiness.new()
 var drinks_this_visit := 0
+var pours_this_visit := 0  ## rotates Pour Perfect through the menu's featured drinks
 var songs_heard := 0
 var start_meters := {}
 var sitting := {}              ## {zone, key, left, seat (bool)} from "sit" until the minute is up or they stand
@@ -80,6 +83,7 @@ func _on_visit_started(info: Dictionary) -> void:
 	start_meters = needs.meters.duplicate()
 	tipsy.reset(needs.real_now())
 	drinks_this_visit = 0
+	pours_this_visit = 0
 	songs_heard = 0
 	_heard = 0.0
 	_apply_mood()
@@ -116,20 +120,22 @@ func rows_for(zone: Dictionary) -> Array[Dictionary]:
 		"bar":
 			var no_alc := T.t("venue.sheet.bar.merry") if merry else ""
 			rows.append(_row("order", "venue.sheet.bar.order",
-				T.t("venue.sheet.bar.order_free") if drinks_this_visit == 0 else T.t("venue.sheet.bar.order_sub"), "drinks", false, no_alc))
+				T.t("venue.sheet.bar.order_free") if drinks_this_visit == 0 else BarMenu.t("menu.bar.order_sub", {"drink": BarMenu.name_of(HOUSE_DRINK)}), "drinks", false, no_alc))
+			rows.append(_row("menu", "menu.bar.menu", BarMenu.t("menu.bar.menu_sub", {"n": BarMenu.items("drinks").size()}), "drinks"))
 			rows.append(_row("pour", "venue.sheet.bar.pour", T.t("venue.sheet.bar.pour_sub", {"best": _best("pour_perfect")}), "drinks", true))
 			var nxt := next_new_drink()
 			if nxt == "":
 				rows.append(_row("try", "venue.sheet.bar.try", "", "drinks", false, T.t("venue.sheet.bar.try_done")))
 			else:
-				rows.append(_row("try", "venue.sheet.bar.try", T.t("venue.sheet.bar.try_sub", {"drink": T.t("venue.drink." + nxt)}), "drinks", false, no_alc))
-			rows.append(_row("mocktail", "venue.sheet.bar.mocktail", T.t("venue.sheet.bar.mocktail_sub"), "drinks"))
+				rows.append(_row("try", "venue.sheet.bar.try", T.t("venue.sheet.bar.try_sub", {"drink": BarMenu.name_of(nxt)}), "drinks", false, no_alc))
+			rows.append(_row("mocktail", "menu.bar.soft", BarMenu.t("menu.bar.soft_sub", {"drink": BarMenu.name_of(SOFT_DRINK)}), "drinks"))
 			rows.append(_row("water", "venue.sheet.bar.water", T.t("venue.sheet.bar.water_sub"), "drinks"))
 			var on_stool: bool = player != null and player.seated and str(player.seat.get("table", "")) == "Bar"
 			var why := T.t("venue.sheet.bar.on_stool") if on_stool else ""
 			if _cap_left("bar_chat") <= 0.0:
 				why = T.t("venue.sheet.plenty")
 			rows.append(_row("stool", "venue.sheet.bar.stool", T.t("venue.sheet.bar.stool_sub"), "friends", false, why))
+			rows.append(_row("kitchen", "menu.bar.kitchen", BarMenu.t("menu.bar.kitchen_sub", {"n": BarMenu.items("kitchen").size()}), ""))
 		"stage":
 			rows.append(_row("front", "venue.sheet.stage.front", T.t("venue.sheet.stage.front_sub"), "music"))
 			rows.append(_row("rhythm", "venue.sheet.stage.rhythm", T.t("venue.sheet.stage.rhythm_sub", {"best": _best("front_row_rhythm")}), "music", true))
@@ -237,7 +243,7 @@ func sit_key(zone: Dictionary) -> String:
 
 func next_new_drink() -> String:
 	var tried: Dictionary = needs.ext.get(TRIED_KEY, {})
-	for d in MENU:
+	for d in BarMenu.try_order():
 		if not tried.has(d):
 			return d
 	return ""
@@ -256,9 +262,9 @@ func do_row(zone: Dictionary, row_id: String) -> bool:
 	var now: float = needs.real_now()
 	match row_id:
 		"order":
-			_drink(now, true, T.t("venue.card.order", {"who": _name(BARTENDER)}))
+			_drink(now, true, BarMenu.t("menu.card.order", {"who": _name(BARTENDER), "drink": BarMenu.name_of(HOUSE_DRINK)}))
 		"mocktail":
-			_drink(now, false, T.t("venue.card.mocktail"))
+			_drink(now, false, BarMenu.t("menu.card.soft", {"drink": BarMenu.name_of(SOFT_DRINK)}))
 		"water":
 			tipsy.water(now)
 			_drink(now, false, T.t("venue.card.water"))
@@ -270,9 +276,14 @@ func do_row(zone: Dictionary, row_id: String) -> bool:
 			tried[d] = true
 			needs.ext[TRIED_KEY] = tried
 			_count_drink(now, true)
-			_card(_merge(r, bonus), T.t("venue.card.try", {"drink": T.t("venue.drink." + d)}))
+			_card(_merge(r, bonus), T.t("venue.card.try", {"drink": BarMenu.name_of(d)}))
 		"pour":
-			_request("pour_perfect", {})
+			_request("pour_perfect", {"drink": BarMenu.pour_pick(pours_this_visit, tipsy.state() == Tipsiness.MERRY)})
+			pours_this_visit += 1
+		"menu":
+			menu_requested.emit("drinks")
+		"kitchen":
+			menu_requested.emit("kitchen")
 		"front":
 			player.walk_to(zone["approach"])
 			action_done.emit({"line": T.t("venue.card.front"), "gains": {}, "tab": 0.0, "ok": true, "reason": "", "quiet": false})
@@ -308,6 +319,25 @@ func _drink(now: float, alcoholic: bool, line: String) -> void:
 	var r: Dictionary = needs.apply_action("order_drink")
 	_count_drink(now, alcoholic)
 	_card(r, line)
+
+
+## Orders one item from the real menu (main.gd, menu list). Same effects as the rows: alcohol = Order a drink,
+## soft = the soft-drink row, water = the water row; kitchen items do nothing yet. False if refused.
+func order_item(id: String) -> bool:
+	var now: float = needs.real_now()
+	match BarMenu.effect(id):
+		"alcohol":
+			if tipsy.state() == Tipsiness.MERRY:
+				return false
+			_drink(now, true, BarMenu.t("menu.card.order", {"who": _name(BARTENDER), "drink": BarMenu.name_of(id)}))
+		"soft":
+			_drink(now, false, BarMenu.t("menu.card.soft", {"drink": BarMenu.name_of(id)}))
+		"water":
+			tipsy.water(now)
+			_drink(now, false, BarMenu.t("menu.card.water"))
+		_:
+			return false
+	return true
 
 
 func _count_drink(now: float, alcoholic: bool) -> void:

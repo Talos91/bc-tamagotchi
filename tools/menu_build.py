@@ -137,7 +137,7 @@ POUR_FEATURED = ["heineken_draught", "house_shooter", "guinness_draught", "petes
 # Pour Perfect layer colours per pour style, bottom to top.
 POUR_COLORS = {
     "lager": ["E39A2D", "F2BE4A", "F6EBDD"],
-    "stout": ["2A120C", "3A1A10", "EADBC2"],
+    "stout": ["4E2216", "6A3020", "EADBC2"],
     "sparkling": ["E8D58A", "F2E3A4", "FBF4DA"],
     "white": ["D9C46A", "E6D58A", "F1E6B4"],
     "red": ["5A0A16", "7A1020", "9C1E2C"],
