@@ -11,7 +11,7 @@
 ## WORKERS ALIVE (max 3)
 - 🎛️ orchestrator fdaed712-5416-430d-b3a7-7174cf46699f (Opus 5.5); 🎬 start-screen (local_d2ed3aae); 🏗️ venue-notes idle.
 
-## WAITING ON OWNER
+## WAITING ON OWNER (answer on the Questions tab: https://claude.ai/artifact/BbpBxVWVVXMjz7TgJ7aFBW#questions)
 - Confirm the stair reading on the venue-notes capture; accept venue v4 after this round (then refreeze layout.json); real entrance-corridor photos later.
 - Orientation; Black Cabin opening hours; brand typeface; staff turnover; resident band + consent packs; stakes numbers; coin sign-off; chat policy; real drinks menu.
 

@@ -6,6 +6,9 @@ extends Node3D
 ## Debug (debug builds): F1 needs panel, F2 +1 game day, F3 debug clock x60, F4 a week away (Welcome Back),
 ## F5 reset the save, F6 skip to the next song / break, F7 swap portrait / landscape window, F8 English / Thai.
 ## Screenshot mode: godot --path game -- --capture=<png> [--capture-size=1080x1920] [--capture-at=bar] [--capture-frames=120]
+## Start screen (BACKLOG B8, scripts/start_screen.gd): the street door at night, tap to walk in; the visit starts
+## once inside. Shown when main.tscn runs as the game, not in screenshot mode or with `-- --skip-intro`; tests and
+## tools that instance main.tscn start straight in the venue unless they set `intro` first.
 
 const S = preload("res://scripts/minigames/strings.gd")
 const T = preload("res://scripts/zones/venue_strings.gd")
@@ -13,6 +16,7 @@ const FrameScene = preload("res://scenes/ui/minigame_frame.tscn")
 const SheetScene = preload("res://scenes/ui/zone_sheet.tscn")
 const WalkOutScene = preload("res://scenes/ui/walk_out.tscn")
 const WelcomeScene = preload("res://scenes/ui/welcome_back.tscn")
+const StartScreen = preload("res://scripts/start_screen.gd")
 
 @onready var player: Player = $Player
 @onready var zones: VenueZones = $Zones
@@ -32,6 +36,8 @@ var welcome: Control
 var pending_zone := ""      ## zone id the player is walking to after a tap; its sheet opens on arrival
 var _spawn: Transform3D
 var _capture := {}
+var intro := false          ## force the start screen (tests); see the header
+var start_screen: Node      ## the start screen while it runs
 
 
 func _ready() -> void:
@@ -58,8 +64,15 @@ func _ready() -> void:
 		dbg.queue_free()
 	else:
 		dbg._toggle.visible = false
-	session.arrive()
 	_parse_capture()
+	if intro or (get_tree().current_scene == self and _capture.is_empty() and not "--skip-intro" in OS.get_cmdline_user_args()):
+		start_screen = StartScreen.new()
+		start_screen.name = "StartScreenRun"
+		add_child(start_screen)
+		start_screen.begin(self)
+		_sync_block()
+	else:
+		session.arrive()
 	if DisplayServer.get_name() == "headless":
 		print("main ready: player at ", player.global_position, ", ", zones.zones.size(), " zones")
 
@@ -79,7 +92,7 @@ func _process(_delta: float) -> void:
 
 
 func _blocked() -> bool:
-	return is_instance_valid(sheet) or is_instance_valid(frame) or is_instance_valid(walk_out) or is_instance_valid(welcome)
+	return is_instance_valid(start_screen) or is_instance_valid(sheet) or is_instance_valid(frame) or is_instance_valid(walk_out) or is_instance_valid(welcome)
 
 
 func _sync_block() -> void:
@@ -87,8 +100,19 @@ func _sync_block() -> void:
 	player.input_enabled = not b
 	session.busy = b
 	hud.prompt.visible = not b
-	hud.visible = not (is_instance_valid(frame) or is_instance_valid(walk_out))
+	hud.visible = not (is_instance_valid(frame) or is_instance_valid(walk_out) or is_instance_valid(start_screen))
 	$UI/Joystick.visible = not b
+
+
+## The start screen has walked the player in: HUD and joystick fade in and the visit starts as it does without one.
+func start_play() -> void:
+	start_screen = null
+	_sync_block()
+	session.process_mode = Node.PROCESS_MODE_INHERIT
+	for c: CanvasItem in [hud, $UI/Joystick]:
+		c.modulate.a = 0.0
+		create_tween().tween_property(c, "modulate:a", 1.0, 0.5)
+	session.arrive()
 
 
 # --- Zones ---------------------------------------------------------------------------------------

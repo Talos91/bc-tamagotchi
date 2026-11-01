@@ -43,3 +43,4 @@ Append-only. One dated line per event, newest last. Never edit earlier lines.
 - 2026-11-01 — venue-notes done (4452080, 676a6a8, a08065e); orchestrator re-ran seven suites (all PASS), pushed; stair and four calls sent to Daniele.
 - 2026-11-02 — Daniele confirmed the stair; session started (by Daniele from the proposal card): 🎬 start-screen (local_d2ed3aae, Opus 5.5); old venue-rebuild session archived.
 - 2026-11-02 — 🏗️ venue-notes: Daniele: raised-strip floor in the wood of its edge, not the room floor; wood boards (kit WoodMid) built, recaptured.
+- 2026-11-02 — Backlog artifact gained a Questions tab (db collection items, 16 questions seeded); open questions now live there, answers copied into DECISIONS by the orchestrator. venue-notes landed raised-strip wood floor (679eef0) on Daniele's direct ask.
