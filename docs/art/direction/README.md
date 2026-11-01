@@ -112,3 +112,13 @@ ashtrays, EXIT signs); 14 the buffer zone's south side (mirror wall, red curtain
 - Buffer zone (`22`): the north wall is a window that looks outside; put a tree outside it.
 - Columns: none in the main room; only the two in the lounge where the map shows them. The pillars at the back bar are
   part of the bar joinery.
+
+### Corrections on plan v4 (Daniele, 2026-11-01)
+
+- Scale confirmed: "Keep 21.7 m" (uniform scale from the map; main room 21.7 × 15 m).
+- The bar staff area east of the bar is a **closed walled room** (staff spawn). In its north wall, right beside the
+  staff door, a **half wall for orders**: a pass-through counter where waiters return dirty glasses and collect ready
+  orders. (Daniele's crop of the map was pasted in chat, not saved as a file.)
+- There is **no wall** between the main room and the toilet corridor strip west of the bar; it is open floor.
+- The entrance lobby and the entrance corridor are **one L-shaped corridor**: no line, no door between them. Idea for
+  later: framed pictures of regular customers on its walls.

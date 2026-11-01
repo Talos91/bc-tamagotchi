@@ -28,6 +28,7 @@ a layout plan are coming from Daniele; until then the layout stays frozen.
 | B1 | More interactive places (beyond bar, stage, tables, pinball) | M | map fixed (A1) | idea |
 | B2 | Character creation (creator UI on the accepted v2 presets) | M | — | planned (STATE job 3) |
 | B3 | More minigames (today: Pour Perfect, Rhythm, pinball, Candle Talk) | M each | — | idea |
+| B7 | Framed photos of regular customers on the entrance corridor walls (could tie to achievements or the photo feature) | S | map v4 | idea |
 | B4 | Achievements as stickers on the club's entry door; shown when you leave and in the Flat before you go out | M | — | idea |
 | B5 | Voxel quality push: more cubes per object without killing a phone (pairs with the performance pass) | L | phone measurement first | idea |
 | B6 | Leaderboard per minigame, weekly and monthly | M | online backend, accounts | idea |

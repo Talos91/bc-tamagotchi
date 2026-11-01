@@ -35,6 +35,8 @@ GDD is updated.
 
 | 2026-11-01 | **Baseline map from the real floor plan.** Daniele supplied the floor map (direction 08, route 17) and photos 09–22 with a legend and answers (direction README). Binding: main room ≈ 30 × 15 m; stage mid north wall at floor level, carpets, backstage behind; tiny two-stool tables below and right of the stage; a row of five four-chair tables; raised 15 cm strip on the east with couch, round tables, shelves, neon under the edge; bar on the south wall with cashier bump and reindeer head; buffer zone with four tall tables between lounge and main room, window north with a tree outside, mirror south; smoking room SE with glass to a night street, red door in; entrance lobby west → corridor → Sticker door → old corridor → lounge/buffer → main room; lounge keeps its furniture plus a Black Cabin flappy-bird machine by the stairs and the pinball on the west wall; no columns in the main room. Green rooms are NPC spawns, never walkable. **`layout.json` is unfrozen** for this rebuild and refreezes when Daniele accepts it. |
 
+| 2026-11-01 | **Plan v4 accepted with three corrections.** Scale: "Keep 21.7 m" (main room 21.7 × 15 m, uniform from the map). Staff area is a closed walled room with a half wall for orders beside the staff door; no wall between main room and the toilet corridor strip; entrance lobby + corridor are one L-shaped corridor with no door between (regulars' framed photos on its walls, later). Counter stools 4 + 5 as drawn; two round tables in the lounge; old corridor walkable and bare. |
+
 ## Still open
 
 - Black Cabin's real opening hours (drives what the game shows at 14:00: open all day with staff only, or "Doors at 18:00" with the Flat only).
