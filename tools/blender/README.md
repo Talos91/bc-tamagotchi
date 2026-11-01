@@ -75,7 +75,7 @@ shelf tile, neon edge) and `smoke` (teak tables, wishbone chair, ashtray, air pu
 "derived" ones. Contact sheet of just these objects:
 
 ```
-"C:\Program Files\Blender Foundation\Blender 5.2lender.exe" --background --factory-startup --python tools/blender/bc_kit_sheet.py
+"C:\Program Files\Blender Foundation\Blender 5.2\blender.exe" --background --factory-startup --python tools/blender/bc_kit_sheet.py
 ```
 
 writes `docs/art/screens/kit/kit-v4-additions.png` (`-- --out <png> --names a,b,c` to pick others). It exports
