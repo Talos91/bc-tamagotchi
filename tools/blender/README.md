@@ -65,6 +65,22 @@ godot --path . --script res://assets/kit/capture_showcase.gd
 The capture needs a GPU window (not `--headless`); it writes `docs/art/kit-showcase.png` and prints how one
 material came through the importer (vertex colour, seam texture, emission energy, cull mode).
 
+## v4 additions (2026-11-01, baseline map)
+
+30 objects for the real room (direction photos 08-22; README legend and answers are binding) registered through
+`kit4(...)` in `bc_kit.py`, so `bc_kit.V4_NAMES` lists them. New zones (= manifest `zone` and GLB folder):
+`buffer` (tall tables and stools, window and mirror panels, PAR on a stand, outdoor bare tree), `raised` (couch,
+shelf tile, neon edge) and `smoke` (teak tables, wishbone chair, ashtray, air purifier); the rest went into `tables`,
+`bar`, `lounge` and `circulation`. New palette swatches are marked "v4" in `PALETTE` and need art sign-off like the
+"derived" ones. Contact sheet of just these objects:
+
+```
+"C:\Program Files\Blender Foundation\Blender 5.2lender.exe" --background --factory-startup --python tools/blender/bc_kit_sheet.py
+```
+
+writes `docs/art/screens/kit/kit-v4-additions.png` (`-- --out <png> --names a,b,c` to pick others). It exports
+nothing; run `bc_kit.py` for the GLBs, the manifest and `blender/BlackCabinKit.blend`.
+
 ## What `bc_kit.py` does
 
 - **Voxel grid.** `Vox` is a sparse dict of integer cells -> material key, with `box`, `cyl` (stepped pixel

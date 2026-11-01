@@ -115,6 +115,23 @@ PALETTE = {
     "BarkGrey":     ("#4A3C34", 0.90, 0.0, 0),
     "FloorPale":    ("#46383A", 0.30, 0.0, 0),     # concrete mottling either side of Floor Grey
     "FloorDeep":    ("#30242A", 0.30, 0.0, 0),
+    # v4 (baseline map, direction photos 09-22): the real room's materials that the bible has no swatch for yet
+    "StoneDark":    ("#1E1A1C", 0.15, 0.0, 0),     # cashier / bar top: dark polished stone (09, 16)
+    "GlassNight":   ("#0C1220", 0.05, 0.2, 0),     # window glass at night (15, 20, 22)
+    "GlassRib":     ("#B8B4B0", 0.10, 0.0, 0),     # ribbed glass rail on the cashier bump (09)
+    "FurBrown":     ("#6E5A48", 0.90, 0.0, 0),     # kudu head (16)
+    "FurLight":     ("#9A8470", 0.90, 0.0, 0),
+    "HornDark":     ("#2E2420", 0.60, 0.0, 0),
+    "TeakPale":     ("#B08A5C", 0.35, 0.0, 0),     # smoking-room furniture, pale teak (13, 20, 21)
+    "WeaveCream":   ("#D8CFBE", 0.80, 0.0, 0),     # wishbone chair seats
+    "SteelDark":    ("#6A6A72", 0.35, 0.6, 0),     # hairpin legs, tripod stand, push bar (reads black below ~#60)
+    "DoorRed":      ("#A8201C", 0.50, 0.0, 0),     # smoke-room door (21)
+    "ScreenSky":    ("#4EC0F0", 0.30, 0.0, 1.8),   # flappy-bird screen
+    "ScreenGreen":  ("#3CC04A", 0.30, 0.0, 1.6),
+    "ScreenYellow": ("#F2D23C", 0.30, 0.0, 2.2),
+    "BackglassBlue": ("#2A58C8", 0.30, 0.0, 1.8),  # pinball backglass
+    "PaperWhite":   ("#E6E2DA", 0.70, 0.0, 0),     # notices on doors, menus
+    "PrintGrey":    ("#6A6668", 0.70, 0.0, 0),     # monochrome photo mid tone
 }
 SEAM_VALUE = 0.55              # brightness of the seam line relative to the voxel face (sRGB texel value)
 BLOCK2 = {"ColumnWhite"}       # white tile: jitter and seams on a 2x2 grid, not per voxel (bible section 5)
@@ -1484,8 +1501,561 @@ def floor_tile_b(v):
 
 # ------------------------------------------------------------------ review .blend
 
+# ================================================================== V4: BASELINE-MAP ADDITIONS (direction 08-22)
+# Objects the real room needs that the renders did not show. Photos in docs/art/direction/ (09-22) and the README
+# legend are the source; the venue-rebuild session places these by name, so the names are fixed.
+
+V4_NAMES = []      # filled by kit4(); tools/blender/bc_kit_sheet.py renders these onto the contact sheet
+DOOR_H = 42        # 2.1 m door leaf
+
+
+def kit4(name, zone, size_class, anchor="floor", **extra):
+    V4_NAMES.append(name)
+    return kit(name, zone, size_class, anchor, **extra)
+
+
+def hairpin(v, top, feet, m="SteelDark"):
+    """Hairpin leg: two 1-voxel steel rods from one point under the top down to two feet on the floor (14, 15, 22)."""
+    for f in feet:
+        v.line(top, (f[0], f[1], 0), m, keep=True)
+
+
+# ---------------------------------------------------------------- buffer zone (14, 15, 22)
+
+@kit4("tall_table_square", "buffer", "S")
+def tall_table_square(v):
+    """High table (14, 15, 22): 0.6 m white square top at 1.05 m, a dark under-plate, four steel hairpin legs."""
+    W, H = 12, 21
+    v.box(0, 0, H - 1, W - 1, W - 1, H - 1, "PlasticWhite")
+    v.box(1, 1, H - 2, W - 2, W - 2, H - 2, "StoolBlack")            # dark underside so the top reads thin
+    for cx, cy, dx, dy in ((2, 2, -1, -1), (W - 3, 2, 1, -1), (2, W - 3, -1, 1), (W - 3, W - 3, 1, 1)):
+        hairpin(v, (cx, cy, H - 3), ((cx + dx * 2, cy), (cx, cy + dy * 2)))
+
+
+@kit4("tall_table_round", "buffer", "S", variant_of="tall_table_square")
+def tall_table_round(v):
+    """High table, 0.6 m dark wood round top at 1.05 m on four hairpin legs (14)."""
+    H = 21
+    v.cyl(6, 6, H - 1, H - 1, 12, "WoodDark")
+    v.cyl(6, 6, H - 2, H - 2, 10, "ChairWoodDark")                   # apron
+    for cx, cy, dx, dy in ((3, 3, -1, -1), (8, 3, 1, -1), (3, 8, -1, 1), (8, 8, 1, 1)):
+        hairpin(v, (cx, cy, H - 3), ((cx + dx * 2, cy), (cx, cy + dy * 2)))
+
+
+@kit4("tall_stool", "buffer", "S")
+def tall_stool(v):
+    """Hairpin bar stool (14, 22): 0.35 m dark wood round seat at 0.75 m, four steel hairpins."""
+    H = 15
+    v.cyl(3.5, 3.5, H - 1, H - 1, 7, "WoodDark")
+    v.cyl(3.5, 3.5, H - 2, H - 2, 5, "ChairWoodDark")
+    for cx, cy, dx, dy in ((2, 2, -1, -1), (4, 2, 1, -1), (2, 4, -1, 1), (4, 4, 1, 1)):
+        hairpin(v, (cx, cy, H - 3), ((cx + dx * 2, cy), (cx, cy + dy * 2)))
+
+
+@kit4("window_wall_panel", "buffer", "Architecture")
+def window_wall_panel(v):
+    """1 m of full-height window wall (15, 22): black steel mullions, two panes wide, three transoms, night
+    glass. Room side at -y; tiles along x (both edge mullions are present, a seam reads as a 2-voxel post)."""
+    W, H = 20, ROOM_H
+    v.box(1, 1, 1, W - 2, 1, H - 2, "GlassNight")
+    for x in (0, 10, W - 1):
+        v.box(x, 0, 0, x, 1, H - 1, "BeamBlack")
+    for z in (0, 27, 54, H - 1):
+        v.box(0, 0, z, W - 1, 1, z, "BeamBlack")
+
+
+@kit4("mirror_wall_panel", "buffer", "Architecture")
+def mirror_wall_panel(v):
+    """1 m x 2.5 m framed mirror panel (14): black frame, mirror face with a pale diagonal streak and a darker
+    foot so it reads as glass without a reflection probe. Face at -y, back flat on the wall."""
+    W, H = 20, 50
+    v.box(0, 1, 0, W - 1, 1, H - 1, "BeamBlack")                     # backing
+    v.box(0, 0, 0, W - 1, 0, H - 1, "BeamBlack")                     # frame
+    v.box(1, 0, 1, W - 2, 0, H - 2, "MirrorGrey")
+    v.box(1, 0, 1, W - 2, 0, 12, "MirrorDark")
+    for x in range(1, W - 1):                                        # streak
+        for z in range(1, H - 1):
+            if 0 <= (x * 2 - z + 34) <= 2:
+                v.set(x, 0, z, "MirrorLight")
+
+
+@kit4("par_on_stand", "buffer", "M")
+def par_on_stand(v):
+    """PAR can on a tripod stand (14): three steel legs, a pole, a black can aimed toward -y with a dim amber
+    LED face. About 2 m tall."""
+    for f in ((-6, -4), (6, -4), (0, 6)):
+        v.line((0, 0, 28), (f[0], f[1], 0), "SteelDark", keep=True)
+    v.box(0, 0, 28, 0, 0, 33, "SteelDark")                           # pole
+    v.box(-3, 0, 34, 3, 0, 34, "BeamBlack")                          # yoke
+    v.cyl(0.5, 37.5, -4, 1, 7, "StoolBlack", axis="y")               # can, along y (x, z disc)
+    v.cyl(0.5, 37.5, -5, -5, 5, "MirrorDark", axis="y")              # LED face
+    for x, z in ((0, 37), (1, 38), (-1, 38), (0, 39), (0, 36)):
+        v.set(x, -5, z, E("LanternAmber"))
+
+
+def branch(v, a, length, level, r):
+    """Bare branching: 2-3 children per tip, each shorter and more horizontal than its parent."""
+    if level == 0 or length < 3:
+        return
+    for _ in range(3 if level >= 3 else 2):
+        b = (a[0] + r.randint(-length, length), a[1] + r.randint(-length * 2 // 3, length * 2 // 3),
+             a[2] + r.randint(length // 2, length))
+        v.line(a, b, "BarkGrey", keep=True)
+        branch(v, b, int(length * 0.7), level - 1, r)
+
+
+@kit4("outdoor_tree_bare", "buffer", "L")
+def outdoor_tree_bare(v):
+    """Bare tree for outside the windows (19, 22): grey trunk from the ground, three limbs, twigs; no leaves,
+    no planter. About 3.6 m tall. `stage_tree` stays the indoor one."""
+    r = rng("outdoor_tree_bare")
+    v.box(-1, -1, 0, 0, 0, 24, "BarkGrey")                           # trunk 2 x 2
+    v.box(-2, -2, 0, 1, 1, 2, "BarkGrey")                            # root flare
+    for a, b in (((-1, 0, 24), (-7, -2, 34)), ((0, -1, 24), (6, -3, 36)), ((0, 0, 24), (1, 4, 38))):
+        v.line(a, b, "BarkGrey", keep=True)
+        v.line((a[0], a[1], a[2] - 1), (b[0], b[1], b[2] - 1), "BarkGrey", keep=True)   # limbs 2 voxels thick
+        branch(v, b, 12, 3, r)
+
+
+# ---------------------------------------------------------------- tiny tables (11, legend: gold circles)
+
+@kit4("tiny_table", "tables", "S")
+def tiny_table(v):
+    """Tiny two-person table below the stage (11): 0.5 m dark round top at 0.7 m on a black pedestal and disc
+    foot. Stools: `drum_stool`."""
+    H = 14
+    v.cyl(5, 5, H - 1, H - 1, 10, "WoodDark")
+    v.cyl(5, 5, H - 2, H - 2, 8, "BeamBlack")
+    v.box(4, 4, 1, 5, 5, H - 3, "BeamBlack")
+    v.cyl(5, 5, 0, 0, 6, "BeamBlack")
+
+
+# ---------------------------------------------------------------- raised east strip (11, 18)
+
+@kit4("couch_long", "raised", "L")
+def couch_long(v):
+    """1 m banquette segment for the raised strip's east wall (11): deep red velvet, channel-tufted back,
+    Neon Red strip under the seat nose. Seat to -y, back on the wall at +y; tiles along x, no arms."""
+    W, D, SEAT, TOP = 20, 14, 8, 18
+    v.box(0, 2, 0, W - 1, D - 1, 2, "BeamBlack")                     # plinth, recessed 2 voxels
+    v.box(0, 2, 1, W - 1, 2, 1, E("NeonRed"))                        # lit from below
+    v.box(0, 0, 3, W - 1, 9, SEAT, "VelvetRed")                      # seat cushion
+    v.box(0, 0, 3, W - 1, 0, 3, "VelvetShadow")                      # shadow seam under the nose
+    v.box(0, 10, 3, W - 1, D - 1, TOP, "VelvetShadow")               # back
+    for x in range(W):                                               # tubes 3 wide, groove 1, absolute rhythm
+        if x % 4 != 3:
+            v.box(x, 9, SEAT + 1, x, 9, TOP, "VelvetRed")
+    v.box(0, 9, TOP, W - 1, D - 1, TOP, "VelvetCrest")               # top roll
+
+
+@kit4("shelf_wall_tile", "raised", "L", mount="wall", mount_height_m=1.1)
+def shelf_wall_tile(v):
+    """1 x 1 m open shelving for the wall above the couch (11): dark wood frame, plum back, four 0.5 m cells with
+    bottles, books, a framed print, glasses. Tiles along x and z (edge members are doubled at seams)."""
+    W, D, H = 20, 6, 20
+    v.box(0, D - 1, 0, W - 1, D - 1, H - 1, "CeilingPlum")
+    for x in (0, 10, W - 1):
+        v.box(x, 0, 0, x, D - 2, H - 1, "WoodDark")
+    for z in (0, 10, H - 1):
+        v.box(0, 0, z, W - 1, D - 2, z, "WoodDark")
+
+    def bottles(x, z):
+        for i, (b, c) in enumerate((("BottleAmber", "BottleAmberCap"), ("BottleGreen", "BottleGreenCap"),
+                                    ("BottleClear", "BottleClearCap"))):
+            v.box(x + i * 2, 3, z, x + i * 2, 3, z + 3, b)
+            v.set(x + i * 2, 3, z + 4, c)
+
+    def books_flat(x, z):
+        for i, c in enumerate(("DrumRed", "ColumnWhite", "WoodMid", "StageBlue")):
+            v.box(x + (i % 2), 2, z + i, x + 2 + (i % 2), 4, z + i, c)
+
+    def books_up(x, z):
+        for i, c in enumerate(("CarpetRed", "LabelCream", "BeamBlack", "CymbalGold")):
+            v.box(x + i, 2, z, x + i, 4, z + 4 + (i % 2), c)
+
+    def frame(x, z):
+        v.box(x, 4, z, x + 3, 4, z + 4, "CymbalGold")
+        v.box(x + 1, 4, z + 1, x + 2, 4, z + 3, "PrintGrey")
+        v.set(x + 1, 4, z + 2, "ColumnWhite")
+
+    def glasses(x, z):
+        for i in range(2):
+            v.box(x + i * 2, 3, z, x + i * 2, 3, z + 2, "BottleClear")
+            v.set(x + i * 2, 3, z + 3, "BottleClearCap")
+
+    def bust(x, z):
+        v.box(x, 2, z, x + 2, 4, z, "BeamBlack")
+        v.box(x, 2, z + 1, x + 2, 4, z + 4, "ColumnWhite")
+
+    items = (bottles, books_flat, frame, glasses, books_up, bust)
+    for bay, (bx, bz) in enumerate(((1, 1), (11, 1), (1, 11), (11, 11))):
+        a, b = items[(bay * 2) % len(items)], items[(bay * 2 + 1) % len(items)]
+        a(bx + 1, bz + 1)
+        b(bx + 5, bz + 1)
+
+
+@kit4("raised_edge_neon", "raised", "Architecture")
+def raised_edge_neon(v):
+    """1 m of the raised strip's edge (18): a 15 cm wood riser standing on a Neon Red strip recessed one voxel
+    under its face. Face at -y (the floor side); the platform surface behind it is built by the venue generator."""
+    W = 20
+    v.box(0, 1, 0, W - 1, 1, 0, E("NeonRed"))
+    v.box(0, 2, 0, W - 1, 3, 0, "BeamBlack")
+    v.box(0, 0, 1, W - 1, 3, 2, "WoodMid")
+    v.box(0, 0, 1, W - 1, 0, 1, "WoodDark")
+
+
+# ---------------------------------------------------------------- bar additions (09, 12, 16)
+
+@kit4("cashier_counter", "bar", "L")
+def cashier_counter(v):
+    """The cashier bump that comes out of the bar counter (09, 16): 1 x 0.6 m, same joinery and foot glow as
+    `bar_counter`, dark stone top, ribbed-glass rail on three sides, card reader, menu stack, a small black lamp.
+    Customers at -y and both sides; its +y face joins the bar counter."""
+    W, D, H = 20, 12, 22
+    v.box(0, 1, 0, W - 1, D - 1, 1, "StoolBlack")                    # kick
+    v.box(0, 1, 1, W - 1, 1, 1, E("ShelfAmber"))
+    v.box(1, 1, 1, 1, D - 1, 1, E("ShelfAmber"))
+    v.box(W - 2, 1, 1, W - 2, D - 1, 1, E("ShelfAmber"))
+    v.box(0, 0, 2, W - 1, D - 1, H - 3, "BarFront")                  # body
+    for x in range(0, W, 5):
+        v.box(x, 0, 2, x, 0, H - 3, "WoodDark")
+    for y in range(2, D, 5):
+        v.box(0, y, 2, 0, y, H - 3, "WoodDark")
+        v.box(W - 1, y, 2, W - 1, y, H - 3, "WoodDark")
+    v.box(0, 0, 2, W - 1, 0, 2, "WoodDark")
+    v.box(-1, -1, H - 2, W, D - 1, H - 1, "StoneDark")               # stone top, 1 voxel proud on three sides
+    v.box(-1, -1, H - 2, W, -1, H - 2, "CymbalGold")                 # brass edge trim
+    for x in range(-1, W + 1):                                       # ribbed glass rail along the front
+        v.box(x, -1, H, x, -1, H + 3, "GlassRib" if x % 2 else "BottleClear")
+    for y in range(-1, D - 1):                                       # and both sides
+        v.box(-1, y, H, -1, y, H + 3, "GlassRib" if y % 2 else "BottleClear")
+        v.box(W, y, H, W, y, H + 3, "GlassRib" if y % 2 else "BottleClear")
+    v.box(3, 5, H, 5, 7, H + 1, "PlasticWhite")                      # card reader
+    v.set(4, 5, H + 2, E("ScreenCyan"))
+    v.box(8, 3, H, 12, 7, H + 1, "PaperWhite")                       # menu stack
+    v.box(8, 3, H + 2, 12, 7, H + 2, "DrumRed")
+    v.box(15, 6, H, 15, 6, H + 5, "BeamBlack")                       # lamp stem
+    v.box(14, 5, H + 6, 16, 7, H + 7, "StoolBlack")                  # cone shade
+    v.set(15, 6, H + 5, E("LampGold"))
+
+
+@kit4("reindeer_head", "bar", "M", mount="wall", mount_height_m=1.5)
+def reindeer_head(v):
+    """Mounted kudu-like head in a gilded frame, wearing a tiara (16), for the wall over the cashier. Frame
+    0.8 x 1.0 m flat on the wall (+y), the pale head stands 0.45 m proud, two thick spiral horns rise above the
+    frame."""
+    W, H = 16, 20
+    v.box(0, 2, 0, W - 1, 3, H - 1, "CymbalGold")                    # frame
+    v.box(2, 2, 2, W - 3, 3, H - 3, "VelvetShadow")                  # panel inside the frame
+    v.box(1, 1, 0, W - 2, 1, 0, "CymbalGold")                        # frame moulding
+    v.box(1, 1, H - 1, W - 2, 1, H - 1, "CymbalGold")
+    v.box(5, -2, 3, 10, 1, 9, "FurBrown")                            # neck / shoulders
+    v.box(6, -3, 2, 9, -2, 5, "FurLight")                            # chest bib
+    v.box(5, -6, 9, 10, -2, 14, "FurLight")                          # head
+    v.box(6, -8, 9, 9, -6, 11, "FurBrown")                           # muzzle
+    v.box(7, -9, 10, 8, -8, 10, "HornDark")                          # nose
+    v.set(5, -6, 12, "BeamBlack")                                    # eyes
+    v.set(10, -6, 12, "BeamBlack")
+    v.box(2, -5, 14, 4, -4, 15, "FurBrown")                          # ears
+    v.box(11, -5, 14, 13, -4, 15, "FurBrown")
+    v.box(6, -5, 15, 9, -4, 15, "CymbalGold")                        # tiara
+    for x in (6, 9):
+        v.set(x, -5, 16, "CymbalGold")
+    v.set(7, -5, 16, E("White"))
+    v.set(8, -5, 16, "CymbalGold")
+    for sx, x0 in ((-1, 5), (1, 10)):                                # spiral horns, 2 voxels thick
+        pts = ((x0, -4, 15), (x0 + sx * 2, -5, 19), (x0, -3, 23), (x0 + sx * 3, -5, 27), (x0 + sx * 1, -4, 31))
+        for a, b in zip(pts, pts[1:]):
+            v.line(a, b, "FurBrown", keep=True)
+            v.line((a[0] + sx, a[1], a[2]), (b[0] + sx, b[1], b[2]), "FurBrown", keep=True)
+
+
+@kit4("wine_fridge", "bar", "M")
+def wine_fridge(v):
+    """Glass-door wine fridge (12): 0.5 m black cabinet 1 m tall, bottles behind night glass with a warm
+    interior strip, a red brand band across the top. `lightbox_bc` sits on it. Door at -y."""
+    W, D, H = 10, 10, 20
+    v.box(0, 0, 0, W - 1, D - 1, H - 1, "StoolBlack")
+    v.clear_box(1, 0, 1, W - 2, 2, 14)                               # cavity behind the door
+    v.box(1, 2, 1, W - 2, 2, 14, "CabinDark")                        # cavity back
+    v.box(1, 1, 14, W - 2, 1, 14, E("CubbyGlow"))                    # interior light
+    for x in (2, 4, 6):                                              # two shelves of bottles
+        for z in (1, 8):
+            v.box(x, 1, z, x, 1, z + 4, "BottleGreen" if (x + z) % 4 else "BottleRed")
+            v.set(x, 1, z + 5, "BottleGreenCap")
+    v.box(1, 1, 7, W - 2, 1, 7, "MirrorGrey")                        # wire shelf
+    v.box(1, 0, 1, W - 2, 0, 14, "GlassNight")                       # glass door
+    v.box(W - 2, -1, 6, W - 2, -1, 9, "SteelDark")                   # handle
+    v.box(0, 0, 15, W - 1, D - 1, 18, "CarpetRed")                   # brand band
+    v.box(2, -1, 16, W - 3, -1, 17, "LabelCream")                    # label
+
+
+@kit4("lightbox_bc", "bar", "S")
+def lightbox_bc(v):
+    """The red BLACK CABIN light box (12): 0.7 x 0.5 m black box, Panel Red lit face with a black 'BC' in the
+    kit's 5 x 7 pixel font (the full name does not fit a 0.7 m box at 5 cm voxels), the small skull on top.
+    Stands on `wine_fridge`; face at -y."""
+    W, D, H = 14, 3, 10
+    v.box(0, 0, 0, W - 1, D - 1, H - 1, "StoolBlack")
+    v.box(1, 0, 1, W - 2, 0, H - 2, E("PanelRed"))
+    for ci, ch in enumerate("BC"):
+        for row, bits in enumerate(FONT[ch]):
+            for col, bit in enumerate(bits):
+                if bit == "1":
+                    v.set(1 + ci * 7 + col, 0, H - 2 - row, "BeamBlack")
+    v.box(1, 1, H, 3, 2, H + 2, "ColumnWhite")                       # skull
+    v.set(1, 1, H + 1, "BeamBlack")
+    v.set(3, 1, H + 1, "BeamBlack")
+
+
+# ---------------------------------------------------------------- lounge machines (README answers)
+
+@kit4("game_cabinet_bc", "lounge", "M")
+def game_cabinet_bc(v):
+    """Black Cabin's own arcade cabinet (lounge, by the stairs): black body skinned with red side stripes, a
+    flappy-bird style screen (sky, two green pipes, a yellow bird), skull marquee, one lit button. Player at -y.
+    Distinct from `arcade_cabinet`."""
+    W, D, H = 14, 12, 36
+    v.box(0, 0, 0, W - 1, D - 1, H - 1, "StoolBlack")
+    for x in (0, W - 1):                                             # red / black side skin
+        v.box(x, 2, 2, x, 3, H - 3, "VelvetRed")
+        v.box(x, 6, 2, x, 7, H - 3, "VelvetRed")
+        v.box(x, 1, H - 6, x, D - 2, H - 5, "VelvetRed")
+    v.clear_box(2, 0, 20, W - 3, 0, 29)
+    v.box(2, 1, 20, W - 3, 1, 29, E("ScreenSky"))                    # screen
+    v.box(2, 1, 20, W - 3, 1, 20, E("ScreenGreen"))                  # ground
+    v.box(9, 1, 21, 10, 1, 23, E("ScreenGreen"))                     # lower pipe
+    v.box(9, 1, 27, 10, 1, 29, E("ScreenGreen"))                     # upper pipe
+    v.box(5, 1, 24, 6, 1, 25, E("ScreenYellow"))                     # bird
+    v.set(7, 1, 25, "BeamBlack")                                     # beak / eye
+    v.box(1, 0, 31, W - 2, 0, 34, E("PanelRed"))                     # marquee
+    v.box(6, -1, 31, 8, -1, 33, "ColumnWhite")                       # skull
+    v.set(6, -1, 32, "BeamBlack")
+    v.set(8, -1, 32, "BeamBlack")
+    v.box(1, -3, 16, W - 2, -1, 17, "BeamBlack")                     # control deck
+    v.box(1, -3, 17, W - 2, -3, 17, "VelvetRed")
+    v.set(7, -2, 18, E("LampGold"))                                  # the one button
+    v.box(5, -1, 5, 8, -1, 10, "CymbalGold")                         # coin door
+
+
+@kit4("pinball_machine", "lounge", "L")
+def pinball_machine(v):
+    """Classic pinball table (lounge west wall): 0.7 x 1.4 m cabinet on four steel legs, red / black sides,
+    glass over a dark playfield with lit bumpers, upright backbox with a lit blue backglass. Player at -y."""
+    W, L = 14, 28
+    for x, y in ((1, 1), (W - 2, 1), (1, L - 2), (W - 2, L - 2)):
+        v.box(x, y, 0, x, y, 10, "SteelDark")
+    v.box(0, 0, 11, W - 1, L - 1, 17, "StoolBlack")                  # cabinet
+    for x in (0, W - 1):
+        v.box(x, 2, 12, x, L - 3, 13, "VelvetRed")
+        v.box(x, 2, 15, x, L - 3, 15, "VelvetRed")
+    v.box(1, 1, 17, W - 2, L - 2, 17, "StoneDark")                   # playfield
+    for x, y in ((4, 8), (9, 8), (6, 13), (4, 19), (9, 19)):
+        v.set(x, y, 17, E("LampGold"))                               # bumpers
+        v.set(x, y, 18, "BeamBlack")
+    v.box(5, 2, 17, 8, 2, 17, "CymbalGold")                          # flippers
+    v.box(1, 1, 18, W - 2, L - 2, 18, "GlassNight")                  # glass
+    v.box(0, 0, 11, W - 1, 0, 12, "VelvetRed")                       # front skirt
+    v.box(W - 2, -1, 14, W - 2, -1, 14, "CymbalGold")                # plunger
+    v.box(0, L - 6, 18, W - 1, L - 1, 32, "StoolBlack")              # backbox
+    v.box(1, L - 7, 20, W - 2, L - 7, 30, E("BackglassBlue"))        # backglass
+    for x, z in ((3, 27), (7, 28), (10, 26), (5, 23), (8, 22)):
+        v.set(x, L - 7, z, E("LampGold"))
+    v.box(3, L - 7, 24, 10, L - 7, 24, E("NeonRed"))                 # title band
+    v.box(0, L - 6, 32, W - 1, L - 1, 32, "VelvetRed")               # backbox top
+
+
+# ---------------------------------------------------------------- doors (12, 20, 21, map)
+
+def door_frame(v, w, h=DOOR_H):
+    """Black frame around a leaf w voxels wide: posts at x 0 and w+1, header at z h. Depth 3 (y 0..2)."""
+    v.box(0, 0, 0, 0, 2, h, "BeamBlack")
+    v.box(w + 1, 0, 0, w + 1, 2, h, "BeamBlack")
+    v.box(0, 0, h, w + 1, 2, h, "BeamBlack")
+
+
+def door_leaf(v, x0, w, m, h=DOOR_H):
+    v.box(x0, 1, 0, x0 + w - 1, 1, h - 1, m)
+
+
+@kit4("red_door", "circulation", "L", note="stands in a wall opening; room side -y, hinge at +x")
+def red_door(v):
+    """The smoking-room door (21): red leaf in a black frame, steel lever handle, two paper notices at eye height."""
+    W = 18
+    door_frame(v, W)
+    door_leaf(v, 1, W, "DoorRed")
+    v.box(1, 1, 0, W, 1, 1, "StoolBlack")                            # kick
+    v.box(3, 0, 20, 3, 0, 22, "SteelDark")                           # handle
+    v.box(3, 0, 20, 4, 0, 20, "SteelDark")
+    v.box(7, 0, 26, 9, 0, 29, "PaperWhite")                          # notices
+    v.box(11, 0, 27, 13, 0, 29, "PaperWhite")
+    v.set(12, 0, 28, "ScreenCyan")
+
+
+@kit4("emergency_door", "circulation", "L", note="stands in a wall opening; room side -y")
+def emergency_door(v):
+    """The smoking room's emergency exit (20): dark double door, steel push bar across both leaves, no-smoking
+    sign, cyan EXIT sign over the frame. 1.8 m wide, 2.4 m to the top of the sign."""
+    W = 16
+    door_frame(v, 2 * W + 1)
+    door_leaf(v, 1, W, "StoolBlack")
+    door_leaf(v, W + 2, W, "StoolBlack")
+    v.box(W + 1, 1, 0, W + 1, 1, DOOR_H - 1, "BeamBlack")            # meeting stile
+    v.box(2, 0, 20, 2 * W, 0, 21, "SteelDark")                       # push bar
+    v.box(W - 3, 0, 30, W - 1, 0, 32, "ColumnWhite")                 # no-smoking sign
+    v.set(W - 2, 0, 31, "DrumRed")
+    v.box(W - 7, 1, DOOR_H + 1, W + 8, 2, DOOR_H + 5, "BeamBlack")   # EXIT box
+    v.box(W - 6, 0, DOOR_H + 2, W + 7, 0, DOOR_H + 4, E("ExitCyan"))
+    for x in (W - 4, W - 2, W, W + 2, W + 4):
+        v.set(x, -1, DOOR_H + 3, "ColumnWhite")
+
+
+@kit4("sticker_door", "circulation", "L", note="stands in a wall opening; room side -y; achievements become decals later")
+def sticker_door(v):
+    """The achievements door between the entrance corridor and the old toilet corridor: plain dark leaf, steel
+    handle, a few sticker patches. The surface stays clean for the decals that come later."""
+    W = 18
+    door_frame(v, W)
+    door_leaf(v, 1, W, "CabinDark")
+    v.box(3, 0, 20, 3, 0, 22, "SteelDark")
+    v.box(3, 0, 20, 4, 0, 20, "SteelDark")
+    for x, z, w, h, c in ((7, 30, 2, 2, "ColumnWhite"), (12, 24, 3, 2, "DrumRed"), (15, 33, 2, 3, "StageBlue"),
+                          (9, 14, 2, 2, "CymbalGold"), (14, 10, 3, 2, "LabelCream")):
+        v.box(x, 0, z, x + w - 1, 0, z + h - 1, c)
+
+
+@kit4("staff_door", "circulation", "L", note="stands in a wall opening; room side -y")
+def staff_door(v):
+    """Staff door (backstage, bar walled area, kitchen): dark wood leaf, steel handle, small brass plate."""
+    W = 18
+    door_frame(v, W)
+    door_leaf(v, 1, W, "WoodDark")
+    v.box(1, 1, 0, W, 1, 1, "StoolBlack")
+    v.box(3, 0, 20, 3, 0, 22, "SteelDark")
+    v.box(3, 0, 20, 4, 0, 20, "SteelDark")
+    v.box(8, 0, 30, 11, 0, 31, "CymbalGold")
+
+
+# ---------------------------------------------------------------- wall dressing (10, 11, 21)
+
+@kit4("wall_picture_framed", "circulation", "S", mount="wall", mount_height_m=1.4)
+def wall_picture_framed(v):
+    """Framed monochrome photo, portrait 0.5 x 0.7 m (11, 21): black frame, white mat, grey print."""
+    W, H = 10, 14
+    v.box(0, 1, 0, W - 1, 1, H - 1, "BeamBlack")
+    v.box(0, 0, 0, W - 1, 0, H - 1, "BeamBlack")
+    v.box(1, 0, 1, W - 2, 0, H - 2, "ColumnWhite")
+    v.box(2, 0, 2, W - 3, 0, H - 3, "PrintGrey")
+    v.box(3, 0, 3, 5, 0, 7, "MirrorDark")
+    v.box(4, 0, 8, 7, 0, 10, "FloorGrey")
+    v.set(6, 0, 4, "ColumnWhite")
+
+
+@kit4("wall_picture_framed_b", "circulation", "S", mount="wall", mount_height_m=1.5, variant_of="wall_picture_framed")
+def wall_picture_framed_b(v):
+    """Variant: landscape 0.7 x 0.5 m, black frame, a red poster print (21)."""
+    W, H = 14, 10
+    v.box(0, 1, 0, W - 1, 1, H - 1, "BeamBlack")
+    v.box(0, 0, 0, W - 1, 0, H - 1, "BeamBlack")
+    v.box(1, 0, 1, W - 2, 0, H - 2, "CabinDark")
+    v.box(3, 0, 3, 8, 0, 7, "DrumRed")
+    v.box(9, 0, 2, 11, 0, 4, "ColumnWhite")
+    v.box(2, 0, 2, 2, 0, 7, "PrintGrey")
+
+
+@kit4("picture_light", "circulation", "XS", mount="wall", mount_height_m=2.0)
+def picture_light(v):
+    """Brass picture lamp (10): wall plate, short arm, a 0.4 m tube with a warm emissive underside."""
+    v.box(3, 3, 2, 4, 3, 3, "CymbalGold")                            # wall plate
+    v.box(3, 1, 3, 4, 2, 3, "CymbalGold")                            # arm
+    v.box(0, 0, 3, 7, 1, 3, "CymbalGold")                            # tube
+    v.box(1, 0, 2, 6, 1, 2, E("LampGold"))                           # lit underside
+
+
+@kit4("vinyl_record_wall", "circulation", "S", mount="wall", mount_height_m=1.3)
+def vinyl_record_wall(v):
+    """Vinyl record on a clear plate (10): 0.4 x 0.6 m acrylic plate, black record with a cream label, a small
+    red sleeve square and a plaque below."""
+    W, H = 8, 12
+    v.box(0, 1, 0, W - 1, 1, H - 1, "BottleClear")
+    v.cyl(3.5, 7.5, 0, 0, 7, "BeamBlack", axis="y")                  # record (x, z disc)
+    v.set(3, 0, 7, "LabelCream")
+    v.box(2, 0, 1, 4, 0, 3, "DrumRed")                               # sleeve
+    v.set(3, 0, 2, "BeamBlack")
+    v.box(5, 0, 2, 6, 0, 2, "LabelCream")                            # plaque
+
+
+# ---------------------------------------------------------------- smoking room (13, 20, 21)
+
+@kit4("smoke_table_square", "smoke", "M")
+def smoke_table_square(v):
+    """Smoking-room table (13, 20, 21): 0.8 x 0.7 m pale teak top at 0.75 m, plank seams, four slim legs."""
+    W, D, H = 16, 14, 15
+    v.box(0, 0, H - 1, W - 1, D - 1, H - 1, "TeakPale")
+    for y in range(0, D, 4):
+        v.box(0, y, H - 1, W - 1, y, H - 1, "WoodMid")
+    v.box(1, 1, H - 2, W - 2, D - 2, H - 2, "WoodMid")                # apron
+    for x in (1, W - 2):
+        for y in (1, D - 2):
+            v.box(x, y, 0, x, y, H - 3, "TeakPale")
+
+
+@kit4("smoke_table_round", "smoke", "M", variant_of="smoke_table_square")
+def smoke_table_round(v):
+    """Low round smoking-room table (13, 20): 0.7 m teak top at 0.5 m on three slim legs."""
+    H = 10
+    v.cyl(7, 7, H - 1, H - 1, 14, "TeakPale")
+    v.cyl(7, 7, H - 2, H - 2, 12, "WoodMid")
+    for x, y in ((3, 7), (10, 4), (10, 10)):
+        v.box(x, y, 0, x, y, H - 3, "TeakPale")
+
+
+@kit4("wishbone_chair", "smoke", "S")
+def wishbone_chair(v):
+    """Wishbone chair (13, 20, 21): pale teak, woven cream seat at 0.45 m, hoop top rail at 0.75 m carried on
+    the back legs and two arm rails, Y splat. Back at +y."""
+    for x in (0, 8):
+        for y in (0, 8):
+            v.box(x, y, 0, x, y, 7, "TeakPale")
+    v.box(0, 0, 8, 8, 8, 8, "TeakPale")                              # seat frame
+    v.box(1, 1, 8, 7, 7, 8, "WeaveCream")                            # woven seat
+    for x in (0, 8):
+        v.box(x, 8, 9, x, 8, 13, "TeakPale")                         # back legs continue
+        v.box(x, 4, 14, x, 8, 14, "TeakPale")                        # arm rails
+        v.box(x, 4, 12, x, 4, 13, "TeakPale")                        # arm supports
+    v.box(0, 8, 14, 8, 8, 15, "TeakPale")                            # hoop top rail
+    v.box(4, 8, 9, 4, 8, 11, "TeakPale")                             # Y splat
+    v.set(3, 8, 12, "TeakPale")
+    v.set(5, 8, 12, "TeakPale")
+    v.set(2, 8, 13, "TeakPale")
+    v.set(6, 8, 13, "TeakPale")
+
+
+@kit4("ashtray", "smoke", "XS")
+def ashtray(v):
+    """Glass ashtray, 0.15 m: clear ring over a dark base (13)."""
+    v.box(0, 0, 0, 2, 2, 0, "BottleClear")
+    v.set(1, 1, 0, "BeamBlack")
+    v.cyl(1.5, 1.5, 1, 1, 3, "BottleClear", inner=1)
+
+
+@kit4("air_purifier", "smoke", "S")
+def air_purifier(v):
+    """Tall white cylinder air purifier (12, 21): 0.3 m across, 0.7 m high, grey vent ring, cyan status light.
+    Front at -y."""
+    H = 14
+    v.cyl(3, 3, 0, H - 1, 6, "PlasticWhite")
+    v.cyl(3, 3, H - 3, H - 2, 6, "FloorGrey")                        # vent band
+    v.cyl(3, 3, H - 1, H - 1, 6, "ColumnWhite")
+    v.cyl(3, 3, 0, 0, 6, "FloorGrey")                                # foot
+    v.set(3, 0, H - 4, E("ScreenCyan"))
+
+
+# ------------------------------------------------------------------ review
+
 BLEND = os.path.join(REPO, "blender", "BlackCabinKit.blend")
-ZONE_ORDER = ("tables", "bar", "stage", "lounge", "circulation")   # front row (camera side) first
+ZONE_ORDER = ("tables", "bar", "stage", "raised", "buffer", "smoke", "lounge", "circulation")   # front row (camera side) first
 REVIEW_GAP = 0.5
 REVIEW_MAX_W = 9.0
 
