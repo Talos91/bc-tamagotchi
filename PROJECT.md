@@ -20,7 +20,7 @@ If the folder you are in is not this root, stop and tell the orchestrator.
 ## Repo, clones, numbers
 - Repo: github.com/Talos91/bc-tamagotchi. Branch: `main` only; never push to any other branch. Product code lives in `game/` (Godot project); tools in `tools/`; Blender review files in `blender/`.
 - Checkout: single shared checkout at the root above; workers do not use worktrees. Commit straight to `main` with only your own paths staged (`git add <paths>`, never `git add -A`), after `git pull --rebase`. Never stash, reset or switch branches; other sessions have uncommitted work in the same tree.
-- Numbers and rules: `game/scripts/rules.gd` (decay, floors, actions), `game/scripts/needs.gd`, `game/scripts/save.gd`; minigames in `game/scripts/minigames/`; strings in `game/i18n/strings.csv` and `game/i18n/strings_venue.csv`; layout of record `game/assets/kit/layout.json` (unfrozen 2026-11-01 for the baseline-map rebuild; owned by the 🏗️ venue-rebuild session; refreezes when Daniele accepts).
+- Numbers and rules: `game/scripts/rules.gd` (decay, floors, actions), `game/scripts/needs.gd`, `game/scripts/save.gd`; minigames in `game/scripts/minigames/`; strings in `game/i18n/strings.csv` and `game/i18n/strings_venue.csv`; layout of record `game/assets/kit/layout.json` (frozen again 2026-11-02: venue v4 accepted by Daniele).
 - Engine: Godot 4.6.1 at `H:/My Drive/PROJECTS/Ooze Syndicate/Tools/Godot/Godot_v4.6.1-stable_win64.exe` (Compatibility renderer, `rendering/viewport/hdr_2d=true` required). Blender 5.2.2 at `C:\Program Files\Blender Foundation\Blender 5.2\blender.exe`.
 - House rules: where DECISIONS.md and the GDD disagree, DECISIONS.md wins until the GDD is updated; every Blender generator saves a lit, labelled review `.blend` into `blender/`; every screenshot set includes portrait (1080×1920) and landscape (1920×1080) until orientation is decided; claim only what was verified.
 
@@ -36,8 +36,8 @@ If the folder you are in is not this root, stop and tell the orchestrator.
 
 ## Never
 - Never edit another session's paths.
-- Never move anything in `game/assets/kit/layout.json` unless you are the 🏗️ venue-rebuild session (2026-11-01 wave); it refreezes when Daniele accepts the rebuilt room.
-- Never use direction render 04 for layout. Layout source is the real floor map `docs/art/direction/08` + route `17` with photos 09–22 and the README answers; renders 05–06 remain the look target.
+- Never move anything in `game/assets/kit/layout.json` (frozen; venue v4 accepted by Daniele 2026-11-02). Only an owner decision unfreezes it.
+- Never use direction render 04 for layout. Layout source is the real floor map `docs/art/direction/08` + route `17` with photos 09–25 and the README answers; renders 05–06 remain the look target.
 - Never commit raw venue photos over 2000 px.
 - Never push to any branch but `main`.
 - Never report "done" without evidence (tip, test log, artefact path, note) and a LOG.md line.

@@ -1,37 +1,30 @@
-# STATE — Black Cabin Tamagotchi (rewritten, never appended; as of 2026-11-01)
+# STATE — Black Cabin Tamagotchi (rewritten, never appended; as of 2026-11-02, version closed)
 
-## LIVE
-- No release yet (no build/publish path). `main` = design docs, needs system, four minigames, kit v4 (90 objects), characters v2, VENUE V4 rebuilt to the real floor map (228eb2e, daf76b6; plan `docs/art/plan-v4.md`, 21.7 × 15 m main room), first playable loop re-wired to it; six headless suites green (orchestrator re-ran on daf76b6).
-- `layout.json` unfrozen until Daniele accepts v4. Play it: `docs/tech/02-playtest-guide.md` (spawn is now the west lobby).
+## LIVE (main, pushed, verified in a clean worktree)
+- No release build yet. `main` = venue v4 to the real floor map (accepted, **layout.json frozen**), doors you walk through, real sitting at every seat, stair, TV memory corner (upload stub), corridor neon, cutaway rule (walls solid until you pass the door), front-door start screen with the real sign and exit shot, brand fonts Lato + Kristi (Thai fallback IBM Plex Sans Thai Looped), portrait-first with a landscape toggle, the real Black Cabin menu (121 drinks, 34 dishes) at the bar and in Pour Perfect.
+- Suites (run from `game/`): smoke_stairs, smoke_tap, smoke_hud, test_needs (106), test_minigames (828), smoke_loop, smoke_doors_sit, smoke_start, test_menu (2373).
+- Play: `docs/tech/02-playtest-guide.md`. Venue facts: `docs/venue/menu/`, `docs/venue/events/` (Oct 2026), opening hours Tue–Sun 19:00–02:00.
 
-## HANDOVER DECIDED (Daniele 2026-11-02)
-- No new orchestrator until all work is closed: follow handoffs/ORCHESTRATOR-HANDOVER.md. No new workers. Running: venue-notes (local_545c7c14), real-menu (local_b0e3443e, waits for go after venue-notes commits), fonts+orientation (local_6cdfb9ab).
+## IN FLIGHT
+- Nothing. No workers running. Handover to a new orchestrator per `handoffs/ORCHESTRATOR-HANDOVER.md`.
 
-## IN FLIGHT (shared checkout, branch main only)
-- Venue notes round on main (676a6a8, a08065e): doors, seating, stair, alcove camera, Prae leftovers; seven suites pass (incl. new smoke_doors_sit). venue-notes session idle, kept for venue follow-ups. Stair confirmed by Daniele 2026-11-02.
-- B8 start screen on main (0dc0b68, cf0555f). Round 2 running in 🎬 start-screen (local_d2ed3aae): sign from direction 23, no title, eased camera sequence, exit shot.
-- 🏗️ venue-notes (local_545c7c14): spawn out of exit zone, Entrance zone label, red neon edge, Prae no surname, every seat sittable, bar_chat +3 Friends (provisional). Then REFREEZE layout.json (Daniele accepted v4).
+## WAITING ON OWNER (Questions tab: https://claude.ai/artifact/BbpBxVWVVXMjz7TgJ7aFBW#questions)
+- Open cards: venue address (website vs Google), wordmark lettering, corridor camera, memory-corner props, menu prices, Pour Perfect list, cocktail page, misprints, "Try something new", soft-drink row, Thai brand names.
+- Photos of the street front, street door and entrance corridor (next visit); band consent (Daniele asking Black Cabin).
 
-## WORKERS ALIVE (max 3)
-- 🎛️ orchestrator fdaed712-5416-430d-b3a7-7174cf46699f (Opus 5.5); 🏗️ venue-notes (spawn + label fix); 🎬 start-screen idle, kept for follow-ups.
-
-## WAITING ON OWNER
-- All Questions-tab items answered 2026-11-02 (see DECISIONS). Outstanding: entrance/street photos (next visit), band consent (Daniele asking Black Cabin).
-## (older) (answer on the Questions tab: https://claude.ai/artifact/BbpBxVWVVXMjz7TgJ7aFBW#questions)
-- Confirm the stair reading on the venue-notes capture; accept venue v4 after this round (then refreeze layout.json); real entrance-corridor photos later.
-- Orientation; Black Cabin opening hours; brand typeface; staff turnover; resident band + consent packs; stakes numbers; coin sign-off; chat policy; real drinks menu.
+## PROMISED, NOT DONE
+- **Flaky test, fix first:** `smoke_start`'s "no cut" check (camera speed < 12 m/s per frame, `game/tests/smoke_start.gd:113`) fails intermittently, 13–14.6 m/s, on frame hitches; reproduced on already-pushed cb8fb07 (1 pass, 1 fail) and on ccc6417. Measure speed over a time window or skip the first frames after the door opens; the camera itself has no cut.
+- 🎲 Stakes chapter from Daniele's base proposal (DECISIONS 2026-11-02): total deletion, friend revival (e.g. zombie act on stage), only "go to Black Cabin" fatal, other needs minor annoyances; plus the one-page coin summary Daniele asked for; plus the Flat as a rented second-floor room unlock.
+- Memory upload at the TV corner (BACKLOG D5); regulars' photos on the corridor wall (B7).
+- Menu follow-ups: ordering from the menu does not mark a drink as tried; bundles in data but not shown; export include filter needs `*.json`, `*.csv` once an export preset exists.
+- Memory-corner kit props (placeholders now); street front and door from real photos.
+- Remove the unused Kanit font files.
 
 ## NEXT THREE JOBS
-1. Verify venue-notes round → refreeze layout.json (PROJECT never-list), regenerate the changelog. Verify start-screen round 2.
-2. B8 start screen DONE pending Daniele's calls on the Questions tab (camera, sign, title, exit shot); was: outside street facade at night with lit Black Cabin neon, still first-person camera on the street door, tap to enter → door opens → camera follows the character in → door closes → pull back to game camera → play. Reuses venue-notes' door code; title/menu UI and save load stay as now.
-3. Performance pass (42 lights, phone measurement before any phone build), then figure lighting/proportion pass and character creator.
-- Later: everything in `docs/design/BACKLOG.md` (ideas, real-life bridge, online, debt). Shared board: https://claude.ai/artifact/BbpBxVWVVXMjz7TgJ7aFBW
+1. 🎲 Stakes + coins + Flat design (Opus, docs only), then answers from the tab folded in.
+2. Performance pass (42 lights; phone measurement before any phone build), then figure lighting and proportions.
+3. Character creator; then the real-life bridge (events list from `docs/venue/events/`, Tonight tab, booking scaffold).
+- Later: everything in `docs/design/BACKLOG.md`.
 
 ## POINTERS
-- Worker rules `PROJECT.md`; history `LOG.md`; owner decisions `docs/design/DECISIONS.md` ("Still open"); waves `ORCHESTRATION.md`; changelog `docs/CHANGELOG.md` (`python tools/changelog.py`).
-- Handoffs `handoffs/` (orchestrator, zone-wiring). Method: vault `wiki/concepts/claude-orchestration-method.md`, profiles `wiki/agents/`.
-
-## QUEUED (start when a worker slot frees)
-- 🎲 stakes + economy design (Opus): stakes chapter from Daniele's base proposal (total deletion, friend revival e.g. zombie stage act, fatal = not going to Black Cabin, others minor annoyances), one-page coin summary, Flat-as-rented-room unlock note.
-- Orientation toggle: portrait first + landscape button top-right (give to start-screen session or a UI worker).
-- 🍸 real-menu (local_b0e3443e) running: menu.json from docs/venue/menu, replaces six invented drinks; needs orchestrator go-ahead before editing game/scripts/zones/.
+- Rules `PROJECT.md` (incl. 2026-11-02 working rules); history `LOG.md`; owner decisions `docs/design/DECISIONS.md`; changelog `docs/CHANGELOG.md` (`python tools/changelog.py`); role notes `handoffs/`; worker reports `handoffs/worker-reports-2026-11/`; hub https://claude.ai/artifact/BbpBxVWVVXMjz7TgJ7aFBW.
