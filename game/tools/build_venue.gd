@@ -878,7 +878,7 @@ func _tiny_table(g: Node, nm: String, c: Vector3, stools_south: bool) -> void:
 	_kit(g, "beer_glass", c + Vector3(-0.12, 0.7, 0.1), 0.0, nm + "Glass")
 	for k in 2:
 		var off := Vector3(-0.32 + k * 0.64, 0, 0.5) if stools_south else Vector3(0.5, 0, -0.32 + k * 0.64)
-		var face := 0.0 if stools_south else 90.0
+		var face := 180.0 if stools_south else -90.0   # toward the table and the stage (yaw 0 faces +z, south)
 		_kit_solid(g, "drum_stool", c + off, k * 37.0, nm + "Stool%d" % k)
 		_seat("Tables", "Tables_%s_S%d" % [nm, k], c + off, face)
 
@@ -940,10 +940,11 @@ func _raised() -> void:
 		var t := _kit(g, "round_table", c, 0.0, "Raised%d" % i, Vector3(0.8, 1.0, 0.8))
 		_collider(t, "Collider", Vector3(0, 0.375, 0), Vector3(0.9, 0.75, 0.9))
 		_table_dressing(g, "Raised%d" % i, c + Vector3(0, 0.75, 0), i % 2 == 0, 1, 2)
-		_kit_solid(g, "cafe_chair", c + Vector3(-0.6, 0, 0), -90.0, "Raised%dChair" % i)
-		_seat("Raised", "Raised_T%d_C" % i, c + Vector3(-0.6, 0, 0), -90.0, 0.45 + RAISED_H)
+		_kit_solid(g, "cafe_chair", c + Vector3(-0.6, 0, 0), 90.0, "Raised%dChair" % i)   # west of the table, facing east
+		_seat("Raised", "Raised_T%d_C" % i, c + Vector3(-0.6, 0, 0), 90.0, 0.45 + RAISED_H)
 		for k in 2:
-			_seat("Raised", "Raised_T%d_S%d" % [i, k], Vector3(MAIN_X1 - 0.38, RAISED_H, c.z - 0.35 + k * 0.7), 90.0, 0.45 + RAISED_H)
+			# On the couch, backs to the wall, facing west across the table (yaw -90; +90 faced the couch back)
+			_seat("Raised", "Raised_T%d_S%d" % [i, k], Vector3(MAIN_X1 - 0.45, RAISED_H, c.z - 0.35 + k * 0.7), -90.0, 0.45 + RAISED_H)
 	_omni(g, "RaisedLightA", LAMP_GOLD, 2.0, 4.0, Vector3(RAISED_TABLE_X, 1.9, 2.2))
 	_omni(g, "RaisedLightB", LAMP_GOLD, 2.0, 4.0, Vector3(RAISED_TABLE_X, 1.9, 7.9))
 	# Mirror ceiling panels over the strip (photo 11): glossy dark tiles on the ceiling layer
@@ -1053,7 +1054,7 @@ func _smoking() -> void:
 		_kit(g, "tealight_lantern", p + Vector3(-0.2, 0.75, -0.15), 0.0, "Smoke%dTealight" % i)
 		for k in 2:
 			var off := Vector3(0, 0, -0.7 + k * 1.4)
-			var face := 180.0 if k == 0 else 0.0
+			var face := 0.0 if k == 0 else 180.0   # north chair faces south (+z) to the table, south chair faces north
 			_ph(g, "wishbone_chair", p + off, face, "Smoke%dChair%d" % [i, k])
 			_seat("Smoking", "Smoking_T%d_C%d" % [i, k], p + off, face)
 	_ph(g, "air_purifier", Vector3(41.45, 0, 13.1), 0.0, "AirPurifier")
@@ -1180,13 +1181,14 @@ func _contact_shadows() -> void:
 
 ## Camera framings, one per zone, read by camera_rig.gd. rect = membership (x, z, w, d); clamp = where the look
 ## target may go; yaw 0 looks north (-z), -90 looks east, 90 west, 180 south. "fallback" covers the main room.
+## The old-corridor alcove has no zone of its own: it is entered only from the lounge, whose framing stays.
 func _camera_zones() -> void:
 	var g := _group("CameraZones")
 	var zones := [
 		{"name": "lobby", "rect": Rect2(-0.2, 5.05, 2.35, 8.2), "clamp": Rect2(1.1, 7.0, 0.1, 5.0), "yaw": 0.0, "pitch": -36.0, "dist": 6.5, "look_y": 1.2},
-		{"name": "corridor", "rect": Rect2(-0.2, 13.25, 15.65, 1.65), "clamp": Rect2(2.5, 14.05, 10.5, 0.1), "yaw": -90.0, "pitch": -32.0, "dist": 6.5, "look_y": 1.2},
-		{"name": "lounge", "rect": Rect2(LOUNGE.position.x, LOUNGE.position.y, LOUNGE.size.x + 4.5, LOUNGE.size.y), "clamp": Rect2(5.0, 2.8, 5.0, 7.5), "yaw": 90.0, "pitch": -34.0, "dist": 8.0, "look_y": 1.3},
+		{"name": "corridor", "rect": Rect2(-0.2, 13.25, 15.65, 1.65), "clamp": Rect2(3.5, 13.6, 9.5, 0.1), "yaw": 0.0, "pitch": -42.0, "dist": 7.0, "look_y": 1.0},
 		{"name": "buffer", "rect": Rect2(BUFFER.position.x, BUFFER.position.y, BUFFER.size.x, BUFFER.size.y), "clamp": Rect2(17.7, 4.6, 0.3, 1.5), "yaw": 0.0, "pitch": -32.0, "dist": 7.0, "look_y": 1.3},
+		{"name": "lounge", "rect": Rect2(LOUNGE.position.x, LOUNGE.position.y, LOUNGE.size.x, LOUNGE.size.y), "clamp": Rect2(5.0, 2.8, 5.0, 7.5), "yaw": 90.0, "pitch": -34.0, "dist": 8.0, "look_y": 1.3},
 		{"name": "bar", "rect": Rect2(BAR_X0, 9.6, BAR_X1 - BAR_X0, MAIN_Z1 - 9.6), "clamp": Rect2(23.5, 10.6, 10.5, 0.6), "yaw": 180.0, "pitch": -32.0, "dist": 7.0, "look_y": 1.0},
 		{"name": "stage", "rect": Rect2(26.4, 0.0, 9.6, 6.6), "clamp": Rect2(29.0, 1.6, 3.5, 0.6), "yaw": 0.0, "pitch": -26.0, "dist": 7.5, "look_y": 1.4},
 		{"name": "toilets", "rect": Rect2(MAIN_X0, 12.0, BAR_X0 - MAIN_X0 + 2.6, 4.7), "clamp": Rect2(21.0, 13.5, 0.6, 2.0), "yaw": 180.0, "pitch": -34.0, "dist": 6.0, "look_y": 1.2},

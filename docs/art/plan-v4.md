@@ -7,6 +7,16 @@ Geometry of record once built: `game/tools/build_venue.gd` → `game/assets/kit/
 
 ![plan v4](screens/plan/plan-v4.png)
 
+## Corrections applied (Daniele, 2026-11-01, via the orchestrator)
+
+- Scale kept: 21.7 × 15 m ("Keep 21.7 m").
+- The bar staff area is a **closed walled room** (staff spawn, no navmesh). Its north wall has the staff door and,
+  right beside it, a **half wall for orders** at x 36.05–36.95: sill 1.05 m with a wooden counter top, glasses on it.
+- **No wall** between the main room and the strip west of the bar: open floor down to z 15; only the vestibule south
+  of it is enclosed (kitchen curtain, toilet doors).
+- Lobby + entrance corridor are **one L corridor**: no threshold, no door; framed-picture placeholders on its walls.
+- Smoke-room door widened to x 38.9–40.3 and the west smoking tables moved to x 38.85 so the doorway stays walkable.
+
 ## Scale and axes
 
 - The map file is 1500 × 771 px; regions were segmented by colour (lounge/main beige, green rooms, pink buffer, red
