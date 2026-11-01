@@ -17,8 +17,8 @@ a layout plan are coming from Daniele; until then the layout stays frozen.
 
 | # | Item | Effort | Needs | Status |
 |---|------|--------|-------|--------|
-| A1 | Baseline map of the club corrected to the new photos + plan (unfreeze `layout.json`, re-run parity) | M | direction 08–22 (received) | in progress |
-| A2 | Bar-counter strip connected to the walkable floor (known navmesh gap) | S | — | queued |
+| A1 | Baseline map of the club rebuilt to the real floor map (venue v4) | M | Daniele's acceptance | built, awaiting acceptance |
+| A2 | Bar-counter strip connected to the walkable floor (known navmesh gap) | S | — | done (228eb2e) |
 | A3 | Playtest fixes: walk-through doors, real sitting on tap-to-sit, stairs reoriented (2026-11-01 notes) | M | — | in progress |
 
 ## B. The playable world
@@ -29,6 +29,7 @@ a layout plan are coming from Daniele; until then the layout stays frozen.
 | B2 | Character creation (creator UI on the accepted v2 presets) | M | — | planned (STATE job 3) |
 | B3 | More minigames (today: Pour Perfect, Rhythm, pinball, Candle Talk) | M each | — | idea |
 | B7 | Framed photos of regular customers on the entrance corridor walls (could tie to achievements or the photo feature) | S | map v4 | idea |
+| B8 | Start screen as the club's front door: still first-person view from outside facing the street door under a lit Black Cabin neon sign; tap to enter, door opens, camera follows the character's view inside, door closes, camera pulls back to the game view, play starts (Daniele 2026-11-01) | M | walking doors (A3), street facade | idea |
 | B4 | Achievements as stickers on the club's entry door; shown when you leave and in the Flat before you go out | M | — | idea |
 | B5 | Voxel quality push: more cubes per object without killing a phone (pairs with the performance pass) | L | phone measurement first | idea |
 | B6 | Leaderboard per minigame, weekly and monthly | M | online backend, accounts | idea |
@@ -82,3 +83,4 @@ a layout plan are coming from Daniele; until then the layout stays frozen.
 ## Log
 
 - 2026-11-01 — Created from Daniele's alpha verdict and the todo list relayed from the Ooze project.
+- 2026-11-01 — B8 start-screen idea added; A1 built, A2 done, A3 in progress.
