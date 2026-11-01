@@ -7,10 +7,10 @@
 
 ## IN FLIGHT
 - New orchestrator: session local_78d0c67d (detached, top level). Handover checked: origin/main 51603f0, no workers were running; the old orchestrator's answers to "what is not in the files" are in `handoffs/orchestrator-2026-11-02.md`.
-- Workers running (started 2026-11-02): 🖼️ answers-batch3 (Opus, local_084d7fb8: Kristi lettering on the corridor neon and memory box, dimmed THB prices, Pour Perfect rotation of 12).
+- Workers running (started 2026-11-02): 🛠️ versioning (Sonnet, local_5a83e04a: version 0.2.0 in `project.godot`, label in game, `tools/version.py` build stamp, changelog by version, `docs/tech/versioning.md`); 🖼️ answers-batch3 (Opus, local_084d7fb8: Kristi lettering on the corridor neon and memory box, dimmed THB prices, Pour Perfect rotation of 12).
 
 ## WAITING ON OWNER (Questions tab: https://claude.ai/artifact/BbpBxVWVVXMjz7TgJ7aFBW#questions)
-- **Stakes, coins and the Flat (15 cards, 2026-11-02):** S1–S10 stakes, S11–S12 Flat rent, C1 coin sign-off, C2 drink pricing, F1 what is really upstairs. Source: `handoffs/stakes-design-2026-11-02.md`. After the answers: fold into `06-stakes.md` / `04-coins*.md`, apply the §12 amendments to the GDD and high concept, then a needs worker builds `06-stakes.md` §10 (also fix the stale `START_VALUE` comment in `rules.gd`).
+- **Stakes answered** (DECISIONS row of 2026-11-02, 14 of 15; several differ from the recommendations: 21-day timer, 14-day ghost, real-bar revival only, any refill resets, stronger annoyances). Still open: **C1 coin sign-off** (`docs/design/04-coins-summary.md`) and **S13** (game visit vs real visit as the fatal need). Then a design worker folds the answers into `06-stakes.md`. Original cards: S1–S10 stakes, S11–S12 Flat rent, C1 coin sign-off, C2 drink pricing, F1 what is really upstairs. Source: `handoffs/stakes-design-2026-11-02.md`. After the answers: fold into `06-stakes.md` / `04-coins*.md`, apply the §12 amendments to the GDD and high concept, then a needs worker builds `06-stakes.md` §10 (also fix the stale `START_VALUE` comment in `rules.gd`).
 - Open menu cards: cocktail page, misprints, "Try something new", soft-drink row, Thai brand names. (Address, lettering, corridor camera, memory-corner props, menu prices, Pour Perfect list were answered after the close; DECISIONS row "Questions tab, third batch".)
 - Photos of the street front, street door and entrance corridor (next visit); band consent (Daniele asking Black Cabin).
 
