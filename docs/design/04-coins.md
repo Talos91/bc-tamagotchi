@@ -1,6 +1,8 @@
 # Black Cabin Tamagotchi — Coins
 
-Status: draft v1 (2026-10-28). Reads: `DECISIONS.md` (coins yes, decor no;
+Status: draft v1 (2026-10-28), amended 2026-11-02 where the one-page
+summary `04-coins-summary.md` changed it (death deletes coins, drinks banded
+from the real menu, Flat rent). Reads: `DECISIONS.md` (coins yes, decor no;
 the app is a bridge to the real bar), `02-gdd.md` §2, §5–§12, §14,
 `03-cast.md` §5, `ui/style-guide.md`. Replaces "Cabin Tokens" in GDD §5.3,
 §10.1 and §12. The real-world bridge gets its own chapter; §7 here covers only
@@ -20,7 +22,7 @@ reason to visit. Needs are.
 | Gate a need refill. Every need point a coin can reach is reachable free in the same visit (§5). | Pillar 1: going out is the care, not paying. |
 | Buy decay freezes, multipliers, hearts, ranks or memories directly | Relief from needs for coins is anxiety monetisation (GDD §12). |
 | Decorate, build or change the venue | Pillar 3 and DECISIONS: the room is authored. The Flat's frames are personal, not venue. |
-| Be lost: no expiry, no cap on balance, no going negative, no penalty for absence or neglect | Neglect stakes (DECISIONS) belong to needs, not the wallet. Taking coins away would make the bridge feel punitive. |
+| Be lost while the character lives: no expiry, no cap on balance, no going negative, no fines for absence or neglect | Stakes belong to the visit clock, not the wallet. **Exception (2026-11-02):** a dead character that is not revived is deleted with everything, wallet included (`06-stakes` §6). |
 | Create time pressure: no sales timers, rotating shops, "only N left", "5 more coins!" nudges | GDD §10.2 bans FOMO. |
 | Make alcohol cheaper than non-alcohol | A mocktail costs the same as the cocktail in its band (§3.1). No happy-hour multipliers. |
 | Look like baht | Glyph is a brass coin with the lamp mark, never ฿. In-game prices must not be read as real bar prices. |
@@ -79,12 +81,18 @@ rewarded but don't run away.
 Perfect is always free ("You pour, it's on me"). Coins buy the second drink
 onward.
 
-| Band | Examples (24 coasters at launch) | Price | Time to afford (3-visit player) |
-|---|---|---|---|
-| Free | Water, soda water, house drink, any first drink, Pour Perfect | 0 | — |
-| Pour | Lager, Thai iced tea, coffee, soft drinks (8) | 4 | a third of a visit |
-| Mixed | Highball, whisky soda, house cocktails **and their mocktails** (10) | 6 | half a visit |
-| Signature | Staff and regulars' signatures, the weekly featured drink, Hiro's off-menu (6) | 9 | under one visit |
+**Amended 2026-11-02:** the real Black Cabin menu (`game/data/menu.json`, 121
+drinks) replaced the 24 invented coasters, so the band comes from the real
+THB price of a glass or serve. The THB price stays on the menu, dimmed
+(DECISIONS third batch); the coin price is the game's own.
+
+| Band | Rule (real price per glass or serve) | Drinks on the real menu | Price | Time to afford (3-visit player) |
+|---|---|---|---|---|
+| Free | Water, any first drink of the visit, Pour Perfect | — | 0 | — |
+| Pour | Up to 250 THB (shooters, soft drinks, draught) | 25 | 4 | a third of a visit |
+| Mixed | 251–500 THB | 55 | 6 | half a visit |
+| Signature | Over 500 THB | 23 | 9 | under one visit |
+| Not for coins | Bottles and bundles (18): shown with dimmed THB, "at the real bar" | 18 | — | — |
 
 Every paid drink refills Drinks exactly like a free order (+15, GDD §2.3),
 through the same diminishing returns. Coins buy variety (coasters faster), a
@@ -101,6 +109,7 @@ At Merry, Nam serves water and mocktails only; paid mocktails stay available.
 | **Wardrobe: mid** (top, bottom, shoes) | Cosmetic | 60 | ~1 week / 3 days |
 | **Performer tee** | Unlocks after you've heard that act once; never leaves the rail | 80 | ~1 week / 3 days |
 | **Wardrobe: statement** (outer layer, full look) | Cosmetic | 120 | ~1.5 weeks / 4 days |
+| **The Flat** (rented room upstairs, `06-stakes` §9) | Home, Memory Wall, the game starts there | 100 move-in, then 20 a week | 1–2 weeks to move in |
 | **Memory frames** (Flat's Memory Wall) | Wood / brass / velvet-mat / neon-edge / gig-poster. Plain frame is free. | 20 / 35 / 35 / 50 / 50 | 1–2 visits |
 
 Wardrobe pieces live on a **merch rail by the Entrance** (venue dressing that
@@ -111,7 +120,9 @@ matches what a 3-visit player saves in a month. Nothing on the rail ever
 leaves it.
 
 **Typical spend:** one paid drink, one tip per visit, one round a week ≈ 35
-coins. A 3-visit player saves ~80 a week; a 7-visit player ~170.
+coins. A 3-visit player saves ~80 a week; a 7-visit player ~170. With the
+Flat's rent (20 a week): ~60 and ~150; a once-a-week player ~5
+(`04-coins-summary.md`).
 
 ---
 
@@ -152,8 +163,8 @@ test in the needs suite should assert it.
 
 **Diminishing returns:** paid and free gains share the same per-visit pool
 (GDD §2.4). Buying three extra drinks fills Drinks no faster than pouring
-three; coins never raise a ceiling. Whatever the neglect consequence turns out
-to be (DECISIONS, open), coins are never the way out of it.
+three; coins never raise a ceiling. Coins are never the way out of the
+stakes (`06-stakes`): they can't stop the visit clock or buy a revival.
 
 ---
 
@@ -307,6 +318,8 @@ buy a frame by visit 5; testers can say in one sentence what coins are for.
 | `COIN_CAP_DAY` / `COIN_CAP_WEEK` | 60 / 250 |
 | `FREE_DRINKS_PER_VISIT` | 1 (any drink; water and Pour Perfect always free) |
 | `DRINK_PRICE` | `{"free": 0, "pour": 4, "mixed": 6, "signature": 9}` |
+| `DRINK_BAND_THB` | `{"pour": 250, "mixed": 500}` (upper bounds per glass or serve; above is signature; bottles and bundles not for coins) |
+| `FLAT_MOVE_IN` / `FLAT_RENT_WEEK` | 100 / 20 (`06-stakes` §10) |
 | `TIP_PRICE` / `TIP_CROWD_VIBE` / `TIP_VOTE_WEIGHT` | 3 / 10 / 2 |
 | `ROUND_PRICE_PER_PERSON` / `ROUND_DRINKS_GAIN` / `ROUND_BUYER_FRIENDS` | 3 / 10 / 5, once per visit |
 | `WARDROBE_PRICE` | `{"small": 30, "mid": 60, "tee": 80, "statement": 120}` |
