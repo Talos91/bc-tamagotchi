@@ -17,7 +17,7 @@ a layout plan are coming from Daniele; until then the layout stays frozen.
 
 | # | Item | Effort | Needs | Status |
 |---|------|--------|-------|--------|
-| A1 | Baseline map of the club corrected to the new photos + plan (unfreeze `layout.json`, re-run parity) | M | photos + plan from Daniele | waiting on inputs |
+| A1 | Baseline map of the club corrected to the new photos + plan (unfreeze `layout.json`, re-run parity) | M | direction 08–22 (received) | in progress |
 | A2 | Bar-counter strip connected to the walkable floor (known navmesh gap) | S | — | queued |
 | A3 | Playtest fixes from the alpha (list to come as Daniele plays) | S–M | Daniele's notes | collecting |
 
@@ -68,7 +68,7 @@ a layout plan are coming from Daniele; until then the layout stays frozen.
 - Chat policy for multiplayer (phrase wheel vs free text).
 - The Flat home screen: keep minimal or cut.
 - Black Cabin's real drinks menu (six placeholder drinks today).
-- New photos and layout plan for A1.
+- Real photos of the entrance corridor; day version of the outside (later).
 
 ## F. Accepted debt (not features)
 

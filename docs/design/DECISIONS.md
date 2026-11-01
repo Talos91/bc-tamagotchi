@@ -33,6 +33,8 @@ GDD is updated.
 
 | 2026-11-01 | **Alpha verdict and the gate.** Daniele played the first loop: "fun, fucked up but fine, good alpha". Order of work: "we need to fix the baseline map of the club, everything else comes after, as is a community game so at least the base needs to be fixed". New photos and a layout plan are coming; `layout.json` stays frozen until then. Everything else Daniele listed (online chat, more places, real-life features, achievements, creator, voxel push, leaderboards, more minigames, and the Ooze-relayed list) is filed in `docs/design/BACKLOG.md` and the shared backlog artifact, not scheduled. |
 
+| 2026-11-01 | **Baseline map from the real floor plan.** Daniele supplied the floor map (direction 08, route 17) and photos 09–22 with a legend and answers (direction README). Binding: main room ≈ 30 × 15 m; stage mid north wall at floor level, carpets, backstage behind; tiny two-stool tables below and right of the stage; a row of five four-chair tables; raised 15 cm strip on the east with couch, round tables, shelves, neon under the edge; bar on the south wall with cashier bump and reindeer head; buffer zone with four tall tables between lounge and main room, window north with a tree outside, mirror south; smoking room SE with glass to a night street, red door in; entrance lobby west → corridor → Sticker door → old corridor → lounge/buffer → main room; lounge keeps its furniture plus a Black Cabin flappy-bird machine by the stairs and the pinball on the west wall; no columns in the main room. Green rooms are NPC spawns, never walkable. **`layout.json` is unfrozen** for this rebuild and refreezes when Daniele accepts it. |
+
 ## Still open
 
 - Black Cabin's real opening hours (drives what the game shows at 14:00: open all day with staff only, or "Doors at 18:00" with the Flat only).
@@ -47,5 +49,5 @@ GDD is updated.
 - Chat policy for multiplayer (phrase wheel vs free text, now that the game is 21+).
 - The Flat home screen: keep minimal or cut.
 - Black Cabin's real drinks menu (six placeholder drinks in the game today).
-- New photos and layout plan of the club for the baseline-map fix (BACKLOG A1).
+- Real photos of the entrance corridor (dim for now); a day version of the outside (night only for now).
 

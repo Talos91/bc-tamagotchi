@@ -92,3 +92,23 @@ round tables, shelf wall, mirror ceiling, bare tree in the far corner; 12 the sm
 corner (Black Cabin light box, wine fridge, curtain); 13 the smoking room (glass wall to the street, wooden tables,
 ashtrays, EXIT signs); 14 the buffer zone's south side (mirror wall, red curtains, two tall tables, PAR on a stand);
 15 the buffer zone's north side (full-height window wall); 16 the reindeer head over the cashier, red back bar.
+
+### Answers from Daniele (2026-11-01) — binding for the rebuild
+
+- Scale: no measured plan. Main room is roughly **30 × 15 m**; scale the whole map from that.
+- Player route (`17-floor-map-player-route.webp`, red line): spawn in the west entrance lobby → entrance corridor
+  along the south of the lounge → **Sticker door** → north up the old toilet corridor into the lounge's east end /
+  buffer zone → through the curtains into the main room → the bar → the smoke-room door. Keep that corridor dimly lit
+  for now; real photos later.
+- Lounge: keep the current furniture (plant wall, neon, banquette, long table). The real lounge changes often and has
+  no bookable tables, so we are free there. Add a **game machine** (Black Cabin–themed flappy-bird style game) next to
+  the stairs near the sticker door, and put the **pinball on the west wall**.
+- Raised area (`18`): about **15 cm**, a neon strip under its edge; only the yellow strip with the couch and round
+  tables is raised. The south-east corner by the smoke-room door is at floor level.
+- Tree (`19`): a bare tree to the **right of the stage**, between stage and raised area, next to the tiny tables.
+- Curtains are open all night (lounge–buffer, buffer–main, kitchen corridor).
+- Smoking room (`20`, `21`): the **red door** opens to the main venue, the dark door is an emergency exit. Windows look
+  outside; it is **night** outside (a day version maybe later).
+- Buffer zone (`22`): the north wall is a window that looks outside; put a tree outside it.
+- Columns: none in the main room; only the two in the lounge where the map shows them. The pillars at the back bar are
+  part of the bar joinery.
