@@ -15,7 +15,7 @@ If the folder you are in is not this root, stop and tell the orchestrator.
 - **Questions carry pictures:** any question for Daniele that needs a visual includes one or more screenshots (on its Questions-tab card), so he never has to launch the game to answer.
 - **Workers archive themselves:** a finished worker writes its handoff note in `handoffs/`, reports to the orchestrator, then archives itself. Idle workers close after refreshing their notes; their next job goes to a fresh worker started by the orchestrator. The orchestrator starts every worker itself.
 - **Models:** the orchestrator runs on Fable or Opus at high effort or above; workers run on whatever model the job needs (Opus for design and art, Sonnet for mechanical work). A Fable worker needs Daniele's written OK.
-- **Handover:** orchestrator handovers follow `handoffs/ORCHESTRATOR-HANDOVER.md`. Promised-but-not-done items and worker reports live in project files, never only in a session.
+- **Handover:** no new orchestrator until all the work is closed (every worker finished, role note written, archived; version closed; everything in files). Follow `handoffs/ORCHESTRATOR-HANDOVER.md`, the copy of vault `wiki/concepts/orchestrator-handover.md`. Every worker brief ends with "write your role note, report, archive yourself". Promised-but-not-done items and worker reports live in project files, never only in a session.
 
 ## Repo, clones, numbers
 - Repo: github.com/Talos91/bc-tamagotchi. Branch: `main` only; never push to any other branch. Product code lives in `game/` (Godot project); tools in `tools/`; Blender review files in `blender/`.
