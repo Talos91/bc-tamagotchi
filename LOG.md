@@ -41,3 +41,4 @@ Append-only. One dated line per event, newest last. Never edit earlier lines.
 - 2026-11-01 — Daniele: start B8 (front-door start screen) after the venue-notes round, same workflow; queued as STATE job 2.
 - 2026-11-01 — 🏗️ venue-notes: Daniele's v4 notes built (4452080 Prae leftovers, 676a6a8 swing doors, real seats, stair turned, alcove camera, smoke_doors_sit); six suites + new test PASS; 42 lights; captures in docs/art/screens/v4; stair reading awaits Daniele.
 - 2026-11-01 — venue-notes done (4452080, 676a6a8, a08065e); orchestrator re-ran seven suites (all PASS), pushed; stair and four calls sent to Daniele.
+- 2026-11-02 — Daniele confirmed the stair; session started (by Daniele from the proposal card): 🎬 start-screen (local_d2ed3aae, Opus 5.5); old venue-rebuild session archived.

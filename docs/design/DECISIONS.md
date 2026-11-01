@@ -43,6 +43,8 @@ GDD is updated.
 
 | 2026-11-01 | **Venue notes round landed** (4452080, 676a6a8, a08065e; seven suites pass on the orchestrator's run): swing doors on the street, Sticker and red doors; real seating at tables, couch, tall stools and the bar ("Take a stool", no needs effect); stair turned as read above, west-wall flight ends at a velvet rope before a closed upper floor; game cabinet moved 0.9 m east; alcove camera. **To confirm with Daniele:** stair reading; street door uses the staff-door model until a photo exists; Prae's full name "Praewa Srisuk / แพรวา ศรีสุข" was invented by the worker in `03-cast.md`. |
 
+| 2026-11-02 | **Stair confirmed.** Daniele on the stair captures: "Stair is right" (south-wall flight from the game cabinet rising west, landing, west-wall flight north to the closed upper floor). Still open from that round: street door model, Prae's full name, bar-stool row, neon edge colour. |
+
 ## Still open
 
 - Black Cabin's real opening hours (drives what the game shows at 14:00: open all day with staff only, or "Doors at 18:00" with the Flat only).
