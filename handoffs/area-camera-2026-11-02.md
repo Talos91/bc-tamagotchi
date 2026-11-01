@@ -83,3 +83,7 @@ past the venue's west edge on the right half (portrait is fine); mobile is portr
 - In front of the red door (the smoking view's strip of main room) the HUD title already reads "Smoking Room" and the
   band is out of earshot there (it was floor); small, left as is.
 - Open questions for the Questions tab: see the report.
+
+## Commit
+
+9f05783 (main, not pushed): code, venue.tscn, test_feel, capture_areas, captures, playtest guide, this note.
