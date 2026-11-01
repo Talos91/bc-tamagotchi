@@ -5,10 +5,10 @@
 - Layout frozen at `game/assets/kit/layout.json`. Play it: `docs/tech/02-playtest-guide.md`.
 
 ## IN FLIGHT (shared checkout, branch main only)
-- WAVE 4 baseline map: 🧱 kit-real-room (local_33603a64) models the new objects (names fixed in its brief); 🏗️ venue-rebuild (local_… see Linked sessions) rebuilds geometry, layout.json (unfrozen), lighting, navmesh, zones from direction 08/17 + answers. Paths disjoint: kit = tools/blender, kit .glb/manifest, blender/; venue = build_venue, layout.json, zones, captures.
+- WAVE 4 baseline map: 🧱 kit done (90 objects, pushed). 🏗️ venue-rebuild (local_21de4de2) building from plan v4 (`docs/art/plan-v4.md`, 21.7 × 15 m confirmed) with three owner corrections relayed (walled staff room + half wall, no toilet-corridor wall, L corridor).
 
 ## WORKERS ALIVE (max 3)
-- 🎛️ orchestrator fdaed712-5416-430d-b3a7-7174cf46699f; 🧱 kit-real-room; 🏗️ venue-rebuild.
+- 🎛️ orchestrator fdaed712-5416-430d-b3a7-7174cf46699f; 🏗️ venue-rebuild. kit-real-room archived.
 
 ## WAITING ON OWNER
 - Acceptance of the rebuilt room when renders land; real photos of the entrance corridor later; playtest notes (A3).
