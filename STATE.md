@@ -7,7 +7,7 @@
 
 ## IN FLIGHT
 - New orchestrator: session local_78d0c67d (detached, top level). Handover checked: origin/main 51603f0, no workers were running; the old orchestrator's answers to "what is not in the files" are in `handoffs/orchestrator-2026-11-02.md`.
-- Workers running: 🎮 feel-pass (Opus, local_5c0bdf0a: camera, transparent walls but the bottom 10 %, fluid movement, facing bug, seat orientation);
+- Workers running: 🎮 feel-pass (Opus, local_5c0bdf0a: camera, transparent walls but the bottom 10 %, fluid movement, facing bug, seat orientation; final suites + captures); 🐞 chat-stuck (Sonnet, local_f15a4457: Daniele's playtest of 967eab0, "chat seems stuck").
 - Queued (max three workers):
   when feel-pass closes (both edit `build_venue.gd` / the venue scene), 🏗️ lounge revamp + corridor portraits (BACKLOG B7, B9–B11; DECISIONS "Lounge revamp" row; `layout.json` unfrozen for the lounge and corridor walls only, refreeze on Daniele's acceptance).
 
