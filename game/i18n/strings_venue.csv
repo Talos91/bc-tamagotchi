@@ -129,3 +129,10 @@ venue.sheet.bar.stool_sub,Sit at the counter a minute,นั่งริมเ�
 venue.sheet.bar.on_stool,You're on a stool,นั่งอยู่ที่บาร์แล้ว,"Disabled reason, the player already sits at the bar",40
 venue.start.tap,Tap to enter,แตะเพื่อเข้าร้าน,"Start screen prompt under the street door; tap, click, Enter or Space walks the character in",24
 venue.card.bar_chat,A good minute chatting at the bar.,คุยเล่นที่บาร์ได้ดีหนึ่งนาที,Action card line after a minute on a bar stool (bar_chat),40
+venue.zone.memory,MEMORY CORNER,มุมความทรงจำ,"HUD zone name, the memory corner in the lounge (photo 25)",16
+venue.prompt.memory,Tap for the memory corner,แตะเพื่อไปมุมความทรงจำ,Zone prompt pill at the memory corner,40
+venue.sheet.memory.head,MEMORY CORNER,มุมความทรงจำ,Memory corner sheet header,26
+venue.sheet.memory.greet,Photos taken at Black Cabin will be shared here.,รูปที่ถ่ายที่แบล็กคาบินจะมาแชร์กันที่นี่,Line on the memory corner sheet,90
+venue.sheet.memory.share,Share a photo,แชร์รูป,Memory corner row title (upload is BACKLOG D5),26
+venue.sheet.memory.share_sub,A real photo from a night here,รูปจริงจากคืนหนึ่งที่นี่,Memory corner row sub-line,34
+venue.sheet.memory.soon,Coming soon,เร็ว ๆ นี้,"Disabled reason on Share a photo, until uploads land",40

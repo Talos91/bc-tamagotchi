@@ -8,6 +8,8 @@ extends Node3D
 ## between the camera and the look target; render layer 2 (ceiling) is never drawn by this camera. Any "cutaway"
 ## piece whose box crosses the sight line from the camera to the player (feet, chest, head) is hidden too, so shared
 ## walls, narrow rooms and closed-room blocks (cut_normal ZERO) never stand between the camera and the player.
+## A piece with meta cut_rooms (Array of zone names) is cut only while the camera is in one of those zones: a room's
+## walls stay solid until the character has gone through its door (Daniele 2026-11-02).
 ## Lives in player.tscn as a top_level child, so it ignores the player's transform.
 
 const CEILING_LAYER_MASK := 1 << 1
@@ -122,6 +124,10 @@ func _update_cutaway(back: Vector3, cam: Vector3, player: Vector3) -> void:
 	for i in _cutaway.size():
 		var w := _cutaway[i]
 		if not is_instance_valid(w):
+			continue
+		var rooms: Variant = w.get_meta("cut_rooms") if w.has_meta("cut_rooms") else null
+		if rooms != null and not (rooms as Array).has(zone):
+			w.visible = true
 			continue
 		var show := (w.get_meta("cut_normal") as Vector3).dot(back) < 0.35
 		if show:

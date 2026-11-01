@@ -247,7 +247,7 @@
    "position": [
     2.5,
     0.9,
-    1.6
+    4.0
    ],
    "rotation_y": 90.0,
    "scale": [
@@ -263,7 +263,7 @@
    "position": [
     2.5,
     1.9,
-    1.6
+    4.0
    ],
    "rotation_y": 90.0,
    "scale": [
@@ -279,7 +279,7 @@
    "position": [
     2.5,
     2.9,
-    1.6
+    4.0
    ],
    "rotation_y": 90.0,
    "scale": [
@@ -295,7 +295,7 @@
    "position": [
     2.5,
     0.9,
-    2.6
+    5.0
    ],
    "rotation_y": 90.0,
    "scale": [
@@ -311,7 +311,7 @@
    "position": [
     2.5,
     1.9,
-    2.6
+    5.0
    ],
    "rotation_y": 90.0,
    "scale": [
@@ -327,7 +327,7 @@
    "position": [
     2.5,
     2.9,
-    2.6
+    5.0
    ],
    "rotation_y": 90.0,
    "scale": [
@@ -343,7 +343,7 @@
    "position": [
     2.5,
     0.9,
-    3.6
+    6.0
    ],
    "rotation_y": 90.0,
    "scale": [
@@ -359,7 +359,7 @@
    "position": [
     2.5,
     1.9,
-    3.6
+    6.0
    ],
    "rotation_y": 90.0,
    "scale": [
@@ -375,55 +375,7 @@
    "position": [
     2.5,
     2.9,
-    3.6
-   ],
-   "rotation_y": 90.0,
-   "scale": [
-    1.0,
-    1.0,
-    1.0
-   ],
-   "zone": "Lounge"
-  },
-  {
-   "name": "PlantWall3_0",
-   "object": "plant_wall_tile",
-   "position": [
-    2.5,
-    0.9,
-    4.6
-   ],
-   "rotation_y": 90.0,
-   "scale": [
-    1.0,
-    1.0,
-    1.0
-   ],
-   "zone": "Lounge"
-  },
-  {
-   "name": "PlantWall3_1",
-   "object": "plant_wall_tile",
-   "position": [
-    2.5,
-    1.9,
-    4.6
-   ],
-   "rotation_y": 90.0,
-   "scale": [
-    1.0,
-    1.0,
-    1.0
-   ],
-   "zone": "Lounge"
-  },
-  {
-   "name": "PlantWall3_2",
-   "object": "plant_wall_tile",
-   "position": [
-    2.5,
-    2.9,
-    4.6
+    6.0
    ],
    "rotation_y": 90.0,
    "scale": [
@@ -439,7 +391,7 @@
    "position": [
     2.73,
     1.75,
-    3.1
+    5.0
    ],
    "rotation_y": 90.0,
    "scale": [
@@ -455,7 +407,7 @@
    "position": [
     2.65,
     0.0,
-    1.6
+    4.0
    ],
    "rotation_y": 90.0,
    "scale": [
@@ -471,7 +423,7 @@
    "position": [
     2.65,
     0.0,
-    2.6
+    5.0
    ],
    "rotation_y": 90.0,
    "scale": [
@@ -487,23 +439,7 @@
    "position": [
     2.65,
     0.0,
-    3.6
-   ],
-   "rotation_y": 90.0,
-   "scale": [
-    1.0,
-    1.0,
-    1.0
-   ],
-   "zone": "Lounge"
-  },
-  {
-   "name": "LoungeBanquette3",
-   "object": "banquette_straight",
-   "position": [
-    2.65,
-    0.0,
-    4.6
+    6.0
    ],
    "rotation_y": 90.0,
    "scale": [
@@ -519,11 +455,11 @@
    "position": [
     3.9,
     0.0,
-    3.6
+    5.0
    ],
    "rotation_y": 90.0,
    "scale": [
-    1.0,
+    0.75,
     1.0,
     1.0
    ],
@@ -535,7 +471,7 @@
    "position": [
     3.8,
     0.75,
-    2.55
+    3.95
    ],
    "rotation_y": 0.0,
    "scale": [
@@ -551,7 +487,7 @@
    "position": [
     4.115,
     0.75,
-    2.747
+    4.147
    ],
    "rotation_y": 0.0,
    "scale": [
@@ -567,7 +503,7 @@
    "position": [
     3.96,
     0.75,
-    2.4
+    3.8
    ],
    "rotation_y": 0.0,
    "scale": [
@@ -583,7 +519,7 @@
    "position": [
     4.75,
     0.0,
-    2.6
+    4.0
    ],
    "rotation_y": -90.0,
    "scale": [
@@ -599,7 +535,7 @@
    "position": [
     4.04,
     0.75,
-    3.7
+    5.1
    ],
    "rotation_y": 0.0,
    "scale": [
@@ -615,7 +551,7 @@
    "position": [
     4.115,
     0.75,
-    3.747
+    5.147
    ],
    "rotation_y": 0.0,
    "scale": [
@@ -631,7 +567,7 @@
    "position": [
     3.96,
     0.75,
-    3.4
+    4.8
    ],
    "rotation_y": 0.0,
    "scale": [
@@ -647,7 +583,7 @@
    "position": [
     4.75,
     0.0,
-    3.6
+    5.0
    ],
    "rotation_y": -90.0,
    "scale": [
@@ -663,7 +599,7 @@
    "position": [
     3.8,
     0.75,
-    4.55
+    5.95
    ],
    "rotation_y": 0.0,
    "scale": [
@@ -679,7 +615,7 @@
    "position": [
     4.115,
     0.75,
-    4.747
+    6.147
    ],
    "rotation_y": 0.0,
    "scale": [
@@ -695,7 +631,7 @@
    "position": [
     3.96,
     0.75,
-    4.4
+    5.8
    ],
    "rotation_y": 0.0,
    "scale": [
@@ -711,9 +647,89 @@
    "position": [
     4.75,
     0.0,
-    4.6
+    6.0
    ],
    "rotation_y": -90.0,
+   "scale": [
+    1.0,
+    1.0,
+    1.0
+   ],
+   "zone": "Lounge"
+  },
+  {
+   "name": "DiscLamp",
+   "object": "wall_lamp",
+   "position": [
+    3.4,
+    1.2,
+    0.65
+   ],
+   "rotation_y": 0.0,
+   "scale": [
+    1.0,
+    1.0,
+    1.0
+   ],
+   "zone": "Lounge"
+  },
+  {
+   "name": "CRT",
+   "object": "crt_monitor",
+   "position": [
+    4.05,
+    0.0,
+    0.35
+   ],
+   "rotation_y": 0.0,
+   "scale": [
+    1.0,
+    1.0,
+    1.0
+   ],
+   "zone": "Lounge"
+  },
+  {
+   "name": "MemoryChair0",
+   "object": "cafe_chair",
+   "position": [
+    5.75,
+    0.0,
+    0.75
+   ],
+   "rotation_y": 0.0,
+   "scale": [
+    1.0,
+    1.0,
+    1.0
+   ],
+   "zone": "Lounge"
+  },
+  {
+   "name": "MemoryChair1",
+   "object": "cafe_chair",
+   "position": [
+    6.9,
+    0.0,
+    0.75
+   ],
+   "rotation_y": 0.0,
+   "scale": [
+    1.0,
+    1.0,
+    1.0
+   ],
+   "zone": "Lounge"
+  },
+  {
+   "name": "BoxStool",
+   "object": "tall_stool",
+   "position": [
+    6.32,
+    0.0,
+    0.4
+   ],
+   "rotation_y": 0.0,
    "scale": [
     1.0,
     1.0,
@@ -776,22 +792,6 @@
     8.95,
     0.0,
     9.75
-   ],
-   "rotation_y": 0.0,
-   "scale": [
-    1.0,
-    1.0,
-    1.0
-   ],
-   "zone": "Lounge"
-  },
-  {
-   "name": "CRT",
-   "object": "crt_monitor",
-   "position": [
-    11.2,
-    0.0,
-    0.3
    ],
    "rotation_y": 0.0,
    "scale": [
@@ -885,7 +885,7 @@
    "name": "LoungePainting",
    "object": "painting_a",
    "position": [
-    6.0,
+    8.2,
     1.4,
     0.05
    ],
@@ -11332,7 +11332,7 @@
    "position": [
     4.75,
     0.0,
-    2.6
+    4.0
    ],
    "preset_slot": "PATRON",
    "rotation_y": -90.0,
@@ -11346,7 +11346,7 @@
    "position": [
     2.65,
     0.0,
-    2.6
+    4.0
    ],
    "preset_slot": "PATRON",
    "rotation_y": 90.0,
@@ -11360,7 +11360,7 @@
    "position": [
     4.75,
     0.0,
-    3.6
+    5.0
    ],
    "preset_slot": "PATRON",
    "rotation_y": -90.0,
@@ -11374,7 +11374,7 @@
    "position": [
     2.65,
     0.0,
-    3.6
+    5.0
    ],
    "preset_slot": "PATRON",
    "rotation_y": 90.0,
@@ -11388,7 +11388,7 @@
    "position": [
     4.75,
     0.0,
-    4.6
+    6.0
    ],
    "preset_slot": "PATRON",
    "rotation_y": -90.0,
@@ -11402,13 +11402,41 @@
    "position": [
     2.65,
     0.0,
-    4.6
+    6.0
    ],
    "preset_slot": "PATRON",
    "rotation_y": 90.0,
    "seat_h": 0.45,
    "spot": "Lounge_Banquette2",
    "table": "LongTable",
+   "zone": "Lounge"
+  },
+  {
+   "pose": "sit",
+   "position": [
+    5.75,
+    0.0,
+    0.75
+   ],
+   "preset_slot": "PATRON",
+   "rotation_y": 0.0,
+   "seat_h": 0.45,
+   "spot": "Memory_Chair0",
+   "table": "memory",
+   "zone": "Lounge"
+  },
+  {
+   "pose": "sit",
+   "position": [
+    6.9,
+    0.0,
+    0.75
+   ],
+   "preset_slot": "PATRON",
+   "rotation_y": 0.0,
+   "seat_h": 0.45,
+   "spot": "Memory_Chair1",
+   "table": "memory",
    "zone": "Lounge"
   },
   {

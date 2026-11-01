@@ -12,6 +12,7 @@ extends Node3D
 ##            as Prae since 2026-11-01); the raised strip's small tables reach their couch seats (radius x 0.95 at least)
 ##   arcade   the pinball (pinball_machine, or arcade_cabinet while the kit lacked it) on the lounge's west wall
 ##   cabinet  the Black Cabin game machine (game_cabinet_bc) by the stairs: stub, generic sheet for now
+##   memory   the memory corner in the lounge's north-west (around its crt_monitor): share a photo (coming soon), sit
 ##   tall     every tall_table_square (buffer zone and the main room's west opening): stub, generic sheet
 ##   smoking  the smoking room, one zone over its tables: stub, generic sheet
 ##   table    also every other group of seats (spawns' "table": tiny tables, the lounge long table and counter, the
@@ -32,6 +33,7 @@ const REGULAR_TABLE := "Table2"   ## her table: the round one in the middle of t
 const TRIGGER_HEIGHT := 2.4
 const TABLE_RADIUS := 1.15        ## metres around a round table's centre (x its scale)
 const TALL_RADIUS := 1.0
+const MEMORY_RADIUS := 1.5
 const SEAT_MARGIN := 0.35         ## metres past the farthest seat of a seat-group table zone
 const FRONT_RADIUS := 1.1        ## around the floor point in front of a wall machine (pinball, game cabinet)
 const TABLE_ZONES := ["Tables", "Raised", "Lounge"]
@@ -116,6 +118,17 @@ static func defs_from_layout(path: String) -> Array[Dictionary]:
 			break
 
 	for k in kit:
+		if k["object"] == "crt_monitor":   # the memory corner's TV (photo 25)
+			var p := _v3(k["position"])
+			var a := p + Vector3(1.0, 0, 1.1)
+			var z := _zone("memory", "memory", Rect2(), a)
+			z["shape"] = "circle"
+			z["center"] = Vector2(a.x, a.z)
+			z["radius"] = MEMORY_RADIUS
+			out.append(z)
+			break
+
+	for k in kit:
 		if k["object"] == "tall_table_square":
 			var p := _v3(k["position"])
 			var z := _zone("tall:" + str(k["name"]), "tall", Rect2(), p)
@@ -128,6 +141,7 @@ static func defs_from_layout(path: String) -> Array[Dictionary]:
 	var have := {}
 	for z in out:
 		have[str(z["id"]).get_slice(":", 1)] = true
+		have[str(z["id"])] = true
 	var groups := {}
 	for s in d.get("spawns", []):
 		var t := str(s.get("table", ""))

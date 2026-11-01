@@ -63,6 +63,13 @@
   HUD title of a table zone is now its camera room; "Take a stool" runs a seated minute that applies the new
   provisional `bar_chat` (+3 Friends, cap 6 per visit, the one approved `rules.gd` entry).
 
+- 2026-11-02 second round (photos 24/25): **memory corner** in the lounge NW (`_memory_corner`, zone `memory`: share a
+  photo row "Coming soon" (BACKLOG D5) + sit; west-wall set moved south, long table 3 m; RedPanelLightA moved there, 42
+  lights). Placeholders for a kit pass: snake plant, disc-lamp stand, tripod camera, floor lamp, cube light box,
+  upholstered chairs (cafe_chair). **Corridor end wall** (`_corridor_end`: emissive red brick, Label3D wordmarks, NOW OPEN
+  arrow, no light). **Cutaway rule**: meta `cut_rooms` (lobby/corridor, lounge/alcove, smoking) — a room's walls cut only
+  while the camera is in its zone (`camera_rig.gd`); the corridor camera looks east down the corridor at the sign.
+
 ## Rooms and kit
 - Every kit v4 object is instanced by manifest name through `_ph()` (box fallback if a name is missing; none is now).
   Doors sit in gaps `_wall_x/_wall_z` leave; door rotation puts the kit's room side (+z) toward the walkable room.

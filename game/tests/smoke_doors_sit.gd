@@ -6,6 +6,7 @@ extends SceneTree
 ##           the seat's height; a minute seated refills Friends as before; stick input stands them up; the same on a
 ##           raised-strip couch, a tall-table stool and a bar stool ("Take a stool": a minute gives bar_chat); and at
 ##           each new kind of seat zone (tiny tables, long table, lounge counter, rectangular and smoking tables)
+##   cutaway lounge and smoking-room walls stay solid from outside, cut once inside; the memory corner zone
 ##   stairs  up the first flight to the landing, up the second until the rope; the game cabinet stays reachable
 ##   godot --headless --path . --script res://tests/smoke_doors_sit.gd
 
@@ -47,7 +48,7 @@ func _init() -> void:
 	for i in 20:   # HUD title and navigation map settle
 		await physics_frame
 	check(main.zones.current.is_empty() and not main.hud.prompt.is_showing(), "spawn in the lobby is outside the exit zone: no prompt at the start (%s)" % p.global_position)
-	check(main.hud._title.text == "ENTRANCE", "HUD zone name in the lobby: %s" % main.hud._title.text)
+	check(main.hud._title.text.to_upper() == VenueSession.T.t("venue.zone.lobby").to_upper(), "HUD zone name in the lobby: %s" % main.hud._title.text)
 
 	print("doors")
 	var names := []
@@ -65,11 +66,30 @@ func _init() -> void:
 	await through_door("RedDoor", Vector3(39.6, 0.1, 11.4), Vector3(39.6, 0, 14.6), func(q: Vector3): return q.z > 13.6)
 	await through_door("StreetDoor", Vector3(1.6, 0.1, 7.2), Vector3(-1.0, 0, 7.2), func(q: Vector3): return q.x < -0.5)
 	check(main.zones.current.get("kind", "") == "exit", "the step outside the street door is in the exit zone (leave from there)")
-	# Staff door: shut to the player, and solid
+	# Staff door: shut to the player, and solid (the hatch staff's errand is held so only the player is near)
+	var crowd: Node = main.get_node("Venue/Patrons")
+	crowd._errand.clear()
+	crowd._errand_wait = 999.0
+	crowd._runner.position = crowd._hatch_pos
 	teleport(Vector3(37.55, 0.1, 11.4))
 	await walk(Vector3(37.55, 0, 14.0), 150)
 	check(doors.openness("StaffDoorBar") < 0.01, "staff door stays shut for the player")
 	check(p.global_position.z < 12.6, "staff door blocks the player (z %.2f)" % p.global_position.z)
+
+	print("cutaway rule")
+	# A room's walls stay solid until the character has gone through its door (Daniele 2026-11-02)
+	await room_walls("lounge", Vector3(8.0, 0.1, 14.1), Vector3(9.0, 0.1, 6.0))
+	await room_walls("smoking", Vector3(39.6, 0.1, 11.0), Vector3(40.0, 0.1, 15.3))
+
+	print("memory corner")
+	var mem: Dictionary = main.zones.first_of("memory")
+	check(not mem.is_empty(), "memory corner zone built")
+	if not mem.is_empty():
+		var share: Array = s.rows_for(mem).filter(func(r): return r["id"] == "share")
+		check(share.size() == 1 and not share[0]["enabled"] and share[0]["reason"] == VenueSession.T.t("venue.sheet.memory.soon"), "Share a photo row: coming soon")
+		var ms := await sit_at(mem, "sit")
+		check(str(ms.get("table", "")) == "memory", "seated on a memory corner chair")
+		await stand_with_stick()
 
 	print("sitting")
 	var f0: float = needs.meters["friends"]
@@ -221,3 +241,21 @@ func stand_with_stick() -> void:
 	js.value = Vector2.ZERO
 	await physics_frame
 	check(not p.seated, "stick input stands the player up")
+
+
+## Walls of `room` (cutaway pieces whose cut_rooms has it): all shown while the player is outside at `outside`; once
+## inside at `inside` the camera is in that room's zone and the cutaway works there (some piece hidden: the room's own
+## walls in the lounge, the main room's wall between camera and player in the smoking room).
+func room_walls(room: String, outside: Vector3, inside: Vector3) -> void:
+	var pieces := get_nodes_in_group("cutaway").filter(func(n): return n.has_meta("cut_rooms") and (n.get_meta("cut_rooms") as Array).has(room))
+	teleport(outside)
+	for i in 10:
+		await process_frame
+	var hidden := pieces.filter(func(n): return not n.visible).size()
+	check(pieces.size() > 0 and hidden == 0, "%s walls all solid from outside (%s view, %d pieces)" % [room, p.rig.zone, pieces.size()])
+	teleport(inside)
+	for i in 10:
+		await process_frame
+	hidden = get_nodes_in_group("cutaway").filter(func(n): return not n.visible).size()
+	check(p.rig.zone == room and hidden > 0, "%s: cutaway works once inside (%d pieces hidden)" % [room, hidden])
+

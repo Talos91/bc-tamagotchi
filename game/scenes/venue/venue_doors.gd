@@ -5,6 +5,7 @@ extends Node
 ## whoever comes within REACH of the opening, and closes HOLD seconds after the last of them has gone.
 
 const REACH := 1.2
+const STAFF_REACH := 0.9    ## staff-only doors: the hatch staff idles 1.1 m from the bar staff door
 const OPEN_DEG := 95.0
 const OPEN_TIME := 0.25      ## seconds to swing fully open (the player walks 1.2 m in about 0.33 s)
 const CLOSE_TIME := 0.8
@@ -40,7 +41,7 @@ func _process(delta: float) -> void:
 
 func _nearest_user(d: Dictionary) -> Node3D:
 	var best: Node3D = null
-	var best_d := REACH
+	var best_d := STAFF_REACH if d.users == "staff_door_user" else REACH
 	for u in get_tree().get_nodes_in_group(d.users):
 		var p: Vector3 = (u as Node3D).global_position
 		if absf(p.y - d.center.y) > 2.0:

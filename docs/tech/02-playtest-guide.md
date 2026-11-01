@@ -27,6 +27,10 @@ visit end to end.
 - **Doors.** The street door, the Sticker door and the red door to the smoking room swing open when you (or a
   patron) come within about a metre, and close behind you. The emergency exit, toilet, kitchen and staff doors stay
   shut; the bar staff sometimes step out through the staff door by the order hatch.
+- **Memory corner** (lounge, north-west corner): the TV, camera and lit BLACK CABIN box. Its sheet says photos taken at
+  Black Cabin will be shared here ("Coming soon"); you can sit on its two chairs.
+- **Walls.** A room's walls stay solid until you are through its door: from the corridor (camera looking east at the
+  BLACK CABIN / NOW OPEN sign) you don't see into the lounge; the smoking room stays closed from the main room.
 - **Stairs.** In the lounge's south-west corner: the first flight runs along the Sticker-door wall from beside the
   game machine up to a landing, the second turns right and climbs along the west wall into the floor above. You
   can climb to the velvet rope; upstairs is closed for now.

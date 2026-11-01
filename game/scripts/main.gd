@@ -28,7 +28,7 @@ const ExitShot = preload("res://scripts/exit_shot.gd")
 @onready var needs: Node = get_node("/root/Needs")
 
 ## HUD zone name for an interaction zone; elsewhere the camera framing's name is used.
-const ZONE_TITLES := {"bar": "bar", "stage": "stage", "arcade": "lounge", "exit": "lobby"}   # tables: the room they stand in
+const ZONE_TITLES := {"bar": "bar", "stage": "stage", "arcade": "lounge", "exit": "lobby", "memory": "memory"}   # tables: the room they stand in
 
 var sheet: Control
 var sheet_zone: Dictionary = {}

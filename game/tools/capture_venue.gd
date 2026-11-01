@@ -20,6 +20,13 @@ const SHOTS := [
 	{"name": "toilets", "player": Vector3(22.3, 0, 15.8)},
 	{"name": "smoking", "player": Vector3(40.0, 0, 15.2)},
 	{"name": "alcove-walk", "player": Vector3(17.0, 0, 11.25)},
+	# Daniele 2026-11-02: memory corner (photo 25); corridor end wall (photo 24); a walk through the Sticker door with
+	# the walls solid before it (corridor view) and cut after (lounge view)
+	{"name": "memory", "player": Vector3(5.0, 0, 1.7)},
+	{"name": "corridor-end", "player": Vector3(12.0, 0, 14.1)},
+	{"name": "walk-1-corridor", "player": Vector3(13.0, 0, 14.1)},
+	{"name": "walk-2-doorway", "player": Vector3(13.65, 0, 13.6)},
+	{"name": "walk-3-lounge", "player": Vector3(13.65, 0, 12.2)},
 ]
 ## Eye-level views matched to the real photos (docs/art/direction): 09 bar from the west end, 11 the raised east
 ## side from its south end, 14 the buffer zone's south (mirror) side looking at the window, 20 the smoking room's
@@ -28,6 +35,8 @@ const EYE := [
 	{"name": "eye-P09-bar", "from": Vector3(22.6, 1.5, 11.6), "at": Vector3(33.0, 0.9, 13.6), "fov": 62.0, "player": Vector3(27.0, 0, 10.8)},
 	{"name": "eye-P11-raised", "from": Vector3(40.2, 1.5, 10.6), "at": Vector3(38.6, 1.3, 1.0), "fov": 64.0, "player": Vector3(38.0, 0, 7.0)},
 	{"name": "eye-P14-buffer", "from": Vector3(17.8, 1.4, 7.4), "at": Vector3(17.8, 1.1, 2.6), "fov": 66.0, "player": Vector3(16.6, 0, 5.4)},
+	{"name": "eye-memory", "from": Vector3(6.4, 1.5, 4.4), "at": Vector3(4.3, 0.9, 0.3), "fov": 62.0, "player": Vector3(5.6, 0, 2.6)},
+	{"name": "eye-corridor-end", "from": Vector3(9.0, 1.6, 14.1), "at": Vector3(15.45, 1.9, 14.07), "fov": 55.0, "player": Vector3(12.8, 0, 14.4)},
 	{"name": "eye-P20-smoking", "from": Vector3(39.4, 1.6, 13.2), "at": Vector3(40.2, 1.0, 18.0), "fov": 66.0, "player": Vector3(39.9, 0, 15.3)},
 ]
 

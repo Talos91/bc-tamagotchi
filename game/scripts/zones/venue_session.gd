@@ -152,6 +152,12 @@ func rows_for(zone: Dictionary) -> Array[Dictionary]:
 			rows.append(sit)
 		"arcade":
 			rows.append(_row("pinball", "venue.sheet.arcade.play", T.t("venue.sheet.arcade.play_sub", {"best": _best("neon_pinball")}), "nightlife", true))
+		"memory":
+			# Memory corner (photo 25): sharing a real photo is BACKLOG D5; for now the row says it is coming
+			rows.append(_row("share", "venue.sheet.memory.share", T.t("venue.sheet.memory.share_sub"), "", false, T.t("venue.sheet.memory.soon")))
+			var msit := _row("sit", "venue.sheet.table.sit", T.t("venue.sheet.table.sit_sub"), "friends", false,
+				T.t("venue.sheet.table.sat") if needs.daily_keys.has("sit_with|" + sit_key(zone)) else "")
+			rows.append(msit)
 		"cabinet", "tall", "smoking":
 			# Plan v4 stubs (game cabinet, tall tables, smoking room): the generic table sheet until their own content lands
 			var sit := _row("sit", "venue.sheet.table.sit", T.t("venue.sheet.table.sit_sub"), "friends", false,
@@ -177,7 +183,7 @@ func header_for(zone: Dictionary) -> Array[String]:
 			return [T.t("venue.sheet.table.head"), T.t("venue.sheet.table.greet")]
 		"arcade":
 			return [T.t("venue.sheet.arcade.head"), T.t("venue.sheet.arcade.greet")]
-		"cabinet", "tall", "smoking":
+		"cabinet", "tall", "smoking", "memory":
 			return [T.t("venue.sheet.%s.head" % zone["kind"]), T.t("venue.sheet.%s.greet" % zone["kind"])]
 		"exit":
 			return [T.t("venue.sheet.exit.head"), T.t("venue.sheet.exit.greet")]
@@ -461,6 +467,8 @@ static func _seat_of(s: Node, zone: Dictionary) -> bool:
 			return str(s.get_meta("table", "")) == str(zone["id"]).get_slice(":", 1)
 		"bar":
 			return str(s.get_meta("table", "")) == "Bar"
+		"memory":
+			return str(s.get_meta("table", "")) == "memory"
 		"smoking":
 			return str(s.get_meta("zone", "")) == "Smoking"
 	return false
