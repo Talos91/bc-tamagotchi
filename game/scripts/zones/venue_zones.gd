@@ -333,3 +333,12 @@ func zone_at(world_pos: Vector3, grow := 0.2) -> Dictionary:
 			best_d = d
 			best = z
 	return best
+
+
+## Metres on the floor from a point to a zone's footprint: 0 inside it.
+static func gap(z: Dictionary, world_pos: Vector3) -> float:
+	var p := Vector2(world_pos.x, world_pos.z)
+	if z["shape"] == "circle":
+		return maxf(0.0, p.distance_to(z["center"]) - float(z["radius"]))
+	var r: Rect2 = z["rect"]
+	return Vector2(maxf(maxf(r.position.x - p.x, p.x - r.end.x), 0.0), maxf(maxf(r.position.y - p.y, p.y - r.end.y), 0.0)).length()

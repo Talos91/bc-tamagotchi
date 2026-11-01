@@ -10,7 +10,11 @@ extends "res://scripts/minigames/minigame_base.gd"
 const UI = preload("res://scripts/minigames/mg_ui.gd")
 const S = preload("res://scripts/minigames/strings.gd")
 
+const Cast = preload("res://scripts/cast.gd")
+
 const DATA_DIR := "res://scenes/minigames/candle_talk/"
+## A cast member with no lines of their own yet (only Prae has a file) talks with this set, so a chat always starts.
+const FALLBACK := "mali"
 const REACT_SECONDS := 1.8
 const FULL := 1.0
 const HALF := 0.5
@@ -142,13 +146,15 @@ func _on_start() -> void:
 	regular = str(config.get("regular", "mali"))
 	action_key = regular
 	data = load_data(regular)
+	if data.is_empty():
+		data = load_data(FALLBACK)
 	turns = int(data.get("turns", 5))
 	_rng.seed = int(config.get("seed", Time.get_ticks_usec()))
 	turn = 0
 	candle = 0.0
 	used_lines.clear()
 	history.clear()
-	_name_label.text = S.t("cast.%s.name" % regular)
+	_name_label.text = Cast.name_of(regular)
 	_hint.text = S.t("mg.candle_talk.hint")
 	_next_turn()
 
@@ -168,7 +174,7 @@ func _next_turn() -> void:
 		card_order[j] = t
 	_bubble.text = S.t(line["key"])
 	_hint.text = S.t("mg.candle_talk.hint")
-	set_status(S.t("mg.candle_talk.status", {"regular": S.t("cast.%s.name" % regular), "turn": turn + 1, "total": turns}))
+	set_status(S.t("mg.candle_talk.status", {"regular": Cast.name_of(regular), "turn": turn + 1, "total": turns}))
 	_fill_cards(true)
 	queue_redraw()
 

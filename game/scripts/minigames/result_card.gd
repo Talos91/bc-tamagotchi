@@ -168,7 +168,7 @@ func _build(result: Dictionary, o: Dictionary) -> void:
 			h.tint = UI.NEON if i < hearts else UI.LINE
 			h.custom_minimum_size = Vector2(UI.dp(28), UI.dp(28))
 			hrow.add_child(h)
-		hrow.add_child(UI.wrap(UI.label(S.t("mg.result.hearts", {"regular": S.t("cast.%s.name" % extra["regular"]), "count": hearts, "max": MAX_HEARTS}), 14, UI.SMOKE)))
+		hrow.add_child(UI.wrap(UI.label(S.t("mg.result.hearts", {"regular": Cast.name_of(str(extra["regular"])), "count": hearts, "max": MAX_HEARTS}), 14, UI.SMOKE)))
 
 	var btns := HBoxContainer.new()
 	btns.add_theme_constant_override("separation", int(UI.dp(12)))

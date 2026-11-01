@@ -15,6 +15,8 @@ const CardScript = preload("res://scripts/minigames/result_card.gd")
 const Glyph = preload("res://scripts/minigames/need_glyph.gd")
 const Cast = preload("res://scripts/cast.gd")
 const Zones = preload("res://scripts/zones/venue_zones.gd")
+const Chars = preload("res://assets/chars/bc_chars.gd")
+const FrameScene = preload("res://scenes/ui/minigame_frame.tscn")
 
 const T0 := 1_800_000_000.0
 const TEST_SAVE := "user://test_minigames_save.json"
@@ -33,6 +35,7 @@ func _initialize() -> void:
 	test_rhythm_play()
 	test_candle_logic()
 	test_candle_play()
+	await test_chat_cast()
 	test_pinball()
 	test_result_card()
 	print("")
@@ -345,6 +348,47 @@ func test_candle_play() -> void:
 		else:
 			check(res[0]["score"] == 0.0 and 4 in g.used_lines and not (3 in g.used_lines), "off path takes the food branch, scores 0 (still the minimum reward)")
 		g.queue_free()
+
+
+## A chat with every cast member that can host one (Prae, an owner, and each regular: only Prae has lines of her own, the
+## others fall back to the shared set), through the real frame: it starts, the five turns play out, the result card
+## applies the talk, DONE closes the frame and hands control back. Hearts only for regulars, never for the owner.
+func test_chat_cast() -> void:
+	print("[chat] every cast member's talk starts, finishes and gives control back")
+	var ids := ["mali"]
+	for p in Chars.manifest().get("presets", []):
+		if str(p.get("role", "")) == "regular":
+			ids.append(str(p["name"]))
+	check(ids.size() >= 8, "Prae and the seven regulars are in the manifest (%d ids)" % ids.size())
+	for id in ids:
+		var n := fresh_needs()
+		n.meters["friends"] = 30.0
+		var fr: Control = FrameScene.instantiate()
+		fr.needs = n
+		root.add_child(fr)
+		await process_frame   # the frame builds itself in _ready
+		var closed := []
+		fr.closed.connect(func(r): closed.append(r))
+		fr.open(load("res://scenes/minigames/candle_talk/candle_talk.tscn"), {"regular": id, "seed": 3})
+		var g: Control = fr.game
+		check(g.running and g.phase == Candle.Phase.ASK and not g.data.is_empty(), "%s: the talk starts with lines to say" % id)
+		check(g._name_label.text != "" and not g._name_label.text.begins_with("cast."), "%s: a real name over the bubble (%s)" % [id, g._name_label.text])
+		var guard := 0
+		while not g.done and guard < 400:
+			guard += 1
+			if g.phase == Candle.Phase.ASK:
+				check(g._cards_box.get_children().filter(func(c): return not c.is_queued_for_deletion()).size() == 3, "%s: three topic cards to tap (turn %d)" % [id, g.turn + 1])
+				g.choose(g.line["best"])
+			g.advance(0.5)
+		check(g.done and g.turn == 5, "%s: five turns, then it finishes" % id)
+		check(is_instance_valid(fr._card) and closed.is_empty(), "%s: the result card is up, the frame still open" % id)
+		fr._card.done.emit()
+		check(closed.size() == 1 and closed[0]["extra"]["regular"] == id, "%s: DONE closes the frame (control goes back)" % id)
+		check(n.meters["friends"] > 30.0, "%s: the talk refilled Friends (%.1f)" % [id, n.meters["friends"]])
+		var kept: bool = n.ext.get(CardScript.HEARTS_KEY, {}).has(id)
+		check(kept == Cast.befriends(id), "%s: hearts kept only for regulars (kept %s)" % [id, kept])
+		fr.free()
+		n.free()
 
 
 # --- Pinball -------------------------------------------------------------------------------------

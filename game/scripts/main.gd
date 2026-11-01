@@ -43,6 +43,7 @@ var menu_list: Control
 var frame: Control
 var walk_out: Control
 var welcome: Control
+const ARRIVE_SLACK := 0.5   ## metres a finished walk may end outside its target zone and still open the sheet
 var pending_zone := ""      ## zone id the player is walking to after a tap; its sheet opens on arrival
 var _spawn: Transform3D
 var _capture := {}
@@ -111,7 +112,12 @@ func _process(_delta: float) -> void:
 			player.walking_to = false
 			open_sheet(z)
 		elif not player.walking_to:
+			# The walk is over. A table or stool zone is ringed by its furniture's nav hole and the agent stops short of
+			# its target, so the feet can end just outside the circle: close enough counts as arrived.
+			var z := zones.by_id(pending_zone)
 			pending_zone = ""
+			if not z.is_empty() and not _blocked() and VenueZones.gap(z, player.global_position) <= ARRIVE_SLACK:
+				open_sheet(z)
 	if not _capture.is_empty():
 		_capture_tick()
 
