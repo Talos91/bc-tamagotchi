@@ -25,13 +25,14 @@ If the folder you are in is not this root, stop and tell the orchestrator.
 - House rules: where DECISIONS.md and the GDD disagree, DECISIONS.md wins until the GDD is updated; every Blender generator saves a lit, labelled review `.blend` into `blender/`; every screenshot set includes portrait (1080×1920) and landscape (1920×1080) until orientation is decided; claim only what was verified.
 
 ## Tests
-- Headless suites, run from `game/`: `smoke_stairs`, `smoke_tap`, `smoke_hud`, `test_needs`, `test_minigames`, `smoke_loop` (new, owned by the zone-wiring session). Files are `game/tests/<name>.gd`, run as `Godot --headless --path game -s tests/<name>.gd` using the Godot exe above.
+- Headless suites, run from `game/`: `smoke_stairs`, `smoke_tap`, `smoke_hud`, `test_needs`, `test_minigames`, `smoke_loop`, `smoke_doors_sit`, `smoke_start`, `test_menu`, `smoke_version` (ten as of 2026-11-02; new suites add themselves here through the orchestrator). Files are `game/tests/<name>.gd`, run as `Godot --headless --path game -s tests/<name>.gd` using the Godot exe above.
 - Orchestrator verification runs in a clean `git worktree` of the exact SHA (import first), never the shared tree, then pushes that SHA only.
-- Full-suite rule: run all six once per assembled wave before the orchestrator regenerates the changelog; role suites (needs, minigames, loop) run on every change to their paths.
+- Full-suite rule: run all suites once per assembled wave before the orchestrator regenerates the changelog; role suites (needs, minigames, loop) run on every change to their paths.
 - Windowed runs: omit `--headless`; screenshots go next to the renders they are compared with. Known slow: `test_minigames` (hundreds of checks).
 
 ## Release path
-- None yet: no build, export or publish path exists. First playable is desktop; phone later (web export untested).
+- Versioning (2026-11-02, `docs/tech/versioning.md`): the version lives in `application/config/version` in `game/project.godot` (0.1.0 closed 2026-11-02; 0.2.0 in progress). The orchestrator bumps MINOR when it closes a version and PATCH for a hotfix; workers never bump it. The game shows `v<version> · <sha>` bottom right (`game/scripts/version_info.gd`). Stamp a build with `python tools/version.py` before handing it to Daniele; add the closed version to `RELEASES` in `tools/changelog.py` when cutting one.
+- No build, export or publish path exists yet. First playable is desktop; phone later (web export untested).
 - Docs updated together after a wave: `ORCHESTRATION.md` wave status, `docs/MANUAL.md` section 15, `STATE.md`, `LOG.md`, and `docs/CHANGELOG.md` via `python tools/changelog.py` (orchestrator only).
 
 ## Never
