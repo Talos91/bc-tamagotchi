@@ -113,7 +113,7 @@ func _build(result: Dictionary, o: Dictionary) -> void:
 	var game_id := str(result.get("game_id", ""))
 	var tier := int(result.get("tier", 0))
 	var word := S.t("mg.%s.tier_%d" % [game_id, tier + 1])
-	col.add_child(UI.label(word, 32, UI.GOLD))
+	col.add_child(UI.title(word, 32))
 
 	var score_row := HBoxContainer.new()
 	score_row.add_theme_constant_override("separation", int(UI.dp(14)))

@@ -47,6 +47,29 @@ static func label(text: String, size_dp := 15.0, color := CREAM, align := HORIZO
 	return l
 
 
+## Kristi, the brand script, is for stylish titles only (zone names, the result card heading, Welcome Back). It has
+## no Thai glyphs, so Thai falls back to IBM Plex Sans Thai Looped (bc_theme.tres); Kristi's small x-height needs a
+## bigger size than the fallback does, hence SCRIPT_SCALE outside Thai.
+const SCRIPT_SCALE := 1.4
+
+
+static func title(text: String, size_dp: float, color := GOLD) -> Label:
+	var l := label(title_case(text), size_dp, color)
+	l.theme_type_variation = &"LabelTitle"
+	title_size(l, size_dp)
+	return l
+
+
+static func title_size(l: Label, size_dp: float) -> void:
+	var thai := TranslationServer.get_locale().begins_with("th")
+	l.add_theme_font_size_override("font_size", int(dp(size_dp * (1.0 if thai else SCRIPT_SCALE))))
+
+
+## Script capitals read badly: "THE LOUNGE" becomes "The Lounge". Mixed case and Thai pass through.
+static func title_case(s: String) -> String:
+	return s.capitalize() if s == s.to_upper() and s != s.to_lower() else s
+
+
 ## Makes a label wrap inside its container (Thai breaks by dictionary, so no clip_text anywhere).
 static func wrap(l: Label) -> Label:
 	l.autowrap_mode = TextServer.AUTOWRAP_WORD_SMART
@@ -92,7 +115,8 @@ static func need_color(need: String) -> Color:
 
 ## Draws text with its baseline at `pos`; centered on pos.x unless align says otherwise.
 static func draw_text(ci: CanvasItem, text: String, pos: Vector2, size_px: int, color: Color, centered := true) -> void:
-	var font := ThemeDB.fallback_font
+	var theme := ThemeDB.get_project_theme()
+	var font: Font = theme.default_font if theme != null and theme.default_font != null else ThemeDB.fallback_font
 	var p := pos
 	if centered:
 		p.x -= font.get_string_size(text, HORIZONTAL_ALIGNMENT_LEFT, -1, size_px).x * 0.5

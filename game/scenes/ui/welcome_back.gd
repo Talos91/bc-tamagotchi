@@ -35,9 +35,7 @@ func open(player_name: String) -> void:
 	var col := VBoxContainer.new()
 	col.add_theme_constant_override("separation", int(UI.dp(12)))
 	pad.add_child(col)
-	var title := UI.label(T.t("venue.welcome.title"), 28, UI.GOLD)
-	title.theme_type_variation = &"LabelDisplayL"
-	col.add_child(title)
+	col.add_child(UI.title(T.t("venue.welcome.title"), 28))
 	col.add_child(UI.label(T.t("venue.cast.nam"), 14, UI.SMOKE))
 	var who := player_name if player_name != "" else T.t("venue.welcome.friend")
 	col.add_child(UI.wrap(UI.label(T.t("venue.welcome.line", {"name": who}), 18, UI.CREAM)))

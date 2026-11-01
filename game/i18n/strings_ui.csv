@@ -1,0 +1,3 @@
+key,en,th,context,max
+ui.orientation.to_landscape,Landscape,แนวนอน,"HUD orientation toggle (top right) in portrait: tooltip and accessible name, switches to landscape",14
+ui.orientation.to_portrait,Portrait,แนวตั้ง,"HUD orientation toggle (top right) in landscape: tooltip and accessible name, switches to portrait",14

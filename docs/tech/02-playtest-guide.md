@@ -41,6 +41,7 @@ visit end to end.
 | Close a sheet | Esc, or click the room above it | tap the room |
 | Leave | **Leave** (top left), or the street door (its sheet opens inside it or on the step outside) | same |
 | Stand up | any move key or the joystick, or click / tap somewhere to walk | same |
+| Portrait / landscape | the round button at the top right, under the rings (remembered in the save; portrait by default) | same |
 
 The top row shows the four needs as rings (Music, Friends, Drinks, Nightlife). The lowest one breathes, and its
 zone's chip gets the same colour edge. Gains rise from the rings as "+N".

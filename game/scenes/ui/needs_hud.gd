@@ -2,8 +2,9 @@ extends Control
 ## Venue HUD (wireframes §3): Leave (door), the four need rings with the lowest breathing, Welcome Back x2 chip,
 ## tipsiness chip, zone name (large on entry, small after 2 s), band caption, walk-hint chips on the right edge
 ## (the lowest meter's zone gets its colour edge), the zone prompt at the bottom, rising +N chips and the action
-## card after each plain action. Drops to 60% while walking. Built in code with the minigame UI helpers; the
-## project theme supplies the fonts.
+## card after each plain action, and the orientation toggle at the top right, under the bar's right end on the zone
+## name's row (scripts/ui/orientation.gd). Drops to 60% while walking. Built in code with the minigame UI helpers;
+## the project theme supplies the fonts (zone names in Kristi, the brand script).
 
 signal leave_pressed
 signal prompt_pressed
@@ -16,6 +17,8 @@ const Rules = preload("res://scripts/rules.gd")
 const Ring = preload("res://scenes/ui/meter_ring.gd")
 const PromptScene = preload("res://scenes/ui/zone_prompt.tscn")
 const CardScene = preload("res://scenes/ui/action_card.tscn")
+const Orientation = preload("res://scripts/ui/orientation.gd")
+const OrientationToggle = preload("res://scenes/ui/orientation_toggle.gd")
 
 ## Walk hints: zone kind, label key, the need that zone refills.
 const HINTS := [["bar", "venue.hint.bar", "drinks"], ["stage", "venue.hint.stage", "music"],
@@ -33,6 +36,7 @@ var _x2: Label
 var _tipsy: Label
 var _hints := {}
 var _top: Control
+var orientation_toggle: Button
 var _zone_name := ""
 var _title_age := 0.0
 var _clock := 0.0
@@ -47,6 +51,7 @@ func _ready() -> void:
 func setup(s: VenueSession, n: Node) -> void:
 	session = s
 	needs = n
+	Orientation.restore(needs)
 	needs.meter_changed.connect(_on_meter)
 	session.action_done.connect(_on_action)
 	session.state_changed.connect(_refresh_status)
@@ -71,9 +76,10 @@ func _build() -> void:
 	_top.add_theme_constant_override("separation", int(UI.dp(4)))
 	add_child(_top)
 
+	# Leave | rings | chips. No separation on the outer row (the pads take the slack) so it fits 390 dp wide.
 	var bar := HBoxContainer.new()
 	bar.mouse_filter = Control.MOUSE_FILTER_IGNORE
-	bar.add_theme_constant_override("separation", int(UI.dp(8)))
+	bar.add_theme_constant_override("separation", 0)
 	_top.add_child(bar)
 	var leave := Button.new()
 	leave.name = "Leave"
@@ -92,11 +98,15 @@ func _build() -> void:
 	left_pad.size_flags_horizontal = Control.SIZE_EXPAND_FILL
 	left_pad.mouse_filter = Control.MOUSE_FILTER_IGNORE
 	bar.add_child(left_pad)
+	var ring_row := HBoxContainer.new()
+	ring_row.mouse_filter = Control.MOUSE_FILTER_IGNORE
+	ring_row.add_theme_constant_override("separation", int(UI.dp(8)))
+	bar.add_child(ring_row)
 	for m in Rules.METERS:
 		var r := Ring.new()
 		r.need = m
 		r.name = "Ring_" + m
-		bar.add_child(r)
+		ring_row.add_child(r)
 		rings[m] = r
 	var right_pad := Control.new()
 	right_pad.size_flags_horizontal = Control.SIZE_EXPAND_FILL
@@ -113,9 +123,19 @@ func _build() -> void:
 	_tipsy = _chip(UI.AMBER)
 	chips.add_child(_tipsy)
 
-	_title = UI.label("", 30, UI.GOLD)
-	_title.theme_type_variation = &"LabelDisplayL"
-	_top.add_child(_title)
+	var title_row := HBoxContainer.new()
+	title_row.mouse_filter = Control.MOUSE_FILTER_IGNORE
+	title_row.add_theme_constant_override("separation", int(UI.dp(8)))
+	_top.add_child(title_row)
+	_title = UI.title("", 30)
+	_title.size_flags_horizontal = Control.SIZE_EXPAND_FILL
+	_title.text_overrun_behavior = TextServer.OVERRUN_TRIM_ELLIPSIS  # a long name never pushes the toggle off screen
+	title_row.add_child(_title)
+	orientation_toggle = OrientationToggle.new()
+	orientation_toggle.pressed.connect(func():
+		Orientation.toggle(needs)
+		orientation_toggle.refresh())
+	title_row.add_child(orientation_toggle)
 	_caption = UI.label("", 14, UI.SMOKE)
 	_top.add_child(_caption)
 	_status = UI.label("", 14, UI.GOLD)
@@ -156,8 +176,8 @@ func set_zone_name(cam_zone: String) -> void:
 	if cam_zone == _zone_name or cam_zone == "":
 		return
 	_zone_name = cam_zone
-	_title.text = T.t("venue.zone." + cam_zone)
-	_title.add_theme_font_size_override("font_size", int(UI.dp(30)))
+	_title.text = UI.title_case(T.t("venue.zone." + cam_zone))
+	UI.title_size(_title, 30)
 	_title_age = 0.0
 
 
@@ -166,6 +186,7 @@ func retitle() -> void:
 	var z := _zone_name
 	_zone_name = ""
 	set_zone_name(z)
+	orientation_toggle.refresh()
 
 
 func set_here(kind: String) -> void:
@@ -176,7 +197,7 @@ func set_here(kind: String) -> void:
 func _process(delta: float) -> void:
 	_title_age += delta
 	if _title_age > 2.0 and _title_age - delta <= 2.0:
-		_title.add_theme_font_size_override("font_size", int(UI.dp(18)))
+		UI.title_size(_title, 18)
 	_clock += delta
 	if _clock >= 0.25 and session != null:
 		_clock = 0.0
