@@ -21,6 +21,15 @@ const ExitShot = preload("res://scripts/exit_shot.gd")
 
 var needs: Node
 var fails: Array[String] = []
+## Engine delta of the current frame. The SceneTree script's _process runs first, then process_frame is emitted, and
+## only then the nodes move: a sample taken after `await process_frame` sees the camera as the PREVIOUS frame left
+## it, moved by the previous frame's delta (kept in the entry loop as `moved_by`).
+var frame_delta := 0.0
+
+
+func _process(delta: float) -> bool:
+	frame_delta = delta
+	return false
 
 
 func check(ok: bool, what: String) -> void:
@@ -78,11 +87,14 @@ func _init() -> void:
 	var shoulder_before_door := false
 	var door_seen_open := false
 	var open_at_pull := -1.0
-	var max_speed := 0.0
+	var max_speed := 0.0   # per frame: step over the engine delta that produced it
+	var max_step := 0.0   # largest displacement in a single frame, whatever its length
+	var moved_by := 0.0   # engine delta of the frame before this sample: what moved the camera since the last one
 	var last_pos: Vector3 = ss_cam.global_position
-	var last_t := Time.get_ticks_usec()
 	while is_instance_valid(main.start_screen) and Time.get_ticks_msec() - t0 < 12000:
 		await process_frame
+		var step_delta := moved_by
+		moved_by = frame_delta
 		var open: float = doors.openness("StreetDoor")
 		max_open = maxf(max_open, open)
 		var pp: Vector3 = main.player.global_position
@@ -92,12 +104,11 @@ func _init() -> void:
 				door_seen_open = true
 				shoulder_before_door = c.x < pp.x - 0.8 and c.z - pp.z > 0.15 and absf(c.y - StartScreen.FOLLOW_H) < 0.1
 				print("  door starts opening: camera %s, character %s" % [c.snapped(Vector3.ONE * 0.01), pp.snapped(Vector3.ONE * 0.01)])
-			var now := Time.get_ticks_usec()
-			var dt := (now - last_t) / 1000000.0
-			if dt > 0.004:
-				max_speed = maxf(max_speed, c.distance_to(last_pos) / dt)
+			var step := c.distance_to(last_pos)
+			max_step = maxf(max_step, step)
+			if step_delta > 0.0:
+				max_speed = maxf(max_speed, step / step_delta)
 			last_pos = c
-			last_t = now
 		if is_instance_valid(ss) and ss.phase == StartScreen.Phase.PULL:
 			if not saw_pull:
 				open_at_pull = open
@@ -110,7 +121,10 @@ func _init() -> void:
 	check(saw_pull, "camera pulls back to the diorama camera")
 	check(shoulder_before_door, "camera over the shoulder before the door opens")
 	check(open_at_pull > 0.05 and open_at_pull < 0.99, "pull-back starts while the door closes (door %.2f open)" % open_at_pull)
-	check(max_speed < 12.0, "no cut: camera speed at most %.1f m/s" % max_speed)
+	# Speed per frame is the step over the engine delta that made it, so a frame hitch (a long delta, a long step) leaves
+	# it unchanged; wall-clock time between samples did not, and read 13 to 14.6 m/s now and then. The camera tops out
+	# near 8 m/s; a cut (1 m in one frame) reads 60 m/s at 60 fps or more.
+	check(max_speed < 12.0, "no cut: camera speed at most %.1f m/s (biggest step %.2f m)" % [max_speed, max_step])
 	check(cam_inside, "camera followed through the doorway at head height")
 	check(max_open > 0.9, "street door swung open for the character (%.2f)" % max_open)
 	check(needs.visit_active, "visit started")
