@@ -293,6 +293,36 @@ func _ph(parent: Node, kname: String, pos: Vector3, rot_deg := 0.0, nm := "", so
 		_shadow_spot(pos, maxf(s.x * scl.x, s.y * scl.z) * 0.5 + 0.06)
 	return holder
 
+## Wood boards running along z (the raised strip, its length), in the kit's WoodMid so the floor matches the
+## raised_edge_neon border on top of the riser: 0.15 m boards, random end joints, world-triplanar like the floor.
+func _plank_mat() -> StandardMaterial3D:
+	if mats.has("planks"):
+		return mats["planks"]
+	var base := Color("5e3e2a")   # bc_kit.py WoodMid
+	var img := Image.create(160, 160, false, Image.FORMAT_RGB8)   # 4 m: boards 6 px (0.15 m) wide
+	var rng := RandomNumberGenerator.new()
+	rng.seed = 2611
+	for bx in 160 / 6 + 1:
+		var joint := rng.randi_range(0, 159)
+		var shade := [rng.randf_range(-0.035, 0.035), rng.randf_range(-0.035, 0.035)]
+		for px in range(bx * 6, mini(bx * 6 + 6, 160)):
+			for py in 160:
+				var j: float = shade[0] if py < joint else shade[1]
+				var c := Color(base.r + j, base.g + j * 0.9, base.b + j * 0.8)
+				var seam := px == bx * 6 or py == joint
+				img.set_pixel(px, py, c.darkened(0.35) if seam else c)
+	var m := StandardMaterial3D.new()
+	m.resource_name = "Planks"
+	m.albedo_texture = ImageTexture.create_from_image(img)
+	m.texture_filter = BaseMaterial3D.TEXTURE_FILTER_NEAREST_WITH_MIPMAPS
+	m.uv1_triplanar = true
+	m.uv1_world_triplanar = true
+	m.uv1_scale = Vector3(0.25, 0.25, 0.25)
+	m.roughness = 0.3
+	m.metallic_specular = 0.5
+	mats["planks"] = m
+	return m
+
 func _glass_mat() -> StandardMaterial3D:
 	if mats.has("glass"):
 		return mats["glass"]
@@ -1044,7 +1074,7 @@ func _tables() -> void:
 ## chair on the room side, neon strip under the edge, mirror ceiling panels. The navmesh climbs it on hidden ramps.
 func _raised() -> void:
 	var g := _group("Raised")
-	_floor(g, RAISED, _floor_mat(), RAISED_H)
+	_floor(g, RAISED, _plank_mat(), RAISED_H)   # wood like its edge (Daniele, 2026-11-02), not the room's floor
 	# Ramps the agent can climb (max climb 0.05 per cell): 0.6 m run along the west edge and the south end
 	var run := 0.6
 	var hyp := sqrt(run * run + RAISED_H * RAISED_H)
