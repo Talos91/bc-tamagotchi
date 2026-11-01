@@ -41,6 +41,8 @@ GDD is updated.
 
 | 2026-11-01 | **Playtest of venue v4: doors, sitting, stairs.** Daniele: "doors are currently not doors there should be doors that the player can pass through and you should be able to actually sit when you press tap to sit". Stairs: "the start of the stair should be facing the game machine and its side should be on the wall where the entrance to lounge is; second half of the stair should go up in an (unreachable for now) area going to the right of the lounge entrance wall". Read as: first flight along the lounge's south wall (the Sticker-door wall), bottom step facing the game cabinet, rising west; the second half turns and climbs out of the lounge into a non-walkable upper area. To be confirmed on the worker's stair capture. |
 
+| 2026-11-01 | **Venue notes round landed** (4452080, 676a6a8, a08065e; seven suites pass on the orchestrator's run): swing doors on the street, Sticker and red doors; real seating at tables, couch, tall stools and the bar ("Take a stool", no needs effect); stair turned as read above, west-wall flight ends at a velvet rope before a closed upper floor; game cabinet moved 0.9 m east; alcove camera. **To confirm with Daniele:** stair reading; street door uses the staff-door model until a photo exists; Prae's full name "Praewa Srisuk / แพรวา ศรีสุข" was invented by the worker in `03-cast.md`. |
+
 ## Still open
 
 - Black Cabin's real opening hours (drives what the game shows at 14:00: open all day with staff only, or "Doors at 18:00" with the Flat only).
