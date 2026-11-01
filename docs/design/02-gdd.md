@@ -18,7 +18,7 @@ All numbers are starting values for tuning and live in one data file
 2. **Go out.** Tap the door. Your character arrives at the Black Cabin entrance
    under the orange sign. The notice board shows what's on in this visit.
 3. **Pick what you need.** The lowest meter glows on the HUD. The board and
-   the regulars hint at where to go ("Mali's at the long table, the band's on
+   the regulars hint at where to go ("Prae's at the long table, the band's on
    in 2 minutes").
 4. **Do bar things.** Order a drink, catch a song or a set, sit with a
    regular, dance, play a minigame. Each action refills one or two meters (§2.3).

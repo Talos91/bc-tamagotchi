@@ -4432,7 +4432,7 @@
   },
   {
    "name": "mali",
-   "display": "Mali",
+   "display": "Prae",
    "role": "regular",
    "slot": "REG_MALI",
    "path": "res://assets/chars/presets/mali.glb",

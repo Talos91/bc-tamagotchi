@@ -104,7 +104,7 @@ transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.475, 0, 0)
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.475, 0.02, 0.5)
 billboard = 1
 modulate = Color(1, 1, 1, 0.8)
-text = "Mali"
+text = "Prae"
 
 [node name="dougie" type="Node3D" parent="." unique_id=1028573366 instance=ExtResource("6_5bu8i")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.475, 0, 0)

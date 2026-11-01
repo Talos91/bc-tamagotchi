@@ -123,8 +123,8 @@ meters still never notify at 0.
 | Staying In | Postcard from the regular with the most hearts | Ploy: "Third table's empty without you." |
 | Fading | Postcard from Nam | "Your stool's still warm. Sort of." |
 | Packing | Postcards from Nam and a second regular | Big: "Band's on Friday. Just saying." · Dougie: "Don't make me come round there." |
-| **Rescued** (first visit from Staying In or later) | Nam at the bar (Welcome Back line), then a regular | Nam (from Packing): "Don't you dare. Sit. This one's on me." · Mali: "We kept your name on the board." |
-| Rule B warning, in the venue (any visit while a meter is Empty) | The regular who feeds that meter (`03-cast` §3.1) | Jules: "You haven't touched the pinball in weeks." · Tong: "Front row's lonely." · Hiro: "Water again?" · Mali: "Sit with us." |
+| **Rescued** (first visit from Staying In or later) | Nam at the bar (Welcome Back line), then a regular | Nam (from Packing): "Don't you dare. Sit. This one's on me." · Prae: "We kept your name on the board." |
+| Rule B warning, in the venue (any visit while a meter is Empty) | The regular who feeds that meter (`03-cast` §3.1) | Jules: "You haven't touched the pinball in weeks." · Tong: "Front row's lonely." · Hiro: "Water again?" · Prae: "Sit with us." |
 | Gone | Nam's postcard in the album | "They said thanks for every first one." |
 
 **Rescue** is any qualifying visit before Gone. It resets `since_night_out` to
