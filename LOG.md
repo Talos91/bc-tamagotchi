@@ -59,3 +59,5 @@ Append-only. One dated line per event, newest last. Never edit earlier lines.
 - 2026-11-02 — real menu filed in docs/venue/menu/ (11 pages, authorized); start-screen round 2 reported (015efcc, 8024f54): fcb0f92 alone fails on a clean checkout; verifying in a clean worktree from now on.
 - 2026-11-02 — Daniele answered all remaining Questions-tab items; 3 DECISIONS rows (second batch, Flat, stakes proposal). Opening hours from public listings: Tue–Sun 19:00–02:00, closed Mon.
 - 2026-11-02 — Session started: 🍸 real-menu (local_b0e3443e, Opus 5.5). Stakes/economy design and orientation toggle queued in STATE.
+- 2026-11-02 — start-screen round 2 verified in a clean worktree (eight suites PASS on 8024f54) and pushed with 9c12840; clean-checkout break fixed. Verification now always runs in a clean git worktree.
+- 2026-11-02 — New rules from Daniele via the Ooze orchestrator (vault method §5): one hub artifact, questions carry screenshots, workers archive themselves, model rules, handover checklist. Added to PROJECT.md; handoffs/ORCHESTRATOR-HANDOVER.md written.

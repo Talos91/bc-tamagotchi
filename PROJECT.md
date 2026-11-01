@@ -10,6 +10,13 @@ If the folder you are in is not this root, stop and tell the orchestrator.
 - Models: Opus for design and art, Sonnet for mechanical work. At most three workers at a time.
 - Session titles start with an emoji: 🎛️ orchestrator, 🎲 design, 🎨 art, 🛠️ tech, 🎭 cast, 🖼️ UI, 🧱 kit, 🏗️ venue, 🎮 gameplay, 🌐 multiplayer, 🧹 housekeeping.
 
+## Working rules from Daniele (2026-11-02, vault method §5)
+- **One hub artifact:** every page made for Black Cabin is a tab or a database row of the Black Cabin Backlog (https://claude.ai/artifact/BbpBxVWVVXMjz7TgJ7aFBW). Never publish a new standalone artifact ("so we don't have 40 sparse artifacts"). The existing manual stays a Claude Doc.
+- **Questions carry pictures:** any question for Daniele that needs a visual includes one or more screenshots (on its Questions-tab card), so he never has to launch the game to answer.
+- **Workers archive themselves:** a finished worker writes its handoff note in `handoffs/`, reports to the orchestrator, then archives itself. Idle workers close after refreshing their notes; their next job goes to a fresh worker started by the orchestrator. The orchestrator starts every worker itself.
+- **Models:** the orchestrator runs on Fable or Opus at high effort or above; workers run on whatever model the job needs (Opus for design and art, Sonnet for mechanical work). A Fable worker needs Daniele's written OK.
+- **Handover:** orchestrator handovers follow `handoffs/ORCHESTRATOR-HANDOVER.md`. Promised-but-not-done items and worker reports live in project files, never only in a session.
+
 ## Repo, clones, numbers
 - Repo: github.com/Talos91/bc-tamagotchi. Branch: `main` only; never push to any other branch. Product code lives in `game/` (Godot project); tools in `tools/`; Blender review files in `blender/`.
 - Checkout: single shared checkout at the root above; workers do not use worktrees. Commit straight to `main` with only your own paths staged (`git add <paths>`, never `git add -A`), after `git pull --rebase`. Never stash, reset or switch branches; other sessions have uncommitted work in the same tree.
@@ -19,6 +26,7 @@ If the folder you are in is not this root, stop and tell the orchestrator.
 
 ## Tests
 - Headless suites, run from `game/`: `smoke_stairs`, `smoke_tap`, `smoke_hud`, `test_needs`, `test_minigames`, `smoke_loop` (new, owned by the zone-wiring session). Files are `game/tests/<name>.gd`, run as `Godot --headless --path game -s tests/<name>.gd` using the Godot exe above.
+- Orchestrator verification runs in a clean `git worktree` of the exact SHA (import first), never the shared tree, then pushes that SHA only.
 - Full-suite rule: run all six once per assembled wave before the orchestrator regenerates the changelog; role suites (needs, minigames, loop) run on every change to their paths.
 - Windowed runs: omit `--headless`; screenshots go next to the renders they are compared with. Known slow: `test_minigames` (hundreds of checks).
 
