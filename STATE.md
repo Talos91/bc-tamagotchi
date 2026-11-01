@@ -7,10 +7,11 @@
 
 ## IN FLIGHT
 - New orchestrator: session local_78d0c67d (detached, top level). Handover checked: origin/main 51603f0, no workers were running; the old orchestrator's answers to "what is not in the files" are in `handoffs/orchestrator-2026-11-02.md`.
-- Workers running (started 2026-11-02): 🛠️ smoke-start-flake (Sonnet, local_7e81e277: `game/tests/smoke_start.gd`, plus committing `smoke_loop.gd.uid` and ignoring `__pycache__/`); 🎲 stakes-design (Opus, local_13d0486b: docs only, `06-stakes.md`, `04-coins-summary.md`, the Flat); 🖼️ answers-batch3 (Opus, local_084d7fb8: Kristi lettering on the corridor neon and memory box, dimmed THB prices, Pour Perfect rotation of 12).
+- Workers running (started 2026-11-02): 🛠️ smoke-start-flake (Sonnet, local_7e81e277: `game/tests/smoke_start.gd`, plus committing `smoke_loop.gd.uid` and ignoring `__pycache__/`); 🖼️ answers-batch3 (Opus, local_084d7fb8: Kristi lettering on the corridor neon and memory box, dimmed THB prices, Pour Perfect rotation of 12).
 
 ## WAITING ON OWNER (Questions tab: https://claude.ai/artifact/BbpBxVWVVXMjz7TgJ7aFBW#questions)
-- Open cards: cocktail page, misprints, "Try something new", soft-drink row, Thai brand names. (Address, lettering, corridor camera, memory-corner props, menu prices, Pour Perfect list were answered after the close; DECISIONS row "Questions tab, third batch".)
+- **Stakes, coins and the Flat (15 cards, 2026-11-02):** S1–S10 stakes, S11–S12 Flat rent, C1 coin sign-off, C2 drink pricing, F1 what is really upstairs. Source: `handoffs/stakes-design-2026-11-02.md`. After the answers: fold into `06-stakes.md` / `04-coins*.md`, apply the §12 amendments to the GDD and high concept, then a needs worker builds `06-stakes.md` §10 (also fix the stale `START_VALUE` comment in `rules.gd`).
+- Open menu cards: cocktail page, misprints, "Try something new", soft-drink row, Thai brand names. (Address, lettering, corridor camera, memory-corner props, menu prices, Pour Perfect list were answered after the close; DECISIONS row "Questions tab, third batch".)
 - Photos of the street front, street door and entrance corridor (next visit); band consent (Daniele asking Black Cabin).
 
 ## PROMISED, NOT DONE
@@ -25,7 +26,7 @@
 - Remove the unused Kanit font files.
 
 ## NEXT THREE JOBS
-1. 🎲 Stakes + coins + Flat design (Opus, docs only), then answers from the tab folded in.
+1. 🎲 Stakes + coins + Flat design: docs DONE (f62a858, `06-stakes.md` v2, `04-coins-summary.md`); waiting on the 15 Questions-tab cards, then the build.
 2. Performance pass (42 lights; phone measurement before any phone build), then figure lighting and proportions.
 3. Character creator; then the real-life bridge (events list from `docs/venue/events/`, Tonight tab, booking scaffold).
 - Later: everything in `docs/design/BACKLOG.md`.
