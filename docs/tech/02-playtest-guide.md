@@ -48,8 +48,8 @@ zone's chip gets the same colour edge. Gains rise from the rings as "+N".
 | **Stage** front | Find a spot · Play along (**Front Row Rhythm**, the song playing now) · Applaud (between songs only, capped) | Music |
 | Anywhere on the Candle Floor or at the stage (not the bar or Lounge) | every song you hear most of (60 s songs) is +5 Music; 4 songs also earn the set bonus (+5 Music, +5 Nightlife) | Music |
 | **Prae's table** (gold "Prae ♥" tag) | **Candle Talk** (once a day) · Sit with Prae (60 s seated, once a day) | Friends |
-| Other tables (Candle Floor, raised strip, lounge), tall tables, smoking room | Sit here a while (60 s seated, once per table per day) | Friends |
-| **Bar** | Take a stool: sit at the counter (no need effect; order from the stool) | — |
+| Every other table: Candle Floor round, rectangular and tiny tables, raised strip, lounge tables, long table and counter, tall tables, smoking-room tables | Sit here a while (60 s seated, once per table per day) | Friends |
+| **Bar** | Take a stool: a minute at the counter chatting (+3, provisional; order from the stool) | Friends |
 | **Lounge** | first time in each visit: +5 | Nightlife |
 | **Pinball cabinet** (Lounge) | **Neon Pinball** | Nightlife |
 | **Street door** | Head home: the walk-out summary | — |

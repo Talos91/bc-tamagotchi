@@ -413,7 +413,7 @@ use it.
 | Tong ★ | Tong | ต้อง | Thanakorn Wongsawat | ธนกร วงศ์สวัสดิ์ | |
 | Ploy ★ | Ploy | พลอย | Ploypailin Chaiyaporn | พลอยไพลิน ชัยพร | |
 | Jules ★ | Jules | จูลส์ | Jules Moreau | จูลส์ โมโร | |
-| Prae | Prae | แพร | Praewa Srisuk | แพรวา ศรีสุข | Renamed from Mali 2026-11-01 (Daniele); internal id stays `mali` |
+| Prae | Prae | แพร | — | — | Renamed from Mali 2026-11-01 (Daniele); just "Prae", no surname (2026-11-02); internal id stays `mali` |
 | Dougie | Dougie | ดักกี้ | Douglas McLeod | ดักลาส แมคลาวด์ | |
 | Lung Nop | Lung Nop | ลุงนพ | Noppadol Rattanakul | นพดล รัตนกุล | "Lung" = uncle |
 | Bow | Bow | โบว์ | Benjawan Kaewmanee | เบญจวรรณ แก้วมณี | |

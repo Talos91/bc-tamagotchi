@@ -115,6 +115,7 @@ const ACTIONS := {
 	## regular per day, so this fires at most as often. DECISIONS (k) approves +5; 03-cast §3.1 proposed it.
 	"candle_talk_lean": {"label": "Candle Talk lean bonus (candle fully lit)", "zone": "Candle Floor", "gains": {"friends": 5.0}},
 	"sit_with": {"label": "Sit at a table 60 s", "zone": "Any table", "gains": {"friends": 8.0}, "daily_once": true},
+	"bar_chat": {"label": "Chat at the bar 60 s", "zone": "Bar", "gains": {"friends": 3.0}, "cap_per_visit": 6.0},  # provisional (DECISIONS 2026-11-02)
 	"social_verb": {"label": "Receive a wave / cheers / high five", "zone": "Any", "gains": {"friends": 2.0}, "cap_per_visit": 10.0},
 	"quiz_night": {"label": "Quiz Night / Name That Tune", "zone": "Long Table", "gains": {"music": 5.0, "friends": [10.0, 15.0]}},
 	"dance_30s": {"label": "Dance under the disco ball (30 s)", "zone": "Dance floor", "gains": {"nightlife": 3.0}, "cap_per_visit": 15.0},

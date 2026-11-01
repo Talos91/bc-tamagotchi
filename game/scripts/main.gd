@@ -7,8 +7,9 @@ extends Node3D
 ## F5 reset the save, F6 skip to the next song / break, F7 swap portrait / landscape window, F8 English / Thai.
 ## Screenshot mode: godot --path game -- --capture=<png> [--capture-size=1080x1920] [--capture-at=bar] [--capture-frames=120]
 ## Start screen (BACKLOG B8, scripts/start_screen.gd): the street door at night, tap to walk in; the visit starts
-## once inside. Shown when main.tscn runs as the game, not in screenshot mode or with `-- --skip-intro`; tests and
-## tools that instance main.tscn start straight in the venue unless they set `intro` first.
+## once inside. Leaving plays the exit shot (scripts/exit_shot.gd) before the walk-out card. Both only when main.tscn
+## runs as the game, not in screenshot mode or with `-- --skip-intro`; tests and tools that instance main.tscn start
+## straight in the venue and leave straight to the card unless they set `intro` first.
 
 const S = preload("res://scripts/minigames/strings.gd")
 const T = preload("res://scripts/zones/venue_strings.gd")
@@ -17,6 +18,7 @@ const SheetScene = preload("res://scenes/ui/zone_sheet.tscn")
 const WalkOutScene = preload("res://scenes/ui/walk_out.tscn")
 const WelcomeScene = preload("res://scenes/ui/welcome_back.tscn")
 const StartScreen = preload("res://scripts/start_screen.gd")
+const ExitShot = preload("res://scripts/exit_shot.gd")
 
 @onready var player: Player = $Player
 @onready var zones: VenueZones = $Zones
@@ -26,7 +28,7 @@ const StartScreen = preload("res://scripts/start_screen.gd")
 @onready var needs: Node = get_node("/root/Needs")
 
 ## HUD zone name for an interaction zone; elsewhere the camera framing's name is used.
-const ZONE_TITLES := {"bar": "bar", "stage": "stage", "table": "floor", "arcade": "lounge", "exit": "lobby"}
+const ZONE_TITLES := {"bar": "bar", "stage": "stage", "arcade": "lounge", "exit": "lobby"}   # tables: the room they stand in
 
 var sheet: Control
 var sheet_zone: Dictionary = {}
@@ -36,8 +38,10 @@ var welcome: Control
 var pending_zone := ""      ## zone id the player is walking to after a tap; its sheet opens on arrival
 var _spawn: Transform3D
 var _capture := {}
-var intro := false          ## force the start screen (tests); see the header
+var intro := false          ## force the start screen and exit shot (tests); see the header
+var street_shots := false   ## start screen and exit shot on
 var start_screen: Node      ## the start screen while it runs
+var exit_shot: Node         ## the exit shot while it runs
 
 
 func _ready() -> void:
@@ -66,6 +70,7 @@ func _ready() -> void:
 		dbg._toggle.visible = false
 	_parse_capture()
 	if intro or (get_tree().current_scene == self and _capture.is_empty() and not "--skip-intro" in OS.get_cmdline_user_args()):
+		street_shots = true
 		start_screen = StartScreen.new()
 		start_screen.name = "StartScreenRun"
 		add_child(start_screen)
@@ -92,7 +97,7 @@ func _process(_delta: float) -> void:
 
 
 func _blocked() -> bool:
-	return is_instance_valid(start_screen) or is_instance_valid(sheet) or is_instance_valid(frame) or is_instance_valid(walk_out) or is_instance_valid(welcome)
+	return is_instance_valid(start_screen) or is_instance_valid(exit_shot) or is_instance_valid(sheet) or is_instance_valid(frame) or is_instance_valid(walk_out) or is_instance_valid(welcome)
 
 
 func _sync_block() -> void:
@@ -100,7 +105,7 @@ func _sync_block() -> void:
 	player.input_enabled = not b
 	session.busy = b
 	hud.prompt.visible = not b
-	hud.visible = not (is_instance_valid(frame) or is_instance_valid(walk_out) or is_instance_valid(start_screen))
+	hud.visible = not (is_instance_valid(frame) or is_instance_valid(walk_out) or is_instance_valid(start_screen) or is_instance_valid(exit_shot))
 	$UI/Joystick.visible = not b
 
 
@@ -219,6 +224,23 @@ func _on_visit_finished(summary: Dictionary) -> void:
 	close_sheet()
 	sheet = null
 	pending_zone = ""
+	if street_shots and summary.get("reason", "") == "left" and not is_instance_valid(exit_shot):
+		exit_shot = ExitShot.new()
+		exit_shot.name = "ExitShotRun"
+		add_child(exit_shot)
+		exit_shot.begin(self, summary)
+		_sync_block()
+		return
+	_show_walk_out(summary)
+
+
+## The exit shot is over (or skipped): the walk-out card.
+func end_exit_shot(summary: Dictionary) -> void:
+	exit_shot = null
+	_show_walk_out(summary)
+
+
+func _show_walk_out(summary: Dictionary) -> void:
 	if is_instance_valid(walk_out):
 		walk_out.queue_free()
 	walk_out = WalkOutScene.instantiate()

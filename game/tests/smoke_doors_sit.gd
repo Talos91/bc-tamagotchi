@@ -4,7 +4,8 @@ extends SceneTree
 ##           the player walks through and closes after; the staff door stays shut to the player and blocks them
 ##   sitting "sit" at Prae's table (id mali) walks the player to a chair and seats them on it, facing the table at
 ##           the seat's height; a minute seated refills Friends as before; stick input stands them up; the same on a
-##           raised-strip couch, a tall-table stool and a bar stool ("Take a stool")
+##           raised-strip couch, a tall-table stool and a bar stool ("Take a stool": a minute gives bar_chat); and at
+##           each new kind of seat zone (tiny tables, long table, lounge counter, rectangular and smoking tables)
 ##   stairs  up the first flight to the landing, up the second until the rope; the game cabinet stays reachable
 ##   godot --headless --path . --script res://tests/smoke_doors_sit.gd
 
@@ -100,7 +101,23 @@ func _init() -> void:
 	check(str(seat.get("table", "")) == "Bar" and absf(float(seat.get("h", 0.0)) - 0.8) < 0.01, "bar: seated on a bar stool")
 	var stool_row: Dictionary = s.rows_for(bar).filter(func(r): return r["id"] == "stool")[0]
 	check(not stool_row["enabled"], "Take a stool is disabled while on a stool")
+	var fb: float = needs.meters["friends"]
+	s.tick(VenueSession.SIT_SECONDS + 1.0)
+	check(needs.meters["friends"] > fb and needs.visit_action_totals.get("bar_chat", 0.0) > 0.0, "a minute on the stool chats (bar_chat): Friends %.1f -> %.1f" % [fb, needs.meters["friends"]])
+	check(p.seated, "still on the stool after the minute")
 	await stand_with_stick()
+	# Every seat in the club is sittable (Daniele 2026-11-02): one of each new kind of seat zone
+	for id in ["table:Tiny2", "table:TinyE0", "table:LongTable", "table:HighCounter", "table:RectTableW", "table:RectTableE", "table:Smoke1"]:
+		var tz: Dictionary = main.zones.by_id(id)
+		check(not tz.is_empty(), "zone %s built" % id)
+		if tz.is_empty():
+			continue
+		var ff: float = needs.meters["friends"]
+		seat = await sit_at(tz, "sit")
+		check(str(seat.get("table", "")) == id.get_slice(":", 1), "%s: seated at its table (%s)" % [id, seat.get("node", null)])
+		s.tick(VenueSession.SIT_SECONDS + 1.0)
+		check(needs.meters["friends"] > ff, "%s: a seated minute refills Friends" % id)
+		await stand_with_stick()
 
 	print("stairs")
 	teleport(Vector3(9.0, 0.1, 12.25))

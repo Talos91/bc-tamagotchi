@@ -4,9 +4,12 @@ extends Node
 ## Groups set by the generator:
 ##   look_red_bar      back-bar bays: amber cubby / shelf / soffit glow -> red LED, bottles glow red (photos 09, 16)
 ##   look_shelf_dull   shelf tiles over the couch: dull browns and glass, no rainbow spines (photo 11)
+##   look_neon_red     the neon strip under the raised edge and the couches' base strip on it: saturated red (photo
+##                     18; the kit's NeonRed at energy 5 burns to amber-white through the tonemapper)
 
 const RED_LED := Color("ff1a12")
 const BOTTLE_RED := Color("c41a14")
+const NEON_EDGE := Color("ff0e0a")
 
 var _cache := {}
 
@@ -16,6 +19,8 @@ func _ready() -> void:
 		_apply(n, _red_bar)
 	for n in get_tree().get_nodes_in_group("look_shelf_dull"):
 		_apply(n, _shelf_dull)
+	for n in get_tree().get_nodes_in_group("look_neon_red"):
+		_apply(n, _neon_red)
 
 
 func _apply(n: Node, pick: Callable) -> void:
@@ -58,6 +63,12 @@ func _red_bar(name: String) -> Material:
 		return _mat("bar_bottle_red", BOTTLE_RED, 0.9, 0.3)
 	if name.begins_with("LabelCream"):
 		return _mat("bar_label_red", Color("d89080"), 0.3)
+	return null
+
+
+func _neon_red(name: String) -> Material:
+	if name.begins_with("NeonRed"):
+		return _mat("edge_neon_red", NEON_EDGE, 2.4, 0.5)
 	return null
 
 

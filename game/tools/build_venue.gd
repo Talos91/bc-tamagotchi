@@ -1082,14 +1082,14 @@ func _raised() -> void:
 	_collider(g, "RampS", Vector3(RAISED.get_center().x, RAISED_H * 0.5 - 0.1, RAISED.end.y + run * 0.5), Vector3(RAISED.size.x, 0.2, hyp), Vector3(atan2(RAISED_H, run), 0, 0))
 	# Riser face with the neon strip under the edge (kit raised_edge_neon, 1 x 0.2 x 0.15, front = room side)
 	for i in int(ceil(RAISED.size.y)):
-		_ph(g, "raised_edge_neon", Vector3(RAISED.position.x - 0.1, 0.0, minf(RAISED.position.y + 0.5 + i, RAISED.end.y - 0.4)), -90.0, "NeonW%d" % i, false)
+		_ph(g, "raised_edge_neon", Vector3(RAISED.position.x - 0.1, 0.0, minf(RAISED.position.y + 0.5 + i, RAISED.end.y - 0.4)), -90.0, "NeonW%d" % i, false).add_to_group("look_neon_red", true)
 	for i in 3:
-		_ph(g, "raised_edge_neon", Vector3(minf(RAISED.position.x + 0.4 + i * 1.0, MAIN_X1 - 0.5), 0.0, RAISED.end.y + 0.1), 0.0, "NeonS%d" % i, false)
+		_ph(g, "raised_edge_neon", Vector3(minf(RAISED.position.x + 0.4 + i * 1.0, MAIN_X1 - 0.5), 0.0, RAISED.end.y + 0.1), 0.0, "NeonS%d" % i, false).add_to_group("look_neon_red", true)
 	_omni(g, "NeonEdgeA", NEON_RED, 1.4, 4.5, Vector3(RAISED.position.x - 0.3, 0.2, 2.8))
 	_omni(g, "NeonEdgeB", NEON_RED, 1.4, 4.5, Vector3(RAISED.position.x - 0.3, 0.2, 8.2))
 	# Couch along the east wall, shelves above it
 	for i in int(RAISED.size.y):
-		_cut(_ph(g, "couch_long", Vector3(MAIN_X1 - 0.35, RAISED_H, RAISED.position.y + 0.5 + i), -90.0, "Couch%d" % i), Vector3.RIGHT)
+		_cut(_ph(g, "couch_long", Vector3(MAIN_X1 - 0.35, RAISED_H, RAISED.position.y + 0.5 + i), -90.0, "Couch%d" % i), Vector3.RIGHT).add_to_group("look_neon_red", true)
 	for i in int(RAISED.size.y):
 		for r in 2:
 			var sh := _cut(_ph(g, "shelf_wall_tile", Vector3(MAIN_X1 - 0.15, RAISED_H + 1.1 + r * 1.0, RAISED.position.y + 0.5 + i), -90.0, "Shelf%d_%d" % [i, r], false), Vector3.RIGHT)

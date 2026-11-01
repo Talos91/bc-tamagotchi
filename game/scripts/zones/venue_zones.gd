@@ -14,6 +14,9 @@ extends Node3D
 ##   cabinet  the Black Cabin game machine (game_cabinet_bc) by the stairs: stub, generic sheet for now
 ##   tall     every tall_table_square (buffer zone and the main room's west opening): stub, generic sheet
 ##   smoking  the smoking room, one zone over its tables: stub, generic sheet
+##   table    also every other group of seats (spawns' "table": tiny tables, the lounge long table and counter, the
+##            rectangular tables, the smoking-room tables; Daniele 2026-11-02: every seat is sittable), centred on its
+##            table (or its seats) and reaching just past the farthest seat
 ##   exit     the street door under exit_sign ExitSignStreet (lobby west wall), approached from its front; it reaches
 ##            out over the step of street beyond the door
 ## A zone is a Dictionary: id, kind, shape ("rect" | "circle"), rect (Rect2 in x,z), center (Vector2 x,z), radius,
@@ -29,6 +32,7 @@ const REGULAR_TABLE := "Table2"   ## her table: the round one in the middle of t
 const TRIGGER_HEIGHT := 2.4
 const TABLE_RADIUS := 1.15        ## metres around a round table's centre (x its scale)
 const TALL_RADIUS := 1.0
+const SEAT_MARGIN := 0.35         ## metres past the farthest seat of a seat-group table zone
 const FRONT_RADIUS := 1.1        ## around the floor point in front of a wall machine (pinball, game cabinet)
 const TABLE_ZONES := ["Tables", "Raised", "Lounge"]
 ## Trigger depth in front of the counter's centre line; the floor by the stools is open now, so the player orders
@@ -119,6 +123,36 @@ static func defs_from_layout(path: String) -> Array[Dictionary]:
 			z["center"] = Vector2(p.x, p.z)
 			z["radius"] = TALL_RADIUS
 			out.append(z)
+
+	# Every other group of seats becomes a table zone with the plain table sheet (sit_with, once per table per day)
+	var have := {}
+	for z in out:
+		have[str(z["id"]).get_slice(":", 1)] = true
+	var groups := {}
+	for s in d.get("spawns", []):
+		var t := str(s.get("table", ""))
+		if t != "" and t != "Bar" and not have.has(t):
+			if not groups.has(t):
+				groups[t] = []
+			groups[t].append(_v3(s["position"]))
+	for t in groups:
+		var seats: Array = groups[t]
+		var c := Vector3.ZERO
+		for sp in seats:
+			c += sp
+		c /= seats.size()
+		for k in kit:
+			if str(k["name"]) == t:
+				c = _v3(k["position"])
+				break
+		var reach := 0.0
+		for sp in seats:
+			reach = maxf(reach, Vector2(sp.x - c.x, sp.z - c.z).length())
+		var z := _zone("table:" + t, "table", Rect2(), c)
+		z["shape"] = "circle"
+		z["center"] = Vector2(c.x, c.z)
+		z["radius"] = reach + SEAT_MARGIN
+		out.append(z)
 
 	var smoke := _bounds(kit.filter(func(k): return k["object"] == "smoke_table_square"))
 	if smoke.size != Vector2.ZERO:

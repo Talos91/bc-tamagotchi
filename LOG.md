@@ -50,3 +50,6 @@ Append-only. One dated line per event, newest last. Never edit earlier lines.
 - 2026-11-02 — Daniele answered the sign question with a photo (direction 23); sign rebuild sent to start-screen.
 - 2026-11-02 — 🏗️ venue-notes: spawn moved to lobby x 1.5 and the exit zone shrunk to the doorway + street step (no "head home" prompt at start); lobby and corridor both named ENTRANCE / ทางเข้า (exit zone no longer says THE LOUNGE); eight suites PASS.
 - 2026-11-02 — 9 answers read from the Questions tab and logged in DECISIONS (venue v4 accepted; sign; camera sequence; no title; exit shot; red neon; Prae; all seats sittable; bar Friends gain). Routed to start-screen (round 2) and venue-notes.
+- 2026-11-02 — process slip: orchestrator's push of 128ddfb also pushed venue-notes' 29f95b4 (spawn/ENTRANCE label) before verification; eight suites run on it immediately after. Rule going forward: push only a verified SHA (`git push origin <sha>:main`), never a bare `git push` while workers commit.
+- 2026-11-02 — eight suites PASS on 128ddfb (incl. venue-notes' 29f95b4); the unverified push turned out clean.
+- 2026-11-02 — 🏗️ venue-notes: Daniele's answers built: raised-edge neon red, Prae without surname, every seat sittable (tiny, long, counter, rectangular, smoking tables), Take a stool gives provisional bar_chat (+3 Friends, cap 6/visit); eight suites PASS.

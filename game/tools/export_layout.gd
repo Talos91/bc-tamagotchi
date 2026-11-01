@@ -3,7 +3,7 @@ extends SceneTree
 ## for the combined Blender review file. Run from game/ after tools/build_venue.gd:
 ##   godot --headless --path . --script res://tools/export_layout.gd
 ## Kit entries: {"object", "zone", "name", "position": [x, y, z], "rotation_y": degrees, "scale": [x, y, z]}.
-## Spawn entries: {"preset_slot", "spot", "zone", "pose", "seat_h", "position", "rotation_y"}; preset_slot is
+## Spawn entries: {"preset_slot", "spot", "zone", "pose", "seat_h", "position", "rotation_y"} (+ "table" on seats); preset_slot is
 ## PLAYER, BAR_1 (bartender), PATRON (seats), PATRON_STAND (standing spots), PATRON_WANDER (wander points) or
 ## NPC_SPAWN (band backstage, staff in the kitchen and the walled bar area). Units are metres, x east, z south,
 ## y up (Godot axes; Blender is x, -z, y).
@@ -23,8 +23,11 @@ func _init() -> void:
 	for s in venue.get_node("Patrons/Spots").get_children():
 		var pose: String = s.get_meta("pose")
 		var slot: String = {"staff": "BAR_1", "wander": "PATRON_WANDER", "spawn": "NPC_SPAWN", "stand": "PATRON_STAND"}.get(pose, "PATRON")
-		spawns.append({"preset_slot": slot, "spot": str(s.name), "zone": s.get_meta("zone"), "pose": pose,
-			"seat_h": s.get_meta("seat_h"), "position": _v(s.position), "rotation_y": snappedf(s.rotation_degrees.y, 0.01)})
+		var entry := {"preset_slot": slot, "spot": str(s.name), "zone": s.get_meta("zone"), "pose": pose,
+			"seat_h": s.get_meta("seat_h"), "position": _v(s.position), "rotation_y": snappedf(s.rotation_degrees.y, 0.01)}
+		if pose == "sit":
+			entry["table"] = s.get_meta("table", "")   # the table (kit name) the seat belongs to; "Bar" = counter stools
+		spawns.append(entry)
 	var data := {"source": "res://scenes/venue/venue.tscn", "units": "m", "axes": "godot: x east, y up, z south",
 		"room_height_m": 4.0, "kit": kit, "spawns": spawns}
 	var f := FileAccess.open(OUT, FileAccess.WRITE)

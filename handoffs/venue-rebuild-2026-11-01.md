@@ -54,8 +54,14 @@
 - Numbers this round: 42 lights, 1 shadow map. Floor view 1080×1920: 3,042 draw calls (HEAD before: 3,032); GPU
   7.9–8.2 ms new vs 7.4–8.3 ms for the previous venue measured back to back the same hour (the 6.3 ms of the last
   round did not reproduce on this laptop today; no measurable difference between the two scenes).
-- Neon edge under the raised strip: a thin glowing line along the riser, reads warm amber more than red in
-  `landscape-neon-edge.png`.
+- Neon edge under the raised strip: a thin glowing line; now red (Daniele 2026-11-02, photo 18) via group
+  `look_neon_red` in `venue_looks.gd` (kit NeonRed at energy 5 burned to amber through the tonemapper).
+- 2026-11-02 round (Daniele's answers): raised-strip floor in WoodMid boards (`_plank_mat`); spawn at lobby x 1.5 and the
+  exit zone shrunk to the doorway + street step; lobby/corridor named ENTRANCE; Prae without surname; every seat
+  sittable: `export_layout.gd` writes each seat's `table` into layout.json spawns and `venue_zones.gd` builds a
+  table zone for every seat group without one (tiny tables, LongTable, HighCounter, RectTableW/E, Smoke0-3);
+  HUD title of a table zone is now its camera room; "Take a stool" runs a seated minute that applies the new
+  provisional `bar_chat` (+3 Friends, cap 6 per visit, the one approved `rules.gd` entry).
 
 ## Rooms and kit
 - Every kit v4 object is instanced by manifest name through `_ph()` (box fallback if a name is missing; none is now).
@@ -91,7 +97,5 @@
 
 ## Open / for later
 - Band and kitchen staff walking out of their spawns (only the hatch staff uses a door so far).
-- Tiny tables (drum stools) are not zones, so the player cannot sit there yet; the long table and the lounge
-  counter neither.
 - Real photos of the L corridor; framed pictures of regulars to replace the placeholders.
 - `layout.json` refreezes when Daniele accepts the room.

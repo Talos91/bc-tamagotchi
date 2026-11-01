@@ -5,7 +5,7 @@ extends Node
 ## passive listening to the house band, the one-minute sit, tipsiness (03-cast §5.1) and the drink menu.
 ## Sitting takes a real seat (find_seat): the player walks to a free chair, couch place or stool of the zone's table
 ## and sits on it; the minute runs once seated and stops when they stand up. Zones without seats (the game cabinet)
-## keep the old stand-still minute. "Take a stool" at the bar only seats the player (no need effect).
+## keep the old stand-still minute. "Take a stool" at the bar seats the player for a minute's chat (bar_chat).
 ## UI-free: the HUD and sheets read rows_for() and listen to the signals; main.gd opens minigames on request.
 
 signal action_done(card: Dictionary)  ## {line, gains, tab, ok, reason, quiet}; quiet = passive, chips only
@@ -126,8 +126,10 @@ func rows_for(zone: Dictionary) -> Array[Dictionary]:
 			rows.append(_row("mocktail", "venue.sheet.bar.mocktail", T.t("venue.sheet.bar.mocktail_sub"), "drinks"))
 			rows.append(_row("water", "venue.sheet.bar.water", T.t("venue.sheet.bar.water_sub"), "drinks"))
 			var on_stool: bool = player != null and player.seated and str(player.seat.get("table", "")) == "Bar"
-			rows.append(_row("stool", "venue.sheet.bar.stool", T.t("venue.sheet.bar.stool_sub"), "", false,
-				T.t("venue.sheet.bar.on_stool") if on_stool else ""))
+			var why := T.t("venue.sheet.bar.on_stool") if on_stool else ""
+			if _cap_left("bar_chat") <= 0.0:
+				why = T.t("venue.sheet.plenty")
+			rows.append(_row("stool", "venue.sheet.bar.stool", T.t("venue.sheet.bar.stool_sub"), "friends", false, why))
 		"stage":
 			rows.append(_row("front", "venue.sheet.stage.front", T.t("venue.sheet.stage.front_sub"), "music"))
 			rows.append(_row("rhythm", "venue.sheet.stage.rhythm", T.t("venue.sheet.stage.rhythm_sub", {"best": _best("front_row_rhythm")}), "music", true))
@@ -283,8 +285,12 @@ func do_row(zone: Dictionary, row_id: String) -> bool:
 			state_changed.emit()
 		"stool":
 			var seat := find_seat(zone)
-			if not seat.is_empty():
-				player.sit_at(seat)
+			if seat.is_empty():
+				return false
+			sitting = {"zone": zone["id"], "key": "", "left": SIT_SECONDS, "seat": true, "action": "bar_chat"}
+			player.sit_at(seat)
+			_apply_mood()
+			state_changed.emit()
 		"pinball":
 			_request("neon_pinball", {})
 		"leave":
@@ -376,8 +382,9 @@ func tick(delta: float) -> void:
 			sitting["left"] -= delta
 			if sitting["left"] <= 0.0:
 				var key: String = sitting["key"]
+				var action: String = sitting.get("action", "sit_with")
 				cancel_sit(false)   # the minute is up; the player keeps the seat until they move
-				_card(needs.apply_action("sit_with", 1.0, key), T.t("venue.card.sit"))
+				_card(needs.apply_action(action, 1.0, key), T.t("venue.card.bar_chat" if action == "bar_chat" else "venue.card.sit"))
 	if tipsy.update(needs.real_now()):
 		_apply_mood()
 		state_changed.emit()
