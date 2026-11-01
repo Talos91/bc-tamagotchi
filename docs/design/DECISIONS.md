@@ -37,6 +37,8 @@ GDD is updated.
 
 | 2026-11-01 | **Plan v4 accepted with three corrections.** Scale: "Keep 21.7 m" (main room 21.7 × 15 m, uniform from the map). Staff area is a closed walled room with a half wall for orders beside the staff door; no wall between main room and the toilet corridor strip; entrance lobby + corridor are one L-shaped corridor with no door between (regulars' framed photos on its walls, later). Counter stools 4 + 5 as drawn; two round tables in the lounge; old corridor walkable and bare. |
 
+| 2026-11-01 | **Playtest calls given directly to the venue worker.** Mali is renamed **Prae** (Thai แพร) in all player-facing text; internal id stays `mali`. Camera: any cutaway wall or closed-room box between camera and player is hidden (fixes the camera stuck behind walls, smoking room included). Input: a held stick or key keeps its direction while the camera swings between zones. Landed in 68d9ff5 (strings, `camera_rig.gd`, `player.gd`); cast docs, chars manifest display name and showcase still say Mali (housekeeping). |
+
 ## Still open
 
 - Black Cabin's real opening hours (drives what the game shows at 14:00: open all day with staff only, or "Doors at 18:00" with the Flat only).
