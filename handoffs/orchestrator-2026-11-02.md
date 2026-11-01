@@ -23,6 +23,10 @@ handover. Read `PROJECT.md`, then `STATE.md`, then this note.
   their session), so the orchestrator archives them after verification.
 - **Vault:** recaps only at releases (no release yet).
 
+## Lessons this version
+- A worker staging a whole file sweeps up another session's uncommitted hunks in it (4bf4d9e took nightlife's toilet-zone hunk of `venue_zones.gd`). Briefs say: check `git status` first and ask before editing a file another session has touched.
+- With uncommitted edits from parallel workers in the shared tree, suites can fail there (smoke_loop "walked to stage" with feel-pass edits); only the clean-worktree run counts.
+
 ## This version so far
 - Six answers given after the close are folded into DECISIONS ("Questions tab, third batch"); "Still open" pruned.
 - Workers: see STATE.md IN FLIGHT.
