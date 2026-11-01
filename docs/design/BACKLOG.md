@@ -29,7 +29,7 @@ a layout plan are coming from Daniele; until then the layout stays frozen.
 | B2 | Character creation (creator UI on the accepted v2 presets) | M | — | planned (STATE job 3) |
 | B3 | More minigames (today: Pour Perfect, Rhythm, pinball, Candle Talk) | M each | — | idea |
 | B7 | Framed photos of regular customers on the entrance corridor walls (could tie to achievements or the photo feature) | S | map v4 | idea |
-| B8 | Start screen as the club's front door: still first-person view from outside facing the street door under a lit Black Cabin neon sign; tap to enter, door opens, camera follows the character's view inside, door closes, camera pulls back to the game view, play starts (Daniele 2026-11-01) | M | walking doors (A3), street facade | idea |
+| B8 | Start screen as the club's front door: still first-person view from outside facing the street door under a lit Black Cabin neon sign; tap to enter, door opens, camera follows the character's view inside, door closes, camera pulls back to the game view, play starts (Daniele 2026-11-01) | M | walking doors (A3), street facade | next, after A3 |
 | B4 | Achievements as stickers on the club's entry door; shown when you leave and in the Flat before you go out | M | — | idea |
 | B5 | Voxel quality push: more cubes per object without killing a phone (pairs with the performance pass) | L | phone measurement first | idea |
 | B6 | Leaderboard per minigame, weekly and monthly | M | online backend, accounts | idea |

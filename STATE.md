@@ -16,8 +16,8 @@
 
 ## NEXT THREE JOBS
 1. Venue-notes round (running): verify, six suites + door/sit test, show Daniele the stair; then refreeze layout.json and regenerate the changelog.
-2. Performance pass: 42 lights, ~1,850 draw calls, 24 ms GPU desktop; phone measurement before any phone build.
-3. Figure lighting and proportion pass (warm key/rim, heads 27–34 %); then character creator + the Flat.
+2. B8 front-door start screen (Daniele: start it once the venue-notes round is verified; same workflow: Opus worker, brief, verify, log): outside street facade at night with lit Black Cabin neon, still first-person camera on the street door, tap to enter → door opens → camera follows the character in → door closes → pull back to game camera → play. Reuses venue-notes' door code; title/menu UI and save load stay as now.
+3. Performance pass (42 lights, phone measurement before any phone build), then figure lighting/proportion pass and character creator.
 - Later: everything in `docs/design/BACKLOG.md` (ideas, real-life bridge, online, debt). Shared board: https://claude.ai/artifact/BbpBxVWVVXMjz7TgJ7aFBW
 
 ## POINTERS

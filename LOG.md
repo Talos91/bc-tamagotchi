@@ -38,3 +38,4 @@ Append-only. One dated line per event, newest last. Never edit earlier lines.
 - 2026-11-01 — orchestrator re-ran six suites on 4cb4bf3 (all PASS), pushed venue v4 fix round; venue session archived at its context limit; orchestrator now on Opus 5.5.
 - 2026-11-01 — Daniele playtested v4: doors must open and be passable, tap-to-sit must seat the character, stairs reoriented; logged in DECISIONS, new Opus venue session briefed.
 - 2026-11-01 — Session started: 🏗️ venue-notes (local_545c7c14, Opus 5.5).
+- 2026-11-01 — Daniele: start B8 (front-door start screen) after the venue-notes round, same workflow; queued as STATE job 2.
