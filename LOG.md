@@ -24,3 +24,4 @@ Append-only. One dated line per event, newest last. Never edit earlier lines.
 - 2026-11-01 — method-setup done: PROJECT/STATE/LOG/handoffs (ae5e543), vault profiles voxel-art + social-features; archived.
 - 2026-11-01 — orchestrator re-ran all six suites, pushed main, rewrote STATE; waiting on Daniele's first hand playtest.
 - 2026-11-01 — Daniele played the alpha ("good alpha"); gate = baseline map fix, inputs pending; BACKLOG.md + shared backlog artifact created with all ideas and open questions.
+- 2026-11-01 — Daniele supplied the real floor map and nine photos; filed as direction 08–16 (116aa23); orchestrator asking scale/route questions before briefing A1.

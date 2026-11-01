@@ -11,7 +11,7 @@
 - 🎛️ orchestrator fdaed712-5416-430d-b3a7-7174cf46699f only. zone-wiring, apply-decisions, method-setup finished and archived.
 
 ## WAITING ON OWNER
-- New photos + layout plan of the club (BACKLOG A1); playtest notes as they come (A3).
+- Answers to the orchestrator's baseline-map questions (scale, lounge furniture, player route, raised height); playtest notes (A3). Floor map + photos are in `docs/art/direction/08–16`.
 - Orientation; Black Cabin opening hours; brand typeface; staff turnover; resident band + consent packs; stakes numbers; coin sign-off; chat policy; real drinks menu.
 
 ## NEXT THREE JOBS
