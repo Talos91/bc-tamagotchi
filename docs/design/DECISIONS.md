@@ -58,6 +58,8 @@ GDD is updated.
 | 2026-11-02 | **The Flat:** keep it minimal now; later it becomes an unlock: with in-game currency you rent a room (an instanced area) on the second floor, and the game starts there. |
 | 2026-11-02 | **Stakes (Daniele's base proposal, open to tweaks).** Goal: players grow attached to their character. **Death is total:** the character is deleted from the game, including leaderboard positions and achievements; a new game starts from scratch. **Revival:** a way back exists: "a friend needs to do something and they come back to life", e.g. a zombie act on stage. **Needs that matter:** drink, listen to music, have a chat, do a memory, play a minigame, check the event calendar, go to Black Cabin. **Only "go to Black Cabin" is fatal**; neglecting the others brings minor annoyances. "This is not an everyday job; keep it light but give people a reason to open it." A design worker turns this into the stakes chapter. |
 
+| 2026-11-02 | **Brand fonts** (Daniele, checked on blackcabin.bar's stylesheet): **Lato** for all interface text (the site uses weights 300–700; Daniele: "all bold"), **Kristi** (handwritten script) for stylish titles only. Both are free Google Fonts. Lato has no Thai glyphs, so Thai keeps IBM Plex Sans Thai Looped as the fallback. Replaces Kanit in the theme. The site also confirms "every night of the week except Mondays"; its Find Us block gives 33/1 Soi Farmwattana while Google listings give 466 Soi Thong Lo 16 (question on the tab). |
+
 ## Still open
 
 - Black Cabin's real opening hours (drives what the game shows at 14:00: open all day with staff only, or "Doors at 18:00" with the Flat only).
