@@ -114,38 +114,6 @@
    "zone": "Lobby"
   },
   {
-   "name": "RegularPictureN0",
-   "object": "wall_picture_framed",
-   "position": [
-    5.0,
-    1.4,
-    13.31
-   ],
-   "rotation_y": 0.0,
-   "scale": [
-    1.0,
-    1.0,
-    1.0
-   ],
-   "zone": "Lobby"
-  },
-  {
-   "name": "RegularPictureN1",
-   "object": "wall_picture_framed",
-   "position": [
-    9.0,
-    1.4,
-    13.31
-   ],
-   "rotation_y": 0.0,
-   "scale": [
-    1.0,
-    1.0,
-    1.0
-   ],
-   "zone": "Lobby"
-  },
-  {
    "name": "StickerDoorLeaf",
    "object": "sticker_door",
    "position": [
@@ -13146,6 +13114,19 @@
    "seat_h": 0.0,
    "spot": "Spawn_StaffArea",
    "zone": "Spawn"
+  },
+  {
+   "pose": "hatch",
+   "position": [
+    36.5,
+    0.0,
+    13.2
+   ],
+   "preset_slot": "PATRON",
+   "rotation_y": -180.0,
+   "seat_h": 0.0,
+   "spot": "Staff_Hatch",
+   "zone": "Staff"
   }
  ],
  "units": "m"

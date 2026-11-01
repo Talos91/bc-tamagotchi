@@ -21,7 +21,7 @@ const TABLE_POSES := ["sit_drink", "sit_drink", "sit_talk"]
 const FREE_POSES := ["sit_hold", "sit_hold", "sit_applaud"]
 const SEAT_ZONES := ["Tables", "Bar", "Lounge", "Buffer", "Raised", "Smoking"]
 const WALK_SPEED := 1.1
-const SERVER_START := Vector3(16.0, 0, 5.6)
+const SERVER_START := Vector3(30.0, 0, 6.7)
 ## PatronFigure draws presets at its FIG_SCALE; seated figures are lowered so their thighs land on the seat.
 const FIG_SCALE := PatronFigure.FIG_SCALE
 ## The bartender stands on the raised duckboard behind the counter (05/06 show them chest-up over the 1.1 m bar)
@@ -41,19 +41,21 @@ var figures: Array[PatronFigure] = []
 var _wanderers: Array[Dictionary] = []
 var _wander_points: Array[Vector3] = []
 var _bartender: PatronFigure
-var _bar_x := Vector2(12.4, 23.6)
+var _bar_x := Vector2(22.6, 35.0)   # plan v4 bar, x 21.8..35.75
 var _rng := RandomNumberGenerator.new()
 
 func _ready() -> void:
 	_rng.seed = crowd_seed
 	var seats: Array[Node3D] = []
 	var staff: Node3D = null
+	var hatch: Node3D = null
 	var band: Array[Node3D] = []
 	for s in $Spots.get_children():
 		var pose: String = s.get_meta("pose", "")
 		match pose:
 			"sit": seats.append(s)
 			"staff": staff = s
+			"hatch": hatch = s
 			"wander": _wander_points.append(s.global_position)
 			_:
 				if BAND.has(pose):
@@ -91,6 +93,11 @@ func _ready() -> void:
 		_bartender.position = staff.position + Vector3(0, BARTENDER_LIFT, 0)
 		_bartender.rotation.y = staff.rotation.y
 		_bartender.set_meta("pace", 0.0)
+	if hatch:   # staff member behind the order hatch of the walled staff room (plan v4)
+		var h := _spawn("fern", "HatchStaff")
+		h.position = hatch.position
+		h.rotation.y = hatch.rotation.y
+		h.play("idle")
 	for i in mini(wanderer_count, _wander_points.size()):
 		var f := _spawn("server" if i == 0 else presets[n % presets.size()], "Server" if i == 0 else "Wanderer%d" % i,
 			{"walk": "walk_tray", "idle": "idle_tray"} if i == 0 else {})

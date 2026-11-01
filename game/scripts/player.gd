@@ -25,6 +25,8 @@ var _gravity: float = ProjectSettings.get_setting("physics/3d/default_gravity", 
 var _press_index := -1
 var _press_pos := Vector2.ZERO
 var _press_time := 0
+var _move_yaw := 0.0            ## camera yaw latched when a stick / key press starts (see input_to_world)
+var _moving := false
 
 @onready var rig: CameraRig = $CameraRig
 @onready var _agent: NavigationAgent3D = $NavigationAgent3D
@@ -82,8 +84,13 @@ func _physics_process(delta: float) -> void:
 	var dir := Vector3.ZERO
 	if iv.length() > 0.1:
 		walking_to = false
-		dir = rig.input_to_world(iv)
-	elif walking_to:
+		if not _moving:   # a held direction keeps meaning the same way while the camera swings between zones
+			_move_yaw = rig.yaw
+			_moving = true
+		dir = input_to_world(iv)
+	else:
+		_moving = false
+	if iv.length() <= 0.1 and walking_to:
 		if _agent.is_navigation_finished():
 			walking_to = false
 		else:
@@ -105,6 +112,15 @@ func _physics_process(delta: float) -> void:
 		figure.play(_anim_name("walk"))
 	else:
 		figure.play(pose_override if pose_override != "" else _anim_name("idle"))
+
+## World direction for a stick / key vector in the frame latched at the start of the press (camera yaw then).
+func input_to_world(v: Vector2) -> Vector3:
+	return Basis(Vector3.UP, _move_yaw if _moving else rig.yaw) * Vector3(v.x, 0, v.y)
+
+## Stick vector that walks toward world direction `d` in the current input frame (tests drive the joystick with it).
+func world_to_input(d: Vector3) -> Vector2:
+	var l := Basis(Vector3.UP, -(_move_yaw if _moving else rig.yaw)) * Vector3(d.x, 0, d.z)
+	return Vector2(l.x, l.z)
 
 ## The tipsiness variant of a base animation when the figure has it (box placeholders do not).
 func _anim_name(base: String) -> String:

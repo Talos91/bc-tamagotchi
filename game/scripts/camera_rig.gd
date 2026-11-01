@@ -5,7 +5,9 @@ extends Node3D
 ## tools/build_venue.gd) with metas rect / clamp (Rect2 in x,z), yaw, pitch (degrees), dist, look_y. Switching
 ## zone eases position, yaw, pitch and distance. A zone with meta fallback=true applies only where no other does. Walls in group "cutaway" whose meta cut_normal faces the camera
 ## are hidden, as are hanging props in group "occluder" (metas occluder_center, occluder_radius) that sit
-## between the camera and the look target; render layer 2 (ceiling) is never drawn by this camera.
+## between the camera and the look target; render layer 2 (ceiling) is never drawn by this camera. Any "cutaway"
+## piece whose box crosses the sight line from the camera to the player (feet, chest, head) is hidden too, so shared
+## walls, narrow rooms and closed-room blocks (cut_normal ZERO) never stand between the camera and the player.
 ## Lives in player.tscn as a top_level child, so it ignores the player's transform.
 
 const CEILING_LAYER_MASK := 1 << 1
@@ -24,6 +26,7 @@ var _pitch := -0.6
 var _dist := 9.0
 var _snap := true
 var _cutaway: Array[Node3D] = []
+var _cut_boxes: Array[AABB] = []   ## world boxes of _cutaway, same order (the venue is static)
 var _occluders: Array[Node3D] = []
 
 @onready var camera: Camera3D = $Camera3D
@@ -42,8 +45,13 @@ func _collect() -> void:
 	for n in get_tree().get_nodes_in_group("camera_zone"):
 		_zones.append(n)
 	_cutaway.clear()
+	_cut_boxes.clear()
 	for n in get_tree().get_nodes_in_group("cutaway"):
 		_cutaway.append(n)
+		if n is VisualInstance3D:
+			_cut_boxes.append((n as VisualInstance3D).global_transform * (n as VisualInstance3D).get_aabb())
+		else:
+			_cut_boxes.append(AABB((n as Node3D).global_position - Vector3(0.3, 0.3, 0.3), Vector3(0.6, 0.6, 0.6)))
 	_occluders.clear()
 	for n in get_tree().get_nodes_in_group("occluder"):
 		_occluders.append(n)
@@ -106,13 +114,23 @@ func _process(delta: float) -> void:
 		_dist = lerpf(_dist, want_dist, k)
 	var b := Basis.from_euler(Vector3(_pitch, yaw, 0))
 	global_transform = Transform3D(b, _look + b.z * _dist)
-	_update_cutaway(Vector3(b.z.x, 0, b.z.z).normalized())
+	_update_cutaway(Vector3(b.z.x, 0, b.z.z).normalized(), global_position, _target.global_position)
 	_update_occluders(global_position, _look)
 
-func _update_cutaway(back: Vector3) -> void:
-	for w in _cutaway:
-		if is_instance_valid(w):
-			w.visible = (w.get_meta("cut_normal") as Vector3).dot(back) < 0.35
+func _update_cutaway(back: Vector3, cam: Vector3, player: Vector3) -> void:
+	var ends := [player + Vector3(0, 0.3, 0), player + Vector3(0, 1.1, 0), player + Vector3(0, 1.8, 0)]
+	for i in _cutaway.size():
+		var w := _cutaway[i]
+		if not is_instance_valid(w):
+			continue
+		var show := (w.get_meta("cut_normal") as Vector3).dot(back) < 0.35
+		if show:
+			var box := _cut_boxes[i].grow(0.05)
+			for e in ends:
+				if box.intersects_segment(cam, e):
+					show = false
+					break
+		w.visible = show
 
 func _update_occluders(from: Vector3, to: Vector3) -> void:
 	for o in _occluders:

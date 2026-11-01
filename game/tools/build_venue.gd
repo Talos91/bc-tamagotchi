@@ -151,6 +151,10 @@ func _init() -> void:
 	await process_frame   # root joins the tree after _init starts; navmesh parsing needs the venue inside it
 	_navigation()
 	_wander_spots()
+	var looks := Node.new()
+	looks.name = "Looks"
+	looks.set_script(load("res://scenes/venue/venue_looks.gd"))
+	_own(looks, vroot)
 	patrons.set_script(load("res://scripts/venue_patrons.gd"))
 	patrons.set("seated_count", 64)   # more seats than before (118); 64 seated + band + staff + wanderers stays under the draw budget
 	vroot.set_script(load("res://scripts/venue.gd"))
@@ -464,6 +468,7 @@ func _wander_spots() -> void:
 	_seat("Spawn", "Spawn_Backstage", Vector3(25.9, 0, -1.5), 180.0, 0.0, "spawn")
 	_seat("Spawn", "Spawn_Kitchen", Vector3(18.5, 0, 16.5), 0.0, 0.0, "spawn")
 	_seat("Spawn", "Spawn_StaffArea", Vector3(37.0, 0, 13.8), 0.0, 0.0, "spawn")
+	_seat("Staff", "Staff_Hatch", Vector3((STAFF_PASS.x + STAFF_PASS.y) * 0.5, 0, MAIN_SE_Z + 0.55), 180.0, 0.0, "hatch")
 
 # --- environment ------------------------------------------------------------------------------------------
 
@@ -541,8 +546,7 @@ func _lobby_and_corridor() -> void:
 		_cut(_ph(g, "wall_picture_framed" if i == 0 else "wall_picture_framed_b", Vector3(0.06, 1.4, 10.0 + i * 2.2), 90.0, "RegularPictureW%d" % i, false), Vector3.LEFT)
 	for i in 4:
 		_cut(_ph(g, "wall_picture_framed" if i % 2 == 0 else "wall_picture_framed_b", Vector3(3.6 + i * 2.6, 1.4, CORRIDOR.end.y - 0.06), 180.0, "RegularPictureS%d" % i, false), Vector3.BACK)
-	for i in 2:
-		_cut(_ph(g, "wall_picture_framed", Vector3(5.0 + i * 4.0, 1.4, CORRIDOR.position.y + 0.06), 0.0, "RegularPictureN%d" % i, false), Vector3.FORWARD)
+	# None on the corridor's lounge side: that wall hides on the sight line and its pictures would float
 	# Sticker door (open all night): the door leaf stands open against the corridor wall, stickers on it
 	_door(g, "StickerDoorLeaf", "sticker_door", Vector3(STICKER_DOOR.x - 0.55, 0, CORRIDOR.position.y + 0.1), 0.0, Vector3.FORWARD, false)
 	_omni(g, "LobbyLight", Color("ffc890"), 0.9, 5.0, Vector3(1.1, 3.2, 8.0))
@@ -637,7 +641,7 @@ func _stairs() -> void:
 	var rise := 2.4
 	var cx := STAIRS_LEG.get_center().x
 	_kit(g, "stair_run", Vector3(cx, 0, STAIRS_LEG.position.y + 1.6), 180.0, "StairRun")
-	_box(g, "Block", Vector3(STAIRS_BLOCK.position.x, 0, STAIRS_BLOCK.position.y), Vector3(STAIRS_BLOCK.size.x, rise, STAIRS_BLOCK.size.y), _mat("beam_black", BEAM_BLACK, 0.7))
+	_cut(_box(g, "Block", Vector3(STAIRS_BLOCK.position.x, 0, STAIRS_BLOCK.position.y), Vector3(STAIRS_BLOCK.size.x, rise, STAIRS_BLOCK.size.y), _mat("beam_black", BEAM_BLACK, 0.7)), Vector3.ZERO)
 	_box(g, "BlockWall", Vector3(STAIRS_BLOCK.position.x, rise, STAIRS_BLOCK.position.y), Vector3(STAIRS_BLOCK.size.x, ROOM_H - rise, 0.2), _mat("lounge_wall", Color("4a0c10"), 0.9), false)
 	_collider(g, "StairRamp", Vector3(cx, rise * 0.5 - 0.1, STAIRS_LEG.position.y + run * 0.5), Vector3(1.5, 0.2, sqrt(run * run + rise * rise)), Vector3(-atan2(rise, run), 0, 0))
 	_collider(g, "StairSide", Vector3(STAIRS_LEG.end.x, 1.2, STAIRS_LEG.get_center().y), Vector3(0.1, 2.4, STAIRS_LEG.size.y))
@@ -934,7 +938,12 @@ func _raised() -> void:
 		_cut(_ph(g, "couch_long", Vector3(MAIN_X1 - 0.35, RAISED_H, RAISED.position.y + 0.5 + i), -90.0, "Couch%d" % i), Vector3.RIGHT)
 	for i in int(RAISED.size.y):
 		for r in 2:
-			_cut(_ph(g, "shelf_wall_tile", Vector3(MAIN_X1 - 0.15, RAISED_H + 1.1 + r * 1.0, RAISED.position.y + 0.5 + i), -90.0, "Shelf%d_%d" % [i, r], false), Vector3.RIGHT)
+			var sh := _cut(_ph(g, "shelf_wall_tile", Vector3(MAIN_X1 - 0.15, RAISED_H + 1.1 + r * 1.0, RAISED.position.y + 0.5 + i), -90.0, "Shelf%d_%d" % [i, r], false), Vector3.RIGHT)
+			sh.add_to_group("look_shelf_dull", true)
+	# Pink-red strip along the top of the shelf wall (photo 11), and a few shelf backs lit from behind
+	_cut(_box(g, "ShelfNeon", Vector3(MAIN_X1 - 0.32, RAISED_H + 3.12, RAISED.position.y), Vector3(0.04, 0.04, RAISED.size.y), _mat("shelf_neon", Color("ff2a5a"), 0.5, 2.6), false), Vector3.RIGHT)
+	for z in [1.6, 4.4, 7.9]:
+		_cut(_box(g, "ShelfBacklight_%d" % int(z * 10), Vector3(MAIN_X1 - 0.06, RAISED_H + 2.2, z), Vector3(0.03, 0.7, 0.8), _mat("shelf_backlight", Color("c8284a"), 0.6, 1.4), false), Vector3.RIGHT)
 	for i in RAISED_TABLES_Z.size():
 		var c := Vector3(RAISED_TABLE_X, RAISED_H, RAISED_TABLES_Z[i])
 		var t := _kit(g, "round_table", c, 0.0, "Raised%d" % i, Vector3(0.8, 1.0, 0.8))
@@ -963,7 +972,7 @@ func _bar() -> void:
 	var bay_z := MAIN_Z1 - 0.25
 	for i in 9:
 		var kname := "back_bar_art" if i == 4 else "back_bar_shelf"
-		_kit(g, kname, Vector3(22.55 + i * 1.5, 0, bay_z), 180.0, "Bay%d" % i)
+		_kit(g, kname, Vector3(22.55 + i * 1.5, 0, bay_z), 180.0, "Bay%d" % i).add_to_group("look_red_bar", true)
 	_collider(g, "BackBarCollider", Vector3((BAR_X0 + BAR_X1) * 0.5, 1.8, MAIN_Z1 - 0.25), Vector3(BAR_X1 - BAR_X0, 3.6, 0.5))
 	var cz := 13.0   # counter centre line (0.65 deep)
 	for i in 14:
@@ -980,7 +989,12 @@ func _bar() -> void:
 		_kit_solid(g, "bar_stool", Vector3(x, 0, COUNTER_STOOL_Z), 0.0, "Stool%d" % i)
 		_seat("Bar", "Bar_Stool%d" % i, Vector3(x, 0, COUNTER_STOOL_Z), 0.0, BAR_SEAT_H)
 	_seat("Bar", "Bar_Bartender", Vector3(CASHIER_X, 0, 13.9), 180.0, 0.0, "staff")
-	# Red-lit back bar (photos 09, 16): the bottle shelves glow red, three red omnis behind the counter
+	# Red-lit back bar (photos 09, 16): red LED strips under the soffit and along the top of the cabinets (emissive
+	# boxes, no lights), the cubbies and bottles recoloured red at load (scenes/venue/venue_looks.gd), dark joinery
+	var led := _mat("bar_led_strip", BAR_RED, 0.5, 3.2)
+	for y in [2.35, 3.55]:
+		_cut(_box(g, "RedLED_%d" % int(y * 100), Vector3(BAR_X0, y, MAIN_Z1 - 0.52), Vector3(BAR_X1 - BAR_X0, 0.04, 0.04), led, false), Vector3.BACK)
+	# Three red omnis behind the counter
 	for i in 3:
 		_omni(g, "BackBarRed%d" % i, BAR_RED, 1.6, 4.5, Vector3(24.5 + i * 5.2, 2.0, MAIN_Z1 - 0.8))
 	# Counter dressing: lamps, lanterns, glasses, napkins, bottles
@@ -1032,7 +1046,7 @@ func _vestibule() -> void:
 func _smoking() -> void:
 	var g := _group("Smoking")
 	var wall := _mat("smoke_wall", Color("1e1c20"), 0.9)
-	var plaster := _mat("smoke_plaster", Color("b8b09a"), 0.9)
+	var plaster := _mat("smoke_plaster", Color("6e6e6a"), 0.95)   # pale concrete plaster, not beige (photos 20/21)
 	_floor(g, SMOKING, _concrete_mat())
 	_ceiling(g, SMOKING)
 	_wall_z(g, "WallWest", SMOKING.position.x, SMOKING.position.y, SMOKING.end.y, wall, Vector3.LEFT)
@@ -1058,8 +1072,9 @@ func _smoking() -> void:
 			_ph(g, "wishbone_chair", p + off, face, "Smoke%dChair%d" % [i, k])
 			_seat("Smoking", "Smoking_T%d_C%d" % [i, k], p + off, face)
 	_ph(g, "air_purifier", Vector3(41.45, 0, 13.1), 0.0, "AirPurifier")
-	_omni(g, "SmokeLightN", Color("ffd2a0"), 1.3, 4.5, Vector3(40.0, 2.8, 14.0))
-	_omni(g, "SmokeLightS", Color("ffd2a0"), 1.1, 4.5, Vector3(40.0, 2.8, 16.6))
+	# Cool blue-white spill from the street through the glass, one small warm bulb by the pictures (photos 20/21)
+	_omni(g, "StreetSpill", Color("a8c4e8"), 1.2, 5.0, Vector3(SMOKING.end.x + 0.6, 2.2, 15.4))
+	_omni(g, "SmokeBulb", Color("ffc890"), 0.7, 3.0, Vector3(SMOKING.position.x + 0.5, 2.0, 14.9))
 	_seat("Smoking", "Smoking_Stand0", Vector3(40.0, 0, 15.3), -90.0, 0.0, "stand")
 
 ## Floor under door openings whose rooms' floors stop at the wall faces (Sticker door, smoke-room door): without it
@@ -1101,6 +1116,7 @@ func _closed_rooms() -> void:
 		var r: Rect2 = rooms[nm]
 		var mi := _box(g, nm, Vector3(r.position.x, 0, r.position.y), Vector3(r.size.x, ROOM_H, r.size.y), dark, true)
 		mi.cast_shadow = GeometryInstance3D.SHADOW_CASTING_SETTING_OFF
+		_cut(mi, Vector3.ZERO)   # never cut by direction; hidden only when it blocks the sight line to the player
 
 ## Night outside the windows (Daniele: night only for now): dark pavement, a bare tree north of the buffer zone,
 ## a faint streetlight, lit windows of the buildings across the street east of the smoking room.

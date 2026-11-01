@@ -19,7 +19,7 @@ func _init() -> void:
 			d.y = 0
 			if d.length() < 0.25:
 				break
-			js.value = p.rig.world_to_input(d.normalized())
+			js.value = p.world_to_input(d.normalized())
 			await physics_frame
 	js.value = Vector2.ZERO
 	for i in 30:

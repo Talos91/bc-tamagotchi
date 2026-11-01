@@ -6,7 +6,7 @@ venue.zone.stage,STAGE,เวที,"HUD zone name, camera zone Stage & Front Ro
 venue.zone.floor,CANDLE FLOOR,โซนเทียน,"HUD zone name, camera zone Candle Floor",16
 venue.hint.bar,Bar,บาร์,Walk hint chip at the screen edge; tap walks to the bar,14
 venue.hint.stage,Stage,เวที,Walk hint chip; tap walks to the stage front,14
-venue.hint.table,Mali's table,โต๊ะมะลิ,Walk hint chip; tap walks to the table where the regular Mali sits,14
+venue.hint.table,Prae's table,โต๊ะแพร,Walk hint chip; tap walks to the table where the regular Mali sits,14
 venue.hint.arcade,Pinball,พินบอล,Walk hint chip; tap walks to the pinball cabinet in the Lounge,14
 venue.hint.exit,Door,ประตู,Walk hint chip; tap walks to the street door,14
 venue.band.live,LIVE · song {n} of 4,เล่นสด · เพลงที่ {n} จาก 4,HUD caption while the house band plays; {n} = song number 1-4,32
