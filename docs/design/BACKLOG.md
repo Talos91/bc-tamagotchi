@@ -28,11 +28,15 @@ a layout plan are coming from Daniele; until then the layout stays frozen.
 | B1 | More interactive places (beyond bar, stage, tables, pinball) | M | map fixed (A1) | idea |
 | B2 | Character creation (creator UI on the accepted v2 presets) | M | — | planned (STATE job 3) |
 | B3 | More minigames (today: Pour Perfect, Rhythm, pinball, Candle Talk) | M each | — | idea |
-| B7 | Framed photos of regular customers on the entrance corridor walls (could tie to achievements or the photo feature) | S | map v4 | idea |
+| B7 | Entrance corridor: framed portraits of characters in the game's own graphics on the walls; they will hold the top 10 customers. Passing a portrait lets you open it and read a message from the owner (Daniele 2026-11-02) | S | venue v4 | portraits: queued (lounge+corridor job); owner messages: **to do**, placeholder text for now |
 | B8 | Start screen as the club's front door: still first-person view from outside facing the street door under a lit Black Cabin neon sign; tap to enter, door opens, camera follows the character's view inside, door closes, camera pulls back to the game view, play starts (Daniele 2026-11-01) | M | walking doors (A3), street facade | next, after A3 |
 | B4 | Achievements as stickers on the club's entry door; shown when you leave and in the Flat before you go out | M | — | idea |
 | B5 | Voxel quality push: more cubes per object without killing a phone (pairs with the performance pass) | L | phone measurement first | idea |
 | B6 | Leaderboard per minigame, weekly and monthly | M | online backend, accounts | idea |
+| B9 | Lounge revamp (Daniele 2026-11-02): merch shop top right; memory-share corner and the game machine top left; "Top patrons" leaderboard under the stairs (left); decorations around the room | M | layout.json unfrozen for the lounge (owner decision) | queued after the feel pass |
+| B10 | Top-patrons board under the lounge stairs: placeholder names now, real customers once there are accounts and check-ins | S now, M later | backend for real data | queued with B9 |
+| B11 | Merch shop in the lounge: browse Black Cabin merch (what is sold, prices, coins or real money) | M | Black Cabin's merch list | stand placed with B9; contents an open question |
+| B12 | Nightlife actions: "Light one up" in the smoking room; secret "Check the plumbing" in the toilet; drunk debuff from 3 drinks; WASTED screen with a 12 h lockout (Daniele 2026-11-02) | M | — | queued |
 
 ## C. Online and community
 
@@ -60,17 +64,7 @@ a layout plan are coming from Daniele; until then the layout stays frozen.
 
 ## E. Questions Daniele still has to answer
 
-- Black Cabin's real opening hours (what the game shows at 14:00).
-- Orientation: portrait or landscape primary (both work today; F7 swaps).
-- Brand typeface, or keep Kanit + IBM Plex Sans Thai Looped.
-- Staff turnover policy when a real person leaves.
-- Resident band, consent and staff packs (asks at the end of `03-cast.md`).
-- Death rules: how long at zero, warnings, what survives.
-- Coin economy sign-off (`04-coins.md`).
-- Chat policy for multiplayer (phrase wheel vs free text).
-- The Flat home screen: keep minimal or cut.
-- Black Cabin's real drinks menu (six placeholder drinks today).
-- Real photos of the entrance corridor; day version of the outside (later).
+Live on the Questions tab of the hub (https://claude.ai/artifact/BbpBxVWVVXMjz7TgJ7aFBW#questions); the binding list is "Still open" in `DECISIONS.md`.
 
 ## F. Accepted debt (not features)
 
@@ -84,3 +78,4 @@ a layout plan are coming from Daniele; until then the layout stays frozen.
 
 - 2026-11-01 — Created from Daniele's alpha verdict and the todo list relayed from the Ooze project.
 - 2026-11-01 — B8 start-screen idea added; A1 built, A2 done, A3 in progress.
+- 2026-11-02 — Playtest round: B7 reworded (portraits + owner messages, to do), B9–B12 added (lounge revamp, top patrons, merch shop, nightlife actions); E now points to the Questions tab.
