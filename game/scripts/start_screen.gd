@@ -21,6 +21,7 @@ extends "res://scripts/street_shot.gd"
 
 const UI = preload("res://scripts/minigames/mg_ui.gd")
 const T = preload("res://scripts/zones/venue_strings.gd")
+const VersionInfo = preload("res://scripts/version_info.gd")
 
 const FOLLOW_H := 1.75       ## camera height behind the character (1.35 m tall)
 const FOLLOW := 1.3          ## camera this far behind the character outside ...
@@ -236,6 +237,7 @@ func _build_ui() -> void:
 	var tw := _prompt.create_tween().set_loops()
 	tw.tween_property(_prompt, "modulate:a", 0.35, 1.1).set_trans(Tween.TRANS_SINE)
 	tw.tween_property(_prompt, "modulate:a", 1.0, 1.1).set_trans(Tween.TRANS_SINE)
+	_screen.add_child(VersionInfo.label())  # bottom right, fades out with the prompt
 	_retitle()
 
 

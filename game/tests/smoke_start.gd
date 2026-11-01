@@ -67,7 +67,7 @@ func _init() -> void:
 	check(th_tap != "venue.start.tap" and th_tap.unicode_at(0) >= 0x0E00 and th_tap.unicode_at(0) <= 0x0E7F, "Thai: %s" % th_tap)
 	var labels := []
 	for n in _all(ss._layer, []):
-		if n is Label and (n as Label).is_visible_in_tree():
+		if n is Label and (n as Label).is_visible_in_tree() and n.name != "VersionLabel":  # the build version is not a title
 			labels.append((n as Label).text)
 	check(labels == [en_tap], "only the prompt on screen, no title: %s" % [labels])
 	var lights_title := _visible_lights()

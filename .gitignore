@@ -20,3 +20,6 @@ dist/
 docs/reference/venue-photos-original/
 # Python
 __pycache__/
+
+# Build stamp written by tools/version.py
+game/build_info.json

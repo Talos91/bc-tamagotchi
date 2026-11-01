@@ -19,6 +19,7 @@ const PromptScene = preload("res://scenes/ui/zone_prompt.tscn")
 const CardScene = preload("res://scenes/ui/action_card.tscn")
 const Orientation = preload("res://scripts/ui/orientation.gd")
 const OrientationToggle = preload("res://scenes/ui/orientation_toggle.gd")
+const VersionInfo = preload("res://scripts/version_info.gd")
 
 ## Walk hints: zone kind, label key, the need that zone refills.
 const HINTS := [["bar", "venue.hint.bar", "drinks"], ["stage", "venue.hint.stage", "music"],
@@ -155,6 +156,8 @@ func _build() -> void:
 		b.pressed.connect(func(): hint_pressed.emit(h[0]))
 		hints.add_child(b)
 		_hints[h[0]] = b
+
+	add_child(VersionInfo.label())  # build version, bottom right, dim
 
 	prompt = PromptScene.instantiate()
 	prompt.pressed.connect(func(): prompt_pressed.emit())
