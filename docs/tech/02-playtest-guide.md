@@ -1,6 +1,7 @@
 # Playtest guide: the first playable loop
 
-Status: 2026-11-02, venue v4 with walk-through doors, real seats, the turned stair and the front-door start screen. One page on how to play a
+Status: 2026-11-02, venue v4 with walk-through doors, real seats, the turned stair, the front-door start screen and the
+feel pass (camera, walls, movement, facing, seats). One page on how to play a
 visit end to end.
 
 ## Run it
@@ -29,8 +30,13 @@ visit end to end.
   shut; the bar staff sometimes step out through the staff door by the order hatch.
 - **Memory corner** (lounge, north-west corner): the TV, camera and lit BLACK CABIN box. Its sheet says photos taken at
   Black Cabin will be shared here ("Coming soon"); you can sit on its two chairs.
-- **Walls.** A room's walls stay solid until you are through its door: from the corridor (camera looking east at the
-  BLACK CABIN / NOW OPEN sign) you don't see into the lounge; the smoking room stays closed from the main room.
+- **Walls.** In the entrance corridor the walls stay solid until you are through the Sticker door (camera looking east
+  at the BLACK CABIN / NOW OPEN sign; you don't see into the lounge). Everywhere else any wall between the camera and
+  your character sinks to a low stub (its bottom 10 %), so the corners and the buffer zone stay in view; walls
+  beyond you stay up.
+- **Camera.** It follows you smoothly and looks a little ahead of where you walk. The whole main room (floor, bar,
+  stage, toilets corridor) is one view looking east; the view only turns at a door or threshold (lobby, corridor,
+  Sticker door, lounge, buffer, main room, red door).
 - **Stairs.** In the lounge's south-west corner: the first flight runs along the Sticker-door wall from beside the
   game machine up to a landing, the second turns right and climbs along the west wall into the floor above. You
   can climb to the velvet rope; upstairs is closed for now.
@@ -98,7 +104,8 @@ Press **F5** in game, or delete
 
 From `game/`: `Godot --headless --path . --script res://tests/smoke_loop.gd` (the whole visit), plus
 `smoke_stairs`, `smoke_tap`, `smoke_hud`, `test_needs`, `test_minigames`, `smoke_doors_sit` (doors, seats, stair) and
-`smoke_start` (start screen, entry and exit shot). Suites that load `main.tscn` themselves start straight in the venue; only
+`smoke_start` (start screen, entry and exit shot), `test_seats` (every seat faces its table; the seated player faces the
+seat's way in the world) and `test_feel` (facing, movement, tap paths, stairs, camera, walls). Suites that load `main.tscn` themselves start straight in the venue; only
 running the game (main scene) shows the start screen.
 Screenshots: `Godot --path . -- --capture=<png> --capture-size=1080x1920 --capture-at=bar [--capture-sheet]`;
 the current ones are in `docs/art/screens/loop/` (screenshot mode skips the start screen). Start screen, entry and exit shot:

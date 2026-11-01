@@ -6,7 +6,8 @@ extends SceneTree
 ##           the seat's height; a minute seated refills Friends as before; stick input stands them up; the same on a
 ##           raised-strip couch, a tall-table stool and a bar stool ("Take a stool": a minute gives bar_chat); and at
 ##           each new kind of seat zone (tiny tables, long table, lounge counter, rectangular and smoking tables)
-##   cutaway lounge and smoking-room walls stay solid from outside, cut once inside; the memory corner zone
+##   cutaway lounge walls stay solid from the corridor, the smoking room's from the main-room aisle; cut once inside;
+##           the memory corner zone
 ##   stairs  up the first flight to the landing, up the second until the rope; the game cabinet stays reachable
 ##   godot --headless --path . --script res://tests/smoke_doors_sit.gd
 
@@ -77,9 +78,11 @@ func _init() -> void:
 	check(p.global_position.z < 12.6, "staff door blocks the player (z %.2f)" % p.global_position.z)
 
 	print("cutaway rule")
-	# A room's walls stay solid until the character has gone through its door (Daniele 2026-11-02)
+	# A room's walls stay solid until the character has gone through its door (Daniele 2026-11-02); since the playtest
+	# of 33dc5b9 that holds as such only in the entrance corridor: elsewhere a wall in front of the player sinks to
+	# its stub, so the smoking room stays closed from the main room only where it is not between camera and player
 	await room_walls("lounge", Vector3(8.0, 0.1, 14.1), Vector3(9.0, 0.1, 6.0))
-	await room_walls("smoking", Vector3(39.6, 0.1, 11.0), Vector3(40.0, 0.1, 15.3))
+	await room_walls("smoking", Vector3(30.0, 0.1, 6.7), Vector3(40.0, 0.1, 15.3))
 
 	print("memory corner")
 	var mem: Dictionary = main.zones.first_of("memory")
@@ -229,7 +232,7 @@ func check_on_seat(seat: Dictionary) -> void:
 	var pos: Vector3 = seat["pos"]
 	var want_y := float(seat["h"]) - PatronFigure.SEAT_H * PatronFigure.FIG_SCALE
 	check(p.seated and p.global_position.distance_to(pos) < 0.02, "on the seat spot %s" % seat["node"].name)
-	check(absf(angle_difference(p.get_node("Body").rotation.y, float(seat["yaw"]))) < 0.02, "facing the seat's way (yaw %.0f)" % rad_to_deg(seat["yaw"]))
+	check(absf(angle_difference(p.facing(), float(seat["yaw"]))) < 0.02, "facing the seat's way in the world (yaw %.0f)" % rad_to_deg(seat["yaw"]))
 	check(absf(p.figure.position.y - want_y) < 0.01, "seat height %.2f (figure lowered to %.3f)" % [seat["h"], p.figure.position.y])
 	check(p.figure.state.begins_with("sit"), "seated pose (%s)" % p.figure.state)
 

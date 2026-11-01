@@ -1038,17 +1038,16 @@ func _frame(g: Node) -> void:
 	_cut(_nocast(_box(g, "UpperS", Vector3(BAR_X0, ROOM_H, MAIN_Z1), Vector3(BAR_X1 - BAR_X0, uh, 0.2), upper, false)), Vector3.BACK)
 	_cut(_nocast(_box(g, "UpperSE", Vector3(BAR_X1, ROOM_H, MAIN_SE_Z), Vector3(MAIN_X1 - BAR_X1, uh, 0.2), upper, false)), Vector3.BACK)
 	_cut(_nocast(_box(g, "UpperE", Vector3(MAIN_X1, ROOM_H, -0.2), Vector3(0.2, uh, MAIN_SE_Z + 0.2), upper, false)), Vector3.RIGHT)
-	# The west upper wall sits right in front of the floor-zone camera: 1.2 m occluder segments the rig hides on its sight line
+	# The west upper wall sits right in front of the floor-zone camera: 1.2 m cutaway segments (facing the main-room
+	# camera, so they are cut while it looks east; elsewhere when in front of the player)
 	var zw := 0.0
 	var k := 0
 	while zw < MAIN_Z1 - 0.01:
 		var seg := Node3D.new()
 		seg.name = "UpperW%d" % k
 		seg.position = Vector3(MAIN_X0, ROOM_H + uh * 0.5, zw + 0.6)
-		seg.set_meta("occluder_center", Vector3.ZERO)
-		seg.set_meta("occluder_radius", 1.3)
-		seg.add_to_group("occluder", true)
 		_own(seg, g)
+		_cut(seg, Vector3.LEFT)
 		_nocast(_box(seg, "Brick", Vector3(-0.2, -uh * 0.5, -0.6), Vector3(0.2, uh, 1.2), upper, false))
 		for i in 4:
 			_box(seg, "Joist%d" % i, Vector3(0.0, 0.35 + i * 0.45 - uh * 0.5, -0.6), Vector3(0.06, 0.08, 1.2), wood, false)
@@ -1494,19 +1493,27 @@ func _contact_shadows() -> void:
 ## The corridor looks east down its length at the end-wall sign (photo 24), so its walls never cut away and the lounge
 ## stays hidden until the Sticker door is passed. The lobby reaches out over the step of street beyond the street door. The old-corridor alcove off the lounge has its
 ## own framing, looking south into it over the old toilets' closed box (hidden on the sight line).
+## The main room is one framing (Daniele's playtest of 33dc5b9: no swings between zones unless at a door): floor, bar,
+## stage and toilets all look east with the same pitch and distance and a clamp wide enough to reach the corners, so
+## the camera only follows inside the room; the zones stay for their names (HUD title, band earshot). The view turns
+## at thresholds only: lobby, corridor, Sticker door, lounge, buffer, main room, red door to the smoking room.
 func _camera_zones() -> void:
+	const MAIN_CLAMP := Rect2(21.6, 1.6, 17.6, 10.6)   # look target x 21.6..39.2, z 1.6..12.2: every corner table in frame
+	const MAIN_PITCH := -32.0
+	const MAIN_DIST := 8.5
+	const MAIN_LOOK_Y := 0.9
 	var g := _group("CameraZones")
 	var zones := [
 		{"name": "lobby", "rect": Rect2(-2.0, 5.05, 4.15, 8.2), "clamp": Rect2(1.1, 7.0, 0.1, 5.0), "yaw": 0.0, "pitch": -36.0, "dist": 6.5, "look_y": 1.2},
 		{"name": "corridor", "rect": Rect2(-0.2, 13.25, 15.65, 1.65), "clamp": Rect2(3.5, 14.07, 9.0, 0.01), "yaw": -90.0, "pitch": -34.0, "dist": 6.0, "look_y": 1.1},
 		{"name": "buffer", "rect": Rect2(BUFFER.position.x, BUFFER.position.y, BUFFER.size.x, BUFFER.size.y), "clamp": Rect2(17.7, 4.6, 0.3, 1.5), "yaw": 0.0, "pitch": -32.0, "dist": 7.0, "look_y": 1.3},
 		{"name": "alcove", "rect": Rect2(STUB.position.x, STUB.position.y, STUB.size.x, STUB.size.y), "clamp": Rect2(16.4, 11.3, 2.2, 0.1), "yaw": 180.0, "pitch": -48.0, "dist": 5.5, "look_y": 1.0},
-		{"name": "lounge", "rect": Rect2(LOUNGE.position.x, LOUNGE.position.y, LOUNGE.size.x, LOUNGE.size.y), "clamp": Rect2(5.0, 2.8, 5.0, 7.5), "yaw": 90.0, "pitch": -34.0, "dist": 8.0, "look_y": 1.3},
-		{"name": "bar", "rect": Rect2(BAR_X0, 9.6, BAR_X1 - BAR_X0, MAIN_Z1 - 9.6), "clamp": Rect2(23.5, 10.6, 10.5, 0.6), "yaw": 180.0, "pitch": -32.0, "dist": 7.0, "look_y": 1.0},
-		{"name": "stage", "rect": Rect2(26.4, 0.0, 9.6, 6.6), "clamp": Rect2(29.0, 1.6, 3.5, 0.6), "yaw": 0.0, "pitch": -26.0, "dist": 7.5, "look_y": 1.4},
-		{"name": "toilets", "rect": Rect2(MAIN_X0, 12.0, BAR_X0 - MAIN_X0 + 2.6, 4.7), "clamp": Rect2(21.0, 13.5, 0.6, 2.0), "yaw": 180.0, "pitch": -34.0, "dist": 6.0, "look_y": 1.2},
+		{"name": "lounge", "rect": Rect2(LOUNGE.position.x, LOUNGE.position.y, LOUNGE.size.x, LOUNGE.size.y), "clamp": Rect2(4.5, 1.6, 5.5, 9.4), "yaw": 90.0, "pitch": -34.0, "dist": 8.0, "look_y": 1.3},
+		{"name": "bar", "rect": Rect2(BAR_X0, 9.6, BAR_X1 - BAR_X0, MAIN_Z1 - 9.6), "clamp": MAIN_CLAMP, "yaw": -90.0, "pitch": MAIN_PITCH, "dist": MAIN_DIST, "look_y": MAIN_LOOK_Y},
+		{"name": "stage", "rect": Rect2(26.4, 0.0, 9.6, 6.6), "clamp": MAIN_CLAMP, "yaw": -90.0, "pitch": MAIN_PITCH, "dist": MAIN_DIST, "look_y": MAIN_LOOK_Y},
+		{"name": "toilets", "rect": Rect2(MAIN_X0, 12.0, BAR_X0 - MAIN_X0 + 2.6, 4.7), "clamp": Rect2(MAIN_CLAMP.position.x, MAIN_CLAMP.position.y, MAIN_CLAMP.size.x, 15.6 - MAIN_CLAMP.position.y), "yaw": -90.0, "pitch": MAIN_PITCH, "dist": MAIN_DIST, "look_y": MAIN_LOOK_Y},
 		{"name": "smoking", "rect": Rect2(SMOKING.position.x, MAIN_SE_Z, SMOKING.size.x, SMOKING.end.y - MAIN_SE_Z), "clamp": Rect2(40.0, 14.2, 0.1, 2.0), "yaw": 180.0, "pitch": -34.0, "dist": 6.0, "look_y": 1.2},
-		{"name": "floor", "rect": Rect2(MAIN_X0, 0.0, MAIN_X1 - MAIN_X0, MAIN_Z1), "clamp": Rect2(23.5, 4.0, 15.0, 5.0), "yaw": -90.0, "pitch": -30.0, "dist": 8.5, "look_y": 0.9, "fallback": true},
+		{"name": "floor", "rect": Rect2(MAIN_X0, 0.0, MAIN_X1 - MAIN_X0, MAIN_Z1), "clamp": MAIN_CLAMP, "yaw": -90.0, "pitch": MAIN_PITCH, "dist": MAIN_DIST, "look_y": MAIN_LOOK_Y, "fallback": true},
 	]
 	for z in zones:
 		var m := Marker3D.new()
