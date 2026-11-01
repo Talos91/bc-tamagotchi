@@ -1,83 +1,89 @@
-# 🎬 Start screen: the club's front door (BACKLOG B8) — state 2026-11-02
+# 🎬 Start screen and exit shot (BACKLOG B8) — state 2026-11-02, round 2
 
-Daniele's words: "when you start the game the menu should be a still camera as if first person of you staring on the
-entrance of the club from outside with a camera on the door on which a Black Cabin neon lit sign is; you tap to
-enter, door opens, your character walks in with camera following his point of view and then once in, door closes,
-camera zooms out to current one and game starts."
+Daniele's words (2026-11-01): "when you start the game the menu should be a still camera as if first person of you
+staring on the entrance of the club from outside with a camera on the door on which a Black Cabin neon lit sign is;
+you tap to enter, door opens, your character walks in with camera following his point of view and then once in, door
+closes, camera zooms out to current one and game starts." Round 2 answers (2026-11-02, DECISIONS.md): the sign is
+the photo (direction 23); no title; camera "start first (when you see the door) tapping and camera ease to over the
+shoulder, character open the door enters and while the door is closing camera ease to game view, interface appear
+and its playable"; add an exit shot.
 
-## What is built (on main)
-- **Street front** `game/scenes/street/street_front.gd` (script only, built in code at runtime; no `.tscn`). Placed
-  from the venue's `StreetDoor` meta `center`, so it follows the door if the venue session moves it. Black-painted
-  two-floor front with a parapet; the door cut out of it with dark jambs and a sill; a black sign board above the
-  door carrying the **kit `neon_sign`** (BLACK over CABIN, red voxel tubes, the lounge's sign at ×1.5, emission ×3
-  so it blooms); a small lit menu box beside the door; upper floor: one dark window, one lit behind a red blind,
-  a wall AC unit, a drainpipe. Neighbours: a taller grey shophouse north with a roller shutter and lit windows,
-  a low shop south with a shutter. Ground: pavement (around build_venue.gd's own 1.6 m `StreetStep`, not over it),
-  kerb, a 2.4 m soi with lane marks, the far kerb and a strip of opposite pavement up to build_venue.gd's
-  `StreetFacade` box across the street. Dressing: concrete utility pole with a sodium streetlight on an arm, the
-  Bangkok cable bundle sagging along the street, a transformer; a potted palm by the door; a parked cream
-  step-through scooter. Sky = the venue environment's NIGHT_SKY colour (no stars, no moon).
-  **Two lights** (`NeonWash` red omni, `Streetlight` sodium omni): 44 on the start screen (max_renderable 48),
-  42 once inside (the street and both lights are hidden when the pull-back starts; node `Main/Street` stays,
-  hidden). No colliders: nothing there is walked on except the venue's own step.
-- **Start screen and entry** `game/scripts/start_screen.gd`, started from `game/scripts/main.gd`:
-  - Title: still camera at eye height (1.6 m) on the opposite pavement, ~4.8 m from the facade, pitched up
-    (portrait 62° horizontal FOV, +13°: facade to the cables and the dark sky; landscape 54° vertical, +9°: door,
-    sign, upper windows). Title "BLACK CABIN" (Kanit Bold, LabelDisplayXL, cream with a red glow) near the top,
-    "Tap to enter" (Kanit SemiBold, gold, slow pulse) near the bottom, soft dark gradients behind both. Strings
-    `venue.start.title`, `venue.start.tap` in `game/i18n/strings_venue.csv` (EN + machine-draft TH
-    "แตะเพื่อเข้าร้าน"; the title stays Latin in Thai). F8 swaps the language on the title.
-  - Tap / click / Enter / Space / E: the title fades; the character (hidden until now, under the camera) walks
-    6.6 m from behind the camera to the lobby spawn in 3.3 s (about 2.4 m/s, eased in and out; physics off, position driven, walk
-    animation from the figure); the street door opens by its own proximity rule (venue_doors.gd, unchanged); the
-    camera follows 1.3 m behind and 0.3 m right (over the shoulder), at 1.75 m, tilting from looking up at the sign
-    to slightly down, closing to 0.6 m behind and centred once through the door. Then a 1.7 s pull-back: up first,
-    then back, always looking at the character, ending exactly on the diorama rig's lobby camera (FOV and aspect
-    blended, ceiling dropped above 3.6 m). The street is hidden as the pull starts (the camera faces into the
-    lobby). The door swings shut during the pull (its own 0.6 s hold + 0.8 s close). Then `main.start_play()`:
-    HUD and joystick fade in over 0.5 s, the session resumes, `session.arrive()` starts the visit (Welcome Back if
-    due) exactly as before. Tap to the end of the visit start: 5.0 s (+0.5 s fade).
-  - Any tap after the first: skip; the player lands at the spawn, the door is forced shut (hold cleared), the rig
-    camera takes over, the visit starts.
-  - While it runs: no visit (`Needs.begin_visit` not called), HUD and joystick hidden, `VenueSession` process
-    disabled (house band and sit minute frozen), `_blocked()` true so E/Space/Enter and sheets do nothing, the rig
-    does not process until the pull-back (so its cutaway never hides the lobby's west wall while we stand outside).
-    The save is loaded by the Needs autoload before any of this.
-- **When it shows** (`main.gd`): only when main.tscn is the running scene (`get_tree().current_scene == self`), not
-  in `--capture=` screenshot mode, not with `-- --skip-intro`. Tests and tools that instance main.tscn themselves
-  (all six old suites, smoke_doors_sit, capture_venue, measure_shadows, capture_parity, export_layout) start straight
-  in the venue as before, no edits to them. A test can force it with `main.intro = true` before `add_child`.
-  Debug builds: Esc on the start screen goes straight in. F5 (reset save) reloads the scene, so the start screen
-  shows again.
+## Commits
+- Round 1: `0dc0b68` (code, test), `cf0555f` (captures, docs). Round 2: see LOG.md (sign, sequence, exit shot).
+
+## Street front `game/scenes/street/street_front.gd`
+- Script only, built in code at runtime from the venue's `StreetDoor` meta `center` (follows the door if the venue
+  session moves it); one node `Main/Street`, hidden with its lights while the player is inside.
+- **Sign (direction 23):** `game/assets/street/street_sign.png` (2048×1024), drawn by `tools/street_sign.py`:
+  BLACK over a smaller centred CABIN in a high-contrast serif built from rectangles, polygons and ellipses (no font
+  file, nothing to license); the glyph masks' edges become the tubes (dilate minus erode), so every stroke reads as
+  a double line; pale pink-white core, deep red glow (two blurs). In the scene: one 3.6 × 1.8 m quad, unshaded,
+  additive (black adds nothing), albedo ×2.4 so the environment glow blooms it, 0.34 m out from the facade over the
+  door. Behind it **foliage lit red from behind**: 520 voxel leaf clumps in an oval (4.3 × 2.1 m), three merged
+  meshes (glowing deep red at the back and middle, mid red, near-black in front and at the edges; emissive ones
+  have a black albedo and no specular so the streetlight doesn't tint them). Regenerate the texture with
+  `python tools/street_sign.py`, then let Godot import it (`--import` or the editor). A missing import falls back to
+  reading the PNG directly.
+- The rest as round 1: black two-floor front, door jambs and sill, lit menu box, upper windows (one lit), AC unit
+  (moved north of the sign), drainpipe, taller grey neighbour north, low shuttered shop south, pavement round the
+  venue's own StreetStep, kerbs, a 2.4 m soi, the opposite pavement; utility pole with sodium streetlight and cables,
+  potted palm, cream scooter. **Two lights** (`NeonWash`, `Streetlight`): 44 with the street on, 42 inside.
+- `view_transform(portrait)`, `view_pitch`, `view_fov`: the still camera of both shots (opposite pavement, eye
+  1.6 m; portrait 62° horizontal FOV pitched +14°, landscape 54° vertical pitched +10°).
+
+## Start screen `game/scripts/start_screen.gd` (shared base `game/scripts/street_shot.gd`)
+- Title: the still view, only "Tap to enter" (`venue.start.tap`, EN + machine-draft TH, Kanit SemiBold gold, slow
+  pulse) over a soft dark band at the bottom. No title (removed `venue.start.title`).
+- Tap / click / Enter / Space / E:
+  1. prompt fades; the character steps out from under the camera (visible from now) and walks to 0.75 m in front of
+     the facade (1.9 s); the camera eases over 1.2 s from the still view to over the right shoulder (1.3 m behind,
+     0.3 m right, 1.75 m up, pitched down), following with a damped x so nothing jerks;
+  2. they stop 0.3 s while the door swings open (venue_doors.gd's proximity rule, unchanged), then walk through to
+     main's spawn (1.2 s), the camera closing to 0.6 m behind and centring;
+  3. when the door starts to swing shut (venue_doors.gd: 0.6 s after they leave its 1.2 m reach), the camera eases
+     over 1.6 s up first, then back, always looking at the character, ending exactly on the diorama rig's lobby
+     camera; the street goes dark once the door is shut;
+  4. `main.start_play()`: HUD and joystick fade in (0.5 s), the session resumes, `session.arrive()` starts the visit
+     (Welcome Back if due) exactly as without a start screen. Tap to visit start ≈ 5.3–5.5 s.
+- Second tap: skip (door forced shut, street dark, diorama camera, visit starts). Debug Esc: same from the title.
+- While it runs: no visit, HUD/joystick hidden, `VenueSession` process disabled (band, sit minute), `_blocked()`
+  true, rig not processing until the pull-back.
+
+## Exit shot `game/scripts/exit_shot.gd`
+- `main._on_visit_finished`: when the visit ended because the player **left** (Leave button or the street door's
+  Head home; not idle, not the F4 debug week) and street shots are on, the exit shot plays first, then
+  `main.end_exit_shot(summary)` opens the walk-out card exactly as before (totals, rules, card unchanged).
+- 0.25 s dip to black; under it the street lights on, the still view (landscape: pitched +4°, 60° FOV so the
+  character on the pavement is in frame), the character just inside the shut door facing out; dip back. They walk
+  out (1.7 s) to 1.5 m in front of the facade, a step to the side; the door opens for them and shuts 1.4 s after
+  they pass its reach; 0.4 s more, then: street dark, character back at the spawn with the diorama camera behind the
+  card, card. ≈ 3.2 s. A tap skips straight to the card. GO OUT starts the next visit at the spawn, as before.
+
+## When the shots run (`main.gd`)
+- `street_shots` is on only when main.tscn is the running scene (`current_scene == self`), not in `--capture=`
+  screenshot mode, not with `-- --skip-intro`. Tests and tools that instance main.tscn start in the venue and leave
+  straight to the card unless they set `main.intro = true` first. F5 reloads, so the start screen shows again.
 
 ## Tests and captures
-- `game/tests/smoke_start.gd`: title (street built with 2 lights, neon present, start camera current and aimed at
-  the door, EN/TH strings, no visit after 20 frames, HUD/joystick hidden, session suspended, player hidden), entry
-  (ends in 4–6.5 s, camera followed through the doorway at head height, pull-back phase seen, door opened ≥0.9, visit
-  started, rig camera current, lobby zone, street hidden, HUD alpha 1, door shut, lights inside ≤ venue's own and
-  ≤ 42, player at spawn and walking again, session processing), skip (second tap, door shut and stays shut, HUD,
-  lights), off (no start screen without `intro`, visit starts at once).
-- `game/tests/capture_start.gd` (windowed): `docs/art/screens/start/{portrait,landscape}-{1-title,2-door,3-pull,4-play}.png`
-  at half size (540×960 / 960×540, as capture_venue.gd; a full 1080×1920 window is clipped to this laptop's screen).
-  2-door = 2.2 s after the tap, 3-pull = 4.1 s.
+- `game/tests/smoke_start.gd`: title (street lit, sign + foliage, still camera aimed at the door, only the prompt on
+  screen, EN/TH, no visit, HUD hidden, session suspended), entry (over the shoulder before the door opens, door opens,
+  through the doorway at head height, pull-back starts while the door closes, no cut: camera speed < 12 m/s, ends
+  4–6.5 s, visit, rig camera, lobby zone, street dark, HUD, door shut, lights 42, spawn, walking), exit (shot before
+  the card, street lit with 44 lights, its camera, no HUD, door opens, character out on the pavement, door shut before
+  the card, then the card, street dark, lights 42, rig camera), exit skip (GO OUT → next visit, leave, tap → card,
+  door shut), entry skip, off (no shots without `intro`; leaving opens the card at once).
+- `game/tests/capture_start.gd` (windowed, half size 540×960 / 960×540): `docs/art/screens/start/<orientation>-`
+  `1-title, 2-shoulder, 3-door, 4-pull, 5-play, 6-exit-out, 7-exit-shut`. Round-1 frame names removed.
 
 ## Not measured / not done
-- Frame time of the start screen view not measured (light count only). Desktop, not a phone.
-- Leaving (walk-out) is unchanged. Showing the street on leave would be small: `Main/Street` is still in the tree,
-  hidden; `street.set_on(true)` + a camera out on the step. Follow-up, not built.
-- The first gameplay frame shows the prompt "Tap to head home": the lobby spawn sits inside the exit zone. That was
-  already so before this change (checked with the start screen off); a venue/zone question.
+- Frame time of the street views not measured (light count only). Desktop, not a phone.
+- The real street door model (staff-door stand-in kept, Daniele 2026-11-02) and a real photo of the front.
 
-## Calls for Daniele
-1. The facade: black-painted two-floor shophouse front, neighbours grey (taller) and brown (low, shutter), a narrow
-   soi. All stand-ins until a photo of the real front exists.
-2. The sign: the lounge's kit neon (BLACK over CABIN, red voxel tubes) on a black board above the door. Real sign's
-   shape, colour, placement (flat over the door, projecting blade, lightbox)?
-3. The door from outside: the kit `staff_door` leaf (dark, reads red under the neon), as inside.
-4. Dressing: streetlight on a utility pole with the cable bundle, potted palm, cream scooter, menu box. Keep / swap?
-5. Title text: "BLACK CABIN" (duplicates the neon on screen; a game name instead?) and "Tap to enter" /
-   "แตะเพื่อเข้าร้าน" (machine-draft Thai). Shown in the current language only.
-6. Camera: across the street on the opposite pavement (slightly further than "on the pavement" so the door, sign and
-   sky fit in portrait); over-the-shoulder follow rather than true first person (true first person showed only the
-   back of the head and the lobby wall).
-7. Timing: ~5 s, walk 3.3 s; any tap skips. F5 shows the start screen again.
+## Calls for Daniele (options, recommendation first)
+1. **Sign proportions:** the letters are my own serif drawing after the photo, not the real sign's font. (a) keep
+   (recommended until a straight-on, higher-resolution photo of the sign exists); (b) match a named typeface if
+   Daniele knows it; (c) trace the real sign from a better photo.
+2. **Exit shot on idle endings:** today only a chosen leave plays it. (a) only on leaving (recommended: an idle
+   timeout is not the character walking out); (b) on every visit end.
+3. **GO OUT after the exit shot:** today straight back inside at the spawn, no entry shot. (a) keep (recommended:
+   the Flat stand-in is temporary); (b) replay the entry from the street each time.

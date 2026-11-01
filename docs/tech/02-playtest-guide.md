@@ -11,11 +11,16 @@ visit end to end.
 - **Command line:** `Godot_v4.6.1-stable_win64.exe --path game` (portrait 1080×1920, shrunk to fit the screen).
   For landscape add `--resolution 1920x1080`, or press **F7** in game to swap.
 - **Start screen.** The game opens on the street at night, looking across the soi at the club's door under the
-  lit BLACK CABIN neon, with the title and "Tap to enter". Tap, click, Enter or Space: your character steps out from
-  under the camera and walks in, the door swings open for them, the camera follows over their shoulder through the
-  doorway, then pulls back and up into the game camera as the door swings shut; the HUD fades in. About 5 s; tap
-  again to skip to the end. Nothing counts until you are inside (no visit, no band, no HUD); the save loads first.
+  BLACK CABIN neon (outlined serif tubes on red-lit foliage, after Daniele's photo), with only "Tap to enter" on
+  screen. Tap, click, Enter or Space: your character steps out from under the camera and the camera eases to over
+  their shoulder; they stop at the door while it swings open, walk in, and as the door swings shut behind them the
+  camera eases up and back into the game camera; the HUD fades in. About 5.5 s; tap again to skip to the end.
+  Nothing counts until you are inside (no visit, no band, no HUD); the save loads first.
   Skip it altogether with `-- --skip-intro` on the command line, or **Esc** on the start screen (debug builds).
+- **Exit shot.** Leaving (the Leave button or the street door's Head home) dips to black and shows the street: the
+  door opens, your character steps out onto the pavement, the door shuts behind them, the neon stays on; then the
+  walk-out card as before. About 3 s; a tap skips to the card. Not with `--skip-intro`, and not when a visit ends
+  by idling.
 - You arrive in the entrance lobby, just inside the street door (west end of the L corridor), and the visit starts
   then. The corridor runs east along the lounge to the Sticker door; through it is the lounge, then the buffer
   zone and the main room.
@@ -88,10 +93,10 @@ Press **F5** in game, or delete
 
 From `game/`: `Godot --headless --path . --script res://tests/smoke_loop.gd` (the whole visit), plus
 `smoke_stairs`, `smoke_tap`, `smoke_hud`, `test_needs`, `test_minigames`, `smoke_doors_sit` (doors, seats, stair) and
-`smoke_start` (start screen and entry). Suites that load `main.tscn` themselves start straight in the venue; only
+`smoke_start` (start screen, entry and exit shot). Suites that load `main.tscn` themselves start straight in the venue; only
 running the game (main scene) shows the start screen.
 Screenshots: `Godot --path . -- --capture=<png> --capture-size=1080x1920 --capture-at=bar [--capture-sheet]`;
-the current ones are in `docs/art/screens/loop/` (screenshot mode skips the start screen). Start screen and entry:
+the current ones are in `docs/art/screens/loop/` (screenshot mode skips the start screen). Start screen, entry and exit shot:
 `Godot --path . --resolution 540x960 --script res://tests/capture_start.gd -- --tag=portrait` (and `960x540`,
 `--tag=landscape`) → `docs/art/screens/start/`.
 
