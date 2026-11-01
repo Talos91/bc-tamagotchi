@@ -18,3 +18,5 @@ dist/
 
 # Full-resolution originals stay local (300MB)
 docs/reference/venue-photos-original/
+# Python
+__pycache__/
