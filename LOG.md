@@ -23,3 +23,4 @@ Append-only. One dated line per event, newest last. Never edit earlier lines.
 - 2026-11-01 — apply-decisions done: GDD §2/§9, Rhythm +12–18 (b891f3b), cast, high concept, manual, ORCHESTRATION 3b list; archived.
 - 2026-11-01 — method-setup done: PROJECT/STATE/LOG/handoffs (ae5e543), vault profiles voxel-art + social-features; archived.
 - 2026-11-01 — orchestrator re-ran all six suites, pushed main, rewrote STATE; waiting on Daniele's first hand playtest.
+- 2026-11-01 — Daniele played the alpha ("good alpha"); gate = baseline map fix, inputs pending; BACKLOG.md + shared backlog artifact created with all ideas and open questions.

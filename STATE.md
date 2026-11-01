@@ -5,20 +5,20 @@
 - Layout frozen at `game/assets/kit/layout.json`. Play it: `docs/tech/02-playtest-guide.md`.
 
 ## IN FLIGHT (shared checkout, branch main only)
-- Nothing. Daniele's first hand playtest is the gate for the next wave.
+- Nothing. Alpha verdict in: "good alpha". Gate = baseline map fix; waiting on Daniele's new photos + plan.
 
 ## WORKERS ALIVE (max 3)
 - 🎛️ orchestrator fdaed712-5416-430d-b3a7-7174cf46699f only. zone-wiring, apply-decisions, method-setup finished and archived.
 
 ## WAITING ON OWNER
-- Playtest verdict on the first loop (feel, controls, what is confusing).
+- New photos + layout plan of the club (BACKLOG A1); playtest notes as they come (A3).
 - Orientation; Black Cabin opening hours; brand typeface; staff turnover; resident band + consent packs; stakes numbers; coin sign-off; chat policy; real drinks menu.
 
 ## NEXT THREE JOBS
-1. Playtest fixes from Daniele's verdict + bar-counter navmesh connection (venue owner).
+1. Baseline map fix from the new photos + plan (unfreeze layout.json, re-run parity) + bar-counter navmesh (BACKLOG A1, A2).
 2. Performance pass: 42 lights, ~1,850 draw calls, 24 ms GPU desktop; phone measurement before any phone build.
 3. Figure lighting and proportion pass (warm key/rim, heads 27–34 %); then character creator + the Flat.
-- Later: lounge camera vs curtain wall, performances schedule, memories, native Thai pass, real-world bridge chapter, coins, web export.
+- Later: everything in `docs/design/BACKLOG.md` (ideas, real-life bridge, online, debt). Shared board: https://claude.ai/artifact/BbpBxVWVVXMjz7TgJ7aFBW
 
 ## POINTERS
 - Worker rules `PROJECT.md`; history `LOG.md`; owner decisions `docs/design/DECISIONS.md` ("Still open"); waves `ORCHESTRATION.md`; changelog `docs/CHANGELOG.md` (`python tools/changelog.py`).

@@ -1,0 +1,141 @@
+<title>Black Cabin Backlog</title>
+<meta name="claude:viewport-fit-sides" content="cover">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Kanit:wght@400;500;600&family=IBM+Plex+Sans:wght@400;500&display=swap">
+<style>
+/* Layout: one column of lettered sections, each a table of items; a sticky legend strip. Dark-first (the club at night), warm PAR-light accent. */
+:root {
+  --bg: #15110f; --panel: #1f1916; --fg: #efe6da; --muted: #a8988a; --line: #3a2f29;
+  --accent: #f0a63a; --accent-ink: #1a1208;
+  --ok: #7fc47a; --wait: #e2b24a; --idea: #8fa9c9;
+  --display: "Kanit", "Trebuchet MS", sans-serif; --body: "IBM Plex Sans", "Segoe UI", sans-serif;
+  color-scheme: dark;
+}
+@media (prefers-color-scheme: light) { :root:not([data-theme="dark"]) {
+  --bg: #f6f1ea; --panel: #fffaf3; --fg: #221b17; --muted: #6e6056; --line: #e2d6c8;
+  --accent: #b9661a; --accent-ink: #fff7ea; --ok: #2f8a3a; --wait: #9a6b00; --idea: #3c5f8a; color-scheme: light; } }
+:root[data-theme="light"] {
+  --bg: #f6f1ea; --panel: #fffaf3; --fg: #221b17; --muted: #6e6056; --line: #e2d6c8;
+  --accent: #b9661a; --accent-ink: #fff7ea; --ok: #2f8a3a; --wait: #9a6b00; --idea: #3c5f8a; color-scheme: light; }
+
+body { background: var(--bg); color: var(--fg); font-family: var(--body); line-height: 1.5;
+  padding-left: max(16px, env(safe-area-inset-left, 0px)); padding-right: max(16px, env(safe-area-inset-right, 0px)); padding-block: 0 48px; }
+.wrap { max-width: 980px; margin: 0 auto; }
+header { padding-block: 36px 20px; border-bottom: 1px solid var(--line); display: flex; flex-wrap: wrap; gap: 12px 32px; align-items: flex-end; }
+h1 { font-family: var(--display); font-weight: 600; font-size: clamp(28px, 5vw, 40px); margin: 0; letter-spacing: .01em; text-wrap: balance; }
+h1 small { display: block; font-family: var(--body); font-weight: 400; font-size: 14px; color: var(--muted); letter-spacing: 0; }
+.verdict { flex: 1 1 260px; min-width: 0; border-left: 3px solid var(--accent); padding-left: 14px; color: var(--muted); font-size: 14px; }
+.verdict b { color: var(--fg); font-weight: 500; }
+.legend { position: sticky; top: env(safe-area-inset-top, 0px); z-index: 5; background: var(--bg); padding-block: 10px; border-bottom: 1px solid var(--line); display: flex; flex-wrap: wrap; gap: 8px 18px; font-size: 12px; color: var(--muted); }
+body::before { content: ""; position: fixed; inset: 0 0 auto; height: env(safe-area-inset-top, 0px); z-index: 10; background: var(--bg); }
+.legend span::before { content: ""; display: inline-block; width: 9px; height: 9px; border-radius: 50%; margin-right: 6px; vertical-align: 0; }
+.legend .s-ok::before { background: var(--ok); } .legend .s-wait::before { background: var(--wait); } .legend .s-idea::before { background: var(--idea); } .legend .s-plan::before { background: var(--accent); }
+section { padding-block: 30px 6px; }
+h2 { font-family: var(--display); font-weight: 500; font-size: 22px; margin: 0 0 4px; text-wrap: balance; }
+h2 .letter { color: var(--accent); margin-right: 10px; }
+.sub { color: var(--muted); font-size: 14px; margin: 0 0 14px; max-width: 65ch; }
+.tablewrap { overflow-x: auto; }
+table { border-collapse: collapse; width: 100%; font-size: 14px; }
+th { text-align: left; font-weight: 500; font-size: 11px; letter-spacing: .08em; text-transform: uppercase; color: var(--muted); padding: 6px 10px; border-bottom: 1px solid var(--line); white-space: nowrap; }
+td { padding: 9px 10px; border-bottom: 1px solid var(--line); vertical-align: top; }
+td.id { font-family: var(--display); color: var(--accent); white-space: nowrap; font-variant-numeric: tabular-nums; }
+td.eff { white-space: nowrap; font-variant-numeric: tabular-nums; }
+td.needs { color: var(--muted); min-width: 160px; }
+.pill { display: inline-block; font-size: 11px; letter-spacing: .04em; padding: 2px 8px; border-radius: 999px; border: 1px solid var(--line); white-space: nowrap; }
+.pill.ok { color: var(--ok); border-color: var(--ok); } .pill.wait { color: var(--wait); border-color: var(--wait); } .pill.idea { color: var(--idea); border-color: var(--idea); } .pill.plan { color: var(--accent); border-color: var(--accent); }
+ul.q { margin: 0; padding-left: 20px; max-width: 70ch; } ul.q li { margin-bottom: 6px; } ul.q li.new { color: var(--accent); }
+.foot { margin-top: 36px; color: var(--muted); font-size: 12px; border-top: 1px solid var(--line); padding-top: 12px; }
+code { font-family: ui-monospace, Consolas, monospace; font-size: 13px; }
+@media (max-width: 560px) { td, th { padding-inline: 6px; } td.needs { min-width: 120px; } }
+</style>
+<div class="wrap">
+<header>
+  <h1>Black Cabin Backlog<small>Ideas, requests and open questions for the Tamagotchi. Lives in the repo as <code>docs/design/BACKLOG.md</code>.</small></h1>
+  <div class="verdict"><b>Alpha verdict, 1 Nov 2026:</b> “fun, fucked up but fine, good alpha.” First job is the baseline map of the club. Everything else waits for it, because a community game needs the real room right.</div>
+</header>
+<div class="legend"><span class="s-plan">planned / in STATE</span><span class="s-wait">waiting on an input</span><span class="s-idea">idea, not scheduled</span><span class="s-ok">done</span><span>Effort: S a day · M a wave · L several waves</span></div>
+
+<section id="fix">
+<h2><span class="letter">A</span>Fix first, the gate</h2>
+<p class="sub">New photos and a layout plan are coming from Daniele. The layout file stays frozen until they land.</p>
+<div class="tablewrap"><table>
+<tr><th>#</th><th>Item</th><th>Effort</th><th>Needs</th><th>Status</th></tr>
+<tr><td class="id">A1</td><td>Baseline map of the club corrected to the new photos and plan; unfreeze the layout file, re-run the parity composites</td><td class="eff">M</td><td class="needs">photos + plan from Daniele</td><td><span class="pill wait">waiting on inputs</span></td></tr>
+<tr><td class="id">A2</td><td>Bar-counter strip connected to the walkable floor (known navmesh gap)</td><td class="eff">S</td><td class="needs">nothing</td><td><span class="pill plan">queued</span></td></tr>
+<tr><td class="id">A3</td><td>Playtest fixes from the alpha, listed as Daniele plays</td><td class="eff">S–M</td><td class="needs">Daniele's notes</td><td><span class="pill wait">collecting</span></td></tr>
+</table></div>
+</section>
+
+<section id="world">
+<h2><span class="letter">B</span>The playable world</h2>
+<div class="tablewrap"><table>
+<tr><th>#</th><th>Item</th><th>Effort</th><th>Needs</th><th>Status</th></tr>
+<tr><td class="id">B1</td><td>More interactive places beyond bar, stage, tables and pinball</td><td class="eff">M</td><td class="needs">map fixed (A1)</td><td><span class="pill idea">idea</span></td></tr>
+<tr><td class="id">B2</td><td>Character creation on the accepted v2 presets</td><td class="eff">M</td><td class="needs">nothing</td><td><span class="pill plan">planned</span></td></tr>
+<tr><td class="id">B3</td><td>More minigames (today: Pour Perfect, Rhythm, pinball, Candle Talk)</td><td class="eff">M each</td><td class="needs">nothing</td><td><span class="pill idea">idea</span></td></tr>
+<tr><td class="id">B4</td><td>Achievements as stickers on the club's entry door, shown when you leave and in the Flat before you go out</td><td class="eff">M</td><td class="needs">nothing</td><td><span class="pill idea">idea</span></td></tr>
+<tr><td class="id">B5</td><td>Voxel quality push: more cubes per object without killing a phone; pairs with the performance pass</td><td class="eff">L</td><td class="needs">phone measurement first</td><td><span class="pill idea">idea</span></td></tr>
+<tr><td class="id">B6</td><td>Leaderboard per minigame, weekly and monthly</td><td class="eff">M</td><td class="needs">online backend, accounts</td><td><span class="pill idea">idea</span></td></tr>
+</table></div>
+</section>
+
+<section id="online">
+<h2><span class="letter">C</span>Online and community</h2>
+<p class="sub">Everything here needs a backend and player accounts, which the game does not have yet. Decide the chat policy before C1.</p>
+<div class="tablewrap"><table>
+<tr><th>#</th><th>Item</th><th>Effort</th><th>Needs</th><th>Status</th></tr>
+<tr><td class="id">C1</td><td>Chat with other players in the club</td><td class="eff">L</td><td class="needs">backend, accounts, chat policy (phrase wheel vs free text, 21+)</td><td><span class="pill idea">idea</span></td></tr>
+<tr><td class="id">C2</td><td>Cheer button during a set; the band sees a live cheer count</td><td class="eff">M</td><td class="needs">backend, a band-side view</td><td><span class="pill idea">idea</span></td></tr>
+<tr><td class="id">C3</td><td>Crew quests: weekly goals for a friend group (“try the featured cocktail”, “catch two new bands”), brandable by sponsors</td><td class="eff">L</td><td class="needs">online, friends, sponsor deals</td><td><span class="pill idea">idea</span></td></tr>
+<tr><td class="id">C4</td><td>Referral reward for bringing a first-time visitor who checks in</td><td class="eff">M</td><td class="needs">online, check-in proof</td><td><span class="pill idea">idea</span></td></tr>
+<tr><td class="id">C5</td><td>Seasonal cosmetics for holidays and themed nights that expire</td><td class="eff">M</td><td class="needs">content calendar</td><td><span class="pill idea">idea</span></td></tr>
+</table></div>
+</section>
+
+<section id="bridge">
+<h2><span class="letter">D</span>Real-life bridge</h2>
+<p class="sub">These need data or systems from Black Cabin itself. Scaffolding can be built before the real wiring exists.</p>
+<div class="tablewrap"><table>
+<tr><th>#</th><th>Item</th><th>Effort</th><th>Needs</th><th>Status</th></tr>
+<tr><td class="id">D1</td><td>Upcoming events list</td><td class="eff">S–M</td><td class="needs">events feed, even a spreadsheet</td><td><span class="pill idea">idea</span></td></tr>
+<tr><td class="id">D2</td><td>“Tonight” tab with the band lineup</td><td class="eff">S</td><td class="needs">tonight's lineup source</td><td><span class="pill idea">idea</span></td></tr>
+<tr><td class="id">D3</td><td>Table booking, scaffold only, not wired to a real system</td><td class="eff">M</td><td class="needs">later: Black Cabin's booking flow</td><td><span class="pill idea">idea</span></td></tr>
+<tr><td class="id">D4</td><td>Band info and band pages: followers, past set lists, a “bands you've seen” passport filled by check-ins</td><td class="eff">L</td><td class="needs">band data, check-ins</td><td><span class="pill idea">idea</span></td></tr>
+<tr><td class="id">D5</td><td>Post a picture taken at the club; counts as the monthly refill of one need</td><td class="eff">M</td><td class="needs">photo upload, moderation, consent for faces</td><td><span class="pill idea">idea</span></td></tr>
+<tr><td class="id">D6</td><td>Tip a band through the app</td><td class="eff">L</td><td class="needs">payments provider, legal, band payout</td><td><span class="pill idea">idea</span></td></tr>
+<tr><td class="id">D7</td><td>Ride-home button at last call (Grab link; Grab could sponsor)</td><td class="eff">S</td><td class="needs">Grab deep link</td><td><span class="pill idea">idea</span></td></tr>
+<tr><td class="id">D8</td><td>Guest list and tickets for special nights: RSVP and a QR that works at the door</td><td class="eff">L</td><td class="needs">door-side scanner, ticketing</td><td><span class="pill idea">idea</span></td></tr>
+<tr><td class="id">D9</td><td>Dashboard for the bar: attendance per band, busiest hours, redemptions</td><td class="eff">L</td><td class="needs">backend, check-ins</td><td><span class="pill idea">idea</span></td></tr>
+</table></div>
+</section>
+
+<section id="questions">
+<h2><span class="letter">E</span>Questions for Daniele</h2>
+<p class="sub">Each one unblocks something above. Answer in chat and it moves to DECISIONS.</p>
+<ul class="q">
+<li class="new">New photos and layout plan of the club (unblocks A1).</li>
+<li>Black Cabin's real opening hours (what the game shows at 14:00).</li>
+<li>Orientation: portrait or landscape primary. Both work today, F7 swaps.</li>
+<li>Brand typeface, or keep Kanit + IBM Plex Sans Thai Looped.</li>
+<li>Staff turnover policy when a real person leaves.</li>
+<li>Resident band, consent and staff packs (asks at the end of the cast bible).</li>
+<li>Death rules: how long at zero, warnings, what survives.</li>
+<li>Coin economy sign-off.</li>
+<li>Chat policy for multiplayer: phrase wheel vs free text (unblocks C1).</li>
+<li>The Flat home screen: keep minimal or cut.</li>
+<li>Black Cabin's real drinks menu (six placeholder drinks today).</li>
+</ul>
+</section>
+
+<section id="debt">
+<h2><span class="letter">F</span>Accepted debt</h2>
+<ul class="q">
+<li>Performance: 42 lights, about 1,850 draw calls, 24 ms GPU on desktop. Phone measurement before any phone build.</li>
+<li>Lounge camera partly blocked by the curtain wall.</li>
+<li>Figure lighting and head proportions (heads 37–43 % of height vs 27–34 % in the renders).</li>
+<li>Native Thai pass, Thai line-height override, web export check.</li>
+<li>Coins, the Flat, memories album and performances schedule not built.</li>
+</ul>
+</section>
+
+<p class="foot">Updated 1 Nov 2026 by the orchestrator. Items are never silently deleted: shipped ones get the commit, dropped ones get the reason.</p>
+</div>
