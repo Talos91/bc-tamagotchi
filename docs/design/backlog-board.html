@@ -99,13 +99,18 @@ code { font-family: ui-monospace, Consolas, monospace; font-size: 13px; }
 .crow .qbtn { padding: 6px 12px; font-size: 13px; }
 .crow .edited { font-size: 11px; color: var(--accent); white-space: nowrap; }
 @media (max-width: 560px) { td, th { padding-inline: 6px; } td.needs { min-width: 120px; } }
+table.doc td, table.doc th { vertical-align: top; text-align: left; }
+.doc-panel h3 { font-family: var(--display); font-weight: 500; font-size: 17px; margin: 22px 0 6px; color: var(--accent); }
+.doc-panel p.sub { max-width: 80ch; }
+.doc-panel code { font-size: 12.5px; }
+.tabs { flex-wrap: wrap; }
 </style>
 <div class="wrap">
 <header>
   <h1>Black Cabin Backlog<small>Ideas, requests and open questions for the Tamagotchi. Lives in the repo as <code>docs/design/BACKLOG.md</code>.</small></h1>
   <div class="verdict"><b>Alpha verdict, 1 Nov 2026:</b> “fun, fucked up but fine, good alpha.” First job is the baseline map of the club. Everything else waits for it, because a community game needs the real room right.</div>
 </header>
-<nav class="tabs" role="tablist" aria-label="Board sections"><button class="tab" role="tab" id="t-backlog" aria-controls="p-backlog" aria-selected="true">Backlog</button><button class="tab" role="tab" id="t-questions" aria-controls="p-questions" aria-selected="false">Questions <span class="badge zero" id="q-badge">…</span></button><button class="tab" role="tab" id="t-coins" aria-controls="p-coins" aria-selected="false">Coins</button></nav>
+<nav class="tabs" role="tablist" aria-label="Board sections"><button class="tab" role="tab" id="t-backlog" aria-controls="p-backlog" aria-selected="true">Backlog</button><button class="tab" role="tab" id="t-questions" aria-controls="p-questions" aria-selected="false">Questions <span class="badge zero" id="q-badge">…</span></button><button class="tab" role="tab" id="t-coins" aria-controls="p-coins" aria-selected="false">Coins</button><button class="tab" role="tab" id="t-stakes" aria-controls="p-stakes" aria-selected="false">Stakes rules</button><button class="tab" role="tab" id="t-bible" aria-controls="p-bible" aria-selected="false">Game bible</button></nav>
 <div id="p-backlog" role="tabpanel" aria-labelledby="t-backlog">
 <div class="legend"><span class="s-plan">planned / in STATE</span><span class="s-wait">waiting on an input</span><span class="s-idea">idea, not scheduled</span><span class="s-ok">done</span><span>Effort: S a day · M a wave · L several waves</span></div>
 
@@ -119,8 +124,12 @@ code { font-family: ui-monospace, Consolas, monospace; font-size: 13px; }
 <tr><td class="id">A3</td><td>Playtest fixes: doors you can walk through, real sitting at every seat, stairs reoriented, memory corner, corridor sign, walls solid until the door</td><td class="eff">M</td><td class="needs">nothing</td><td><span class="pill ok">done</span></td></tr>
 <tr><td class="id">A4</td><td>Real Black Cabin menu at the bar and in Pour Perfect; brand fonts Lato + Kristi; portrait first with a landscape toggle</td><td class="eff">M</td><td class="needs">your answers on the Questions tab</td><td><span class="pill ok">done</span></td></tr>
 <tr><td class="id">A5</td><td>Playtest fixes: smoother camera, walls see-through but their bottom 10 % (corridor excepted), fluid movement, facing bug, seats facing the right way; Prae as an owner with her real look</td><td class="eff">M</td><td class="needs">nothing</td><td><span class="pill ok">done; area views and buttons back</span></td></tr>
-<tr><td class="id">A7</td><td>Camera feel, round 2: tighter follow, walls and furniture out of the way, distance and angle (your 2 Nov answer)</td><td class="eff">M</td><td class="needs">your answers on the Questions tab</td><td><span class="pill wait">built; open, awaiting your answer on camera-feel-2-accept, camera-closer-still and camera-patrons-in-front</span></td></tr>
-<tr><td class="id">A8</td><td>Web build on Vercel: the game playable on your phone from a link (Godot 4.6.1 Web export, Compatibility renderer, single-threaded, PWA), for first feedback from your friends at Black Cabin</td><td class="eff">M</td><td class="needs">phone check (load time, frame rate with 42 lights, touch, portrait HUD, save survives reload)</td><td><span class="pill plan">in progress</span></td></tr>
+<tr><td class="id">A7</td><td>Camera feel, round 2: tighter follow, walls and furniture out of the way, distance and angle (your 2 Nov answer)</td><td class="eff">M</td><td class="needs">your answers on the Questions tab</td><td><span class="pill wait">built (406d2fd, c97abde); awaiting your acceptance on camera-feel-2-accept, camera-closer-still and camera-patrons-in-front</span></td></tr>
+<tr><td class="id">A8</td><td>Web build on Vercel: the game playable on your phone from a link (Godot 4.6.1 Web export, Compatibility renderer, single-threaded, PWA), for first feedback from your friends at Black Cabin</td><td class="eff">M</td><td class="needs">phone check (load time, frame rate with 42 lights, touch, portrait HUD, save survives reload)</td><td><span class="pill wait">built; you deploy it (redeploy from the repo root, see docs/tech/03-web-build.md), then the phone pass</span></td></tr>
+<tr><td class="id">A9</td><td>Look-D follow-ups: darker with the player readable, corridor west-end neon line, sconces on the line, symmetric stage curtain, electric-piano player, second Top-patrons poster; owner items 1, 3, 9, 10, 12</td><td class="eff">M</td><td class="needs">your acceptance (card look-followups-review)</td><td><span class="pill wait">built (84c58e5, 86b40ab); card open</span></td></tr>
+<tr><td class="id">A10</td><td>Needs and stakes build: stake clock, ghost, annoyances, minigame misses and tries, Retire, farewell card (stakes v3 with O1–O3); Ty named (owner item 2)</td><td class="eff">M</td><td class="needs">your acceptance (card needs-stakes-review)</td><td><span class="pill wait">built (dd4e03c); card open</span></td></tr>
+<tr><td class="id">A11</td><td>Touch anywhere instead of the fixed joystick; area buttons slide away and back (owner items 13, 14)</td><td class="eff">S</td><td class="needs">your acceptance, phone feel (card touch-anywhere-review)</td><td><span class="pill wait">built (b8f6d50); card open</span></td></tr>
+<tr><td class="id">A12</td><td>Venue fixes: bar door, raised bar and walled area, buffer curtains, toilet door, rope in the unused corridor (owner items 4–8, 11)</td><td class="eff">M</td><td class="needs">your acceptance (card venue-fixes-review)</td><td><span class="pill wait">built (e4d7e76); card open</span></td></tr>
 <tr><td class="id">A6</td><td>Version number in the game (v0.2.0 plus the build), changelog by version</td><td class="eff">S</td><td class="needs">nothing</td><td><span class="pill ok">done (v0.2.0)</span></td></tr>
 </table></div>
 </section>
@@ -183,6 +192,7 @@ code { font-family: ui-monospace, Consolas, monospace; font-size: 13px; }
 <li>Figure lighting and head proportions (heads 37–43 % of height vs 27–34 % in the renders).</li>
 <li>Native Thai pass, Thai line-height override, web export check.</li>
 <li>Coins, the Flat, memories album and performances schedule not built.</li>
+<li>Needs build left out: Retire settings screen, audio duck, postcards beyond the home text.</li>
 </ul>
 </section>
 
@@ -203,19 +213,216 @@ code { font-family: ui-monospace, Consolas, monospace; font-size: 13px; }
 <div id="c-body"><div class="qempty">Loading the economy…</div></div>
 </div>
 
+<div id="p-stakes" class="doc-panel" role="tabpanel" aria-labelledby="t-stakes" hidden>
+<!--BEGIN:stakes-->
+<h2>Stakes rules, as the player meets them</h2>
+<p class="sub">Source: <code>06-stakes.md</code> v3 (accepted by Daniele 2026-11-02, answers O1–O4 folded in), built in <code>dd4e03c</code>. Numbers live in <code>game/scripts/rules.gd</code>. If this page and <code>06-stakes.md</code> differ, the design doc wins.</p>
+<h3>1. The idea</h3>
+<p class="sub">Players should grow attached to their character, so losing one must mean something. <b>One need is fatal: go to Black Cabin, the real one.</b> Every other need only brings annoyances. Tone: playful ghost and zombie. The character &quot;dies of boredom&quot;; the copy talks about the character, never about the player.</p>
+<h3>2. The needs</h3>
+<div class="tablewrap"><table class="doc"><thead><tr><th>Need</th><th>Filled by</th><th>If neglected</th></tr></thead><tbody>
+<tr><td><b>Go to Black Cabin</b></td><td>A real visit: a table QR check-in, or a memory photo taken at the bar</td><td><b>Fatal</b></td></tr>
+<tr><td>Drink</td><td>Order a drink, Pour Perfect, try a new drink</td><td>Thirsty</td></tr>
+<tr><td>Music</td><td>Listen to songs, Front Row Rhythm, applaud</td><td>Earworm</td></tr>
+<tr><td>Chat</td><td>Candle Talk, sit at a table, bar chat, a cigarette</td><td>Phone face</td></tr>
+<tr><td>Minigame</td><td>Any minigame finished without a miss</td><td>Rusty</td></tr>
+<tr><td>Event calendar</td><td>Open the calendar (not built yet)</td><td>Out of the loop</td></tr>
+</tbody></table></div>
+<h3>3. What counts as a visit</h3>
+<ul class="q">
+<li>Only a <b>real visit</b> resets the fatal clock: a QR check-in while the bar is open (Tue–Sun 19:00–02:00 Bangkok), or a photo shared at the lounge TV corner on a night you checked in. One per bar night; a night runs 06:00 to 06:00 Bangkok.</li>
+<li><b>Until the server exists</b>, any one refill action in the game stands in (a drink, a chat, a song). It counts the moment it lands. One flag, <code>REAL_VISIT_REQUIRED</code>, switches this off later.</li>
+<li><b>O1:</b> the real-visit rule only bites a character that has checked in at the bar at least once.</li>
+<li>A character cannot die mid-visit: if the clock hits 21 days during a visit, death waits until the visit ends.</li>
+<li><b>Out of Town</b> (up to 14 days, once per 30) freezes the clock. It cannot be started once Restless.</li>
+</ul>
+<h3>4. The clock and the warnings</h3>
+<div class="tablewrap"><table class="doc"><thead><tr><th>Days since last visit</th><th>Stage</th><th>What you see</th></tr></thead><tbody>
+<tr><td>0–10</td><td>Fine</td><td>Nothing</td></tr>
+<tr><td>10</td><td>Restless</td><td>Chip &quot;Restless&quot;, paces, a regular&#x27;s postcard</td></tr>
+<tr><td>15</td><td>Fading</td><td>Greyed, slumped on the kerb, lamps dim</td></tr>
+<tr><td>18</td><td>Last Call</td><td>Translucent, chip &quot;Last Call · 3 days&quot;, Nam&#x27;s postcard</td></tr>
+<tr><td>21</td><td>Dead, a ghost</td><td>A voxel ghost of the character, tombstone sticker on the club door</td></tr>
+<tr><td>28, 33</td><td>Ghost reminders</td><td>Chip shows days left to bring the character back</td></tr>
+<tr><td>35</td><td>Deleted</td><td>The farewell card, then a new game</td></tr>
+</tbody></table></div>
+<p class="sub">Days are shown, never a live countdown. Any counting visit before day 21 resets the clock and triggers <b>Welcome Back</b> (double gains for 15 minutes); from Last Call it also drops a &quot;Close Call&quot; polaroid.</p>
+<div class="tablewrap"><table class="doc"><thead><tr><th>Player</th><th>Danger</th></tr></thead><tbody>
+<tr><td>2–3 visits a week</td><td>Never</td></tr>
+<tr><td>1 visit a week</td><td>Never past Fine; Thirsty at most</td></tr>
+<tr><td>1 visit every 10–20 days</td><td>Warnings, never dead</td></tr>
+<tr><td>Opens the app after creating, never plays</td><td>Dead day 21, deleted day 35</td></tr>
+</tbody></table></div>
+<h3>5. Death, the ghost window, revival</h3>
+<ul class="q">
+<li>At day 21 the character becomes a <b>ghost for 14 days</b>. Meters, coins and everything freeze; nothing the ghost does counts. It can still walk the club and watch the band.</li>
+<li><b>O2:</b> before the server exists there is <b>no revival</b>; the window simply runs out. A debug &quot;Fake check-in&quot; exists for tests only.</li>
+<li>Later: a <b>QR check-in at the real bar</b> during the window revives the character, <b>once per 90 days</b>.</li>
+<li>A revived character comes back as a zombie for that visit, meters lifted to at least 40, keeps everything, and gets a &quot;Lives: 2&quot; mark.</li>
+</ul>
+<h3>6. Deletion is total</h3>
+<p class="sub">At day 35, or on a voluntary Retire, the character is deleted: look, name, meters, coins, wardrobe, hearts, memories, achievements, minigame bests, leaderboard rows. Nothing survives in the game. What stays: the account (sign-in, settings), real-world vouchers already claimed, and a <b>farewell card</b> the player can save or share before it goes. A new game starts from scratch. Retire has a 7-day cooldown.</p>
+<h3>7. Annoyances (stronger, but never touch coins)</h3>
+<p class="sub">A meter annoyance starts when its meter is below 10 and is cleared in the same visit by doing the thing. While any annoyance is on, gains to every other meter are <b>×0.85 per annoyance</b> (two on: ×0.72; four: ×0.52).</p>
+<div class="tablewrap"><table class="doc"><thead><tr><th>Annoyance</th><th>Extra friction</th><th>Cleared by</th></tr></thead><tbody>
+<tr><td>Thirsty (Drink)</td><td>Walks 25 % slower</td><td>Any drink, water counts</td></tr>
+<tr><td>Earworm (Music)</td><td>Club music ducked −9 dB</td><td>Hearing one song</td></tr>
+<tr><td>Phone face (Chat)</td><td>Regulars do not wave you over; one extra tap on the first chat</td><td>Any chat</td></tr>
+<tr><td>Rusty (Minigame)</td><td>2-second fumble, higher miss line on the first minigame</td><td>Finishing any minigame</td></tr>
+<tr><td>Out of the loop (Calendar, 7 days)</td><td>&quot;?&quot; on the Tonight board</td><td>Opening the calendar</td></tr>
+</tbody></table></div>
+<h3>8. Minigames can be missed</h3>
+<ul class="q">
+<li>A round below <b>0.25</b> is a <b>miss</b>: no need gain, no coins, no best. While Rusty, the first round misses below 0.4.</li>
+<li><b>3 rounds per minigame per visit</b>, misses included.</li>
+<li>A missed Candle Talk costs a try, never a heart. A missed Pour Perfect serves no drink.</li>
+<li>Every meter can still be filled to 100 with no coins.</li>
+</ul>
+<h3>9. Why players get attached</h3>
+<p class="sub">The character card (&quot;At Black Cabin since 3 Oct · 23 nights out · Lives 1&quot;), achievement stickers on the club door, &quot;the usual&quot; at the bar after three orders, regulars who remember you, Top patrons on the lounge board and corridor wall, the Flat, and the scar a revival leaves.</p>
+<h3>10. The memory rule (O3)</h3>
+<p class="sub">Only photos shared on a night the player <b>checked in</b> count as a memory at the bar. The memory need is the real one: a photo taken at the real Black Cabin and shared at the lounge TV corner.</p>
+<h3>11. The Flat (later unlock)</h3>
+<p class="sub">Rent a room on the second floor: <b>100 coins</b> to move in, <b>20 coins a week</b> (Mondays 00:00 Bangkok), up to 4 weeks ahead. Rent pauses while Out of Town or a ghost. It never buys relief from needs. If rent lapses: 7 days&#x27; grace, then moved out, things to storage, re-rent free of the move-in fee within 30 days.</p>
+<h3>12. Still to build</h3>
+<p class="sub">Retire settings screen, audio duck bus, notifications and postcards beyond the home text, the stitched-scar sticker, the Going bonus (all need push, wardrobe or the calendar), and the real server behind QR check-ins.</p>
+<!--END:stakes-->
+</div>
+
+<div id="p-bible" class="doc-panel" role="tabpanel" aria-labelledby="t-bible" hidden>
+<!--BEGIN:bible-->
+<h2>Game bible</h2>
+<p class="sub">One page that points at everything known about Black Cabin Tamagotchi, with the live numbers from <code>game/scripts/rules.gd</code>. Paths are relative to the repo root. Where DECISIONS and another doc disagree, <code>docs/design/DECISIONS.md</code> wins. Maintained by Housekeeping; refresh after each wave (<code>python docs/design/build_hub_tabs.py</code>).</p>
+<h3>What it is</h3>
+<p class="sub">A voxel-art Tamagotchi-style game commissioned by the real Black Cabin bar (466 Soi Thong Lo 16, Bangkok; open Tue–Sun 19:00–02:00). The character lives a needs loop (four meters, real-time decay) in a voxel replica of the venue, with minigames, coins and, later, a bridge to the real venue. Mobile only, portrait first. Engine: Godot 4.6.1, Compatibility renderer.</p>
+<h3>Design</h3>
+<div class="tablewrap"><table class="doc"><thead><tr><th>Doc</th><th>What it holds</th></tr></thead><tbody>
+<tr><td><code>docs/design/DECISIONS.md</code></td><td>Binding decision log, newest rows at the bottom, plus the &quot;Still open&quot; list</td></tr>
+<tr><td><code>docs/design/00-brief.md</code></td><td>The original brief (2026-09-22)</td></tr>
+<tr><td><code>docs/design/01-high-concept.md</code></td><td>Pitch, pillars, the stakes in one page</td></tr>
+<tr><td><code>docs/design/02-gdd.md</code></td><td>Game design document: needs, Vibe, visits, memories, minigames, notifications</td></tr>
+<tr><td><code>docs/design/03-cast.md</code></td><td>Cast bible: owners, staff, regulars (Prae, Nam, Ty and the rest), asks to Black Cabin</td></tr>
+<tr><td><code>docs/design/04-coins.md</code></td><td>Coin economy v2, signed off (long form)</td></tr>
+<tr><td><code>docs/design/04-coins-summary.md</code></td><td>The coin economy on one page</td></tr>
+<tr><td><code>docs/design/06-stakes.md</code></td><td>Stakes v3: fatal timer, ghost window, deletion, annoyances, the Flat, build spec</td></tr>
+<tr><td><code>docs/design/stakes-rules.md</code></td><td>The player-facing stakes rules (hub tab &quot;Stakes rules&quot;)</td></tr>
+<tr><td><code>docs/design/BACKLOG.md</code></td><td>Living list of ideas and requests; mirrored on the hub Backlog tab</td></tr>
+<tr><td><code>docs/MANUAL.md</code></td><td>The game manual (also a live Claude Doc), sections 1–16</td></tr>
+</tbody></table></div>
+<h3>Venue and real-world facts</h3>
+<div class="tablewrap"><table class="doc"><thead><tr><th>Doc</th><th>What it holds</th></tr></thead><tbody>
+<tr><td><code>docs/venue/menu/</code></td><td>The real menu: 11 page photos, <code>menu.json</code>, <code>menu.md</code> (121 drinks, 34 dishes); used with the bar&#x27;s authorization</td></tr>
+<tr><td><code>docs/venue/menu/errata-for-black-cabin.md</code></td><td>Spellings that cannot be verified, to send to the bar</td></tr>
+<tr><td><code>docs/venue/events/</code></td><td>Monthly event posters and JSON transcriptions (feeds the calendar need)</td></tr>
+<tr><td><code>docs/art/direction/</code></td><td>Floor map, route and photos 01–25 of the real venue, the renders that set the look</td></tr>
+<tr><td><code>docs/reference/venue-photos/</code></td><td>Reduced venue photos for reference (originals in <code>venue-photos-original/</code>)</td></tr>
+</tbody></table></div>
+<h3>Art</h3>
+<div class="tablewrap"><table class="doc"><thead><tr><th>Doc</th><th>What it holds</th></tr></thead><tbody>
+<tr><td><code>docs/art/art-bible.md</code></td><td>Art bible v2: voxel scale, palette, characters</td></tr>
+<tr><td><code>docs/art/palette-look-d.md</code></td><td>Look D (the accepted venue look) values and the follow-ups</td></tr>
+<tr><td><code>docs/art/plan-v4.md</code></td><td>Venue v4 plan from the real floor map</td></tr>
+<tr><td><code>docs/art/parity-measurements.md</code></td><td>Measurements of renders 05 and 06 against the build</td></tr>
+<tr><td><code>docs/art/screens/</code></td><td>Review captures per job, portrait 1080×1920 and landscape 1920×1080</td></tr>
+<tr><td><code>blender/</code></td><td>Review <code>.blend</code> files (kit, characters)</td></tr>
+</tbody></table></div>
+<h3>UI</h3>
+<div class="tablewrap"><table class="doc"><thead><tr><th>Doc</th><th>What it holds</th></tr></thead><tbody>
+<tr><td><code>docs/ui/style-guide.md</code></td><td>UI style guide: Lato for text, Kristi for titles, Thai fallback</td></tr>
+<tr><td><code>docs/ui/wireframes.md</code></td><td>Portrait wireframes and components</td></tr>
+<tr><td><code>docs/ui/strings-guidelines.md</code></td><td>String table rules; English and Thai ship together (<code>game/i18n/</code>)</td></tr>
+</tbody></table></div>
+<h3>Tech and process</h3>
+<div class="tablewrap"><table class="doc"><thead><tr><th>Doc</th><th>What it holds</th></tr></thead><tbody>
+<tr><td><code>docs/tech/01-engine-decision.md</code></td><td>Why Godot over a web-native client</td></tr>
+<tr><td><code>docs/tech/02-playtest-guide.md</code></td><td>How to play the first loop</td></tr>
+<tr><td><code>docs/tech/03-web-build.md</code></td><td>Web export, Vercel deploy, phone pass</td></tr>
+<tr><td><code>docs/tech/versioning.md</code></td><td>Version number, build stamp, changelog</td></tr>
+<tr><td><code>docs/CHANGELOG.md</code></td><td>Every commit by version (<code>python tools/changelog.py</code>)</td></tr>
+<tr><td><code>PROJECT.md</code>, <code>STATE.md</code>, <code>LOG.md</code></td><td>Rules, state now, history</td></tr>
+<tr><td><code>ORCHESTRATION.md</code>, <code>handoffs/</code></td><td>How the project is run; role notes and worker reports</td></tr>
+<tr><td><code>game/tests/</code></td><td>The fifteen headless suites</td></tr>
+</tbody></table></div>
+<h3>Live numbers (<code>game/scripts/rules.gd</code>)</h3>
+<div class="tablewrap"><table class="doc"><thead><tr><th>Section</th><th>Constant</th><th>Value</th><th>Note</th></tr></thead><tbody>
+<tr><td>Meters</td><td><code>METER_MAX</code></td><td><code>100.0</code></td><td>§2.1 &quot;float 0-100&quot;</td></tr>
+<tr><td>Meters</td><td><code>METER_MIN</code></td><td><code>0.0</code></td><td></td></tr>
+<tr><td>Meters</td><td><code>START_VALUE</code></td><td><code>75.0</code></td><td>GDD §2.1 (start value line)</td></tr>
+<tr><td>Meters</td><td><code>SOFT_FLOOR_BELOW</code></td><td><code>30.0</code></td><td></td></tr>
+<tr><td>Meters</td><td><code>SOFT_FLOOR_FACTOR</code></td><td><code>0.3</code></td><td></td></tr>
+<tr><td>Meters</td><td><code>PERSONALITY_DECAY_MULT</code></td><td><code>0.9</code></td><td></td></tr>
+<tr><td>Meters</td><td><code>OUT_OF_TOWN_MAX_DAYS</code></td><td><code>14.0</code></td><td></td></tr>
+<tr><td>Meters</td><td><code>OUT_OF_TOWN_COOLDOWN_DAYS</code></td><td><code>30.0</code></td><td></td></tr>
+<tr><td>Vibe</td><td><code>GLOWING_MEMORY_BONUS</code></td><td><code>0.25</code></td><td>§2.2 +25% memory drop chance (consumed by the memories system)</td></tr>
+<tr><td>Visits and diminishing returns</td><td><code>DIMINISH_TIER_1_END</code></td><td><code>40.0</code></td><td></td></tr>
+<tr><td>Visits and diminishing returns</td><td><code>DIMINISH_TIER_2_END</code></td><td><code>80.0</code></td><td></td></tr>
+<tr><td>Visits and diminishing returns</td><td><code>DIMINISH_TIER_1_FACTOR</code></td><td><code>1.0</code></td><td></td></tr>
+<tr><td>Visits and diminishing returns</td><td><code>DIMINISH_TIER_2_FACTOR</code></td><td><code>0.5</code></td><td></td></tr>
+<tr><td>Visits and diminishing returns</td><td><code>DIMINISH_TIER_3_FACTOR</code></td><td><code>0.25</code></td><td></td></tr>
+<tr><td>Visits and diminishing returns</td><td><code>VISIT_IDLE_SECONDS</code></td><td><code>600.0</code></td><td></td></tr>
+<tr><td>Visits and diminishing returns</td><td><code>DAY_UTC_OFFSET_HOURS</code></td><td><code>7.0</code></td><td></td></tr>
+<tr><td>Full and empty</td><td><code>OVERFLOW_TO_TAB_RATIO</code></td><td><code>1.0</code></td><td></td></tr>
+<tr><td>Welcome Back</td><td><code>WELCOME_BACK_VIBE_BELOW</code></td><td><code>25.0</code></td><td>first visit after Vibe has been below 25...</td></tr>
+<tr><td>Welcome Back</td><td><code>WELCOME_BACK_AWAY_DAYS</code></td><td><code>7.0</code></td><td>...or after 7+ days away</td></tr>
+<tr><td>Welcome Back</td><td><code>WELCOME_BACK_GAIN_MULT</code></td><td><code>2.0</code></td><td></td></tr>
+<tr><td>Welcome Back</td><td><code>WELCOME_BACK_MINUTES</code></td><td><code>15.0</code></td><td>for 15 minutes</td></tr>
+<tr><td>Notifications</td><td><code>NOTIFY_LOWEST_METER_CROSSES</code></td><td><code>40.0</code></td><td></td></tr>
+<tr><td>Notifications</td><td><code>NOTIFY_MAX_PER_WEEK</code></td><td><code>2</code></td><td></td></tr>
+<tr><td>Notifications</td><td><code>NOTIFY_QUIET_AFTER_HOUR</code></td><td><code>22</code></td><td></td></tr>
+<tr><td>Debug clock</td><td><code>DEBUG_CLOCK_MULTIPLIER</code></td><td><code>60.0</code></td><td></td></tr>
+<tr><td>Persistence</td><td><code>AUTOSAVE_SECONDS</code></td><td><code>30.0</code></td><td></td></tr>
+<tr><td>Persistence</td><td><code>VISIT_LOG_MAX</code></td><td><code>200</code></td><td></td></tr>
+<tr><td>Stakes</td><td><code>FATAL_DAYS</code></td><td><code>21.0</code></td><td>days without a counting visit (Out of Town excluded): the character dies</td></tr>
+<tr><td>Stakes</td><td><code>GHOST_WINDOW_DAYS</code></td><td><code>14.0</code></td><td>a ghost can be revived by a check-in this long, then it is deleted (day 35)</td></tr>
+<tr><td>Stakes</td><td><code>GHOST_REMINDER_DAYS</code></td><td><code>[28.0, 33.0]</code></td><td>days since the last visit: a ghost&#x27;s reminders</td></tr>
+<tr><td>Stakes</td><td><code>REVIVE_COOLDOWN_DAYS</code></td><td><code>90.0</code></td><td>one revival per this many days</td></tr>
+<tr><td>Stakes</td><td><code>REVIVE_METER_FLOOR</code></td><td><code>40.0</code></td><td>a revived character&#x27;s meters are lifted to at least this</td></tr>
+<tr><td>Stakes</td><td><code>REAL_VISIT_REQUIRED</code></td><td><code>false</code></td><td></td></tr>
+<tr><td>Stakes</td><td><code>STAKE_NOTIFY_OUTSIDE_BUDGET</code></td><td><code>[&quot;last_call&quot;, &quot;dead&quot;, &quot;ghost_33&quot;]</code></td><td></td></tr>
+<tr><td>Stakes</td><td><code>STAKE_NOTIFY_FALLBACK_HOUR</code></td><td><code>19</code></td><td></td></tr>
+<tr><td>Stakes</td><td><code>NIGHT_STARTS_HOUR</code></td><td><code>6.0</code></td><td>a bar night belongs to the Bangkok day that starts at 06:00 (check-in at 01:00 = the night before)</td></tr>
+<tr><td>Stakes</td><td><code>CHECKIN_NIGHTS_KEPT</code></td><td><code>14</code></td><td></td></tr>
+<tr><td>Stakes</td><td><code>ANNOY_EMPTY_BELOW</code></td><td><code>10.0</code></td><td></td></tr>
+<tr><td>Stakes</td><td><code>ANNOY_DRAG_MULT</code></td><td><code>0.85</code></td><td>gains to every OTHER meter, per active annoyance</td></tr>
+<tr><td>Stakes</td><td><code>THIRSTY_WALK_MULT</code></td><td><code>0.75</code></td><td></td></tr>
+<tr><td>Stakes</td><td><code>EARWORM_DUCK_DB</code></td><td><code>-9.0</code></td><td></td></tr>
+<tr><td>Stakes</td><td><code>RUSTY_FUMBLE_SECONDS</code></td><td><code>2.0</code></td><td></td></tr>
+<tr><td>Stakes</td><td><code>CALENDAR_HABIT_DAYS</code></td><td><code>7.0</code></td><td></td></tr>
+<tr><td>Stakes</td><td><code>CALENDAR_HABIT_ENABLED</code></td><td><code>false</code></td><td>until the events calendar (BACKLOG D1) exists</td></tr>
+<tr><td>Stakes</td><td><code>MINIGAME_MISS_BELOW</code></td><td><code>0.25</code></td><td></td></tr>
+<tr><td>Stakes</td><td><code>RUSTY_MISS_BELOW</code></td><td><code>0.4</code></td><td></td></tr>
+<tr><td>Stakes</td><td><code>MINIGAME_TRIES_PER_VISIT</code></td><td><code>3</code></td><td></td></tr>
+<tr><td>Stakes</td><td><code>GOING_BONUS_MUSIC</code></td><td><code>10.0</code></td><td>waits for the calendar (D1)</td></tr>
+<tr><td>Stakes</td><td><code>RETIRE_COOLDOWN_DAYS</code></td><td><code>7.0</code></td><td></td></tr>
+<tr><td>Nightlife</td><td><code>DRUNK_FROM</code></td><td><code>3</code></td><td>the drunk screen effect starts at this many drinks...</td></tr>
+<tr><td>Nightlife</td><td><code>DRUNK_FULL</code></td><td><code>10</code></td><td>...and grows to its strongest here</td></tr>
+<tr><td>Nightlife</td><td><code>WASTED_AFTER</code></td><td><code>10</code></td><td>one more than this: WASTED</td></tr>
+<tr><td>Nightlife</td><td><code>DRUNK_SOBER_MINUTES</code></td><td><code>20.0</code></td><td>provisional: one drink wears off per 20 game minutes (03-cast §5.1 had a state per 30)</td></tr>
+<tr><td>Nightlife</td><td><code>WATER_SOBER_DRINKS</code></td><td><code>2</code></td><td>provisional: a glass of water takes two drinks off (it used to drop a state)</td></tr>
+<tr><td>Nightlife</td><td><code>DRUNK_WARN_FROM</code></td><td><code>8</code></td><td>provisional: from here Nam&#x27;s line on the Order row is a warning</td></tr>
+<tr><td>Nightlife</td><td><code>WASTED_LOCKOUT_HOURS</code></td><td><code>12.0</code></td><td>on the game clock, saved; the debug clock (F2, F3) skips it</td></tr>
+<tr><td>Nightlife</td><td><code>WASTED_METER_VALUE</code></td><td><code>0.0</code></td><td>provisional: &quot;all minor needs unfulfilled&quot; = the four meters to this</td></tr>
+<tr><td>Nightlife</td><td><code>WASTED_LINES</code></td><td><code>10</code></td><td>nightlife.wasted.line.0..9 in i18n/strings_nightlife.csv, one at random</td></tr>
+<tr><td>Nightlife</td><td><code>SMOKE_SECONDS</code></td><td><code>8.0</code></td><td>one cigarette; light_one_up lands when it is finished</td></tr>
+<tr><td>Nightlife</td><td><code>PLUMBING_DRINKS_TO</code></td><td><code>0.0</code></td><td>Daniele: Check the plumbing resets the drink need to 0</td></tr>
+</tbody></table></div>
+<p class="sub">Refill actions (gains per action, caps) are the <code>ACTIONS</code> table in the same file; decay per real hour: music 0.55, friends 0.50, drinks 0.70, nightlife 0.45.</p>
+<!--END:bible-->
+</div>
+
 <dialog class="lb" id="lb" aria-label="Picture viewer">
   <div class="lb-bar"><span class="lb-cap" id="lb-cap"></span><button class="qbtn ghost" id="lb-close">Close ✕</button></div>
   <div class="lb-stage"><img id="lb-img" alt=""></div>
   <div class="lb-nav" id="lb-nav"><button class="qbtn ghost" id="lb-prev">← Previous</button><button class="qbtn ghost" id="lb-next">Next →</button></div>
 </dialog>
 
-<p class="foot">Updated 2 Nov 2026, v13 (look D landed, camera round 2 built and awaiting your answers, web build A8 in progress). Backlog items are never silently deleted: shipped ones get the commit, dropped ones get the reason. Answers on the Questions tab are copied into <code>docs/design/DECISIONS.md</code>.</p>
+<p class="foot">Updated 3 Nov 2026, v14 (all fourteen owner items built and verified; Stakes rules and Game bible tabs added; web build A8 built, deploy is yours). Backlog items are never silently deleted: shipped ones get the commit, dropped ones get the reason. Answers on the Questions tab are copied into <code>docs/design/DECISIONS.md</code>.</p>
 </div>
 <script>
 (function(){
   const $ = s => document.querySelector(s);
-  // Tabs: three views, bookmarkable as #backlog, #questions and #coins
-  const tabs = { backlog: [$('#t-backlog'), $('#p-backlog')], questions: [$('#t-questions'), $('#p-questions')], coins: [$('#t-coins'), $('#p-coins')] };
+  // Tabs: five views, bookmarkable as #backlog, #questions, #coins, #stakes and #bible
+  const tabs = { backlog: [$('#t-backlog'), $('#p-backlog')], questions: [$('#t-questions'), $('#p-questions')], coins: [$('#t-coins'), $('#p-coins')], stakes: [$('#t-stakes'), $('#p-stakes')], bible: [$('#t-bible'), $('#p-bible')] };
   function show(name){
     if(!tabs[name]) name = 'backlog';
     for(const k in tabs){ const on = k === name; tabs[k][0].setAttribute('aria-selected', String(on)); tabs[k][1].hidden = !on; }
