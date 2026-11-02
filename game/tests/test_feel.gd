@@ -41,7 +41,7 @@ const MIN_HEIGHT_SMOKING := 72.0    ## the smoking view stays a little wider: it
 ## Camera feel 2 framings: area -> [pitch, distance] (build_venue.gd _camera_zones)
 const FRAMING := {"lobby": [-40.0, 5.0], "corridor": [-36.0, 5.0], "buffer": [-40.0, 4.6], "alcove": [-50.0, 4.2],
 	"merch": [-38.0, 5.0], "memory": [-38.0, 5.0], "patrons": [-34.0, 4.8], "lounge": [-40.0, 5.0], "bar": [-40.0, 5.2],
-	"stage": [-34.0, 5.2], "toilets": [-42.0, 4.8], "smoking": [-46.0, 5.4], "floor": [-40.0, 5.2]}
+	"stage": [-34.0, 5.2], "toilets": [-42.0, 4.8], "smoking": [-46.0, 5.4], "floor": [-36.0, 5.6]}
 ## A spot in each area (framing check)
 const AREA_SPOTS := {"floor": Vector3(30.0, 0.1, 6.8), "bar": Vector3(29.0, 0.1, 11.4), "stage": Vector3(30.75, 0.1, 4.6),
 	"toilets": Vector3(21.0, 0.1, 14.2), "smoking": Vector3(40.0, 0.1, 15.2), "buffer": Vector3(17.7, 0.1, 5.3),
@@ -246,6 +246,13 @@ func _init() -> void:
 			teleport(at)
 			await frames(20)
 			check(on_screen(p.global_position + Vector3(0, 0.9, 0), 0.04), "player on screen at %s (%dx%d)" % [v2(at), size.x, size.y])
+		# From the middle of the floor the raised strip's tables are in frame (test_lounge taps them from here)
+		teleport(Vector3(30.0, 0.1, 7.0))
+		await frames(10)
+		var raised := 0
+		for i in 5:
+			raised += int(on_screen((main.get_node("Venue").find_child("Raised%d" % i, true, false) as Node3D).global_position + Vector3(0, 0.75, 0), 0.0))
+		check(raised == 5, "from the middle of the floor %d of 5 raised-strip tables in frame (%dx%d)" % [raised, size.x, size.y])
 	root.size = Vector2i(1080, 1920)
 
 	print("follow")

@@ -27,7 +27,8 @@ extends Node3D
 ## time when the view changes, so a new area's framing eases in while the player stays tracked. The rig steps in _physics_process, in lockstep with the
 ## player's movement (the body moves only on physics ticks; a tight follow at the display rate would shake it on
 ## screen), and with a fixed delta, so the tests measure it deterministically. set_process(false) still turns it off
-## (street_shot.gd, start_screen.gd): the switch is is_processing().
+## (street_shot.gd, start_screen.gd): the switch is is_processing(). snap() frames the player at once (it does not wait
+## for the next tick), and so does collecting the zones, so `zone` is set from the first frame.
 ##
 ## Walls (group "cutaway", meta cut_normal = the outward normal of the room whose camera looks through them):
 ##   entrance zones (lobby, corridor)  as before: a piece is hidden when its cut_normal faces the camera or it
@@ -140,6 +141,7 @@ func _collect() -> void:
 	_occluders.clear()
 	for n in get_tree().get_nodes_in_group("occluder"):
 		_occluders.append(n)
+	snap()
 
 ## World box of a cutaway piece: its own mesh, or for a kit piece (a scene root) all the meshes under it.
 static func _world_box(n: Node3D) -> AABB:
@@ -171,8 +173,10 @@ func _make_stub(n: Node3D, box: AABB) -> Variant:
 	mi.get_parent().add_child(stub)
 	return [stub, mi.position.y - h * 0.5, h]
 
+## Jump straight to the framing for where the player is now (teleports, scene start), without waiting for a tick.
 func snap() -> void:
 	_snap = true
+	_physics_process(0.0)
 
 ## Area button: turn to `area`'s framing now and follow the player to it (see the header).
 func focus_on(area: String) -> void:

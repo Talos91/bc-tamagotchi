@@ -43,6 +43,7 @@ func _init() -> void:
 	needs.new_game()
 	for m in needs.meters:
 		needs.meters[m] = 50.0
+	root.size = Vector2i(1080, 1920)   # portrait, as on the phone (a headless window is square: the landscape framing)
 	main = load("res://scenes/main.tscn").instantiate()
 	root.add_child(main)
 	for i in 5:

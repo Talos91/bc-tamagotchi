@@ -1752,8 +1752,8 @@ func _contact_shadows() -> void:
 ## horizon instead of on the upper walls); before -> after (pitch / distance) in handoffs/camera-feel-2-2026-11-02.md.
 func _camera_zones() -> void:
 	const MAIN_CLAMP := Rect2(21.6, 1.6, 17.6, 10.6)   # look target x 21.6..39.2, z 1.6..12.2: every corner table in frame
-	const MAIN_PITCH := -40.0
-	const MAIN_DIST := 5.2
+	const MAIN_PITCH := -36.0
+	const MAIN_DIST := 5.6
 	const MAIN_LOOK_Y := 0.9
 	var g := _group("CameraZones")
 	var zones := [
