@@ -21,6 +21,7 @@ signal menu_requested(tab: String)  ## main.gd opens the real menu list (scripts
 signal wasted(line: int)  ## past Rules.WASTED_AFTER drinks; the rules are applied already, main.gd plays the shot
 
 const Rules = preload("res://scripts/rules.gd")
+const Cast = preload("res://scripts/cast.gd")
 const Tipsiness = preload("res://scripts/zones/tipsiness.gd")
 const HouseBand = preload("res://scripts/zones/house_band.gd")
 const T = preload("res://scripts/zones/venue_strings.gd")
@@ -302,7 +303,7 @@ func _nrow(id: String, title_key: String, sub: String, need: String, game := fal
 func _name(id: String) -> String:
 	if id == BARTENDER:
 		return T.t("venue.cast.nam")
-	return String(TranslationServer.translate("cast.%s.name" % id))
+	return Cast.name_of(id)
 
 
 func _best(game_id: String) -> String:

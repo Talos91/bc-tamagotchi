@@ -70,6 +70,19 @@ func _init() -> void:
 		if n is Label and (n as Label).is_visible_in_tree() and n.name != "VersionLabel":  # the build version is not a title
 			labels.append((n as Label).text)
 	check(labels == [en_tap], "only the prompt on screen, no title: %s" % [labels])
+	# No raw "cast.<id>.name" key anywhere on screen or in the first regular's table prompt (the Ty label bug, 2026-11-03)
+	var raw := []
+	for n in _all(main, []):
+		if n is Label and "cast." in (n as Label).text or n is Label3D and "cast." in (n as Label3D).text:
+			raw.append(str(n.name))
+	check(raw.is_empty(), "no raw cast. label in the scene tree: %s" % [raw])
+	# The cast names are registered with the engine from project.godot, so they resolve without the runtime CSV read
+	# (the web export showed the raw key over Ty's table: the runtime read is not what a phone should depend on)
+	var reg: PackedStringArray = ProjectSettings.get_setting("internationalization/locale/translations", PackedStringArray())
+	check(reg.has("res://i18n/strings.en.translation") and reg.has("res://i18n/strings.th.translation"), "strings.en/th.translation registered in project.godot")
+	check(TranslationServer.translate("cast.tt.name") == "Ty", "Ty resolves from the registered translation (%s)" % TranslationServer.translate("cast.tt.name"))
+	var tt_prompt: String = main.session.prompt_for(main.zones.by_id("table:LongTable"))
+	check(not tt_prompt.contains("cast.") and tt_prompt.contains("Ty"), "Ty's table prompt names him: %s" % tt_prompt)
 	var lights_title := _visible_lights()
 	print("  lights on the start screen: ", lights_title, " (venue alone ", inside, ")")
 	check(lights_title <= 48, "start screen within max_renderable_lights 48")

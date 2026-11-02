@@ -91,6 +91,9 @@ func _init() -> void:
 	# Tt is regular #4 (Daniele 2026-11-02): a heart by his name, seated at his table, and hearts from a good talk
 	var tag: Label3D = main.zones.get_node_or_null("Tag_tt")
 	check(tag != null and tag.text == "Ty  ♥", "a regular's name tag carries the heart (%s)" % (tag.text if tag else "missing"))
+	check(not main.find_children("*", "Label", true, false).any(func(l): return "cast." in l.text), "no raw cast. label on screen at Ty's table")
+	var sheet_prompt: String = s.prompt_for(main.zones.current)
+	check(sheet_prompt.contains("Ty") and not sheet_prompt.contains("cast."), "Ty's table prompt names him (%s)" % sheet_prompt)
 	var tt: PatronFigure = main.find_child("Host_tt", true, false)
 	check(tt != null and tt.state == "sit", "Tt sits at the Long Table")
 	# Prae (an owner) is in on even nights, silent: her tag has no heart and her table offers no talk
