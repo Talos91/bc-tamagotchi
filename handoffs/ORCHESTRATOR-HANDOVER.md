@@ -2,6 +2,8 @@
 
 **Rule (Daniele, 2026-11-02): no new orchestrator until all the work is closed.** That means every worker has finished, or closed with its role note; everything is documented; nothing is running; and the version is closed. Only then does the new orchestrator start from the files and spawn its own fresh sessions. Source of truth: vault `wiki/concepts/orchestrator-handover.md` (method §5 and `wiki/agents/game-dev/orchestrator.md` point to it); this file is its Black Cabin copy, replaced 2026-11-02 on Daniele's update relayed by the Ooze orchestrator.
 
+**Mandatory for workers (Daniele 2026-11-02):** no self-archive before the role note is refreshed, the report is committed and the final message is sent (PROJECT.md, working rules).
+
 ## Old orchestrator, before handing over (at ~40 % context, or when Daniele asks)
 1. Once the handover is decided, stop starting work: no new workers and no new jobs to existing ones. Workers only finish the task they already have.
 2. Idle workers: each refreshes its role note in `handoffs/`, reports, then archives itself. Check that each note exists before moving on.
