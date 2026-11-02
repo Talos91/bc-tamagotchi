@@ -18,3 +18,5 @@ Daniele's words, numbered by the orchestrator. Owner decisions: items 4, 5, 7, 1
 Pictures: 1 bar floor / song HUD; 2 the bar with the reindeer frame and shelves; 3 library artefacts; 4 candle floor corridor wall; 5 player on the dark floor (look D darkness check); 6 stage with the band; 7–8 band door shadows.
 
 13. (added ~17:30 UTC) Navigation: the joystick is fixed at the bottom right; instead, wherever a person touches, a swipe in a direction moves the character, so the control is anywhere the finger lands and no joystick needs to be visible. → 🎮 touch-anywhere control (after needs-stakes commits player.gd).
+
+14. (added 2026-11-03 ~00:10 UTC+7) The list of places you can tap to go to (the area buttons): add a control that hides them to the side, and pressing it again brings them back out. → 🎮 touch-anywhere worker (HUD, same job).
