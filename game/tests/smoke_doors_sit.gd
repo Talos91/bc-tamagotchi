@@ -190,39 +190,33 @@ func bar_area(crowd: Node) -> void:
 	# The errand through the bar door: out to behind the counter and back, the door open as they pass, shut after
 	crowd._runner.position = crowd._hatch_pos
 	crowd._errand.clear()
-	crowd._bar_errand = false   # flips to the bar door for this errand
 	crowd._errand_wait = 0.0
 	var opened := 0.0
+	var north := 0.0
 	var behind := false
+	var level := true   # item 15: never steps down or up
 	for i in 900:
 		await physics_frame
 		opened = maxf(opened, doors.openness("BarDoor"))
+		north = maxf(north, doors.openness("StaffDoorBar"))
 		var q: Vector3 = crowd._runner.position
+		level = level and absf(q.y - lift) < 0.01 and q.z > 12.85
 		if q.x < 35.0:
 			behind = behind or absf(q.y - lift) < 0.01
 		if crowd._errand.is_empty() and i > 60:
 			break
 	check(behind, "hatch staff walked through the bar door to behind the counter, on the raised floor")
 	check(opened > 0.8, "bar door swung open for them (%.2f)" % opened)
+	check(level and north < 0.01, "the errand stays on the raised level, inside the walled area and behind the bar; the north staff door stays shut")
 	crowd._errand_wait = 999.0
 	for i in 150:
 		await physics_frame
 	check(doors.openness("BarDoor") < 0.05, "bar door closes after they are back at the hatch (%.2f)" % doors.openness("BarDoor"))
-	# North errand: down the step into the main room
-	crowd._errand.clear()
-	crowd._bar_errand = true   # flips to the north door
-	crowd._errand_wait = 0.0
-	var floor_out := false
-	for i in 900:
-		await physics_frame
-		var q: Vector3 = crowd._runner.position
-		if q.z < 12.0:
-			floor_out = floor_out or absf(q.y) < 0.01
-		if crowd._errand.is_empty() and i > 60:
-			break
-	check(floor_out, "hatch staff steps down to the main-room floor through the north staff door")
-	crowd._errand_wait = 999.0
 	crowd._runner.position = crowd._hatch_pos
+	# Item 15: the player never enters the walled area, so the camera never cuts it (walls, doors, hatch stay solid)
+	var cut := get_nodes_in_group("cutaway").filter(func(n): return ["StaffRoom", "StaffDoorBar", "BarDoor", "Pass"].any(func(pre): return str(n.name).begins_with(pre)))
+	var walls := venue.find_children("StaffRoom*", "MeshInstance3D", true, false)
+	check(cut.is_empty() and walls.size() >= 4, "walled bar area out of the camera's cutaway (%d walls, %d cut pieces)" % [walls.size(), cut.size()])
 	# Alcove rope (item 11)
 	var map: RID = p.get_world_3d().navigation_map
 	var path := NavigationServer3D.map_get_path(map, Vector3(13.6, 0, 11.2), Vector3(18.5, 0, 11.2), true)

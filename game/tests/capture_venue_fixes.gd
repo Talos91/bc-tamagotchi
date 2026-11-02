@@ -12,6 +12,10 @@ const VIEWS := [
 	{"name": "bar-east", "player": Vector3(35.2, 0.1, 11.5), "yaw": PI},
 	{"name": "bar-door-top", "player": Vector3(33.0, 0.1, 9.0), "yaw": PI, "cam": [Vector3(33.2, 3.4, 11.2), Vector3(35.8, 0.6, 14.0)]},
 	{"name": "bar-side", "player": Vector3(30.0, 0.1, 9.0), "yaw": PI, "cam": [Vector3(26.5, 2.0, 11.6), Vector3(30.5, 1.2, 14.0)]},
+	# 15 (follow-up) the walled bar area stays solid in the views that looked into it
+	{"name": "staff-from-smoking", "player": Vector3(39.6, 0.1, 11.6), "yaw": PI},
+	{"name": "staff-from-floor", "player": Vector3(36.8, 0.1, 9.6), "yaw": PI},
+	{"name": "staff-from-bar", "player": Vector3(35.4, 0.1, 11.5), "yaw": PI * 0.5},
 	# 6 the buffer curtains in the way; 8 the buffer's east side
 	{"name": "buffer", "player": Vector3(17.7, 0.1, 5.3), "yaw": 0.0},
 	{"name": "buffer-west", "player": Vector3(16.0, 0.1, 5.3), "yaw": PI * 0.5},

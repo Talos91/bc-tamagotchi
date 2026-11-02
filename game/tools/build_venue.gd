@@ -82,6 +82,7 @@ const STAFF_DOOR_BAR := Vector2(37.05, 38.05)
 const DOOR_USERS := "door_user"              # groups whose members open a door (player, crowd; staff_door_user)
 const STAFF_USERS := "staff_door_user"
 const STAFF_PASS := Vector2(36.05, 36.95)   # half wall for orders in the staff room's north wall, beside the staff door
+const STAFF_ROOM_X1 := 38.25                 # the walled bar area's east edge (the smoking room's west wall)
 const BAR_DOOR := Vector2(13.4, 14.4)        # z range: staff door in the walled bar area's west wall, from behind the counter (owner item 4)
 const BAR_FLOOR_H := 0.45                    # raised floor behind the counter and in the walled bar area (owner item 5; venue_patrons.gd BARTENDER_LIFT)
 const TINY_ROW_Z := 5.1
@@ -529,6 +530,14 @@ func _cut(n: Node3D, cut_normal: Vector3) -> Node3D:
 	n.set_meta("cut_normal", cut_normal)
 	n.add_to_group("cutaway", true)
 	return n
+
+## Takes a piece (and everything under it) out of the camera's cutaway: it always stands.
+func _uncut(n: Node) -> void:
+	n.remove_from_group("cutaway")
+	for m in ["cut_normal", "cut_sight_only", "cut_rooms"]:
+		n.remove_meta(m)
+	for c in n.get_children():
+		_uncut(c)
 
 ## Wall the diorama camera can cut away: hidden when its outward normal points at the camera.
 func _wall(parent: Node, nm: String, pos: Vector3, size: Vector3, mat: Material, cut_normal: Vector3) -> MeshInstance3D:
@@ -1278,7 +1287,9 @@ func _main_room() -> void:
 	_wall_z(g, "WallWest", MAIN_X0, -0.2, MAIN_Z1, wall, Vector3.LEFT, [Vector2(BUFFER.position.y, BUFFER.end.y)], 3.4)
 	# South: behind the bar (z MAIN_Z1) from the bar's west end to the staff area; east of it the wall at MAIN_SE_Z
 	_wall_x(g, "WallSouthBar", MAIN_Z1, BAR_X0, BAR_X1 + 0.2, wall, Vector3.BACK)
-	_wall_x(g, "WallSouthEast", MAIN_SE_Z, BAR_X1, MAIN_X1 + 0.2, wall, Vector3.BACK, [STAFF_PASS, STAFF_DOOR_BAR, SMOKE_DOOR], 2.2)
+	# The walled bar area's north wall (order hatch, staff door) is its own piece, so it can stay solid (_staff_room)
+	_wall_x(g, "StaffRoomNorth", MAIN_SE_Z, BAR_X1, STAFF_ROOM_X1, wall, Vector3.BACK, [STAFF_PASS, STAFF_DOOR_BAR], 2.2)
+	_wall_x(g, "WallSouthEast", MAIN_SE_Z, STAFF_ROOM_X1, MAIN_X1 + 0.2, wall, Vector3.BACK, [SMOKE_DOOR], 2.2)
 	_staff_room(g, wall)
 	# Staff door north wall into the backstage, staff door into the walled bar area (both closed)
 	_door(g, "StaffDoorBackstage", "staff_door", Vector3(25.9, 0, -0.1), 0.0, Vector3.FORWARD)
@@ -1289,6 +1300,12 @@ func _main_room() -> void:
 	# Red door to the smoking room: swings open for whoever comes through (front, the red side, faces the main room)
 	_swing_door(g, "RedDoor", "red_door", Vector3((SMOKE_DOOR.x + SMOKE_DOOR.y) * 0.5, 0, MAIN_SE_Z + 0.1), 180.0, Vector3.BACK)
 	_cut(_kit(g, "exit_sign", Vector3((SMOKE_DOOR.x + SMOKE_DOOR.y) * 0.5, 2.45, MAIN_SE_Z - 0.05), 0.0, "ExitSignSmoke"), Vector3.BACK)
+	# The player never enters the walled bar area, so the camera never cuts it: its walls, doors and hatch stay solid
+	# (owner feedback 2026-11-02, item 15: "it renders transparently ... it should stay solid")
+	for n in g.get_children():
+		for pre in ["StaffRoom", "StaffDoorBar", "BarDoor", "Pass"]:
+			if str(n.name).begins_with(pre):
+				_uncut(n)
 	# South-east corner at floor level: wine fridge, Black Cabin light box over the door (photo 12)
 	# Both hidden only on the sight line (they stand in front of the smoking room's north-east corner, seen from its view)
 	_cut(_ph(g, "wine_fridge", Vector3(41.4, 0, MAIN_SE_Z - 0.35), 0.0, "WineFridge"), Vector3.ZERO)
@@ -1701,13 +1718,13 @@ func _thresholds() -> void:
 ## no navmesh), staff spawn inside. Its north wall has the staff door and, right beside it, the half wall for orders:
 ## a pass-through counter at bar height where waiters return glasses and collect orders; staff show behind it.
 func _staff_room(g: Node, wall: Material) -> void:
-	var r := Rect2(BAR_X1, MAIN_SE_Z, 38.25 - BAR_X1, MAIN_Z1 - MAIN_SE_Z)
+	var r := Rect2(BAR_X1, MAIN_SE_Z, STAFF_ROOM_X1 - BAR_X1, MAIN_Z1 - MAIN_SE_Z)
 	var fl := _box(g, "StaffRoomFloor", Vector3(r.position.x, -0.2, r.position.y), Vector3(r.size.x, 0.2, r.size.y), _concrete_mat(), false)
 	fl.cast_shadow = GeometryInstance3D.SHADOW_CASTING_SETTING_OFF
 	_ceiling(g, r, "StaffRoomCeiling")
 	# West wall: a staff door from behind the counter into the room (owner feedback 2026-11-02, item 4), the same kit door
 	# as the north one, staff-only (blocker in its opening; the player never gets behind the bar anyway). Its front faces
-	# the bar (-90). The hatch staff's errands go through it too (venue_patrons.gd)
+	# the bar (-90). The hatch staff's errands go through it, on the raised floor (venue_patrons.gd)
 	_wall_z(g, "StaffRoomWest", BAR_X1, MAIN_SE_Z, MAIN_Z1, wall, Vector3.RIGHT, [BAR_DOOR], 2.2 + BAR_FLOOR_H)   # leaf stands on the raised floor
 	_swing_door(g, "BarDoor", "staff_door", Vector3(BAR_X1 + 0.1, BAR_FLOOR_H, (BAR_DOOR.x + BAR_DOOR.y) * 0.5), -90.0, Vector3.RIGHT,
 		BAR_DOOR.y - BAR_DOOR.x, STAFF_USERS, true)
