@@ -248,7 +248,9 @@ func _init() -> void:
 			check(on_screen(p.global_position + Vector3(0, 0.9, 0), 0.04), "player on screen at %s (%dx%d)" % [v2(at), size.x, size.y])
 		# From the middle of the floor the raised strip's tables are in frame (test_lounge taps them from here)
 		teleport(Vector3(30.0, 0.1, 7.0))
-		await frames(10)
+		await frames(5)
+		rig.snap()   # again, now that the window's new size is in effect (the framing settles over a second otherwise)
+		await frames(5)
 		var raised := 0
 		for i in 5:
 			raised += int(on_screen((main.get_node("Venue").find_child("Raised%d" % i, true, false) as Node3D).global_position + Vector3(0, 0.75, 0), 0.0))

@@ -75,7 +75,7 @@ const ROOMS := {"floor": "main", "bar": "main", "stage": "main", "toilets": "mai
 @export var lead_time := 0.25       ## seconds of the player's velocity the camera looks ahead
 @export var portrait_hfov := 52.0
 @export var landscape_vfov := 42.0
-@export var landscape_dist_scale := 1.3
+@export var landscape_dist_scale := 1.5   ## landscape shows less height (vfov 42): farther, so the raised strip stays in frame from mid-floor
 
 ## Effects hook, see the header. World metres; extra pitch, yaw, roll in radians; field-of-view multiplier.
 var fx_offset := Vector3.ZERO
