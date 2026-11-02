@@ -1,7 +1,7 @@
 # Godot
 .godot/
 *.import
-export_presets.cfg
+# game/export_presets.cfg is tracked (Web preset, no secrets); credentials never go in it
 # Blender
 *.blend1
 # OS / editors
@@ -23,3 +23,6 @@ __pycache__/
 
 # Build stamp written by tools/version.py
 game/build_info.json
+
+# Web build output (python tools/build_web.py)
+web/
