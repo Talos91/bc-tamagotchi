@@ -1,6 +1,8 @@
 # Black Cabin Tamagotchi — High Concept
 
-Status: draft v1 (session 1A, 2026-10-27). Feeds: `02-gdd.md`, art bible, cast bible, UI.
+Status: draft v1 (session 1A, 2026-10-27); revised 2026-11-02 for the stakes
+(`06-stakes.md` v3), the Flat and mobile only. Feeds: `02-gdd.md`, art bible,
+cast bible, UI.
 
 ## Elevator pitch
 
@@ -10,7 +12,8 @@ about a week. You refill them by taking your character to Black Cabin, a
 candlelit live-music bar in Bangkok recreated block by block: you order at the
 amber-lit bar, catch the house band's set from the front row, sit with the
 regulars at the long table, and play pinball in the neon lounge. A visit takes
-about ten minutes. Three visits a week keep your character glowing.
+about ten minutes. Three visits a week keep your character glowing; one rule
+keeps them alive: go to the real Black Cabin at least every three weeks.
 
 ## The fantasy
 
@@ -29,10 +32,12 @@ hangover, the bill or the trip across town.
   tourists who visited) who want a piece of the place in their pocket.
 - **Not for:** players who want competition, combat, or optimisation pressure.
 
-## Platform recommendation (orchestrator decides)
+## Platform (decided)
 
-**Phone, portrait, as the primary platform. Desktop as a secondary build of the
-same game.**
+**Mobile only, portrait first with a landscape toggle** (DECISIONS
+2026-11-02: "the game is mobile only"). The reasoning below was the original
+recommendation and still holds; the desktop build it mentions is a
+development tool, not a product.
 
 - The Tamagotchi loop is a check-in loop: short sessions, a few times a week,
   driven by a gentle notification ("Your character is humming to themselves.
@@ -55,9 +60,11 @@ same game.**
    in the venue: listening, drinking, talking, dancing. There are no feeding
    buttons and no menus that fill meters. If an action doesn't feel like
    something you'd do at Black Cabin, it doesn't refill anything.
-2. **Cozy, with real stakes.** Needs drain over days; a normal week costs
-   nothing; three weeks without a night out and your character leaves Bangkok
-   for good, memories kept.
+2. **Cozy, with real stakes.** Needs drain over days and a normal week costs
+   nothing; a neglected need is an annoyance you clear in one visit. One thing
+   is fatal: skip the real Black Cabin for three weeks and your character dies
+   of boredom; a check-in at the bar within two weeks brings them back; after
+   that they are gone for good, with everything they had (06-stakes).
 3. **The room is the star.** One fixed, authored, real place, faithful to the
    real Black Cabin (velvet curtains, ribbed glass table lamps, candles, the
    orange "BLACK CABIN" sign, the drum kit by the olive tree). It grows through
@@ -70,8 +77,8 @@ same game.**
 |---|---|---|
 | **Animal Crossing** | You own and build an island; daily chores on a real-time calendar. | You own nothing but your look and your memories. You *visit* a place someone else runs. The pull is your character's needs, not a to-do list. |
 | **Habbo Hotel** | User-built rooms; chat is the content. | One authored venue with scheduled live content (sets, quiz nights, headline nights). Social play runs through verbs (cheers, sit with, dance with, buy a round), not free chat. NPC regulars keep the room alive when it's quiet. |
-| **The Sims** | Needs drain in minutes; constant micromanagement; failure states. | Needs drain over a real week; one 10-minute visit fixes a lot; no failure state. |
-| **Tamagotchi** | You care for a creature that can get sick or die. | You care for *yourself-as-avatar*, and the care is going out. Neglect makes your character a homebody, then makes them leave Bangkok (06-stakes). |
+| **The Sims** | Needs drain in minutes; constant micromanagement; failure states. | Needs drain over a real week; one 10-minute visit fixes a lot; one failure state, and it is staying away from the bar. |
+| **Tamagotchi** | You care for a creature that can get sick or die. | You care for *yourself-as-avatar*, and the care is going out, to the real bar. Neglect makes your character a homebody, then a ghost; a check-in at Black Cabin can still raise them (06-stakes). |
 
 ## The "Tamagotchi" hook, stated precisely
 
@@ -80,5 +87,11 @@ Your character has four needs (Music, Friends, Drinks, Nightlife), each a
 days. The only way to refill them is to take your character to Black Cabin and
 do the things people do there. A typical 10-minute visit restores about 30
 points to each meter, so **three visits a week keeps a character happy**.
-Neglect makes your character a homebody, then makes them leave Bangkok for good
-(06-stakes); their memories stay in the album.
+Let a meter run empty and your character gets an annoyance (Thirsty,
+Earworm, Phone face, Rusty) that drags the whole night until you see to it.
+The one fatal need is **going to Black Cabin**: a QR check-in at a table or a
+memory taken at the real bar (until the server exists, any visit in the game
+stands in). Twenty-one days without one and the character dies; fourteen more
+and they are deleted with everything they had, unless a check-in at the bar
+brings them back first (once per 90 days). Your character lives in a rented
+room upstairs once you can afford it (100 coins, then 20 a week).

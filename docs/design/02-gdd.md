@@ -4,6 +4,11 @@ Status: draft v1 (session 1A, 2026-10-27). Read `01-high-concept.md` first.
 Revised 2026-10-28 (wave 3b): soft floor ×0.3, Welcome Back replaces the daily
 multiplier, Candle Talk lean bonus, start value 75, coin and Last Call
 amendments from `04-coins.md` §10.1 and `06-stakes.md` §5.2 applied in place.
+Revised 2026-11-02: stakes v3 (`06-stakes.md`: a real visit every 21 days,
+ghost, deletion, stronger annoyances, minigame misses and tries), coins signed
+off with the lounge merch shop, the Flat as a rented room, mobile only, Bangkok
+time for events; §15 answered. Where this file and `DECISIONS.md` disagreed on
+those, this file now matches.
 All numbers are starting values for tuning and live in one data file
 (`needs_config`) so they can be changed without code changes.
 
@@ -13,8 +18,9 @@ All numbers are starting values for tuning and live in one data file
 
 ### 1.1 A visit (8–15 minutes)
 
-1. **Check in** (home screen, 10–30 s). See your character in their flat:
-   mood, the four meters, postcards from regulars, tonight's lineup.
+1. **Check in** (home screen, 10–30 s). See your character at home (the
+   street door now; the Flat once rented, §7.3): mood, the four meters, the
+   stake chip from Restless on, postcards from regulars, tonight's lineup.
 2. **Go out.** Tap the door. Your character arrives at the Black Cabin entrance
    under the orange sign. The notice board shows what's on in this visit.
 3. **Pick what you need.** The lowest meter glows on the HUD. The board and
@@ -72,11 +78,11 @@ below 10), so a player who skips a week comes back to a thirsty character,
 not a lost one.
 
 **Soft floor:** below 30, decay ×0.3. The floor slows emptying; it does not
-stop it. Below 10 a meter is Empty (06-stakes §2).
+stop it. Below 10 a meter is Empty and its annoyance shows (06-stakes §7).
 
-**Out of Town toggle:** freezes decay and the Last Call clocks for up to 14
-days, once per 30 days; plus one Long Trip of up to 35 days a year; only from
-Fine or Staying In (06-stakes §2.4). Shown as a suitcase in the flat.
+**Out of Town toggle:** freezes decay and the visit clock for up to 14 days,
+once per 30 days; can't start once the character is Restless (06-stakes §3).
+The only pause. Shown as a suitcase at home.
 
 **Personality modifier:** set at character creation (§7). Lowers one meter's
 decay by 10%.
@@ -91,13 +97,13 @@ state.
 | 80–100 | **Glowing** | Warm rim light on the character, happy idles, +25% memory drop chance, can be picked for the Spotlight at headline nights |
 | 50–79 | **Good** | Normal |
 | 25–49 | **Meh** | Muted idles, one "missing it" line from a regular each visit |
-| 0–24 | **Homebody** | Character stays in pyjamas at the flat; the first visit after this triggers the **Welcome Back** (below). Also the look for the Staying In stage, whatever the Vibe |
+| 0–24 | **Homebody** | Character stays in pyjamas at the flat; the first visit after this triggers the **Welcome Back** (below). Also the look from the Restless stake stage on, whatever the Vibe (06-stakes §4) |
 
 ### 2.3 Refill actions
 
 Values are base gains before diminishing returns. "Score-scaled" means
-minimum at a poor score, maximum at a perfect one. Low skill always earns the
-minimum, never zero.
+minimum at a poor score, maximum at a perfect one. Low skill earns the
+minimum; only a minigame **miss** (below 0.25, §9) earns nothing.
 
 | Action | Zone | Music | Friends | Drinks | Nightlife | Notes |
 |---|---|---|---|---|---|---|
@@ -118,6 +124,7 @@ minimum, never zero.
 | Pinball (one game) | Lounge | | | | +10–20 | Score-scaled |
 | First time entering the Lounge each visit | Lounge | | | | +5 | |
 | Stay until "last song" of a headline night | Any | | | | +10 | |
+| Finish any minigame without a miss | Any | | | | +3 | Capped at +9 per visit; "play a minigame" (06-stakes §2) |
 
 **Sample 10-minute visit:** free drink (+15 D), Pour Perfect (+25 D), three
 songs from the front row (+15 M) plus one Front Row Rhythm round (+15 M),
@@ -145,14 +152,24 @@ stops being efficient.
 **At 100:** the meter shows a small "topped up" sparkle. Further gains for that
 meter turn into **Tab** (progression XP, §10) at 1:1, so play is never wasted.
 
-**At 0:** nothing breaks. The character's tell for that meter (table in §2.1)
-is at full strength. All four at 0 is just a very homebody character.
+**Empty (below 10):** the meter's **annoyance** shows (Thirsty, Earworm,
+Phone face, Rusty) and every other meter's gains are ×0.85 until it is seen
+to in the same visit (06-stakes §7). A meter never kills.
+
+**The stakes** (06-stakes): one need is fatal, **going to Black Cabin**, the
+real bar: a QR check-in at a table or a memory taken there (until the server
+exists, any in-game refill stands in). After 21 days without one the character
+dies of boredom and haunts the club as a ghost (warnings at 10, 15 and 18
+days); a check-in at the real bar within 14 days revives them, once per 90
+days; at day 35 they are deleted with everything they had, and a new game
+starts from scratch.
 
 **Welcome Back:** the first visit after Vibe has been below 25, or after 7+
 days away: the bartender says hello by name, the first drink is free, and all
 gains are doubled for 15 minutes (diminishing returns still apply). The ×2
 replaces the daily visit multiplier while it lasts; it never stacks with it.
-It also gives 10 coins and does not double coin earnings. Two
+It also gives 10 coins and does not double coin earnings. It also fires on a
+rescue (a counting visit from Restless on) and on a revival. Two
 regulars send warm postcards during the absence ("Haven't seen you at the long
 table lately"). Never guilt: copy may not say "abandoned / neglected / forgot".
 
@@ -162,9 +179,10 @@ table lately"). Never guilt: copy may not say "abandoned / neglected / forgot".
   is humming to themselves").
 - Friday 18:00 local: the headline act for tonight.
 - Never notify about a meter hitting 0. Never notify after 22:00 local.
-- Last Call stage messages use the 2-a-week budget; the one Last Call warning
-  (48 h before leaving) is outside it and moves earlier rather than into quiet
-  hours.
+- Stake messages (06-stakes §4) use the 2-a-week budget, except three that
+  sit outside it: Last Call (3 days before death), the death notice, and the
+  last 2 days of the ghost window. One that would fall in quiet hours goes out
+  at 19:00 local that day instead.
 
 ---
 
@@ -172,7 +190,7 @@ table lately"). Never guilt: copy may not say "abandoned / neglected / forgot".
 
 | Session type | Length | Frequency target | Contents |
 |---|---|---|---|
-| **Check-in** | 10–30 s | 1/day | Flat view, meters, postcards, lineup. No venue load. |
+| **Check-in** | 10–30 s | 1/day | Home view, meters, stake chip, postcards, lineup, the events calendar. No venue load. |
 | **Quick drink** | 3–5 min | 1–2/week | Bar + one song. Tops up Drinks and some Music. |
 | **Night out** | 8–15 min | 2–3/week | The full loop in §1.1. |
 | **Event night** | 15–25 min | 1/week | Quiz Night or Headline Night end to end. |
@@ -200,7 +218,7 @@ owns exact layout and scale; this section owns what each zone *does*.
 | 6 | **The Long Table** | Long dark tables with black metal bistro chairs, candelabra on the sideboard by the curtain | Group seating (8), Quiz Night, Name That Tune, Coaster Flip, Toast Chain | Friends |
 | 7 | **Dance Floor** | Open floor in front of the stage on Headline Nights; mirror disco ball | Dancing, Dance-off; disco ball turns on Fri/Sat and during events | Nightlife |
 | 8 | **The Lounge** | Second space: black-painted concrete beams, red neon "BLACK CABIN" sign over the plant wall, long communal table, globe lamps, vintage CRT TV, pinball-style cabinet | Pinball, CRT Channel Surf, late-night hangout | Nightlife |
-| 9 | **The Staircase** | Staircase up from the lounge | Roped off at launch ("Coming soon: upstairs"). The first expansion zone (§11). | — |
+| 9 | **The Staircase** | Staircase up from the lounge | Roped off. The real upstairs is an events floor; later the Flat's rented rooms open behind the rope for tenants (06-stakes §9). | — |
 
 **Venue state changes, not layout changes:** the room's layout never moves.
 What changes is lighting (house lights vs. show lights vs. disco), who's on
@@ -275,12 +293,12 @@ open question (§15).
 
 - **House sets:** the house band plays a 4-song set, then a 2-minute break,
   continuously (about every 8 minutes). Something is always starting soon.
-- **Event nights:** per §1.2, on the player's local clock, 19:00–24:00 local.
+- **Event nights:** per §1.2, on Bangkok time (DECISIONS (f)), 19:00–24:00.
   Outside that window the event's content is available as "the after-party"
   (reduced bonus), so players in odd time zones or on night shifts aren't
   locked out.
 - **Headline Night:** a featured performer replaces the house band for one
-  10-song set that loops 19:00–24:00 local Fri and Sat.
+  10-song set that loops 19:00–24:00 Bangkok time Fri and Sat.
 
 ### 6.2 How a performance works
 
@@ -328,14 +346,20 @@ Name: free text, filtered.
 Slots: hat, top, outer layer, bottom, shoes, accessory (glasses, earrings),
 held item (only cosmetic: e.g. a tote bag, a vinyl record). Launch: **~60
 items**. New items come from memories, regulars' hearts, performer merch, the
-weekly stamp card and the merch rail by the Entrance (coins, 04-coins §3.2).
+weekly stamp card and the merch shop in the lounge (coins, 04-coins §3.2).
 Outfits can be saved as 3 presets.
 
 ### 7.3 The Flat
 
-One small voxel room (bed, record player, door) used as the check-in screen,
-showing the character's mood and the **Memory Wall** (§8). Wall colour and 4
-furniture swaps only: a frame, not a building game.
+**Now:** minimal; the home is the street-door start screen and the walk-out
+card. **Later, an unlock** (06-stakes §9): a room rented with coins on the
+second floor, behind the lounge stair's rope (100 coins to move in, 20 a week
+every Monday Bangkok time; paused Out of Town or as a ghost; 7 days' grace,
+then moved out with things to storage; free re-rent within 30 days). The game
+then starts there. One small voxel room (bed, record player, door) used as the
+check-in screen, showing the character's mood and the **Memory Wall** (§8).
+Wall colour and 4 furniture swaps only: a frame, not a building game. The real
+upstairs is an events floor, so the Flat may move later.
 
 ---
 
@@ -369,9 +393,11 @@ Memories are the collection layer: the record of nights out.
 
 ## 9. Minigames
 
-All minigames: one thumb, portrait, 10–180 s, no fail screen (any finish
-gives the minimum reward), local best score shown, optional and never
-required for refills. The table is the summary; designs follow.
+All minigames: one thumb, portrait, 10–180 s, local best score shown,
+optional and never required for refills. A round scoring below 0.25 is a
+**miss** (no gain, no coins); each minigame can be played **3 times per
+visit**, misses included (06-stakes §7.2; Daniele: "make failing at
+minigame a thing and limit time a minigame can be retried"). The table is the summary; designs follow.
 
 | # | Minigame | Zone | Need | Duration | Players | First playable? |
 |---|---|---|---|---|---|---|
@@ -480,16 +506,17 @@ and drop. *Feeds:* Music +10.
 | **Weekly stamp card** | 4 stamps: get each meter to 80+ at least once that week | Weekly cosmetic or 5 coins per stamp; a "Good Week" stamp in the album |
 | **Minigame bests** | Personal bests and per-minigame mastery (bronze/silver/gold) | Titles, cosmetic variants |
 
-Rank never goes down while the character lives; a new character starts at
-Newcomer. Nothing decays except the four meters.
+Rank never goes down while the character lives; deletion resets everything
+(06-stakes §6) and a new character starts at Newcomer. Nothing decays except the four meters.
 
 ### 10.2 Retention levers (and what we don't use)
 
 Used: needs (gentle return pull), weekly lineup and events, regulars'
 schedules, monthly new performers, the Week Recap.
 Not used: login streaks that reset, energy timers, expiring rewards, FOMO
-limited-forever items. The Last Call clock is the one hard deadline. It is
-never shown as a streak count.
+limited-forever items. The visit clock (a real visit to Black Cabin at least
+every 21 days, 06-stakes) is the one hard deadline. It is never shown as a
+streak count.
 
 ---
 
@@ -498,9 +525,9 @@ never shown as a streak count.
 | Cadence | Adds |
 |---|---|
 | **Weekly** | Lineup (which performer headlines), featured drink (+1 coaster), weekly stamp-card reward, 10 new quiz questions |
-| **Monthly** | 1 new performer (content unit §6.3), 1 new regular *or* a new story chapter for an existing one, 8–12 cosmetics (about half coin-priced on the merch rail), 1 monthly memory set (5 polaroids) |
+| **Monthly** | 1 new performer (content unit §6.3), 1 new regular *or* a new story chapter for an existing one, 8–12 cosmetics (about half coin-priced at the lounge merch shop), 1 monthly memory set (5 polaroids) |
 | **Every 2 months** | 1 new minigame (from the backlog in §9 or new) |
-| **Quarterly** | 1 venue expansion or major state change. Order: **Upstairs** (via the staircase, a second small bar room), then a rooftop, then a back-alley stage. Each opens with a launch event week. |
+| **Quarterly** | 1 venue expansion or major state change. Order: **Upstairs** (via the staircase; the real second floor is an events floor), then a rooftop, then a back-alley stage. Each opens with a launch event week. |
 | **Seasonal (yearly, returning)** | Halloween (late Oct), **Loy Krathong** (Nov: krathong decorations, candle-floating memory), New Year countdown, Valentine's slow-dance night, **Songkran** (April: water-themed decorations, no water physics), Black Cabin anniversary (date from the venue) |
 
 Real-world tie-in candidates (need venue agreement): real Black Cabin
@@ -529,11 +556,12 @@ same night, a QR code at the real bar that unlocks a coaster.
 
 ## 13. Recommendations on the open decisions
 
-**Platform:** phone portrait primary, desktop secondary (reasoning in
-`01-high-concept.md`). Build implication: fixed-angle diorama camera with
-tap/click-to-move. Treat the 1C third-person controller as greybox tooling.
+**Platform (decided):** mobile only, portrait first with a landscape toggle
+(DECISIONS 2026-11-02). Build implication: fixed-angle diorama camera per
+area with tap-to-move and area buttons. Treat the 1C third-person controller
+as greybox tooling.
 
-**Single-player-first vs multiplayer-first:** **single-player-first.**
+**Single-player-first vs multiplayer-first:** **single-player-first** (decided).
 - The first playable must answer "does the loop make you want to come back
   in two days?" That needs no server.
 - A small early population means empty real-time rooms, the worst first
@@ -551,7 +579,7 @@ tap/click-to-move. Treat the 1C third-person controller as greybox tooling.
 compressed debug clock) and wants to return.
 
 **In:**
-- Flat check-in screen (static room, character, four meters, Vibe state)
+- Home check-in screen (the street door now; character, four meters, Vibe state, stake chip)
 - Character creator lite: 3 body types, 6 skin tones, 4 hair styles, 3
   outfits, 4 personalities
 - Venue zones: Entrance, Bar, Stage & Front Row, Candle Floor, Lounge
@@ -559,8 +587,10 @@ compressed debug clock) and wants to return.
   disco ball with a dance emote)
 - Needs system: full decay model (§2.1), refill table rows that apply to
   included content, diminishing returns, Welcome Back, save/load, debug clock
-  (1 real minute = 1 game hour), Last Call stages, Gone and new-character
-  flow, driven by the debug clock with a debug "jump to day N"
+  (1 real minute = 1 game hour), the stakes as in 06-stakes §10.9 step 1
+  (stake stages on the in-game stand-in, ghost, deletion with the farewell
+  card, Retire, annoyances, minigame misses and tries), driven by the debug
+  clock with a debug "jump to day N" and "Fake check-in"
 - House band: 1 set of 4 songs on loop, applaud between songs
 - 3 regulars + bartender with schedules and Candle Talk, hearts 0–3
 - Minigames: **Pour Perfect, Front Row Rhythm, Candle Talk, Neon Pinball**
@@ -568,11 +598,11 @@ compressed debug clock) and wants to return.
 - Memories: ~15 (polaroids, 6 coasters, 1 ticket stub), album + wall of 6
 - Week Recap card
 
-**Out:** multiplayer of any kind, merch rail and real-world rewards (a minimal
-coin loop is in, 04-coins §9), Last Call notification, real-bar check-in, Long
-Trip, events and headline nights,
-wardrobe beyond creation, notifications, other minigames, the Flat
-customisation, upstairs.
+**Out:** multiplayer of any kind, merch shop purchases and real-world rewards
+(a minimal coin loop is in, 04-coins §9), real-bar check-in, memory upload and
+revival (server), push notifications, the Flat's rent and customisation,
+events and headline nights, wardrobe beyond creation, other minigames,
+upstairs.
 
 **Exit criteria:** meters, decay and refills read clearly without a tutorial
 longer than 60 s; a 10-minute visit lands near the §2.3 sample totals; testers
@@ -580,28 +610,21 @@ can name a regular.
 
 ---
 
-## 15. Open questions for the orchestrator
+## 15. Open questions (answered)
 
-1. **Platform** and **single vs multiplayer**: recommendations in §13; need
-   a decision before 2B (UI wireframes) and 2D (needs prototype) lock layouts
-   and save formats.
-2. **Alcohol and age rating** (12+ to 17+ depending on depiction). Proposal:
-   menu mixes cocktails, beer, mocktails, Thai iced tea, coffee; never any
-   intoxication effects. Confirm the target rating.
-3. **Relationship with the real Black Cabin:** rights to name, logo and
-   likeness; can real staff or performers appear; brand piece or independent
-   product? (Affects §11, §12.)
-4. **Music sourcing.** Original commissioned tracks, licensed tracks from
-   Black Cabin's real performers, or both? Each performer needs 6–10 songs plus
-   beat maps.
-5. **Event clock.** Player-local time (proposed) vs. Bangkok time for event
-   nights. Local is friendlier; Bangkok time is more "real" and matters if P3
-   rooms are global.
-6. **Venue survey.** The 12 photos don't show the bar counter, lounge, disco
-   ball, CRT, pinball or stairs. Request more photos or a floor plan with
-   dimensions.
-7. **Chat policy for P3:** phrase wheel only, or opt-in 18+ free text?
-8. **Languages at launch:** English only, or English + Thai?
-9. **Notification budget:** max 2 per week is proposed; confirm.
-10. **The Flat:** keep it as a minimal home screen (proposed) or cut it for a
-    2D menu to save art budget?
+All ten are settled in `DECISIONS.md`; kept as a record.
+
+1. **Platform:** mobile only, portrait first with a landscape toggle.
+   **Single vs multiplayer:** single-player first; multiplayer later.
+2. **Alcohol and age rating:** 21+; drinks are real and intoxication is in
+   (drunk effect, WASTED).
+3. **Black Cabin:** commissioned by the bar; real name, logo, venue and, with
+   consent, real staff and performers.
+4. **Music:** both commissioned and licensed tracks.
+5. **Event clock:** Bangkok time everywhere.
+6. **Venue survey:** the real floor map and photos (direction 08–25).
+7. **Chat:** phrase wheel only.
+8. **Languages:** English and Thai.
+9. **Notification budget:** 2 a week, plus three stake messages outside it
+   (06-stakes §4).
+10. **The Flat:** minimal now; later a rented room upstairs (§7.3).

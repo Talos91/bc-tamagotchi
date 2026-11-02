@@ -1,12 +1,19 @@
 # Black Cabin Tamagotchi — Coins
 
-Status: draft v1 (2026-10-28), amended 2026-11-02 where the one-page
-summary `04-coins-summary.md` changed it (death deletes coins, drinks banded
-from the real menu, Flat rent). Reads: `DECISIONS.md` (coins yes, decor no;
-the app is a bridge to the real bar), `02-gdd.md` §2, §5–§12, §14,
-`03-cast.md` §5, `ui/style-guide.md`. Replaces "Cabin Tokens" in GDD §5.3,
-§10.1 and §12. The real-world bridge gets its own chapter; §7 here covers only
+Status: **v2, signed off** (Daniele, C1, answered 2026-11-01: "signed off as
+written"). v1 (2026-10-28) amended 2026-11-02 with the answers: death deletes
+coins, drinks banded from the real menu (C2), the Flat's prices (S11, S12),
+the coin merch shop in the lounge. Reads: `DECISIONS.md` (coins yes, decor
+no; the app is a bridge to the real bar), `02-gdd.md` §2, §5–§12, §14,
+`03-cast.md` §5, `06-stakes.md`, `ui/style-guide.md`. Replaces "Cabin Tokens"
+in the GDD. The real-world bridge gets its own chapter; §7 here covers only
 what coins can do there.
+
+**The live copy of the numbers is the hub's Coins tab**
+(https://claude.ai/artifact/BbpBxVWVVXMjz7TgJ7aFBW#coins, database collection
+`coins`, one row per number). Daniele asked for it "so later we can modify
+fastly". When a row there shows an edit date, its value wins over this file;
+the orchestrator copies it here and into `rules.gd`.
 
 ---
 
@@ -39,7 +46,7 @@ double coins; it gives a flat gift instead.
 | Source | Coins | Limit | First playable |
 |---|---|---|---|
 | First visit of the (Bangkok) day | 10 | once per day | Yes |
-| Minigame result: good / great / perfect tier | 2 / 3 / 5 | first 4 results per visit pay the tier; after that 1 each | Yes |
+| Minigame result: good / great / perfect tier | 2 / 3 / 5 | first 4 results per visit pay the tier; after that 1 each; a miss earns nothing (`06-stakes` §7.2) | Yes |
 | Applaud at least once during a set | 1 | 2 sets per visit | Yes |
 | Encore present | 3 | per encore | Live-ops |
 | New memory dropped | 2 | 3 per visit | Yes |
@@ -81,10 +88,11 @@ rewarded but don't run away.
 Perfect is always free ("You pour, it's on me"). Coins buy the second drink
 onward.
 
-**Amended 2026-11-02:** the real Black Cabin menu (`game/data/menu.json`, 121
-drinks) replaced the 24 invented coasters, so the band comes from the real
-THB price of a glass or serve. The THB price stays on the menu, dimmed
-(DECISIONS third batch); the coin price is the game's own.
+**Decided 2026-11-02 (C2):** the real Black Cabin menu (`game/data/menu.json`,
+121 drinks) replaced the 24 invented coasters, so the band comes from the real
+THB price of a glass or serve: **up to 250 THB → 4 coins, up to 500 → 6, more
+→ 9; bottles and bundles are not sold for coins.** The THB price stays on the
+menu, dimmed (DECISIONS third batch); the coin price is the game's own.
 
 | Band | Rule (real price per glass or serve) | Drinks on the real menu | Price | Time to afford (3-visit player) |
 |---|---|---|---|---|
@@ -107,17 +115,25 @@ At Merry, Nam serves water and mocktails only; paid mocktails stay available.
 | **Buy a round** (at a table, social verb) | Everyone at the table gets their usual: Drinks +10 each (players), a reaction line (regulars). You get Friends +5 through normal diminishing returns. Counts as one shared activity toward a regular's heart, once per regular per week. Once per visit. | 3 per person served (round of 4 = 12) | half a visit |
 | **Wardrobe: small** (hat, accessory, held item) | Cosmetic | 30 | 2 visits / 1 day |
 | **Wardrobe: mid** (top, bottom, shoes) | Cosmetic | 60 | ~1 week / 3 days |
-| **Performer tee** | Unlocks after you've heard that act once; never leaves the rail | 80 | ~1 week / 3 days |
+| **Performer tee** | Unlocks after you've heard that act once; never leaves the shop | 80 | ~1 week / 3 days |
 | **Wardrobe: statement** (outer layer, full look) | Cosmetic | 120 | ~1.5 weeks / 4 days |
-| **The Flat** (rented room upstairs, `06-stakes` §9) | Home, Memory Wall, the game starts there | 100 move-in, then 20 a week | 1–2 weeks to move in |
+| **The Flat** (rented room upstairs, `06-stakes` §9) | Home, Memory Wall, the game starts there. Rent every Monday 00:00 Bangkok; paused Out of Town or as a ghost; 7 days' grace, then moved out with things to storage; re-renting within 30 days skips the move-in | 100 move-in, then 20 a week | 1–2 weeks to move in |
 | **Memory frames** (Flat's Memory Wall) | Wood / brass / velvet-mat / neon-edge / gig-poster. Plain frame is free. | 20 / 35 / 35 / 50 / 50 | 1–2 visits |
 
-Wardrobe pieces live on a **merch rail by the Entrance** (venue dressing that
-already exists, not a shop screen). About half of the ~60 launch items are
-coin-priced; the rest come from hearts, memories and the stamp card as in GDD
-§7.2. Live-ops adds 8–12 cosmetics a month, half coin-priced, which roughly
-matches what a 3-visit player saves in a month. Nothing on the rail ever
-leaves it.
+Wardrobe pieces are sold at the **merch shop in the lounge** (top right,
+built in the lounge revamp, 50a0623): Black Cabin merch for the character,
+paid in coins, at the four wardrobe tiers above (DECISIONS "Lounge revamp
+answers"). Which items it stocks is a Questions-tab card (lounge-merch-items).
+About half of the ~60 launch items are coin-priced; the rest come from hearts,
+memories and the stamp card as in GDD §7.2. Live-ops adds 8–12 cosmetics a
+month, half coin-priced, which roughly matches what a 3-visit player saves in
+a month. Nothing in the shop ever leaves it.
+
+**A real-life merch shop comes later**, also in the lounge, and it is **not
+coins**: real Black Cabin merch for real money, with the bar (Daniele: "we
+will put in the lounge another merch shop for real life items, for now the
+merch shop is in-game items"). The only coin path to real merch stays the
+monthly raffle (§7.1).
 
 **Typical spend:** one paid drink, one tip per visit, one round a week ≈ 35
 coins. A 3-visit player saves ~80 a week; a 7-visit player ~170. With the
@@ -132,7 +148,7 @@ Flat's rent (20 a week): ~60 and ~150; a once-a-week player ~5
 |---|---|
 | Flat (check-in) | Top right, as in the mockup: coin glyph + number in `caption`, Cream on `bg.base` 80%. No gold, no glow. |
 | Venue HUD | Same chip left of the Album button, 60% opacity. Hidden during sets and minigames (HUD compresses). |
-| Spending sheets (bar menu, tip jar, round, merch rail) | Balance in the sheet header; prices beside each row. A row you can't afford shows the price at 40% with "Not tonight", never "Need N more". |
+| Spending sheets (bar menu, tip jar, round, merch shop) | Balance in the sheet header; prices beside each row. A row you can't afford shows the price at 40% with "Not tonight", never "Need N more". |
 | Minigame result card | One line under the need gain: coin glyph "+3". |
 | Walk-out summary | One line after the meters: "Coins +24". The only place a total is shown. |
 | Week Recap | "Coins +15 for last week" in the card. |
@@ -164,7 +180,9 @@ test in the needs suite should assert it.
 **Diminishing returns:** paid and free gains share the same per-visit pool
 (GDD §2.4). Buying three extra drinks fills Drinks no faster than pouring
 three; coins never raise a ceiling. Coins are never the way out of the
-stakes (`06-stakes`): they can't stop the visit clock or buy a revival.
+stakes (`06-stakes`): they can't stop the visit clock, clear an annoyance,
+buy a minigame try or buy a revival. Annoyances never cost coins either
+(`06-stakes` §7: the bite is in gains, not the wallet).
 
 ---
 
@@ -194,6 +212,7 @@ verified in person**.
 | Discount voucher (e.g. 10% off the bill) | Buy | 150 | 1 a week | ~2 weeks of savings |
 | A drink at the real bar (house list) | Buy | 300 | 1 a month | ~4 weeks |
 | Merch raffle (monthly draw: tee, tote, signed setlist) | Enter | 50 per entry | 3 entries per draw | <1 week |
+| Real-life merch shop (later, in the lounge) | **Never**; real money at the bar | — | — | — |
 | Song request slot (real set, that night) | Buy | 100 | 1 a month; the venue sets slots per night; you must be checked in at the real bar | ~1.5 weeks |
 | Table booking | **Never** | free service in the app | — | — |
 | Real event calendar | **Never** | free | — | — |
@@ -287,7 +306,7 @@ coins are fun without a shop.
 
 | In (FP) | Out (live-ops / bridge) |
 |---|---|
-| Wallet in the save, Flat and HUD chip, result-card and walk-out lines | Merch rail and wardrobe purchases |
+| Wallet in the save, home and HUD chip, result-card and walk-out lines | Merch shop and wardrobe purchases; the Flat's rent (built after the wallet, `06-stakes` §10.9) |
 | Earning: first visit of the day, minigame tiers, applause, new memory, hearts, Welcome Back, Week Recap, ceilings | Encore, stamp card |
 | Spending: second drink onward at the bar (6 FP drinks, 2 per paid band), tip jar for House Lights | Buy a round, performer tees |
 | 3 memory frames (20 / 35 / 50) as the one save-up goal | All real-world rewards, server wallet, multiplayer |
@@ -319,7 +338,8 @@ buy a frame by visit 5; testers can say in one sentence what coins are for.
 | `FREE_DRINKS_PER_VISIT` | 1 (any drink; water and Pour Perfect always free) |
 | `DRINK_PRICE` | `{"free": 0, "pour": 4, "mixed": 6, "signature": 9}` |
 | `DRINK_BAND_THB` | `{"pour": 250, "mixed": 500}` (upper bounds per glass or serve; above is signature; bottles and bundles not for coins) |
-| `FLAT_MOVE_IN` / `FLAT_RENT_WEEK` | 100 / 20 (`06-stakes` §10) |
+| `FLAT_MOVE_IN` / `FLAT_RENT_WEEK` / `FLAT_PREPAY_WEEKS` | 100 / 20 / 4 (`06-stakes` §10.6) |
+| `FLAT_GRACE_DAYS` / `FLAT_REJOIN_FREE_DAYS` | 7 / 30 |
 | `TIP_PRICE` / `TIP_CROWD_VIBE` / `TIP_VOTE_WEIGHT` | 3 / 10 / 2 |
 | `ROUND_PRICE_PER_PERSON` / `ROUND_DRINKS_GAIN` / `ROUND_BUYER_FRIENDS` | 3 / 10 / 5, once per visit |
 | `WARDROBE_PRICE` | `{"small": 30, "mid": 60, "tee": 80, "statement": 120}` |
@@ -328,15 +348,10 @@ buy a frame by visit 5; testers can say in one sentence what coins are for.
 | `REAL_VOUCHER_DAYS` / `REAL_CODE_MINUTES` / `REAL_REDEEM_PER_DAY` | 30 / 10 / 1 |
 | `COIN_LEDGER_MAX` | 200 (matches `VISIT_LOG_MAX`) |
 
-### 10.1 GDD amendments (one line each)
+### 10.1 GDD amendments
 
-- **§2.3** Order a drink: "First drink each visit is on the house (any drink); later drinks cost coins (04-coins §3.1); Pour Perfect is always free."
-- **§2.5** Welcome Back: "Also gives 10 coins; does not double coin earnings."
-- **§5.3** Buy a round: "Spend coins (3 per person) …" replacing "tokens".
-- **§6.2** Between songs: "Requests stay free; a tip (3 coins) doubles your vote and adds Crowd Vibe."
-- **§7.2** Wardrobe: "the shop" becomes "the merch rail by the Entrance (coins, 04-coins §3.2)".
-- **§7.3 / §8** Memory Wall: "Frames: plain free, five styles for coins."
-- **§10.1** Weekly stamp card reward: "5 coins per stamp" replacing "token reward".
-- **§11** Monthly cosmetics: "about half coin-priced on the merch rail."
-- **§12** Replace the Cabin Tokens bullet: "Coins: see 04-coins. Never sold for real money; Night Pass has no paid lane."
-- **§14** Out list: "shop and tokens" becomes "merch rail and real-world rewards (a minimal coin loop is in, 04-coins §9)".
+Applied to `02-gdd.md` (wave 3b, then 2026-11-02 with the merch shop): §2.3
+first drink free and later drinks in coins, §2.5 Welcome Back coins, §5.3 buy
+a round, §6.2 tips, §7.2 the merch shop in the lounge, §8 frames, §10.1 stamp
+card coins, §11 monthly cosmetics, §12 coins never sold, §14 the minimal coin
+loop.
