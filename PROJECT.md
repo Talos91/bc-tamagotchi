@@ -51,7 +51,7 @@ If the folder you are in is not this root, stop and tell the orchestrator.
 
 ## Per-role notes
 ### Orchestrator
-- Session fdaed712-5416-430d-b3a7-7174cf46699f. Briefs, verifies, writes STATE.md and LOG.md, owns DECISIONS.md "Still open", regenerates the changelog. Builds nothing.
+- Session local_9bb3d41c (from 2026-11-02; before: local_78d0c67d, fdaed712). Briefs, verifies, writes STATE.md and LOG.md, owns DECISIONS.md "Still open", regenerates the changelog. Builds nothing.
 ### Game design / gameplay (🎲 🎮)
 - Design docs `docs/design/`; code under `game/scripts/`, `game/scenes/`; see Tests above.
 ### Voxel art (🎨 🧱 🎭)

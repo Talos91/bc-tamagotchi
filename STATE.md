@@ -6,11 +6,9 @@
 - Play: `docs/tech/02-playtest-guide.md`. Venue facts: `docs/venue/menu/`, `docs/venue/events/` (Oct 2026), opening hours Tue–Sun 19:00–02:00.
 
 ## IN FLIGHT
-- New orchestrator: session local_78d0c67d (detached, top level). Handover checked: origin/main 51603f0, no workers were running; the old orchestrator's answers to "what is not in the files" are in `handoffs/orchestrator-2026-11-02.md`.
-- Workers running: **none**. Version 0.2.0 still open (not closed: the lounge revamp is queued).
-- **Handover decided (2026-11-02, context 40 %):** no new workers from this orchestrator; area-camera is verified, pushed and archived (b0a6c72); a new orchestrator takes over from `C:/Users/itisf/.claude/handoffs/442902c3-f019-4eb1-9441-d2ea598bdc70.md` and starts the queue.
-- Queued (max three workers):
-  next, for the new orchestrator (area-camera has closed; both edit `build_venue.gd` / the venue scene), 🏗️ lounge revamp + corridor portraits + the curtain seen from the main room + Raised3 approach (BACKLOG B7, B9–B11; DECISIONS "Lounge revamp" row; `layout.json` unfrozen for the lounge and corridor walls only, refreeze on Daniele's acceptance).
+- Orchestrator: session local_9bb3d41c (Opus, high; detached, top level), from the handoff of local_78d0c67d (archived). Handover checked 2026-11-02: origin/main db5e398 (e9f5b25 + LOG line), shared tree clean, no workers running.
+- Workers running: **none yet**. 🏗️ lounge-revamp (Opus, high) is **proposed as a card** (task_cdf74505, expires 2026-11-09; the app refuses `user_asked` on a turn started by another session, so Daniele starts it with a click): lounge revamp + corridor portraits + the curtain seen from the main room + Raised3 approach (BACKLOG B7, B9–B11; DECISIONS "Lounge revamp" row; `layout.json` unfrozen for the lounge and corridor walls only, refreeze on Daniele's acceptance). Version 0.2.0 open.
+- Queued (max three workers): 🧹 menu follow-ups (Sonnet; see PROMISED, NOT DONE: misprint fixes + list for Black Cabin, Try something new six per family, ordering marks tried, bundles).
 
 ## WAITING ON OWNER (Questions tab: https://claude.ai/artifact/BbpBxVWVVXMjz7TgJ7aFBW#questions)
 - **Coins signed off**; the hub has a **Coins tab** (db collection `coins`, one row per number): Daniele edits there, the orchestrator copies edits (rows with `edited_at`) into `04-coins.md` and the rules.
@@ -19,7 +17,7 @@
 - **Prae cards (older):** her look (accept?), who takes her old regular duties, retire Khun Joy?, ask Prae for her nights/spot/lines. Interim: her table keeps the old quiz-captain Candle Talk lines.
 - **Camera:** per-area views answered; new card "Area views and area buttons are back" (buttons open the menu on arrival vs navigate only).
 - **Nightlife cards:** sobering rate, Light one up effect, Check the plumbing reset, WASTED reset, WASTED lettering, Nam serving past Merry. Thai nightlife lines need a native read.
-- Open menu cards: cocktail page, misprints, "Try something new", soft-drink row, Thai brand names. (Address, lettering, corridor camera, memory-corner props, menu prices, Pour Perfect list were answered after the close; DECISIONS row "Questions tab, third batch".)
+- Menu cards: all answered (DECISIONS row "Menu cards", 2026-11-01 19:36–19:37, folded 2026-11-02 by local_9bb3d41c). Only the cocktail page waits: Daniele brings the separate printed cocktail menu.
 - Photos of the street front, street door and entrance corridor (next visit); band consent (Daniele asking Black Cabin).
 
 ## PROMISED, NOT DONE
@@ -29,7 +27,7 @@
 - 🎲 Stakes chapter from Daniele's base proposal (DECISIONS 2026-11-02): total deletion, friend revival (e.g. zombie act on stage), only "go to Black Cabin" fatal, other needs minor annoyances; plus the one-page coin summary Daniele asked for; plus the Flat as a rented second-floor room unlock.
 - Memory upload at the TV corner (BACKLOG D5); regulars' photos on the corridor wall (B7).
 - Cast (92c0a27): Tt is regular #4 (Prae's old duties and Candle Talk set); Prae has long hair, is in on even Bangkok nights rotating WestTable0 → Table0 → BufferTall3, silent; Khun Joy retired (owner moments unassigned); all regulars have name strings and six-line Candle Talk sets (Thai drafts need a native writer). Raised3 can't be opened by tap from the main room (approach point beside Raised4); fold into the lounge/venue job.
-- Menu follow-ups: ordering from the menu does not mark a drink as tried; bundles in data but not shown; export include filter needs `*.json`, `*.csv` once an export preset exists.
+- Menu follow-ups: ordering from the menu does not mark a drink as tried; bundles in data but not shown; export include filter needs `*.json`, `*.csv` once an export preset exists. From the menu cards: correct the misprints in the game (now kept as printed with `print_errata` in `docs/venue/menu/menu.json`) and write the list for Black Cabin; "Try something new" = six real drinks, one per family (check what is built); the bar sheet's soft row is Coke (check).
 - Memory-corner kit props (placeholders now); street front and door from real photos.
 - Remove the unused Kanit font files.
 
