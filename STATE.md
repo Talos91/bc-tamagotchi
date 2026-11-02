@@ -7,11 +7,11 @@
 ## IN FLIGHT
 - Orchestrator: **local_ddbbfc1d** (Fable 5.1; effort medium, Daniele asked to set high; **context ~25 %** at this rewrite; day 11-02: 8 → 19 %; 11-03: 23, 25 %). Handoff `C:/Users/itisf/.claude/handoffs/1ab97086-9b4b-48fb-afb8-c28766300c88.md`. Connectors off. Never verifies, pushes code, publishes or deploys itself.
 - **No worker running; local main = origin.** 🔍 verify-stack PASSED 2d55d45 (15/15, build 54.0 MB; report 0f25a8a). Sessions to archive on Daniele's side: venue-fixes local_0ea22856, verify-stack local_85923ca7, verify-web-build local_cffc72a4.
-- **Next for Daniele:** redeploy from the repo root (clean tree now): `python tools/build_web.py --deploy --out %LOCALAPPDATA%c-web` (after `npx.cmd vercel login` once), send the URL, then the phone pass (load s, fps with 42 lights, touch walk, HUD, save survives reload) and the acceptance cards.
+- **Next for Daniele:** the phone pass on https://bc-tamagotchi.vercel.app (load s, fps with 42 lights, touch walk + hideable buttons, HUD, save survives reload) and the acceptance cards. Redeploy any time with `python tools/build_web.py --deploy --out %LOCALAPPDATA%c-web` from the repo root (login done on this PC).
 - 🧹 housekeeping-3 DONE and pushed (ec6b258, c842e94): hub v14 with Stakes rules + Game bible tabs (`docs/design/build_hub_tabs.py` regenerates them from `stakes-rules.md` and `game-bible.md`), DECISIONS row for the 14 items, worktrees pruned. Session to archive: local_48ba0855.
 
 ## WAITING ON OWNER (Questions tab: https://claude.ai/artifact/BbpBxVWVVXMjz7TgJ7aFBW#questions)
-- **Web build:** deployed once by Daniele from the shared tree (URL not recorded; send it). Redeploy after the stack is verified: `npx.cmd vercel login`, then `python tools/build_web.py --deploy --out %LOCALAPPDATA%c-web`; then a phone pass (load s, fps, tap walk, HUD, save survives reload). Card web-build-review.
+- **Web build:** live at https://bc-tamagotchi.vercel.app; phone pass (load s, fps, tap walk, HUD, save survives reload). Card web-build-review.
 - **Camera:** camera-feel-2-accept, camera-closer-still, camera-patrons-in-front (playtest of origin ≥ afd2e58).
 - **Menu:** the unverifiable-spelling list for the bar is `docs/venue/menu/errata-for-black-cabin.md` (Daniele asked to be sent it; link it in chat).
 - Coins tab: no edits yet. Facts pending: cocktail page, entrance/street photos, band and staff consent, Prae's lines, November poster, real merch list.
