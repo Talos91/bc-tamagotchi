@@ -371,7 +371,7 @@ Memories are the collection layer: the record of nights out.
 |---|---|---|
 | **Polaroid** | Notable moments: auto-captured voxel snapshot with a caption ("Thursday, front row, the House Lights") | ~40 authored triggers + random "candid" drops |
 | **Ticket stub** | Completing a set or event; Encore stubs; Headline stubs | 1 per performer + events |
-| **Coaster** | First time trying each drink | 24 drinks |
+| **Coaster** | First time trying each drink; the real menu (121 drinks, 34 dishes) is the set, so coasters = tried drinks | 121 drinks |
 | **Setlist** | Hearing every song in a performer's catalogue | 1 per performer |
 | **Postcard** | From regulars at heart milestones and during absences | ~3 per regular |
 

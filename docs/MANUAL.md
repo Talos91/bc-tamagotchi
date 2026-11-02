@@ -29,7 +29,7 @@ face waves you over.
 | Refill | Only by doing bar things at Black Cabin; no feed buttons |
 | Typical visit | ~10 minutes, ~30 points per meter (GDD sample: 115 points) |
 | Rhythm | 3 visits a week keeps the character happy |
-| Neglect | SUPERSEDED: the high concept said "neglect has no lasting cost". DECISIONS 2026-10-28: neglect is fatal. 21 days without a night out, or 14 days with a need left empty, and the character leaves Bangkok for good; memories, coins and wardrobe stay (section 5) |
+| Neglect | SUPERSEDED: the high concept said "neglect has no lasting cost". DECISIONS 2026-10-28: neglect is fatal. superseded again by stakes v3: 21 days without a real bar visit and the character dies and becomes a ghost, a real check-in within 14 days revives them, deleted at day 35 with everything (section 5) |
 
 **Pillars (as amended).**
 
@@ -198,86 +198,69 @@ die / dead".
 
 **Notifications** (out of the FP). Opt-in, default on, max 2 a week. Lowest meter crossing 40: one character line.
 Friday 18:00: tonight's headliner (OPEN: GDD says local time, DECISIONS says Bangkok everywhere). Never about a
-meter at 0; never after 22:00 local. Last Call has one exception (section 5).
+meter at 0; never after 22:00 local. The three Last Call and ghost warnings are the exception (section 5).
 
 Source files: `docs/design/02-gdd.md` §2, `game/scripts/rules.gd`, `game/scripts/needs.gd`,
 `docs/design/06-stakes.md` §5.
 
 ---
 
-## 5. Stakes: mandatory care and Last Call
+## 5. Stakes: mandatory care and the ghost window
 
-`06-stakes.md` is draft v1 (2026-10-28) implementing "Neglect is fatal". Its numbers await sign-off; none are in
-code.
+`06-stakes.md` is **v3 (2026-11-02)**, Daniele's answers folded in. **Designed only: none of it is built yet.** The
+build spec is its §10; the build waits for Daniele to accept the v3 review card.
 
-**Fiction.** Nobody gets sick. The character stops going out, then **leaves Bangkok**. The system is called **Last
-Call** (English in both languages). Final: no revive, no coins, no paid restore. Flat chip: "Thinking of leaving · 3
-days". Title card: "[Name] has left Bangkok." A letter by personality (Night Owl: "Took a day job in Chiang Mai.
-Early nights now."), ending "Left you my tab with Nam." Banned words extend to die, dead, death, kill, starve, sick.
+**Fiction.** Playful ghost and zombie, a 21+ bar wink. One need is fatal: **go to Black Cabin**, the real one. A
+character whose player has not been to the bar in **21 days** "dies of boredom" and becomes a voxel **ghost**; a check-in
+at the real bar within **14 days** brings them back as a zombie for one night; at **day 35** they are deleted with
+everything they had and the next game starts from scratch. Copy describes the character ("[Name] is getting restless"),
+never the player. Every other need (drink, music, chat, a minigame, the event calendar) only brings annoyances.
 
-**The two mandatory rules.**
+**The visit clock.** Days since the last counted visit, Out of Town days excluded. Real time, computed on load, day
+boundaries in Bangkok time. A visit in progress cannot die mid-visit. Until the server can see real visits, any accepted
+in-game refill stands in for one (one flag, `REAL_VISIT_REQUIRED`, switches it off later and restarts every clock).
 
-| Rule | Minimum | If broken |
-|---|---|---|
-| A. Night Out | One qualifying visit in any 7 real days | Decline starts at day 7 |
-| B. Every need touched | No meter Empty (below 10) for long; per-meter clock resets at 10+ | Decline starts on going Empty; Gone after 14 Empty days |
-
-Qualifying visit: 5+ real minutes (idle excluded) and 2+ refill actions. A visit in progress blocks Gone.
-Driver: `stake_days = max(since_night_out, longest_empty_days + 7)`.
-
-**Decline timeline.**
-
-| Stage | `stake_days` | Character / Flat | Notification |
+| Day | Stage | What the player sees | Notification |
 |---|---|---|---|
-| Fine | 0 to 7 | As Vibe | None |
-| Staying In | 7 to 12 | Homebody look; curtains drawn | Day 7 (inside the 2-a-week budget) |
-| Fading | 12 to 17 | Faces the window, 30% desaturated; lamps dim | Day 12 (budget) |
-| Packing | 17 to 21 | Packs a suitcase; one wall pin down a day | Day 17 (budget); **Day 19 Last Call warning outside the budget**, moved to 19:00 if in quiet hours |
-| Gone | 21+ | Empty flat, keys and the letter | None |
+| 0 to 10 | Fine | As Vibe | None |
+| 10 | Restless | Homebody look, paces; a regular's postcard | Yes (2-a-week budget) |
+| 15 | Fading | Greyed 30 %, slumped on the kerb; lamps dim | Yes (budget) |
+| 18 | Last Call | Translucent edges; "3 days left" | Yes, outside the budget |
+| 21 | Ghost | Voxel ghost, same outfit; nothing it does counts | Yes, outside the budget |
+| 33 | Ghost, 2 days | Barely there | Yes, outside the budget |
+| 35 | Deleted | Farewell card, then a new game | None |
 
-| Player | Outcome |
+**Revival.** Only a QR check-in at the real bar during the ghost window revives; no NPC zombie act. Limit: once per 90
+days per character. The character returns with every meter at 40 or more, Welcome Back fires, they keep everything, and
+a "Back From the Dead" sticker and a scar accessory unlock. Before the server exists no revival ships (a debug "Fake
+check-in" tests it).
+
+**Deletion is total** (S7): character, meters, coins, wardrobe, hearts, memories, achievements and leaderboard rows all
+go. Kept: the account and settings, and already-claimed real-world vouchers. A farewell card can be saved first. A
+voluntary **Retire** deletes at once (two confirmations, once per 7 days).
+
+**Annoyances** (stronger, cleared within the same visit by doing the thing). A meter below 10 gives its annoyance
+(Thirsty, Earworm, Phone face, Rusty); the calendar one is Out of the loop after 7 days unopened. Each one drags gains
+to every other meter by ×0.85 (two on: ×0.72). Coins are never touched. **Minigames can be missed:** a round below 0.25
+(0.4 while Rusty) gives no gain, no coins and no best, and each minigame allows **3 tries per visit**, misses included.
+A missed Candle Talk costs a try but never a heart.
+
+**Out of Town is the only pause:** up to 14 days, once per 30, freezes the visit clock, not available once Restless.
+
+**The Flat.** An unlock with coins: **100 to move in, 20 a week** (Monday 00:00 Bangkok), up to 4 weeks ahead; rent
+pauses while Out of Town or a ghost. A late week starts 7 days' grace, then the character moves out and frames go to
+storage; re-renting within 30 days skips the move-in fee. The Flat never buys relief from needs. Now it stays a minimal
+home (the start screen).
+
+| Designed (v3) | Built |
 |---|---|
-| 3 sample visits a week | Always Fine |
-| 1 sample visit a week | Staying In for ~3 days before each visit, never Fading |
-| 3 visits a week, zero Nightlife | Nightlife Empty ~day 10.3, Fading ~15.3, Gone ~24.3 |
-| Never returns after creation | Gone on day 21 |
+| All of the above | Out of Town (14 days, once per 30) and the 0.3 meter floor |
+| Needs the backend [server]: real check-in, revival, Top patrons, memory proof | Nothing else |
 
-**Rescue** = any qualifying visit before Gone: resets the clock, triggers Welcome Back; from Packing also a "Close
-Call" polaroid and the wall pins go back up. Staff and regulars send warm postcards at each stage.
+OPEN (Questions tab): O1 players who cannot reach the bar, O2 revival before the server, O3 how a memory proves it was
+taken at the bar, O4 tuning (drag ×0.85, miss line 0.25, 3 tries, warnings 10/15/18).
 
-**What survives Gone.**
-
-| Kept | Lost |
-|---|---|
-| Memory Album (read-only chapter with the old name and dates) | Name, look, personality |
-| Coins, wardrobe, frames, the Flat | Meters, Tab, Regular Rank |
-| Real-world vouchers and raffle entries (account-level) | Hearts (seen story beats stay in the album) |
-| | Minigame bests, stamp card, Memory Wall (reset with a farewell polaroid) |
-
-In the venue, the old character's drink appears as a named coaster on the collectibles shelf (max 3) and their name
-stays on the chalkboard. A new character gets no second 20-coin starting wallet or repeat memory and heart coins.
-
-**Holiday mode.**
-
-| Rule | Value |
-|---|---|
-| Out of Town | Freezes meters and both stake clocks; up to 14 days; 30-day cooldown |
-| Long Trip | Once per rolling 365 days, up to 35 days |
-| Yearly cap | 70 trip days |
-| Allowed from | Fine or Staying In only |
-| Real-bar check-in | Staff-verified visit to the real bar counts as a Night Out, lifts meters to 30, once a Bangkok day (post-FP) |
-
-**Edge cases.** Clock forward: Gone needs trusted server time; offline the stage caps at Packing. Clock back: jumps
-over 10 minutes count as 0. Uninstall: clocks keep running; FP local saves are lost. Fresh start: voluntary **Move
-On**, two confirmations, once per 30 days. Server outage: all clocks freeze. The chapter specifies 17 tests and
-constants such as `EMPTY_BELOW 10`, `NIGHT_OUT_MIN_MINUTES 5`, `LAST_CALL_NOTIFY_HOURS_BEFORE 48`,
-`LONG_TRIP_MAX_DAYS 35`, `TRIP_DAYS_PER_YEAR 70`.
-
-OPEN (06-stakes §8): 21/14 days or 14/10; keep Rule B; quiet hours device-local or Bangkok; emergency retroactive
-trip; coins and wardrobe surviving; real-bar check-in and its backend timing; Last Call by email or LINE; letter
-reasons fixed or player-written; the code floor is already 0.3.
-
-Source files: `docs/design/06-stakes.md`, `docs/design/DECISIONS.md`.
+Source files: `docs/design/06-stakes.md` (§10 build spec), `docs/design/DECISIONS.md`.
 
 ---
 
@@ -544,7 +527,7 @@ Source files: `docs/design/DECISIONS.md`, `docs/design/04-coins.md` §7, `docs/d
 |---|---|---|
 | Polaroid | Authored moments and random candids | ~40 triggers |
 | Ticket stub | Sets, events, encores | 1 per performer + events |
-| Coaster | First taste of each drink | 24 |
+| Coaster | First taste of each drink (the real menu, 121 drinks) | 121 |
 | Setlist | Hearing a whole catalogue | 1 per performer |
 | Postcard | Heart milestones, absences | ~3 per regular |
 
@@ -661,9 +644,7 @@ Source files: `docs/art/art-bible.md`, `docs/art/direction/README.md`.
 a time; UI never glows brighter than a tealight, never covers the character's zone, and shrinks during a set. UI is
 smooth, the world is voxel. No bounce or elastic motion.
 
-**Fonts.** Display: **Kanit** 600/700. Text: **IBM Plex Sans Thai Looped** 400/500/600. Fallback Noto Sans Thai
-Looped → Noto Sans → Noto Color Emoji. Free OFL licences, Latin and Thai. Not in the repo yet. OPEN: Black Cabin
-brand typeface. The neon wordmark is a logo asset, never typeset.
+**Fonts.** Brand fonts (2026-11-02): **Lato** for text and **Kristi** for the script accents, replacing Kanit; **IBM Plex Sans Thai Looped** stays for Thai. Free OFL licences, in `game/assets/fonts/`. The neon wordmark is a logo asset, never typeset.
 
 **Meter component.** Fixed order Music, Friends, Drinks, Nightlife.
 
@@ -784,62 +765,36 @@ Source files: `docs/tech/01-engine-decision.md`, `game/README.md`, `tools/blende
 
 ## 15. Status and open questions
 
-**Where the project stands (2026-10-28).** The room is accepted at parity iteration 18 (`6dc9f5d`), layout frozen.
-Characters v2 (`ae9decf`) are accepted as the base. Wave 3b mechanical work is done: the floor is 0.3, Welcome Back
-replaces the daily multiplier, the lean bonus gives +5 Friends, the Rhythm gain is +12 to 18 Music, fonts are in. Zone
-wiring (walking to zones, zone sheets, minigames reachable from the venue) is in progress.
+**Where the project stands (2026-11-02, `14cda24`; version 0.2.0 open).** Venue v4 is built to the real floor map and the
+lounge revamp is accepted, so `layout.json` is frozen. Look D (dark walls, red light) is in and awaits acceptance. The
+real menu is in the game. Stakes v3 is designed and waits for Daniele's review. Every code commit is verified in a clean
+worktree.
 
 **Built and tested on `main`.**
 
 | Area | What runs |
 |---|---|
-| Needs | Decay, 0.3 floor, personality, diminishing returns, Welcome Back replacing the daily multiplier, Tab, Out of Town, save/load, debug clock and HUD |
+| Needs | Decay, 0.3 floor, personality, Welcome Back, Tab, Out of Town, save/load, debug clock and HUD, nightlife actions, WASTED lockout |
 | Minigames | Four FP games, frame, result card, lab, string loader |
-| Venue | Kit-built room, lighting, diorama camera, tap-to-move, crowd, both orientations |
-| Kit, characters | Kit objects; characters v2 presets and animations |
+| Venue | Real floor map, doors and seats, stair, lounge (coin merch shop, memory corner, game machine, Top patrons board, ten corridor portraits), look D, per-area camera with seven area buttons, tap-to-move, portrait first with a landscape toggle |
+| Menu | The real menu (121 drinks, 34 dishes); Try something new rotates six real drinks a night; Bundles tab |
+| Cast, UI | Prae (owner), Tt (regular 4), characters v2; start screen with the real sign; fonts Lato and Kristi; version stamp |
+| Tests | 14 headless suites: smoke_stairs, smoke_tap, smoke_hud, test_needs, test_minigames, smoke_loop, smoke_doors_sit, smoke_start, test_menu, smoke_version, test_nightlife, test_seats, test_feel, test_lounge |
 
-**Designed only:** Last Call, coins, bridge, memories, the Flat, creator, performances and schedule, regular behaviour,
-events, notifications, wardrobe, Thai native pass, backend, multiplayer.
+**Designed only:** stakes v3 (section 5), the coin economy (`04-coins.md` v2 signed off), the Flat, memory upload at the
+TV corner, bridge, creator, performances and schedule, notifications, wardrobe, Thai native pass, backend, multiplayer.
 
-**Known debt, not blocking:** 42 lights give about 1,850 draw calls and 24 ms GPU on desktop (needs a performance pass
-and a real-device measurement before any phone build); the lounge camera is partly blocked by the curtain wall; figures
-are lit darker than the renders and heads are above the 27 to 34 % target.
+**Known debt, not blocking:** 42 lights need a performance pass and a phone measurement before any phone build; the camera
+is being retuned (clunky: trails, walls in the way); some raised couch places are not walkable; Thai strings are machine
+drafts; Pour Perfect does not mark a drink as tried.
 
-**Still open (DECISIONS).**
+**Open questions** live on the **Questions tab** of the Black Cabin Backlog hub
+(https://claude.ai/artifact/BbpBxVWVVXMjz7TgJ7aFBW#questions), and decided ones move into `docs/design/DECISIONS.md`. Now
+waiting: look D acceptance and three look cards, stakes v3 review plus O1 to O4, three menu questions, the lounge east
+tables, merch items and board wording. Facts still wanted from Black Cabin: cocktail page, entrance and street photos,
+consent for band and staff, Prae's lines, the real merch list. Later work: `docs/design/BACKLOG.md`.
 
-1. Black Cabin's real opening hours and what the game shows at 14:00.
-2. Staff turnover policy if a real person leaves.
-3. Brand typeface: Black Cabin's own, or Kanit + IBM Plex Sans Thai Looped.
-4. The asks to Black Cabin (consent, house band, staff packs).
-5. Death rules: Last Call timeline, warnings, mandatory weekly interactions, what survives (06-stakes §8 lists the
-   sub-questions: 21/14 or 14/10 days, Rule B, quiet-hours time zone, emergency trip, coins and wardrobe surviving,
-   real-bar check-in, email/LINE warning, letter reasons).
-6. Real-world bridge chapter (redemption, staff verification, booking and song requests, order-to-table, legal).
-7. Orientation: landscape or portrait primary.
-8. Coin economy (earn/spend, no decor; "never sold for real money").
-9. Multiplayer chat policy.
-10. The Flat: kept as a minimal home screen by (h), still listed open.
-
-**Smaller items from the documents:** hearts 4 to 5 at launch; Candle Talk content only for Mali (FP needs Tong, Ploy,
-Jules; Mali's Thai is machine-drafted); difficulty picker for Rhythm; skin tone count (12, 8 or 6); kit deviations from
-the art bible; headline notification time zone; the 2-a-week notification budget; English minigame names with Thai
-subtitles; web export size baseline; music licensing and beat maps per performer; premium cosmetics or no
-monetization beyond the commission; pinball mapping to be set from playtests (median human score × 2.5).
-
-**Asks for Black Cabin.**
-
-| Priority | Ask |
-|---|---|
-| 1 | Who agrees to appear, with signed consent |
-| 2 | Resident band: names, photos with instruments, 4+ songs with licence status, real set |
-| 3 | Head bartender pack: photos, nickname TH/EN, signature drink, story, catchphrases |
-| 4 | Door, sound, owner packs (owner adds founding story, anniversary, toast) |
-| 5 | Up to six acts and the night they really play |
-| 6 | Opening hours and the real weekly calendar |
-| 7 | Bridge: reward catalogue, monthly budget, staff verification, legal advice |
-
-Source files: `docs/design/DECISIONS.md`, `docs/design/03-cast.md` §7, `docs/design/04-coins.md`,
-`docs/design/06-stakes.md` §8, `ORCHESTRATION.md`.
+Source files: `STATE.md`, `docs/design/DECISIONS.md`, `docs/design/BACKLOG.md`, `ORCHESTRATION.md`.
 
 ---
 
@@ -862,7 +817,9 @@ Source files: `docs/design/DECISIONS.md`, `docs/design/03-cast.md` §7, `docs/de
 | Greybox | A rough block-out of a level for testing space before real art |
 | Headless test | A test that runs the engine without a window |
 | Kit | The library of reusable 3D objects the venue is built from |
-| Last Call | The neglect system ending with the character leaving Bangkok |
+| Last Call | Stage at day 18 of the visit clock: three days left before the character dies and becomes a ghost |
+| Ghost window | The 14 days after death in which a real check-in at the bar revives the character; day 35 deletes them |
+| Out of Town | The only pause: up to 14 days, once per 30, freezes the visit clock |
 | Live-ops | Content and events added on a schedule after launch |
 | Navmesh | The walkable-area map used for path-finding |
 | PAR light | A stage spotlight can |
