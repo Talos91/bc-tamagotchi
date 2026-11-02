@@ -121,6 +121,7 @@ PALETTE = {
     "GlassRib":     ("#B8B4B0", 0.10, 0.0, 0),     # ribbed glass rail on the cashier bump (09)
     "FurBrown":     ("#6E5A48", 0.90, 0.0, 0),     # kudu head (16)
     "FurLight":     ("#9A8470", 0.90, 0.0, 0),
+    "FurPale":      ("#D6CABA", 0.90, 0.0, 0),     # the kudu's pale head and neck (16; look-build 2026-11-02)
     "HornDark":     ("#2E2420", 0.60, 0.0, 0),
     "TeakPale":     ("#B08A5C", 0.35, 0.0, 0),     # smoking-room furniture, pale teak (13, 20, 21)
     "WeaveCream":   ("#D8CFBE", 0.80, 0.0, 0),     # wishbone chair seats
@@ -1744,21 +1745,21 @@ def cashier_counter(v):
 def reindeer_head(v):
     """Mounted kudu-like head in a gilded frame, wearing a tiara (16), for the wall over the cashier. Frame
     0.8 x 1.0 m flat on the wall (+y), the pale head stands 0.45 m proud, two thick spiral horns rise above the
-    frame."""
+    frame. Head, neck and ears pale cream as in photo 16 (look-build 2026-11-02; they were mid browns)."""
     W, H = 16, 20
     v.box(0, 2, 0, W - 1, 3, H - 1, "CymbalGold")                    # frame
     v.box(2, 2, 2, W - 3, 3, H - 3, "VelvetShadow")                  # panel inside the frame
     v.box(1, 1, 0, W - 2, 1, 0, "CymbalGold")                        # frame moulding
     v.box(1, 1, H - 1, W - 2, 1, H - 1, "CymbalGold")
-    v.box(5, -2, 3, 10, 1, 9, "FurBrown")                            # neck / shoulders
-    v.box(6, -3, 2, 9, -2, 5, "FurLight")                            # chest bib
-    v.box(5, -6, 9, 10, -2, 14, "FurLight")                          # head
-    v.box(6, -8, 9, 9, -6, 11, "FurBrown")                           # muzzle
+    v.box(5, -2, 3, 10, 1, 9, "FurPale")                             # neck / shoulders
+    v.box(6, -3, 2, 9, -2, 5, "FurPale")                             # chest bib
+    v.box(5, -6, 9, 10, -2, 14, "FurPale")                           # head
+    v.box(6, -8, 9, 9, -6, 11, "FurLight")                           # muzzle
     v.box(7, -9, 10, 8, -8, 10, "HornDark")                          # nose
     v.set(5, -6, 12, "BeamBlack")                                    # eyes
     v.set(10, -6, 12, "BeamBlack")
-    v.box(2, -5, 14, 4, -4, 15, "FurBrown")                          # ears
-    v.box(11, -5, 14, 13, -4, 15, "FurBrown")
+    v.box(2, -5, 14, 4, -4, 15, "FurPale")                           # ears
+    v.box(11, -5, 14, 13, -4, 15, "FurPale")
     v.box(6, -5, 15, 9, -4, 15, "CymbalGold")                        # tiara
     for x in (6, 9):
         v.set(x, -5, 16, "CymbalGold")

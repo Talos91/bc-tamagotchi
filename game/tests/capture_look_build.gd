@@ -12,7 +12,8 @@ extends SceneTree
 ## Variants D..G apply look D on top of the venue as built, so they only make sense on the pre-build venue (54b96c3 and
 ## before). Since look D is built (build_venue.gd), only A is meaningful: it captures the before|after shots
 ## (--variants=A --out=<dir>; two-ups by game/tools/look_build_compose.py after). Views: floor, bar, stage, lounge,
-## corridor, smoking, toilets (landscape: floor, bar, stage).
+## corridor, smoking, toilets, corridor-mid, cashier (landscape: floor, bar, stage). Variants K*: the darker-lighting
+## trials (relative light factors on the venue as built at 6cd9735); the build took KI with ambient 0.7.
 ## From game/, windowed (headless renders nothing):
 ##   godot --path . --script res://tests/capture_look_build.gd -- --tag=portrait [--only=floor,bar] [--variants=D,E]
 ## Writes <variant>-<view>.png to docs/art/screens/look-build/floor-proto/ (--out=DIR).
@@ -29,7 +30,7 @@ const LIGHT_CATS := {
 	"ParSpot2": "red", "TreeLight": "red", "NeonEdgeA": "red", "NeonEdgeB": "red", "BackBarRed0": "red",
 	"BackBarRed1": "red", "BackBarRed2": "red",
 	"ParSpot3": "par_amber", "ParSpot1": "par_blue",
-	"LobbyLight": "house", "CorridorLight": "house", "StaffRoomLight": "house", "LightboxGlow": "house",
+	"LobbyLight": "lobby", "CorridorLight": "corridor", "StaffRoomLight": "house", "LightboxGlow": "house",
 	"DiscoGlint": "house",
 	"PictureLightOmni": "picture", "StreetSpill": "smoke", "SmokeBulb": "smoke", "Streetlight": "outside",
 	"PinballGlow": "screen",
@@ -93,6 +94,41 @@ const VARIANTS := {
 		"emit": RED_LEDS, "lights": D_LIGHTS, "env": DARK_ENV},
 	"G": {"label": "G  E, 0.2 m cells", "walls": BLACKISH, "cement": {"cell": 8, "edge": false}, "north": true,
 		"emit": RED_LEDS, "lights": D_LIGHTS, "env": DARK_ENV},
+	# Darker look D (Daniele 2026-11-02: "an half way between real and what we got now"), on the venue as built at
+	# 6cd9735+: relative light factors, absolute environment values; walls and floor as built.
+	"K1": {"label": "K1  darker", "walls": {}, "emit": {}, "env": {"ambient_light_energy": 1.1, "tonemap_exposure": 1.25},
+		"lights": {"key": [null, 0.75], "house": [null, 0.7], "red": [null, 1.1]}},
+	"K2": {"label": "K2  halfway", "walls": {}, "emit": {}, "env": {"ambient_light_energy": 0.85, "tonemap_exposure": 1.2},
+		"lights": {"key": [null, 0.6], "house": [null, 0.55], "red": [null, 1.2], "lamp": [null, 1.1],
+			"candle": [null, 1.2]}},
+	"K3": {"label": "K3  darker still", "walls": {}, "emit": {}, "env": {"ambient_light_energy": 0.65, "tonemap_exposure": 1.15},
+		"lights": {"key": [null, 0.5], "house": [null, 0.45], "red": [null, 1.3], "lamp": [null, 1.2],
+			"candle": [null, 1.3], "counter": [null, 1.1]}},
+	"KF": {"label": "KF", "walls": {}, "emit": {}, "env": {"ambient_light_energy": 0.7, "tonemap_exposure": 1.15},
+		"lights": {"key": [null, 0.5], "house": [null, 0.6], "lobby": [null, 0.8], "red": [null, 1.3],
+			"counter": [null, 0.8], "candle": [null, 1.3]}},
+	"KG": {"label": "KG", "walls": {}, "emit": {}, "env": {"ambient_light_energy": 0.62, "tonemap_exposure": 1.15},
+		"lights": {"key": [null, 0.5], "house": [null, 0.6], "lobby": [null, 0.8], "corridor": [null, 1.2],
+			"red": [null, 1.35], "counter": [null, 0.8], "candle": [null, 1.3], "lamp": [null, 1.1]}},
+	"KH": {"label": "KH", "walls": {}, "emit": {}, "env": {"ambient_light_energy": 0.65, "tonemap_exposure": 1.15},
+		"lights": {"key": [null, 0.5], "house": [null, 0.6], "lobby": [null, 0.8], "corridor": [null, 2.2],
+			"red": [null, 1.3], "counter": [null, 0.8], "candle": [null, 1.3], "lamp": [null, 1.05], "smoke": [null, 1.3],
+			"picture": [null, 1.3]}},
+	"KI": {"label": "KI", "walls": {}, "emit": {}, "env": {"ambient_light_energy": 0.65, "tonemap_exposure": 1.15},
+		"lights": {"key": [null, 0.5], "house": [null, 0.6], "lobby": [null, 0.8], "corridor": [CANDLE, 1.6],
+			"red": [null, 1.3], "counter": [null, 0.8], "candle": [null, 1.3], "lamp": [null, 1.05], "smoke": [null, 1.3],
+			"picture": [null, 1.3]}},
+	"KC": {"label": "KC", "walls": {}, "emit": {}, "env": {}, "lights": {"corridor": [null, 1.8], "lobby": [null, 1.5]}},
+	"K4": {"label": "K4", "walls": {}, "emit": {}, "env": {"ambient_light_energy": 0.55, "tonemap_exposure": 1.15},
+		"lights": {"key": [null, 0.45], "house": [null, 0.6], "red": [null, 1.3], "counter": [null, 0.8],
+			"candle": [null, 1.3]}},
+	"K5": {"label": "K5", "walls": {}, "emit": {}, "env": {"ambient_light_energy": 0.45, "tonemap_exposure": 1.1},
+		"lights": {"key": [null, 0.4], "house": [null, 0.6], "red": [null, 1.4], "lamp": [null, 1.1],
+			"counter": [null, 0.8], "candle": [null, 1.4]}},
+	"K6": {"label": "K6", "walls": {}, "emit": {}, "env": {"ambient_light_energy": 0.55, "tonemap_exposure": 1.15,
+			"adjustment_contrast": 1.12},
+		"lights": {"key": [null, 0.45], "house": [null, 0.6], "red": [null, 1.3], "counter": [null, 0.8],
+			"candle": [null, 1.3]}},
 }
 
 ## Views: the player's spot and facing; `area` presses that area button first (its view, as in the game).
@@ -104,6 +140,8 @@ const VIEWS := [
 	{"name": "corridor", "player": Vector3(4.2, 0.1, 14.0), "yaw": -PI * 0.5},
 	{"name": "smoking", "player": Vector3(40.0, 0.1, 15.2), "yaw": PI},
 	{"name": "toilets", "area": "toilets"},
+	{"name": "corridor-mid", "player": Vector3(9.0, 0.1, 14.0), "yaw": -PI * 0.5},
+	{"name": "cashier", "player": Vector3(29.65, 0.1, 11.4), "yaw": PI},
 ]
 
 var out := "res://../docs/art/screens/look-build/floor-proto"
