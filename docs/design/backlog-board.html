@@ -63,6 +63,18 @@ code { font-family: ui-monospace, Consolas, monospace; font-size: 13px; }
 .qctx { font-size: 14px; max-width: 70ch; } .qctx p { margin: 0 0 6px; }
 .qimgs { display: flex; gap: 8px; overflow-x: auto; padding-bottom: 4px; }
 .qimgs img { height: 180px; width: auto; max-width: none; border-radius: 6px; border: 1px solid var(--line); display: block; }
+.qimg { padding: 0; border: none; background: none; cursor: zoom-in; border-radius: 6px; flex: none; }
+.qimg:focus-visible, .lb button:focus-visible { outline: 2px solid var(--accent); outline-offset: 2px; }
+/* In-page picture viewer: pictures open here, since a new tab can't load the hub's stored files */
+.lb { position: fixed; inset: 0; width: 100%; height: 100%; max-width: none; max-height: none; margin: 0; border: none; padding: 0; background: var(--bg); color: var(--fg); }
+.lb::backdrop { background: var(--bg); }
+.lb[open] { display: grid; grid-template-rows: auto 1fr auto; }
+.lb-bar { display: flex; gap: 12px; align-items: center; justify-content: space-between; padding: calc(10px + env(safe-area-inset-top, 0px)) max(16px, env(safe-area-inset-right, 0px)) 10px max(16px, env(safe-area-inset-left, 0px)); border-bottom: 1px solid var(--line); }
+.lb-cap { font-size: 14px; color: var(--muted); min-width: 0; overflow-wrap: anywhere; }
+.lb-stage { min-height: 0; display: flex; align-items: center; justify-content: center; padding: 12px; overflow: auto; }
+.lb-stage img { max-width: 100%; max-height: 100%; width: auto; height: auto; object-fit: contain; border-radius: 6px; }
+.lb-nav { display: flex; gap: 10px; justify-content: center; padding: 10px 16px calc(12px + env(safe-area-inset-bottom, 0px)); }
+.lb-nav[hidden] { display: none; }
 .qopts { display: grid; gap: 6px; }
 .qopt { display: flex; gap: 10px; align-items: flex-start; padding: 8px 10px; border: 1px solid var(--line); border-radius: 6px; cursor: pointer; font-size: 14px; }
 .qopt.rec { border-color: var(--accent); }
@@ -102,7 +114,7 @@ code { font-family: ui-monospace, Consolas, monospace; font-size: 13px; }
 <tr><td class="id">A2</td><td>Bar-counter strip connected to the walkable floor (known navmesh gap)</td><td class="eff">S</td><td class="needs">nothing</td><td><span class="pill ok">done</span></td></tr>
 <tr><td class="id">A3</td><td>Playtest fixes: doors you can walk through, real sitting at every seat, stairs reoriented, memory corner, corridor sign, walls solid until the door</td><td class="eff">M</td><td class="needs">nothing</td><td><span class="pill ok">done</span></td></tr>
 <tr><td class="id">A4</td><td>Real Black Cabin menu at the bar and in Pour Perfect; brand fonts Lato + Kristi; portrait first with a landscape toggle</td><td class="eff">M</td><td class="needs">your answers on the Questions tab</td><td><span class="pill ok">done</span></td></tr>
-<tr><td class="id">A5</td><td>Playtest fixes: smoother camera, walls see-through but their bottom 10 % (corridor excepted), fluid movement, facing bug, seats facing the right way; Prae as an owner with her real look</td><td class="eff">M</td><td class="needs">nothing</td><td><span class="pill plan">landed; area views coming back</span></td></tr>
+<tr><td class="id">A5</td><td>Playtest fixes: smoother camera, walls see-through but their bottom 10 % (corridor excepted), fluid movement, facing bug, seats facing the right way; Prae as an owner with her real look</td><td class="eff">M</td><td class="needs">nothing</td><td><span class="pill ok">done; area views and buttons back</span></td></tr>
 <tr><td class="id">A6</td><td>Version number in the game (v0.2.0 plus the build), changelog by version</td><td class="eff">S</td><td class="needs">nothing</td><td><span class="pill ok">done (v0.2.0)</span></td></tr>
 </table></div>
 </section>
@@ -117,11 +129,11 @@ code { font-family: ui-monospace, Consolas, monospace; font-size: 13px; }
 <tr><td class="id">B4</td><td>Achievements as stickers on the club's entry door, shown when you leave and in the Flat before you go out</td><td class="eff">M</td><td class="needs">nothing</td><td><span class="pill idea">idea</span></td></tr>
 <tr><td class="id">B5</td><td>Voxel quality push: more cubes per object without killing a phone; pairs with the performance pass</td><td class="eff">L</td><td class="needs">phone measurement first</td><td><span class="pill idea">idea</span></td></tr>
 <tr><td class="id">B6</td><td>Leaderboard per minigame, weekly and monthly</td><td class="eff">M</td><td class="needs">online backend, accounts</td><td><span class="pill idea">idea</span></td></tr>
-<tr><td class="id">B7</td><td>Entrance corridor portraits of characters in the game's own graphics; the top 10 customers will hang there. Walk past one to open it and read a message from the owner</td><td class="eff">S</td><td class="needs">owner messages: placeholder text for now</td><td><span class="pill plan">queued; messages to do</span></td></tr>
+<tr><td class="id">B7</td><td>Entrance corridor portraits of characters in the game's own graphics; the top 10 customers will hang there. Walk past one to open it and read a message from the owner</td><td class="eff">S</td><td class="needs">messages written by each patron, once accounts exist</td><td><span class="pill ok">ten portraits in; placeholder messages</span></td></tr>
 <tr><td class="id">B8</td><td>Start screen as the club's front door: a still first-person view from outside, facing the street door under a lit Black Cabin neon sign. Tap to enter, the door opens, the camera follows your character's view inside, the door closes behind, the camera pulls back to the normal game view and play starts</td><td class="eff">M</td><td class="needs">real street photos for the facade</td><td><span class="pill ok">done (sign from your photo)</span></td></tr>
-<tr><td class="id">B9</td><td>Lounge revamp: merch shop top right, memory corner and the game machine top left, a top-patrons leaderboard under the stairs (left), decorations around the room</td><td class="eff">M</td><td class="needs">the lounge layout reopened (your decision)</td><td><span class="pill plan">queued after the camera pass</span></td></tr>
-<tr><td class="id">B10</td><td>Top-patrons board under the lounge stairs: placeholder names now, real customers later</td><td class="eff">S</td><td class="needs">accounts and check-ins for real names</td><td><span class="pill plan">queued with B9</span></td></tr>
-<tr><td class="id">B11</td><td>Merch shop in the lounge: what is sold, prices, coins or real money</td><td class="eff">M</td><td class="needs">Black Cabin's merch list</td><td><span class="pill wait">stand with B9; contents open</span></td></tr>
+<tr><td class="id">B9</td><td>Lounge revamp: merch shop top right, memory corner and the game machine top left, a top-patrons leaderboard under the stairs (left), decorations around the room</td><td class="eff">M</td><td class="needs">your acceptance (refreezes the layout)</td><td><span class="pill plan">landed; machine back by the stair in progress</span></td></tr>
+<tr><td class="id">B10</td><td>Top-patrons board under the lounge stairs: placeholder names now, real customers later</td><td class="eff">S</td><td class="needs">QR check-ins for the real monthly ranking</td><td><span class="pill ok">board in; placeholder names</span></td></tr>
+<tr><td class="id">B11</td><td>Merch shop in the lounge: in-game cosmetics for coins; a second shop for real-life merch comes later</td><td class="eff">M</td><td class="needs">coins and cosmetics in the game</td><td><span class="pill plan">stand in; coin shop sheet in progress</span></td></tr>
 <tr><td class="id">B12</td><td>Nightlife actions: "Light one up" in the smoking room, secret "Check the plumbing" in the toilet, drunk from 3 drinks, WASTED screen with a 12 h lockout</td><td class="eff">M</td><td class="needs">nothing</td><td><span class="pill ok">done</span></td></tr>
 </table></div>
 </section>
@@ -184,7 +196,13 @@ code { font-family: ui-monospace, Consolas, monospace; font-size: 13px; }
 <div id="c-body"><div class="qempty">Loading the economy…</div></div>
 </div>
 
-<p class="foot">Updated 2 Nov 2026 by the orchestrator (Coins tab added). Backlog items are never silently deleted: shipped ones get the commit, dropped ones get the reason. Answers on the Questions tab are copied into <code>docs/design/DECISIONS.md</code>.</p>
+<dialog class="lb" id="lb" aria-label="Picture viewer">
+  <div class="lb-bar"><span class="lb-cap" id="lb-cap"></span><button class="qbtn ghost" id="lb-close">Close ✕</button></div>
+  <div class="lb-stage"><img id="lb-img" alt=""></div>
+  <div class="lb-nav" id="lb-nav"><button class="qbtn ghost" id="lb-prev">← Previous</button><button class="qbtn ghost" id="lb-next">Next →</button></div>
+</dialog>
+
+<p class="foot">Updated 2 Nov 2026 by the orchestrator (pictures open in the page). Backlog items are never silently deleted: shipped ones get the commit, dropped ones get the reason. Answers on the Questions tab are copied into <code>docs/design/DECISIONS.md</code>.</p>
 </div>
 <script>
 (function(){
@@ -200,6 +218,29 @@ code { font-family: ui-monospace, Consolas, monospace; font-size: 13px; }
   let first = (location.hash || '').slice(1);
   if(!tabs[first]) { try { first = localStorage.getItem('bc-tab') || 'backlog'; } catch(e) { first = 'backlog'; } }
   show(first);
+
+  // Picture viewer: one card's pictures, full size, inside the page
+  const lb = $('#lb'), lbImg = $('#lb-img'), lbCap = $('#lb-cap'), lbNav = $('#lb-nav');
+  let pics = [], pic = 0, picFrom = null;
+  function drawPic(){
+    const im = pics[pic] || {};
+    lbImg.src = im.url || ''; lbImg.alt = im.alt || '';
+    lbCap.textContent = (im.alt || 'Picture') + (pics.length > 1 ? ` · ${pic + 1} of ${pics.length}` : '');
+    lbNav.hidden = pics.length < 2;
+  }
+  function openPic(list, i, from){
+    pics = list || []; pic = i; picFrom = from; drawPic();
+    if(lb.showModal) lb.showModal(); else lb.setAttribute('open', '');
+    $('#lb-close').focus();
+  }
+  function closePic(){ if(lb.close) lb.close(); else lb.removeAttribute('open'); }
+  function stepPic(d){ if(pics.length > 1){ pic = (pic + d + pics.length) % pics.length; drawPic(); } }
+  $('#lb-close').addEventListener('click', closePic);
+  $('#lb-prev').addEventListener('click', () => stepPic(-1));
+  $('#lb-next').addEventListener('click', () => stepPic(1));
+  lb.addEventListener('click', e => { if(e.target === lb || e.target.classList.contains('lb-stage')) closePic(); });
+  lb.addEventListener('keydown', e => { if(e.key === 'ArrowLeft') stepPic(-1); else if(e.key === 'ArrowRight') stepPic(1); });
+  lb.addEventListener('close', () => { lbImg.removeAttribute('src'); if(picFrom && picFrom.isConnected) picFrom.focus(); });
 
   // Questions: one document per question in the "items" collection
   const groups = { now: $('#g-now'), design: $('#g-design'), facts: $('#g-facts'), done: $('#g-done') };
@@ -221,12 +262,13 @@ code { font-family: ui-monospace, Consolas, monospace; font-size: 13px; }
       <div class="qeyebrow">${it.ref ? `<span class="ref">${esc(it.ref)}</span>` : ''}<span>${esc(it.date || '')}</span>${done ? '<span>answered</span>' : ''}</div>
       <h3>${esc(it.title)}</h3>
       <div class="qctx">${ctx}</div>
-      ${(it.images || []).length ? `<div class="qimgs">${it.images.map(im => `<a href="${esc(im.url)}" target="_blank" rel="noopener"><img src="${esc(im.url)}" alt="${esc(im.alt || '')}" loading="lazy"></a>`).join('')}</div>` : ''}
+      ${(it.images || []).length ? `<div class="qimgs">${it.images.map((im, i) => `<button class="qimg" data-img="${i}" aria-label="Open picture: ${esc(im.alt || 'picture ' + (i + 1))}"><img src="${esc(im.url)}" alt="${esc(im.alt || '')}" loading="lazy"></button>`).join('')}</div>` : ''}
       ${done ? `<div class="qanswer"><b>${esc(optText(it, it.answer))}</b>${it.note ? ' · ' + esc(it.note) : ''}<br><span class="qstatus">${esc(it.answered_at || '')}</span></div>` : ''}
       <div class="qopts" ${done ? 'hidden' : ''}>${opts}</div>
       <textarea id="n-${id}" aria-label="Note" placeholder="${(it.options || []).length ? 'Note (optional)' : 'Your answer'}" ${done ? 'hidden' : ''}>${esc(it.note || '')}</textarea>
       <div class="qrow">${done ? '<button class="qbtn ghost" data-act="reopen">Change answer</button>' : '<button class="qbtn" data-act="answer">Answer</button>'}<span class="qstatus" data-s></span></div>`;
     el.querySelector('[data-act]').addEventListener('click', () => done ? reopen(it, el) : answer(it, el));
+    el.querySelectorAll('[data-img]').forEach(b => b.addEventListener('click', () => openPic(it.images, Number(b.dataset.img), b)));
     return el;
   }
   function render(){

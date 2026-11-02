@@ -28,14 +28,14 @@ a layout plan are coming from Daniele; until then the layout stays frozen.
 | B1 | More interactive places (beyond bar, stage, tables, pinball) | M | map fixed (A1) | idea |
 | B2 | Character creation (creator UI on the accepted v2 presets) | M | — | planned (STATE job 3) |
 | B3 | More minigames (today: Pour Perfect, Rhythm, pinball, Candle Talk) | M each | — | idea |
-| B7 | Entrance corridor: framed portraits of characters in the game's own graphics on the walls; they will hold the top 10 customers. Passing a portrait lets you open it and read a message from the owner (Daniele 2026-11-02) | S | venue v4 | portraits: queued (lounge+corridor job); owner messages: **to do**, placeholder text for now |
+| B7 | Entrance corridor: framed portraits of characters in the game's own graphics on the walls; they will hold the top 10 customers. Passing a portrait lets you open it and read a message from the owner (Daniele 2026-11-02) | S | venue v4 | ten portraits in (50a0623); messages written by each patron once accounts exist (Daniele 2026-11-02); placeholders now |
 | B8 | Start screen as the club's front door: still first-person view from outside facing the street door under a lit Black Cabin neon sign; tap to enter, door opens, camera follows the character's view inside, door closes, camera pulls back to the game view, play starts (Daniele 2026-11-01) | M | walking doors (A3), street facade | next, after A3 |
 | B4 | Achievements as stickers on the club's entry door; shown when you leave and in the Flat before you go out | M | — | idea |
 | B5 | Voxel quality push: more cubes per object without killing a phone (pairs with the performance pass) | L | phone measurement first | idea |
 | B6 | Leaderboard per minigame, weekly and monthly | M | online backend, accounts | idea |
-| B9 | Lounge revamp (Daniele 2026-11-02): merch shop top right; memory-share corner and the game machine top left; "Top patrons" leaderboard under the stairs (left); decorations around the room | M | layout.json unfrozen for the lounge (owner decision) | queued after the feel pass |
-| B10 | Top-patrons board under the lounge stairs: placeholder names now, real customers once there are accounts and check-ins | S now, M later | backend for real data | queued with B9 |
-| B11 | Merch shop in the lounge: browse Black Cabin merch (what is sold, prices, coins or real money) | M | Black Cabin's merch list | stand placed with B9; contents an open question |
+| B9 | Lounge revamp (Daniele 2026-11-02): merch shop top right; memory-share corner and the game machine top left; "Top patrons" leaderboard under the stairs (left); decorations around the room | M | layout.json unfrozen for the lounge (owner decision) | landed (50a0623); follow-up running: game machine back by the stair foot, Raised3 lane; acceptance pending |
+| B10 | Top-patrons board under the lounge stairs: placeholder names now, real customers once there are accounts and check-ins | S now, M later | backend for real data | board in (50a0623), placeholder names; ranking = real QR check-ins per month (Daniele 2026-11-02) |
+| B11 | Merch shop in the lounge: browse Black Cabin merch (what is sold, prices, coins or real money) | M | Black Cabin's merch list | stand in (50a0623); this shop = in-game coin cosmetics (Daniele 2026-11-02), sheet in the follow-up; a second real-life merch shop in the lounge later |
 | B12 | Nightlife actions: "Light one up" in the smoking room; secret "Check the plumbing" in the toilet; drunk debuff from 3 drinks; WASTED screen with a 12 h lockout (Daniele 2026-11-02) | M | — | queued |
 
 ## C. Online and community
@@ -79,3 +79,5 @@ Live on the Questions tab of the hub (https://claude.ai/artifact/BbpBxVWVVXMjz7T
 - 2026-11-01 — Created from Daniele's alpha verdict and the todo list relayed from the Ooze project.
 - 2026-11-01 — B8 start-screen idea added; A1 built, A2 done, A3 in progress.
 - 2026-11-02 — Playtest round: B7 reworded (portraits + owner messages, to do), B9–B12 added (lounge revamp, top patrons, merch shop, nightlife actions); E now points to the Questions tab.
+
+- 2026-11-02 — Lounge answers: B7, B9–B11 statuses updated (machine back, Raised3 lane, coin merch, monthly check-ins, patron-written messages). Look test (black/burgundy walls, red light) and camera feedback on the Questions tab.
