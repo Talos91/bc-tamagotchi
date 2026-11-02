@@ -4,6 +4,8 @@
 
 **Mandatory for workers (Daniele 2026-11-02):** no self-archive before the role note is refreshed, the report is committed and the final message is sent (PROJECT.md, working rules).
 
+**Context budget (method v1.1, 2026-11-02):** the new orchestrator runs by PROJECT.md "Context budget": reads only STATE, the LOG tail and EVIDENCE blocks; a 🔍 Verifier worker runs suites and pushes; 🧹 Housekeeping publishes; briefs ≤ 40 lines as pointers with "Done when"; reports ≤ 60 lines; unused connectors disabled in its session; context % recorded in STATE at every rewrite.
+
 ## Old orchestrator, before handing over (at ~40 % context, or when Daniele asks)
 1. Once the handover is decided, stop starting work: no new workers and no new jobs to existing ones. Workers only finish the task they already have.
 2. Idle workers: each refreshes its role note in `handoffs/`, reports, then archives itself. Check that each note exists before moving on.
