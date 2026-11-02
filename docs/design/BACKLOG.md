@@ -37,6 +37,7 @@ a layout plan are coming from Daniele; until then the layout stays frozen.
 | B10 | Top-patrons board under the lounge stairs: placeholder names now, real customers once there are accounts and check-ins | S now, M later | backend for real data | board in (50a0623), placeholder names; ranking = real QR check-ins per month (Daniele 2026-11-02) |
 | B11 | Merch shop in the lounge: browse Black Cabin merch (what is sold, prices, coins or real money) | M | Black Cabin's merch list | stand in (50a0623); this shop = in-game coin cosmetics (Daniele 2026-11-02), sheet in the follow-up; a second real-life merch shop in the lounge later |
 | B12 | Nightlife actions: "Light one up" in the smoking room; secret "Check the plumbing" in the toilet; drunk debuff from 3 drinks; WASTED screen with a 12 h lockout (Daniele 2026-11-02) | M | — | queued |
+| B13 | Venue look D (Daniele 2026-11-02): blackish walls in the kit's voxel finish, main-room north wall grey-top with a red neon line, voxel cement floor, red neon + dim candles with lighting halfway between today and the real bar; bar fixes (stray frame, reindeer head over the cashier) | M | nothing | first pass landed (6cd9735); darker light, walls, bar fixes in progress |
 
 ## C. Online and community
 
@@ -81,3 +82,4 @@ Live on the Questions tab of the hub (https://claude.ai/artifact/BbpBxVWVVXMjz7T
 - 2026-11-02 — Playtest round: B7 reworded (portraits + owner messages, to do), B9–B12 added (lounge revamp, top patrons, merch shop, nightlife actions); E now points to the Questions tab.
 
 - 2026-11-02 — Lounge answers: B7, B9–B11 statuses updated (machine back, Raised3 lane, coin merch, monthly check-ins, patron-written messages). Look test (black/burgundy walls, red light) and camera feedback on the Questions tab.
+- 2026-11-02 — B13 look D and A7 camera round 2 added; B9 accepted (layout refrozen).
