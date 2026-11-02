@@ -1,0 +1,2 @@
+# Housekeeping role note (2026-11-02, Sonnet)
+Did: MANUAL §5/§15/glossary to stakes v3 and 14cda24, GDD coaster row, deleted lounge-revamp before-*.png, tracked six test .uid files, removed Kanit fonts (smoke_hud and smoke_start pass in an isolated copy), hub mirror list. Details: `worker-reports-2026-11/housekeeping.md`. Gotchas: MANUAL.md is CRLF (edit with newline='' in Python); twoups are .jpg; nothing pushed.
