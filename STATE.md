@@ -29,6 +29,7 @@
 - Export include filter `*.json`, `*.csv` once an export preset exists.
 
 ## NEXT THREE JOBS
+0. 🛠️ **Web build on Vercel (Sonnet or Opus; Daniele's ask 2026-11-02, BACKLOG A8):** export templates for 4.6.1, Web export preset in `game/export_presets.cfg` (Compatibility, single-threaded, include `*.json,*.csv`, PWA on), `tools/build_web.py` that exports and stamps with `tools/version.py`, a `web/` output folder with a `vercel.json` (static, cache headers), Vercel project `bc-tamagotchi` (Daniele's Vercel account; the orchestrator has Vercel MCP tools), test on a phone browser: load time, frame rate (42 lights), touch, portrait HUD, save survives reload; then the performance pass with the phone numbers. A `*.vercel.app` URL first; custom domain later.
 1. 🛠️ Needs/stakes build (on stakes-v3-review acceptance).
 2. Look follow-ups + look-D acceptance, then close 0.2.0.
 3. Performance pass (42 lights, phone measurement), then character creator, then the real-life bridge.

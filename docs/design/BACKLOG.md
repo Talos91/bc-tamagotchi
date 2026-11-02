@@ -83,3 +83,4 @@ Live on the Questions tab of the hub (https://claude.ai/artifact/BbpBxVWVVXMjz7T
 
 - 2026-11-02 — Lounge answers: B7, B9–B11 statuses updated (machine back, Raised3 lane, coin merch, monthly check-ins, patron-written messages). Look test (black/burgundy walls, red light) and camera feedback on the Questions tab.
 - 2026-11-02 — B13 look D and A7 camera round 2 added; B9 accepted (layout refrozen).
+- 2026-11-02 — A8 web build on Vercel (phone feedback) added, first in the queue.
