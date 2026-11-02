@@ -27,7 +27,7 @@ handover. Read `PROJECT.md`, then `STATE.md`, then this note.
 - A worker staging a whole file sweeps up another session's uncommitted hunks in it (4bf4d9e took nightlife's toilet-zone hunk of `venue_zones.gd`). Briefs say: check `git status` first and ask before editing a file another session has touched.
 - With uncommitted edits from parallel workers in the shared tree, suites can fail there (smoke_loop "walked to stage" with feel-pass edits); only the clean-worktree run counts.
 
-- **Push only what you verified, also for doc commits (local_9bb3d41c, 2026-11-02):** a worker's unverified commit (50a0623) sat on local main under the orchestrator's STATE commit, so `git push origin HEAD:main` sent it out before the verify (it then passed 14/14). Before any push, run `git log --oneline origin/main..HEAD` and push only when every commit listed is verified or the orchestrator's own docs.
+- **Push only what you verified, also for doc commits (local_9bb3d41c, 2026-11-02):** a worker's unverified commit (50a0623) sat on local main under the orchestrator's STATE commit, so `git push origin HEAD:main` sent it out before the verify (it then passed 14/14). Before any push, run `git log --oneline origin/main..HEAD` and push only when every commit listed is verified or the orchestrator's own docs. **Never chain the check and the push in one command** (it happened again with 6cd9735 the same day): run `git log origin/main..HEAD`, read it, then push in a separate call.
 
 ## This version so far
 - Six answers given after the close are folded into DECISIONS ("Questions tab, third batch"); "Still open" pruned.
