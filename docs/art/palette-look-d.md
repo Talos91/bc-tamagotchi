@@ -85,3 +85,17 @@ below ambient ~0.65 the player turns into a silhouette between the pools (trials
 New swatch `FurPale` d6caba for the head, neck, chest and ears (were FurBrown 6e5a48 / FurLight 9a8470; the muzzle
 is FurLight now). In the venue it hangs at 1.75 m on a 1.4 m dark panel between two dark pillars that break the back
 bar behind the cashier, facing the room (it faced the wall before, so only its gilt frame showed).
+
+## Follow-ups (Daniele 2026-11-02, look-followups worker)
+
+| Value | Look D built | Follow-ups |
+|---|---|---|
+| ambient energy / exposure / key | 0.7 / 1.15 / 0.15 | **0.5 / 1.0 / 0.12** (frame luma about 10–14 % lower) |
+| player lift (`game/scripts/venue.gd` `PLAYER_LIFT`) | none | **0.15**: the player's materials emit their own albedo; no Light3D (budget 42), patrons not lifted |
+| corridor west end | no light | **low neon line** `CORRIDOR_LOW_NEON` ffbcae, emission 0.8, 4 cm at 0.1 m along the bottom of the corridor's south wall from the street wall to x 6.5 and the street wall's corridor end; emissive only |
+| stage curtain | 2 panels west, 1 east, backdrop 0.35 m east of centre | backdrop centred on the drums (x 30.75), 2 panels each side at 0.825 m to the stage ends |
+| LEDs | kit ShelfAmber / SoffitPeach / CubbyGlow red at load (`venue_looks.gd`) | unchanged; the new electric piano's LED is NeonRed |
+
+Not baked into `bc_kit.py`: `CabinDark` is also the staff wardrobe swatch in `bc_chars.py` (`STAFF_TOP`) and the review
+world colour, so baking the venue's blackish value into it would turn the staff tops black on the next character run;
+a venue-only swatch is a kit job of its own.

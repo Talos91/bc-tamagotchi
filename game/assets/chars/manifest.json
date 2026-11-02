@@ -236,6 +236,13 @@
    "seconds": 2.0,
    "loop": true,
    "root_speed_mps": 0.0
+  },
+  {
+   "name": "play_keys",
+   "frames": 48,
+   "seconds": 2.0,
+   "loop": true,
+   "root_speed_mps": 0.0
   }
  ],
  "drinks": [
@@ -7497,6 +7504,103 @@
     "play_drums"
    ],
    "bytes": 285032
+  },
+  {
+   "name": "band_keys",
+   "display": "Guest keyboardist",
+   "role": "band",
+   "slot": "PERF_GUEST",
+   "path": "res://assets/chars/presets/band_keys.glb",
+   "body": "regular",
+   "parts": {
+    "head": "square",
+    "hair": "shaggy",
+    "eyes": "dot",
+    "brows": "thick",
+    "mouth": "small",
+    "top": "jacket",
+    "bottom": "jeans",
+    "shoes": "boots",
+    "accessories": [
+     "beard"
+    ]
+   },
+   "colours": {
+    "beard": {
+     "swatch": "HairBleach",
+     "hex": "#E8CF86"
+    },
+    "bottom": {
+     "swatch": "StoolBlack",
+     "hex": "#221110"
+    },
+    "bottom_trim": {
+     "swatch": "CymbalGold",
+     "hex": "#E8A030"
+    },
+    "eyes": {
+     "swatch": "Ink",
+     "hex": "#120808"
+    },
+    "hair": {
+     "swatch": "HairBleach",
+     "hex": "#E8CF86"
+    },
+    "mouth": {
+     "swatch": "Mouth",
+     "hex": "#6A2420"
+    },
+    "shoes": {
+     "swatch": "StoolBlack",
+     "hex": "#221110"
+    },
+    "shoes_trim": {
+     "swatch": "Charcoal",
+     "hex": "#403A3E"
+    },
+    "skin": {
+     "swatch": "Skin1",
+     "hex": "#F0D2B6"
+    },
+    "top": {
+     "swatch": "Jacket",
+     "hex": "#3A3444"
+    },
+    "top_accent": {
+     "swatch": "StoolBlack",
+     "hex": "#221110"
+    },
+    "top_trim": {
+     "swatch": "StoolBlack",
+     "hex": "#221110"
+    }
+   },
+   "height_m": 1.55,
+   "height_vox": 31,
+   "head_top_vox": 29,
+   "tris": 736,
+   "animations": [
+    "idle",
+    "walk",
+    "sit",
+    "sit_drink",
+    "sit_talk",
+    "sit_hold",
+    "sit_applaud",
+    "stand_drink",
+    "cheers",
+    "applaud",
+    "dance",
+    "idle_warm",
+    "idle_tipsy",
+    "idle_merry",
+    "walk_warm",
+    "walk_tipsy",
+    "walk_merry",
+    "idle_sad",
+    "play_keys"
+   ],
+   "bytes": 243452
   },
   {
    "name": "patron_01",

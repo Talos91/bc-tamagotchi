@@ -20,6 +20,18 @@ const TOP := [
 ]
 
 
+## This month's ranking for the lounge's second poster (Daniele 2026-11-02): PLACEHOLDER, the same ten people in another
+## order (indices into TOP), until check-ins are counted per month.
+const MONTH := [3, 0, 5, 1, 8, 2, 9, 4, 6, 7]
+
+
+static func month() -> Array:
+	var rows := []
+	for i in MONTH:
+		rows.append(TOP[i])
+	return rows
+
+
 static func count() -> int:
 	return TOP.size()
 

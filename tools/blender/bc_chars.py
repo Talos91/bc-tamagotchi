@@ -1037,6 +1037,12 @@ PRESETS = [
       "jacket", "jeans", "boots", ["guitar_electric", "beard"],
       skin="Skin1", hair="HairBleach", top="Jacket", top_trim="StoolBlack", top_accent="StoolBlack",
       bottom="StoolBlack", bottom_trim="Charcoal", shoes="StoolBlack", shoes_trim="Charcoal", beard="HairBleach"),
+    # Daniele 2026-11-02: the guest at the left of the stage plays an electric piano (kit electric_piano); same look
+    # as the guest guitarist, no guitar, plays play_keys (KEYS_PLAYERS)
+    P("band_keys", "Guest keyboardist", "band", "PERF_GUEST", "regular", "square", "shaggy", ("dot", "thick", "small"),
+      "jacket", "jeans", "boots", ["beard"],
+      skin="Skin1", hair="HairBleach", top="Jacket", top_trim="StoolBlack", top_accent="StoolBlack",
+      bottom="StoolBlack", bottom_trim="Charcoal", shoes="StoolBlack", shoes_trim="Charcoal", beard="HairBleach"),
 ]
 
 # 24 anonymous patrons (DECISIONS m), styled after the crowd in 05/06: big hair, beards, white shirts, dark
@@ -1613,6 +1619,19 @@ def a_sing(t, D):                 # Jo: acoustic guitar at the mic stand, chin u
     return strum(t, D, "guitar", 2, sing=True)
 
 
+def a_play_keys(t, D):            # stage piano at hip height in front: both hands on the keys, chords, a nod
+    leg = D["leg"]
+    y = D["y0"] - 4.0                                   # over the keybed, a forearm in front of the chest
+    z = leg + 2.5
+    l = S(t, 4)
+    r = S(t, 4, 0.5)
+    slide = S(t, 1, 0.15)
+    return pose(hips=((0, 0, 0), (0, 0.15 * (1 - C_(t, 2)) / 2, 0)), spine=((10 + S(t, 2), 3 * slide, 0),),
+                head=((12 + 4 * max(0.0, S(t, 2)), 8 * slide, 2 * S(t, 2, 0.2)),),
+                armL=("ik", (3.2 + 1.2 * slide, y, z + 0.6 * max(0.0, l)), (1, 0.4, -0.6)),
+                armR=("ik", (-3.2 + 1.2 * slide, y, z + 0.6 * max(0.0, r)), (-1, 0.4, -0.6)))
+
+
 def a_play_drums(t, D):           # seated at the kit, sticks alternate on the snare, a cymbal crash per loop
     hitL = max(0.0, S(t, 4)) ** 2
     hitR = max(0.0, S(t, 4, 0.5)) ** 2
@@ -1635,10 +1654,12 @@ ANIMS = [
     ("idle_sad", 72, a_idle_sad, True),
     ("idle_tray", 48, a_idle_tray, True), ("walk_tray", 16, a_walk_tray, True), ("pour", 72, a_pour, True),
     ("play_guitar", 48, a_play_guitar, True), ("play_bass", 48, a_play_bass, True), ("sing", 48, a_sing, True),
-    ("play_drums", 48, a_play_drums, True),
+    ("play_drums", 48, a_play_drums, True), ("play_keys", 48, a_play_keys, True),
 ]
 STAFF_ANIMS = ("idle_tray", "walk_tray", "pour")
 BAND_ANIMS = ("play_guitar", "play_bass", "sing", "play_drums")
+KEYS_ANIMS = ("play_keys",)
+KEYS_PLAYERS = ("band_keys",)                       # presets at the electric piano (no instrument accessory)
 WALK_SPEED = {"walk": 1.1, "walk_warm": 1.1, "walk_tipsy": 0.85, "walk_merry": 0.7, "walk_tray": 1.0}   # m/s
 
 
@@ -1649,7 +1670,9 @@ def anims_for(spec):
         extra |= set(STAFF_ANIMS)
     if any(a in INSTRUMENTS for a in spec["acc"]):
         extra |= set(BAND_ANIMS)
-    return [a[0] for a in ANIMS if a[0] not in STAFF_ANIMS + BAND_ANIMS or a[0] in extra]
+    if spec["name"] in KEYS_PLAYERS:
+        extra |= set(KEYS_ANIMS)
+    return [a[0] for a in ANIMS if a[0] not in STAFF_ANIMS + BAND_ANIMS + KEYS_ANIMS or a[0] in extra]
 
 
 def _fcurves(act):
@@ -1828,7 +1851,7 @@ SPACING = 0.9
 ROW_GAP = 2.0
 POSE_FRAME = 12                # the still shows every armature at this frame
 ANIM_ROW = "patron_01"        # the preset that demonstrates the shared animations
-ANIM_DEMO = {"idle_tray": "server", "walk_tray": "server", "pour": "nam", "play_guitar": "band_guitar",
+ANIM_DEMO = {"idle_tray": "server", "walk_tray": "server", "pour": "nam", "play_guitar": "band_guitar", "play_keys": "band_keys",
              "play_bass": "pete", "sing": "jo", "play_drums": "boy", "sit_talk": "patron_02",
              "sit_hold": "patron_04", "stand_drink": "patron_03", "cheers": "patron_03"}
 SEATED = {"sit": 9, "sit_drink": 9, "sit_talk": 9, "sit_hold": 9, "sit_applaud": 9, "play_drums": 9}

@@ -942,6 +942,36 @@
    "tris_unmerged": 306
   },
   {
+   "name": "electric_piano",
+   "zone": "stage",
+   "size_class": "S",
+   "anchor": "floor",
+   "path": "res://assets/kit/stage/electric_piano.glb",
+   "footprint_m": [
+    1.1,
+    0.35
+   ],
+   "height_m": 0.75,
+   "size_vox": [
+    22,
+    7,
+    15
+   ],
+   "emissive": true,
+   "materials": [
+    "BeamBlack",
+    "ColumnWhite",
+    "CymbalGold",
+    "NeonRed_emissive",
+    "PadBlack",
+    "SteelDark",
+    "StoolBlack"
+   ],
+   "voxels": 635,
+   "tris": 434,
+   "tris_unmerged": 1628
+  },
+  {
    "name": "monitor_wedge",
    "zone": "stage",
    "size_class": "S",

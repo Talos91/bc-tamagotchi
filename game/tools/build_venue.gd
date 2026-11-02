@@ -72,6 +72,8 @@ const LEDGE_X := Vector2(11.1, 12.8)                  # high counter on the sout
 const MERCH := Vector3(13.6, 0, 1.55)                 # merch counter, top right of the lounge (lounge revamp)
 const PORTRAIT_X0 := 3.0                              # corridor south wall: ten top-patron portraits 1.2 m apart (B7)
 const PORTRAIT_STEP := 1.2
+const LOW_NEON_X1 := 6.5                              # corridor west end: the low neon line runs from the street wall to here
+const CORRIDOR_LOW_NEON := Color("ffbcae")            # dim white, slightly red (Daniele 2026-11-02)
 const DOOR_W := 1.2                                   # walk-through doors: kit leaf (1 m) stretched to this opening
 const STICKER_DOOR := Vector2(13.05, 14.25)  # x range on the lounge south wall
 const STREET_DOOR := Vector2(6.6, 7.8)       # z range on the lobby west wall
@@ -709,11 +711,13 @@ func _environment() -> void:
 	env.ambient_light_source = Environment.AMBIENT_SOURCE_COLOR
 	# Look D, darker (Daniele 2026-11-02: "half way between real and what we got now"): a near-neutral ambient, so
 	# figures keep their colours in the red room, at about half the test's energy; the red neon and the candle pools
-	# carry the light. Below ~0.65 the player turns into a silhouette between the pools (capture_look_build.gd K4..KI).
+	# carry the light. Below ~0.65 the player turned into a silhouette between the pools (capture_look_build.gd K4..KI);
+	# darker still (Daniele 2026-11-02, look-d-accept): 0.5 and exposure 1.0, and venue.gd lifts the player's own colours (PLAYER_LIFT)
+	# so they stay readable on the darkest floor (capture_look_followups.gd dark, dark-aisle).
 	env.ambient_light_color = Color(0.45, 0.34, 0.34)
-	env.ambient_light_energy = 0.7
+	env.ambient_light_energy = 0.5
 	env.tonemap_mode = Environment.TONE_MAPPER_FILMIC
-	env.tonemap_exposure = 1.15
+	env.tonemap_exposure = 1.0
 	env.tonemap_white = 6.0
 	env.glow_enabled = true
 	env.glow_intensity = 0.30
@@ -739,7 +743,7 @@ func _environment() -> void:
 	var key := DirectionalLight3D.new()
 	key.name = "KeyLight"
 	key.light_color = Color("ff8a70")
-	key.light_energy = 0.15
+	key.light_energy = 0.12
 	key.light_specular = 0.3
 	key.shadow_enabled = true
 	key.shadow_opacity = 0.85
@@ -799,6 +803,11 @@ func _lobby_and_corridor() -> void:
 	for x in [PORTRAIT_X0 + PORTRAIT_STEP * 0.5, PORTRAIT_X0 + PORTRAIT_STEP * 5.5]:   # between portraits, above them
 		_cut(_kit(g, "wall_lamp", Vector3(x, 2.6, CORRIDOR.end.y - 0.05), 0.0, "CorridorLamp%d" % int(x)), Vector3.BACK)
 	_kit(g, "track_light", Vector3(13.0, ROOM_H, 14.1), 0.0, "CorridorTrack")
+	# West end (Daniele 2026-11-02): stays dark, with a dim white, slightly red neon line along the bottom of the wall,
+	# from the lobby's street wall to where the corridor light takes over. Emissive only, no light.
+	var low := _mat("corridor_low_neon", CORRIDOR_LOW_NEON, 0.5, 0.8)
+	_cut(_box(g, "LowNeonS", Vector3(0.05, 0.1, CORRIDOR.end.y - 0.05), Vector3(LOW_NEON_X1 - 0.05, 0.04, 0.03), low, false), Vector3.BACK)
+	_cut(_box(g, "LowNeonW", Vector3(0.02, 0.1, CORRIDOR.position.y), Vector3(0.03, 0.04, CORRIDOR.end.y - CORRIDOR.position.y - 0.05), low, false), Vector3.LEFT)
 	_seat("Lobby", "Lobby_Stand0", Vector3(1.3, 0, 12.6), 90.0, 0.0, "stand")
 	_corridor_end(g)
 	_cut_rooms(g, ["lobby", "corridor"])
@@ -917,9 +926,21 @@ func _patrons_board(g: Node) -> void:
 		return
 	var title := _wordmark(b, "Title", "Top patrons", Vector3(0, 1.13, 0.09), 0.0, 0.0045, Color(2.4, 1.8, 0.8), 48)
 	title.font = load(KRISTI)
-	for r in Patrons.count():
+	_board_names(b, "venue.board.all_time", Patrons.TOP)
+	# Second poster (Daniele 2026-11-02, "add another poster"): this month's ranking beside the all-time one, on the same
+	# plinth face north of it, the same kit board at 0.7 with its top level with the first
+	var m := _kit(g, "patrons_board", Vector3(STAIR_UPPER.end.x + 0.08, 1.4 - 0.7, 8.28), 90.0, "PatronsBoardMonth", Vector3.ONE * 0.7)
+	_wordmark(m, "Title", "Top patrons", Vector3(0, 1.13, 0.09), 0.0, 0.0045, Color(2.4, 1.8, 0.8), 48).font = load(KRISTI)
+	_board_names(m, "venue.board.this_month", Patrons.month())
+
+## The board's subtitle over the rule (a strings_venue key: Label3D translates it) and its ten names, ranks 1-5 left,
+## 6-10 right.
+func _board_names(b: Node3D, sub_key: String, rows: Array) -> void:
+	var sub := _wordmark(b, "Sub", sub_key, Vector3(-0.47, 0.785, 0.085), 0.0, 0.0021, Color("e8c070"), 36)   # left of the crown
+	sub.horizontal_alignment = HORIZONTAL_ALIGNMENT_LEFT
+	for r in rows.size():
 		var row := r % 5
-		var l := _wordmark(b, "Name%d" % r, "%d  %s" % [r + 1, Patrons.at(r)["name"]], Vector3(-0.47 if r < 5 else 0.12, 0.625 - row * 0.1, 0.085), 0.0, 0.0022, Color("f2e6c8"), 36)
+		var l := _wordmark(b, "Name%d" % r, "%d  %s" % [r + 1, rows[r]["name"]], Vector3(-0.47 if r < 5 else 0.12, 0.625 - row * 0.1, 0.085), 0.0, 0.0022, Color("f2e6c8"), 36)
 		l.horizontal_alignment = HORIZONTAL_ALIGNMENT_LEFT
 
 ## Top patrons' portraits on the entrance corridor's south wall (Daniele 2026-11-02, BACKLOG B7): ten gold frames
@@ -1312,17 +1333,17 @@ func _stage() -> void:
 				cz = STAGE.end.y - 0.5
 			_kit(carpet, "stage_carpet_tile", Vector3(STAGE.position.x + 0.5 + ix, 0.0, cz), 0.0, "Tile%d_%d" % [ix, iz])
 	_shadow_rect(Rect2(STAGE.position.x - 0.05, STAGE.end.y - 0.05, STAGE.size.x + 0.1, 0.25), 0.5)
-	# Wall behind: curtains either side, slatted backdrop (lit) behind the drums, lanterns
+	# Wall behind: the slatted backdrop (lit) centred on the drums, a curtain of two panels either side reaching the
+	# stage's ends (Daniele 2026-11-02: "the stage curtain is not symmetric on both sides and should be"; it was two
+	# panels west, one east, the backdrop 0.35 m east of centre), lanterns
 	var cx := STAGE.get_center().x
-	var x := STAGE.position.x + 0.5
-	var k := 0
-	while x < STAGE.end.x:
-		if absf(x - cx) < 1.6:
-			_cut(_kit(g, "slatted_backdrop", Vector3(x, 0, 0.1), 0.0, "Backdrop%d" % k), Vector3.FORWARD)
-		else:
-			_cut(_kit(g, "curtain_panel", Vector3(x, 0, 0.12), 0.0, "CurtainBack%d" % k), Vector3.FORWARD)
-		x += 1.0
-		k += 1
+	var cw := (STAGE.size.x - 3.0) * 0.25     # curtain panel width: two per side between the backdrop and the stage end
+	for i in 3:
+		_cut(_kit(g, "slatted_backdrop", Vector3(cx - 1.0 + i, 0, 0.1), 0.0, "Backdrop%d" % (i + 2)), Vector3.FORWARD)
+	for i in 4:
+		var side := -1.0 if i < 2 else 1.0
+		var x := cx + side * (1.5 + cw * (0.5 + i % 2))
+		_cut(_kit(g, "curtain_panel", Vector3(x, 0, 0.12), 0.0, "CurtainBack%d" % [0, 1, 6, 5][i], Vector3(cw, 1, 1)), Vector3.FORWARD)
 	for i in 2:
 		_cut(_kit(g, "backdrop_lantern", Vector3(cx - 1.0 + i * 2.0, 2.85, 0.25), 0.0, "BackdropLantern%d" % i), Vector3.FORWARD)
 	# Backline facing the room (+z): stacks either side of the drums, combo, guitar, three mics, wedges on the
@@ -1333,12 +1354,13 @@ func _stage() -> void:
 	_kit_solid(g, "amp_stack", Vector3(33.4, 0, 0.35), 0.0, "AmpStackR")
 	_kit_solid(g, "amp", Vector3(32.4, 0, 0.6), -20.0, "ComboR")
 	_kit_solid(g, "guitar_on_stand", Vector3(27.9, 0, 1.6), 20.0, "Guitar")
-	_kit(g, "mic_stand", Vector3(28.9, 0, 3.0), 0.0, "Mic0")
+	# The guest at the left of the stage plays an electric piano (Daniele 2026-11-02; it held a guitar at Mic0): the kit
+	# piano in front of Band_Keys, keys to the player (the guitar stays on its stand as backline)
+	_kit(g, "electric_piano", Vector3(28.98, 0, 2.51), 195.0, "ElectricPiano")
 	_kit(g, "mic_stand", Vector3(30.8, 0, 3.1), 0.0, "Mic1")
 	_kit(g, "mic_stand", Vector3(32.6, 0, 3.0), 0.0, "Mic2")
 	for mx in [28.3, 30.75, 33.2]:
 		_kit_solid(g, "monitor_wedge", Vector3(mx, 0, STAGE.end.y - 0.3), 180.0, "Wedge%d" % int(mx))
-	_kit(g, "pedalboard", Vector3(28.9, 0, 2.5), 10.0, "PedalboardGtr")
 	_kit(g, "pedalboard", Vector3(32.6, 0, 2.55), -12.0, "PedalboardBass")
 	var cables := [[Vector3(28.5, 0, 1.0), 70.0], [Vector3(29.0, 0, 2.0), 95.0], [Vector3(30.0, 0, 1.3), 20.0],
 		[Vector3(31.6, 0, 1.9), 80.0], [Vector3(32.4, 0, 1.1), 110.0], [Vector3(30.3, 0, 3.0), 0.0]]
@@ -1348,9 +1370,9 @@ func _stage() -> void:
 		_kit(g, "bottle_clear", Vector3(bx, 0, 3.4), 0.0, "StageWater%d" % int(bx))
 	_kit_solid(g, "pa_speaker", Vector3(STAGE.position.x - 0.3, 0, STAGE.end.y - 0.3), 0.0, "SpeakerL")
 	_kit_solid(g, "pa_speaker", Vector3(STAGE.end.x + 0.3, 0, STAGE.end.y - 0.3), 0.0, "SpeakerR")
-	# Band spots: drummer behind the kit, guitarist, singer, bassist
+	# Band spots: drummer behind the kit, keyboardist, singer, bassist
 	_seat("Band", "Band_Drums", Vector3(30.75, 0, 0.5), 0.0, 0.45, "band_drums")
-	_seat("Band", "Band_Guitar", Vector3(28.9, 0, 2.2), 15.0, 0.0, "band_guitar")
+	_seat("Band", "Band_Keys", Vector3(28.9, 0, 2.2), 15.0, 0.0, "band_keys")
 	_seat("Band", "Band_Vocal", Vector3(30.8, 0, 2.4), 0.0, 0.0, "band_vocal")
 	_seat("Band", "Band_Bass", Vector3(32.6, 0, 2.2), -15.0, 0.0, "band_bass")
 	# Truss with cube PARs along the top of the wall behind the stage, tilted down at the carpet (four pools)

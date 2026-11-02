@@ -18,8 +18,9 @@ const FIGURE := preload("res://scenes/venue/patron_figure.tscn")
 const PATRON_PRESETS := ["patron_01", "patron_02", "patron_03", "patron_04", "patron_05", "patron_07", "patron_08",
 	"patron_09", "patron_10", "patron_11", "patron_12", "patron_13", "patron_14", "patron_15", "patron_16",
 	"patron_17", "patron_18", "patron_19", "patron_20", "patron_21", "patron_22", "patron_23", "patron_24"]
-## Band spots (pose band_*) -> preset and the animation it plays (renders 05/06: drums, two guitars, bass; Jo sings)
-const BAND := {"band_drums": ["boy", "play_drums"], "band_guitar": ["band_guitar", "play_guitar"],
+## Band spots (pose band_*) -> preset and the animation it plays (renders 05/06: drums, guitars, bass; Jo sings). The
+## guest at the left of the stage plays the electric piano (Daniele 2026-11-02; was band_guitar, play_guitar).
+const BAND := {"band_drums": ["boy", "play_drums"], "band_keys": ["band_keys", "play_keys"],
 	"band_bass": ["pete", "play_bass"], "band_vocal": ["jo", "sing"]}
 ## Seated pose by spot: at a table or the bar, forearms on the top with a glass, some chatting; on the drum-stool
 ## poufs facing the stage and in lounge chairs, glass held at the chest; now and then the front row applauds.

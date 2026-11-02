@@ -153,5 +153,7 @@ venue.sheet.portrait.greet,"One of Black Cabin's top patrons. Their message, in 
 venue.sheet.portrait.from,A message from {name},ข้อความจาก {name},"Portrait sheet: title over the message, written by the portrait's owner, a patron in the hall of fame, not by the bar; TH machine draft",26
 venue.sheet.portrait.message,Thanks for the nights at Black Cabin! Come say hi at the bar. (Placeholder: {name} will write this.),ขอบคุณสำหรับทุกค่ำคืนที่แบล็กคาบิน แวะมาทักทายกันที่บาร์นะ (ข้อความชั่วคราว: {name} จะเขียนเอง),"Portrait sheet: the patron's own message, first person, placeholder until each patron writes theirs; TH machine draft",140
 venue.zone.patrons,TOP PATRONS,ลูกค้าประจำอันดับต้น,"HUD zone name, in front of the Top patrons board under the lounge stairs (camera zone Patrons); TH machine draft",16
+venue.board.all_time,All time,ตลอดกาล,"Subtitle on the lounge's first Top patrons poster (Daniele 2026-11-02: one all time, one this month); TH machine draft",16
+venue.board.this_month,This month,เดือนนี้,"Subtitle on the lounge's second Top patrons poster, beside the first; TH machine draft",16
 venue.merch.performer,Performer tee,เสื้อยืดวงดนตรี,Merch row (placeholder item; 04-coins.md: unlocks after you have heard that act once); TH machine draft,26
 venue.merch.jacket,Black Cabin jacket,แจ็กเก็ตแบล็กคาบิน,"Merch row (placeholder item, wardrobe statement tier: outer layer); TH machine draft",26

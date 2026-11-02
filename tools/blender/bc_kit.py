@@ -1037,6 +1037,32 @@ def mic_stand(v):
     v.box(2, 2, 27, 2, 2, 28, "CarpetRed")                           # red mic head
 
 
+@kit("electric_piano", "stage", "S")
+def electric_piano(v):
+    """Stage piano on an X stand (Daniele 2026-11-02: the guest at the left of the stage plays an electric piano):
+    1.1 x 0.35 m black body, a voxel keybed of white keys with raised black keys in the octave pattern on the
+    front half (-y, the player's side), a panel strip with gold knobs and one red LED at the back, the X stand in
+    steel. Keys 0.6 m up: the venue draws figures at 0.75, so this is a figure's hip height."""
+    W, D = 22, 7
+    for x in (3, W - 4):                                             # X stand: two crossed pairs
+        v.line((x, 1, 0), (x, D - 2, 9), "SteelDark", keep=True)
+        v.line((x, D - 2, 0), (x, 1, 9), "SteelDark", keep=True)
+        v.set(x, 1, 0, "PadBlack")
+        v.set(x, D - 2, 0, "PadBlack")
+    v.box(3, 3, 9, W - 4, 3, 9, "SteelDark")                         # cross bar under the body
+    v.box(0, 0, 10, W - 1, D - 1, 11, "StoolBlack")                  # body
+    v.box(1, 0, 12, W - 2, 3, 12, "ColumnWhite")                     # keybed, white keys
+    for x in range(1, W - 1):
+        if (x - 1) % 7 in (0, 1, 3, 4, 5) and x < W - 2:             # black keys between the whites
+            v.box(x, 2, 13, x, 3, 13, "BeamBlack")
+    v.box(0, 4, 12, W - 1, D - 1, 13, "BeamBlack")                   # panel
+    for x in (3, 5, 7, 9):
+        v.set(x, 5, 14, "CymbalGold")                                # knobs
+    v.set(W - 3, 5, 14, E("NeonRed"))                                # power LED, red like every LED in the venue
+    v.box(0, 0, 12, 0, D - 1, 13, "StoolBlack")                      # end cheeks
+    v.box(W - 1, 0, 12, W - 1, D - 1, 13, "StoolBlack")
+
+
 @kit("monitor_wedge", "stage", "S")
 def monitor_wedge(v):
     """Floor wedge, low edge at the front (-y), speaker on the slope."""
