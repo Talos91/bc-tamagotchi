@@ -26,6 +26,7 @@ const MenuList = preload("res://scripts/menu/menu_list.gd")
 const Nightlife = preload("res://scripts/zones/nightlife.gd")
 const WastedShot = preload("res://scripts/wasted_shot.gd")
 const DrunkOverlay = preload("res://scripts/ui/drunk_overlay.gd")
+const FarewellCard = preload("res://scripts/ui/farewell_card.gd")
 
 @onready var player: Player = $Player
 @onready var zones: VenueZones = $Zones
@@ -53,6 +54,7 @@ var start_screen: Node      ## the start screen while it runs
 var exit_shot: Node         ## the exit shot while it runs
 var wasted_shot: Node       ## the WASTED shot and screen while they run
 var drunk: CanvasLayer      ## the drunk overlay
+var farewell: Control       ## the farewell card (ghost window over, or Retire)
 var _wasted_line := -1      ## WASTED during a minigame: the shot waits for the frame to close
 
 
@@ -87,8 +89,11 @@ func _ready() -> void:
 		dbg.queue_free()
 	else:
 		dbg._toggle.visible = false
+	needs.character_deleted.connect(show_farewell)
 	_parse_capture()
-	if Nightlife.locked(needs) and _capture.is_empty():
+	if needs.is_deleted():
+		show_farewell()  # the ghost window ran out while the app was closed
+	elif Nightlife.locked(needs) and _capture.is_empty():
 		_show_wasted(-1)
 	elif intro or (get_tree().current_scene == self and _capture.is_empty() and not "--skip-intro" in OS.get_cmdline_user_args()):
 		street_shots = true
@@ -125,8 +130,28 @@ func _process(_delta: float) -> void:
 		_capture_tick()
 
 
+## The farewell card, then a new game from the street door with the account kept (Needs.complete_deletion).
+func show_farewell() -> void:
+	if is_instance_valid(farewell):
+		return
+	close_sheet()
+	close_menu()
+	farewell = FarewellCard.new()
+	overlay.add_child(farewell)
+	farewell.open(str(needs.profile.get("display_name", "")), needs.nights_out, needs.lives)
+	farewell.done.connect(func():
+		farewell.queue_free()
+		farewell = null
+		needs.complete_deletion()
+		if get_tree().current_scene == self:
+			get_tree().reload_current_scene()
+		else:
+			_sync_block())
+	_sync_block()
+
+
 func _blocked() -> bool:
-	return is_instance_valid(start_screen) or is_instance_valid(exit_shot) or is_instance_valid(wasted_shot) or is_instance_valid(sheet) or is_instance_valid(menu_list) or is_instance_valid(frame) or is_instance_valid(walk_out) or is_instance_valid(welcome)
+	return is_instance_valid(farewell) or is_instance_valid(start_screen) or is_instance_valid(exit_shot) or is_instance_valid(wasted_shot) or is_instance_valid(sheet) or is_instance_valid(menu_list) or is_instance_valid(frame) or is_instance_valid(walk_out) or is_instance_valid(welcome)
 
 
 func _sync_block() -> void:

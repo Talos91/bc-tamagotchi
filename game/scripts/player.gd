@@ -196,7 +196,7 @@ func _physics_process(delta: float) -> void:
 		if not _moving:   # a held direction keeps meaning the same way while the camera swings between zones
 			_move_yaw = rig.yaw
 			_moving = true
-		want = input_to_world(iv) * speed
+		want = input_to_world(iv) * _speed()
 	else:
 		_moving = false
 		if walking_to:
@@ -270,7 +270,13 @@ func _follow_path() -> Vector3:
 		need -= seg
 		from = _flat(i)
 	var dir := (goal - pos).normalized()
-	return Vector3(dir.x, 0, dir.y) * speed * clampf((left + best_d) / ARRIVE_SLOW, 0.15, 1.0)
+	return Vector3(dir.x, 0, dir.y) * _speed() * clampf((left + best_d) / ARRIVE_SLOW, 0.15, 1.0)
+
+## Walk speed: Thirsty (a Drinks meter that ran Empty, 06-stakes §7.1) slows the venue walk by 25 %.
+func _speed() -> float:
+	var n := get_node_or_null("/root/Needs")
+	return speed * (n.walk_mult() if n != null and n.has_method("walk_mult") else 1.0)
+
 
 func _flat(i: int) -> Vector2:
 	return Vector2(_path[i].x, _path[i].z)

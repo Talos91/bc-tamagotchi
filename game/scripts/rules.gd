@@ -12,7 +12,7 @@ const METERS: Array[String] = ["music", "friends", "drinks", "nightlife"]
 
 const METER_MAX := 100.0  # §2.1 "float 0-100"
 const METER_MIN := 0.0
-const START_VALUE := 75.0  # GDD §2.1 (start value line); 06-stakes §2 assumes it ("meters 75", Gone at 21.0 days)
+const START_VALUE := 75.0  # GDD §2.1 (start value line)
 
 ## Points lost per REAL hour (§2.1 table). Full to empty is 100 / rate: 7.6, 8.3, 6.0, 9.3 days.
 const DECAY_PER_HOUR := {
@@ -126,7 +126,45 @@ const ACTIONS := {
 	## Provisional (DECISIONS "Playtest of 33dc5b9", BACKLOG B12): a cigarette by the smoking-room window is a chat
 	## with whoever is there, so it feeds Friends a little; two count per visit. Call for Daniele on the Questions tab.
 	"light_one_up": {"label": "Light one up (a cigarette)", "zone": "Smoking room", "gains": {"friends": 3.0}, "cap_per_visit": 6.0},
+	## 06-stakes §2, §10.6: applied by the result card after any minigame round that is not a miss.
+	"minigame_played": {"label": "Finish a minigame (not a miss)", "zone": "Any", "gains": {"nightlife": 3.0}, "cap_per_visit": 9.0},
 }
+
+# --- Stakes (docs/design/06-stakes.md v3 §10.6; Daniele's: FATAL_DAYS, GHOST_WINDOW_DAYS, REVIVE_COOLDOWN_DAYS) --------
+const FATAL_DAYS := 21.0              ## days without a counting visit (Out of Town excluded): the character dies
+const GHOST_WINDOW_DAYS := 14.0       ## a ghost can be revived by a check-in this long, then it is deleted (day 35)
+## Stake stage by days since the last counting visit, highest first (same shape as VIBE_THRESHOLDS). `ghost` and
+## `deleted` are not here: they come from `dead_at`.
+const STAKE_STAGES := [["last_call", 18.0], ["fading", 15.0], ["restless", 10.0], ["fine", 0.0]]
+const STAGE_GHOST := "ghost"
+const STAGE_DELETED := "deleted"
+const GHOST_REMINDER_DAYS := [28.0, 33.0]   ## days since the last visit: a ghost's reminders
+const REVIVE_COOLDOWN_DAYS := 90.0    ## one revival per this many days
+const REVIVE_METER_FLOOR := 40.0      ## a revived character's meters are lifted to at least this
+## false until the server exists. When true, in-game refills stop resetting the clock, but only for a character
+## that has checked in at the bar at least once (DECISIONS 2026-11-02, O1).
+const REAL_VISIT_REQUIRED := false
+const STAKE_NOTIFY_OUTSIDE_BUDGET := ["last_call", "dead", "ghost_33"]
+const STAKE_NOTIFY_FALLBACK_HOUR := 19
+const NIGHT_STARTS_HOUR := 6.0        ## a bar night belongs to the Bangkok day that starts at 06:00 (check-in at 01:00 = the night before)
+const CHECKIN_NIGHTS_KEPT := 14
+
+## Annoyances (§7.1, §10.3). A meter annoyance is on while its meter is below ANNOY_EMPTY_BELOW and not yet seen to this visit.
+const ANNOY_EMPTY_BELOW := 10.0
+const ANNOY_DRAG_MULT := 0.85         ## gains to every OTHER meter, per active annoyance
+const ANNOYANCES := {"thirsty": "drinks", "earworm": "music", "phone_face": "friends", "rusty": "nightlife", "out_of_loop": ""}
+const THIRSTY_WALK_MULT := 0.75
+const EARWORM_DUCK_DB := -9.0
+const RUSTY_FUMBLE_SECONDS := 2.0
+const CALENDAR_HABIT_DAYS := 7.0
+const CALENDAR_HABIT_ENABLED := false ## until the events calendar (BACKLOG D1) exists
+
+## Minigames (§7.2, §10.4): a round below MINIGAME_MISS_BELOW is a miss (RUSTY_MISS_BELOW for the first round while Rusty).
+const MINIGAME_MISS_BELOW := 0.25
+const RUSTY_MISS_BELOW := 0.4
+const MINIGAME_TRIES_PER_VISIT := 3
+const GOING_BONUS_MUSIC := 10.0       ## waits for the calendar (D1)
+const RETIRE_COOLDOWN_DAYS := 7.0
 
 # --- Nightlife (DECISIONS "Playtest of 33dc5b9", BACKLOG B12; scripts/zones/nightlife.gd) -------------
 ## Counted in alcoholic drinks this visit (scripts/zones/tipsiness.gd: menu category "alcohol", Order a drink, Try
@@ -143,6 +181,14 @@ const WASTED_METER_VALUE := 0.0       ## provisional: "all minor needs unfulfill
 const WASTED_LINES := 10              ## nightlife.wasted.line.0..9 in i18n/strings_nightlife.csv, one at random
 const SMOKE_SECONDS := 8.0            ## one cigarette; light_one_up lands when it is finished
 const PLUMBING_DRINKS_TO := 0.0       ## Daniele: Check the plumbing resets the drink need to 0
+
+
+## Stake stage for `days` since the last counting visit (06-stakes §10.1); never `ghost` or `deleted` (see Needs.stake_stage).
+static func stake_stage(days: float) -> String:
+	for t in STAKE_STAGES:
+		if days >= t[1]:
+			return t[0]
+	return "fine"
 
 
 ## Vibe state for a Vibe value (§2.2).

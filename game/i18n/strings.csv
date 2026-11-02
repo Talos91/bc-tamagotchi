@@ -19,7 +19,7 @@ mg.result.nothing_daily,Already caught up today,วันนี้คุยก�
 mg.result.tab,The bar is full. The rest goes on your Tab,เต็มแล้ว ส่วนที่เหลือเข้าบิลของคุณ,Result card note when part of the gain overflowed to Tab,50
 mg.result.hearts,Hearts with {regular}: {count} of {max},หัวใจกับ{regular}: {count} จาก {max},Result card under Candle Talk. {regular} = regular's display name; {count} 0-3; {max} = 3,40
 cast.mali.name,Prae,แพร,"Display name of Prae, an owner (id mali; renamed by Daniele 2026-11-01; owner, not a regular, 2026-11-02; silent until she gives her own lines) (cast table 6.2)",16
-cast.tt.name,Tt,ทีที,"Display name of Tt, regular #4 (Daniele 2026-11-02). TH is a draft transliteration: staff check needed (cast table 6.2)",16
+cast.tt.name,Ty,ไท,"Display name of regular #4 (id tt); Daniele 2026-11-02: the name is Ty. TH is a machine-draft transliteration: staff check needed (cast table 6.2)",16
 cast.tong.name,Tong,ต้อง,Display name of the regular Tong (cast table 6.2),16
 cast.ploy.name,Ploy,พลอย,Display name of the regular Ploy (cast table 6.2),16
 cast.jules.name,Jules,จูลส์,Display name of the regular Jules (cast table 6.2),16
@@ -147,3 +147,7 @@ vibe.glowing,Glowing,เปล่งประกาย,Vibe state word,12
 vibe.good,Good,ดี,Vibe state word,12
 vibe.meh,Meh,เฉย ๆ,Vibe state word,12
 vibe.homebody,Homebody,ติดบ้าน,Vibe state word,12
+mg.result.miss,MISS,พลาด,Result card tier word for a round below the miss line (06-stakes §7.2); TH machine draft,10
+mg.result.miss_line.0,Most of it's on the floor.,ส่วนใหญ่หกลงพื้นหมดเลย,"Result card line under MISS, variant 0 (Nam's voice); TH machine draft",40
+mg.result.miss_line.1,"Nothing earned. Go again, or come back later.",ไม่ได้อะไรเลย ลองอีกรอบ หรือค่อยมาใหม่,"Result card line under MISS, variant 1; TH machine draft",50
+mg.result.miss_line.2,The room saw nothing. Shake it off.,ไม่มีใครเห็นหรอก สะบัดๆ ไปเลย,"Result card line under MISS, variant 2; TH machine draft",50

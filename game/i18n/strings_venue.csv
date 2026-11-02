@@ -157,3 +157,24 @@ venue.board.all_time,All time,ตลอดกาล,"Subtitle on the lounge's fi
 venue.board.this_month,This month,เดือนนี้,"Subtitle on the lounge's second Top patrons poster, beside the first; TH machine draft",16
 venue.merch.performer,Performer tee,เสื้อยืดวงดนตรี,Merch row (placeholder item; 04-coins.md: unlocks after you have heard that act once); TH machine draft,26
 venue.merch.jacket,Black Cabin jacket,แจ็กเก็ตแบล็กคาบิน,"Merch row (placeholder item, wardrobe statement tier: outer layer); TH machine draft",26
+venue.stake.name_fallback,Your character,ตัวละครของคุณ,Stand-in for the character's name in stake lines when no name is set yet; TH machine draft,20
+venue.stake.restless,Restless,กระสับกระส่าย,Home chip from day 10 without a counting visit (06-stakes §4); TH machine draft,20
+venue.stake.fading,Fading · {d} days,เลือนราง · อีก {d} วัน,Home chip from day 15. {d} = whole days left before the character dies; TH machine draft,30
+venue.stake.last_call,Last Call · {d} days,ลาสต์คอล · อีก {d} วัน,Home chip from day 18. {d} = whole days left; TH machine draft,30
+venue.stake.ghost,Ghost · {d} days to bring {name} back,ผี · อีก {d} วันเพื่อพา {name} กลับมา,"Home chip while a ghost. {d} = days left in the ghost window, {name} = the character; TH machine draft",50
+venue.stake.ghost_rule,Check in at Black Cabin to bring {name} back,เช็กอินที่แบล็กคาบินเพื่อพา {name} กลับมา,Ghost chip second line: the only way back (06-stakes §5.2); TH machine draft,60
+venue.stake.postcard.restless,"""Third table's empty without you."" — Ploy","""โต๊ะที่สามเงียบไปเลยถ้าไม่มีคุณ"" — พลอย",Postcard on the home view from Restless; TH machine draft,60
+venue.stake.postcard.fading,Postcards are piling up by the door.,โปสการ์ดกองอยู่หน้าประตู,Postcard line from Fading; TH machine draft,50
+venue.stake.postcard.last_call,"""Don't make me come round there."" — Nam","""อย่าให้พี่ต้องไปหาถึงที่นะ"" — น้ำ",Postcard on the home view from Last Call; TH machine draft,60
+venue.stake.postcard.ghost,A tombstone sticker on the club door. Someone left flowers.,สติกเกอร์หลุมศพที่ประตูร้าน มีคนวางดอกไม้ไว้,Ghost home line; TH machine draft,70
+venue.stake.ghost_prompt,You're a ghost,คุณเป็นผีไปแล้ว,Zone prompt and sheet reason while the character is a ghost; nothing counts (06-stakes §5.1); TH machine draft,30
+venue.stake.lives,Lives: {n},ชีวิต: {n},Character line after a revival; TH machine draft,20
+venue.stake.farewell.title,{name} is gone,{name} จากไปแล้ว,Farewell card title when the ghost window ran out or after Retire; TH machine draft,30
+venue.stake.farewell.body,The club keeps no copy. Save a picture if you want one.,ร้านไม่เก็บสำเนาไว้ บันทึกภาพไว้ได้นะถ้าอยากเก็บ,Farewell card body (06-stakes §6); TH machine draft,80
+venue.stake.farewell.stats,Nights out: {n} · Lives: {lives},ออกไปเที่ยว: {n} คืน · ชีวิต: {lives},Farewell card stats line; TH machine draft,60
+venue.stake.farewell.done,Start again,เริ่มใหม่,Farewell card button: new character; TH machine draft,20
+venue.annoy.thirsty,Thirsty,กระหายน้ำ,HUD annoyance chip beside the Drinks ring (06-stakes §7.1); TH machine draft,14
+venue.annoy.earworm,Earworm,เพลงติดหู,HUD annoyance chip beside the Music ring; TH machine draft,14
+venue.annoy.phone_face,Phone face,จมอยู่กับมือถือ,HUD annoyance chip beside the Friends ring; TH machine draft,14
+venue.annoy.rusty,Rusty,มือสนิม,HUD annoyance chip beside the Nightlife ring; TH machine draft,14
+venue.annoy.out_of_loop,Out of the loop,ตกข่าว,HUD annoyance chip for the event calendar habit (off until the calendar exists); TH machine draft,20

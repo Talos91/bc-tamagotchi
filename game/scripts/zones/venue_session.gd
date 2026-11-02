@@ -44,6 +44,8 @@ const HEARD_FRACTION := 0.6        ## share of a song spent within earshot for i
 const EARSHOT_ZONES := ["stage", "floor"]  ## camera zones within earshot of the stage (Stage, Candle Floor)
 const TRIED_KEY := "drinks_tried"  ## Needs.ext[TRIED_KEY][drink_id] = true (persists with the save)
 const CIGARETTE_AT := Vector3(0.2, 1.05, 0.22)  ## in the player's Body: the drink hand of the stand_drink pose
+## Sheet row -> the minigame it opens (for the tries per visit).
+const ROW_GAMES := {"pour": "pour_perfect", "rhythm": "front_row_rhythm", "talk": "candle_talk", "pinball": "neon_pinball"}
 const GAMES := {
 	"pour_perfect": "res://scenes/minigames/pour_perfect/pour_perfect.tscn",
 	"front_row_rhythm": "res://scenes/minigames/front_row_rhythm/front_row_rhythm.tscn",
@@ -219,6 +221,14 @@ func rows_for(zone: Dictionary) -> Array[Dictionary]:
 			rows.append(sit)
 		"exit":
 			rows.append(_row("leave", "venue.sheet.exit.leave", T.t("venue.sheet.exit.leave_sub"), ""))
+	for r in rows:
+		var gid: String = ROW_GAMES.get(r["id"], "")
+		if gid != "" and r["enabled"] and needs.minigame_tries_left(gid) <= 0:  # 3 rounds per minigame per visit (§7.2)
+			r["enabled"] = false
+			r["reason"] = T.t("venue.sheet.plenty")
+		if needs.is_ghost() and r["id"] != "leave" and not r.get("info", false):  # a ghost can walk in; nothing counts (§5.1)
+			r["enabled"] = false
+			r["reason"] = T.t("venue.stake.ghost_prompt")
 	return rows
 
 
@@ -257,6 +267,8 @@ func image_for(zone: Dictionary) -> Texture2D:
 
 
 func prompt_for(zone: Dictionary) -> String:
+	if needs.is_ghost() and zone.get("kind", "") != "":
+		return T.t("venue.stake.ghost_prompt")
 	match zone.get("kind", ""):
 		"table":
 			if zone.get("regular", "") != "":
@@ -450,6 +462,9 @@ func _get_wasted() -> void:
 
 
 func _request(game_id: String, config: Dictionary) -> void:
+	if needs.minigame_tries_left(game_id) <= 0:
+		_card({"gains": {}, "tab": 0.0, "ok": false, "reason": "tries"}, "")  # "That's plenty for tonight"
+		return
 	cancel_sit(false)   # the minute stops; a seated player stays on the seat through the minigame
 	minigame_requested.emit(game_id, config)
 
@@ -458,6 +473,8 @@ func _request(game_id: String, config: Dictionary) -> void:
 ## swaps in a soft drink while Merry, BarMenu.pour_pick).
 func _on_action_applied(action_id: String, result: Dictionary) -> void:
 	if action_id == "pour_perfect" and result.get("ok", false):
+		if _pour_drink != "":
+			mark_tried(_pour_drink)  # the poured drink counts as tried (orchestrator 2026-11-02); a miss serves nothing
 		_count_drink(needs.clock, _pour_drink == "" or BarMenu.effect(_pour_drink) == "alcohol")
 
 

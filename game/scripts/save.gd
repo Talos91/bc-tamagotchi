@@ -12,6 +12,9 @@ extends RefCounted
 ##   "visits":  [ { start, end, day, number, gains{meter:pts}, actions, welcome }, ... ],
 ##   "ext":     { "<system>": {...} }                         # namespace for systems added later
 ## }
+## Stakes keys in "needs" (docs/design/06-stakes.md §10.7, all additive, old saves load at Fine): last_counted_visit,
+## stake_paused, created_at, nights_out, stake_stage (derived on load), dead_at, last_revival_at, lives, zombie_next_visit,
+## annoy_cleared, minigame_tries, last_calendar_at, going, last_retire_at, stake_notified, has_checked_in, checkin_nights.
 ## Rule for additions: add a key, never rename or retype one; bump VERSION only when a migration is needed.
 
 const VERSION := 1

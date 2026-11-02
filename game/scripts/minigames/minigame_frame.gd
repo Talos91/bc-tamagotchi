@@ -8,6 +8,7 @@ signal closed(result: Dictionary)  # DONE on the result card; result is the game
 const UI = preload("res://scripts/minigames/mg_ui.gd")
 const S = preload("res://scripts/minigames/strings.gd")
 const Glyph = preload("res://scripts/minigames/need_glyph.gd")
+const Rules = preload("res://scripts/rules.gd")
 const ResultCardScene = preload("res://scenes/ui/result_card.tscn")
 
 var needs: Node  # optional injection for the result card
@@ -111,6 +112,11 @@ func _start_game() -> void:
 		_card.queue_free()
 	game = game_scene.instantiate()
 	game.config = game_config
+	var rn := _get_needs()
+	if rn != null and rn.has_method("minigame_miss_below"):
+		game.miss_below = rn.minigame_miss_below()
+		if rn.is_annoyed("rusty") and rn.visit_minigame_rounds == 0:
+			game.fumble = Rules.RUSTY_FUMBLE_SECONDS  # Rusty: the first round of the visit opens with a fumble
 	game.set_anchors_preset(Control.PRESET_FULL_RECT)
 	_content.add_child(game)
 	game.finished.connect(_on_finished)

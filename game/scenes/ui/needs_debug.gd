@@ -120,6 +120,14 @@ func _build() -> void:
 	_button(ctl2, "End visit", func(): needs.end_visit("left"))
 	_button(ctl2, "New game", func(): needs.new_game(); needs.save_game())
 
+	var ctl3 := HBoxContainer.new()  # stakes (06-stakes §10.5)
+	ctl3.add_theme_constant_override("separation", 10)
+	box.add_child(ctl3)
+	_button(ctl3, "Jump +5 d", func(): needs.debug_advance(5.0 * 86400.0))
+	_button(ctl3, "Fake check-in", func(): _status.text = "check-in: %s" % str(needs.check_in()))
+	_button(ctl3, "Open calendar", func(): needs.open_calendar())
+	_button(ctl3, "Retire", func(): _status.text = "retire: %s" % str(needs.retire()))
+
 	var sc := HBoxContainer.new()
 	box.add_child(sc)
 	_score_label = _label(sc, "")
@@ -211,6 +219,6 @@ func _refresh() -> void:
 	var vs := "in visit #%d (x%.2f)" % [needs.visits_today, needs.current_daily_mult()] if needs.visit_active else "not in a visit"
 	if needs.welcome_active():
 		vs += "  WELCOME BACK x2"
-	_visit_label.text = "Visit: %s" % vs
+	_visit_label.text = "Visit: %s   Stake: %s, %.1f d since visit, lives %d" % [vs, needs.stake_stage, needs.days_since_visit(), needs.lives]
 	_clock_btn.text = "Clock x%d" % int(needs.multiplier) if needs.multiplier != 1.0 else "Clock x1 (real)"
 	_score_label.text = "Score %.2f" % _score.value

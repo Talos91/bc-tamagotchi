@@ -17,6 +17,7 @@ const BEST_KEY := "minigame_best"  # Needs.ext[BEST_KEY][game_id] = best points 
 const HEARTS_KEY := "hearts"  # Needs.ext[HEARTS_KEY][regular_id] = 0..MAX_HEARTS (DECISIONS: hearts 0-3), regulars only
 const MAX_HEARTS := 3
 const LEAN_ACTION := "candle_talk_lean"  # Rules.ACTIONS key for the extra.lean bonus
+const PLAYED_ACTION := "minigame_played"  # Rules.ACTIONS key applied after every round that is not a miss
 const GAIN_EPSILON := 0.05
 
 var needs: Node
@@ -33,13 +34,22 @@ func _get_needs() -> Node:
 
 
 ## Records best/hearts (regulars only), applies the refill and returns the outcome. No UI; safe to call off-tree.
+## A round uses one of the visit's tries (misses included, 06-stakes §7.2). A MISS (result.miss) earns nothing: no best,
+## no hearts, no refill, no minigame_played, and a missed Candle Talk leaves the regular's talk of the day open.
 func apply(result: Dictionary) -> Dictionary:
 	var n := _get_needs()
 	var points := int(result.get("points", 0))
 	var game_id := str(result.get("game_id", ""))
+	var missed := bool(result.get("miss", false))
 	var new_best := false
 	var best := points
 	var hearts := -1
+	if n != null and not n.note_minigame_round(game_id):
+		return _outcome({"ok": false, "reason": "tries", "gains": {}, "tab": 0.0}, 0, false, -1, false, true, missed)
+	if missed:
+		var prev_best := int(n.ext.get(BEST_KEY, {}).get(game_id, 0)) if n != null else 0
+		return _outcome({"ok": false, "reason": "miss", "gains": {}, "tab": 0.0}, prev_best, false, -1,
+			n == null or n.minigame_tries_left(game_id) > 0, false, true)
 	if n != null:
 		var bests: Dictionary = n.ext.get(BEST_KEY, {})
 		var prev := int(bests.get(game_id, 0))
@@ -62,19 +72,33 @@ func apply(result: Dictionary) -> Dictionary:
 		# Candle Talk lean bonus (DECISIONS (k)): a fully lit candle also earns candle_talk_lean, shown as one gain.
 		if applied.get("ok", false) and bool(result.get("extra", {}).get("lean", false)):
 			var lean: Dictionary = n.apply_action(LEAN_ACTION, 1.0, str(result.get("key", "")))
-			if lean.get("ok", false):
-				for m in lean["gains"]:
-					applied["gains"][m] = float(applied["gains"].get(m, 0.0)) + float(lean["gains"][m])
-				applied["tab"] = float(applied.get("tab", 0.0)) + float(lean.get("tab", 0.0))
+			_fold(applied, lean)
+		# Any round that is not a miss is "play a minigame" (06-stakes §2): +3 Nightlife, capped +9 a visit
+		if applied.get("ok", false):
+			_fold(applied, n.apply_action(PLAYED_ACTION))
+	var again: bool = n == null or n.minigame_tries_left(game_id) > 0
+	return _outcome(applied, best, new_best, hearts, again, false, false, str(result.get("action_id", "")))
+
+
+func _fold(applied: Dictionary, extra: Dictionary) -> void:
+	if extra.get("ok", false):
+		for m in extra["gains"]:
+			applied["gains"][m] = float(applied["gains"].get(m, 0.0)) + float(extra["gains"][m])
+		applied["tab"] = float(applied.get("tab", 0.0)) + float(extra.get("tab", 0.0))
+
+
+## `again`: tries are left; `plenty`: tries ran out on this round or before it (the card says so); AGAIN is also
+## hidden when the next round would earn nothing (diminishing returns, daily_once).
+func _outcome(applied: Dictionary, best: int, new_best: bool, hearts: int, again: bool, tries_out: bool, missed: bool, action_id := "") -> Dictionary:
 	var total := 0.0
 	for m in applied.get("gains", {}):
 		total += float(applied["gains"][m])
+	var earns: bool = applied.get("ok", false) and total > GAIN_EPSILON 		and not Rules.ACTIONS.get(action_id, {}).get("daily_once", false)
 	outcome = {
 		"ok": applied.get("ok", false), "reason": applied.get("reason", ""), "gains": applied.get("gains", {}),
-		"tab": applied.get("tab", 0.0), "best": best, "new_best": new_best, "hearts": hearts,
-		# AGAIN is hidden when the next attempt would earn nothing (diminishing returns, daily_once).
-		"again_ok": applied.get("ok", false) and total > GAIN_EPSILON \
-			and not Rules.ACTIONS.get(str(result.get("action_id", "")), {}).get("daily_once", false),
+		"tab": applied.get("tab", 0.0), "best": best, "new_best": new_best, "hearts": hearts, "miss": missed,
+		"tries_out": tries_out or not again,
+		"again_ok": again and (missed or earns),
 	}
 	return outcome
 
@@ -113,7 +137,7 @@ func _build(result: Dictionary, o: Dictionary) -> void:
 
 	var game_id := str(result.get("game_id", ""))
 	var tier := int(result.get("tier", 0))
-	var word := S.t("mg.%s.tier_%d" % [game_id, tier + 1])
+	var word := S.t("mg.result.miss") if tier < 0 else S.t("mg.%s.tier_%d" % [game_id, tier + 1])
 	col.add_child(UI.title(word, 32))
 
 	var score_row := HBoxContainer.new()
@@ -150,11 +174,15 @@ func _build(result: Dictionary, o: Dictionary) -> void:
 		bar.add_theme_stylebox_override("fill", UI.box(UI.need_color(m), 4))
 		row.add_child(bar)
 		row.add_child(UI.label("+%d" % roundi(float(gains[m])), 15, UI.need_color(m)))
-	if gains.is_empty():
+	if o.get("miss", false):
+		col.add_child(UI.wrap(UI.label(S.t("mg.result.miss_line.%d" % posmod(hash(game_id + str(result.get("points", 0))), 3)), 15, UI.SMOKE)))
+	elif gains.is_empty():
 		var why := "mg.result.nothing_daily" if o.get("reason", "") == "daily_once" else "mg.result.plenty"
 		col.add_child(UI.wrap(UI.label(S.t(why), 15, UI.SMOKE)))
 	elif float(o.get("tab", 0.0)) > 0.0:
 		col.add_child(UI.wrap(UI.label(S.t("mg.result.tab"), 13, UI.SMOKE)))
+	if o.get("tries_out", false) and not gains.is_empty():
+		col.add_child(UI.wrap(UI.label(S.t("mg.result.plenty"), 13, UI.SMOKE)))
 
 	var extra: Dictionary = result.get("extra", {})
 	if extra.has("regular") and int(o.get("hearts", -1)) >= 0:

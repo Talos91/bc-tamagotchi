@@ -22,6 +22,7 @@ extends "res://scripts/street_shot.gd"
 const UI = preload("res://scripts/minigames/mg_ui.gd")
 const T = preload("res://scripts/zones/venue_strings.gd")
 const VersionInfo = preload("res://scripts/version_info.gd")
+const Rules = preload("res://scripts/rules.gd")
 
 const FOLLOW_H := 1.75       ## camera height behind the character (1.35 m tall)
 const FOLLOW := 1.3          ## camera this far behind the character outside ...
@@ -53,6 +54,7 @@ var _pull_fov := 0.0
 var _layer: CanvasLayer
 var _screen: Control
 var _prompt: Label
+var _stake_box: VBoxContainer   ## stage chip, ghost rule, postcard, annoyance chips, lives (06-stakes §10.5)
 var _locale := ""
 
 
@@ -238,12 +240,71 @@ func _build_ui() -> void:
 	tw.tween_property(_prompt, "modulate:a", 0.35, 1.1).set_trans(Tween.TRANS_SINE)
 	tw.tween_property(_prompt, "modulate:a", 1.0, 1.1).set_trans(Tween.TRANS_SINE)
 	_screen.add_child(VersionInfo.label())  # bottom right, fades out with the prompt
+	_stake_box = VBoxContainer.new()
+	_stake_box.name = "StakeInfo"
+	_stake_box.mouse_filter = Control.MOUSE_FILTER_IGNORE
+	_stake_box.set_anchors_preset(Control.PRESET_TOP_WIDE)
+	_stake_box.offset_left = UI.dp(16)
+	_stake_box.offset_right = -UI.dp(16)
+	_stake_box.offset_top = UI.dp(44)
+	_stake_box.add_theme_constant_override("separation", int(UI.dp(6)))
+	_screen.add_child(_stake_box)
 	_retitle()
 
 
 func _retitle() -> void:
 	_locale = TranslationServer.get_locale()
 	_prompt.text = text_for("venue.start.tap")
+	_fill_stake_box()
+
+
+## The character's stake on the street-door home view (06-stakes §4, §10.5): the stage chip from Restless on, the revival
+## rule for a ghost, the postcard, one chip per annoyance, "Lives: N" after a revival. Nothing at Fine with no annoyance.
+func _fill_stake_box() -> void:
+	for c in _stake_box.get_children():
+		c.queue_free()
+	var needs: Node = main.needs
+	var who := str(needs.profile.get("display_name", ""))
+	if who == "":
+		who = text_for("venue.stake.name_fallback")
+	var stage: String = needs.stake_stage
+	var d: int = needs.days_left()
+	var chip := ""
+	match stage:
+		"restless":
+			chip = text_for("venue.stake.restless")
+		"fading", "last_call":
+			chip = text_for("venue.stake." + stage).format({"d": d})
+		"ghost":
+			chip = text_for("venue.stake.ghost").format({"d": d, "name": who})
+	if chip != "":
+		var col := UI.RED_HI if stage in ["last_call", "ghost"] else UI.GOLD
+		_stake_box.add_child(_start_chip(chip, col))
+	if stage == "ghost":
+		_stake_box.add_child(UI.wrap(UI.label(text_for("venue.stake.ghost_rule").format({"name": who}), 14, UI.SMOKE)))
+	if stage != "fine":
+		_stake_box.add_child(UI.wrap(UI.label(text_for("venue.stake.postcard." + stage) if stage != "ghost" else text_for("venue.stake.postcard.ghost"), 14, UI.CREAM)))
+	var row := HBoxContainer.new()
+	row.add_theme_constant_override("separation", int(UI.dp(4)))
+	for id in needs.annoyances():
+		var meter: String = Rules.ANNOYANCES[id]
+		row.add_child(_start_chip(text_for("venue.annoy." + id), UI.need_color(meter) if meter != "" else UI.SMOKE))
+	if int(needs.lives) > 1:
+		row.add_child(_start_chip(text_for("venue.stake.lives").format({"n": needs.lives}), UI.GOLD))
+	if row.get_child_count() > 0:
+		_stake_box.add_child(row)
+	else:
+		row.queue_free()
+
+
+func _start_chip(text: String, color: Color) -> Label:
+	var l := UI.label(text, 14, color, HORIZONTAL_ALIGNMENT_CENTER)
+	var sb := UI.box(Color(UI.BG_DEEP, 0.85), 12, color, 2.0)
+	sb.content_margin_left = UI.dp(8)
+	sb.content_margin_right = UI.dp(8)
+	l.add_theme_stylebox_override("normal", sb)
+	l.size_flags_horizontal = Control.SIZE_SHRINK_BEGIN
+	return l
 
 
 ## Start-screen string in the current language. Reads the CSV when the imported translation predates the key (the

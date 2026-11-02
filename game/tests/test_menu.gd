@@ -290,7 +290,7 @@ func test_try_pool() -> void:
 	for b in bundles:
 		by[b["id"]] = b
 		check(str(b["name"]) != "" and str(b["bottles"]).contains(" + "), "%s lists its bottles" % b["id"])
-		check(int(b["price"]) > 0 and int(b["price"]) < int(b["was"]), "%s now %d under was %d" % [b["id"], b["price"], b["was"]])
+		check(int(b["price"]) > 0, "%s has a price (%d)" % [b["id"], b["price"]])
 	check(by.has("seppuku") and int(by["seppuku"]["price"]) == 34990, "Seppuku 34,990")
 	check(by.has("bigmac") and int(by["bigmac"]["price"]) == 16990 and by["bigmac"]["name"] == "BigMac", "BigMac 16,990")
 	check(by.has("rockstar_breakfast") and int(by["rockstar_breakfast"]["price"]) == 6590, "Rockstar Breakfast 6,590")
@@ -393,6 +393,16 @@ func test_menu_list() -> void:
 	var texts := []
 	for l in ml.find_children("*", "Label", true, false):
 		texts.append((l as Label).text)
+	# Daniele 2026-11-02: price only (no struck-through 'was' price), list-only (no ordering)
+	for bd in BarMenu.bundles():
+		check(not bd.has("was"), "%s carries no 'was' price" % bd["id"])
+	var src_b: Array = BarMenu.data()["bundles"]
+	for sb in src_b:
+		check(not texts.has(BarMenu.bundle_price_text(int(sb["was"]))) or int(sb["was"]) == int(sb["now"]), "no label shows the 'was' price %d" % int(sb["was"]))
+	var any_btn := false
+	for bd in BarMenu.bundles():
+		any_btn = any_btn or ml.bundle_rows[bd["id"]].find_children("*", "Button", true, false).size() > 0
+	check(not any_btn, "bundle rows hold no button: list-only, nothing to order")
 	check(texts.has(BarMenu.t("menu.bundles.note")), "the daily-limit note shows on the Bundles tab")
 	ml.show_tab("drinks")
 	await process_frame
@@ -484,6 +494,13 @@ func test_bar_sheet() -> void:
 	s.do_row(z, "order")
 	s.do_row(z, "mocktail")
 	check(needs.ext["drinks_tried"].has("house_shooter") and needs.ext["drinks_tried"].has("coke"), "the Order and soft-drink rows mark theirs")
+	# Pour Perfect marks the poured drink as tried once it is served (orchestrator 2026-11-02)
+	needs.ext.erase("drinks_tried")
+	s.do_row(z, "pour")
+	var poured: String = s._pour_drink
+	check(poured != "" and not needs.ext.get("drinks_tried", {}).has(poured), "a pour that is only requested is not tried yet")
+	needs.apply_action("pour_perfect", 1.0)
+	check(needs.ext["drinks_tried"].has(poured), "Pour Perfect marks the poured drink (%s) as tried" % poured)
 	# Try something new never offers what was already tried and still marks its own drink
 	needs.ext.erase("drinks_tried")
 	for id in BarMenu.try_order().slice(0, 5):

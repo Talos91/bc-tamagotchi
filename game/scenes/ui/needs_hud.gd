@@ -43,6 +43,9 @@ var _caption: Label
 var _status: Label
 var _x2: Label
 var _tipsy: Label
+var _stake: Label     ## Last Call chip (06-stakes §10.5: the venue shows no stage chip but this one)
+var _annoy_row: HBoxContainer
+var annoy_chips := {}  ## annoyance id -> its small chip under the title (colour of its meter)
 var _areas := {}      ## area -> its button
 var _here := ""
 var _top: Control
@@ -63,6 +66,8 @@ func setup(s: VenueSession, n: Node) -> void:
 	needs = n
 	Orientation.restore(needs)
 	needs.meter_changed.connect(_on_meter)
+	needs.annoyances_changed.connect(func(_a): _refresh_status())
+	needs.stake_stage_changed.connect(func(_o, _n): _refresh_status())
 	session.action_done.connect(_on_action)
 	session.state_changed.connect(_refresh_status)
 	for m in Rules.METERS:
@@ -132,6 +137,8 @@ func _build() -> void:
 	chips.add_child(_x2)
 	_tipsy = _chip(UI.AMBER)
 	chips.add_child(_tipsy)
+	_stake = _chip(UI.RED_HI)
+	chips.add_child(_stake)
 
 	var title_row := HBoxContainer.new()
 	title_row.mouse_filter = Control.MOUSE_FILTER_IGNORE
@@ -150,6 +157,17 @@ func _build() -> void:
 	_top.add_child(_caption)
 	_status = UI.label("", 14, UI.GOLD)
 	_top.add_child(_status)
+	_annoy_row = HBoxContainer.new()
+	_annoy_row.name = "Annoyances"
+	_annoy_row.mouse_filter = Control.MOUSE_FILTER_IGNORE
+	_annoy_row.add_theme_constant_override("separation", int(UI.dp(4)))
+	_top.add_child(_annoy_row)
+	for id in Rules.ANNOYANCES:
+		var meter: String = Rules.ANNOYANCES[id]
+		var chip := _chip(UI.need_color(meter) if meter != "" else UI.SMOKE)
+		chip.name = "Annoy_" + id
+		_annoy_row.add_child(chip)
+		annoy_chips[id] = chip
 
 	var col := VBoxContainer.new()
 	col.name = "Areas"
@@ -247,6 +265,14 @@ func _refresh_status() -> void:
 	_tipsy.visible = st > 0
 	if st > 0:
 		_tipsy.text = T.t("venue.tipsy.%d" % st)
+	for id in annoy_chips:
+		var on: bool = needs.is_annoyed(id)
+		annoy_chips[id].visible = on
+		if on:
+			annoy_chips[id].text = T.t("venue.annoy." + id)
+	_stake.visible = needs.stake_stage == "last_call"
+	if _stake.visible:
+		_stake.text = T.t("venue.stake.last_call", {"d": needs.days_left()})
 	_status.text = T.t("venue.hud.sitting", {"s": ceili(session.sitting["left"])}) if not session.sitting.is_empty() else ""
 	if not session.smoking.is_empty():
 		_status.text = N.t("nightlife.hud.smoking", {"s": ceili(session.smoking["left"])})

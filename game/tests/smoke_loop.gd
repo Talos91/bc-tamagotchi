@@ -90,7 +90,7 @@ func _init() -> void:
 	check(main.zones.current.get("id", "") == "table:LongTable" and main.zones.current.get("regular", "") == "tt", "at Tt's table, the Long Table (%s)" % main.zones.current.get("id", ""))
 	# Tt is regular #4 (Daniele 2026-11-02): a heart by his name, seated at his table, and hearts from a good talk
 	var tag: Label3D = main.zones.get_node_or_null("Tag_tt")
-	check(tag != null and tag.text == "Tt  ♥", "a regular's name tag carries the heart (%s)" % (tag.text if tag else "missing"))
+	check(tag != null and tag.text == "Ty  ♥", "a regular's name tag carries the heart (%s)" % (tag.text if tag else "missing"))
 	var tt: PatronFigure = main.find_child("Host_tt", true, false)
 	check(tt != null and tt.state == "sit", "Tt sits at the Long Table")
 	# Prae (an owner) is in on even nights, silent: her tag has no heart and her table offers no talk

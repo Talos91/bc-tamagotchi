@@ -71,8 +71,10 @@ func spawn(script: GDScript) -> Control:
 # --- Tiers ---------------------------------------------------------------------------------------
 
 func test_tiers() -> void:
-	print("[tiers] 0 good / 1 great / 2 perfect, never a fail tier")
-	check(Base.tier_for(0.0) == 0, "score 0 is still tier 0 (no fail word)")
+	print("[tiers] miss / 0 good / 1 great / 2 perfect (06-stakes §7.2)")
+	check(Base.tier_for(0.0) == Base.TIER_MISS and Base.tier_for(0.24) == Base.TIER_MISS, "below 0.25 is a miss")
+	check(Base.tier_for(0.25) == 0, "0.25 is good")
+	check(Base.tier_for(0.3, 0.4) == Base.TIER_MISS and Base.tier_for(0.4, 0.4) == 0, "Rusty raises the line to 0.4")
 	check(Base.tier_for(0.59) == 0, "0.59 -> tier 0")
 	check(Base.tier_for(0.6) == 1, "0.60 -> tier 1")
 	check(Base.tier_for(0.849) == 1, "0.849 -> tier 1")
@@ -546,10 +548,10 @@ func test_result_card() -> void:
 		var result := {"game_id": c["game"], "action_id": c["action"], "need_id": c["meter"], "key": c["key"],
 			"score": 1.0, "points": 100, "tier": 2, "extra": {}}
 		var o: Dictionary = card.apply(result)
-		check(seen == [c["action"]], "%s applies exactly one action '%s' (saw %s)" % [c["game"], c["action"], str(seen)])
+		check(seen == [c["action"], "minigame_played"], "%s applies its action '%s' then minigame_played (saw %s)" % [c["game"], c["action"], str(seen)])
 		check(o["ok"] and n.meters[c["meter"]] > 20.0, "%s raises %s" % [c["game"], c["meter"]])
 		var def: Dictionary = Rules.ACTIONS[c["action"]]
-		var top: float = def["gains"][c["meter"]][1]
+		var top: float = def["gains"][c["meter"]][1] + (Rules.ACTIONS["minigame_played"]["gains"]["nightlife"] if c["meter"] == "nightlife" else 0.0)
 		check(is_equal_approx(n.meters[c["meter"]] - 20.0, top), "%s perfect score gains the GDD maximum %.0f" % [c["game"], top])
 		check(n.ext["minigame_best"][c["game"]] == 100, "%s best score saved in Needs.ext" % c["game"])
 		card.free()
@@ -566,6 +568,7 @@ func test_result_card() -> void:
 	# Repeat until diminishing returns hide AGAIN.
 	var hidden := false
 	for i in 12:
+		n2.minigame_tries.clear()  # the tries cap is tested in test_needs; here only the diminishing returns
 		var oo: Dictionary = card2.apply({"game_id": "pour_perfect", "action_id": "pour_perfect", "key": "", "score": 1.0, "points": 100, "tier": 2, "extra": {}})
 		if not oo["again_ok"]:
 			hidden = true
@@ -595,6 +598,7 @@ func test_result_card() -> void:
 	var owner := talk.duplicate()
 	owner["key"] = "mali"
 	owner["extra"] = {"regular": "mali"}
+	n3.minigame_tries.clear()  # a fourth Candle Talk round in one visit would be refused (tries are tested in test_needs)
 	var t4: Dictionary = card3.apply(owner)
 	check(t4["ok"] and t4["gains"].get("friends", 0.0) > 0.0, "a good talk with the owner still refills Friends")
 	check(t4["hearts"] == -1 and not n3.ext.get(CardScript.HEARTS_KEY, {}).has("mali"), "owner: no hearts kept (%s)" % t4["hearts"])

@@ -105,13 +105,14 @@ static func try_pick(tried: Dictionary, night := 0) -> String:
 	return ""
 
 
-## Bottle bundles (the Seppuku and the five on the brandy page) in menu order: [{id, name, bottles, price, was}].
-## Shown in the menu list's Bundles tab; not orderable (no coin price yet). `was` is the printed struck-through price.
+## Bottle bundles (the Seppuku and the five on the brandy page) in menu order: [{id, name, bottles, price}].
+## Shown in the menu list's Bundles tab, list-only: not orderable. Only the price now is shown; the printed struck-through
+## "was" price stays in the data but is not exposed (Daniele 2026-11-02, until the bar confirms it).
 static func bundles() -> Array:
 	var out: Array = []
 	for b in data().get("bundles", []):
 		out.append({"id": b["id"], "name": b["name_en"], "bottles": " + ".join(b["bottles_en"]),
-			"price": int(b["now"]), "was": int(b["was"])})
+			"price": int(b["now"])})
 	return out
 
 
