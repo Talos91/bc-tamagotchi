@@ -4,7 +4,8 @@ Done and closed: no worker of this role is running. Worker: gameplay (Opus), bri
 local_9bb3d41c after Daniele's camera answer (DECISIONS "Camera, what feels clunky", Questions tab 07:26: trails
 behind when walking; walls or furniture still in the way; too far, too close or too steep; not ticked: turn speed,
 surprise turns, tap-to-walk). Builds on the feel pass (`handoffs/feel-pass-2026-11-02.md`) and the area camera
-(`handoffs/area-camera-2026-11-02.md`). Report: `handoffs/worker-reports-2026-11/camera-feel-2.md`. Code commit cdb2dce.
+(`handoffs/area-camera-2026-11-02.md`). Report: `handoffs/worker-reports-2026-11/camera-feel-2.md`. Code commits cdb2dce, e04b8e9, d5825cb, 406d2fd. Hub cards camera-feel-2-accept, camera-closer-still,
+camera-patrons-in-front.
 
 ## What exists now (`game/scripts/camera_rig.gd`)
 - **Follow:** `follow_time` 0.12 s (was 0.3), `lead_time` 0.25 s (was 0.4), lead spring `LEAD_SETTLE` 0.25 s (was a
@@ -15,27 +16,34 @@ surprise turns, tap-to-walk). Builds on the feel pass (`handoffs/feel-pass-2026-
 - **Physics step:** the rig works in `_physics_process` (lockstep with the player, which moves only on physics ticks;
   with a tight follow at the display rate the figure would shake on screen) and so with a fixed delta. `set_process()`
   is still the on/off switch (street_shot.gd and start_screen.gd call it): `_physics_process` returns while
-  `is_processing()` is false; `_ready` turns processing on.
+  `is_processing()` is false; `_ready` turns processing on. `snap()` runs one step at once (and `_collect` snaps), so
+  a teleport or the scene start never waits a tick: tests that wait process frames (test_lounge) and the Lounge
+  entry bonus (smoke_loop) rely on that.
 - Dwell 0.3 s, swings, focus_on / release_focus, the cutaway rules and `STUB_H` 0.4 m (10 % of the 4 m rooms) are
   unchanged.
 
 ## Zone data (`game/tools/build_venue.gd` `_camera_zones()`), pitch / distance, before -> after
-floor -32/8.5 -> -40/5.2 · bar -32/7.0 -> -40/5.2 · stage -28/7.5 -> -34/5.2 · toilets -34/6.0 -> -42/4.8 ·
+floor -32/8.5 -> -36/5.6 (-40/5.2 lost the raised strip from mid-floor in landscape) · bar -32/7.0 -> -40/5.2 · stage -28/7.5 -> -34/5.2 · toilets -34/6.0 -> -42/4.8 ·
 smoking -40/6.5 -> -46/5.4 · buffer -32/7.0 -> -40/4.6 · lounge -34/8.0 -> -40/5.0 · merch, memory -34/6.5 -> -38/5.0 ·
 patrons -30/5.2 -> -34/4.8 · alcove -48/5.5 -> -50/4.2 · corridor -34/6.0 -> -36/5.0 · lobby -36/6.5 -> -40/5.0.
 Clamps: bar x to 36.0 (was 34.0: the player walking east to the red door left the frame before the smoking view took
-over), buffer Rect2(16.8, 4.2, 1.8, 2.2) (was 0.3 m wide), stage x 28.4-33.4, smoking Rect2(38.2, 12.8, 2.6, 3.6).
-Landscape keeps `landscape_dist_scale` 1.3.
+over), buffer Rect2(16.8, 4.2, 1.8, 2.2) (was 0.3 m wide), stage x 28.4-33.4, smoking Rect2(38.2, 12.8, 2.6, 3.6), corridor from x 4.6 (was 3.5: in portrait the camera stood behind the
+lobby's street wall and taps from the corridor's west end hit its collider; cut walls keep full-height colliders,
+so any camera behind a wall can block taps).
+Landscape: `landscape_dist_scale` 1.5 (was 1.3; at 1.3 the raised strip sat just above a 16:9 frame from mid-floor).
 
 ## Sight-line cuts added (all `cut_sight_only`: hidden only while they cover the player)
 Buffer `ValanceW` / `ValanceE` and `BufferPar`, `TreeRightOfStage`, the nine back-bar bays `Bay0..8` (the west ones
 stood in the toilets view), lounge `TrackLight0/1`. `venue.tscn` rebuilt (layout untouched, navmesh 561 polygons).
 
-## Tests (`game/tests/test_feel.gd`, 131 checks)
+## Tests (`game/tests/test_feel.gd`, 133 checks; `test_lounge.gd` adapted)
 New sections follow (trail <= 0.35 m, within 0.9 m, back on the player <= 0.8 s, step-change <= 0.012 m per tick at
 start/stop, <= 0.024 on the stairs), framing (every area's pitch/distance; the character >= 80 px of 800 standing in
 each area, smoking >= 72), occlusion (16 tap-walk routes; every other tick no visible mesh, by its own box, on the
-camera -> chest or head line; characters not counted). Turn speed and camera steps are per physics tick now.
+camera -> chest or head line; characters not counted), raised strip in frame from mid-floor (portrait, landscape).
+Turn speed and camera steps are per physics tick now. test_lounge runs portrait 1080 x 1920 (headless windows are
+square = the landscape branch); its curtain check wants both main-side curtains standing, both in frame in front of
+the opening, the near one off to the side.
 
 ## Tools
 `game/tests/capture_camera2.gd` (windowed: `--tag=portrait|landscape --prefix=before- --out=DIR --only=areas|walk|occl`),
