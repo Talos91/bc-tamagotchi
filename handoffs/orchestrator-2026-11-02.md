@@ -14,6 +14,7 @@ handover. Read `PROJECT.md`, then `STATE.md`, then this note.
   `if_version`; Daniele edits cards live, so expect version mismatches and re-read. Screenshots: `Artifact` publish
   with the hub url, `asset: true`, `file_paths`; put the returned `/_blob/<id>` url in `images`. The page source is
   `docs/design/backlog-board.html` (capabilities db + user + assets); `Artifact read` it once before republishing.
+- **Hub card schema, extended 2026-11-02:** `files: [{path, label}]` renders as a code line with a Copy button (browsers block `file://` links from the page). Every review card: images + files.
 - **How Daniele works:** sometimes messages workers directly, and they act and report it. Answers come both on the tab
   and in chat; a chat answer with an image becomes a direction file in the repo, and the tab card is marked answered
   with a note. Explain game-dev jargon, use emoji session titles and they/them, keep status messages short.

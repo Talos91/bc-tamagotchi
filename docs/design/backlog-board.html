@@ -75,6 +75,10 @@ code { font-family: ui-monospace, Consolas, monospace; font-size: 13px; }
 .lb-stage img { max-width: 100%; max-height: 100%; width: auto; height: auto; object-fit: contain; border-radius: 6px; }
 .lb-nav { display: flex; gap: 10px; justify-content: center; padding: 10px 16px calc(12px + env(safe-area-inset-bottom, 0px)); }
 .lb-nav[hidden] { display: none; }
+.qfiles { display: grid; gap: 6px; }
+.qfile { display: flex; gap: 8px; align-items: center; flex-wrap: wrap; font-size: 13px; }
+.qfile code { background: var(--bg); border: 1px solid var(--line); border-radius: 6px; padding: 4px 8px; overflow-wrap: anywhere; min-width: 0; flex: 1 1 240px; user-select: all; }
+.qfile .qbtn { padding: 5px 10px; font-size: 12px; }
 .qopts { display: grid; gap: 6px; }
 .qopt { display: flex; gap: 10px; align-items: flex-start; padding: 8px 10px; border: 1px solid var(--line); border-radius: 6px; cursor: pointer; font-size: 14px; }
 .qopt.rec { border-color: var(--accent); }
@@ -204,7 +208,7 @@ code { font-family: ui-monospace, Consolas, monospace; font-size: 13px; }
   <div class="lb-nav" id="lb-nav"><button class="qbtn ghost" id="lb-prev">← Previous</button><button class="qbtn ghost" id="lb-next">Next →</button></div>
 </dialog>
 
-<p class="foot">Updated 2 Nov 2026 by the orchestrator (A7, B13 added). Backlog items are never silently deleted: shipped ones get the commit, dropped ones get the reason. Answers on the Questions tab are copied into <code>docs/design/DECISIONS.md</code>.</p>
+<p class="foot">Updated 2 Nov 2026 by the orchestrator (review cards carry file paths). Backlog items are never silently deleted: shipped ones get the commit, dropped ones get the reason. Answers on the Questions tab are copied into <code>docs/design/DECISIONS.md</code>.</p>
 </div>
 <script>
 (function(){
@@ -220,6 +224,13 @@ code { font-family: ui-monospace, Consolas, monospace; font-size: 13px; }
   let first = (location.hash || '').slice(1);
   if(!tabs[first]) { try { first = localStorage.getItem('bc-tab') || 'backlog'; } catch(e) { first = 'backlog'; } }
   show(first);
+
+  // File paths: copy to the clipboard (Explorer opens the folder); fall back to selecting the text
+  function copyPath(path, btn, codeEl){
+    const done = () => { const old = btn.textContent; btn.textContent = 'Copied'; setTimeout(() => { btn.textContent = old; }, 1600); };
+    const select = () => { try { const r = document.createRange(); r.selectNodeContents(codeEl); const s = getSelection(); s.removeAllRanges(); s.addRange(r); btn.textContent = 'Selected: press Ctrl+C'; } catch(e) {} };
+    if(navigator.clipboard && navigator.clipboard.writeText) navigator.clipboard.writeText(path).then(done, select); else select();
+  }
 
   // Picture viewer: one card's pictures, full size, inside the page
   const lb = $('#lb'), lbImg = $('#lb-img'), lbCap = $('#lb-cap'), lbNav = $('#lb-nav');
@@ -265,12 +276,14 @@ code { font-family: ui-monospace, Consolas, monospace; font-size: 13px; }
       <h3>${esc(it.title)}</h3>
       <div class="qctx">${ctx}</div>
       ${(it.images || []).length ? `<div class="qimgs">${it.images.map((im, i) => `<button class="qimg" data-img="${i}" aria-label="Open picture: ${esc(im.alt || 'picture ' + (i + 1))}"><img src="${esc(im.url)}" alt="${esc(im.alt || '')}" loading="lazy"></button>`).join('')}</div>` : ''}
+      ${(it.files || []).length ? `<div class="qfiles">${it.files.map((f, i) => `<div class="qfile"><code id="f-${id}-${i}">${esc(f.path)}</code><button class="qbtn ghost" data-copy="${i}" title="Copy the path, then paste it in Explorer">Copy path</button>${f.label ? `<span class="qstatus">${esc(f.label)}</span>` : ''}</div>`).join('')}</div>` : ''}
       ${done ? `<div class="qanswer"><b>${esc(optText(it, it.answer))}</b>${it.note ? ' · ' + esc(it.note) : ''}<br><span class="qstatus">${esc(it.answered_at || '')}</span></div>` : ''}
       <div class="qopts" ${done ? 'hidden' : ''}>${opts}</div>
       <textarea id="n-${id}" aria-label="Note" placeholder="${(it.options || []).length ? 'Note (optional)' : 'Your answer'}" ${done ? 'hidden' : ''}>${esc(it.note || '')}</textarea>
       <div class="qrow">${done ? '<button class="qbtn ghost" data-act="reopen">Change answer</button>' : '<button class="qbtn" data-act="answer">Answer</button>'}<span class="qstatus" data-s></span></div>`;
     el.querySelector('[data-act]').addEventListener('click', () => done ? reopen(it, el) : answer(it, el));
     el.querySelectorAll('[data-img]').forEach(b => b.addEventListener('click', () => openPic(it.images, Number(b.dataset.img), b)));
+    el.querySelectorAll('[data-copy]').forEach(b => b.addEventListener('click', () => copyPath(it.files[Number(b.dataset.copy)].path, b, el.querySelector('#f-' + id + '-' + b.dataset.copy))));
     return el;
   }
   function render(){
