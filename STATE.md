@@ -1,39 +1,34 @@
-# STATE — Black Cabin Tamagotchi (rewritten, never appended; as of 2026-11-02 ~08:45 UTC)
+# STATE — Black Cabin Tamagotchi (rewritten, never appended; as of 2026-11-02 ~13:20 UTC)
 
-## LIVE (origin/main 14cda24; every code SHA verified 14/14 in a clean worktree, APPDATA empty per suite)
-- Venue v4 to the real floor map, doors, seats, stair, start screen with the real sign, Lato + Kristi, portrait first + landscape toggle, real menu (121 drinks, 34 dishes), Prae owner, Tt regular #4, nightlife actions + WASTED, per-area camera with seven area buttons, lounge revamp (coin merch shop, memory corner, game machine by the stair foot, Top patrons board, ten corridor portraits with patron messages, curtain from the main room, lane to Raised3; accepted, **layout.json frozen**), **look D** (6cd9735 + 6df5288: voxel cement floor and grained walls, blackish, grey-top north wall with a red neon line, red neon + candle pools, a third darker than before, reindeer head over the cashier; acceptance pending), **menu follow-ups** (6c7d9e4: Try something new rotates six real drinks per night, any order marks tried, Coke row, Bundles tab, errata list `docs/venue/menu/errata-for-black-cabin.md`; accepted 08:09), **stakes v3 docs** (625f83f: `06-stakes.md` v3 with §10 build spec, `04-coins.md` v2 signed off, GDD + high concept match; review pending).
+## LIVE (origin/main 5b657d0; every code SHA on it verified 14/14 in a clean worktree, APPDATA empty per suite)
+- Venue v4 to the real floor map, doors, seats, stair, start screen with the real sign, Lato + Kristi, portrait first + landscape toggle, real menu (121 drinks, 34 dishes), Prae owner, Tt regular #4, nightlife actions + WASTED, per-area camera with seven area buttons, lounge revamp + follow-up (accepted, **layout.json frozen**), look D (6cd9735 + 6df5288; acceptance pending), menu follow-ups (6c7d9e4; accepted), stakes v3 docs (625f83f; review pending), housekeeping 38fc2fa (MANUAL §5/§15, GDD §8, Kanit removed).
 - 14 suites (run from `game/`): smoke_stairs, smoke_tap, smoke_hud, test_needs, test_minigames, smoke_loop, smoke_doors_sit, smoke_start, test_menu, smoke_version, test_nightlife, test_seats, test_feel, test_lounge. Version 0.2.0 open (`docs/tech/versioning.md`). Play: `docs/tech/02-playtest-guide.md`.
 
 ## IN FLIGHT
-- Orchestrator: local_9bb3d41c (Fable 5.1, high; detached; **context 46 %** at this rewrite, handover in progress). Rule since 08:00: `git log origin/main..HEAD`, read it, push in a separate call; never past an unverified worker commit. Review rule since 08:20 (PROJECT.md): every review is a hub card with pictures and `files` paths; the orchestrator links the hub in chat when asking.
-- **Handover decided 2026-11-02 ~09:00 (context past 40 %):** no new workers from local_9bb3d41c; it finishes the two below (verify, push, cards), then Daniele starts the successor from `C:/Users/itisf/.claude/handoffs/1ab97086-9b4b-48fb-afb8-c28766300c88.md`. Workers running (2 of 3, started by Daniele from cards):
-  - 🎮 **camera-feel-2** (Opus, local_e7daa046) DONE by its report after the limit reset: code tip 406d2fd, docs 38d488c (on top of cdb2dce, e04b8e9), 14/14 in its isolated copy, hub cards camera-feel-2-accept, camera-closer-still, camera-patrons-in-front. **Not verified, not pushed**: 🔍 verify-camera-2 (Sonnet) proposed as a card for Daniele to start; it verifies 38d488c in a clean worktree and pushes. Session idle, to archive on Daniele's OK.
-  - 🧹 **housekeeping** (Sonnet, local_a768e570): `docs/MANUAL.md` §5 (stakes v1 → v3) and §15 refresh, GDD §8 coaster count, untracked `before-*.png` and `.uid` leftovers, Kanit font files if unreferenced, hub Backlog mirror check. Docs and assets only.
-- Finished today, verified, pushed: lounge-revamp 50a0623, lounge-followup e5d38a6, look-test 8067c7a, look-build 6cd9735 + 6df5288, menu-followups 6c7d9e4, stakes-fold 625f83f. Role notes `handoffs/<job>-2026-11-02.md`, reports `handoffs/worker-reports-2026-11/`. menu-followups session archived by Daniele.
-- Queued: 🛠️ **needs/stakes build** (Sonnet or Opus) from `06-stakes.md` §10 + the build list in `handoffs/worker-reports-2026-11/stakes-fold.md`, **after Daniele accepts stakes-v3-review** (and O1–O4 if they change numbers); 🎨 look follow-ups once the three look cards are answered (corridor light, sconces, amber LEDs; optional: bake swatches into `bc_kit.py`); 🎨 kit pass for memory-corner props; 0.2.0 close after look-D acceptance (changelog, live manual §15).
+- Orchestrator: **local_ddbbfc1d** (Fable 5.1; effort medium at start, Daniele asked to set high; **context ~8 %** at this rewrite). Took over 13:10 UTC from local_9bb3d41c (handoff `C:/Users/itisf/.claude/handoffs/1ab97086-9b4b-48fb-afb8-c28766300c88.md`; its answers and 👑 Master's six points folded here). Connectors all off. Runs by PROJECT.md "Context budget": never verifies, pushes, publishes or deploys itself.
+- **Unpushed on local main** (above 5b657d0, none verified by an orchestrator): cdb2dce, e04b8e9, 4cc5528 (docs), d5825cb, 406d2fd (camera code tip), 38d488c (camera report/note/captures), 2b01291, 4ced856 (old orchestrator STATE/LOG), then this commit. 🎮 camera-feel-2 reports 14/14 on 406d2fd in its own copy; hub cards camera-feel-2-accept, camera-closer-still, camera-patrons-in-front. Its session local_e7daa046 is idle and finished; Daniele archives it.
+- 🔍 **verify-camera-2** (Sonnet, local_ac83b848, started 13:11): clean worktree of 2b01291, import, 14 suites with empty APPDATA, push 2b01291 by SHA if all pass, report `handoffs/worker-reports-2026-11/verify-camera-2.md`. After it: the orchestrator pushes its own docs commits by SHA (check `git log origin/main..HEAD`, read, push in a separate call).
+- Proposed as cards (event-driven turn, starts refused): 🧹 Housekeeping (standardisation + hub + DECISIONS) and 🛠️ Web build on Vercel (job 0). Both may run alongside the verifier (different paths); max three workers.
 
 ## WAITING ON OWNER (Questions tab: https://claude.ai/artifact/BbpBxVWVVXMjz7TgJ7aFBW#questions)
+- **Camera:** camera-feel-2-accept, camera-closer-still, camera-patrons-in-front.
 - **Look D:** look-d-accept, look-corridor-light, look-sconces-neon, look-amber-leds.
 - **Stakes:** stakes-v3-review, stakes-o1-far-players, stakes-o2-revival-before-server, stakes-o3-memory-proof, stakes-o4-tuning.
-- **Menu:** menu-errata-unsure, menu-bundle-was, menu-bundle-coins.
-- **Lounge:** lounge-east-tables (the one open layout question), lounge-merch-items, lounge-board-wording.
+- **Menu:** menu-errata-unsure, menu-bundle-was, menu-bundle-coins. **Lounge:** lounge-east-tables, lounge-merch-items, lounge-board-wording.
 - Coins tab: no edits yet. Facts pending: cocktail page, entrance/street photos, band and staff consent, Prae's lines, November poster, real merch list.
 
 ## PROMISED, NOT DONE
-- Live manual (Claude Doc) §15 stale since venue v4; `docs/MANUAL.md` §5 still stakes v1 (housekeeping running).
-- Memory upload at the TV corner (D5, counts as a real visit under v3); memory-corner props placeholders; portraits read edge-on in play.
-- Raised couch places not walkable: Raised0 S0, Raised2 S1, Raised4 S0/S1.
-- Thai strings are machine drafts everywhere new.
-- Pour Perfect does not mark a drink as tried (not asked; decide with the needs build).
-- Stale card "🎲 Real-world bridge chapter" (task_b873ccbd): dismiss, re-propose later.
-- Export include filter `*.json`, `*.csv` once an export preset exists.
+- Hub page v12 lacks BACKLOG A8 and the camera cards' status (Housekeeping). Live manual (Claude Doc) §15 stale since venue v4.
+- Standardisation (Master's note): profiles in vault `wiki/agents/general/`; PROJECT.md Working rules + Context budget and ORCHESTRATOR-HANDOVER.md become one pointer line to `wiki/concepts/claude-orchestration-method.md` plus Black Cabin deltas.
+- Memory upload at the TV corner (D5); memory-corner props placeholders; portraits read edge-on in play; raised couch places not walkable (Raised0 S0, Raised2 S1, Raised4 S0/S1); Thai strings machine drafts; Pour Perfect does not mark a drink tried (decide with the needs build); stale card "🎲 Real-world bridge chapter" (task_b873ccbd) to dismiss; export include filter `*.json`, `*.csv` once a preset exists.
+- Method v1.1 review by Daniele ~2026-11-16: LOG carries a "context %" per day.
 
-## NEXT THREE JOBS
-0. 🛠️ **Web build on Vercel (Sonnet or Opus; Daniele's ask 2026-11-02, BACKLOG A8):** export templates for 4.6.1, Web export preset in `game/export_presets.cfg` (Compatibility, single-threaded, include `*.json,*.csv`, PWA on), `tools/build_web.py` that exports and stamps with `tools/version.py`, a `web/` output folder with a `vercel.json` (static, cache headers), Vercel project `bc-tamagotchi` (Daniele's Vercel account; the orchestrator has Vercel MCP tools), test on a phone browser: load time, frame rate (42 lights), touch, portrait HUD, save survives reload; then the performance pass with the phone numbers. A `*.vercel.app` URL first; custom domain later.
-1. 🛠️ Needs/stakes build (on stakes-v3-review acceptance).
-2. Look follow-ups + look-D acceptance, then close 0.2.0.
-3. Performance pass (42 lights, phone measurement), then character creator, then the real-life bridge.
-- Later: `docs/design/BACKLOG.md`.
+## NEXT JOBS
+0. 🛠️ **Web build on Vercel** (Sonnet or Opus; BACKLOG A8, DECISIONS 2026-11-02): export templates for 4.6.1, Web preset in `game/export_presets.cfg` (Compatibility, single-threaded, include `*.json,*.csv`, PWA on), `tools/build_web.py` exporting + stamping via `tools/version.py`, `web/` output with `vercel.json` (static, cache headers), Vercel project `bc-tamagotchi` on Daniele's account, phone check (load time, frame rate with 42 lights, touch, portrait HUD, save survives reload). Worker owns the preset, script, project and the phone check; the orchestrator receives the URL and evidence only. A `*.vercel.app` URL first.
+1. 🧹 Housekeeping: standardisation pass, hub Backlog tab (A8, camera status), DECISIONS rows for new answers.
+2. 🛠️ Needs/stakes build from `06-stakes.md` §10 + the build list in `handoffs/worker-reports-2026-11/stakes-fold.md`, after stakes-v3-review (and O1–O4 if numbers change).
+3. Look follow-ups once the three look cards are answered; memory-corner kit props; look-D acceptance → close 0.2.0 (changelog, live manual §15).
+4. Performance pass (phone numbers), character creator, real-life bridge. Later: `docs/design/BACKLOG.md`.
 
 ## POINTERS
-- Rules `PROJECT.md`; history `LOG.md`; decisions `docs/design/DECISIONS.md`; changelog `docs/CHANGELOG.md` (`python tools/changelog.py`); orchestrator gotchas `handoffs/orchestrator-2026-11-02.md`; hub source `docs/design/backlog-board.html`; verify script (scratchpad) = clean worktree of the SHA, import, 14 suites with empty APPDATA each.
+- Rules `PROJECT.md`; history `LOG.md`; decisions `docs/design/DECISIONS.md`; changelog `docs/CHANGELOG.md` (`python tools/changelog.py`); orchestrator gotchas `handoffs/orchestrator-2026-11-02.md` (verify recipe lines 7–9, push rule line 31, hub schema 12–17); hub source `docs/design/backlog-board.html` (Housekeeping only); profiles `G:\My Drive\VAULTS\Talos Vault\wiki\agents\general\` + `game-dev\`.
