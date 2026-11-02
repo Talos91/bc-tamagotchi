@@ -1,0 +1,21 @@
+# Report: 🧹 menu-followups (Sonnet, 2026-11-02)
+
+**Commit 6c7d9e4** on local `main` (not pushed). **Suites: all 14 PASS** in an isolated copy (`git archive 6c7d9e4 game tools docs/venue` on local disk, imported, venue rebuilt (navmesh 561, 42 lights), imported again, `APPDATA` empty per suite): smoke_stairs, smoke_tap, smoke_hud, test_needs (106), test_minigames (1468), smoke_loop, smoke_doors_sit, smoke_start, test_menu (3655, was 2736), smoke_version, test_nightlife (107), test_seats, test_feel, test_lounge. Ready to verify.
+
+## What changed
+1. **Misprints.** The five clear ones (Caviar, Frites, Marlborough, Riebeeksrivier, DOCG) and the "Blended Scotch" heading were already corrected in the game names and `strings_menu.csv` by the first menu job; ids and `name_printed` keep the printed spelling, `print_errata` in `docs/venue/menu/menu.json` is untouched (10 entries). Now pinned by `test_misprints`. **Left as printed in the game and listed for the bar (unsure):** NV Fillippo, Chateau Les Verenes (vs Les Verges on the red), Logann's Hollow, BigMac's "Sherry Cask" (list says Sherry Oak). I also listed "Another Hendrick's" (same price as Hendrick's) as a question. **`docs/venue/menu/errata-for-black-cabin.md`**: spelling table (6, fixed in game), unsure table (5), the three bundle "was" prices with sums (Rockstar Breakfast 7,180 vs 7,380; Shogun's Potion 16,980 vs 17,980; BigMac 20,480 vs 21,480; the other three bundles add up), page file names.
+2. **Try something new.** The pool was already six real drinks, one per family (beer, whisky, gin, tequila, rum, liqueur), in a fixed order. Now `BarMenu.try_pick(tried, night)` rotates the start per bar night (night % 6, same night definition as Pour Perfect) and skips tried drinks; `VenueSession.next_new_drink()` uses it.
+3. **Soft row:** confirmed Coke (`SOFT_DRINK = "coke"`, sub-line "Coke, no alcohol, same refill"); pinned by a test, no change needed.
+4. **Ordering marks tried.** `VenueSession.mark_tried(id)`: menu orders (alcohol, soft, water; not kitchen), the Order a drink row (house shooter), the soft row (Coke), the water row and Try something new all mark the drink in `Needs.ext["drinks_tried"]`. Gains unchanged; the +5 Try bonus still comes only from the Try row. `rules.gd` untouched. Note: Pour Perfect does not mark a drink as tried (not asked).
+5. **Bundles.** New **Bundles tab** in the menu list (Drinks / Kitchen / Bundles) with the six bundles (Seppuku + five): name, bottles, THB price now, dimmed like all prices, plus the printed daily-limit line (new strings, TH marked as a machine draft in the context column). Not orderable and **no coin price** (C2: bottles are not for coins). Only the price now is shown, not the struck-through "was", since three do not add up. I made it a tab, not a section at the end of the 121-row Drinks tab; if you want the section inside Drinks instead it is a few lines. "BigMac" is cased by hand (`BUNDLE_NAME` in `tools/menu_build.py`); data regenerated with `python tools/menu_build.py` (only the bundles changed).
+
+## Files
+`tools/menu_build.py`, `game/data/menu.json`, `game/i18n/strings_menu.csv` (+2 keys), `game/scripts/menu/bar_menu.gd`, `menu_list.gd`, `game/scripts/zones/venue_session.gd`, `game/tests/test_menu.gd`, `game/tests/capture_menu_followups.gd`, `docs/venue/menu/errata-for-black-cabin.md`, captures `docs/art/screens/menu-followups/` (portrait 1080x1920: 1 bar sheet with Coke row and Try something new, 2 Bundles tab, 3 order from the menu, 4 bar sheet afterwards with Try moved on).
+
+## Hub cards (Questions tab, items 70-73)
+`menu-followups-accept` (accept, three pictures + folder), `menu-errata-unsure` (hand the list to the bar?), `menu-bundle-was` (show the "was" price?), `menu-bundle-coins` (bundles orderable? rec: list only).
+
+## Open / notes
+- Daniele's "correct all misprints" is applied to the clear ones only; the five unsure ones wait for the bar (card `menu-errata-unsure`). If Daniele says "fix them all now", edit `DISPLAY_FIX`/`REGION_FIX`, regenerate, update `test_misprints`.
+- Saves: `drinks_tried` now also contains drinks ordered from the menu; old saves are fine.
+- STATE.md "Menu follow-ups" promised item can be closed on the orchestrator's verify; export include filter for `*.json, *.csv` remains open.
