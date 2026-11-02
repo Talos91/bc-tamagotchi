@@ -7,7 +7,11 @@ Job 0 (BACKLOG A8): the game in a phone browser from a Vercel URL.
 python tools/build_web.py            # stamp, import, export, hash, vercel.json  -> web/
 python tools/build_web.py --deploy   # same, then `vercel link` + `vercel deploy --prod` (project bc-tamagotchi)
 ```
-`web/` is gitignored output. A clean state (no `web/`, no `game/.godot`) builds in about 2 minutes (first import dominates).
+`web/` is gitignored output. `--out <dir>` builds somewhere else (the vercel link/deploy then run in that folder). **Recommended on this PC**, a folder outside Google Drive so sync never holds files:
+```
+python tools/build_web.py --deploy --out %LOCALAPPDATA%\bc-web
+```
+(PowerShell: `--out $env:LOCALAPPDATA\bc-web`.) On Windows the script calls `npx.cmd` (PowerShell blocks `npx.ps1`); log in once with `npx.cmd vercel login`. A clean state (no `web/`, no `game/.godot`) builds in about 2 minutes (first import dominates).
 
 ## What it does
 1. `tools/version.py` stamps `game/build_info.json` (the in-game `v0.2.0 · sha`; commit first, or the label says `dirty`).
@@ -28,4 +32,4 @@ Needs a Vercel login on this machine: `npx vercel login` once (Daniele's account
 pck 15.7 MB, wasm 37.7 MB, js 0.3 MB; Vercel serves them brotli-compressed.
 
 ## Testing locally
-`python -m http.server 8791` inside `web/`, open `http://localhost:8791/index.html`. A hidden browser pane throttles `requestAnimationFrame` to about 1 fps, so frame rates only count on a visible browser or a real phone.
+`python -m http.server 8791 --directory <out dir>` (do not start it with `web/` as its working folder: it keeps the folder locked), open `http://localhost:8791/index.html`. A hidden browser pane throttles `requestAnimationFrame` to about 1 fps, so frame rates only count on a visible browser or a real phone.
