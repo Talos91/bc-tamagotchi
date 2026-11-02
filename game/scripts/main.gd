@@ -163,7 +163,7 @@ func _sync_block() -> void:
 	$UI/Joystick.visible = not b
 
 
-## The start screen has walked the player in: HUD and joystick fade in and the visit starts as it does without one.
+## The start screen has walked the player in: HUD fades in and the visit starts as it does without one.
 func start_play() -> void:
 	start_screen = null
 	_sync_block()

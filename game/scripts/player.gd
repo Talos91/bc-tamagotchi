@@ -1,6 +1,6 @@
 class_name Player
 extends CharacterBody3D
-## Diorama controller. Move with WASD / arrows or the on-screen joystick (touch_joystick.gd), relative to the
+## Diorama controller. Move with WASD / arrows or by dragging anywhere on empty play area (touch_joystick.gd), relative to the
 ## camera; or tap / click the floor to walk there along the venue's navmesh (NavigationAgent3D). Any stick or key
 ## input cancels a tap-walk. The camera is the CameraRig child (camera_rig.gd); the body is a PatronFigure
 ## (scenes/venue/patron_figure.tscn) with the `look` below, and a warm ring on the floor marks the player.

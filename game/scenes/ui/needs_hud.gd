@@ -47,6 +47,9 @@ var _stake: Label     ## Last Call chip (06-stakes §10.5: the venue shows no st
 var _annoy_row: HBoxContainer
 var annoy_chips := {}  ## annoyance id -> its small chip under the title (colour of its meter)
 var _areas := {}      ## area -> its button
+var _areas_col: VBoxContainer
+var _areas_toggle: Button
+static var areas_hidden := false   ## owner item 14: the area column slid off to the side; kept for the session
 var _here := ""
 var _top: Control
 var orientation_toggle: Button
@@ -174,7 +177,7 @@ func _build() -> void:
 	col.set_anchors_preset(Control.PRESET_CENTER_RIGHT)
 	col.grow_horizontal = Control.GROW_DIRECTION_BEGIN
 	col.grow_vertical = Control.GROW_DIRECTION_BOTH
-	col.offset_right = -UI.dp(8)
+	col.offset_right = -AREAS_EDGE()
 	col.add_theme_constant_override("separation", int(UI.dp(6)))
 	add_child(col)
 	for a in AREAS:
@@ -185,6 +188,19 @@ func _build() -> void:
 		b.pressed.connect(func(): area_pressed.emit(a[0]))
 		col.add_child(b)
 		_areas[a[0]] = b
+
+	_areas_col = col
+	_areas_toggle = UI.button("‹", "secondary")
+	_areas_toggle.name = "AreasToggle"
+	_areas_toggle.set_anchors_preset(Control.PRESET_CENTER_RIGHT)
+	_areas_toggle.grow_horizontal = Control.GROW_DIRECTION_BEGIN
+	_areas_toggle.grow_vertical = Control.GROW_DIRECTION_BOTH
+	_areas_toggle.custom_minimum_size = Vector2(UI.dp(24), UI.dp(64))
+	_areas_toggle.add_theme_font_size_override("font_size", int(UI.dp(16)))
+	_areas_toggle.offset_right = 0.0
+	_areas_toggle.pressed.connect(func(): set_areas_shown(areas_hidden))
+	add_child(_areas_toggle)
+	set_areas_shown(not areas_hidden, false)
 
 	add_child(VersionInfo.label())  # build version, bottom right, dim
 
@@ -219,6 +235,34 @@ func retitle() -> void:
 	_zone_name = ""
 	set_zone_name(z)
 	orientation_toggle.refresh()
+
+
+## Space the shown area column keeps clear at the right edge: the slide-away tab sits there.
+static func AREAS_EDGE() -> float:
+	return UI.dp(8) + UI.dp(24) + UI.dp(4)
+
+
+func areas_shown() -> bool:
+	return not areas_hidden
+
+
+## Slide the area buttons off to the right edge (false) or back (true); the tab stays so the next press brings them back.
+func set_areas_shown(shown: bool, animate := true) -> void:
+	areas_hidden = not shown
+	_areas_toggle.text = "›" if shown else "‹"
+	var target := -AREAS_EDGE() if shown else _areas_col.size.x + UI.dp(40)
+	if _areas_col.size.x <= 0.0:
+		target = -AREAS_EDGE() if shown else UI.dp(150)
+	if shown:
+		_areas_col.visible = true
+	if not animate:
+		_areas_col.offset_right = target
+		_areas_col.visible = shown
+		return
+	var tw := create_tween()
+	tw.tween_property(_areas_col, "offset_right", target, 0.2).set_trans(Tween.TRANS_CUBIC).set_ease(Tween.EASE_OUT)
+	if not shown:
+		tw.tween_callback(func(): if areas_hidden: _areas_col.visible = false)
 
 
 ## The area the player is in: its button dims (it stays in place, so the column never shifts under a thumb).
