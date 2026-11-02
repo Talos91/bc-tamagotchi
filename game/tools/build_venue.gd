@@ -1758,7 +1758,7 @@ func _camera_zones() -> void:
 	var g := _group("CameraZones")
 	var zones := [
 		{"name": "lobby", "rect": Rect2(-2.0, 5.05, 4.15, 8.2), "clamp": Rect2(1.1, 7.0, 0.1, 5.0), "yaw": 0.0, "pitch": -40.0, "dist": 5.0, "look_y": 1.2},
-		{"name": "corridor", "rect": Rect2(-0.2, 13.25, 15.65, 1.65), "clamp": Rect2(3.5, 14.07, 9.0, 0.01), "yaw": -90.0, "pitch": -36.0, "dist": 5.0, "look_y": 1.1},
+		{"name": "corridor", "rect": Rect2(-0.2, 13.25, 15.65, 1.65), "clamp": Rect2(4.6, 14.07, 7.9, 0.01), "yaw": -90.0, "pitch": -36.0, "dist": 5.0, "look_y": 1.1},
 		{"name": "buffer", "rect": Rect2(BUFFER.position.x, BUFFER.position.y, BUFFER.size.x, BUFFER.size.y), "clamp": Rect2(16.8, 4.2, 1.8, 2.2), "yaw": 0.0, "pitch": -40.0, "dist": 4.6, "look_y": 1.3},
 		{"name": "alcove", "rect": Rect2(STUB.position.x, STUB.position.y, STUB.size.x, STUB.size.y), "clamp": Rect2(16.4, 11.3, 2.2, 0.1), "yaw": 180.0, "pitch": -50.0, "dist": 4.2, "look_y": 1.0},
 		# The lounge's two top corners look north at their wall (merch shop top right, memory corner top left); the

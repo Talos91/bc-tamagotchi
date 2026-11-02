@@ -13,7 +13,8 @@ extends SceneTree
 ##   raised    every table of the raised strip (Raised3 too) opens its sheet from a tap in the main room; Raised3's chair
 ##             and both couch places are walked to and sat in from the main room, as the east rectangular table's
 ##             0.6 m move west opened a lane
-##   curtain   the buffer's open curtains stand visible and on screen from the main-room side (and from the buffer)
+##   curtain   the buffer's open curtains stand visible from the main-room side (in frame in front of the opening; the
+##             one on the player's side when off to one side) and from the buffer
 ##   camera    the lounge's merch, memory corner and patrons views take over in their corners, the rest keeps the
 ##             lounge view; the seven area buttons still walk to their area and open its sheet (Lounge -> pinball)
 ##   godot --headless --path . --script res://tests/test_lounge.gd
@@ -233,11 +234,17 @@ func _init() -> void:
 	var curtains := get_nodes_in_group("cutaway").filter(func(n): return str(n.name).begins_with("Curtain_"))
 	check(curtains.size() == 4 and curtains.all(func(c): return c.get_meta("cut_sight_only", false)), "the buffer's four curtain panels hide only on the sight line")
 	var main_side := curtains.filter(func(c): return c.global_position.x > 19.0)
+	# Both stand (never cut away) from every spot; in front of the opening both are in frame. Off to one side the nearer
+	# portrait camera (camera feel 2) frames the curtain on the player's side, the other is just out of frame, not hidden.
 	for at in [Vector3(21.6, 0.1, 5.3), Vector3(22.4, 0.1, 6.2), Vector3(21.4, 0.1, 4.2)]:
 		teleport(at)
 		await frames_n(30)
-		var shown := main_side.filter(func(c): return c.is_visible_in_tree() and on_screen(c.global_position + Vector3(0, 1.6, 0)))
-		check(p.rig.zone == "floor" and shown.size() == 2, "from the main room at %s both main-side curtains stand in view (%d)" % [at, shown.size()])
+		var standing := main_side.filter(func(c): return c.is_visible_in_tree())
+		var shown := standing.filter(func(c): return on_screen(c.global_position + Vector3(0, 1.6, 0)))
+		var near_side: Node3D = main_side[0] if absf(main_side[0].global_position.z - at.z) < absf(main_side[1].global_position.z - at.z) else main_side[1]
+		var want_shown := 2 if is_equal_approx(at.z, 5.3) else 1
+		check(p.rig.zone == "floor" and standing.size() == 2 and shown.size() >= want_shown and shown.has(near_side),
+			"from the main room at %s both main-side curtains stand (%d), %d in frame (want %d, the near one among them)" % [at, standing.size(), shown.size(), want_shown])
 	teleport(Vector3(18.0, 0.1, 5.3))
 	await frames_n(30)
 	check(curtains.filter(func(c): return c.is_visible_in_tree()).size() == 4, "from the buffer all four curtains stand")
