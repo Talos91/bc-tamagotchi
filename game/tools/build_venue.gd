@@ -1492,10 +1492,10 @@ func _raised() -> void:
 		for r in 2:
 			var sh := _cut(_ph(g, "shelf_wall_tile", Vector3(MAIN_X1 - 0.15, RAISED_H + 1.1 + r * 1.0, RAISED.position.y + 0.5 + i), -90.0, "Shelf%d_%d" % [i, r], false), Vector3.RIGHT)
 			sh.add_to_group("look_shelf_dull", true)
-	# Pink-red strip along the top of the shelf wall (photo 11), and a few shelf backs lit from behind
-	_cut(_box(g, "ShelfNeon", Vector3(MAIN_X1 - 0.32, RAISED_H + 3.12, RAISED.position.y), Vector3(0.04, 0.04, RAISED.size.y), _mat("shelf_neon", Color("ff2a5a"), 0.5, 2.6), false), Vector3.RIGHT)
-	for z in [1.6, 4.4, 7.9]:
-		_cut(_box(g, "ShelfBacklight_%d" % int(z * 10), Vector3(MAIN_X1 - 0.06, RAISED_H + 2.2, z), Vector3(0.03, 0.7, 0.8), _mat("shelf_backlight", Color("c8284a"), 0.6, 1.4), false), Vector3.RIGHT)
+	# Red strip along the top of the shelf wall (photo 11). Owner feedback 2026-11-02, item 9: the pink backlit shelf
+	# backs (three emissive panels behind the tiles) showed through the tile gaps as pink blocks, so they are gone, and
+	# the strip is the room red instead of pink (all LEDs red)
+	_cut(_box(g, "ShelfNeon", Vector3(MAIN_X1 - 0.32, RAISED_H + 3.12, RAISED.position.y), Vector3(0.04, 0.04, RAISED.size.y), _mat("shelf_neon", NEON_RED, 0.5, 2.6), false), Vector3.RIGHT)
 	for i in RAISED_TABLES_Z.size():
 		var c := Vector3(RAISED_TABLE_X, RAISED_H, RAISED_TABLES_Z[i])
 		var t := _kit(g, "round_table", c, 0.0, "Raised%d" % i, Vector3(0.8, 1.0, 0.8))
@@ -1523,8 +1523,9 @@ func _bar() -> void:
 	var g := _group("Bar")
 	var bay_z := MAIN_Z1 - 0.25
 	for i in 9:
-		var kname := "back_bar_art" if i == 4 else "back_bar_shelf"
-		var bay := _kit(g, kname, Vector3(22.55 + i * 1.5, 0, bay_z), 180.0, "Bay%d" % i)
+		# Every bay is shelving (owner feedback 2026-11-02, item 3: Bay4 was the kit's painting bay, back_bar_art, whose
+		# pixel guitar read as "a guitar instead of the shelving" beside the reindeer)
+		var bay := _kit(g, "back_bar_shelf", Vector3(22.55 + i * 1.5, 0, bay_z), 180.0, "Bay%d" % i)
 		bay.add_to_group("look_red_bar", true)
 		_cut(bay, Vector3.ZERO).set_meta("cut_sight_only", true)   # the west bays stood between the toilets view and the player
 	_collider(g, "BackBarCollider", Vector3((BAR_X0 + BAR_X1) * 0.5, 1.8, MAIN_Z1 - 0.25), Vector3(BAR_X1 - BAR_X0, 3.6, 0.5))
@@ -1675,7 +1676,9 @@ func _closed_rooms() -> void:
 		"ToiletM": Rect2(20.1, 16.7, 4.25, 1.8), "OldToiletN": Rect2(15.45, 7.65, 4.5, 2.45), "OldToiletS": Rect2(15.45, 12.4, 4.5, 2.5),
 	}
 	for nm in rooms:
-		var r: Rect2 = rooms[nm]
+		# Inset by more than a wall's thickness (0.2): a box reaching the wall line shared the wall's room face and
+		# z-fought with it (owner feedback 2026-11-02, item 10: black patches on the north wall at the band door)
+		var r: Rect2 = (rooms[nm] as Rect2).grow(-0.21)
 		var mi := _box(g, nm, Vector3(r.position.x, 0, r.position.y), Vector3(r.size.x, ROOM_H, r.size.y), dark, true)
 		mi.cast_shadow = GeometryInstance3D.SHADOW_CASTING_SETTING_OFF
 		_cut(mi, Vector3.ZERO)   # never cut by direction; hidden only when it blocks the sight line to the player
