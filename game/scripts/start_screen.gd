@@ -155,8 +155,8 @@ func _start_pull() -> void:
 	var sp: Transform3D = main._spawn
 	p.global_transform = Transform3D(sp.basis, Vector3(sp.origin.x, 0.02, sp.origin.z))
 	p.get_node("Body").global_rotation = Vector3(0, PI * 0.5, 0)
+	p.rig.set_process(true)   # first: snap() does nothing while the rig is off, and the pull-back would aim at (0, 0, 0) for a frame
 	p.rig.snap()
-	p.rig.set_process(true)
 	_pull_from = cam.global_transform
 	_pull_look = cam.global_position - cam.global_basis.z * 1.8
 	_pull_fov = cam.fov
