@@ -9,10 +9,16 @@ extends Node3D
 ##   stage    the stage_carpet_tile bounds (zone Stage: the stage is at floor level, marked by carpets) plus the
 ##            floor in front, approached at spawn Wander_StageFront
 ##   table    every round_table of zones Tables, Raised and Lounge; the raised strip's small tables reach their couch
-##            seats (radius x 0.95 at least)
+##            seats (radius x 0.95 at least). Raised3 is boxed in (the east rectangular table's chairs west of it,
+##            Raised4's chair south): the nearest spot a walk reaches is on the strip past Raised4, so its approach is
+##            there (APPROACH_AT) with an arrival slack ("slack", main.gd) to match; its own seats stay out of reach
 ##   arcade   the pinball (pinball_machine, or arcade_cabinet while the kit lacked it) on the lounge's west wall
 ##   cabinet  the Black Cabin game machine (game_cabinet_bc) by the stairs: stub, generic sheet for now
 ##   memory   the memory corner in the lounge's north-west (around its crt_monitor): share a photo (coming soon), sit
+##   merch    the merch counter (merch_stand) top right of the lounge: the merch list, placeholders (BACKLOG B11)
+##   patrons  the "Top patrons" board (patrons_board) under the lounge stairs: the ten names (B10, scripts/zones/patrons.gd)
+##   portrait one per frame on the entrance corridor's south wall (portrait_frame Portrait<rank>): the patron's portrait
+##            and a message from the owner (placeholder); id "portrait:<rank>" (B7)
 ##   tall     every tall_table_square (buffer zone and the main room's west opening): stub, generic sheet
 ##   smoking  the smoking room, one zone over its tables: Light one up (nightlife) and the generic sit
 ##   toilet   the toilets vestibule behind the bar's west end (Vestibule kit at floor level): the secret
@@ -23,7 +29,7 @@ extends Node3D
 ##   exit     the street door under exit_sign ExitSignStreet (lobby west wall), approached from its front; it reaches
 ##            out over the step of street beyond the door
 ## A zone is a Dictionary: id, kind, shape ("rect" | "circle"), rect (Rect2 in x,z), center (Vector2 x,z), radius,
-## approach (Vector3 on the floor), host ("" or the cast id placed there tonight, of any role: Cast.hosts()), regular
+## approach (Vector3 on the floor), optional slack (extra metres a finished walk may end outside it, main.gd), host ("" or the cast id placed there tonight, of any role: Cast.hosts()), regular
 ## (the host when they have Candle Talk lines, so the zone offers a talk; else ""). Tonight Tt (a regular) hosts the
 ## lounge's Long Table and Prae (an owner, silent for now) is at one of her spots every other night (cast.gd).
 ## Where zones overlap, circles (a table, the cabinet) win over the big rects (bar, stage, smoking), then the nearest
@@ -40,6 +46,10 @@ const TALL_RADIUS := 1.0
 const MEMORY_RADIUS := 1.5
 const SEAT_MARGIN := 0.35         ## metres past the farthest seat of a seat-group table zone
 const FRONT_RADIUS := 1.1        ## around the floor point in front of a wall machine (pinball, game cabinet)
+## Approach points for zones whose own centre is out of the walk's reach: the nearest reachable floor (navmesh probe).
+const APPROACH_AT := {"table:Raised3": Vector3(39.6, 0.0, 9.2)}
+const BOARD_REACH := 0.75        ## metres in front of the patrons board and a corridor portrait where the walk ends
+const PORTRAIT_RADIUS := 0.55    ## portraits hang 1.2 m apart: each zone is the floor right in front of its frame
 const TABLE_ZONES := ["Tables", "Raised", "Lounge"]
 ## Trigger depth in front of the counter's centre line; the floor by the stools is open now, so the player orders
 ## from right behind them (BAR_APPROACH metres from the counter line).
@@ -88,10 +98,14 @@ static func defs_from_layout(path: String) -> Array[Dictionary]:
 	for k in kit:
 		if k["object"] == "round_table" and k["zone"] in TABLE_ZONES:
 			var p := _v3(k["position"])
-			var z := _zone("table:" + str(k["name"]), "table", Rect2(), p)
+			var id := "table:" + str(k["name"])
+			var a: Vector3 = APPROACH_AT.get(id, p)
+			var z := _zone(id, "table", Rect2(), a)
 			z["shape"] = "circle"
 			z["center"] = Vector2(p.x, p.z)
 			z["radius"] = TABLE_RADIUS * maxf(float(k["scale"][0]), 0.95)
+			if APPROACH_AT.has(id):
+				z["slack"] = maxf(0.0, Vector2(a.x - p.x, a.z - p.z).length() - float(z["radius"])) + 0.3
 			out.append(z)
 
 	for k in kit:
@@ -119,6 +133,32 @@ static func defs_from_layout(path: String) -> Array[Dictionary]:
 			z["radius"] = FRONT_RADIUS
 			out.append(z)
 			break
+
+	for k in kit:
+		if k["object"] == "merch_stand":
+			var p := _v3(k["position"])
+			var fwd := Vector3(0, 0, 1).rotated(Vector3.UP, deg_to_rad(float(k["rotation_y"])))
+			var a := p + fwd * 1.1
+			var z := _zone("merch", "merch", Rect2(), a)
+			z["shape"] = "circle"
+			z["center"] = Vector2(a.x, a.z)
+			z["radius"] = FRONT_RADIUS
+			out.append(z)
+		elif k["object"] == "patrons_board" or k["object"] == "portrait_frame":
+			var p := _v3(k["position"])
+			var fwd := Vector3(0, 0, 1).rotated(Vector3.UP, deg_to_rad(float(k["rotation_y"])))
+			var portrait: bool = k["object"] == "portrait_frame"
+			# The board is read from its view in the north-east: the walk ends a little to that side of it
+			var a := p + fwd * BOARD_REACH + (Vector3.ZERO if portrait else Vector3.UP.cross(fwd) * 0.45)
+			var id := "portrait:" + str(k["name"]).trim_prefix("Portrait") if portrait else "patrons"
+			var z := _zone(id, "portrait" if portrait else "patrons", Rect2(), a)
+			z["shape"] = "circle"
+			var c := p + fwd * 0.55 if portrait else a   # nearer the wall, so a tap on the frame (the wall behind it) lands in it
+			z["center"] = Vector2(c.x, c.z)
+			z["radius"] = PORTRAIT_RADIUS if portrait else FRONT_RADIUS
+			if portrait:
+				z["rank"] = int(str(k["name"]).trim_prefix("Portrait"))
+			out.append(z)
 
 	for k in kit:
 		if k["object"] == "crt_monitor":   # the memory corner's TV (photo 25)

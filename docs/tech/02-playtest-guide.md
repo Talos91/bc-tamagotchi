@@ -29,7 +29,15 @@ visit end to end.
   patron) come within about a metre, and close behind you. The emergency exit, toilet, kitchen and staff doors stay
   shut; the bar staff sometimes step out through the staff door by the order hatch.
 - **Memory corner** (lounge, north-west corner): the TV, camera and lit BLACK CABIN box. Its sheet says photos taken at
-  Black Cabin will be shared here ("Coming soon"); you can sit on its two chairs.
+  Black Cabin will be shared here ("Coming soon"); you can sit on its two chairs. The Black Cabin game machine
+  stands beside it on the north wall (lounge revamp, 2026-11-02).
+- **Lounge revamp** (2026-11-02, placeholders): the **merch shop** top right (lit MERCH counter, a rail of tees, the
+  collectibles shelf; its sheet lists six items, none for sale yet), the **Top patrons** board under the second flight
+  of the stairs (ten placeholder names; tap it for the list), the high counter with its two stools now on the south
+  wall east of the stair foot, gig posters over the stair, records over the counter, two snake plants. In the merch
+  corner, the memory corner and in front of the board the camera turns to look at them.
+- **Corridor portraits:** ten framed portraits of the top patrons on the entrance corridor's south wall. Walking
+  past one shows its prompt; tap it to see the portrait with a message from the owner (placeholder text).
 - **Walls.** In the entrance corridor the walls stay solid until you are through the Sticker door (camera looking east
   at the BLACK CABIN / NOW OPEN sign; you don't see into the lounge). Everywhere else any wall between the camera and
   your character sinks to a low stub (its bottom 10 %), so the corners and the buffer zone stay in view; walls
@@ -44,7 +52,7 @@ visit end to end.
   the area and its sheet opens. The button of the area you are in is dimmed; the one whose need is lowest has that
   need's colour edge.
 - **Stairs.** In the lounge's south-west corner: the first flight runs along the Sticker-door wall from beside the
-  game machine up to a landing, the second turns right and climbs along the west wall into the floor above. You
+  high counter (the game machine moved top left in the revamp) up to a landing, the second turns right and climbs along the west wall into the floor above. You
   can climb to the velvet rope; upstairs is closed for now.
 
 ## Controls
@@ -119,7 +127,9 @@ the current ones are in `docs/art/screens/loop/` (screenshot mode skips the star
 `Godot --path . --resolution 540x960 --script res://tests/capture_start.gd -- --tag=portrait` (and `960x540`,
 `--tag=landscape`) → `docs/art/screens/start/`. Area views, the smoking room and the version label:
 `Godot --path . --resolution 1080x1920 --script res://tests/capture_areas.gd -- --tag=portrait` (and `1920x1080`,
-`--tag=landscape`) → `docs/art/screens/area-camera/`.
+`--tag=landscape`) → `docs/art/screens/area-camera/`. Lounge revamp, portraits and the curtain from the main room:
+`Godot --path . --script res://tests/capture_lounge.gd -- --tag=portrait` (and `--tag=landscape`; it renders at
+1080×1920 / 1920×1080 in a half-size window) → `docs/art/screens/lounge-revamp/`.
 
 ## Not in yet
 

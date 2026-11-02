@@ -3,7 +3,8 @@ extends Node3D
 ## Portrait diorama camera: a fixed-angle, elevated three-quarter view that follows the player. Zones are the Marker3D
 ## nodes in group "camera_zone" (venue CameraZones/*, written by tools/build_venue.gd) with metas rect / clamp (Rect2
 ## in x,z), yaw, pitch (degrees), dist, look_y, optional see_through (Array of Rect2 in x,z). A zone with meta
-## fallback=true applies only where no other does. Every area has its own framing again (Daniele, Questions tab
+## fallback=true applies only where no other does; one with meta base=true (the lounge) gives way to any other area
+## inside it (its corners: merch, memory, patrons), hysteresis or not. Every area has its own framing again (Daniele, Questions tab
 ## 2026-11-01: "back to a view per area"; the feel pass had made the main room one view).
 ## Lives in player.tscn as a top_level child, so it ignores the player's transform.
 ##
@@ -32,6 +33,7 @@ extends Node3D
 ##       pieces and doors hide at once. A view's see_through rects cut every piece standing on them, the door in
 ##       it too (shut, it would stand alone in the sunk wall and hide the tables behind it): the smoking room's view
 ##       looks through the main room's south-east wall and red door, so the room is in sight from the approach.
+##   Pieces with meta cut_sight_only (the buffer's open curtains) are cut only on the sight line, in every zone.
 ##   Swing doors (group "swing_door") are tested with their box as they stand now (open or shut), so an open leaf
 ##   between the camera and the player is hidden.
 ## Hanging props in group "occluder" (metas occluder_center, occluder_radius) between the camera and the look point
@@ -53,7 +55,9 @@ const SWING_PER_HALF_TURN := 0.4    ## extra seconds of swing for a 180° turn (
 const SETTLE_95 := 0.42             ## spring time (see _spring) that settles 95 % in 1 s: (1 + x) e^-x = 0.05 at x 4.74
 ## Camera zones that are one room (the view changes between them after ZONE_DWELL); every other zone is its own room.
 ## The smoking room counts as the main room's: its view takes over in front of the red door.
-const ROOMS := {"floor": "main", "bar": "main", "stage": "main", "toilets": "main", "smoking": "main"}
+## The lounge's top corners (merch shop, memory corner) are the lounge's (lounge revamp 2026-11-02).
+const ROOMS := {"floor": "main", "bar": "main", "stage": "main", "toilets": "main", "smoking": "main",
+	"merch": "lounge", "memory": "lounge", "patrons": "lounge"}
 
 @export var follow_time := 0.3      ## seconds for the look point to catch up with the player (spring)
 @export var swing_time := 1.0       ## seconds for yaw, pitch and distance to settle (95 %) on a new area's framing
@@ -199,7 +203,8 @@ func _zone_for(p: Vector3) -> Node3D:
 	var flat := Vector2(p.x, p.z)
 	for z in _zones:
 		if z.name.to_lower() == zone and not z.get_meta("fallback", false) and (z.get_meta("rect") as Rect2).grow(HYSTERESIS).has_point(flat):
-			return z
+			if not (z.get_meta("base", false) and _inner_at(flat, z) != null):
+				return z
 	var fallback: Node3D = null
 	for z in _zones:
 		if (z.get_meta("rect") as Rect2).has_point(flat):
@@ -207,6 +212,13 @@ func _zone_for(p: Vector3) -> Node3D:
 				return z
 			fallback = z
 	return fallback
+
+## An area other than `base` whose rect holds the point, or null.
+func _inner_at(flat: Vector2, base: Node3D) -> Node3D:
+	for z in _zones:
+		if z != base and not z.get_meta("fallback", false) and (z.get_meta("rect") as Rect2).has_point(flat):
+			return z
+	return null
 
 ## Critically damped spring step toward `to` (exact for any delta): returns [value, velocity]. Works on floats and
 ## vectors; `t` is roughly the time to settle.
@@ -325,7 +337,9 @@ func _update_cutaway(fwd: Vector3, cam: Vector3, player: Vector3, see_through: A
 				break
 		var faces := (w.get_meta("cut_normal") as Vector3).dot(back) >= 0.35
 		var cut := false
-		if entrance:
+		if w.get_meta("cut_sight_only", false):   # open curtains: only when they hide the player
+			cut = on_line
+		elif entrance:
 			cut = own and (faces or on_line)
 		elif on_line or _on_rects(box, see_through) or (own and faces):
 			cut = true

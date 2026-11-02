@@ -133,3 +133,25 @@ venue.area.stage,Stage,เวที,Area button: walks to the stage front,16
 venue.area.bar,Bar,บาร์,Area button: walks to the bar,16
 venue.area.toilets,Toilets,ห้องน้ำ,Area button: walks to the toilets behind the bar's west end,16
 venue.area.smoking,Smoking,ห้องสูบบุหรี่,Area button: walks into the smoking room,16
+venue.zone.merch,MERCH SHOP,ร้านของที่ระลึก,"HUD zone name, the merch shop top right of the lounge (camera zone Merch); TH machine draft",16
+venue.prompt.merch,Tap for the merch shop,แตะเพื่อดูร้านของที่ระลึก,Zone prompt pill at the merch counter; TH machine draft,40
+venue.prompt.patrons,Tap for the top patrons,แตะเพื่อดูลูกค้าประจำอันดับต้น,Zone prompt pill at the Top patrons board under the lounge stairs; TH machine draft,40
+venue.prompt.portrait,Tap to look at the portrait,แตะเพื่อดูภาพเหมือน,Zone prompt pill in front of a top patron's portrait in the entrance corridor; TH machine draft,40
+venue.sheet.merch.head,MERCH SHOP,ร้านของที่ระลึก,Merch sheet header; TH machine draft,26
+venue.sheet.merch.greet,Black Cabin merch. What's on sale and the prices are coming soon.,สินค้าแบล็กคาบิน รายการและราคาจะมาเร็ว ๆ นี้,"Line on the merch sheet (placeholder list, BACKLOG B11); TH machine draft",90
+venue.sheet.merch.tbc,Coming soon · price to be confirmed,เร็ว ๆ นี้ · รอยืนยันราคา,Disabled reason on every merch row until prices and payment are decided; TH machine draft,40
+venue.merch.tee,Black Cabin tee,เสื้อยืดแบล็กคาบิน,Merch row (placeholder item); TH machine draft,26
+venue.merch.cap,Black Cabin cap,หมวกแก๊ปแบล็กคาบิน,Merch row (placeholder item); TH machine draft,26
+venue.merch.tote,Tote bag,กระเป๋าผ้า,Merch row (placeholder item); TH machine draft,26
+venue.merch.stickers,Sticker pack,ชุดสติกเกอร์,Merch row (placeholder item); TH machine draft,26
+venue.merch.pin,Enamel pin,เข็มกลัด,Merch row (placeholder item); TH machine draft,26
+venue.merch.poster,Gig poster,โปสเตอร์คอนเสิร์ต,Merch row (placeholder item); TH machine draft,26
+venue.sheet.patrons.head,TOP PATRONS,ลูกค้าประจำอันดับต้น,Top patrons sheet header (BACKLOG B10); TH machine draft,26
+venue.sheet.patrons.greet,Black Cabin's most loyal. Placeholder names until check-ins arrive.,ลูกค้าที่ภักดีที่สุดของแบล็กคาบิน ชื่อชั่วคราวจนกว่าจะมีระบบเช็กอิน,Line on the Top patrons sheet; TH machine draft,90
+venue.sheet.patrons.row,{rank}. {name},{rank}. {name},Top patrons row: rank and placeholder name,26
+venue.sheet.patrons.sub,{n} check-ins,เช็กอิน {n} ครั้ง,Top patrons row sub-line (placeholder count); TH machine draft,34
+venue.sheet.portrait.head,#{rank} · {name},อันดับ {rank} · {name},Portrait sheet header: rank and patron name (BACKLOG B7); TH machine draft,26
+venue.sheet.portrait.greet,One of Black Cabin's top patrons.,หนึ่งในลูกค้าประจำอันดับต้นของแบล็กคาบิน,Line on a portrait sheet; TH machine draft,90
+venue.sheet.portrait.from,From the owner,จากเจ้าของร้าน,Portrait sheet: title over the owner's message; TH machine draft,26
+venue.sheet.portrait.message,"{name}, thank you for all the nights at Black Cabin. See you at the bar. (Placeholder message.)",{name} ขอบคุณสำหรับทุกค่ำคืนที่แบล็กคาบิน แล้วเจอกันที่บาร์ (ข้อความชั่วคราว),"Portrait sheet: the owner's message to a top patron, placeholder until Daniele writes them; TH machine draft",140
+venue.zone.patrons,TOP PATRONS,ลูกค้าประจำอันดับต้น,"HUD zone name, in front of the Top patrons board under the lounge stairs (camera zone Patrons); TH machine draft",16

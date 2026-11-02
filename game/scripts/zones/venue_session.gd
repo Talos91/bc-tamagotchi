@@ -27,6 +27,9 @@ const T = preload("res://scripts/zones/venue_strings.gd")
 const BarMenu = preload("res://scripts/menu/bar_menu.gd")
 const Nightlife = preload("res://scripts/zones/nightlife.gd")
 const N = preload("res://scripts/zones/nightlife_strings.gd")
+const Patrons = preload("res://scripts/zones/patrons.gd")
+## Merch list (lounge revamp, BACKLOG B11): placeholders until Black Cabin says what it sells, the prices and how to pay
+const MERCH_ITEMS := ["tee", "cap", "tote", "stickers", "pin", "poster"]
 
 const BARTENDER := "nam"
 const HOUSE_DRINK := "house_shooter"  ## what Order a drink pours (real menu, scripts/menu/bar_menu.gd)
@@ -177,6 +180,21 @@ func rows_for(zone: Dictionary) -> Array[Dictionary]:
 			var msit := _row("sit", "venue.sheet.table.sit", T.t("venue.sheet.table.sit_sub"), "friends", false,
 				T.t("venue.sheet.table.sat") if needs.daily_keys.has("sit_with|" + sit_key(zone)) else "")
 			rows.append(msit)
+		"merch":
+			# Placeholders: nothing is sold yet (what, prices and coins or real money are Daniele's open question)
+			for item in MERCH_ITEMS:
+				rows.append(_row("merch_" + item, "venue.merch.%s" % item, "", "", false, T.t("venue.sheet.merch.tbc")))
+		"patrons":
+			for r in Patrons.count():
+				var pe := Patrons.at(r)
+				var pr := _row("patron_%d" % r, "", T.t("venue.sheet.patrons.sub", {"n": pe["checkins"]}), "")
+				pr["title"] = T.t("venue.sheet.patrons.row", {"rank": r + 1, "name": pe["name"]})
+				pr["info"] = true
+				rows.append(pr)
+		"portrait":
+			var mr := _row("message", "venue.sheet.portrait.from", T.t("venue.sheet.portrait.message", {"name": Patrons.at(int(zone.get("rank", 0))).get("name", "")}), "")
+			mr["info"] = true
+			rows.append(mr)
 		"toilet":
 			# The secret: offered here only, the one zone out of the camera's view (nightlife)
 			rows.append(_nrow("plumbing", "nightlife.row.plumbing", N.t("nightlife.row.plumbing_sub"), "drinks"))
@@ -211,13 +229,23 @@ func header_for(zone: Dictionary) -> Array[String]:
 			return [T.t("venue.sheet.table.head"), T.t("venue.sheet.table.greet")]
 		"arcade":
 			return [T.t("venue.sheet.arcade.head"), T.t("venue.sheet.arcade.greet")]
-		"cabinet", "tall", "smoking", "memory":
+		"cabinet", "tall", "smoking", "memory", "merch", "patrons":
 			return [T.t("venue.sheet.%s.head" % zone["kind"]), T.t("venue.sheet.%s.greet" % zone["kind"])]
+		"portrait":
+			var r := int(zone.get("rank", 0))
+			return [T.t("venue.sheet.portrait.head", {"rank": r + 1, "name": Patrons.at(r).get("name", "")}), T.t("venue.sheet.portrait.greet")]
 		"exit":
 			return [T.t("venue.sheet.exit.head"), T.t("venue.sheet.exit.greet")]
 		"toilet":
 			return [N.t("nightlife.sheet.toilet.head"), N.t("nightlife.sheet.toilet.greet")]
 	return ["", ""]
+
+
+## Picture shown on the sheet under its header (a corridor portrait), or null.
+func image_for(zone: Dictionary) -> Texture2D:
+	if zone.get("kind", "") == "portrait":
+		return Patrons.portrait(int(zone.get("rank", 0)))
+	return null
 
 
 func prompt_for(zone: Dictionary) -> String:
@@ -453,7 +481,7 @@ func tick(delta: float) -> void:
 	if not busy and band.playing and in_earshot():
 		_heard += delta
 	# Plan v4: the street door opens into the lobby / L corridor, the lounge's entrance: the bonus still lands on arrival
-	if needs.visit_active and player.rig.zone in ["lounge", "lobby", "corridor"] and not needs.visit_once.has("enter_lounge"):
+	if needs.visit_active and player.rig.zone in ["lounge", "merch", "memory", "lobby", "corridor"] and not needs.visit_once.has("enter_lounge"):
 		_card(needs.apply_action("enter_lounge"), T.t("venue.card.lounge"), true)
 	if not sitting.is_empty():
 		var off := false

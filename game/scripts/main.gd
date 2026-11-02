@@ -35,7 +35,7 @@ const DrunkOverlay = preload("res://scripts/ui/drunk_overlay.gd")
 @onready var needs: Node = get_node("/root/Needs")
 
 ## HUD zone name for an interaction zone; elsewhere the camera framing's name is used.
-const ZONE_TITLES := {"bar": "bar", "stage": "stage", "arcade": "lounge", "exit": "lobby", "memory": "memory"}   # tables: the room they stand in
+const ZONE_TITLES := {"bar": "bar", "stage": "stage", "arcade": "lounge", "exit": "lobby", "memory": "memory", "merch": "merch", "patrons": "patrons"}   # tables: the room they stand in
 
 var sheet: Control
 var sheet_zone: Dictionary = {}
@@ -119,7 +119,7 @@ func _process(_delta: float) -> void:
 			# its target, so the feet can end just outside the circle: close enough counts as arrived.
 			var z := zones.by_id(pending_zone)
 			pending_zone = ""
-			if not z.is_empty() and not _blocked() and VenueZones.gap(z, player.global_position) <= ARRIVE_SLACK:
+			if not z.is_empty() and not _blocked() and VenueZones.gap(z, player.global_position) <= ARRIVE_SLACK + float(z.get("slack", 0.0)):
 				open_sheet(z)
 	if not _capture.is_empty():
 		_capture_tick()
@@ -210,7 +210,7 @@ func open_sheet(z: Dictionary) -> void:
 	sheet_zone = z
 	sheet = SheetScene.instantiate()
 	overlay.add_child(sheet)
-	sheet.open(session.header_for(z), session.rows_for(z))
+	sheet.open(session.header_for(z), session.rows_for(z), session.image_for(z))
 	sheet.row_chosen.connect(_on_row)
 	sheet.closed.connect(close_sheet)
 	_sync_block()

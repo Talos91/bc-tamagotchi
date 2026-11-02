@@ -2052,6 +2052,133 @@ def air_purifier(v):
     v.set(3, 0, H - 4, E("ScreenCyan"))
 
 
+# ---------------------------------------------------------------- lounge revamp (Daniele 2026-11-02, BACKLOG B7 B9-B11)
+
+FONT.update({
+    "M": ("1...1", "11.11", "1.1.1", "1.1.1", "1...1", "1...1", "1...1"),
+    "E": ("11111", "1....", "1....", "1111.", "1....", "1....", "11111"),
+    "R": ("1111.", "1...1", "1...1", "1111.", "1.1..", "1..1.", "1...1"),
+    "H": ("1...1", "1...1", "1...1", "11111", "1...1", "1...1", "1...1"),
+})
+
+
+def tee(v, x0, y, z0, body, print_m, sleeve=None):
+    """A T-shirt hung flat facing -y, 9 x 10 voxels from (x0, z0) at depth y: body, short sleeves, a neck notch
+    and a small print on the chest."""
+    sleeve = sleeve or body
+    v.box(x0 + 2, y, z0, x0 + 6, y, z0 + 8, body)                    # body
+    v.box(x0, y, z0 + 5, x0 + 1, y, z0 + 8, sleeve)                  # sleeves
+    v.box(x0 + 7, y, z0 + 5, x0 + 8, y, z0 + 8, sleeve)
+    v.box(x0 + 2, y, z0 + 9, x0 + 3, y, z0 + 9, body)                # shoulders either side of the neck
+    v.box(x0 + 5, y, z0 + 9, x0 + 6, y, z0 + 9, body)
+    v.box(x0 + 3, y - 1, z0 + 5, x0 + 5, y - 1, z0 + 7, print_m)     # chest print, one voxel proud
+    v.set(x0 + 4, y - 1, z0 + 6, body)                               # the print's eye
+
+
+@kit("merch_stand", "lounge", "M")
+def merch_stand(v):
+    """Black Cabin merch counter (lounge, top right): 1.6 x 0.6 m, 1 m high, black body, a lit red front panel
+    lettered MERCH in black in the kit's 5 x 7 pixel font, dark stone top. On it: three stacks of folded tees
+    (black, red, cream), two caps, a standing tote bag with the skull and a tray of sticker packs. Customers at -y."""
+    W, D, H = 32, 12, 20
+    v.box(0, 0, 0, W - 1, D - 1, H - 1, "StoolBlack")
+    v.box(0, 0, H - 1, W - 1, D - 1, H - 1, "StoneDark")             # top
+    v.box(1, -1, 2, W - 2, -1, H - 4, E("PanelRed"))                 # lit front panel
+    v.box(0, -1, 1, W - 1, -1, 1, "BeamBlack")                       # kick strip
+    for ci, ch in enumerate("MERCH"):
+        for row, bits in enumerate(FONT[ch]):
+            for col, bit in enumerate(bits):
+                if bit == "1":
+                    v.set(2 + ci * 6 + col, -2, H - 6 - row, "BeamBlack")
+    for i, (body, band) in enumerate((("BeamBlack", "PanelRed"), ("CarpetRed", "BeamBlack"), ("LabelCream", "BeamBlack"))):
+        x0 = 2 + i * 6                                               # folded tees, three per stack
+        for k in range(3):
+            v.box(x0, 2, H + k, x0 + 4, 6, H + k, body)
+            v.box(x0 + 1, 2, H + k, x0 + 3, 2, H + k, band)          # the print peeking out of the fold
+    for x0, m in ((21, "CarpetRed"), (25, "BeamBlack")):             # caps: crown and a peak toward the customer
+        v.box(x0, 4, H, x0 + 2, 6, H + 1, m)
+        v.box(x0, 2, H, x0 + 2, 3, H, m)
+        v.set(x0 + 1, 5, H + 2, m)
+    v.box(28, 6, H, 30, 9, H + 5, "LabelCream")                      # tote bag standing at the back corner
+    v.box(29, 6, H + 2, 29, 6, H + 3, "BeamBlack")                   # its skull
+    v.box(28, 7, H + 6, 30, 8, H + 6, "LabelCream")                  # handle
+    v.clear_box(29, 7, H + 6, 29, 8, H + 6)
+    v.box(20, 7, H, 26, 10, H, "WoodDark")                           # sticker tray
+    for k, m in enumerate(("PanelRed", "LabelCream", "ScreenSky", "ScreenYellow")):
+        v.set(21 + k + (k // 2), 8 + (k % 2), H + 1, m)
+
+
+@kit("merch_rack", "lounge", "M")
+def merch_rack(v):
+    """Garment rail behind the merch counter: 1.2 m wide, 1.7 m high, steel posts on cross feet and a top bar
+    with three tees hung flat toward the room (black with a red skull, red with a black skull, cream with a
+    black skull). Front at -y."""
+    W, D, H = 24, 10, 34
+    for x in (0, W - 1):
+        v.box(x, 4, 0, x, 5, H - 1, "SteelDark")                     # posts
+        v.box(x, 0, 0, x, D - 1, 0, "SteelDark")                     # feet
+    v.box(0, 4, H - 1, W - 1, 5, H - 1, "SteelDark")                 # top bar
+    for i, (body, ink) in enumerate((("BeamBlack", "PanelRed"), ("CarpetRed", "BeamBlack"), ("LabelCream", "BeamBlack"))):
+        x0 = 1 + i * 7 + (1 if i else 0)
+        v.box(x0 + 4, 4, H - 3, x0 + 4, 4, H - 2, "WoodDark")        # hanger hook
+        tee(v, x0, 4, H - 14, body, ink)
+
+
+@kit("patrons_board", "lounge", "M", mount="wall", mount_height_m=0.4)
+def patrons_board(v):
+    """Top-patrons board (under the lounge stairs): 1.4 x 1.0 m black board in a stepped gold frame, a gold
+    crown at the top centre and ten gold rank studs in two columns of five; the names are lettered on it in the
+    game (Label3D), so the board itself has no text. Back flat against the wall (+y)."""
+    W, H = 28, 20
+    v.box(0, 1, 0, W - 1, 1, H - 1, "BeamBlack")                     # back
+    v.box(0, 0, 0, W - 1, 0, H - 1, "CymbalGold")                    # frame
+    v.box(1, 0, 1, W - 2, 0, H - 2, "WoodDark")                      # inner bevel
+    v.box(2, 0, 2, W - 3, 0, H - 3, "CabinDark")                     # board
+    v.box(2, -1, H - 6, W - 3, -1, H - 6, "CymbalGold")              # rule under the title
+    cx = W // 2
+    v.box(cx - 2, -1, H - 4, cx + 1, -1, H - 4, E("LampGold"))       # crown band
+    for dx in (-2, 0, 1):
+        v.set(cx + dx, -1, H - 3, E("LampGold"))
+    v.set(cx - 1, -1, H - 3, "CymbalGold")
+    for col in (3, cx + 1):                                          # rank studs, rows 1-5
+        for row in range(5):
+            v.set(col, -1, H - 8 - row * 2, "CymbalGold")
+
+
+@kit("portrait_frame", "circulation", "S", mount="wall", mount_height_m=1.15)
+def portrait_frame(v):
+    """Empty portrait frame for the entrance corridor (BACKLOG B7): 0.6 x 0.75 m stepped gold frame, a dark wood
+    mat and a recessed black opening of 0.4 x 0.5 m where the game hangs a character's portrait (a textured
+    quad at 0.05 m in front of the back). Back flat against the wall (+y)."""
+    W, H = 12, 15
+    v.box(0, 2, 0, W - 1, 2, H - 1, "BeamBlack")                     # back board
+    v.box(0, 0, 0, W - 1, 1, H - 1, "CymbalGold")                    # frame, two voxels deep
+    v.box(1, 0, 1, W - 2, 1, H - 2, "WoodDark")                      # mat
+    v.clear_box(2, 0, 3, W - 3, 1, H - 3)                            # opening, down to the back board
+    v.box(4, -1, 1, W - 5, -1, 1, "CymbalGold")                      # name plaque under the opening
+    v.set(0, -1, H - 1, "CymbalGold")                                # corner bosses
+    v.set(W - 1, -1, H - 1, "CymbalGold")
+    v.set(0, -1, 0, "CymbalGold")
+    v.set(W - 1, -1, 0, "CymbalGold")
+
+
+@kit("potted_plant", "lounge", "S")
+def potted_plant(v):
+    """Snake plant in a steel pot (lounge dressing, photo 25): 0.35 m pot, upright blades of three greens with
+    pale edges, 1.1 m tall."""
+    r = rng("potted_plant")
+    v.cyl(3.5, 3.5, 0, 7, 7, "SteelDark")
+    v.cyl(3.5, 3.5, 7, 7, 5, "WoodDark")                             # soil
+    for i in range(9):
+        a = i * math.tau / 9 + r.uniform(-0.3, 0.3)
+        x, y = 3.5 + math.cos(a) * 1.6, 3.5 + math.sin(a) * 1.6
+        top = 8 + r.randint(9, 14)
+        lean = (math.cos(a) * r.uniform(0.5, 2.0), math.sin(a) * r.uniform(0.5, 2.0))
+        m = ("PlantGreen", "PlantMid", "PlantDark")[i % 3]
+        v.line((x, y, 8), (x + lean[0], y + lean[1], top), m)
+        v.set(round(x + lean[0]), round(y + lean[1]), top + 1, "OliveLeaf")
+
+
 # ------------------------------------------------------------------ review
 
 BLEND = os.path.join(REPO, "blender", "BlackCabinKit.blend")

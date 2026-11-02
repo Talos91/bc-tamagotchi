@@ -2517,6 +2517,155 @@
    "voxels": 448,
    "tris": 108,
    "tris_unmerged": 736
+  },
+  {
+   "name": "merch_stand",
+   "zone": "lounge",
+   "size_class": "M",
+   "anchor": "floor",
+   "path": "res://assets/kit/lounge/merch_stand.glb",
+   "footprint_m": [
+    1.6,
+    0.7
+   ],
+   "height_m": 1.35,
+   "size_vox": [
+    32,
+    14,
+    27
+   ],
+   "emissive": true,
+   "materials": [
+    "BeamBlack",
+    "CarpetRed",
+    "LabelCream",
+    "PanelRed",
+    "PanelRed_emissive",
+    "ScreenSky",
+    "ScreenYellow",
+    "StoneDark",
+    "StoolBlack",
+    "WoodDark"
+   ],
+   "voxels": 8629,
+   "tris": 590,
+   "tris_unmerged": 5592
+  },
+  {
+   "name": "merch_rack",
+   "zone": "lounge",
+   "size_class": "M",
+   "anchor": "floor",
+   "path": "res://assets/kit/lounge/merch_rack.glb",
+   "footprint_m": [
+    1.25,
+    0.5
+   ],
+   "height_m": 1.7,
+   "size_vox": [
+    25,
+    10,
+    34
+   ],
+   "emissive": false,
+   "materials": [
+    "BeamBlack",
+    "CarpetRed",
+    "LabelCream",
+    "PanelRed",
+    "SteelDark",
+    "WoodDark"
+   ],
+   "voxels": 408,
+   "tris": 300,
+   "tris_unmerged": 2148
+  },
+  {
+   "name": "patrons_board",
+   "zone": "lounge",
+   "size_class": "M",
+   "anchor": "floor",
+   "path": "res://assets/kit/lounge/patrons_board.glb",
+   "footprint_m": [
+    1.4,
+    0.15
+   ],
+   "height_m": 1.0,
+   "size_vox": [
+    28,
+    3,
+    20
+   ],
+   "emissive": true,
+   "materials": [
+    "BeamBlack",
+    "CabinDark",
+    "CymbalGold",
+    "LampGold_emissive",
+    "WoodDark"
+   ],
+   "voxels": 1162,
+   "tris": 194,
+   "tris_unmerged": 2716,
+   "mount": "wall",
+   "mount_height_m": 0.4
+  },
+  {
+   "name": "portrait_frame",
+   "zone": "circulation",
+   "size_class": "S",
+   "anchor": "floor",
+   "path": "res://assets/kit/circulation/portrait_frame.glb",
+   "footprint_m": [
+    0.6,
+    0.2
+   ],
+   "height_m": 0.75,
+   "size_vox": [
+    12,
+    4,
+    15
+   ],
+   "emissive": false,
+   "materials": [
+    "BeamBlack",
+    "CymbalGold",
+    "WoodDark"
+   ],
+   "voxels": 388,
+   "tris": 90,
+   "tris_unmerged": 1164,
+   "mount": "wall",
+   "mount_height_m": 1.15
+  },
+  {
+   "name": "potted_plant",
+   "zone": "lounge",
+   "size_class": "S",
+   "anchor": "floor",
+   "path": "res://assets/kit/lounge/potted_plant.glb",
+   "footprint_m": [
+    0.35,
+    0.35
+   ],
+   "height_m": 1.2,
+   "size_vox": [
+    7,
+    7,
+    24
+   ],
+   "emissive": false,
+   "materials": [
+    "OliveLeaf",
+    "PlantDark",
+    "PlantGreen",
+    "PlantMid",
+    "SteelDark",
+    "WoodDark"
+   ],
+   "voxels": 419,
+   "tris": 338,
+   "tris_unmerged": 1330
   }
  ]
 }

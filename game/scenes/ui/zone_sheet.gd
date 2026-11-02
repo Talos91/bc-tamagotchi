@@ -1,7 +1,9 @@
 extends Control
 ## Zone interaction sheet (wireframes §4): header (zone · person, gold), the greeting line, then one row per thing
 ## you'd do here: need glyph, title, sub-line, GAME chip on minigame rows. Disabled rows show the reason. Tapping
-## the scene above the sheet, or Esc, closes it. Rows come from VenueSession.rows_for().
+## the scene above the sheet, or Esc, closes it. Rows come from VenueSession.rows_for(). A row with "info" true is a
+## plain line of text, not a button (the top-patrons list, a portrait's message). An optional picture shows under the
+## header (a corridor portrait); a long list scrolls within half the screen.
 
 signal row_chosen(row_id: String)
 signal closed
@@ -11,6 +13,8 @@ const T = preload("res://scripts/zones/venue_strings.gd")
 const Glyph = preload("res://scripts/minigames/need_glyph.gd")
 
 const MAX_W := 430.0  ## dp; the sheet stays phone-width in landscape
+const SCROLL_FROM := 6     ## rows; from this many the list scrolls
+const PICTURE_H := 200.0   ## dp; a portrait's height on the sheet
 
 var buttons := {}  # row id -> Button
 
@@ -20,7 +24,7 @@ func _ready() -> void:
 	mouse_filter = Control.MOUSE_FILTER_STOP
 
 
-func open(header: Array[String], rows: Array[Dictionary]) -> void:
+func open(header: Array[String], rows: Array[Dictionary], picture: Texture2D = null) -> void:
 	for c in get_children():
 		c.queue_free()
 	buttons.clear()
@@ -59,8 +63,27 @@ func open(header: Array[String], rows: Array[Dictionary]) -> void:
 	col.add_child(UI.label(header[0], 18, UI.GOLD))
 	if header.size() > 1 and header[1] != "":
 		col.add_child(UI.wrap(UI.label(header[1], 16, UI.CREAM)))
+	if picture != null:
+		var pic := TextureRect.new()
+		pic.name = "Picture"
+		pic.texture = picture
+		pic.expand_mode = TextureRect.EXPAND_IGNORE_SIZE
+		pic.stretch_mode = TextureRect.STRETCH_KEEP_ASPECT_CENTERED
+		pic.custom_minimum_size = Vector2(0, UI.dp(PICTURE_H))
+		col.add_child(pic)
+	var list: VBoxContainer = col
+	if rows.size() >= SCROLL_FROM:
+		var scroll := ScrollContainer.new()
+		scroll.name = "Scroll"
+		scroll.horizontal_scroll_mode = ScrollContainer.SCROLL_MODE_DISABLED
+		scroll.custom_minimum_size.y = get_viewport_rect().size.y * 0.5
+		col.add_child(scroll)
+		list = VBoxContainer.new()
+		list.size_flags_horizontal = Control.SIZE_EXPAND_FILL
+		list.add_theme_constant_override("separation", int(UI.dp(6)))
+		scroll.add_child(list)
 	for r in rows:
-		col.add_child(_row(r))
+		list.add_child(_info(r) if r.get("info", false) else _row(r))
 
 	var w := minf(UI.dp(MAX_W), get_viewport_rect().size.x)
 	panel.custom_minimum_size.x = w
@@ -68,6 +91,25 @@ func open(header: Array[String], rows: Array[Dictionary]) -> void:
 	panel.offset_right = w * 0.5
 	panel.offset_top = 0  # grows upward to fit (grow_vertical BEGIN)
 	panel.offset_bottom = 0
+
+
+## A line of text in a row's frame: title, and the sub-line wrapped under it.
+func _info(r: Dictionary) -> Control:
+	var p := PanelContainer.new()
+	p.name = "Info_" + str(r["id"])
+	var sb := UI.box(UI.BG_BASE, 12, UI.LINE, 1.0)
+	sb.content_margin_left = UI.dp(12)
+	sb.content_margin_right = UI.dp(12)
+	sb.content_margin_top = UI.dp(8)
+	sb.content_margin_bottom = UI.dp(8)
+	p.add_theme_stylebox_override("panel", sb)
+	var texts := VBoxContainer.new()
+	texts.add_theme_constant_override("separation", 0)
+	p.add_child(texts)
+	texts.add_child(UI.label(r["title"], 17, UI.CREAM))
+	if r["sub"] != "":
+		texts.add_child(UI.wrap(UI.label(r["sub"], 14, UI.SMOKE)))
+	return p
 
 
 func _row(r: Dictionary) -> Control:

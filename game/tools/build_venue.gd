@@ -26,6 +26,7 @@ extends SceneTree
 ## camera_rig.gd's cutaway: the outward normal of the room whose camera looks through them.
 
 const MANIFEST := "res://assets/kit/manifest.json"
+const Patrons = preload("res://scripts/zones/patrons.gd")
 const KRISTI := "res://assets/fonts/Kristi-Regular.ttf"
 const CORRIDOR_NEON_TEX := "res://assets/venue/corridor_neon.png"   # tools/venue_neon.py
 const CORRIDOR_NEON_SIZE := Vector2(1.2, 1.12)
@@ -35,6 +36,7 @@ const CEILING_LAYER := 2
 const BAR_SEAT_H := 0.8       # kit bar_stool seat top; chairs, drum stools and banquettes are 0.45
 const TALL_SEAT_H := 0.75
 const RAISED_H := 0.15
+const TAP_LAYER := 1 << 9     # physics layer 10: bodies only screen taps hit (the player, crowd and navmesh ignore it)
 
 # Rooms (plan_v4.py ROOMS): x0, z0, x1, z1
 const LOBBY := Rect2(0.0, 5.05, 2.15, 9.85)
@@ -63,7 +65,11 @@ const STAIR_UPPER := Rect2(2.35, 7.75, 1.6, 3.6)      # second flight, foot at i
 const STAIR_H1 := 1.6                                 # landing height
 const STAIR_TOP := 4.0                                # the floor above
 const STAIR_STOP_Z := 10.05                           # rope across the second flight: as high as the player climbs
-const CABINET_X := 10.3                               # game machine, ~1.9 m east of the bottom step
+const CABINET_X := 8.0                                # game machine on the north wall beside the memory corner (lounge revamp)
+const LEDGE_X := Vector2(9.9, 11.8)                   # high counter on the south wall east of the stair foot (lounge revamp)
+const MERCH := Vector3(13.6, 0, 1.55)                 # merch counter, top right of the lounge (lounge revamp)
+const PORTRAIT_X0 := 3.0                              # corridor south wall: ten top-patron portraits 1.2 m apart (B7)
+const PORTRAIT_STEP := 1.2
 const DOOR_W := 1.2                                   # walk-through doors: kit leaf (1 m) stretched to this opening
 const STICKER_DOOR := Vector2(13.05, 14.25)  # x range on the lounge south wall
 const STREET_DOOR := Vector2(6.6, 7.8)       # z range on the lobby west wall
@@ -630,20 +636,19 @@ func _lobby_and_corridor() -> void:
 	_collider(g, "StreetKerbS", Vector3(-1.0, 1.2, sz + 1.65), Vector3(1.8, 2.4, 0.1))
 	_box(g, "StreetFacade", Vector3(-6.0, 0, sz - 4.0), Vector3(0.5, 6.0, 8.0), _mat("building", Color("0c0d12"), 0.95), false)
 	_box(g, "StreetWindow", Vector3(-5.52, 2.2, sz - 0.6), Vector3(0.04, 1.0, 1.2), _mat("lit_window", Color("ffd9a0"), 0.6, 1.2), false)
-	# Lobby and corridor are one L corridor (Daniele, corrections on plan v4): no door between them. Framed pictures
-	# of regular customers on its walls later; wall_picture_framed placeholders for now.
+	# Lobby and corridor are one L corridor (Daniele, corrections on plan v4): no door between them. Two framed
+	# pictures on the lobby wall; the corridor's south wall holds the top patrons' portraits (_portraits).
 	for i in 2:
 		_cut(_ph(g, "wall_picture_framed" if i == 0 else "wall_picture_framed_b", Vector3(0.06, 1.4, 10.0 + i * 2.2), 90.0, "RegularPictureW%d" % i, false), Vector3.LEFT)
-	for i in 4:
-		_cut(_ph(g, "wall_picture_framed" if i % 2 == 0 else "wall_picture_framed_b", Vector3(3.6 + i * 2.6, 1.4, CORRIDOR.end.y - 0.06), 180.0, "RegularPictureS%d" % i, false), Vector3.BACK)
+	_portraits(g)
 	# None on the corridor's lounge side: that wall hides on the sight line and its pictures would float
 	# Sticker door between the corridor and the lounge: swings open for whoever comes through, stickers on the
 	# corridor side (front +z)
 	_swing_door(g, "StickerDoor", "sticker_door", Vector3((STICKER_DOOR.x + STICKER_DOOR.y) * 0.5, 0, LOUNGE.end.y + 0.1), 0.0, Vector3.BACK)
 	_omni(g, "LobbyLight", Color("ffc890"), 0.9, 5.0, Vector3(1.1, 3.2, 8.0))
 	_omni(g, "CorridorLight", Color("ff9a60"), 0.8, 6.0, Vector3(9.0, 3.3, 14.1))
-	for x in [4.0, 10.0]:
-		_cut(_kit(g, "wall_lamp", Vector3(x, 1.9, CORRIDOR.end.y - 0.05), 0.0, "CorridorLamp%d" % int(x)), Vector3.BACK)
+	for x in [PORTRAIT_X0 + PORTRAIT_STEP * 0.5, PORTRAIT_X0 + PORTRAIT_STEP * 5.5]:   # between portraits, above them
+		_cut(_kit(g, "wall_lamp", Vector3(x, 2.6, CORRIDOR.end.y - 0.05), 0.0, "CorridorLamp%d" % int(x)), Vector3.BACK)
 	_kit(g, "track_light", Vector3(13.0, ROOM_H, 14.1), 0.0, "CorridorTrack")
 	_seat("Lobby", "Lobby_Stand0", Vector3(1.3, 0, 12.6), 90.0, 0.0, "stand")
 	_corridor_end(g)
@@ -692,23 +697,25 @@ func _lounge() -> void:
 	else:
 		_kit_solid(g, "arcade_cabinet", Vector3(LOUNGE.position.x + 0.45, 0, 7.2), 90.0, "ArcadeCabinet")
 	_omni(g, "PinballGlow", SCREEN_CYAN, 0.6, 2.4, Vector3(LOUNGE.position.x + 1.2, 1.4, 7.2))
-	# Black Cabin game machine by the stairs, near the Sticker door (flappy-bird style; zone stub "cabinet")
-	_ph(g, "game_cabinet_bc", Vector3(CABINET_X, 0, LOUNGE.end.y - 0.4), 180.0, "GameCabinet")
+	# Black Cabin game machine (flappy-bird style; zone stub "cabinet"), top left with the memory corner (Daniele,
+	# lounge revamp 2026-11-02). It stood by the stairs facing the bottom step; that reading is asked again.
+	_ph(g, "game_cabinet_bc", Vector3(CABINET_X, 0, 0.4), 0.0, "GameCabinet")
 	# Two white columns where the map shows them
 	for i in 2:
 		var p: Vector3 = [Vector3(8.95, 0, 3.9), Vector3(8.95, 0, 9.75)][i]
-		_kit(g, "white_column", p, 0.0, "Column%d" % i)
+		_cut(_kit(g, "white_column", p, 0.0, "Column%d" % i), Vector3.ZERO)   # hides only when it stands in front of the player
 		_collider(g, "Column%dCollider" % i, p + Vector3(0, ROOM_H * 0.5, 0), Vector3(0.4, ROOM_H, 0.4))
-	# North wall, east part: collectibles shelf with the high counter and two stools (R02); the CRT is in the corner
-	_kit(g, "collectibles_shelf", Vector3(13.6, 0, 0.22), 0.0, "CollectiblesShelf")
-	_collider(g, "ShelfCollider", Vector3(13.6, 1.1, 0.22), Vector3(2.0, 2.2, 0.4))
-	_box(g, "HighCounter", Vector3(12.65, 0, 1.0), Vector3(1.9, 0.95, 0.5), _mat("wood_mid", WOOD_MID, 0.4))
+	_merch_shop(g)
+	# The high counter and its two stools (R02) moved from the top right to the south wall east of the stair foot
+	_box(g, "HighCounter", Vector3(LEDGE_X.x, 0, LOUNGE.end.y - 0.5), Vector3(LEDGE_X.y - LEDGE_X.x, 0.95, 0.5), _mat("wood_mid", WOOD_MID, 0.4))
 	for i in 2:
-		_kit_solid(g, "bar_stool", Vector3(13.15 + i * 0.9, 0, 1.85), 180.0, "CounterStool%d" % i)
-		_seat("Lounge", "Lounge_Stool%d" % i, Vector3(13.15 + i * 0.9, 0, 1.85), 180.0, BAR_SEAT_H, "sit", "HighCounter")
-	_cut(_kit(g, "wall_lamp", Vector3(10.2, 1.7, 0.1), 0.0, "RedDiscLamp"), Vector3.FORWARD)
+		var sp := Vector3(LEDGE_X.x + 0.45 + i * 0.95, 0, LOUNGE.end.y - 1.05)
+		_kit_solid(g, "bar_stool", sp, 0.0, "CounterStool%d" % i)
+		_seat("Lounge", "Lounge_Stool%d" % i, sp, 0.0, BAR_SEAT_H, "sit", "HighCounter")
+	_cut(_kit(g, "wall_lamp", Vector3(10.7, 1.7, 0.1), 0.0, "RedDiscLamp"), Vector3.FORWARD)
 	_cut(_kit(g, "ac_unit", Vector3(7.0, 3.3, 0.15), 0.0, "ACUnit"), Vector3.FORWARD)
-	_cut(_kit(g, "painting_a", Vector3(8.2, 1.4, 0.05), 0.0, "LoungePainting"), Vector3.FORWARD)
+	_cut(_kit(g, "painting_a", Vector3(9.6, 1.4, 0.05), 0.0, "LoungePainting"), Vector3.FORWARD)
+	_lounge_dressing(g)
 	# Two round tables with four chairs in the open middle (the real lounge changes often, Daniele)
 	for n in 2:
 		_round_table(g, "LoungeTable%d" % n, "Lounge", Vector3(11.0, 0, 5.0 + n * 4.0), 0.0, n == 0)
@@ -727,7 +734,77 @@ func _lounge() -> void:
 	_omni(g, "RedPanelLightB", PANEL_RED, 1.4, 7.0, Vector3(10.0, 3.6, 10.0))
 	_kit(g, "track_light", Vector3(6.0, ROOM_H, 7.0), 0.0, "TrackLight0")
 	_kit(g, "track_light", Vector3(12.0, ROOM_H, 11.0), 0.0, "TrackLight1")
-	_cut_rooms(g, ["lounge", "alcove"])
+	_cut_rooms(g, ["lounge", "alcove", "merch", "memory", "patrons"])
+
+## Merch shop, top right of the lounge (Daniele 2026-11-02, BACKLOG B11): the collectibles shelf stays on the north
+## wall, a garment rail with three tees beside it and the lit MERCH counter in front (customers on its south side;
+## zone "merch", scripts/zones/venue_zones.gd). What is sold, prices and how to pay are open questions.
+func _merch_shop(g: Node) -> void:
+	_kit(g, "collectibles_shelf", Vector3(13.6, 0, 0.22), 0.0, "CollectiblesShelf")
+	_collider(g, "ShelfCollider", Vector3(13.6, 1.1, 0.22), Vector3(2.0, 2.2, 0.4))
+	_ph(g, "merch_rack", Vector3(11.85, 0, 0.3), 0.0, "MerchRack")
+	_ph(g, "merch_stand", MERCH, 0.0, "MerchStand")
+	_ph(g, "potted_plant", Vector3(15.05, 0, 0.45), 0.0, "MerchPlant")
+
+## Lounge dressing (Daniele 2026-11-02, "decorations around the room"): the top-patrons board under the second flight
+## of the stairs, gig posters climbing the wall over the first flight, vinyl records over the high counter, two snake
+## plants. Emissive or unlit only: no new light (42).
+func _lounge_dressing(g: Node) -> void:
+	_patrons_board(g)
+	for i in 2:   # over the first flight, following its rise (foot x 8.05 at 0, landing x 4.05 at STAIR_H1)
+		var x := 7.0 - i * 1.7
+		var y := (STAIR_LOWER.end.x - x) / STAIR_LOWER.size.x * STAIR_H1 + 1.3
+		_cut(_ph(g, "wall_picture_framed_b", Vector3(x, y, LOUNGE.end.y - 0.06), 180.0, "GigPoster%d" % i, false), Vector3.BACK)
+	for i in 3:
+		_cut(_ph(g, "vinyl_record_wall", Vector3(LEDGE_X.x + 0.35 + i * 0.6, 1.3, LOUNGE.end.y - 0.06), 180.0, "LoungeVinyl%d" % i, false), Vector3.BACK)
+	_ph(g, "potted_plant", Vector3(STAIR_UPPER.end.x + 0.45, 0, STAIR_LOWER.position.y - 0.4), 0.0, "StairPlant")
+
+## "Top patrons" board (Daniele 2026-11-02, BACKLOG B10) on the face of the plinth under the second flight, facing the
+## room: the kit board plus the title and the ten placeholder names (scripts/zones/patrons.gd) lettered on it, ranks
+## 1-5 in the left column and 6-10 in the right. Zone "patrons": tapping it lists them on a sheet.
+func _patrons_board(g: Node) -> void:
+	var b := _kit(g, "patrons_board", Vector3(STAIR_UPPER.end.x + 0.08, 0.4, 9.55), 90.0, "PatronsBoard")
+	if b == null:
+		return
+	var title := _wordmark(b, "Title", "Top patrons", Vector3(0, 1.13, 0.09), 0.0, 0.0045, Color(2.4, 1.8, 0.8), 48)
+	title.font = load(KRISTI)
+	for r in Patrons.count():
+		var row := r % 5
+		var l := _wordmark(b, "Name%d" % r, "%d  %s" % [r + 1, Patrons.at(r)["name"]], Vector3(-0.47 if r < 5 else 0.12, 0.625 - row * 0.1, 0.085), 0.0, 0.0022, Color("f2e6c8"), 36)
+		l.horizontal_alignment = HORIZONTAL_ALIGNMENT_LEFT
+
+## Top patrons' portraits on the entrance corridor's south wall (Daniele 2026-11-02, BACKLOG B7): ten gold frames
+## (kit portrait_frame) holding each patron's head and shoulders in the game's own voxel style (assets/venue/portraits,
+## tools/render_portraits.gd), a brass picture lamp over each and the rank and name under it. Zone "portrait:<rank>":
+## passing one shows its prompt, tapping opens it with a message from the owner (placeholder).
+func _portraits(g: Node) -> void:
+	var z := CORRIDOR.end.y - 0.1
+	for r in Patrons.count():
+		var x := PORTRAIT_X0 + r * PORTRAIT_STEP
+		var f := _ph(g, "portrait_frame", Vector3(x, 1.15, z), 180.0, "Portrait%d" % r, false)
+		_cut(f, Vector3.BACK)
+		var tex := Patrons.portrait(r)
+		if tex != null:
+			var m := StandardMaterial3D.new()
+			m.resource_name = "portrait_%d" % r
+			m.albedo_texture = tex
+			m.emission_enabled = true
+			m.emission_texture = tex
+			m.emission_energy_multiplier = 0.35
+			m.texture_filter = BaseMaterial3D.TEXTURE_FILTER_LINEAR_WITH_MIPMAPS
+			var q := QuadMesh.new()
+			q.size = Vector2(0.4, 0.5)
+			var mi := MeshInstance3D.new()
+			mi.name = "Picture"
+			mi.mesh = q
+			mi.material_override = m
+			mi.cast_shadow = GeometryInstance3D.SHADOW_CASTING_SETTING_OFF
+			mi.position = Vector3(0, 0.4, -0.04)
+			_own(mi, f)
+		_tap_target(f, Vector3(0, 0.375, 0), Vector3(0.6, 0.75, 0.2))   # a tap on the frame lands on it, not on the wall further on
+		var l := _wordmark(f, "Name", "%d  %s" % [r + 1, Patrons.at(r)["name"]], Vector3(0, -0.07, 0.02), 0.0, 0.0024, Color("e8c070"), 40)
+		l.font = load(KRISTI)
+		_cut(_kit(g, "picture_light", Vector3(x, 2.0, CORRIDOR.end.y - 0.05), 180.0, "PortraitLamp%d" % r), Vector3.BACK)
 
 ## Stairs in the lounge's south-west (Daniele, playtest of v4; map: grey L): the first flight along the south wall,
 ## its bottom step facing the game machine, rises west to a landing in the corner; the second flight turns right and
@@ -790,6 +867,12 @@ func _wedge(g: Node, nm: String, lo: Vector3, hi: Vector3, up_dir: Vector3) -> v
 	shape.points = pts
 	cs.shape = shape
 	_own(cs, body)
+
+## A box only screen taps hit (TAP_LAYER): wall pictures stand clear of the navmesh and the player but still take taps.
+func _tap_target(parent: Node, center: Vector3, size: Vector3) -> void:
+	var b := _collider(parent, "TapTarget", center, size)
+	b.collision_layer = TAP_LAYER
+	b.collision_mask = 0
 
 ## Hand rail: a thin dark bar from `a` to `b` with posts down to the stair line every metre or so.
 func _rail(g: Node, nm: String, a: Vector3, b: Vector3) -> void:
@@ -958,7 +1041,10 @@ func _buffer() -> void:
 	for z in [BUFFER.position.y + 0.4, BUFFER.end.y - 0.4]:
 		for x in [BUFFER.position.x + 0.1, BUFFER.end.x - 0.1]:
 			var p := _kit(g, "curtain_panel", Vector3(x, 0, z), 90.0, "Curtain_%d_%d" % [int(x * 10), int(z * 10)])
-			_cut(p, Vector3.LEFT if x < 18.0 else Vector3.LEFT)
+			# Drawn back to the sides, they hide only when on the sight line to the player: neither facing the camera
+			# nor standing nearer than the player cuts them, so the open curtain shows from the main room as it does
+			# from the lounge (Daniele, Questions tab 2026-11-01)
+			_cut(p, Vector3.ZERO).set_meta("cut_sight_only", true)
 	_box(g, "ValanceW", Vector3(BUFFER.position.x - 0.1, 3.4, BUFFER.position.y), Vector3(0.12, 0.6, BUFFER.size.y), _mat("velvet_red", VELVET_RED, 0.95), false)
 	_box(g, "ValanceE", Vector3(BUFFER.end.x - 0.02, 3.4, BUFFER.position.y), Vector3(0.12, 0.6, BUFFER.size.y), _mat("velvet_red", VELVET_RED, 0.95), false)
 	for i in BUFFER_TALL.size():
@@ -1512,7 +1598,13 @@ func _camera_zones() -> void:
 		{"name": "corridor", "rect": Rect2(-0.2, 13.25, 15.65, 1.65), "clamp": Rect2(3.5, 14.07, 9.0, 0.01), "yaw": -90.0, "pitch": -34.0, "dist": 6.0, "look_y": 1.1},
 		{"name": "buffer", "rect": Rect2(BUFFER.position.x, BUFFER.position.y, BUFFER.size.x, BUFFER.size.y), "clamp": Rect2(17.7, 4.6, 0.3, 1.5), "yaw": 0.0, "pitch": -32.0, "dist": 7.0, "look_y": 1.3},
 		{"name": "alcove", "rect": Rect2(STUB.position.x, STUB.position.y, STUB.size.x, STUB.size.y), "clamp": Rect2(16.4, 11.3, 2.2, 0.1), "yaw": 180.0, "pitch": -48.0, "dist": 5.5, "look_y": 1.0},
-		{"name": "lounge", "rect": Rect2(LOUNGE.position.x, LOUNGE.position.y, LOUNGE.size.x, LOUNGE.size.y), "clamp": Rect2(4.5, 1.6, 5.5, 9.4), "yaw": 90.0, "pitch": -34.0, "dist": 8.0, "look_y": 1.3},
+		# The lounge's two top corners look north at their wall (merch shop top right; memory corner and game machine
+		# top left); the rest of the lounge keeps its west view (the top-patrons board under the stairs is in it)
+		{"name": "merch", "rect": Rect2(10.6, 0.0, LOUNGE.end.x - 10.6, 3.6), "clamp": Rect2(12.4, 2.0, 1.4, 0.6), "yaw": 0.0, "pitch": -34.0, "dist": 6.5, "look_y": 1.1},
+		{"name": "memory", "rect": Rect2(LOUNGE.position.x, 0.0, 9.6 - LOUNGE.position.x, 2.8), "clamp": Rect2(4.8, 1.7, 3.0, 0.5), "yaw": 0.0, "pitch": -34.0, "dist": 6.5, "look_y": 1.1},
+		# In front of the Top patrons board under the stairs: a view from the north-east, past the column
+		{"name": "patrons", "rect": Rect2(STAIR_UPPER.end.x, STAIR_UPPER.position.y, 2.6, STAIR_LOWER.position.y - STAIR_UPPER.position.y), "clamp": Rect2(4.6, 9.2, 0.5, 0.6), "yaw": 130.0, "pitch": -30.0, "dist": 5.2, "look_y": 1.0},
+		{"name": "lounge", "base": true, "rect": Rect2(LOUNGE.position.x, LOUNGE.position.y, LOUNGE.size.x, LOUNGE.size.y), "clamp": Rect2(4.5, 1.6, 5.5, 9.4), "yaw": 90.0, "pitch": -34.0, "dist": 8.0, "look_y": 1.3},
 		{"name": "bar", "rect": Rect2(BAR_X0 + 1.2, 9.6, BAR_X1 - BAR_X0 - 1.2, MAIN_Z1 - 9.6), "clamp": Rect2(23.5, 10.6, 10.5, 0.6), "yaw": 180.0, "pitch": -32.0, "dist": 7.0, "look_y": 1.0},
 		{"name": "stage", "rect": Rect2(26.4, 0.0, 9.6, 6.6), "clamp": Rect2(29.0, 1.6, 3.5, 3.2), "yaw": 0.0, "pitch": -28.0, "dist": 7.5, "look_y": 1.3},
 		{"name": "toilets", "rect": Rect2(MAIN_X0, 12.0, BAR_X0 - MAIN_X0 + 2.6, 4.7), "clamp": Rect2(21.0, 13.5, 0.6, 2.0), "yaw": 180.0, "pitch": -34.0, "dist": 6.0, "look_y": 1.2},
@@ -1551,6 +1643,7 @@ func _navigation() -> void:
 	nm.geometry_parsed_geometry_type = NavigationMesh.PARSED_GEOMETRY_STATIC_COLLIDERS
 	nm.geometry_source_geometry_mode = NavigationMesh.SOURCE_GEOMETRY_GROUPS_WITH_CHILDREN
 	nm.geometry_source_group_name = "nav_source"
+	nm.geometry_collision_mask = 1   # layer 1 only: TAP_LAYER bodies are not obstacles
 	nm.cell_size = 0.1
 	nm.cell_height = 0.05
 	nm.agent_radius = 0.4
