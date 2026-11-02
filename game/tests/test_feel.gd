@@ -15,16 +15,64 @@ extends SceneTree
 ##   smoking   the smoking room is in view from the main room in front of its door (its view takes over there, the
 ##             tables unhidden by walls) and from inside at every corner; walking in through the red door the player
 ##             is never behind a standing wall or the open door leaf
+##   follow    camera feel 2 (Daniele, Questions tab 2026-11-02: "trails behind when walking"): walking across the
+##             floor the look point is never more than FOLLOW_TRAIL behind the player nor more than FOLLOW_NEAR from
+##             them, it is back on them soon after the stop, and the camera does not shake at the start, the stop or
+##             on the stairs (largest change of the camera's step from one tick to the next)
+##   framing   every area's pitch and distance are the camera-feel-2 values (FRAMING), and standing in each area the
+##             character is at least MIN_HEIGHT_PX tall on a 450 x 800 portrait screen (the smoking room's view a bit
+##             less, MIN_HEIGHT_SMOKING, so the room shows from the main room)
+##   occlusion walks through every area (OCCL_ROUTES): on every other tick nothing visible stands on the sight line
+##             from the camera to the player's chest or head (furniture, walls, kit pieces, doors; other characters
+##             are not counted)
 ##   walls     in the main room's corners, the buffer zone ("meeting room") and the lounge, the corner tables are in
 ##             view with no standing wall in between (the lounge's from where the player stands near them: its camera
 ##             looks west, so its east end is under the lens); cut box walls sink to a 0.4 m stub, not to nothing; the bar's
 ##             back wall and the stage's north wall stay up; the corridor keeps its rule (lounge walls solid)
+## Timing is deterministic: the camera rig steps on physics ticks with a fixed delta, and every speed here is taken
+## per tick (the old turn-speed check used the wall clock and flaked under load).
 ##   godot --headless --path . --script res://tests/test_feel.gd
+
+const FOLLOW_TRAIL := 0.35      ## metres the look point may fall behind the player while walking
+const FOLLOW_NEAR := 0.9        ## metres the look point may be from the player while walking (lead included)
+const SHAKE_MAX := 0.012        ## metres: largest tick-to-tick change of the camera's step
+const MIN_HEIGHT_PX := 80.0     ## the character's height on screen, in a 450 x 800 portrait frame
+const MIN_HEIGHT_SMOKING := 72.0    ## the smoking view stays a little wider: its four tables show from the red door
+## Camera feel 2 framings: area -> [pitch, distance] (build_venue.gd _camera_zones)
+const FRAMING := {"lobby": [-40.0, 5.0], "corridor": [-36.0, 5.0], "buffer": [-40.0, 4.6], "alcove": [-50.0, 4.2],
+	"merch": [-38.0, 5.0], "memory": [-38.0, 5.0], "patrons": [-34.0, 4.8], "lounge": [-40.0, 5.0], "bar": [-40.0, 5.2],
+	"stage": [-34.0, 5.2], "toilets": [-42.0, 4.8], "smoking": [-46.0, 5.4], "floor": [-40.0, 5.2]}
+## A spot in each area (framing check)
+const AREA_SPOTS := {"floor": Vector3(30.0, 0.1, 6.8), "bar": Vector3(29.0, 0.1, 11.4), "stage": Vector3(30.75, 0.1, 4.6),
+	"toilets": Vector3(21.0, 0.1, 14.2), "smoking": Vector3(40.0, 0.1, 15.2), "buffer": Vector3(17.7, 0.1, 5.3),
+	"lounge": Vector3(8.0, 0.1, 6.0), "merch": Vector3(12.5, 0.1, 2.4), "memory": Vector3(5.0, 0.1, 2.0),
+	"patrons": Vector3(4.8, 0.1, 9.6), "alcove": Vector3(17.5, 0.1, 11.2), "corridor": Vector3(8.0, 0.1, 14.1),
+	"lobby": Vector3(1.1, 0.1, 10.0)}
+## Occlusion walks: [label, start, waypoints]
+const OCCL_ROUTES := [
+	["lobby", Vector3(1.1, 0.1, 12.5), [Vector3(1.0, 0, 6.0), Vector3(1.2, 0, 12.8)]],
+	["corridor", Vector3(2.6, 0.1, 14.1), [Vector3(13.6, 0, 14.1)]],
+	["lounge", Vector3(13.6, 0.1, 12.0), [Vector3(8.0, 0, 6.0), Vector3(4.0, 0, 4.0), Vector3(12.0, 0, 9.0), Vector3(9.0, 0, 11.5), Vector3(13.0, 0, 6.0)]],
+	["merch", Vector3(11.0, 0.1, 3.0), [Vector3(14.6, 0, 2.6), Vector3(11.0, 0, 1.2)]],
+	["memory", Vector3(7.0, 0.1, 2.0), [Vector3(3.2, 0, 1.4), Vector3(7.5, 0, 1.2)]],
+	["patrons", Vector3(5.5, 0.1, 10.5), [Vector3(4.4, 0, 9.0), Vector3(6.2, 0, 8.2)]],
+	["buffer", Vector3(15.8, 0.1, 5.3), [Vector3(19.6, 0, 5.3), Vector3(17.7, 0, 3.4), Vector3(17.7, 0, 7.2), Vector3(16.0, 0, 5.2)]],
+	["lounge -> floor", Vector3(12.0, 0.1, 5.3), [Vector3(22.6, 0, 6.6)]],
+	["floor -> lounge", Vector3(22.6, 0.1, 6.6), [Vector3(12.0, 0, 5.3)]],
+	["alcove", Vector3(16.0, 0.1, 11.2), [Vector3(19.4, 0, 11.6), Vector3(16.0, 0, 10.6)]],
+	["floor", Vector3(22.5, 0.1, 6.5), [Vector3(38.5, 0, 6.6), Vector3(23.2, 0, 2.6), Vector3(22.0, 0, 10.3), Vector3(36.5, 0, 2.0), Vector3(37.0, 0, 9.5)]],
+	["raised strip", Vector3(40.3, 0.3, 0.8), [Vector3(40.3, 0.15, 9.9), Vector3(40.4, 0.15, 2.0)]],
+	["stage", Vector3(28.0, 0.1, 5.2), [Vector3(33.5, 0, 5.0), Vector3(30.0, 0, 3.5)]],
+	["bar", Vector3(24.5, 0.1, 11.5), [Vector3(34.5, 0, 11.4), Vector3(26.0, 0, 11.2)]],
+	["toilets", Vector3(21.0, 0.1, 13.0), [Vector3(21.0, 0, 15.9), Vector3(23.6, 0, 16.0), Vector3(21.2, 0, 13.0)]],
+	["smoking", Vector3(39.6, 0.1, 13.6), [Vector3(41.1, 0, 17.3), Vector3(39.0, 0, 17.3), Vector3(40.0, 0, 13.4)]],
+]
 
 var main: Node
 var p: Player
 var js: TouchJoystick
 var fails: Array[String] = []
+var geoms: Array[GeometryInstance3D] = []   ## meshes that could hide the player (not the player, not characters)
 
 
 func check(ok: bool, what: String) -> void:
@@ -168,15 +216,11 @@ func _init() -> void:
 		p.walk_to(goal)
 		var last_cam := rig.global_position
 		var last_yaw := rig.yaw
-		var last_t := Time.get_ticks_usec()
 		for i in 1800:
-			await process_frame
+			await physics_frame   # the rig steps once per physics tick with a fixed delta: no wall clock here
 			views[rig.view] = true
-			var dt := (Time.get_ticks_usec() - last_t) / 1e6
-			if dt > 0.004:   # yaw speed over real time (headless frames come at any rate)
-				spin = maxf(spin, absf(angle_difference(last_yaw, rig.yaw)) / dt)
-				last_yaw = rig.yaw
-				last_t = Time.get_ticks_usec()
+			spin = maxf(spin, absf(angle_difference(last_yaw, rig.yaw)) * Engine.physics_ticks_per_second)
+			last_yaw = rig.yaw
 			jump = maxf(jump, rig.global_position.distance_to(last_cam))
 			last_cam = rig.global_position
 			if not p.walking_to and rig.view == rig.zone and absf(rig._yaw_v) < 0.02:
@@ -203,6 +247,23 @@ func _init() -> void:
 			await frames(20)
 			check(on_screen(p.global_position + Vector3(0, 0.9, 0), 0.04), "player on screen at %s (%dx%d)" % [v2(at), size.x, size.y])
 	root.size = Vector2i(1080, 1920)
+
+	print("follow")
+	await follow_walk()
+	await stairs_shake()
+
+	print("framing")
+	for a in FRAMING:
+		var m := zone_marker(a)
+		check(m != null and is_equal_approx(float(m.get_meta("pitch")), FRAMING[a][0]) and is_equal_approx(float(m.get_meta("dist")), FRAMING[a][1]),
+			"%s view: pitch %s, distance %s (want %s, %s)" % [a, m.get_meta("pitch") if m else "?", m.get_meta("dist") if m else "?", FRAMING[a][0], FRAMING[a][1]])
+	for a in AREA_SPOTS:
+		teleport(AREA_SPOTS[a])
+		await frames(10)
+		var cam: Camera3D = rig.camera
+		var r := root.get_visible_rect()
+		var h := (cam.unproject_position(p.global_position) - cam.unproject_position(p.global_position + Vector3(0, 1.35, 0))).length() * 800.0 / r.size.y
+		check(rig.view == a and h >= (MIN_HEIGHT_SMOKING if a == "smoking" else MIN_HEIGHT_PX), "standing in the %s (view %s): the character is %.0f px tall of 800" % [a, rig.view, h])
 
 	print("areas")
 	for a in main.hud.AREAS:
@@ -288,6 +349,13 @@ func _init() -> void:
 			stub_shown += 1
 	check(rig.zone == "corridor" and lounge_cut == 0 and stub_shown == 0, "corridor: lounge walls solid (%d cut), no stubs (%d)" % [lounge_cut, stub_shown])
 
+	print("occlusion")
+	for gi in main.find_children("*", "GeometryInstance3D", true, false):
+		if not p.is_ancestor_of(gi) and not in_figure(gi):
+			geoms.append(gi)
+	for r in OCCL_ROUTES:
+		await occlusion_walk(r[0], r[1], r[2])
+
 	print("\n%s (%d failures)" % ["PASS" if fails.is_empty() else "FAIL", fails.size()])
 	quit(0 if fails.is_empty() else 1)
 
@@ -305,7 +373,7 @@ func area_button(area: String, kind: String) -> void:
 	var jump := 0.0
 	var last_cam := rig.global_position
 	for i in 2400:
-		await process_frame
+		await physics_frame
 		steps += 1
 		off += int(not on_screen(p.global_position + Vector3(0, 0.9, 0), 0.0))
 		jump = maxf(jump, rig.global_position.distance_to(last_cam))
@@ -399,4 +467,122 @@ func wall_at(w: Vector3) -> bool:
 		var n := rig._cutaway[i]
 		if is_instance_valid(n) and n.is_visible_in_tree() and rig._cut_boxes[i].grow(0.05).has_point(w):
 			return true
+	return false
+
+
+## Joystick walk east across the floor and stop: see FOLLOW_TRAIL, FOLLOW_NEAR, SHAKE_MAX.
+func follow_walk() -> void:
+	var rig: CameraRig = p.rig
+	teleport(Vector3(23.0, 0.1, 6.7))
+	await frames(30)
+	var trail := 0.0
+	var near := 0.0
+	var shake := 0.0
+	var last := rig.global_position
+	var step := Vector3.ZERO
+	js.value = p.world_to_input(Vector3(1, 0, 0))
+	for i in 150:
+		await physics_frame
+		var d := Vector3(rig._look.x - p.global_position.x, 0, rig._look.z - p.global_position.z)
+		var v := p.get_real_velocity()
+		if Vector2(v.x, v.z).length() > 0.5:
+			trail = maxf(trail, -d.dot(Vector3(v.x, 0, v.z).normalized()))
+			near = maxf(near, d.length())
+		if i > 0:
+			shake = maxf(shake, (rig.global_position - last - step).length())
+		step = rig.global_position - last
+		last = rig.global_position
+	js.value = Vector2.ZERO
+	var back := -1.0
+	for i in 60:
+		await physics_frame
+		shake = maxf(shake, (rig.global_position - last - step).length())
+		step = rig.global_position - last
+		last = rig.global_position
+		if back < 0.0 and Vector2(rig._look.x - p.global_position.x, rig._look.z - p.global_position.z).length() < 0.15:
+			back = (i + 1) / float(Engine.physics_ticks_per_second)
+	check(rig.view == "floor" and trail <= FOLLOW_TRAIL, "walking the floor the look point trails the player by at most %.2f m (bound %.2f)" % [trail, FOLLOW_TRAIL])
+	check(near <= FOLLOW_NEAR, "  and stays within %.2f m of them (bound %.2f)" % [near, FOLLOW_NEAR])
+	check(back > 0.0 and back <= 0.8, "  back on the player %.2f s after the stop (bound 0.8)" % back)
+	check(shake <= SHAKE_MAX, "  no shake at the start and the stop (largest step change %.3f m per tick)" % shake)
+
+
+## Up both stair flights: the camera's step changes smoothly (no shake from the treads).
+func stairs_shake() -> void:
+	var rig: CameraRig = p.rig
+	teleport(Vector3(9.0, 0.1, 12.25))
+	await frames(30)
+	var shake := 0.0
+	var last := rig.global_position
+	var step := Vector3.ZERO
+	var n := 0
+	for goal in [Vector3(3.2, 0, 12.25), Vector3(3.15, 0, 7.6)]:
+		for i in 400:
+			var d: Vector3 = goal - p.global_position
+			d.y = 0
+			if d.length() < 0.2:
+				break
+			js.value = p.world_to_input(d.normalized())
+			await physics_frame
+			if n > 0:
+				shake = maxf(shake, (rig.global_position - last - step).length())
+			step = rig.global_position - last
+			last = rig.global_position
+			n += 1
+	js.value = Vector2.ZERO
+	check(p.global_position.y > 2.0 and shake <= SHAKE_MAX * 2.0, "  climbing the stairs: largest step change %.3f m per tick (bound %.3f)" % [shake, SHAKE_MAX * 2.0])
+
+
+## Tap-walks along `goals` from `start`: the sight line from the camera to the player's chest and head stays clear.
+func occlusion_walk(label: String, start: Vector3, goals: Array) -> void:
+	teleport(start)
+	await frames(20)
+	var n := 0
+	var hid := 0
+	var by := {}
+	for g in goals:
+		p.walk_to(g)
+		for i in 1500:
+			await physics_frame
+			if i % 2 == 0:
+				n += 1
+				var b := sight_blockers()
+				if not b.is_empty():
+					hid += 1
+					for nm in b:
+						by[nm] = by.get(nm, 0) + 1
+			if not p.walking_to:
+				break
+	check(hid == 0, "%s walk: the player in clear sight %d of %d ticks%s" % [label, n - hid, n, "" if by.is_empty() else " (hidden by %s)" % [by]])
+
+
+## Visible meshes (by their own box) on the camera -> chest or camera -> head line.
+func sight_blockers() -> Array:
+	var cam: Camera3D = p.rig.camera
+	var a := cam.global_position
+	var out := []
+	for e in [p.global_position + Vector3(0, 0.8, 0), p.global_position + Vector3(0, 1.25, 0)]:
+		for g in geoms:
+			if not is_instance_valid(g) or not g.is_visible_in_tree() or (g.layers & cam.cull_mask) == 0:
+				continue
+			var box := g.get_aabb()
+			if box.size.y < 0.05 or (box.size.x < 0.02 and box.size.z < 0.02):
+				continue
+			if not (g.global_transform * box).intersects_segment(a, e):
+				continue
+			var inv := g.global_transform.affine_inverse()
+			if box.intersects_segment(inv * a, inv * e):
+				var nm := "%s/%s" % [g.get_parent().name, g.name]
+				if not out.has(nm):
+					out.append(nm)
+	return out
+
+
+## True when the node is part of a character (crowd, staff, regulars): they may walk in front of the player.
+func in_figure(n: Node) -> bool:
+	var q := n.get_parent()
+	while q != null and q != main:
+		if q is PatronFigure:
+			return true
+		q = q.get_parent()
 	return false

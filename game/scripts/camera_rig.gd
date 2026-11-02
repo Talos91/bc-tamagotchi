@@ -20,6 +20,14 @@ extends Node3D
 ## of their velocity, so what is ahead of them is in view; clamped to the zone's clamp rect and raised with the
 ## player (stairs, raised strip). Yaw, pitch and distance ease to a new zone's framing on their own spring
 ## (swing_time). snap() jumps straight to the framing (teleports, scene start).
+## Camera feel 2 (Daniele, Questions tab 2026-11-02: "trails behind when walking"): the follow is tight (follow_time
+## 0.12 s, the lead builds in LEAD_SETTLE 0.25 s), so the character stays within ~0.5 m of the frame's focus at walking
+## speed and is never left behind at the start of a walk. The look point is that tight follow of the player plus a
+## framing offset (the zone's clamp and look height) on its own spring: CLAMP_SETTLE at a room's edge, the swing's
+## time when the view changes, so a new area's framing eases in while the player stays tracked. The rig steps in _physics_process, in lockstep with the
+## player's movement (the body moves only on physics ticks; a tight follow at the display rate would shake it on
+## screen), and with a fixed delta, so the tests measure it deterministically. set_process(false) still turns it off
+## (street_shot.gd, start_screen.gd): the switch is is_processing().
 ##
 ## Walls (group "cutaway", meta cut_normal = the outward normal of the room whose camera looks through them):
 ##   entrance zones (lobby, corridor)  as before: a piece is hidden when its cut_normal faces the camera or it
@@ -49,7 +57,9 @@ const HYSTERESIS := 0.6         ## metres a zone keeps the player after they cro
 const ENTRANCE_ZONES := ["lobby", "corridor"]
 const STUB_H := 0.4             ## metres of a cut wall that stay standing (10 % of the 4 m room)
 const CUT_TIME := 0.18          ## seconds for a wall to sink to its stub, or rise back
-const LEAD_MAX := 1.6           ## metres the look point may lead the player
+const LEAD_MAX := 1.2           ## metres the look point may lead the player
+const LEAD_SETTLE := 0.25       ## spring time of the lead (how quickly it builds up and dies away)
+const CLAMP_SETTLE := 0.2       ## spring time of the framing offset inside one view (the camera stops at the clamp)
 const ZONE_DWELL := 0.3         ## seconds a new area of the same room must hold the player before the view turns
 const SWING_PER_HALF_TURN := 0.4    ## extra seconds of swing for a 180° turn (scaled by the turn)
 const SETTLE_95 := 0.42             ## spring time (see _spring) that settles 95 % in 1 s: (1 + x) e^-x = 0.05 at x 4.74
@@ -59,9 +69,9 @@ const SETTLE_95 := 0.42             ## spring time (see _spring) that settles 95
 const ROOMS := {"floor": "main", "bar": "main", "stage": "main", "toilets": "main", "smoking": "main",
 	"merch": "lounge", "memory": "lounge", "patrons": "lounge"}
 
-@export var follow_time := 0.3      ## seconds for the look point to catch up with the player (spring)
+@export var follow_time := 0.12     ## seconds for the look point to catch up with the player (spring)
 @export var swing_time := 1.0       ## seconds for yaw, pitch and distance to settle (95 %) on a new area's framing
-@export var lead_time := 0.4        ## seconds of the player's velocity the camera looks ahead
+@export var lead_time := 0.25       ## seconds of the player's velocity the camera looks ahead
 @export var portrait_hfov := 52.0
 @export var landscape_vfov := 42.0
 @export var landscape_dist_scale := 1.3
@@ -79,8 +89,12 @@ var _cand_t := 0.0
 var _swing := 1.0               ## settle time of the current turn
 var yaw := 0.0                  ## current yaw in radians (player input is relative to it)
 var _zones: Array[Node3D] = []
-var _look := Vector3.ZERO
-var _look_v := Vector3.ZERO
+var _look := Vector3.ZERO      ## the look point: _follow + _frame
+var _follow := Vector3.ZERO    ## tight follow of the player (feet height) plus the lead
+var _follow_v := Vector3.ZERO
+var _frame := Vector3.ZERO     ## framing offset: clamp correction and look height
+var _frame_v := Vector3.ZERO
+var _swing_age := 0.0          ## seconds since the view last changed
 var _lead := Vector3.ZERO
 var _lead_v := Vector3.ZERO
 var _yaw_v := 0.0
@@ -100,6 +114,7 @@ var _occluders: Array[Node3D] = []
 
 func _ready() -> void:
 	top_level = true
+	set_process(true)   # the on/off switch other scripts use (see the header); the work is in _physics_process
 	camera.cull_mask &= ~CEILING_LAYER_MASK
 	camera.near = 0.3
 	camera.far = 80.0
@@ -229,8 +244,8 @@ static func _spring(x: Variant, v: Variant, to: Variant, t: float, delta: float)
 	var tmp: Variant = (v + d * w) * delta
 	return [to + (d + tmp) * e, (v - tmp * w) * e]
 
-func _process(delta: float) -> void:
-	if _zones.is_empty() or not is_instance_valid(_target):
+func _physics_process(delta: float) -> void:
+	if not is_processing() or _zones.is_empty() or not is_instance_valid(_target):
 		return
 	var portrait := get_viewport().get_visible_rect().size.aspect() < 1.0
 	var base_fov := portrait_hfov if portrait else landscape_vfov
@@ -262,7 +277,9 @@ func _process(delta: float) -> void:
 	if z.name.to_lower() != view:
 		var turn := 0.0 if view == "" else absf(angle_difference(yaw, deg_to_rad(z.get_meta("yaw"))))
 		_swing = swing_time + SWING_PER_HALF_TURN * turn / PI
+		_swing_age = 0.0
 		view = z.name.to_lower()
+	_swing_age += delta
 	# Look ahead along the player's walk (zero while seated or standing)
 	var vel := Vector3.ZERO
 	if _target is CharacterBody3D:
@@ -277,8 +294,10 @@ func _process(delta: float) -> void:
 	if _snap:
 		_lead = Vector3.ZERO
 		_lead_v = Vector3.ZERO
-		_look = _want_look(p, c, z)
-		_look_v = Vector3.ZERO
+		_follow = Vector3(p.x, maxf(p.y, 0.0), p.z)
+		_follow_v = Vector3.ZERO
+		_frame = _want_look(p, c, z) - _follow
+		_frame_v = Vector3.ZERO
 		yaw = want_yaw
 		_yaw_v = 0.0
 		_pitch = want_pitch
@@ -287,12 +306,17 @@ func _process(delta: float) -> void:
 		_dist_v = 0.0
 		_snap = false
 	else:
-		var r := _spring(_lead, _lead_v, want_lead, 0.6, delta)
+		var r := _spring(_lead, _lead_v, want_lead, LEAD_SETTLE, delta)
 		_lead = r[0]
 		_lead_v = r[1]
-		r = _spring(_look, _look_v, _want_look(p + _lead, c, z), follow_time, delta)
-		_look = r[0]
-		_look_v = r[1]
+		var at_player := Vector3(p.x + _lead.x, maxf(p.y, 0.0), p.z + _lead.z)
+		r = _spring(_follow, _follow_v, at_player, follow_time, delta)
+		_follow = r[0]
+		_follow_v = r[1]
+		var frame_t := lerpf(_swing * SETTLE_95, CLAMP_SETTLE, smoothstep(0.0, 1.0, _swing_age / _swing))
+		r = _spring(_frame, _frame_v, _want_look(at_player, c, z) - at_player, frame_t, delta)
+		_frame = r[0]
+		_frame_v = r[1]
 		r = _spring(yaw, _yaw_v, yaw + angle_difference(yaw, want_yaw), _swing * SETTLE_95, delta)
 		yaw = wrapf(r[0], -PI, PI)
 		_yaw_v = r[1]
@@ -302,6 +326,7 @@ func _process(delta: float) -> void:
 		r = _spring(_dist, _dist_v, want_dist, _swing * SETTLE_95, delta)
 		_dist = r[0]
 		_dist_v = r[1]
+	_look = _follow + _frame
 	var b := Basis.from_euler(Vector3(_pitch, yaw, 0))
 	var at := _look + b.z * _dist
 	global_transform = Transform3D(b * Basis.from_euler(fx_tilt), at + fx_offset)

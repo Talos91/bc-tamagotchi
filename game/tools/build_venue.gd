@@ -881,8 +881,8 @@ func _lounge() -> void:
 	_ceiling_group(ceil)
 	_omni(g, "RedPanelLightA", PANEL_RED, 3.05, 6.5, Vector3(4.6, 2.6, 1.8))   # also washes the memory corner red (photo 25)
 	_omni(g, "RedPanelLightB", PANEL_RED, 2.35, 7.0, Vector3(10.0, 3.6, 10.0))
-	_kit(g, "track_light", Vector3(6.0, ROOM_H, 7.0), 0.0, "TrackLight0")
-	_kit(g, "track_light", Vector3(12.0, ROOM_H, 11.0), 0.0, "TrackLight1")
+	for t in [[Vector3(6.0, ROOM_H, 7.0), "TrackLight0"], [Vector3(12.0, ROOM_H, 11.0), "TrackLight1"]]:   # hid the player under it (camera feel 2)
+		_cut(_kit(g, "track_light", t[0], 0.0, t[1]), Vector3.ZERO).set_meta("cut_sight_only", true)
 	_cut_rooms(g, ["lounge", "alcove", "merch", "memory", "patrons"])
 
 ## Merch shop, top right of the lounge (Daniele 2026-11-02, BACKLOG B11): the collectibles shelf stays on the north
@@ -1194,12 +1194,14 @@ func _buffer() -> void:
 			# nor standing nearer than the player cuts them, so the open curtain shows from the main room as it does
 			# from the lounge (Daniele, Questions tab 2026-11-01)
 			_cut(p, Vector3.ZERO).set_meta("cut_sight_only", true)
-	_box(g, "ValanceW", Vector3(BUFFER.position.x - 0.1, 3.4, BUFFER.position.y), Vector3(0.12, 0.6, BUFFER.size.y), _mat("velvet_red", VELVET_RED, 0.95), false)
-	_box(g, "ValanceE", Vector3(BUFFER.end.x - 0.02, 3.4, BUFFER.position.y), Vector3(0.12, 0.6, BUFFER.size.y), _mat("velvet_red", VELVET_RED, 0.95), false)
+	# Valances and the PAR stand hide only when they cover the player (camera feel 2: walking through the buffer
+	# from the main room or the lounge, they stood on the sight line)
+	_cut(_box(g, "ValanceW", Vector3(BUFFER.position.x - 0.1, 3.4, BUFFER.position.y), Vector3(0.12, 0.6, BUFFER.size.y), _mat("velvet_red", VELVET_RED, 0.95), false), Vector3.ZERO).set_meta("cut_sight_only", true)
+	_cut(_box(g, "ValanceE", Vector3(BUFFER.end.x - 0.02, 3.4, BUFFER.position.y), Vector3(0.12, 0.6, BUFFER.size.y), _mat("velvet_red", VELVET_RED, 0.95), false), Vector3.ZERO).set_meta("cut_sight_only", true)
 	for i in BUFFER_TALL.size():
 		var c: Vector2 = BUFFER_TALL[i]
 		_tall_table(g, "BufferTall%d" % i, "Buffer", Vector3(c.x, 0, c.y), true)
-	_ph(g, "par_on_stand", Vector3(15.9, 0, 7.3), 0.0, "BufferPar")
+	_cut(_ph(g, "par_on_stand", Vector3(15.9, 0, 7.3), 0.0, "BufferPar"), Vector3.ZERO).set_meta("cut_sight_only", true)
 	_spot(g, "BufferParSpot", NEON_RED, 3.7, 7.0, 40.0, Vector3(15.9, 1.6, 7.3), Vector3(18.0, 0.3, 4.5))
 	_omni(g, "BufferCandles", TEALIGHT, 1.8, 4.5, Vector3(17.7, 1.6, 5.3), "tealight")
 
@@ -1365,7 +1367,7 @@ func _stage() -> void:
 		var blue: bool = pars[i][1] == "blue"
 		_spot(g, "ParSpot%d" % i, par_col[pars[i][1]], 2.4 if blue else (3.4 if pars[i][1] == "amber" else 5.75), 7.5, 16.0 if blue else 26.0, src, aims[i])
 	# Bare tree to the right of the stage, between stage and raised strip, by the tiny tables (photo 19)
-	_kit_solid(g, "stage_tree", Vector3(TREE.x, 0, TREE.y), -90.0, "TreeRightOfStage")
+	_cut(_kit_solid(g, "stage_tree", Vector3(TREE.x, 0, TREE.y), -90.0, "TreeRightOfStage"), Vector3.ZERO).set_meta("cut_sight_only", true)   # hid the player on the raised strip
 	_omni(g, "TreeLight", Color("ff5a40"), 2.0, 4.0, Vector3(TREE.x, 2.6, TREE.y + 0.8))
 
 ## Round table with four chairs (rotation 45 = diamond on the map), lamp, lanterns, glasses. Chairs become seats of `zone`.
@@ -1500,7 +1502,9 @@ func _bar() -> void:
 	var bay_z := MAIN_Z1 - 0.25
 	for i in 9:
 		var kname := "back_bar_art" if i == 4 else "back_bar_shelf"
-		_kit(g, kname, Vector3(22.55 + i * 1.5, 0, bay_z), 180.0, "Bay%d" % i).add_to_group("look_red_bar", true)
+		var bay := _kit(g, kname, Vector3(22.55 + i * 1.5, 0, bay_z), 180.0, "Bay%d" % i)
+		bay.add_to_group("look_red_bar", true)
+		_cut(bay, Vector3.ZERO).set_meta("cut_sight_only", true)   # the west bays stood between the toilets view and the player
 	_collider(g, "BackBarCollider", Vector3((BAR_X0 + BAR_X1) * 0.5, 1.8, MAIN_Z1 - 0.25), Vector3(BAR_X1 - BAR_X0, 3.6, 0.5))
 	var cz := 13.0   # counter centre line (0.65 deep)
 	for i in 14:
@@ -1743,28 +1747,31 @@ func _contact_shadows() -> void:
 ## The smoking room's view looks south through the red door and takes over in front of it (its rect reaches north to
 ## the raised strip and west to the bar's east end), seeing through the main room's south-east wall (see_through), so
 ## the room is in sight from any approach; inside, its clamp keeps the whole narrow room in frame.
+## Camera feel 2 (Daniele, Questions tab 2026-11-02: "too far, too close or too steep"): every view is nearer and
+## steeper for a 450 x 800 portrait phone (the character ~85-105 px tall instead of ~60-75, the top of the frame at the
+## horizon instead of on the upper walls); before -> after (pitch / distance) in handoffs/camera-feel-2-2026-11-02.md.
 func _camera_zones() -> void:
 	const MAIN_CLAMP := Rect2(21.6, 1.6, 17.6, 10.6)   # look target x 21.6..39.2, z 1.6..12.2: every corner table in frame
-	const MAIN_PITCH := -32.0
-	const MAIN_DIST := 8.5
+	const MAIN_PITCH := -40.0
+	const MAIN_DIST := 5.2
 	const MAIN_LOOK_Y := 0.9
 	var g := _group("CameraZones")
 	var zones := [
-		{"name": "lobby", "rect": Rect2(-2.0, 5.05, 4.15, 8.2), "clamp": Rect2(1.1, 7.0, 0.1, 5.0), "yaw": 0.0, "pitch": -36.0, "dist": 6.5, "look_y": 1.2},
-		{"name": "corridor", "rect": Rect2(-0.2, 13.25, 15.65, 1.65), "clamp": Rect2(3.5, 14.07, 9.0, 0.01), "yaw": -90.0, "pitch": -34.0, "dist": 6.0, "look_y": 1.1},
-		{"name": "buffer", "rect": Rect2(BUFFER.position.x, BUFFER.position.y, BUFFER.size.x, BUFFER.size.y), "clamp": Rect2(17.7, 4.6, 0.3, 1.5), "yaw": 0.0, "pitch": -32.0, "dist": 7.0, "look_y": 1.3},
-		{"name": "alcove", "rect": Rect2(STUB.position.x, STUB.position.y, STUB.size.x, STUB.size.y), "clamp": Rect2(16.4, 11.3, 2.2, 0.1), "yaw": 180.0, "pitch": -48.0, "dist": 5.5, "look_y": 1.0},
+		{"name": "lobby", "rect": Rect2(-2.0, 5.05, 4.15, 8.2), "clamp": Rect2(1.1, 7.0, 0.1, 5.0), "yaw": 0.0, "pitch": -40.0, "dist": 5.0, "look_y": 1.2},
+		{"name": "corridor", "rect": Rect2(-0.2, 13.25, 15.65, 1.65), "clamp": Rect2(3.5, 14.07, 9.0, 0.01), "yaw": -90.0, "pitch": -36.0, "dist": 5.0, "look_y": 1.1},
+		{"name": "buffer", "rect": Rect2(BUFFER.position.x, BUFFER.position.y, BUFFER.size.x, BUFFER.size.y), "clamp": Rect2(16.8, 4.2, 1.8, 2.2), "yaw": 0.0, "pitch": -40.0, "dist": 4.6, "look_y": 1.3},
+		{"name": "alcove", "rect": Rect2(STUB.position.x, STUB.position.y, STUB.size.x, STUB.size.y), "clamp": Rect2(16.4, 11.3, 2.2, 0.1), "yaw": 180.0, "pitch": -50.0, "dist": 4.2, "look_y": 1.0},
 		# The lounge's two top corners look north at their wall (merch shop top right, memory corner top left); the
 		# rest of the lounge keeps its west view (the top-patrons board and the game machine are in it)
-		{"name": "merch", "rect": Rect2(10.6, 0.0, LOUNGE.end.x - 10.6, 3.6), "clamp": Rect2(12.4, 2.0, 1.4, 0.6), "yaw": 0.0, "pitch": -34.0, "dist": 6.5, "look_y": 1.1},
-		{"name": "memory", "rect": Rect2(LOUNGE.position.x, 0.0, 8.0 - LOUNGE.position.x, 2.8), "clamp": Rect2(4.2, 1.7, 2.4, 0.5), "yaw": 0.0, "pitch": -34.0, "dist": 6.5, "look_y": 1.1},
+		{"name": "merch", "rect": Rect2(10.6, 0.0, LOUNGE.end.x - 10.6, 3.6), "clamp": Rect2(12.4, 2.0, 1.4, 0.6), "yaw": 0.0, "pitch": -38.0, "dist": 5.0, "look_y": 1.1},
+		{"name": "memory", "rect": Rect2(LOUNGE.position.x, 0.0, 8.0 - LOUNGE.position.x, 2.8), "clamp": Rect2(4.2, 1.7, 2.4, 0.5), "yaw": 0.0, "pitch": -38.0, "dist": 5.0, "look_y": 1.1},
 		# In front of the Top patrons board under the stairs: a view from the north-east, past the column
-		{"name": "patrons", "rect": Rect2(STAIR_UPPER.end.x, STAIR_UPPER.position.y, 2.6, STAIR_LOWER.position.y - STAIR_UPPER.position.y), "clamp": Rect2(4.6, 9.2, 0.5, 0.6), "yaw": 130.0, "pitch": -30.0, "dist": 5.2, "look_y": 1.0},
-		{"name": "lounge", "base": true, "rect": Rect2(LOUNGE.position.x, LOUNGE.position.y, LOUNGE.size.x, LOUNGE.size.y), "clamp": Rect2(4.5, 1.6, 5.5, 9.4), "yaw": 90.0, "pitch": -34.0, "dist": 8.0, "look_y": 1.3},
-		{"name": "bar", "rect": Rect2(BAR_X0 + 1.2, 9.6, BAR_X1 - BAR_X0 - 1.2, MAIN_Z1 - 9.6), "clamp": Rect2(23.5, 10.6, 10.5, 0.6), "yaw": 180.0, "pitch": -32.0, "dist": 7.0, "look_y": 1.0},
-		{"name": "stage", "rect": Rect2(26.4, 0.0, 9.6, 6.6), "clamp": Rect2(29.0, 1.6, 3.5, 3.2), "yaw": 0.0, "pitch": -28.0, "dist": 7.5, "look_y": 1.3},
-		{"name": "toilets", "rect": Rect2(MAIN_X0, 12.0, BAR_X0 - MAIN_X0 + 2.6, 4.7), "clamp": Rect2(21.0, 13.5, 0.6, 2.0), "yaw": 180.0, "pitch": -34.0, "dist": 6.0, "look_y": 1.2},
-		{"name": "smoking", "rect": Rect2(BAR_X1, RAISED.end.y, MAIN_X1 - BAR_X1, SMOKING.end.y - RAISED.end.y), "clamp": Rect2(37.8, 13.4, 3.2, 3.0), "yaw": 180.0, "pitch": -40.0, "dist": 6.5, "look_y": 1.0,
+		{"name": "patrons", "rect": Rect2(STAIR_UPPER.end.x, STAIR_UPPER.position.y, 2.6, STAIR_LOWER.position.y - STAIR_UPPER.position.y), "clamp": Rect2(4.6, 9.2, 0.5, 0.6), "yaw": 130.0, "pitch": -34.0, "dist": 4.8, "look_y": 1.0},
+		{"name": "lounge", "base": true, "rect": Rect2(LOUNGE.position.x, LOUNGE.position.y, LOUNGE.size.x, LOUNGE.size.y), "clamp": Rect2(4.5, 1.6, 5.5, 9.4), "yaw": 90.0, "pitch": -40.0, "dist": 5.0, "look_y": 1.3},
+		{"name": "bar", "rect": Rect2(BAR_X0 + 1.2, 9.6, BAR_X1 - BAR_X0 - 1.2, MAIN_Z1 - 9.6), "clamp": Rect2(23.5, 10.6, 12.5, 0.6), "yaw": 180.0, "pitch": -40.0, "dist": 5.2, "look_y": 1.0},
+		{"name": "stage", "rect": Rect2(26.4, 0.0, 9.6, 6.6), "clamp": Rect2(28.4, 1.6, 5.0, 3.2), "yaw": 0.0, "pitch": -34.0, "dist": 5.2, "look_y": 1.3},
+		{"name": "toilets", "rect": Rect2(MAIN_X0, 12.0, BAR_X0 - MAIN_X0 + 2.6, 4.7), "clamp": Rect2(21.0, 13.5, 0.6, 2.0), "yaw": 180.0, "pitch": -42.0, "dist": 4.8, "look_y": 1.2},
+		{"name": "smoking", "rect": Rect2(BAR_X1, RAISED.end.y, MAIN_X1 - BAR_X1, SMOKING.end.y - RAISED.end.y), "clamp": Rect2(38.2, 12.8, 2.6, 3.6), "yaw": 180.0, "pitch": -46.0, "dist": 5.4, "look_y": 1.0,
 			"see_through": [Rect2(BAR_X1 + 0.25, MAIN_SE_Z - 0.03, MAIN_X1 - BAR_X1 - 0.3, 0.2)]},
 		{"name": "floor", "rect": Rect2(MAIN_X0, 0.0, MAIN_X1 - MAIN_X0, MAIN_Z1), "clamp": MAIN_CLAMP, "yaw": -90.0, "pitch": MAIN_PITCH, "dist": MAIN_DIST, "look_y": MAIN_LOOK_Y, "fallback": true},
 	]
