@@ -9,9 +9,8 @@ extends Node3D
 ##   stage    the stage_carpet_tile bounds (zone Stage: the stage is at floor level, marked by carpets) plus the
 ##            floor in front, approached at spawn Wander_StageFront
 ##   table    every round_table of zones Tables, Raised and Lounge; the raised strip's small tables reach their couch
-##            seats (radius x 0.95 at least). Raised3 is boxed in (the east rectangular table's chairs west of it,
-##            Raised4's chair south): the nearest spot a walk reaches is on the strip past Raised4, so its approach is
-##            there (APPROACH_AT) with an arrival slack ("slack", main.gd) to match; its own seats stay out of reach
+##            seats (radius x 0.95 at least). Raised3 was boxed in until the east rectangular table moved 0.6 m west
+##            (Daniele 2026-11-02): its chair and couch places are walked to like the others'
 ##   arcade   the pinball (pinball_machine, or arcade_cabinet while the kit lacked it) on the lounge's west wall
 ##   cabinet  the Black Cabin game machine (game_cabinet_bc) by the stairs: stub, generic sheet for now
 ##   memory   the memory corner in the lounge's north-west (around its crt_monitor): share a photo (coming soon), sit
@@ -47,7 +46,8 @@ const MEMORY_RADIUS := 1.5
 const SEAT_MARGIN := 0.35         ## metres past the farthest seat of a seat-group table zone
 const FRONT_RADIUS := 1.1        ## around the floor point in front of a wall machine (pinball, game cabinet)
 ## Approach points for zones whose own centre is out of the walk's reach: the nearest reachable floor (navmesh probe).
-const APPROACH_AT := {"table:Raised3": Vector3(39.6, 0.0, 9.2)}
+## Empty since Raised3 opened up (a zone listed here gets an arrival slack to match, main.gd).
+const APPROACH_AT := {}
 const BOARD_REACH := 0.75        ## metres in front of the patrons board and a corridor portrait where the walk ends
 const PORTRAIT_RADIUS := 0.55    ## portraits hang 1.2 m apart: each zone is the floor right in front of its frame
 const TABLE_ZONES := ["Tables", "Raised", "Lounge"]

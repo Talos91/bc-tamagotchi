@@ -65,8 +65,8 @@ const STAIR_UPPER := Rect2(2.35, 7.75, 1.6, 3.6)      # second flight, foot at i
 const STAIR_H1 := 1.6                                 # landing height
 const STAIR_TOP := 4.0                                # the floor above
 const STAIR_STOP_Z := 10.05                           # rope across the second flight: as high as the player climbs
-const CABINET_X := 8.0                                # game machine on the north wall beside the memory corner (lounge revamp)
-const LEDGE_X := Vector2(9.9, 11.8)                   # high counter on the south wall east of the stair foot (lounge revamp)
+const CABINET_X := 10.3                               # game machine, ~1.9 m east of the bottom step (back by the stair foot, Daniele 2026-11-02)
+const LEDGE_X := Vector2(11.1, 12.8)                  # high counter on the south wall between the game machine and the Sticker door
 const MERCH := Vector3(13.6, 0, 1.55)                 # merch counter, top right of the lounge (lounge revamp)
 const PORTRAIT_X0 := 3.0                              # corridor south wall: ten top-patron portraits 1.2 m apart (B7)
 const PORTRAIT_STEP := 1.2
@@ -85,6 +85,7 @@ const TINY_EAST_Z := [0.95, 2.3, 3.5]
 const ROW5 := [[24.6, 8.4, 45.0], [27.45, 8.4, 45.0], [30.05, 8.4, 0.0], [32.7, 8.4, 45.0], [35.45, 8.4, 0.0]]
 const RAISED_TABLES_Z := [1.25, 3.1, 4.9, 7.3, 8.55]
 const RAISED_TABLE_X := 40.4
+const EAST_X := 37.6                                  # the east tables (diamond and rectangle) 0.6 m west of the map: opens a lane to Raised3's chair and couch places (Daniele 2026-11-02)
 const COUNTER_STOOLS_X := [24.65, 25.9, 27.1, 28.3, 30.95, 31.95, 32.95, 33.95, 34.95]
 const COUNTER_STOOL_Z := 12.2
 const BUFFER_TALL := [Vector2(16.7, 3.9), Vector2(18.7, 3.9), Vector2(16.7, 6.7), Vector2(18.7, 6.7)]
@@ -697,24 +698,24 @@ func _lounge() -> void:
 	else:
 		_kit_solid(g, "arcade_cabinet", Vector3(LOUNGE.position.x + 0.45, 0, 7.2), 90.0, "ArcadeCabinet")
 	_omni(g, "PinballGlow", SCREEN_CYAN, 0.6, 2.4, Vector3(LOUNGE.position.x + 1.2, 1.4, 7.2))
-	# Black Cabin game machine (flappy-bird style; zone stub "cabinet"), top left with the memory corner (Daniele,
-	# lounge revamp 2026-11-02). It stood by the stairs facing the bottom step; that reading is asked again.
-	_ph(g, "game_cabinet_bc", Vector3(CABINET_X, 0, 0.4), 0.0, "GameCabinet")
+	# Black Cabin game machine by the stairs, facing the bottom step (flappy-bird style; zone stub "cabinet"). The
+	# lounge revamp moved it to the memory corner; Daniele put it back by the stair foot (2026-11-02).
+	_ph(g, "game_cabinet_bc", Vector3(CABINET_X, 0, LOUNGE.end.y - 0.4), 180.0, "GameCabinet")
 	# Two white columns where the map shows them
 	for i in 2:
 		var p: Vector3 = [Vector3(8.95, 0, 3.9), Vector3(8.95, 0, 9.75)][i]
 		_cut(_kit(g, "white_column", p, 0.0, "Column%d" % i), Vector3.ZERO)   # hides only when it stands in front of the player
 		_collider(g, "Column%dCollider" % i, p + Vector3(0, ROOM_H * 0.5, 0), Vector3(0.4, ROOM_H, 0.4))
 	_merch_shop(g)
-	# The high counter and its two stools (R02) moved from the top right to the south wall east of the stair foot
+	# The high counter and its two stools (R02) moved from the top right to the south wall, east of the game machine
 	_box(g, "HighCounter", Vector3(LEDGE_X.x, 0, LOUNGE.end.y - 0.5), Vector3(LEDGE_X.y - LEDGE_X.x, 0.95, 0.5), _mat("wood_mid", WOOD_MID, 0.4))
 	for i in 2:
 		var sp := Vector3(LEDGE_X.x + 0.45 + i * 0.95, 0, LOUNGE.end.y - 1.05)
 		_kit_solid(g, "bar_stool", sp, 0.0, "CounterStool%d" % i)
 		_seat("Lounge", "Lounge_Stool%d" % i, sp, 0.0, BAR_SEAT_H, "sit", "HighCounter")
-	_cut(_kit(g, "wall_lamp", Vector3(10.7, 1.7, 0.1), 0.0, "RedDiscLamp"), Vector3.FORWARD)
+	_cut(_kit(g, "wall_lamp", Vector3(10.2, 1.7, 0.1), 0.0, "RedDiscLamp"), Vector3.FORWARD)
 	_cut(_kit(g, "ac_unit", Vector3(7.0, 3.3, 0.15), 0.0, "ACUnit"), Vector3.FORWARD)
-	_cut(_kit(g, "painting_a", Vector3(9.6, 1.4, 0.05), 0.0, "LoungePainting"), Vector3.FORWARD)
+	_cut(_kit(g, "painting_a", Vector3(8.2, 1.4, 0.05), 0.0, "LoungePainting"), Vector3.FORWARD)
 	_lounge_dressing(g)
 	# Two round tables with four chairs in the open middle (the real lounge changes often, Daniele)
 	for n in 2:
@@ -1286,10 +1287,10 @@ func _tables() -> void:
 		_round_table(g, "Table%d" % n, "Tables", Vector3(t[0], 0, t[1]), t[2], n % 2 == 0)
 	for i in 3:
 		_omni(g, "RowLight%d" % i, LAMP_GOLD, 2.2, 4.2, Vector3(25.9 + i * 4.8, 1.9, 8.4))
-	# East: the diamond and the vertical rectangle before the raised strip
-	_round_table(g, "EastTable", "Tables", Vector3(38.2, 0, 5.85), 45.0, true)
-	_rect_table(g, "RectTableE", "Tables", Vector3(38.2, 0, 8.45), 1.9)
-	_omni(g, "EastLight", LAMP_GOLD, 2.0, 4.2, Vector3(38.2, 1.9, 7.2))
+	# East: the diamond and the vertical rectangle before the raised strip, 0.6 m west of the map (Raised3's lane)
+	_round_table(g, "EastTable", "Tables", Vector3(EAST_X, 0, 5.85), 45.0, true)
+	_rect_table(g, "RectTableE", "Tables", Vector3(EAST_X, 0, 8.45), 1.9)
+	_omni(g, "EastLight", LAMP_GOLD, 2.0, 4.2, Vector3(EAST_X, 1.9, 7.2))
 	# Two tall tables at the main room's west opening, stools north and south
 	for i in OPENING_TALL.size():
 		var c: Vector2 = OPENING_TALL[i]
@@ -1598,10 +1599,10 @@ func _camera_zones() -> void:
 		{"name": "corridor", "rect": Rect2(-0.2, 13.25, 15.65, 1.65), "clamp": Rect2(3.5, 14.07, 9.0, 0.01), "yaw": -90.0, "pitch": -34.0, "dist": 6.0, "look_y": 1.1},
 		{"name": "buffer", "rect": Rect2(BUFFER.position.x, BUFFER.position.y, BUFFER.size.x, BUFFER.size.y), "clamp": Rect2(17.7, 4.6, 0.3, 1.5), "yaw": 0.0, "pitch": -32.0, "dist": 7.0, "look_y": 1.3},
 		{"name": "alcove", "rect": Rect2(STUB.position.x, STUB.position.y, STUB.size.x, STUB.size.y), "clamp": Rect2(16.4, 11.3, 2.2, 0.1), "yaw": 180.0, "pitch": -48.0, "dist": 5.5, "look_y": 1.0},
-		# The lounge's two top corners look north at their wall (merch shop top right; memory corner and game machine
-		# top left); the rest of the lounge keeps its west view (the top-patrons board under the stairs is in it)
+		# The lounge's two top corners look north at their wall (merch shop top right, memory corner top left); the
+		# rest of the lounge keeps its west view (the top-patrons board and the game machine are in it)
 		{"name": "merch", "rect": Rect2(10.6, 0.0, LOUNGE.end.x - 10.6, 3.6), "clamp": Rect2(12.4, 2.0, 1.4, 0.6), "yaw": 0.0, "pitch": -34.0, "dist": 6.5, "look_y": 1.1},
-		{"name": "memory", "rect": Rect2(LOUNGE.position.x, 0.0, 9.6 - LOUNGE.position.x, 2.8), "clamp": Rect2(4.8, 1.7, 3.0, 0.5), "yaw": 0.0, "pitch": -34.0, "dist": 6.5, "look_y": 1.1},
+		{"name": "memory", "rect": Rect2(LOUNGE.position.x, 0.0, 8.0 - LOUNGE.position.x, 2.8), "clamp": Rect2(4.2, 1.7, 2.4, 0.5), "yaw": 0.0, "pitch": -34.0, "dist": 6.5, "look_y": 1.1},
 		# In front of the Top patrons board under the stairs: a view from the north-east, past the column
 		{"name": "patrons", "rect": Rect2(STAIR_UPPER.end.x, STAIR_UPPER.position.y, 2.6, STAIR_LOWER.position.y - STAIR_UPPER.position.y), "clamp": Rect2(4.6, 9.2, 0.5, 0.6), "yaw": 130.0, "pitch": -30.0, "dist": 5.2, "look_y": 1.0},
 		{"name": "lounge", "base": true, "rect": Rect2(LOUNGE.position.x, LOUNGE.position.y, LOUNGE.size.x, LOUNGE.size.y), "clamp": Rect2(4.5, 1.6, 5.5, 9.4), "yaw": 90.0, "pitch": -34.0, "dist": 8.0, "look_y": 1.3},

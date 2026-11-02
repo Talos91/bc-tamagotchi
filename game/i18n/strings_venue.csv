@@ -138,20 +138,20 @@ venue.prompt.merch,Tap for the merch shop,แตะเพื่อดูร้�
 venue.prompt.patrons,Tap for the top patrons,แตะเพื่อดูลูกค้าประจำอันดับต้น,Zone prompt pill at the Top patrons board under the lounge stairs; TH machine draft,40
 venue.prompt.portrait,Tap to look at the portrait,แตะเพื่อดูภาพเหมือน,Zone prompt pill in front of a top patron's portrait in the entrance corridor; TH machine draft,40
 venue.sheet.merch.head,MERCH SHOP,ร้านของที่ระลึก,Merch sheet header; TH machine draft,26
-venue.sheet.merch.greet,Black Cabin merch. What's on sale and the prices are coming soon.,สินค้าแบล็กคาบิน รายการและราคาจะมาเร็ว ๆ นี้,"Line on the merch sheet (placeholder list, BACKLOG B11); TH machine draft",90
-venue.sheet.merch.tbc,Coming soon · price to be confirmed,เร็ว ๆ นี้ · รอยืนยันราคา,Disabled reason on every merch row until prices and payment are decided; TH machine draft,40
-venue.merch.tee,Black Cabin tee,เสื้อยืดแบล็กคาบิน,Merch row (placeholder item); TH machine draft,26
-venue.merch.cap,Black Cabin cap,หมวกแก๊ปแบล็กคาบิน,Merch row (placeholder item); TH machine draft,26
-venue.merch.tote,Tote bag,กระเป๋าผ้า,Merch row (placeholder item); TH machine draft,26
-venue.merch.stickers,Sticker pack,ชุดสติกเกอร์,Merch row (placeholder item); TH machine draft,26
-venue.merch.pin,Enamel pin,เข็มกลัด,Merch row (placeholder item); TH machine draft,26
-venue.merch.poster,Gig poster,โปสเตอร์คอนเสิร์ต,Merch row (placeholder item); TH machine draft,26
+venue.sheet.merch.greet,"Merch for your character, bought with coins. Coins are coming soon.",ของแต่งตัวสำหรับตัวละครของคุณ ซื้อด้วยเหรียญ เหรียญจะมาเร็ว ๆ นี้,Line on the merch sheet: in-game cosmetic merch paid in coins (Daniele 2026-11-02; a real-life merch shop comes later and is not built); TH machine draft,90
+venue.sheet.merch.tbc,{price} coins · coming soon,{price} เหรียญ · เร็ว ๆ นี้,"Disabled reason on every merch row until coins exist; the price is the wardrobe tier of docs/design/04-coins.md 3.2 (small 30, mid 60, performer tee 80, statement 120); TH machine draft",40
+venue.merch.tee,Black Cabin tee,เสื้อยืดแบล็กคาบิน,"Merch row (placeholder item, wardrobe mid tier: top); TH machine draft",26
+venue.merch.cap,Black Cabin cap,หมวกแก๊ปแบล็กคาบิน,"Merch row (placeholder item, wardrobe small tier: hat); TH machine draft",26
+venue.merch.tote,Tote bag,กระเป๋าผ้า,"Merch row (placeholder item, wardrobe small tier: held item); TH machine draft",26
+venue.merch.pin,Enamel pin,เข็มกลัด,"Merch row (placeholder item, wardrobe small tier: accessory); TH machine draft",26
 venue.sheet.patrons.head,TOP PATRONS,ลูกค้าประจำอันดับต้น,Top patrons sheet header (BACKLOG B10); TH machine draft,26
-venue.sheet.patrons.greet,Black Cabin's most loyal. Placeholder names until check-ins arrive.,ลูกค้าที่ภักดีที่สุดของแบล็กคาบิน ชื่อชั่วคราวจนกว่าจะมีระบบเช็กอิน,Line on the Top patrons sheet; TH machine draft,90
+venue.sheet.patrons.greet,"This month's check-ins at the bar, most first. Names and counts are placeholders.",เช็กอินที่บาร์เดือนนี้ เรียงจากมากไปน้อย ชื่อและจำนวนเป็นข้อมูลชั่วคราว,"Line on the Top patrons sheet: ranked by real check-ins at the bar (table QR codes), per month (Daniele 2026-11-02); TH machine draft",90
 venue.sheet.patrons.row,{rank}. {name},{rank}. {name},Top patrons row: rank and placeholder name,26
-venue.sheet.patrons.sub,{n} check-ins,เช็กอิน {n} ครั้ง,Top patrons row sub-line (placeholder count); TH machine draft,34
+venue.sheet.patrons.sub,{n} check-ins this month,เช็กอินเดือนนี้ {n} ครั้ง,Top patrons row sub-line (placeholder count); TH machine draft,34
 venue.sheet.portrait.head,#{rank} · {name},อันดับ {rank} · {name},Portrait sheet header: rank and patron name (BACKLOG B7); TH machine draft,26
-venue.sheet.portrait.greet,One of Black Cabin's top patrons.,หนึ่งในลูกค้าประจำอันดับต้นของแบล็กคาบิน,Line on a portrait sheet; TH machine draft,90
-venue.sheet.portrait.from,From the owner,จากเจ้าของร้าน,Portrait sheet: title over the owner's message; TH machine draft,26
-venue.sheet.portrait.message,"{name}, thank you for all the nights at Black Cabin. See you at the bar. (Placeholder message.)",{name} ขอบคุณสำหรับทุกค่ำคืนที่แบล็กคาบิน แล้วเจอกันที่บาร์ (ข้อความชั่วคราว),"Portrait sheet: the owner's message to a top patron, placeholder until Daniele writes them; TH machine draft",140
+venue.sheet.portrait.greet,"One of Black Cabin's top patrons. Their message, in their own words.",หนึ่งในลูกค้าประจำอันดับต้นของแบล็กคาบิน ข้อความจากตัวเขาเอง,Line on a portrait sheet: the patron writes their own message (Daniele 2026-11-02); TH machine draft,90
+venue.sheet.portrait.from,A message from {name},ข้อความจาก {name},"Portrait sheet: title over the message, written by the portrait's owner, a patron in the hall of fame, not by the bar; TH machine draft",26
+venue.sheet.portrait.message,Thanks for the nights at Black Cabin! Come say hi at the bar. (Placeholder: {name} will write this.),ขอบคุณสำหรับทุกค่ำคืนที่แบล็กคาบิน แวะมาทักทายกันที่บาร์นะ (ข้อความชั่วคราว: {name} จะเขียนเอง),"Portrait sheet: the patron's own message, first person, placeholder until each patron writes theirs; TH machine draft",140
 venue.zone.patrons,TOP PATRONS,ลูกค้าประจำอันดับต้น,"HUD zone name, in front of the Top patrons board under the lounge stairs (camera zone Patrons); TH machine draft",16
+venue.merch.performer,Performer tee,เสื้อยืดวงดนตรี,Merch row (placeholder item; 04-coins.md: unlocks after you have heard that act once); TH machine draft,26
+venue.merch.jacket,Black Cabin jacket,แจ็กเก็ตแบล็กคาบิน,"Merch row (placeholder item, wardrobe statement tier: outer layer); TH machine draft",26

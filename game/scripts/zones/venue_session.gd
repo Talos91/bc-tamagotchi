@@ -28,8 +28,13 @@ const BarMenu = preload("res://scripts/menu/bar_menu.gd")
 const Nightlife = preload("res://scripts/zones/nightlife.gd")
 const N = preload("res://scripts/zones/nightlife_strings.gd")
 const Patrons = preload("res://scripts/zones/patrons.gd")
-## Merch list (lounge revamp, BACKLOG B11): placeholders until Black Cabin says what it sells, the prices and how to pay
-const MERCH_ITEMS := ["tee", "cap", "tote", "stickers", "pin", "poster"]
+## Merch shop (lounge, BACKLOG B11; Daniele 2026-11-02: in-game cosmetic merch for the character, paid in coins). Coins and
+## wardrobe items do not exist yet, so every row shows its price and "coming soon". Item names are placeholders; the
+## prices are the wardrobe tiers of docs/design/04-coins.md 3.2 (small 30, mid 60, performer tee 80, statement 120).
+const MERCH_ITEMS := [
+	{"id": "cap", "price": 30}, {"id": "pin", "price": 30}, {"id": "tote", "price": 30},
+	{"id": "tee", "price": 60}, {"id": "performer", "price": 80}, {"id": "jacket", "price": 120},
+]
 
 const BARTENDER := "nam"
 const HOUSE_DRINK := "house_shooter"  ## what Order a drink pours (real menu, scripts/menu/bar_menu.gd)
@@ -181,9 +186,9 @@ func rows_for(zone: Dictionary) -> Array[Dictionary]:
 				T.t("venue.sheet.table.sat") if needs.daily_keys.has("sit_with|" + sit_key(zone)) else "")
 			rows.append(msit)
 		"merch":
-			# Placeholders: nothing is sold yet (what, prices and coins or real money are Daniele's open question)
+			# In-game coin merch: shown with its coin price, not for sale until coins exist
 			for item in MERCH_ITEMS:
-				rows.append(_row("merch_" + item, "venue.merch.%s" % item, "", "", false, T.t("venue.sheet.merch.tbc")))
+				rows.append(_row("merch_" + item["id"], "venue.merch.%s" % item["id"], "", "", false, T.t("venue.sheet.merch.tbc", {"price": item["price"]})))
 		"patrons":
 			for r in Patrons.count():
 				var pe := Patrons.at(r)
@@ -192,7 +197,10 @@ func rows_for(zone: Dictionary) -> Array[Dictionary]:
 				pr["info"] = true
 				rows.append(pr)
 		"portrait":
-			var mr := _row("message", "venue.sheet.portrait.from", T.t("venue.sheet.portrait.message", {"name": Patrons.at(int(zone.get("rank", 0))).get("name", "")}), "")
+			# Written by the portrait's owner (the patron), not by the bar
+			var who: String = Patrons.at(int(zone.get("rank", 0))).get("name", "")
+			var mr := _row("message", "", T.t("venue.sheet.portrait.message", {"name": who}), "")
+			mr["title"] = T.t("venue.sheet.portrait.from", {"name": who})
 			mr["info"] = true
 			rows.append(mr)
 		"toilet":
