@@ -401,7 +401,7 @@ func test_chat_cast() -> void:
 func test_cast() -> void:
 	print("[cast] Tt, Prae, no Khun Joy, regulars' names and lines, tonight's hosts")
 	check(Cast.role("tt") == Cast.REGULAR and Cast.befriends("tt") and Cast.has_lines("tt"), "Tt is a regular with hearts and lines")
-	check(S.t("cast.tt.name") == "Tt" and Zones.tag_text("tt") == "Tt  ♥", "Tt's name and heart tag (%s)" % Zones.tag_text("tt"))
+	check(S.t("cast.tt.name") == "Ty" and Zones.tag_text("tt") == "Ty  ♥", "Ty's name and heart tag (%s)" % Zones.tag_text("tt"))   # renamed Ty in dd4e03c (id stays tt)
 	var tt_preset: Dictionary = {}
 	for p in Chars.manifest().get("presets", []):
 		if str(p["name"]) == "tt":

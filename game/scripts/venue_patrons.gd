@@ -32,10 +32,15 @@ const SERVER_START := Vector3(30.0, 0, 6.7)
 ## Staff door of the walled bar area (build_venue.gd STAFF_DOOR_BAR, wall z MAIN_SE_Z + 0.1)
 const STAFF_DOOR_X := 37.55
 const STAFF_DOOR_Z := 12.75
+## Staff door from behind the counter into the walled bar area (build_venue.gd BAR_DOOR, wall x BAR_X1 + 0.1): the
+## walled area and the strip behind the counter stand on a raised floor, BARTENDER_LIFT up (owner items 4 and 5)
+const BAR_DOOR_X := 35.85
+const BAR_DOOR_Z := 13.9
 ## PatronFigure draws presets at its FIG_SCALE; seated figures are lowered so their thighs land on the seat.
 const FIG_SCALE := PatronFigure.FIG_SCALE
-## The bartender stands on the raised duckboard behind the counter (05/06 show them chest-up over the 1.1 m bar)
-const BARTENDER_LIFT := 0.3
+## The bartender stands on the raised floor behind the counter (05/06 show them chest-up over the 1.1 m bar);
+## build_venue.gd BAR_FLOOR_H, the same height, also raises the walled bar area and the hatch staff in it
+const BARTENDER_LIFT := 0.45   # figures are 1.16 m: 0.5 m of them shows over the 1.1 m counter, head and shoulders (photo 09)
 const Cast = preload("res://scripts/cast.gd")
 ## Where an owner stands at each of her spots: offset from the table's centre (past the corner between two chairs, clear
 ## of their backs) and the yaw she faces, turned west toward whoever arrives from the lounge side. WestTable0 is 1.8 m
@@ -69,6 +74,7 @@ var taken := {}                     # seat spot -> the patron on it
 var _runner: PatronFigure           # hatch staff on errands through the staff door
 var _errand: Array[Vector3] = []
 var _errand_wait := 0.0
+var _bar_errand := true             # the first errand takes the north door (it flips before each errand)
 var _hatch_pos := Vector3.ZERO
 var _rng := RandomNumberGenerator.new()
 
@@ -232,8 +238,9 @@ func _process(delta: float) -> void:
 	_pace_bartender(delta)
 	_run_errand(delta)
 
-## Hatch staff: wait at the hatch, walk to the staff door, out a step into the main room, pause, and back (straight
-## lines: the staff room is off the navmesh). The door swings for them (venue_doors.gd); the player never passes.
+## Hatch staff: wait at the hatch, walk to a staff door, through it, pause, and back (straight lines: the staff room is
+## off the navmesh). Every other errand takes the north door, down a step into the main room; the others the bar door,
+## to behind the counter on the same raised floor. The doors swing for them (venue_doors.gd); the player never passes.
 func _run_errand(delta: float) -> void:
 	if _runner == null:
 		return
@@ -242,8 +249,13 @@ func _run_errand(delta: float) -> void:
 		_runner.play("idle")
 		_runner.rotation.y = lerp_angle(_runner.rotation.y, PI, 1.0 - exp(-6.0 * delta))
 		if _errand_wait <= 0.0:
-			var inside := Vector3(STAFF_DOOR_X, 0, STAFF_DOOR_Z + 0.6)
+			var y := _hatch_pos.y
+			var inside := Vector3(STAFF_DOOR_X, y, STAFF_DOOR_Z + 0.6)
 			var outside := Vector3(STAFF_DOOR_X, 0, STAFF_DOOR_Z - 1.3)
+			_bar_errand = not _bar_errand
+			if _bar_errand:
+				inside = Vector3(BAR_DOOR_X + 0.7, y, BAR_DOOR_Z)
+				outside = Vector3(BAR_DOOR_X - 1.4, y, BAR_DOOR_Z)
 			_errand = [inside, outside, outside, inside, _hatch_pos]
 			_errand_wait = 2.5   # pause outside
 		return
@@ -262,6 +274,8 @@ func _run_errand(delta: float) -> void:
 			_errand_wait = _rng.randf_range(10.0, 20.0)
 		return
 	_runner.position += d.normalized() * minf(WALK_SPEED * delta, d.length())
+	# Down (or up) the step at the north staff door: raised inside the walled area, floor level in the main room
+	_runner.position.y = _hatch_pos.y if _runner.position.z > STAFF_DOOR_Z else 0.0
 	_runner.rotation.y = lerp_angle(_runner.rotation.y, atan2(d.x, d.z), 1.0 - exp(-8.0 * delta))
 	_runner.move_speed = WALK_SPEED
 	_runner.play("walk")

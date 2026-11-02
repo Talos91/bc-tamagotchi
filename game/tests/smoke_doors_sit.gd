@@ -76,6 +76,7 @@ func _init() -> void:
 	await walk(Vector3(37.55, 0, 14.0), 150)
 	check(doors.openness("StaffDoorBar") < 0.01, "staff door stays shut for the player")
 	check(p.global_position.z < 12.6, "staff door blocks the player (z %.2f)" % p.global_position.z)
+	await bar_area(crowd)
 
 	print("cutaway rule")
 	# A room's walls stay solid until the character has gone through its door (Daniele 2026-11-02); since the playtest
@@ -168,6 +169,72 @@ func teleport(pos: Vector3) -> void:
 	p.rig.snap()
 
 
+## Owner feedback 2026-11-02, items 4 5 11 (handoffs/venue-fixes-2026-11-02.md): the staff door between the bar and the
+## walled bar area swings for the hatch staff's errand through it and closes after; the strip behind the counter and
+## the walled area stand on the raised floor with the bartender and the hatch staff on it; the rope across the unused
+## old-corridor alcove stops the navmesh and the player.
+func bar_area(crowd: Node) -> void:
+	print("bar area and alcove")
+	var names := []
+	for d in doors.doors:
+		names.append(str(d.node.name))
+	check(names.has("BarDoor"), "bar door built (staff door, walled bar area west wall)")
+	var venue: Node = main.get_node("Venue")
+	var duck: MeshInstance3D = venue.find_child("BarDuckboard", true, false)
+	var deck: MeshInstance3D = venue.find_child("StaffRoomDeck", true, false)
+	var lift := 0.45
+	check(duck != null and absf(duck.get_aabb().size.y - lift) < 0.01 and deck != null and absf(deck.get_aabb().size.y - lift) < 0.01,
+		"raised floor %.2f m behind the counter and in the walled bar area" % lift)
+	check(absf(crowd._bartender.global_position.y - lift) < 0.01, "bartender stands on the raised floor (y %.2f)" % crowd._bartender.global_position.y)
+	check(absf(crowd._hatch_pos.y - lift) < 0.01, "hatch staff stands on the raised floor (y %.2f)" % crowd._hatch_pos.y)
+	# The errand through the bar door: out to behind the counter and back, the door open as they pass, shut after
+	crowd._runner.position = crowd._hatch_pos
+	crowd._errand.clear()
+	crowd._bar_errand = false   # flips to the bar door for this errand
+	crowd._errand_wait = 0.0
+	var opened := 0.0
+	var behind := false
+	for i in 900:
+		await physics_frame
+		opened = maxf(opened, doors.openness("BarDoor"))
+		var q: Vector3 = crowd._runner.position
+		if q.x < 35.0:
+			behind = behind or absf(q.y - lift) < 0.01
+		if crowd._errand.is_empty() and i > 60:
+			break
+	check(behind, "hatch staff walked through the bar door to behind the counter, on the raised floor")
+	check(opened > 0.8, "bar door swung open for them (%.2f)" % opened)
+	crowd._errand_wait = 999.0
+	for i in 150:
+		await physics_frame
+	check(doors.openness("BarDoor") < 0.05, "bar door closes after they are back at the hatch (%.2f)" % doors.openness("BarDoor"))
+	# North errand: down the step into the main room
+	crowd._errand.clear()
+	crowd._bar_errand = true   # flips to the north door
+	crowd._errand_wait = 0.0
+	var floor_out := false
+	for i in 900:
+		await physics_frame
+		var q: Vector3 = crowd._runner.position
+		if q.z < 12.0:
+			floor_out = floor_out or absf(q.y) < 0.01
+		if crowd._errand.is_empty() and i > 60:
+			break
+	check(floor_out, "hatch staff steps down to the main-room floor through the north staff door")
+	crowd._errand_wait = 999.0
+	crowd._runner.position = crowd._hatch_pos
+	# Alcove rope (item 11)
+	var map: RID = p.get_world_3d().navigation_map
+	var path := NavigationServer3D.map_get_path(map, Vector3(13.6, 0, 11.2), Vector3(18.5, 0, 11.2), true)
+	# The nearest reachable point to a goal inside the alcove is now elsewhere (the main room, behind its east wall):
+	# no point of the path may lie inside the alcove past the rope
+	var inside := Array(path).filter(func(q: Vector3): return q.x > 15.9 and q.x < 19.9 and q.z > 10.1 and q.z < 12.4)
+	check(path.size() > 0 and inside.is_empty(), "navmesh stops at the alcove rope (%d path points inside)" % inside.size())
+	teleport(Vector3(14.0, 0.1, 11.2))
+	await walk(Vector3(18.5, 0, 11.2), 200)
+	check(p.global_position.x < 15.6, "the rope stops the player at the alcove mouth (x %.2f)" % p.global_position.x)
+
+
 ## Joystick walk toward `goal` (x, z) for at most `frames` physics frames.
 func walk(goal: Vector3, frames: int) -> void:
 	for i in frames:
@@ -210,7 +277,10 @@ func through_door(door: String, from: Vector3, to: Vector3, arrived: Callable) -
 
 ## Stands next to the zone, does the row and waits until seated; returns the seat (or {}).
 func sit_at(zone: Dictionary, row_id: String) -> Dictionary:
-	teleport(zone["approach"] + Vector3(0, 0.1, 0))
+	# Where a walk to the approach ends: the reachable floor nearest it (a seat-group table's approach is the table's
+	# centre; the long table has no walkable top since venue-fixes, so the player is not dropped inside it)
+	var q := NavigationServer3D.map_get_closest_point(p.get_world_3d().navigation_map, zone["approach"])
+	teleport(Vector3(q.x, 0.1, q.z))
 	for i in 20:
 		await physics_frame
 	check(main.zones.current.get("id", "") == zone["id"], "at zone %s" % zone["id"])

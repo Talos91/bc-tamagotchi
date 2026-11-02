@@ -232,8 +232,12 @@ func _init() -> void:
 
 	print("curtain")
 	var curtains := get_nodes_in_group("cutaway").filter(func(n): return str(n.name).begins_with("Curtain_"))
-	check(curtains.size() == 4 and curtains.all(func(c): return c.get_meta("cut_sight_only", false)), "the buffer's four curtain panels hide only on the sight line")
-	var main_side := curtains.filter(func(c): return c.global_position.x > 19.0)
+	check(curtains.size() == 6 and curtains.all(func(c): return c.get_meta("cut_sight_only", false)), "the buffer's six curtain panels hide on the sight line")
+	# Owner feedback 2026-11-02, item 8: the main-room side hangs a second panel back to back, its folds into the buffer
+	var inner := curtains.filter(func(c): return str(c.name).ends_with("In"))
+	check(inner.size() == 2 and inner.all(func(c): return absf(c.global_rotation_degrees.y + 90.0) < 1.0 and c.global_position.x > 19.0),
+		"the main-room side shows folds into the buffer too (two panels at -90 beside the opening)")
+	var main_side := curtains.filter(func(c): return c.global_position.x > 19.0 and not str(c.name).ends_with("In"))
 	# Both stand (never cut away) from every spot; in front of the opening both are in frame. Off to one side the nearer
 	# portrait camera (camera feel 2) frames the curtain on the player's side, the other is just out of frame, not hidden.
 	for at in [Vector3(21.6, 0.1, 5.3), Vector3(22.4, 0.1, 6.2), Vector3(21.4, 0.1, 4.2)]:
@@ -245,9 +249,17 @@ func _init() -> void:
 		var want_shown := 2 if is_equal_approx(at.z, 5.3) else 1
 		check(p.rig.zone == "floor" and standing.size() == 2 and shown.size() >= want_shown and shown.has(near_side),
 			"from the main room at %s both main-side curtains stand (%d), %d in frame (want %d, the near one among them)" % [at, standing.size(), shown.size(), want_shown])
+	# Item 6: in the buffer's own view the south pair, between the camera and the player, no longer fills the foreground;
+	# the north pair beyond the player stands
 	teleport(Vector3(18.0, 0.1, 5.3))
 	await frames_n(30)
-	check(curtains.filter(func(c): return c.is_visible_in_tree()).size() == 4, "from the buffer all four curtains stand")
+	var north := curtains.filter(func(c): return c.global_position.z < 5.3)
+	var south := curtains.filter(func(c): return c.global_position.z > 5.3)
+	# (a panel out of frame is left alone: the rig cuts only what is in view)
+	var south_shown := south.filter(func(c): return c.is_visible_in_tree() and on_screen(c.global_position + Vector3(0, 1.6, 0)))
+	check(p.rig.zone == "buffer" and north.all(func(c): return c.is_visible_in_tree()) and south_shown.is_empty(),
+		"from the buffer the north curtains stand (%d/3), none of the south ones nearer the camera stands in frame (%s)"
+		% [north.filter(func(c): return c.is_visible_in_tree()).size(), south_shown.map(func(c): return str(c.name))])
 
 	print("camera")
 	for v in [["merch", Vector3(13.4, 0.1, 2.6), 0.0], ["memory", Vector3(6.4, 0.1, 1.9), 0.0], ["patrons", Vector3(4.85, 0.1, 9.1), 130.0], ["lounge", Vector3(8.0, 0.1, 6.5), 90.0]]:

@@ -42,7 +42,9 @@ extends Node3D
 ##       pieces and doors hide at once. A view's see_through rects cut every piece standing on them, the door in
 ##       it too (shut, it would stand alone in the sunk wall and hide the tables behind it): the smoking room's view
 ##       looks through the main room's south-east wall and red door, so the room is in sight from the approach.
-##   Pieces with meta cut_sight_only (the buffer's open curtains) are cut only on the sight line, in every zone.
+##   Pieces with meta cut_sight_only (the buffer's open curtains) are cut only on the sight line, in every zone; if
+##       they also carry cut_rooms, inside those rooms' views also when wholly nearer the camera than the player (the
+##       buffer's curtains and PAR stand filled the foreground of its own view: owner feedback 2026-11-02, item 6).
 ##   Swing doors (group "swing_door") are tested with their box as they stand now (open or shut), so an open leaf
 ##   between the camera and the player is hidden.
 ## Hanging props in group "occluder" (metas occluder_center, occluder_radius) between the camera and the look point
@@ -366,8 +368,10 @@ func _update_cutaway(fwd: Vector3, cam: Vector3, player: Vector3, see_through: A
 				break
 		var faces := (w.get_meta("cut_normal") as Vector3).dot(back) >= 0.35
 		var cut := false
-		if w.get_meta("cut_sight_only", false):   # open curtains: only when they hide the player
+		if w.get_meta("cut_sight_only", false):   # open curtains: only when they hide the player ...
 			cut = on_line
+			if not cut and rooms != null and own:   # ... and, in their own rooms' views, when nearer than the player
+				cut = _max_depth(box, cam, fwd) < player_depth - 0.3 and _in_view(box, planes)
 		elif entrance:
 			cut = own and (faces or on_line)
 		elif on_line or _on_rects(box, see_through) or (own and faces):
