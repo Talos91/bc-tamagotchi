@@ -1,14 +1,14 @@
-# STATE — Black Cabin Tamagotchi (rewritten, never appended; as of 2026-11-03 ~02:30 UTC+7)
+# STATE — Black Cabin Tamagotchi (rewritten, never appended; as of 2026-11-03 ~02:50 UTC+7)
 
-## LIVE (origin/main 2db20c8; every code SHA on it verified 14/14 in a clean worktree, APPDATA empty per suite)
+## LIVE (origin/main 0f25a8a; every code SHA on it verified 14/14 in a clean worktree, APPDATA empty per suite)
 - Venue v4 to the real floor map, doors, seats, stair, start screen with the real sign, Lato + Kristi, portrait first + landscape toggle, real menu (121 drinks, 34 dishes), Prae owner, Tt regular #4, nightlife actions + WASTED, per-area camera with seven area buttons, lounge revamp + follow-up (accepted, **layout.json frozen**), look D (6cd9735 + 6df5288; acceptance pending), menu follow-ups (6c7d9e4; accepted), stakes v3 docs (625f83f; review pending), housekeeping 38fc2fa (MANUAL §5/§15, GDD §8, Kanit removed), **camera feel 2** (406d2fd + start-screen fix c97abde: tight follow, nothing hides the player, nearer per-area views, landscape distance x1.5, corridor clamp; acceptance pending on three cards).
 - 15 suites (run from `game/`): smoke_stairs, smoke_tap, smoke_hud, test_needs, test_minigames, smoke_loop, smoke_doors_sit, smoke_start, test_menu, smoke_version, test_nightlife, test_seats, test_feel, test_lounge, test_touch (added 2026-11-03 with touch-anywhere b8f6d50). Version 0.2.0 open (`docs/tech/versioning.md`). Play: `docs/tech/02-playtest-guide.md`.
 
 ## IN FLIGHT
-- Orchestrator: **local_ddbbfc1d** (Fable 5.1; effort medium, Daniele asked to set high; **context ~23 %** at this rewrite; 8 % 13:20, 11 % 14:10, 16 % 16:50, 19 % 17:20 UTC on 11-02). Handoff `C:/Users/itisf/.claude/handoffs/1ab97086-9b4b-48fb-afb8-c28766300c88.md`. Connectors off. Never verifies, pushes code, publishes or deploys itself.
-- **No worker running.** Local main above origin fd91bee, all unverified in a clean worktree, none pushed: owner feedback (68df465…5c43cd8), 🎨 look-followups 84c58e5 + 86b40ab (+ report 7638093), 🛠️ needs-stakes dd4e03c (+ abd40a9), verify-look-needs report aa5259f (FAIL 12/14: stale Tt, LongTable navmesh island), 🎮 touch-anywhere b8f6d50 (+ e1d3a4e; new suite test_touch), 🏗️ venue-fixes e4d7e76 (+ bf0875a: doors, raised bar, buffer curtains, toilet door, corridor barrier, NavTopBlock over the long table, Tt→Ty in test_minigames; 9/9 in the shared tree), orchestrator STATE/LOG/PROJECT commits. **Next: 🔍 verifier of the tip (15 suites), push by SHA**, then Daniele redeploys (`npx.cmd vercel login` once; `python tools/build_web.py --deploy --out %LOCALAPPDATA%c-web`) and does the phone pass.
-- Cards written by workers today, all open for Daniele: needs-stakes-review (+ night-boundary, death-in-visit, rescue-welcome, retire-ui), look-followups-review v2 (+ player-light, layout-export, month-list), touch-anywhere-review, venue-fixes-review (+ bar-height, bar-door), web-build-review. **look-followups-layout-export** decides whether the look pieces go into layout.json by a full export (venue-fixes kept layout.json to its own lines).
-- Sessions to archive on Daniele's side: venue-fixes local_0ea22856, verify-web-build local_cffc72a4.
+- Orchestrator: **local_ddbbfc1d** (Fable 5.1; effort medium, Daniele asked to set high; **context ~25 %** at this rewrite; day 11-02: 8 → 19 %; 11-03: 23, 25 %). Handoff `C:/Users/itisf/.claude/handoffs/1ab97086-9b4b-48fb-afb8-c28766300c88.md`. Connectors off. Never verifies, pushes code, publishes or deploys itself.
+- **No worker running; local main = origin.** 🔍 verify-stack PASSED 2d55d45 (15/15, build 54.0 MB; report 0f25a8a). Sessions to archive on Daniele's side: venue-fixes local_0ea22856, verify-stack local_85923ca7, verify-web-build local_cffc72a4.
+- **Next for Daniele:** redeploy from the repo root (clean tree now): `python tools/build_web.py --deploy --out %LOCALAPPDATA%c-web` (after `npx.cmd vercel login` once), send the URL, then the phone pass (load s, fps with 42 lights, touch walk, HUD, save survives reload) and the acceptance cards.
+- Proposed: 🧹 Housekeeping (DECISIONS row for the 14 owner items, hub Backlog statuses for A7–A9 and the new jobs, stakes-rules + game-bible tabs, prune two stale worktrees from the old orchestrator's scratchpad, hub card ids check).
 
 ## WAITING ON OWNER (Questions tab: https://claude.ai/artifact/BbpBxVWVVXMjz7TgJ7aFBW#questions)
 - **Web build:** deployed once by Daniele from the shared tree (URL not recorded; send it). Redeploy after the stack is verified: `npx.cmd vercel login`, then `python tools/build_web.py --deploy --out %LOCALAPPDATA%c-web`; then a phone pass (load s, fps, tap walk, HUD, save survives reload). Card web-build-review.
@@ -23,7 +23,7 @@
 - Method v1.1 review by Daniele ~2026-11-16: LOG carries a "context %" per day.
 
 ## NEXT JOBS
-0. 🔍 Verify the stack (card), redeploy, Daniele's phone pass with numbers → performance pass.
+0. Redeploy (Daniele), phone pass with numbers → 🛠️ performance pass (42 lights) with those numbers.
 1. 🛠️ **Needs/stakes build** (Sonnet; card proposed): `06-stakes.md` §10 + build list in `handoffs/worker-reports-2026-11/stakes-fold.md`, with O1–O4 as answered; include the menu bundle price-only/list-only change and Pour Perfect marking a drink tried (decide in the brief: yes).
 2. 🎨 **Look follow-ups** (Opus; card proposed): darker still with the player readable, corridor west-end neon line, sconces on the line, symmetric stage curtain, left singer → electric-piano player, two Top-patrons posters; bake look-D swatches into `bc_kit.py` if cheap. Then look-D close → 0.2.0 close (changelog, live manual §15).
 3. 🧹 Housekeeping: hub tabs for stakes rules + game bible; live manual §15.
