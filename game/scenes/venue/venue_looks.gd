@@ -1,6 +1,10 @@
 extends Node
 ## Material overrides on kit instances, applied at load (tools/build_venue.gd adds this node as Venue/Looks): surface
 ## changes on the children of an instanced .glb are not saved by PackedScene.pack, so they are made here instead.
+## Every kit piece (look D "as in the venue", DECISIONS 2026-11-02): the kit's amber LED swatches (ShelfAmber,
+## SoffitPeach, CubbyGlow: bar soffits, counter and cashier strips, back-bar art, the stage backdrop's lights and
+## lanterns, the amber PAR, stage and stair step lights, collectibles shelf, wine fridge) glow red, and the kit's dark
+## swatches CabinDark and CeilingPlum go blackish, as in the look test. Characters (under Patrons) keep their colours.
 ## Groups set by the generator:
 ##   look_red_bar      back-bar bays: amber cubby / shelf / soffit glow -> red LED, bottles glow red (photos 09, 16)
 ##   look_shelf_dull   shelf tiles over the couch: dull browns and glass, no rainbow spines (photo 11)
@@ -8,13 +12,16 @@ extends Node
 ##                     18; the kit's NeonRed at energy 5 burns to amber-white through the tonemapper)
 
 const RED_LED := Color("ff1a12")
+const CUBBY_RED := Color("6a0806")
 const BOTTLE_RED := Color("c41a14")
 const NEON_EDGE := Color("ff0e0a")
+const KIT_D := {"CabinDark": Color("0c0909"), "CeilingPlum": Color("0c0809")}   # look D: blackish (bc_kit.py 1c0d0c, 2a0e12)
 
 var _cache := {}
 
 
 func _ready() -> void:
+	_apply_kit_d(get_parent())
 	for n in get_tree().get_nodes_in_group("look_red_bar"):
 		_apply(n, _red_bar)
 	for n in get_tree().get_nodes_in_group("look_shelf_dull"):
@@ -54,9 +61,44 @@ func _mat(key: String, col: Color, emit := 0.0, rough := 0.8, alpha := 1.0) -> S
 	return m
 
 
+## Look D on kit swatches: amber LEDs -> red (albedo and emission, the kit's emission energy kept), CabinDark and
+## CeilingPlum -> blackish. One copy per kit material, shared by the instances that use it.
+func _apply_kit_d(n: Node) -> void:
+	if n.name == &"Patrons" and n.get_parent() == get_parent():
+		return
+	if n is MeshInstance3D and n.mesh:
+		var mi := n as MeshInstance3D
+		for i in mi.mesh.get_surface_count():
+			var m := mi.get_active_material(i) as BaseMaterial3D
+			if m == null:
+				continue
+			var nm := m.resource_name
+			var col := Color.TRANSPARENT
+			if nm.begins_with("CubbyGlow"):
+				col = CUBBY_RED
+			elif nm.begins_with("ShelfAmber") or nm.begins_with("SoffitPeach"):
+				col = RED_LED
+			else:
+				for k in KIT_D:
+					if nm.begins_with(k):
+						col = KIT_D[k]
+			if col.a == 0.0:
+				continue
+			var key := "kit_d:%d" % m.get_instance_id()
+			if not _cache.has(key):
+				var r := m.duplicate() as BaseMaterial3D
+				r.albedo_color = col
+				if r.emission_enabled:
+					r.emission = col
+				_cache[key] = r
+			mi.set_surface_override_material(i, _cache[key])
+	for c in n.get_children():
+		_apply_kit_d(c)
+
+
 func _red_bar(name: String) -> Material:
 	if name.begins_with("CubbyGlow"):
-		return _mat("bar_cubby_red", Color("6a0806"), 2.2)
+		return _mat("bar_cubby_red", CUBBY_RED, 2.2)
 	if name.begins_with("ShelfAmber") or name.begins_with("SoffitPeach"):
 		return _mat("bar_led_red", RED_LED, 3.0)
 	if name.begins_with("Bottle") and not name.ends_with("Cap"):

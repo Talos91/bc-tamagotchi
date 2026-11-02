@@ -20,7 +20,9 @@ extends SceneTree
 ##   Green rooms on the map (backstage, kitchen, toilets, staff area) are closed boxes behind doors: NPC spawns.
 ## Kit objects are instanced from their .glb (never copied). Objects the 🧱 kit session is still modelling
 ## (PLACEHOLDERS) are grey boxes of the planned footprint until their name appears in the manifest: the swap is
-## automatic. The floor stays 2 m textured tiles (Compatibility shades at most 8 lights per mesh).
+## automatic. The floor stays 2 m meshes (Compatibility shades at most 8 lights per mesh), in voxel cement.
+## Look D "as in the venue" (DECISIONS 2026-11-02, docs/art/palette-look-d.md): blackish walls, the main room's north
+## wall grey on top and blackish below with a red neon line, red room light, warm candle pools, voxel cement floors.
 ## Furniture gets box colliders so the NavigationRegion3D (baked here) routes tap-to-move around it.
 ## Ceiling pieces are on render layer 2 (the game camera hides them). Walls carry meta "cut_normal" for
 ## camera_rig.gd's cutaway: the outward normal of the room whose camera looks through them.
@@ -114,17 +116,22 @@ const PH_TINT := {"red_door": Color("8c0a10"), "emergency_door": Color("1a1618")
 	"couch_long": Color("3a1a1a"), "outdoor_tree_bare": Color("3a3028"), "raised_edge_neon": Color("ff2a14"),
 	"lightbox_bc": Color("f0e6d0"), "wine_fridge": Color("1a1a1e"), "pinball_machine": Color("2a3a5a"), "game_cabinet_bc": Color("202a3a")}
 
-# Palette (art bible §3, game values)
-const CABIN_DARK := Color("1c0d0c")
-const BEAM_BLACK := Color("160a0c")
-const FLOOR_GREY := Color("57525c")
-const CONCRETE := Color("6a6a6c")          # corridors, smoking room and vestibule floors (photos 10, 13)
+# Palette (art bible §3, game values; look D, docs/art/palette-look-d.md)
+const CABIN_DARK := Color("080606")        # ceilings (look D; was 1c0d0c)
+const BEAM_BLACK := Color("0a0708")
+const WALL_BLACK := Color("0e0b0b")        # main room, buffer, vestibule and lounge walls (Daniele: "blackish")
+const CEMENT := Color("4a4848")            # every floor but the raised strip's planks (was tiles 57525c, concrete 6a6a6c)
+const NORTH_TOP := Color("8c8a8a")         # main room north wall (opposite the bar): light grey top ...
+const NORTH_BOTTOM := Color("100c0c")      # ... blackish bottom ...
+const NORTH_NEON := Color("ff1a12")        # ... and a red neon line between them, 8 cm, at NORTH_SPLIT
+const NORTH_SPLIT := 1.9
+const CANDLE := Color("ffa050")            # table and counter lamps: warm candle pools in the red room (photos 07, 11)
+const HOUSE_RED := Color("ff2a18")         # house lights (lobby, corridor, staff room, light box, disco glint), amber PAR
 const VELVET_SHADOW := Color("3e0408")
 const VELVET_RED := Color("8c0610")
 const CARPET_RED := Color("9a0a12")
 const PANEL_RED := Color("b80a10")
 const NEON_RED := Color("ff2a14")
-const LAMP_GOLD := Color("ffb860")
 const TEALIGHT := Color("f7db71")
 const SHELF_AMBER := Color("ff8a30")
 const WOOD_MID := Color("6e3522")
@@ -220,10 +227,105 @@ func _mat(key: String, col: Color, rough := 0.85, emit := 0.0) -> StandardMateri
 	return m
 
 func _floor_mat() -> StandardMaterial3D:
-	return _bond_mat("floor", FLOOR_GREY, 0.07, 0.34, 0.5)
+	return _cement_mat("floor")
 
 func _concrete_mat() -> StandardMaterial3D:
-	return _bond_mat("concrete", CONCRETE, 0.04, 0.7, 0.2)
+	return _cement_mat("concrete")
+
+## Voxel cement (Daniele 2026-11-02: the floor "in the game's voxel style"; prototyped in tests/capture_look_build.gd,
+## variant F). Flat square cells of 0.1 m (two kit voxels), each one of five stepped greys around CEMENT: value noise
+## sampled once per cell and snapped to a step, so patches follow the cell grid, plus single-cell aggregate flecks a
+## step up or down. A 1 px shade on a cell's north and west edges where the grey steps (darker where the neighbour is
+## lighter) makes the cells read as voxels of slightly different height. No grout: cement is poured, not tiled. One
+## seamless 8 m image (1 px = 2.5 cm) shared by the "Floor" (rooms) and "Concrete" (corridors, lobby, buffer, smoking
+## room, vestibule) materials, world-triplanar and nearest-filtered like the bond brick; matte.
+const CEMENT_REPEAT := 8.0
+const CEMENT_CELL := 4           # px: 0.1 m
+const CEMENT_STEP := 0.022       # one grey step (albedo)
+func _cement_mat(key: String) -> StandardMaterial3D:
+	if mats.has(key):
+		return mats[key]
+	if not mats.has("cement_tex"):
+		var px := int(CEMENT_REPEAT * 40.0)
+		var n := px / CEMENT_CELL
+		var noise := FastNoiseLite.new()
+		noise.seed = 4417
+		noise.noise_type = FastNoiseLite.TYPE_VALUE_CUBIC
+		noise.frequency = 0.1           # in cells: patches of roughly 0.5 to 1.5 m
+		noise.fractal_octaves = 2
+		var field := noise.get_seamless_image(n, n)
+		var rng := RandomNumberGenerator.new()
+		rng.seed = 4417
+		var lv := PackedInt32Array()
+		lv.resize(n * n)
+		for cy in n:
+			for cx in n:
+				var l := clampi(int(field.get_pixel(cx, cy).r * 4.0), 0, 3) - 2   # -2..1
+				var r := rng.randf()
+				if r < 0.05:
+					l -= 1
+				elif r < 0.09:
+					l += 1
+				lv[cy * n + cx] = l
+		var img := Image.create(px, px, false, Image.FORMAT_RGB8)
+		for py in px:
+			var cy := py / CEMENT_CELL
+			for qx in px:
+				var cx := qx / CEMENT_CELL
+				var l := lv[cy * n + cx]
+				var up := lv[((cy + n - 1) % n) * n + cx]
+				var left := lv[cy * n + (cx + n - 1) % n]
+				var j := l * CEMENT_STEP
+				if (py % CEMENT_CELL == 0 and up > l) or (qx % CEMENT_CELL == 0 and left > l):
+					j -= CEMENT_STEP * 0.8
+				elif (py % CEMENT_CELL == 0 and up < l) or (qx % CEMENT_CELL == 0 and left < l):
+					j += CEMENT_STEP * 0.5
+				img.set_pixel(qx, py, Color(CEMENT.r + j, CEMENT.g + j * 0.95, CEMENT.b + j * 0.9))
+		img.generate_mipmaps()
+		mats["cement_tex"] = ImageTexture.create_from_image(img)
+	var m := StandardMaterial3D.new()
+	m.resource_name = key.capitalize()
+	m.albedo_texture = mats["cement_tex"]
+	m.texture_filter = BaseMaterial3D.TEXTURE_FILTER_NEAREST_WITH_MIPMAPS
+	m.uv1_triplanar = true
+	m.uv1_world_triplanar = true
+	m.uv1_scale = Vector3.ONE / CEMENT_REPEAT
+	m.roughness = 0.85               # matte (the old tile floor was 0.34, glossy)
+	m.metallic_specular = 0.25
+	mats[key] = m
+	return m
+
+## Main room north wall (look D): two-tone in world height with a thin emissive line at the split (it glows, it lights
+## nothing). One material on the full-height boxes, so camera_rig.gd's sinking stubs (which share it) still work.
+const NORTH_SHADER := """shader_type spatial;
+uniform vec3 top_col : source_color;
+uniform vec3 bottom_col : source_color;
+uniform vec3 neon : source_color;
+uniform float split_y;
+uniform float neon_energy = 3.0;
+varying vec3 wpos;
+void vertex() { wpos = (MODEL_MATRIX * vec4(VERTEX, 1.0)).xyz; }
+void fragment() {
+	float d = wpos.y - split_y;
+	ALBEDO = d > 0.0 ? top_col : bottom_col;
+	ROUGHNESS = 0.9;
+	if (abs(d) < 0.04) { ALBEDO = neon; EMISSION = neon * neon_energy; }
+}
+"""
+func _north_wall_mat() -> ShaderMaterial:
+	if mats.has("north_wall"):
+		return mats["north_wall"]
+	var sh := Shader.new()
+	sh.code = NORTH_SHADER
+	var m := ShaderMaterial.new()
+	m.resource_name = "north_wall"
+	m.shader = sh
+	m.set_shader_parameter("top_col", NORTH_TOP)
+	m.set_shader_parameter("bottom_col", NORTH_BOTTOM)
+	m.set_shader_parameter("neon", NORTH_NEON)
+	m.set_shader_parameter("split_y", NORTH_SPLIT)
+	mats["north_wall"] = m
+	return m
 
 ## Running-bond voxel blocks, 0.2 m, world-triplanar: the floor, and the dark brick of the upper walls.
 func _bond_mat(key: String, base: Color, jit: float, rough: float, spec: float) -> StandardMaterial3D:
@@ -563,13 +665,14 @@ func _environment() -> void:
 	env.background_mode = Environment.BG_COLOR
 	env.background_color = NIGHT_SKY
 	env.ambient_light_source = Environment.AMBIENT_SOURCE_COLOR
-	env.ambient_light_color = Color(0.56, 0.44, 0.44)
-	env.ambient_light_energy = 1.1
+	# Look D: near-neutral ambient, stronger, so figures keep their colours in the red room and dark walls stay dark
+	env.ambient_light_color = Color(0.45, 0.34, 0.34)
+	env.ambient_light_energy = 1.5
 	env.tonemap_mode = Environment.TONE_MAPPER_FILMIC
-	env.tonemap_exposure = 1.2
+	env.tonemap_exposure = 1.3
 	env.tonemap_white = 6.0
 	env.glow_enabled = true
-	env.glow_intensity = 0.22
+	env.glow_intensity = 0.30
 	env.glow_strength = 1.0
 	env.glow_bloom = 0.0
 	env.glow_hdr_threshold = 1.5
@@ -586,12 +689,13 @@ func _environment() -> void:
 	env.fog_sky_affect = 0.0
 	env.adjustment_enabled = true
 	env.adjustment_saturation = 1.15
-	env.adjustment_contrast = 1.18
-	# Warm key from high over the bar corner (iteration 12/18): the one shadow map in the venue (phone budget).
+	env.adjustment_contrast = 1.06   # 1.18 crushed the darks to black under the red light
+	# Key from high over the bar corner (iteration 12/18): the one shadow map in the venue (phone budget). Look D: a pale
+	# red, so figures keep their clothes' colours.
 	var key := DirectionalLight3D.new()
 	key.name = "KeyLight"
-	key.light_color = Color("ffcfa8")
-	key.light_energy = 0.32
+	key.light_color = Color("ff8a70")
+	key.light_energy = 0.288
 	key.light_specular = 0.3
 	key.shadow_enabled = true
 	key.shadow_opacity = 0.85
@@ -614,7 +718,7 @@ func _environment() -> void:
 ## Entrance lobby (spawn) and the corridor along the south of the lounge: concrete, dim, the street door west.
 func _lobby_and_corridor() -> void:
 	var g := _group("Lobby")
-	var wall := _mat("lobby_wall", Color("2a2426"), 0.9)
+	var wall := _mat("lobby_wall", Color("0e0b0c"), 0.9)
 	_floor(g, LOBBY, _concrete_mat())
 	_floor(g, CORRIDOR, _concrete_mat(), 0.0, "CorridorFloor")
 	_ceiling(g, Rect2(LOBBY.position.x, LOBBY.position.y, CORRIDOR.end.x - LOBBY.position.x, LOBBY.size.y))
@@ -646,8 +750,8 @@ func _lobby_and_corridor() -> void:
 	# Sticker door between the corridor and the lounge: swings open for whoever comes through, stickers on the
 	# corridor side (front +z)
 	_swing_door(g, "StickerDoor", "sticker_door", Vector3((STICKER_DOOR.x + STICKER_DOOR.y) * 0.5, 0, LOUNGE.end.y + 0.1), 0.0, Vector3.BACK)
-	_omni(g, "LobbyLight", Color("ffc890"), 0.9, 5.0, Vector3(1.1, 3.2, 8.0))
-	_omni(g, "CorridorLight", Color("ff9a60"), 0.8, 6.0, Vector3(9.0, 3.3, 14.1))
+	_omni(g, "LobbyLight", HOUSE_RED, 0.81, 5.0, Vector3(1.1, 3.2, 8.0))
+	_omni(g, "CorridorLight", HOUSE_RED, 0.72, 6.0, Vector3(9.0, 3.3, 14.1))
 	for x in [PORTRAIT_X0 + PORTRAIT_STEP * 0.5, PORTRAIT_X0 + PORTRAIT_STEP * 5.5]:   # between portraits, above them
 		_cut(_kit(g, "wall_lamp", Vector3(x, 2.6, CORRIDOR.end.y - 0.05), 0.0, "CorridorLamp%d" % int(x)), Vector3.BACK)
 	_kit(g, "track_light", Vector3(13.0, ROOM_H, 14.1), 0.0, "CorridorTrack")
@@ -657,7 +761,7 @@ func _lobby_and_corridor() -> void:
 
 func _lounge() -> void:
 	var g := _group("Lounge")
-	var wall := _mat("lounge_wall", Color("4a0c10"), 0.9)
+	var wall := _mat("lounge_wall", WALL_BLACK, 0.9)
 	_floor(g, LOUNGE)
 	_floor(g, STUB, _concrete_mat(), 0.0, "StubFloor")
 	_ceiling(g, Rect2(LOUNGE.position.x, LOUNGE.position.y, STUB.end.x - LOUNGE.position.x, LOUNGE.size.y))
@@ -678,7 +782,7 @@ func _lounge() -> void:
 		for r in 3:
 			_kit(g, "plant_wall_tile", Vector3(LOUNGE.position.x + 0.15, 0.9 + r, 4.0 + c), 90.0, "PlantWall%d_%d" % [c, r])
 	_kit(g, "neon_sign", Vector3(LOUNGE.position.x + 0.38, 1.75, 5.0), 90.0, "NeonSign", Vector3(1.55, 1.55, 1.0))
-	_omni(g, "NeonLight", NEON_RED, 2.6, 6.5, Vector3(LOUNGE.position.x + 1.3, 2.4, 5.0))
+	_omni(g, "NeonLight", NEON_RED, 3.38, 6.5, Vector3(LOUNGE.position.x + 1.3, 2.4, 5.0))
 	_banquette(g, "LoungeBanquette", LOUNGE.position.x, 3.5, 6.5)
 	var lt := _kit(g, "communal_table", Vector3(3.9, 0, 5.0), 90.0, "LongTable", Vector3(0.75, 1, 1))
 	_collider(lt, "Collider", Vector3(0, 0.375, 0), Vector3(4.0, 0.75, 1.0))
@@ -688,8 +792,8 @@ func _lounge() -> void:
 		_kit_solid(g, "cafe_chair", Vector3(4.75, 0, z), -90.0, "Chair%d" % i)
 		_seat("Lounge", "Lounge_Chair%d" % i, Vector3(4.75, 0, z), -90.0, 0.45, "sit", "LongTable")
 		_seat("Lounge", "Lounge_Banquette%d" % i, Vector3(LOUNGE.position.x + 0.3, 0, z), 90.0, 0.45, "sit", "LongTable", true)
-	_omni(g, "LongTableLightA", LAMP_GOLD, 2.2, 3.4, Vector3(3.9, 1.5, 4.3))
-	_omni(g, "LongTableLightB", LAMP_GOLD, 1.8, 3.2, Vector3(3.9, 1.5, 5.9))
+	_omni(g, "LongTableLightA", CANDLE, 1.65, 3.4, Vector3(3.9, 1.5, 4.3))
+	_omni(g, "LongTableLightB", CANDLE, 1.35, 3.2, Vector3(3.9, 1.5, 5.9))
 	_memory_corner(g)
 	# Pinball on the west wall between the banquette and the stairs (Daniele 2026-11-01); the kit's arcade cabinet
 	# stands in for it until pinball_machine lands (Neon Pinball runs on it, DECISIONS (c)).
@@ -720,7 +824,7 @@ func _lounge() -> void:
 	# Two round tables with four chairs in the open middle (the real lounge changes often, Daniele)
 	for n in 2:
 		_round_table(g, "LoungeTable%d" % n, "Lounge", Vector3(11.0, 0, 5.0 + n * 4.0), 0.0, n == 0)
-	_omni(g, "LoungeTablesLight", LAMP_GOLD, 2.0, 4.5, Vector3(11.0, 1.9, 7.0))
+	_omni(g, "LoungeTablesLight", CANDLE, 1.5, 4.5, Vector3(11.0, 1.9, 7.0))
 	# Red cove strip and the ceiling: black beam grid with red emissive panels
 	_box(g, "RedCove", Vector3(LOUNGE.position.x + 0.31, 0.9, 3.3), Vector3(0.04, 0.04, 3.4), _mat("red_strip", NEON_RED, 0.5, 3.0), false)
 	var ceil := _group("CeilingGrid", g)
@@ -731,8 +835,8 @@ func _lounge() -> void:
 		for i in 8:
 			_kit(ceil, "ceiling_panel", Vector3(4.0 + i * 1.3, ROOM_H, 1.75 + row * 2.5 + (i % 2) * 0.5), 0.0, "Panel%d_%d" % [row, i])
 	_ceiling_group(ceil)
-	_omni(g, "RedPanelLightA", PANEL_RED, 1.8, 6.5, Vector3(4.6, 2.6, 1.8))   # also washes the memory corner red (photo 25)
-	_omni(g, "RedPanelLightB", PANEL_RED, 1.4, 7.0, Vector3(10.0, 3.6, 10.0))
+	_omni(g, "RedPanelLightA", PANEL_RED, 2.34, 6.5, Vector3(4.6, 2.6, 1.8))   # also washes the memory corner red (photo 25)
+	_omni(g, "RedPanelLightB", PANEL_RED, 1.82, 7.0, Vector3(10.0, 3.6, 10.0))
 	_kit(g, "track_light", Vector3(6.0, ROOM_H, 7.0), 0.0, "TrackLight0")
 	_kit(g, "track_light", Vector3(12.0, ROOM_H, 11.0), 0.0, "TrackLight1")
 	_cut_rooms(g, ["lounge", "alcove", "merch", "memory", "patrons"])
@@ -838,7 +942,7 @@ func _stairs() -> void:
 	var bz := STAIR_STOP_Z - 0.1
 	var bulk := _box(g, "UpperFloor", Vector3(up.position.x, 2.9, up.position.y - 0.4), Vector3(up.size.x + 0.25, ROOM_H - 2.9, bz - up.position.y + 0.4), dark, false)
 	_cut(_nocast(bulk), Vector3.ZERO)
-	_box(g, "UpperFloorLip", Vector3(up.position.x, 2.75, bz - 0.12), Vector3(up.size.x + 0.25, 0.15, 0.12), _mat("lounge_wall", Color("4a0c10"), 0.9), false)
+	_box(g, "UpperFloorLip", Vector3(up.position.x, 2.75, bz - 0.12), Vector3(up.size.x + 0.25, 0.15, 0.12), _mat("lounge_wall", WALL_BLACK, 0.9), false)
 	# Velvet rope across the second flight where the climb stops; the blocker keeps the player below the bulkhead
 	var sy := STAIR_H1 + (up.end.y - STAIR_STOP_Z) / up.size.y * (STAIR_TOP - STAIR_H1)
 	var velvet := _mat("velvet_red", VELVET_RED, 0.95)
@@ -1025,7 +1129,7 @@ func _cut_rooms(n: Node, rooms: Array) -> void:
 ## bare tree outside, mirror wall south, four tall tables with two tall stools each, a PAR on a stand.
 func _buffer() -> void:
 	var g := _group("Buffer")
-	var wall := _mat("main_wall", Color("23150f"), 0.85)
+	var wall := _mat("main_wall", WALL_BLACK, 0.85)
 	_floor(g, BUFFER, _concrete_mat())
 	_ceiling(g, BUFFER)
 	# Window wall: glass panels full height with black mullions (photo 15); the sill wall is low
@@ -1052,7 +1156,7 @@ func _buffer() -> void:
 		var c: Vector2 = BUFFER_TALL[i]
 		_tall_table(g, "BufferTall%d" % i, "Buffer", Vector3(c.x, 0, c.y), true)
 	_ph(g, "par_on_stand", Vector3(15.9, 0, 7.3), 0.0, "BufferPar")
-	_spot(g, "BufferParSpot", NEON_RED, 2.2, 7.0, 40.0, Vector3(15.9, 1.6, 7.3), Vector3(18.0, 0.3, 4.5))
+	_spot(g, "BufferParSpot", NEON_RED, 2.86, 7.0, 40.0, Vector3(15.9, 1.6, 7.3), Vector3(18.0, 0.3, 4.5))
 	_omni(g, "BufferCandles", TEALIGHT, 1.4, 4.5, Vector3(17.7, 1.6, 5.3), "tealight")
 
 ## Tall square table with two tall stools (east/west, or north/south), candles on top.
@@ -1070,11 +1174,11 @@ func _tall_table(g: Node, nm: String, zone: String, c: Vector3, east_west: bool)
 
 func _main_room() -> void:
 	var g := _group("MainRoom")
-	var wall := _mat("main_wall", Color("23150f"), 0.85)
+	var wall := _mat("main_wall", WALL_BLACK, 0.85)
 	_floor(g, Rect2(MAIN_X0, 0.0, MAIN_X1 - MAIN_X0, MAIN_SE_Z))
 	_floor(g, Rect2(MAIN_X0, MAIN_SE_Z, BAR_X1 - MAIN_X0, MAIN_Z1 - MAIN_SE_Z), null, 0.0, "FloorSouth")
 	_ceiling(g, MAIN)
-	_wall_x(g, "WallNorth", 0.0, MAIN_X0 - 0.2, MAIN_X1 + 0.2, wall, Vector3.FORWARD, [Vector2(25.4, 26.4)], 2.15)
+	_wall_x(g, "WallNorth", 0.0, MAIN_X0 - 0.2, MAIN_X1 + 0.2, _north_wall_mat(), Vector3.FORWARD, [Vector2(25.4, 26.4)], 2.15)
 	_wall_z(g, "WallEast", MAIN_X1, -0.2, MAIN_SE_Z, wall, Vector3.RIGHT)
 	_wall_z(g, "WallWest", MAIN_X0, -0.2, MAIN_Z1, wall, Vector3.LEFT, [Vector2(BUFFER.position.y, BUFFER.end.y)], 3.4)
 	# South: behind the bar (z MAIN_Z1) from the bar's west end to the staff area; east of it the wall at MAIN_SE_Z
@@ -1094,7 +1198,7 @@ func _main_room() -> void:
 	# Both hidden only on the sight line (they stand in front of the smoking room's north-east corner, seen from its view)
 	_cut(_ph(g, "wine_fridge", Vector3(41.4, 0, MAIN_SE_Z - 0.35), 0.0, "WineFridge"), Vector3.ZERO)
 	_cut(_ph(g, "lightbox_bc", Vector3(41.4, 1.0, MAIN_SE_Z - 0.35), 0.0, "LightboxBC", false), Vector3.ZERO)   # sits on the fridge (kit note)
-	_omni(g, "LightboxGlow", Color("ffd0b0"), 0.9, 3.5, Vector3(41.0, 1.6, MAIN_SE_Z - 0.9))
+	_omni(g, "LightboxGlow", HOUSE_RED, 0.81, 3.5, Vector3(41.0, 1.6, MAIN_SE_Z - 0.9))
 	# Vinyl records and a framed picture on the west wall of the strip to the toilets (photo 10)
 	for i in 3:
 		_cut(_ph(g, "vinyl_record_wall", Vector3(MAIN_X0 + 0.06, 1.3 + (i % 2) * 0.3, 13.0 + i * 0.6), 90.0, "Vinyl%d" % i, false), Vector3.LEFT)
@@ -1107,20 +1211,20 @@ func _main_room() -> void:
 	ball.set_meta("occluder_center", Vector3(0, -1.2, 0))
 	ball.set_meta("occluder_radius", 1.8)
 	ball.add_to_group("occluder", true)
-	_omni(g, "DiscoGlint", Color("ffe2c0"), 0.6, 3.0, Vector3(30.9, 2.6, 7.0))
+	_omni(g, "DiscoGlint", HOUSE_RED, 0.54, 3.0, Vector3(30.9, 2.6, 7.0))
 	_frame(g)
 
 ## Dark wood framing of the main room (renders 05/06): pilasters, cornices, upper walls 4..6 m that fill the frame
 ## top above the cutaway, soffits over the bar, high exit signs. Each hides with the wall below it.
 func _frame(g: Node) -> void:
-	var wood := _mat("frame_wood", Color("2a1810"), 0.55)
-	var ceil := _mat("ceiling_edge", Color("120a0a"), 0.9)
+	var wood := _mat("frame_wood", Color("120c0a"), 0.55)
+	var ceil := _mat("ceiling_edge", Color("070505"), 0.9)
 	for x in [MAIN_X0, 22.0, 24.5, 27.3, 34.2, 37.0, MAIN_X1 - 0.25]:
 		_cut(_box(g, "PilasterN_%d" % int(x * 10), Vector3(x, 0, 0.0), Vector3(0.25, ROOM_H, 0.32), wood, false), Vector3.FORWARD)
 	_cut(_nocast(_box(g, "CorniceN", Vector3(MAIN_X0, ROOM_H - 0.3, 0.0), Vector3(MAIN_X1 - MAIN_X0, 0.3, 0.3), ceil, false)), Vector3.FORWARD)
 	_cut(_nocast(_box(g, "CorniceE", Vector3(MAIN_X1 - 0.6, ROOM_H - 0.3, 0.0), Vector3(0.6, 0.3, MAIN_SE_Z), ceil, false)), Vector3.RIGHT)
 	_cut(_nocast(_box(g, "CorniceS", Vector3(BAR_X0, ROOM_H - 0.3, MAIN_Z1 - 0.9), Vector3(BAR_X1 - BAR_X0, 0.3, 0.9), ceil, false)), Vector3.BACK)
-	var upper := _bond_mat("upper_brick", Color("2e221e"), 0.05, 0.9, 0.3)
+	var upper := _bond_mat("upper_brick", Color("130e0d"), 0.05, 0.9, 0.3)
 	var uh := 2.0
 	_cut(_nocast(_box(g, "UpperN", Vector3(MAIN_X0, ROOM_H, -0.2), Vector3(MAIN_X1 - MAIN_X0, uh, 0.2), upper, false)), Vector3.FORWARD)
 	_cut(_nocast(_box(g, "UpperS", Vector3(BAR_X0, ROOM_H, MAIN_Z1), Vector3(BAR_X1 - BAR_X0, uh, 0.2), upper, false)), Vector3.BACK)
@@ -1209,16 +1313,16 @@ func _stage() -> void:
 		_kit(truss, "truss_segment", Vector3(STAGE.position.x + 1.15 + i * 2.0, ROOM_H, 0.45), 0.0, "Segment%d" % i)
 	var pars := [[28.4, "red"], [30.0, "blue"], [31.6, "red"], [33.2, "amber"]]
 	var aims := [Vector3(28.6, 0, 2.0), Vector3(30.75, 0.6, 0.8), Vector3(31.4, 0, 2.2), Vector3(33.0, 0, 1.6)]
-	var par_col := {"red": NEON_RED, "blue": STAGE_BLUE, "amber": Color("ff7a30")}
+	var par_col := {"red": NEON_RED, "blue": STAGE_BLUE, "amber": HOUSE_RED}   # look D: the amber PAR shines red
 	for i in pars.size():
 		var par := _kit(truss, "par_light_" + pars[i][1], Vector3(pars[i][0], ROOM_H - 0.5, 0.45), 0.0, "Par%d" % i)
 		par.rotation_degrees.x = 40.0
 		var src := Vector3(pars[i][0], ROOM_H - 0.75, 0.75)
 		var blue: bool = pars[i][1] == "blue"
-		_spot(g, "ParSpot%d" % i, par_col[pars[i][1]], 2.4 if blue else 3.4, 7.5, 16.0 if blue else 26.0, src, aims[i])
+		_spot(g, "ParSpot%d" % i, par_col[pars[i][1]], 2.4 if blue else (3.4 if pars[i][1] == "amber" else 4.42), 7.5, 16.0 if blue else 26.0, src, aims[i])
 	# Bare tree to the right of the stage, between stage and raised strip, by the tiny tables (photo 19)
 	_kit_solid(g, "stage_tree", Vector3(TREE.x, 0, TREE.y), -90.0, "TreeRightOfStage")
-	_omni(g, "TreeLight", Color("ff5a40"), 1.2, 4.0, Vector3(TREE.x, 2.6, TREE.y + 0.8))
+	_omni(g, "TreeLight", Color("ff5a40"), 1.56, 4.0, Vector3(TREE.x, 2.6, TREE.y + 0.8))
 
 ## Round table with four chairs (rotation 45 = diamond on the map), lamp, lanterns, glasses. Chairs become seats of `zone`.
 func _round_table(g: Node, nm: String, zone: String, c: Vector3, rot: float, lamp: bool, scl := 1.0) -> void:
@@ -1272,8 +1376,8 @@ func _tables() -> void:
 	_round_table(g, "WestTable0", "Tables", Vector3(21.9, 0, 1.2), 0.0, true)
 	_round_table(g, "WestTable1", "Tables", Vector3(24.25, 0, 1.2), 0.0, false)
 	_rect_table(g, "RectTableW", "Tables", Vector3(24.4, 0, 4.7), 2.4)
-	_omni(g, "WestTablesLight", LAMP_GOLD, 2.2, 4.0, Vector3(23.1, 1.8, 1.4))
-	_omni(g, "RectWLight", LAMP_GOLD, 1.8, 3.4, Vector3(24.4, 1.8, 4.7))
+	_omni(g, "WestTablesLight", CANDLE, 1.65, 4.0, Vector3(23.1, 1.8, 1.4))
+	_omni(g, "RectWLight", CANDLE, 1.35, 3.4, Vector3(24.4, 1.8, 4.7))
 	# Six tiny tables below the stage, three to its right
 	for i in TINY_ROW_X.size():
 		_tiny_table(g, "Tiny%d" % i, Vector3(TINY_ROW_X[i], 0, TINY_ROW_Z), true)
@@ -1286,11 +1390,11 @@ func _tables() -> void:
 		var t: Array = ROW5[n]
 		_round_table(g, "Table%d" % n, "Tables", Vector3(t[0], 0, t[1]), t[2], n % 2 == 0)
 	for i in 3:
-		_omni(g, "RowLight%d" % i, LAMP_GOLD, 2.2, 4.2, Vector3(25.9 + i * 4.8, 1.9, 8.4))
+		_omni(g, "RowLight%d" % i, CANDLE, 1.65, 4.2, Vector3(25.9 + i * 4.8, 1.9, 8.4))
 	# East: the diamond and the vertical rectangle before the raised strip, 0.6 m west of the map (Raised3's lane)
 	_round_table(g, "EastTable", "Tables", Vector3(EAST_X, 0, 5.85), 45.0, true)
 	_rect_table(g, "RectTableE", "Tables", Vector3(EAST_X, 0, 8.45), 1.9)
-	_omni(g, "EastLight", LAMP_GOLD, 2.0, 4.2, Vector3(EAST_X, 1.9, 7.2))
+	_omni(g, "EastLight", CANDLE, 1.5, 4.2, Vector3(EAST_X, 1.9, 7.2))
 	# Two tall tables at the main room's west opening, stools north and south
 	for i in OPENING_TALL.size():
 		var c: Vector2 = OPENING_TALL[i]
@@ -1311,8 +1415,8 @@ func _raised() -> void:
 		_ph(g, "raised_edge_neon", Vector3(RAISED.position.x - 0.1, 0.0, minf(RAISED.position.y + 0.5 + i, RAISED.end.y - 0.4)), -90.0, "NeonW%d" % i, false).add_to_group("look_neon_red", true)
 	for i in 3:
 		_ph(g, "raised_edge_neon", Vector3(minf(RAISED.position.x + 0.4 + i * 1.0, MAIN_X1 - 0.5), 0.0, RAISED.end.y + 0.1), 0.0, "NeonS%d" % i, false).add_to_group("look_neon_red", true)
-	_omni(g, "NeonEdgeA", NEON_RED, 1.4, 4.5, Vector3(RAISED.position.x - 0.3, 0.2, 2.8))
-	_omni(g, "NeonEdgeB", NEON_RED, 1.4, 4.5, Vector3(RAISED.position.x - 0.3, 0.2, 8.2))
+	_omni(g, "NeonEdgeA", NEON_RED, 1.82, 4.5, Vector3(RAISED.position.x - 0.3, 0.2, 2.8))
+	_omni(g, "NeonEdgeB", NEON_RED, 1.82, 4.5, Vector3(RAISED.position.x - 0.3, 0.2, 8.2))
 	# Couch along the east wall, shelves above it
 	for i in int(RAISED.size.y):
 		_cut(_ph(g, "couch_long", Vector3(MAIN_X1 - 0.35, RAISED_H, RAISED.position.y + 0.5 + i), -90.0, "Couch%d" % i), Vector3.RIGHT).add_to_group("look_neon_red", true)
@@ -1334,8 +1438,8 @@ func _raised() -> void:
 		for k in 2:
 			# On the couch, backs to the wall, facing west across the table (yaw -90; +90 faced the couch back)
 			_seat("Raised", "Raised_T%d_S%d" % [i, k], Vector3(MAIN_X1 - 0.45, RAISED_H, c.z - 0.35 + k * 0.7), -90.0, 0.45, "sit", "Raised%d" % i, true)
-	_omni(g, "RaisedLightA", LAMP_GOLD, 2.0, 4.0, Vector3(RAISED_TABLE_X, 1.9, 2.2))
-	_omni(g, "RaisedLightB", LAMP_GOLD, 2.0, 4.0, Vector3(RAISED_TABLE_X, 1.9, 7.9))
+	_omni(g, "RaisedLightA", CANDLE, 1.5, 4.0, Vector3(RAISED_TABLE_X, 1.9, 2.2))
+	_omni(g, "RaisedLightB", CANDLE, 1.5, 4.0, Vector3(RAISED_TABLE_X, 1.9, 7.9))
 	# Mirror ceiling panels over the strip (photo 11): glossy dark tiles on the ceiling layer
 	var mirror := _mat("mirror_ceiling", Color("3a3c44"), 0.05)
 	mirror.metallic = 0.9
@@ -1363,7 +1467,7 @@ func _bar() -> void:
 	# Cashier bump north out of the counter, reindeer head on the back wall above it
 	_ph(g, "cashier_counter", Vector3(CASHIER_X, 0, 12.35), 180.0, "Cashier")   # its back (-z) joins the counter
 	_cut(_ph(g, "reindeer_head", Vector3(CASHIER_X, 1.7, MAIN_Z1 - 0.35), 0.0, "ReindeerHead", false), Vector3.BACK)
-	_omni(g, "CashierLight", Color("ffd0a0"), 1.2, 3.2, Vector3(CASHIER_X, 2.0, 13.3))
+	_omni(g, "CashierLight", CANDLE, 1.08, 3.2, Vector3(CASHIER_X, 2.0, 13.3))
 	for i in COUNTER_STOOLS_X.size():
 		var x: float = COUNTER_STOOLS_X[i]
 		_kit_solid(g, "bar_stool", Vector3(x, 0, COUNTER_STOOL_Z), 0.0, "Stool%d" % i)
@@ -1376,7 +1480,7 @@ func _bar() -> void:
 		_cut(_box(g, "RedLED_%d" % int(y * 100), Vector3(BAR_X0, y, MAIN_Z1 - 0.52), Vector3(BAR_X1 - BAR_X0, 0.04, 0.04), led, false), Vector3.BACK)
 	# Three red omnis behind the counter
 	for i in 3:
-		_omni(g, "BackBarRed%d" % i, BAR_RED, 1.6, 4.5, Vector3(24.5 + i * 5.2, 2.0, MAIN_Z1 - 0.8))
+		_omni(g, "BackBarRed%d" % i, BAR_RED, 2.08, 4.5, Vector3(24.5 + i * 5.2, 2.0, MAIN_Z1 - 0.8))
 	# Counter dressing: lamps, lanterns, glasses, napkins, bottles
 	var top := 1.1
 	var bottles := ["bottle_amber", "bottle_green", "bottle_clear"]
@@ -1385,8 +1489,8 @@ func _bar() -> void:
 		_kit(g, "table_lamp_lit", Vector3(x, top, cz + 0.08), 0.0, "CounterLamp%d" % i)
 		_kit(g, "napkin_cup", Vector3(x + 0.4, top, cz + 0.15), 0.0, "CounterNapkins%d" % i)
 		_kit(g, "tealight_lantern", Vector3(x + 1.5, top, cz - 0.1), 0.0, "CounterTealight%d" % i)
-	_omni(g, "CounterLightW", LAMP_GOLD, 1.0, 4.0, Vector3(25.5, 1.9, cz - 0.4))
-	_omni(g, "CounterLightE", LAMP_GOLD, 1.0, 4.0, Vector3(33.0, 1.9, cz - 0.4))
+	_omni(g, "CounterLightW", CANDLE, 0.9, 4.0, Vector3(25.5, 1.9, cz - 0.4))
+	_omni(g, "CounterLightE", CANDLE, 0.9, 4.0, Vector3(33.0, 1.9, cz - 0.4))
 	for i in 18:
 		_kit(g, bottles[i % 3], Vector3(BAR_X0 + 0.3 + i * 0.77, top, cz + 0.22 + (i % 2) * 0.06), 0.0, "CounterBottle%d" % i)
 	for i in 10:
@@ -1403,7 +1507,7 @@ func _bar() -> void:
 ## a picture light over a framed picture (photo 10). Concrete floor.
 func _vestibule() -> void:
 	var g := _group("Vestibule")
-	var wall := _mat("main_wall", Color("23150f"), 0.85)
+	var wall := _mat("main_wall", WALL_BLACK, 0.85)
 	_floor(g, VESTIBULE, _concrete_mat())
 	_ceiling(g, VESTIBULE)
 	_wall_z(g, "WallWest", VESTIBULE.position.x, VESTIBULE.position.y, VESTIBULE.end.y, wall, Vector3.LEFT, [Vector2(15.1, 16.6)], 2.6)
@@ -1425,7 +1529,7 @@ func _vestibule() -> void:
 ## east to the night street, dark west wall with pictures, four square tables with wishbone chairs, ashtrays.
 func _smoking() -> void:
 	var g := _group("Smoking")
-	var wall := _mat("smoke_wall", Color("1e1c20"), 0.9)
+	var wall := _mat("smoke_wall", Color("0e0c0e"), 0.9)
 	var plaster := _mat("smoke_plaster", Color("6e6e6a"), 0.95)   # pale concrete plaster, not beige (photos 20/21)
 	_floor(g, SMOKING, _concrete_mat())
 	_ceiling(g, SMOKING)
@@ -1484,12 +1588,12 @@ func _staff_room(g: Node, wall: Material) -> void:
 		_kit(g, "beer_glass", Vector3(STAFF_PASS.x + 0.2 + i * 0.25, 1.11, MAIN_SE_Z - 0.05), 0.0, "PassGlass%d" % i)
 	_kit(g, "napkin_cup", Vector3(STAFF_PASS.y - 0.15, 1.11, MAIN_SE_Z + 0.05), 0.0, "PassNapkins")
 	_box(g, "StaffShelf", Vector3(r.position.x + 0.1, 0, r.end.y - 0.45), Vector3(r.size.x - 0.2, 1.8, 0.4), _mat("stool_black", STOOL_BLACK, 0.85), false)
-	_omni(g, "StaffRoomLight", Color("ffd8b0"), 0.9, 3.2, Vector3(r.get_center().x, 2.6, r.get_center().y))
+	_omni(g, "StaffRoomLight", HOUSE_RED, 0.81, 3.2, Vector3(r.get_center().x, 2.6, r.get_center().y))
 
 ## Closed rooms (green on the map): dark boxes behind their doors so a door never opens onto the void.
 func _closed_rooms() -> void:
 	var g := _group("ClosedRooms")
-	var dark := _mat("closed_room", Color("0e0a0a"), 0.95)
+	var dark := _mat("closed_room", Color("070606"), 0.95)
 	var rooms := {"Backstage": BACKSTAGE, "Kitchen": Rect2(6.6, 15.0, 13.5, 3.5), "ToiletF": Rect2(24.4, 15.0, 4.5, 2.4),
 		"ToiletM": Rect2(20.1, 16.7, 4.25, 1.8), "OldToiletN": Rect2(15.45, 7.65, 4.5, 2.45), "OldToiletS": Rect2(15.45, 12.4, 4.5, 2.5),
 	}
