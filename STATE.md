@@ -7,7 +7,7 @@
 
 ## IN FLIGHT
 - Orchestrator: session local_9bb3d41c (Opus, high; detached, top level), from the handoff of local_78d0c67d (archived). Handover checked 2026-11-02: origin/main db5e398 (e9f5b25 + LOG line), shared tree clean, no workers running.
-- Workers running: 🏗️ lounge-revamp (Opus, high), session local_3aa9ea16, started by Daniele from the card 2026-11-02: lounge revamp + corridor portraits + the curtain seen from the main room + Raised3 approach (BACKLOG B7, B9–B11; DECISIONS "Lounge revamp" row; `layout.json` unfrozen for the lounge and corridor walls only, refreeze on Daniele's acceptance). Version 0.2.0 open.
+- Workers running: 🏗️ lounge-revamp (Opus, high), session local_3aa9ea16, started by Daniele from the card 2026-11-02 (past its context guard; if it dies, a fresh worker resumes from `C:/Users/itisf/.claude/handoffs/f9832c11-637f-4931-8385-611a5f29028b.md`): lounge revamp + corridor portraits + the curtain seen from the main room + Raised3 approach (BACKLOG B7, B9–B11; DECISIONS "Lounge revamp" row; `layout.json` unfrozen for the lounge and corridor walls only, refreeze on Daniele's acceptance). Version 0.2.0 open.
 - Queued (max three workers): 🧹 menu follow-ups (Sonnet; see PROMISED, NOT DONE: misprint fixes + list for Black Cabin, Try something new six per family, ordering marks tried, bundles).
 
 ## WAITING ON OWNER (Questions tab: https://claude.ai/artifact/BbpBxVWVVXMjz7TgJ7aFBW#questions)
