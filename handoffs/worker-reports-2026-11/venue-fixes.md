@@ -1,6 +1,16 @@
 # 🏗️ venue-fixes: owner feedback 4, 5, 6, 7, 8, 11 + smoke_loop / test_minigames fixes (2026-11-03)
 
-## EVIDENCE
+## EVIDENCE: follow-up, owner item 15 (2026-11-03)
+- Commit `3492232` on local main (not pushed), after `e4d7e76`/`bf0875a`; then this report + role note.
+- Suites, shared tree, empty APPDATA per suite: **5/5 PASS**: smoke_doors_sit, test_seats, test_feel,
+  test_nightlife, smoke_start.
+- Hatch staff errands only through the bar door, at y 0.45 throughout (no step); the north staff door stays shut.
+  Walled area (`StaffRoom*`, `StaffDoorBar`, `BarDoor`, `Pass*`) out of the camera cutaway; `StaffRoomNorth` split
+  from `WallSouthEast`. No layout.json change. Card `venue-fixes-review` v2 (item 15 text + picture).
+- Captures `docs/art/screens/venue-fixes/before-15/`, `after-15/` (staff-from-smoking, -floor, -bar; portrait +
+  landscape), `twoup-15-walled-area-solid.png`. Item 15 had no saved picture; worked from the note.
+
+## EVIDENCE (first round)
 - Commit on local main (not pushed): `e4d7e76` (code, venue, layout lines, tests, captures); then this report + role note.
   Base 86b40ab (look-followups) clean at the gate; built on top of b8f6d50/d32407a (touch-anywhere).
 - Suites, shared tree, empty APPDATA per suite, all on the final venue: **9/9 PASS**: smoke_loop, test_minigames,

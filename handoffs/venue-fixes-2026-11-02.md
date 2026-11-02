@@ -7,15 +7,13 @@ Report: `handoffs/worker-reports-2026-11/venue-fixes.md`. Captures: `docs/art/sc
 ## What changed (all in `game/tools/build_venue.gd` unless named)
 4. **Door between the bar and the walled bar area:** `BAR_DOOR` (z 13.4–14.4) in the staff room's west wall (x 35.75),
    swing door `BarDoor`, kit `staff_door` like the north one, front to the bar (-90), staff-only (`staff_door_user`,
-   blocker in the opening: the player never gets behind the counter, `BarFloorBlock`). The hatch staff's errands
-   alternate: north door down a step into the main room, then the bar door to behind the counter and back
-   (`scripts/venue_patrons.gd` `_bar_errand`, `BAR_DOOR_X/Z`).
+   blocker in the opening: the player never gets behind the counter, `BarFloorBlock`). The hatch staff's errands go
+   through it to behind the counter and back (`scripts/venue_patrons.gd` `BAR_DOOR_X/Z`; item 15 below).
 5. **Raised bar and walled bar area:** `BAR_FLOOR_H` 0.45: `BarDuckboard` (planks, counter back to the back-bar fronts,
    no collider: it is behind `BarFloorBlock`) and `StaffRoomDeck` (inset to the walls' inner faces, the closed-room
    no-shared-face rule); `StaffShelf` stands on it; spots `Staff_Hatch` and `Spawn_StaffArea` at y 0.45.
    `venue_patrons.gd` `BARTENDER_LIFT` 0.3 → 0.45 (figures are 1.16 m: about 0.5 m shows over the 1.1 m counter, head
-   and shoulders as photo 09; at 0.3 only the head did). The hatch staff steps down to 0 at the north door
-   (`_run_errand`: y by side of `STAFF_DOOR_Z`). Judgement card: `venue-fixes-bar-height`.
+   and shoulders as photo 09; at 0.3 only the head did). Judgement card: `venue-fixes-bar-height`.
 6. **Buffer curtain in the view:** the curtains and the PAR stand keep `cut_sight_only` and now carry
    `cut_rooms ["buffer"]`; `scripts/camera_rig.gd`: such a piece is also cut, in its own rooms' views only, when it
    is wholly nearer the camera than the player and in view (the south pair filled the buffer view's foreground).
@@ -28,6 +26,18 @@ Report: `handoffs/worker-reports-2026-11/venue-fixes.md`. Captures: `docs/art/sc
 11. **Unused corridor barrier:** the stair's velvet rope is now `_velvet_rope()` (stair unchanged, same node names);
    `Alcove` rope across the old-corridor alcove 0.35 m inside its mouth plus collider `AlcoveStop` (navmesh stops).
    The alcove camera zone stays but is unreachable in play (`test_feel` still teleports there).
+
+## Follow-up: owner feedback item 15 (live build 4826ba6, 2026-11-03)
+- **No stepping:** the hatch staff's errand is now only the bar door, behind the counter on the raised floor
+  (`venue_patrons.gd`: `_bar_errand` and the north-door route and its y-snap are gone, `STAFF_DOOR_X/Z` removed). The
+  north staff door into the main room stays shut (it still swings for `staff_door_user`, nobody goes there now).
+- **Solid walled area:** its north wall is its own piece `StaffRoomNorth` (hatch + staff door; `WallSouthEast` now runs
+  from `STAFF_ROOM_X1` 38.25 only), and `_main_room` takes every `StaffRoom*`, `StaffDoorBar`, `BarDoor`, `Pass*` node
+  out of the cutaway (`_uncut`). The smoking view's see-through strip and the nearer-than-player rule no longer open it.
+  No layout.json change (walls are not kit; `export_layout.gd` output was not committed, see below).
+- Tests: `smoke_doors_sit` checks the errand stays at y 0.45 inside the walled area / behind the bar with the north door
+  shut, and that no walled-area piece is in the cutaway. Captures `before-15/`, `after-15/` (staff-from-smoking,
+  -floor, -bar; portrait + landscape), two-up `twoup-15-walled-area-solid.png`.
 
 ## Orchestrator additions (verify of 24ff659 failed 12/14)
 - **smoke_loop "walked to table:LongTable":** the long table's top grew a navmesh island; the seat-group zone's
