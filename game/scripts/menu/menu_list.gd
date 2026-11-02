@@ -1,8 +1,8 @@
 extends Control
-## The real Black Cabin menu as a bottom sheet (same look as scenes/ui/zone_sheet.gd): header, Drinks / Kitchen
-## tabs, then a scrolling list by section with stars, chillies and THB prices as printed. Tapping a drink emits
-## item_chosen(id); VenueSession.order_item() applies its effect (scripts/menu/bar_menu.gd). Kitchen rows are
-## shown but do nothing yet. Alcoholic rows are disabled while Merry. Tapping above the sheet, or Esc, closes it.
+## The real Black Cabin menu as a bottom sheet (same look as scenes/ui/zone_sheet.gd): header, Drinks / Kitchen /
+## Bundles tabs, then a scrolling list by section with stars, chillies and THB prices as printed. Tapping a drink
+## emits item_chosen(id); VenueSession.order_item() applies its effect (scripts/menu/bar_menu.gd). Kitchen and
+## bundle rows are shown but do nothing yet (bundles carry no coin price yet). Alcoholic rows are disabled while Merry. Tapping above the sheet, or Esc, closes it.
 
 signal item_chosen(id: String)
 signal closed
@@ -17,6 +17,7 @@ const PRICE_COLOR := UI.SMOKE  ## THB prices as printed, dimmed in the secondary
 var tab := "drinks"
 var merry := false
 var buttons := {}  # item id -> Button (drinks) or Label row (kitchen)
+var bundle_rows := {}  # bundle id -> row (Bundles tab)
 var tab_buttons := {}
 var _list: VBoxContainer
 var _scroll: ScrollContainer
@@ -76,7 +77,7 @@ func open(start_tab := "drinks", is_merry := false) -> void:
 	var tabs := HBoxContainer.new()
 	tabs.add_theme_constant_override("separation", int(UI.dp(8)))
 	col.add_child(tabs)
-	for t_id in ["drinks", "kitchen"]:
+	for t_id in ["drinks", "kitchen", "bundles"]:
 		var b := Button.new()
 		b.name = "Tab_" + t_id
 		b.text = BarMenu.t("menu.tab." + t_id)
@@ -123,6 +124,13 @@ func show_tab(t_id: String) -> void:
 	for c in _list.get_children():
 		c.queue_free()
 	buttons.clear()
+	bundle_rows.clear()
+	if t_id == "bundles":
+		_list.add_child(UI.wrap(UI.label(BarMenu.t("menu.bundles.note"), 14, UI.SMOKE)))
+		for b in BarMenu.bundles():
+			_list.add_child(_bundle_row(b))
+		_scroll.scroll_vertical = 0
+		return
 	if t_id == "kitchen":
 		_list.add_child(UI.wrap(UI.label(BarMenu.t("menu.kitchen_soon"), 14, UI.SMOKE)))
 	for s in BarMenu.sections(t_id):
@@ -133,6 +141,38 @@ func show_tab(t_id: String) -> void:
 		for it in s["items"]:
 			_list.add_child(_row(it))
 	_scroll.scroll_vertical = 0
+
+
+## A bundle: name, the bottles in it, the price now (THB, dimmed like every price). Not a button: no coin price yet.
+func _bundle_row(b: Dictionary) -> Control:
+	var root := PanelContainer.new()
+	var pb := UI.box(Color(0, 0, 0, 0), 0)
+	pb.content_margin_left = UI.dp(10)
+	pb.content_margin_right = UI.dp(18)  # clear of the scrollbar
+	root.add_theme_stylebox_override("panel", pb)
+	root.name = "Bundle_" + b["id"]
+	root.custom_minimum_size.y = UI.dp(44)
+	bundle_rows[b["id"]] = root
+	var inner := HBoxContainer.new()
+	inner.add_theme_constant_override("separation", int(UI.dp(8)))
+	root.add_child(inner)
+	var texts := VBoxContainer.new()
+	texts.alignment = BoxContainer.ALIGNMENT_CENTER
+	texts.size_flags_horizontal = Control.SIZE_EXPAND_FILL
+	texts.add_theme_constant_override("separation", 0)
+	inner.add_child(texts)
+	var nm := UI.label(b["name"], 15, UI.CREAM)
+	nm.autowrap_mode = TextServer.AUTOWRAP_WORD_SMART
+	texts.add_child(nm)
+	var bottles := UI.label(b["bottles"], 12, UI.ASH)
+	bottles.name = "Bottles"
+	bottles.autowrap_mode = TextServer.AUTOWRAP_WORD_SMART
+	texts.add_child(bottles)
+	var price := UI.label(BarMenu.bundle_price_text(b["price"]), 13, PRICE_COLOR, HORIZONTAL_ALIGNMENT_RIGHT)
+	price.name = "Price"
+	price.size_flags_vertical = Control.SIZE_SHRINK_CENTER
+	inner.add_child(price)
+	return root
 
 
 func _row(it: Dictionary) -> Control:

@@ -88,8 +88,35 @@ static func effect_def(id: String) -> Dictionary:
 	return data().get("effects", {}).get(effect(id), {})
 
 
+## The six Try something new drinks, one per drink family, in their fixed (printed-data) order.
 static func try_order() -> Array:
 	return data().get("try_order", [])
+
+
+## The drink Try something new offers on bar night `night`: the first one `tried` (id -> true) does not hold yet, going
+## round the six from (night % 6), so every night opens on the next drink; "" once all six are tried. Menu orders
+## count as tried (VenueSession.mark_tried).
+static func try_pick(tried: Dictionary, night := 0) -> String:
+	var o := try_order()
+	for i in o.size():
+		var d: String = o[posmod(night + i, o.size())]
+		if not tried.has(d):
+			return d
+	return ""
+
+
+## Bottle bundles (the Seppuku and the five on the brandy page) in menu order: [{id, name, bottles, price, was}].
+## Shown in the menu list's Bundles tab; not orderable (no coin price yet). `was` is the printed struck-through price.
+static func bundles() -> Array:
+	var out: Array = []
+	for b in data().get("bundles", []):
+		out.append({"id": b["id"], "name": b["name_en"], "bottles": " + ".join(b["bottles_en"]),
+			"price": int(b["now"]), "was": int(b["was"])})
+	return out
+
+
+static func bundle_price_text(price: int) -> String:
+	return t("menu.price.serve", {"n": _thousands(price)})
 
 
 ## Pour Perfect's twelve drink families in rotation order: [{id, categories, drink}], one featured drink each

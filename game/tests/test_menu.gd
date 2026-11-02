@@ -2,8 +2,9 @@ extends SceneTree
 ## Headless tests for Black Cabin's real menu in the game. Exit code 0 = all pass.
 ##   godot --headless --path . --script res://tests/test_menu.gd
 ## Data (res://data/menu.json): loads, every item has EN + TH names and a price, ids are unique, categories map to
-## the existing rule effects with today's numbers; it matches the transcription docs/venue/menu/menu.json; the menu
-## strings exist in both languages. UI: the menu list shows every drink, blocks alcohol while Merry, lists the
+## the existing rule effects with today's numbers; it matches the transcription docs/venue/menu/menu.json; the printed
+## misprints are corrected in the game names and kept as printed in print_errata; Try something new is six real drinks,
+## one per family, rotating per bar night; the bundles are listed; the menu strings exist in both languages. UI: the menu list shows every drink, blocks alcohol while Merry, lists the
 ## kitchen without making it orderable; Pour Perfect pours a real drink. Integration (main.tscn): the bar sheet
 ## names real drinks, no invented drink is left, and ordering by category gives exactly the old effects.
 
@@ -41,6 +42,8 @@ func _init() -> void:
 	test_data()
 	test_effects()
 	test_transcription()
+	test_misprints()
+	test_try_pool()
 	test_strings()
 	await test_menu_list()
 	await test_pour()
@@ -196,6 +199,103 @@ func test_transcription() -> void:
 	check(src["print_errata"].size() >= 5, "print errata recorded")
 
 
+## Daniele 2026-11-01 (Menu cards): misprints are corrected in the game and listed for Black Cabin; the printed spelling
+## stays in print_errata (docs/venue/menu/menu.json) as the record. The clear ones are fixed in the game; the unverified
+## ones (Fillippo, Verenes vs Verges, Logann's, the BigMac "sherry cask") stay as printed until the bar confirms them
+## (docs/venue/menu/errata-for-black-cabin.md).
+func test_misprints() -> void:
+	print("[misprints] corrected in the game, kept as printed in print_errata")
+	var root_dir := ProjectSettings.globalize_path("res://")
+	var f := FileAccess.open(root_dir.path_join("../docs/venue/menu/menu.json"), FileAccess.READ)
+	check(f != null, "transcription readable")
+	if f == null:
+		return
+	var text := f.get_as_text()
+	var src: Dictionary = JSON.parse_string(text)
+	var fixed := {  # id (slug of the printed name, stable) -> corrected game name
+		"thai_cavier_yum": "Thai Caviar (Yum)",
+		"aus_ribeye_steak_w_frittes_and_truffle_mayo": "Aus Ribeye Steak w/ Frites & Truffle Mayo",
+		"cape_of_good_hope_riebbeksrevier_chenin_blanc_2023": "Cape of Good Hope Riebeeksrivier Chenin Blanc 2023",
+		"castello_del_trebbio_chianti_superiore_dogc_2022": "Castello del Trebbio Chianti Superiore DOCG 2022",
+	}
+	for id in fixed:
+		check(BarMenu.item(id).get("name_en") == fixed[id], "%s reads %s (game: %s)" % [id, fixed[id], BarMenu.item(id).get("name_en")])
+	check(BarMenu.item("ki_raro_blocks_sauvignon_blanc_2023").get("region") == "Marlborough, NZ", "Marlborough spelled right")
+	for it in BarMenu.items():
+		var shown: String = str(it["name_en"]) + " " + str(it.get("region", ""))
+		for bad in ["Cavier", "Frittes", "Riebbeks", "Malbourough", "DOGC"]:
+			check(shown.findn(bad) == -1, "%s: no misprint %s in the game text" % [it["id"], bad])
+	check(BarMenu.item("thai_cavier_yum").get("name_printed") == "THAI CAVIER (YUM)", "name_printed keeps the printed THAI CAVIER")
+	check(BarMenu.sections("drinks").any(func(s): return s["id"] == "blended_scotch" and s["title"] == "Blended Scotch Whisky"),
+		"the Blended Scotch heading is spelled right")
+	var csv := FileAccess.open(BarMenu.CSV_PATH, FileAccess.READ).get_as_text()
+	check(csv.find("BLENDED SCOTH") != -1 and csv.find(",Blended Scotch Whisky,") != -1,
+		"strings_menu.csv: heading corrected, the printed form kept in the context column")
+	# Unverified: kept as printed in the game until Black Cabin confirms
+	check(BarMenu.item("nv_fillippo_sparkling").get("name_en") == "NV Fillippo, Sparkling", "Fillippo kept as printed (unverified)")
+	check(str(BarMenu.item("chateau_les_verenes_simplement_sauvignon_blanc_2022").get("name_en", "")).contains("Verenes"),
+		"Verenes kept as printed (unverified)")
+	check(BarMenu.item("loganns_hollow_shiraz_2019").get("name_en") == "Logann's Hollow, Shiraz 2019", "Logann's kept as printed (unverified)")
+	# The record: every misprint is still listed as printed, and the printed text is still in the transcription
+	var errata: Array = src["print_errata"]
+	check(errata.size() == 10, "print_errata keeps its 10 entries (%d)" % errata.size())
+	for e in errata:
+		check(str(e["printed"]) != "" and str(e["likely"]) != "" and str(e["page"]) != "", "errata entry %s is complete" % e["printed"])
+		check(text.find(str(e["printed"]).split(": ")[-1]) != -1, "printed text '%s' is still in the transcription" % e["printed"])
+	var off: Array = src["price_notes"].filter(func(n): return n.has("printed_was"))
+	check(off.size() == 3, "the three bundle 'was' prices that do not add up are recorded")
+	for n in off:
+		check(int(n["printed_was"]) != int(n["list_sum"]), "%s: printed was %d is not the list sum %d" % [n["item"], n["printed_was"], n["list_sum"]])
+	var md := FileAccess.open(root_dir.path_join("../docs/venue/menu/errata-for-black-cabin.md"), FileAccess.READ)
+	check(md != null, "errata-for-black-cabin.md exists")
+	if md:
+		var mt := md.get_as_text()
+		for e in errata:
+			check(mt.find(str(e["printed"]).split(": ")[-1]) != -1, "errata file lists '%s'" % e["printed"])
+		for was in ["7,180", "16,980", "20,480"]:
+			check(mt.find(was) != -1, "errata file lists the bundle was price " + was)
+
+
+## Try something new (Daniele 2026-11-01: "six real drinks, one per family"): the pool is six drinks from six different
+## families; the offer rotates per bar night like Pour Perfect and skips any drink already tried. Bundles are in the data.
+func test_try_pool() -> void:
+	print("[try something new] six real drinks, one per family, rotating per bar night; bundles in the data")
+	var pool := BarMenu.try_order()
+	check(pool.size() == 6, "six drinks in the pool")
+	var fams := {}
+	for id in pool:
+		check(BarMenu.has(id) and BarMenu.effect(id) == "alcohol", "%s is a real alcoholic drink" % id)
+		var fam := BarMenu.family_of(id)
+		check(fam != "" and not fams.has(fam), "%s is the only pool drink of family %s" % [id, fam])
+		fams[fam] = true
+	check(fams.size() == 6, "six different families")
+	for night in [0, 1, 5, 6, 20398]:
+		check(BarMenu.try_pick({}, night) == pool[night % 6], "night %d opens on pool[%d]" % [night, night % 6])
+		check(BarMenu.try_pick({}, night) == BarMenu.try_pick({}, night), "night %d is deterministic" % night)
+		check(BarMenu.try_pick({}, night + 1) == pool[(night + 1) % 6], "night %d: tomorrow opens on the next drink" % night)
+	# Skips what is tried; six tried = nothing left
+	var tried := {}
+	var offered := {}
+	for i in 6:
+		var d := BarMenu.try_pick(tried, 3)
+		check(d != "" and not tried.has(d) and not offered.has(d), "night 3, pick %d: %s is new" % [i, d])
+		offered[d] = true
+		tried[d] = true
+	check(offered.size() == 6, "six picks cover the six drinks")
+	check(BarMenu.try_pick(tried, 3) == "", "all six tried: nothing to offer")
+	check(BarMenu.try_pick({pool[0]: true}, 0) == pool[1], "a tried drink is skipped")
+	var bundles := BarMenu.bundles()
+	check(bundles.size() == 6, "six bundles (Seppuku + five)")
+	var by := {}
+	for b in bundles:
+		by[b["id"]] = b
+		check(str(b["name"]) != "" and str(b["bottles"]).contains(" + "), "%s lists its bottles" % b["id"])
+		check(int(b["price"]) > 0 and int(b["price"]) < int(b["was"]), "%s now %d under was %d" % [b["id"], b["price"], b["was"]])
+	check(by.has("seppuku") and int(by["seppuku"]["price"]) == 34990, "Seppuku 34,990")
+	check(by.has("bigmac") and int(by["bigmac"]["price"]) == 16990 and by["bigmac"]["name"] == "BigMac", "BigMac 16,990")
+	check(by.has("rockstar_breakfast") and int(by["rockstar_breakfast"]["price"]) == 6590, "Rockstar Breakfast 6,590")
+
+
 func test_strings() -> void:
 	print("[strings] strings_menu.csv has EN and TH for every key")
 	var f := FileAccess.open(BarMenu.CSV_PATH, FileAccess.READ)
@@ -214,7 +314,8 @@ func test_strings() -> void:
 		check(keys.has(s["title_key"]), s["title_key"] + " in the CSV")
 	for k in ["menu.head", "menu.tab.drinks", "menu.tab.kitchen", "menu.kitchen_soon", "menu.merry", "menu.bar.menu",
 			"menu.bar.menu_sub", "menu.bar.kitchen", "menu.bar.kitchen_sub", "menu.bar.order_sub", "menu.bar.soft",
-			"menu.bar.soft_sub", "menu.card.order", "menu.card.soft", "menu.card.water", "menu.pour.pouring"]:
+			"menu.bar.soft_sub", "menu.card.order", "menu.card.soft", "menu.card.water", "menu.pour.pouring", "menu.tab.bundles",
+			"menu.bundles.note"]:
 		check(keys.has(k), k + " in the CSV")
 	TranslationServer.set_locale("th")
 	check(BarMenu.t("menu.tab.kitchen") == "ครัว", "Thai string resolves")
@@ -274,6 +375,28 @@ func test_menu_list() -> void:
 	for id in ml.buttons:
 		any_button = any_button or ml.buttons[id] is Button
 	check(not any_button, "kitchen rows are not buttons (do nothing yet)")
+	# Bundles tab: their own section, every bundle with its bottles and its THB price dimmed like the rest
+	ml.show_tab("bundles")
+	await process_frame
+	await process_frame
+	check(ml.tab == "bundles" and ml.tab_buttons.has("bundles") and ml.tab_buttons["bundles"].button_pressed, "Bundles tab opens")
+	check(ml.bundle_rows.size() == BarMenu.bundles().size() and ml.buttons.is_empty(),
+		"the Bundles tab lists the %d bundles, no drink rows" % BarMenu.bundles().size())
+	for bd in BarMenu.bundles():
+		var row: Control = ml.bundle_rows.get(bd["id"])
+		var price: Label = row.find_child("Price", true, false) if row else null
+		var bottles: Label = row.find_child("Bottles", true, false) if row else null
+		check(price != null and price.text == BarMenu.bundle_price_text(bd["price"]) and price.get_theme_color("font_color") == MenuList.PRICE_COLOR,
+			"%s shows %s in the dimmed price colour" % [bd["id"], BarMenu.bundle_price_text(bd["price"])])
+		check(bottles != null and bottles.text == bd["bottles"], "%s shows its bottles" % bd["id"])
+		check(row != null and not (row is Button), "%s is not orderable (no coin price yet)" % bd["id"])
+	var texts := []
+	for l in ml.find_children("*", "Label", true, false):
+		texts.append((l as Label).text)
+	check(texts.has(BarMenu.t("menu.bundles.note")), "the daily-limit note shows on the Bundles tab")
+	ml.show_tab("drinks")
+	await process_frame
+	check(ml.bundle_rows.is_empty() and ml.buttons.size() == drinks.size(), "back on Drinks: drink rows only")
 	ml.queue_free()
 	await process_frame
 
@@ -322,7 +445,15 @@ func test_bar_sheet() -> void:
 	print(text)
 	for n in INVENTED_NAMES:
 		check(text.findn(n) == -1, "no invented drink on the bar sheet: " + n)
-	check(text.find(BarMenu.name_of(BarMenu.try_order()[0])) != -1, "Try something new names a real drink")
+	check(BarMenu.try_order().has(s.next_new_drink()) and text.find(BarMenu.name_of(s.next_new_drink())) != -1,
+		"Try something new names a real drink from the six")
+	# Soft row: Coke (Daniele 2026-11-01)
+	check(VenueSession.SOFT_DRINK == "coke", "the soft-drink row is Coke")
+	var soft := {}
+	for r in rows:
+		if r["id"] == "mocktail":
+			soft = r
+	check(str(soft.get("sub", "")).contains("Coke"), "the soft-drink row's sub-line names Coke (%s)" % soft.get("sub", ""))
 	check(ids.has("menu") and ids.has("kitchen"), "bar sheet has The menu and Kitchen rows")
 	for id in ["order", "pour", "try", "mocktail", "water", "stool"]:
 		check(ids.has(id), "row %s kept" % id)
@@ -331,6 +462,39 @@ func test_bar_sheet() -> void:
 		main.queue_free()
 		return
 
+	# Ordering from the menu marks the drink as tried (it did not before); the gains stay the plain order's
+	needs.ext.erase("drinks_tried")
+	check(s.tried_count() == 0, "nothing tried yet")
+	var offer0: String = s.next_new_drink()
+	var d_menu: float = needs.meters["drinks"]
+	check(s.order_item(offer0), "order tonight's Try something new drink from the menu: " + offer0)
+	check(needs.ext.get("drinks_tried", {}).has(offer0) and s.tried_count() == 1, "the menu order marked %s as tried" % offer0)
+	check(s.next_new_drink() != offer0 and BarMenu.try_order().has(s.next_new_drink()), "Try something new moves on after the menu order")
+	check(needs.meters["drinks"] > d_menu, "the menu order refilled Drinks (%.1f -> %.1f), no Try bonus" % [d_menu, needs.meters["drinks"]])
+	s.order_item("jameson")
+	s.order_item("coke")
+	check(s.tried_count() == 3 and needs.ext["drinks_tried"].has("jameson") and needs.ext["drinks_tried"].has("coke"),
+		"any menu drink counts: alcohol and soft")
+	s.order_item("jameson")
+	check(s.tried_count() == 3, "a repeat order does not count twice")
+	check(not s.order_item("black_cabin_burger_and_fries") and s.tried_count() == 3, "kitchen items are not drinks, not marked")
+	# The bar rows mark theirs too
+	needs.ext.erase("drinks_tried")
+	s.tipsy.reset(needs.clock)
+	s.do_row(z, "order")
+	s.do_row(z, "mocktail")
+	check(needs.ext["drinks_tried"].has("house_shooter") and needs.ext["drinks_tried"].has("coke"), "the Order and soft-drink rows mark theirs")
+	# Try something new never offers what was already tried and still marks its own drink
+	needs.ext.erase("drinks_tried")
+	for id in BarMenu.try_order().slice(0, 5):
+		s.order_item(id)
+	check(s.next_new_drink() == BarMenu.try_order()[5], "five of six tried through the menu: Try something new offers the last (%s)" % s.next_new_drink())
+	s.do_row(z, "try")
+	check(s.next_new_drink() == "" and s.tried_count() >= 6, "the Try row marked the sixth; nothing left to try")
+	needs.ext.erase("drinks_tried")
+	s.tipsy.reset(needs.clock)
+	for m in needs.meters:
+		needs.meters[m] = 20.0
 	# Alcohol: exactly the old Order row (+15 Drinks, +1 tipsiness).
 	var d0: float = needs.meters["drinks"]
 	var t0: int = s.tipsy.drinks

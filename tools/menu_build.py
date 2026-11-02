@@ -67,6 +67,8 @@ DISPLAY_FIX = {
     "CASTELLO DEL TREBBIO CHIANTI SUPERIORE DOGC 2022": "Castello del Trebbio Chianti Superiore DOCG 2022",
 }
 REGION_FIX = {"MALBOUROUGH, NZ": "Marlborough, NZ"}
+# Bundle names that title-casing would flatten (printed all caps; BIGMAC is a pun on the Macallan).
+BUNDLE_NAME = {"BIGMAC": "BigMac"}
 
 # Words that stay upper case / lower case when title-casing.
 UPPER = {"NV", "DOCG", "DOGC", "AOP", "VS", "VSOP", "XO", "H"}
@@ -298,7 +300,9 @@ def build():
         "pour_colors": POUR_COLORS,
         "sections": sections,
         "items": items,
-        "bundles": [{"id": slug(b["name"]), "name_en": title(b["name"]), "bottles": b["bottles"],
+        "bundles_note_key": "menu.bundles.note",
+        "bundles": [{"id": slug(b["name"]), "name_en": BUNDLE_NAME.get(b["name"], title(b["name"])),
+                     "bottles": b["bottles"], "bottles_en": [title(x) for x in b["bottles"]],
                      "was": b["was"], "now": b["now"]} for b in src["bundles"]],
     }
     GAME.parent.mkdir(parents=True, exist_ok=True)

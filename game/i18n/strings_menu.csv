@@ -2,6 +2,7 @@ key,en,th,context,max
 menu.head,THE MENU,เมนู,"Menu list header (bar sheet → The menu)",26
 menu.tab.drinks,Drinks,เครื่องดื่ม,Menu list tab,14
 menu.tab.kitchen,Kitchen,ครัว,Menu list tab: food from the real menu (does nothing yet),14
+menu.tab.bundles,Bundles,เซ็ตขวด,Menu list tab: the bottle bundles (TH machine draft; not orderable yet),14
 menu.kitchen_soon,Kitchen orders open soon,เปิดรับออร์เดอร์อาหารเร็ว ๆ นี้,Note at the top of the Kitchen tab; food rows are not orderable yet,40
 menu.merry,Water or a soft drink for now,ตอนนี้ขอเป็นน้ำหรือซอฟต์ดริงก์ก่อน,Disabled reason on alcoholic menu rows while Merry,40
 menu.price_note,Prices in THB as printed at Black Cabin,ราคาเป็นบาทตามเมนูของ Black Cabin,Footer of the menu list,48
@@ -9,6 +10,7 @@ menu.price.serve,{n},{n},Price on a menu row (THB); {n} = price with thousands s
 menu.price.glass,{n} / glass,{n} / แก้ว,Spirit price per glass; {n} = price,16
 menu.price.bottle,{n} / bottle,{n} / ขวด,Wine price per bottle; {n} = price,16
 menu.price.deal,5 + 1 free · {n},5 แถม 1 · {n},House shooters deal price; {n} = price,18
+menu.bundles.note,"Bundles are limited per day, by our mood and star position. Whisper sweet words and ask the crew.","เซ็ตขวดจำกัดจำนวนต่อวัน ขึ้นอยู่กับอารมณ์และตำแหน่งดาวของเรา กระซิบคำหวานแล้วสอบถามทีมงานได้เลย","Note at the top of the Bundles tab, after the printed line on the menu (TH machine draft for Black Cabin staff to check)",120
 menu.close,Close,ปิด,Close button on the menu list,10
 menu.bar.menu,The menu,ดูเมนู,"Bar sheet row title: opens the real menu (drinks, then kitchen)",26
 menu.bar.menu_sub,"Beer, wine, whisky, gin · {n} drinks","เบียร์ ไวน์ วิสกี้ จิน · {n} รายการ",Bar sheet row sub-line; {n} = number of drinks,34

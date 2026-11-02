@@ -2733,6 +2733,7 @@
    "pour_style": "clear_spirit"
   }
  ],
+ "bundles_note_key": "menu.bundles.note",
  "bundles": [
   {
    "id": "seppuku",
@@ -2741,6 +2742,11 @@
     "HIBIKI HARMONY",
     "HAKUSHU RESERVE",
     "YAMAZAKI RESERVE"
+   ],
+   "bottles_en": [
+    "Hibiki Harmony",
+    "Hakushu Reserve",
+    "Yamazaki Reserve"
    ],
    "was": 40970,
    "now": 34990
@@ -2752,6 +2758,10 @@
     "GLENFIDDICH 12Y",
     "HENDRICK'S"
    ],
+   "bottles_en": [
+    "Glenfiddich 12Y",
+    "Hendrick's"
+   ],
    "was": 10980,
    "now": 7990
   },
@@ -2761,6 +2771,10 @@
    "bottles": [
     "HENNESSY VS",
     "HENNESSY VS"
+   ],
+   "bottles_en": [
+    "Hennessy VS",
+    "Hennessy VS"
    ],
    "was": 7180,
    "now": 6590
@@ -2772,6 +2786,10 @@
     "HIBIKI HARMONY",
     "ROKU GIN"
    ],
+   "bottles_en": [
+    "Hibiki Harmony",
+    "Roku Gin"
+   ],
    "was": 16980,
    "now": 12990
   },
@@ -2782,15 +2800,23 @@
     "MARTELL VSOP",
     "MONKEY 47"
    ],
+   "bottles_en": [
+    "Martell VSOP",
+    "Monkey 47"
+   ],
    "was": 12380,
    "now": 9690
   },
   {
    "id": "bigmac",
-   "name_en": "Bigmac",
+   "name_en": "BigMac",
    "bottles": [
     "MACALLAN 12Y SHERRY CASK",
     "NO.3 LONDON DRY GIN"
+   ],
+   "bottles_en": [
+    "Macallan 12Y Sherry Cask",
+    "No.3 London Dry Gin"
    ],
    "was": 20480,
    "now": 16990

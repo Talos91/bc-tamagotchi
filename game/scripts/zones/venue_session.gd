@@ -310,12 +310,22 @@ func sit_key(zone: Dictionary) -> String:
 	return zone["regular"] if zone.get("regular", "") != "" else str(zone["id"])
 
 
+## What Try something new offers tonight: the six real drinks, one per family, rotating per bar night like Pour Perfect
+## (BarMenu.try_pick); "" once all six are tried, however they were ordered.
 func next_new_drink() -> String:
+	return BarMenu.try_pick(needs.ext.get(TRIED_KEY, {}), BarMenu.night_of(needs.real_now()))
+
+
+## Any drink ordered at the bar counts as tried (the Order a drink and soft-drink rows, the menu list, Try something
+## new), so Try something new never offers a drink the player already had. Gains stay Try something new's own.
+func mark_tried(id: String) -> void:
 	var tried: Dictionary = needs.ext.get(TRIED_KEY, {})
-	for d in BarMenu.try_order():
-		if not tried.has(d):
-			return d
-	return ""
+	tried[id] = true
+	needs.ext[TRIED_KEY] = tried
+
+
+func tried_count() -> int:
+	return needs.ext.get(TRIED_KEY, {}).size()
 
 
 # --- Doing things --------------------------------------------------------------------------------
@@ -331,19 +341,20 @@ func do_row(zone: Dictionary, row_id: String) -> bool:
 	var now: float = needs.clock
 	match row_id:
 		"order":
+			mark_tried(HOUSE_DRINK)
 			_drink(now, true, BarMenu.t("menu.card.order", {"who": _name(BARTENDER), "drink": BarMenu.name_of(HOUSE_DRINK)}))
 		"mocktail":
+			mark_tried(SOFT_DRINK)
 			_drink(now, false, BarMenu.t("menu.card.soft", {"drink": BarMenu.name_of(SOFT_DRINK)}))
 		"water":
+			mark_tried("water")
 			tipsy.water(now)
 			_drink(now, false, T.t("venue.card.water"))
 		"try":
 			var d := next_new_drink()
 			var r: Dictionary = needs.apply_action("order_drink")
 			var bonus: Dictionary = needs.apply_action("try_new_drink")
-			var tried: Dictionary = needs.ext.get(TRIED_KEY, {})
-			tried[d] = true
-			needs.ext[TRIED_KEY] = tried
+			mark_tried(d)
 			_count_drink(now, true)
 			_card(_merge(r, bonus), T.t("venue.card.try", {"drink": BarMenu.name_of(d)}))
 		"pour":
@@ -399,10 +410,14 @@ func _drink(now: float, alcoholic: bool, line: String) -> void:
 
 
 ## Orders one item from the real menu (main.gd, menu list). Same effects as the rows: alcohol = Order a drink,
-## soft = the soft-drink row, water = the water row; kitchen items do nothing yet. False if refused.
+## soft = the soft-drink row, water = the water row; kitchen items do nothing yet. False if refused. A drink ordered
+## here is marked as tried.
 func order_item(id: String) -> bool:
 	var now: float = needs.clock
-	match BarMenu.effect(id):
+	var fx := BarMenu.effect(id)
+	if fx in ["alcohol", "soft", "water"]:
+		mark_tried(id)
+	match fx:
 		"alcohol":
 			_drink(now, true, BarMenu.t("menu.card.order", {"who": _name(BARTENDER), "drink": BarMenu.name_of(id)}))
 		"soft":
