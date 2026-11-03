@@ -22,3 +22,5 @@ Pictures: 1 bar floor / song HUD; 2 the bar with the reindeer frame and shelves;
 14. (added 2026-11-03 ~00:10 UTC+7) The list of places you can tap to go to (the area buttons): add a control that hides them to the side, and pressing it again brings them back out. → 🎮 touch-anywhere worker (HUD, same job).
 
 15. (added 2026-11-03 ~03:40 +7, live build 4826ba6; picture in chat only, not saved) The walled bar area looks weird: NPCs walk up and down it (visibly stepping on and off the raised level), and it renders transparently for the camera even though the player cannot walk in it; it should stay solid. → 🏗️ venue-fixes (follow-up).
+
+16. (added 2026-11-03 ~13:00 +7, live build) The entrance (tap the door, the door animation and the camera pull-back) lags a lot on the phone. Orchestrator's read: first-sight shader compilation in the web build, the 42 lights on a phone GPU with the single-threaded Compatibility renderer, and the pull-back + door swing at the same moment. → 🛠️ performance pass (STATE job): measure on Daniele's phone (model, first entry vs second entry), shader warm-up behind the start screen, light budget.
