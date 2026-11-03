@@ -57,7 +57,7 @@ head = bible.split("<!-- RULES-TABLE -->")[0]
 bible = head + "<!-- RULES-TABLE -->\n" + rules_table() + "\n"
 (D / "game-bible.md").write_text(bible, encoding="utf-8", newline="\n")
 page = (D / "backlog-board.html").read_text(encoding="utf-8")
-for key, src in (("stakes", D / "stakes-rules.md"), ("bible", D / "game-bible.md")):
+for key, src in (("stakes", D / "stakes-rules.md"), ("bible", D / "game-bible.md"), ("ask", D / "ask-black-cabin.md")):
     body = md(src.read_text(encoding="utf-8"))
     pat = re.compile(rf"(?s)<!--BEGIN:{key}-->.*?<!--END:{key}-->")
     page, n = pat.subn(lambda m: f"<!--BEGIN:{key}-->\n{body}\n<!--END:{key}-->", page)

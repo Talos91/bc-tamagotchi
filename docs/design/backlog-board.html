@@ -110,7 +110,7 @@ table.doc td, table.doc th { vertical-align: top; text-align: left; }
   <h1>Black Cabin Backlog<small>Ideas, requests and open questions for the Tamagotchi. Lives in the repo as <code>docs/design/BACKLOG.md</code>.</small></h1>
   <div class="verdict"><b>Alpha verdict, 1 Nov 2026:</b> “fun, fucked up but fine, good alpha.” First job is the baseline map of the club. Everything else waits for it, because a community game needs the real room right.</div>
 </header>
-<nav class="tabs" role="tablist" aria-label="Board sections"><button class="tab" role="tab" id="t-backlog" aria-controls="p-backlog" aria-selected="true">Backlog</button><button class="tab" role="tab" id="t-questions" aria-controls="p-questions" aria-selected="false">Questions <span class="badge zero" id="q-badge">…</span></button><button class="tab" role="tab" id="t-coins" aria-controls="p-coins" aria-selected="false">Coins</button><button class="tab" role="tab" id="t-stakes" aria-controls="p-stakes" aria-selected="false">Stakes rules</button><button class="tab" role="tab" id="t-bible" aria-controls="p-bible" aria-selected="false">Game bible</button></nav>
+<nav class="tabs" role="tablist" aria-label="Board sections"><button class="tab" role="tab" id="t-backlog" aria-controls="p-backlog" aria-selected="true">Backlog</button><button class="tab" role="tab" id="t-questions" aria-controls="p-questions" aria-selected="false">Questions <span class="badge zero" id="q-badge">…</span></button><button class="tab" role="tab" id="t-coins" aria-controls="p-coins" aria-selected="false">Coins</button><button class="tab" role="tab" id="t-stakes" aria-controls="p-stakes" aria-selected="false">Stakes rules</button><button class="tab" role="tab" id="t-bible" aria-controls="p-bible" aria-selected="false">Game bible</button><button class="tab" role="tab" id="t-ask" aria-controls="p-ask" aria-selected="false">Ask Black Cabin</button></nav>
 <div id="p-backlog" role="tabpanel" aria-labelledby="t-backlog">
 <div class="legend"><span class="s-plan">planned / in STATE</span><span class="s-wait">waiting on an input</span><span class="s-idea">idea, not scheduled</span><span class="s-ok">done</span><span>Effort: S a day · M a wave · L several waves</span></div>
 
@@ -410,19 +410,88 @@ table.doc td, table.doc th { vertical-align: top; text-align: left; }
 <!--END:bible-->
 </div>
 
+<div id="p-ask" class="doc-panel" role="tabpanel" aria-labelledby="t-ask" hidden>
+<!--BEGIN:ask-->
+<h2>Ask Black Cabin</h2>
+<p class="sub">Tonight&#x27;s list, 2026-11-03. Tick as you go. Each item names the file it came from (paths from the repo root). Prices are THB.</p>
+<h3>1. Menu: spellings and prices</h3>
+<p class="sub">Source: <code>docs/venue/menu/errata-for-black-cabin.md</code>. Show them the page photo if they want to see it.</p>
+<ul class="q">
+<li>☐ #7 &quot;NV FILLIPPO, SPARKLING&quot;: is it FILIPPO? (<code>06-champagne-whites.jpg</code>)</li>
+<li>☐ #8 &quot;CHATEAU LES VERENES SIMPLEMENT SAUVIGNON BLANC 2022&quot;: VERENES or VERGES? The red prints VERGES (<code>06</code>, <code>07</code>)</li>
+<li>☐ #9 &quot;LOGANN&#x27;S HOLLOW, SHIRAZ 2019&quot;: LOGAN&#x27;S? (<code>07-reds.jpg</code>)</li>
+<li>☐ #10 &quot;BIGMAC: MACALLAN 12Y SHERRY CASK&quot;: the single-malt list says SHERRY OAK. Same bottle? Is it BIGMAC or BigMac? (<code>11</code>)</li>
+<li>☐ #11 &quot;ANOTHER HENDRICK&#x27;S&quot; at the same price as HENDRICK&#x27;S (4,990 / 380): joke, or a different bottle? Its name? (<code>11</code>)</li>
+<li>☐ Bundle &quot;was&quot; price ROCKSTAR BREAKFAST: printed 7,180, bottles add up to 7,380. Typo or real discount?</li>
+<li>☐ Bundle &quot;was&quot; price SHOGUN&#x27;S POTION: printed 16,980, bottles add up to 17,980.</li>
+<li>☐ Bundle &quot;was&quot; price BIGMAC: printed 20,480, bottles add up to 21,480.</li>
+<li>☐ Tell them: six clear misprints are already fixed in the game (CAVIAR, FRITES, MARLBOROUGH, RIEBEEKSRIVIER, DOCG, SCOTCH). They may want to fix the printed menu too.</li>
+<li>☐ Thai names: the game uses machine drafts. Ask a staff member to check a few (only two are printed: ยำไข่มดแดง, ยำไข่เป็ดดาว).</li>
+<li>☐ The cocktail page: get the separate printed cocktail menu (photo each page, flat, in good light). No cocktails are in the game yet. (<code>docs/design/DECISIONS.md</code> &quot;Still open&quot;)</li>
+</ul>
+<h3>2. Facts</h3>
+<ul class="q">
+<li>☐ November poster: the monthly events calendar, same as October&#x27;s (<code>docs/venue/events/README.md</code>). Photo or file; ask for the nights, acts and showtimes.</li>
+<li>☐ Real merch list: what the bar really sells (tees, caps, stickers). The game has placeholders until the character creator (<code>docs/design/DECISIONS.md</code>, answers of 2026-11-02).</li>
+<li>☐ Opening hours: confirm Tue to Sun 19:00 to 02:00, closed Monday. The only source is public listings (<code>STATE.md</code>).</li>
+<li>☐ Door policy line, in their own words (<code>docs/design/03-cast.md</code> §2.1, slot <code>DOOR</code>).</li>
+<li>☐ Real weekly calendar: which night is which (jazz, open mic, headline) (<code>03-cast.md</code> priority 6).</li>
+<li>☐ Prae&#x27;s name in full: her family name is still open (<code>docs/design/DECISIONS.md</code> row of 2026-11-02).</li>
+<li>☐ Anything for the real-world bridge: would they honour an in-game reward at the bar? Who checks it? (<code>DECISIONS.md</code> &quot;Still open&quot;)</li>
+<li>☐ A street-door model detail, the bar-stool row and the neon edge colour: any photo or fact that settles them (<code>DECISIONS.md</code> 2026-11-02 row).</li>
+</ul>
+<h3>3. People</h3>
+<p class="sub">Send the same pack to each (<code>03-cast.md</code> §2.1): consent, photos, nickname in Thai and English, signature drink, one true story, 2 to 3 catchphrases, a habit.</p>
+<ul class="q">
+<li>☐ Consent, signed one-pager: bar staff who agree to appear (head bartender first).</li>
+<li>☐ Consent: the house or resident band, every member. Without it the invented names ship (<code>03-cast.md</code> priority 1 and 2).</li>
+<li>☐ Consent: other performers, regular acts, the DJ.</li>
+<li>☐ Consent: Prae, and her yes or no to owner moments (house toast, anniversary night) (<code>03-cast.md</code> §2.3).</li>
+<li>☐ Consent: Ty. Ty is a regular in the game; if he is a real person, ask him.</li>
+<li>☐ Prae&#x27;s own lines: a few things she really says, the founding story, the anniversary date, the house toast. She is silent in the game until then.</li>
+<li>☐ Each performer&#x27;s real name, nickname and instrument (<code>03-cast.md</code> §4.3).</li>
+<li>☐ A photo of each performer with their instrument; plus a live photo or video on the Black Cabin stage.</li>
+<li>☐ Band: 6 to 10 songs with licence status (originals, licensed), and their real set (opener, closer, crowd request).</li>
+<li>☐ Band merch or logo for the in-game band tee.</li>
+<li>☐ Sound engineer: a 30 second phone clip of a real soundcheck.</li>
+<li>☐ Head bartender: photos front, side, back in the work outfit, plus a close-up of the face, in plain light.</li>
+</ul>
+<h3>4. Photos needed</h3>
+<p class="sub">Sources: <code>docs/art/direction/README.md</code>, <code>docs/design/DECISIONS.md</code> &quot;Still open&quot;.</p>
+<ul class="q">
+<li>☐ Street front of the bar, from across the soi.</li>
+<li>☐ The street door, close, with the sign above it.</li>
+<li>☐ The entrance corridor, both ends (the real corridor is dimly lit, keep the red).</li>
+<li>☐ The outside in daylight (the game only has night).</li>
+<li>☐ The north window of the buffer zone, from inside and the view outside.</li>
+<li>☐ The corridor to the toilets and the kitchen curtain, if the old shot is not good enough (photo 10).</li>
+<li>☐ The lounge&#x27;s TV memory corner with a guest posing (<code>25-lounge-tv-memory-corner.jpg</code>).</li>
+<li>☐ A real shot of the stage with the band playing, for positions.</li>
+</ul>
+<h3>5. Show them</h3>
+<p class="sub">Live at https://bc-tamagotchi.vercel.app (open on the phone, portrait). Three things:</p>
+<ul class="q">
+<li>☐ Look D: the darker room with red neon, the sign on the start screen, the stage curtain.</li>
+<li>☐ Ty and Prae: walk to Prae&#x27;s table (she is in every other night) and meet Ty, regular number 4.</li>
+<li>☐ The touch control: tap anywhere to walk, the area buttons for the camera, the hideable buttons.</li>
+<li>☐ Ask: does it feel like Black Cabin? What is wrong with the room? (note the first thing they say)</li>
+</ul>
+<!--END:ask-->
+</div>
+
 <dialog class="lb" id="lb" aria-label="Picture viewer">
   <div class="lb-bar"><span class="lb-cap" id="lb-cap"></span><button class="qbtn ghost" id="lb-close">Close ✕</button></div>
   <div class="lb-stage"><img id="lb-img" alt=""></div>
   <div class="lb-nav" id="lb-nav"><button class="qbtn ghost" id="lb-prev">← Previous</button><button class="qbtn ghost" id="lb-next">Next →</button></div>
 </dialog>
 
-<p class="foot">Updated 3 Nov 2026, v14 (all fourteen owner items built and verified; Stakes rules and Game bible tabs added; web build A8 built, deploy is yours). Backlog items are never silently deleted: shipped ones get the commit, dropped ones get the reason. Answers on the Questions tab are copied into <code>docs/design/DECISIONS.md</code>.</p>
+<p class="foot">Updated 3 Nov 2026, v15 (new tab Ask Black Cabin, the list for the bar visit; all fourteen owner items built and verified; Stakes rules and Game bible tabs added; web build A8 built, deploy is yours). Backlog items are never silently deleted: shipped ones get the commit, dropped ones get the reason. Answers on the Questions tab are copied into <code>docs/design/DECISIONS.md</code>.</p>
 </div>
 <script>
 (function(){
   const $ = s => document.querySelector(s);
-  // Tabs: five views, bookmarkable as #backlog, #questions, #coins, #stakes and #bible
-  const tabs = { backlog: [$('#t-backlog'), $('#p-backlog')], questions: [$('#t-questions'), $('#p-questions')], coins: [$('#t-coins'), $('#p-coins')], stakes: [$('#t-stakes'), $('#p-stakes')], bible: [$('#t-bible'), $('#p-bible')] };
+  // Tabs: six views, bookmarkable as #backlog, #questions, #coins, #stakes, #bible and #ask
+  const tabs = { backlog: [$('#t-backlog'), $('#p-backlog')], questions: [$('#t-questions'), $('#p-questions')], coins: [$('#t-coins'), $('#p-coins')], stakes: [$('#t-stakes'), $('#p-stakes')], bible: [$('#t-bible'), $('#p-bible')], ask: [$('#t-ask'), $('#p-ask')] };
   function show(name){
     if(!tabs[name]) name = 'backlog';
     for(const k in tabs){ const on = k === name; tabs[k][0].setAttribute('aria-selected', String(on)); tabs[k][1].hidden = !on; }
