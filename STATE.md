@@ -1,14 +1,14 @@
-# STATE — Black Cabin Tamagotchi (rewritten, never appended; as of 2026-11-03 ~02:50 UTC+7)
+# STATE — Black Cabin Tamagotchi (rewritten, never appended; as of 2026-11-03 ~11:10 UTC+7)
 
-## LIVE (origin/main c842e94; every code SHA on it verified 14/14 in a clean worktree, APPDATA empty per suite)
+## LIVE (origin/main ff220e4; every code SHA on it verified 14/14 in a clean worktree, APPDATA empty per suite)
 - Venue v4 to the real floor map, doors, seats, stair, start screen with the real sign, Lato + Kristi, portrait first + landscape toggle, real menu (121 drinks, 34 dishes), Prae owner, Tt regular #4, nightlife actions + WASTED, per-area camera with seven area buttons, lounge revamp + follow-up (accepted, **layout.json frozen**), look D (6cd9735 + 6df5288; acceptance pending), menu follow-ups (6c7d9e4; accepted), stakes v3 docs (625f83f; review pending), housekeeping 38fc2fa (MANUAL §5/§15, GDD §8, Kanit removed), **camera feel 2** (406d2fd + start-screen fix c97abde: tight follow, nothing hides the player, nearer per-area views, landscape distance x1.5, corridor clamp; acceptance pending on three cards).
 - 15 suites (run from `game/`): smoke_stairs, smoke_tap, smoke_hud, test_needs, test_minigames, smoke_loop, smoke_doors_sit, smoke_start, test_menu, smoke_version, test_nightlife, test_seats, test_feel, test_lounge, test_touch (added 2026-11-03 with touch-anywhere b8f6d50). Version 0.2.0 open (`docs/tech/versioning.md`). Play: `docs/tech/02-playtest-guide.md`.
 
 ## IN FLIGHT
-- Orchestrator: **local_ddbbfc1d** (Fable 5.1; effort medium, Daniele asked to set high; **context ~25 %** at this rewrite; day 11-02: 8 → 19 %; 11-03: 23, 25 %). Handoff `C:/Users/itisf/.claude/handoffs/1ab97086-9b4b-48fb-afb8-c28766300c88.md`. Connectors off. Never verifies, pushes code, publishes or deploys itself.
-- **No worker running; local main = origin.** 🔍 verify-stack PASSED 2d55d45 (15/15, build 54.0 MB; report 0f25a8a). Sessions to archive on Daniele's side: venue-fixes local_0ea22856, verify-stack local_85923ca7, verify-web-build local_cffc72a4.
-- **Next for Daniele:** the phone pass on https://bc-tamagotchi.vercel.app (load s, fps with 42 lights, touch walk + hideable buttons, HUD, save survives reload) and the acceptance cards. Redeploy any time with `python tools/build_web.py --deploy --out %LOCALAPPDATA%c-web` from the repo root (login done on this PC).
-- 🧹 housekeeping-3 DONE and pushed (ec6b258, c842e94): hub v14 with Stakes rules + Game bible tabs (`docs/design/build_hub_tabs.py` regenerates them from `stakes-rules.md` and `game-bible.md`), DECISIONS row for the 14 items, worktrees pruned. Session to archive: local_48ba0855.
+- Orchestrator: **local_ddbbfc1d** (Fable 5.1; effort medium, Daniele asked to set high; **context ~29 %** at this rewrite; 11-02: 8 → 19 %; 11-03: 23, 25, 29 %). Handoff `C:/Users/itisf/.claude/handoffs/1ab97086-9b4b-48fb-afb8-c28766300c88.md`. Connectors off. Never verifies, pushes code, publishes or deploys itself.
+- **No worker running; local main = origin ff220e4.** 🔍 verify-ty-walled PASSED efc4ea4 (15/15, build, "Ty" in the browser; report ff220e4). Sessions to archive on Daniele's side: venue-fixes local_0ea22856, verify-ty-walled local_44f236e6.
+- **Next for Daniele:** redeploy (`python tools/build_web.py --deploy --out %LOCALAPPDATA%c-web` from the repo root), then the phone pass on https://bc-tamagotchi.vercel.app (load s, fps with 42 lights, touch walk + hideable buttons, HUD, save survives reload, Ty shows, walled bar solid) and the acceptance cards.
+- Trap found by the verifier: a stray `http.server` on port 8765 (PID 57568, some earlier session) serves a stale web build that still shows the raw label; harmless, but kill it before judging a local build.
 
 ## WAITING ON OWNER (Questions tab: https://claude.ai/artifact/BbpBxVWVVXMjz7TgJ7aFBW#questions)
 - **Web build:** live at https://bc-tamagotchi.vercel.app; phone pass (load s, fps, tap walk, HUD, save survives reload). Card web-build-review.
@@ -18,7 +18,7 @@
 - Answered 2026-11-02 (DECISIONS row 07:35–08:19): look D accepted darker still, corridor dim white-red neon line, all red, sconces on the neon line, symmetric stage curtain, left singer → electric-piano band member; stakes v3 accepted, O1 first check-in gates real visits, O2 no revival before the server, O3 memory = photo on a checked-in night, O4 tuning as written; menu follow-ups accepted, bundles price-only and list-only; lounge east tables stay west, two Top-patrons posters (all time, this month), merch placeholders until the character creator.
 
 ## PROMISED, NOT DONE
-- Live manual (Claude Doc) §15 stale since venue v4. Hub tabs Stakes rules / Game bible not yet viewed in a browser by anyone. Needs build left out (worker's call): Retire settings screen, audio duck, postcards beyond the home text. Camera rig: exit sign and sconce lag a moment when the north wall sinks (cut rule in camera_rig.gd).
+- Live manual (Claude Doc) §15 stale since venue v4. Hub tabs Stakes rules / Game bible not yet viewed in a browser by anyone. Needs build left out (worker's call): Retire settings screen, audio duck, postcards beyond the home text. Camera rig: exit sign and sconce lag a moment when the north wall sinks (cut rule in camera_rig.gd). Web: ♥ glyph missing in the web font; ui/menu/nightlife runtime CSV loaders unverified in web; Thai names unverified.
 - Memory upload at the TV corner (D5); memory-corner props placeholders; portraits read edge-on in play; raised couch places not walkable (Raised0 S0, Raised2 S1, Raised4 S0/S1); Thai strings machine drafts; Pour Perfect does not mark a drink tried (decide with the needs build); stale card "🎲 Real-world bridge chapter" (task_b873ccbd) to dismiss; export include filter `*.json`, `*.csv` once a preset exists.
 - Method v1.1 review by Daniele ~2026-11-16: LOG carries a "context %" per day.
 
