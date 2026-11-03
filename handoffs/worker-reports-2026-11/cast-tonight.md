@@ -6,5 +6,5 @@ EVIDENCE
 - Capture 450x800: 1-ty-phone.png (Ty with tag), 2-prae-phone.png (Prae at the table, no tag visible in frame).
 - Hub card: cast-tonight-review (Questions tab, 2 pictures + files).
 OPEN
-- Caveat: web build must be redeployed? No: logic unchanged in behaviour; the live build already shows both tonight.
+- No redeploy needed for tonight: the refactor changes no behaviour; the live build already puts both in tonight by the same rule.
 - The commit used CRLF warnings only. Unrelated untracked files left alone.
