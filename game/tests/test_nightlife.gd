@@ -36,6 +36,7 @@ func _init() -> void:
 	needs.autosave = false
 	needs.save_path = TEST_SAVE
 	test_rules()
+	test_cast_tonight()
 	test_wear_off()
 	test_strings()
 	test_save_lockout()
@@ -69,6 +70,26 @@ func test_rules() -> void:
 	check(Nightlife.clock_text(12 * 3600.0) == "12:00:00" and Nightlife.clock_text(61.2) == "0:01:02", "countdown text")
 	var def: Dictionary = Rules.ACTIONS.get("light_one_up", {})
 	check(def.get("gains", {}).has("friends") and def.has("cap_per_visit"), "light_one_up: a small Friends gain, capped per visit")
+
+
+## Tuesday 2026-11-03 Bangkok (Daniele shows the game at the bar): the night number is the calendar night (not a
+## per-save count), it is even, so Prae is in at WestTable0, and Tt is in; the parity rule still holds around it.
+func test_cast_tonight() -> void:
+	print("[cast] Prae and Ty are both in on the night of 2026-11-03 Bangkok, whatever the save")
+	const Cast = preload("res://scripts/cast.gd")
+	var open := 1793707200.0    # 2026-11-03 19:00 +07
+	var close := 1793728800.0   # 2026-11-04 01:00 +07
+	var next_day := 1793768400.0  # 2026-11-04 12:00 +07
+	var tonight := Cast.night_at(open)
+	check(tonight == 20760 and Cast.night_at(close) == tonight, "19:00 and 01:00 are one night (%d)" % tonight)
+	check(Cast.night_at(next_day) == tonight + 1, "the next afternoon is the next night")
+	var had_visits: int = needs.nights_out
+	for visits in [0, 1, 3]:
+		needs.nights_out = visits   # a fresh save, and saves with odd and even visit counts: the cast never reads it
+		var h: Dictionary = Cast.hosts(Cast.night_at(open))
+		check(h.get(Cast.TT_ZONE, "") == "tt" and h.get("table:WestTable0", "") == "mali", "with %d visits: Ty at the Long Table, Prae at WestTable0" % visits)
+	needs.nights_out = had_visits
+	check(not Cast.prae_in(tonight + 1) and Cast.hosts(tonight + 1).get(Cast.TT_ZONE, "") == "tt", "the odd night after: Prae out (parity rule), Ty in")
 
 
 func test_wear_off() -> void:

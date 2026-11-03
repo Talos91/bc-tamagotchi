@@ -72,7 +72,12 @@ static func name_of(id: String) -> String:
 static func night() -> int:
 	if night_override >= 0:
 		return night_override
-	return int(floor((Time.get_unix_time_from_system() + (BANGKOK_UTC_H - NIGHT_TURNS_H) * 3600.0) / 86400.0))
+	return night_at(Time.get_unix_time_from_system())
+
+
+## The night number of a real moment (unix seconds): the same for every save, player and time zone.
+static func night_at(unix_time: float) -> int:
+	return int(floor((unix_time + (BANGKOK_UTC_H - NIGHT_TURNS_H) * 3600.0) / 86400.0))
 
 
 ## Prae is in on even nights.
