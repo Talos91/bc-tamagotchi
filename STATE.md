@@ -1,13 +1,13 @@
-# STATE — Black Cabin Tamagotchi (rewritten, never appended; as of 2026-11-04 ~14:30 UTC+7)
+# STATE — Black Cabin Tamagotchi (rewritten, never appended; as of 2026-11-04 ~16:00 UTC+7)
 
-## LIVE (origin/main 15551e0; every code SHA on it verified 14/14 in a clean worktree, APPDATA empty per suite)
+## LIVE (origin/main 17be2af; every code SHA on it verified 14/14 in a clean worktree, APPDATA empty per suite)
 - Venue v4 to the real floor map, doors, seats, stair, start screen with the real sign, Lato + Kristi, portrait first + landscape toggle, real menu (121 drinks, 34 dishes), Prae owner, Tt regular #4, nightlife actions + WASTED, per-area camera with seven area buttons, lounge revamp + follow-up (accepted, **layout.json frozen**), look D (6cd9735 + 6df5288; acceptance pending), menu follow-ups (6c7d9e4; accepted), stakes v3 docs (625f83f; review pending), housekeeping 38fc2fa (MANUAL §5/§15, GDD §8, Kanit removed), **camera feel 2** (406d2fd + start-screen fix c97abde: tight follow, nothing hides the player, nearer per-area views, landscape distance x1.5, corridor clamp; acceptance pending on three cards).
 - 15 suites (run from `game/`): smoke_stairs, smoke_tap, smoke_hud, test_needs, test_minigames, smoke_loop, smoke_doors_sit, smoke_start, test_menu, smoke_version, test_nightlife, test_seats, test_feel, test_lounge, test_touch (2026-11-03), test_string_keys (2026-11-04: every key used in code has a translation), test_walk (2026-11-04, movement-polish ac8d0ac: 315 tap-walks + 92 stick runs on the navmesh, none stuck; ~35 s). Version 0.2.0 open (`docs/tech/versioning.md`). Play: `docs/tech/02-playtest-guide.md`.
 
 ## IN FLIGHT
 - Orchestrator: **local_ddbbfc1d** (Fable 5.1; effort medium, Daniele asked to set high; **context ~34 %** at this rewrite; 11-02: 8 → 19 %; 11-03: 23 → 31 %; 11-04: 34 %). Handoff `C:/Users/itisf/.claude/handoffs/1ab97086-9b4b-48fb-afb8-c28766300c88.md`. Connectors off. Never verifies, pushes code, publishes or deploys itself.
-- **No worker running; local main = origin 15551e0.** 🔍 verify-polish PASSED dd45503 (17/17, build with both audio worklets fetched 200, start screen clean at 375×812; report 15551e0). Sessions to archive on Daniele's side: verify-polish local_29ad2307, movement-polish local_600d506b, web-labels-debug local_50480d64.
-- **Next for Daniele:** redeploy (`python tools/build_web.py --deploy --out %LOCALAPPDATA%c-web`), retest on an iPhone (checklist in `handoffs/iphone-load-2026-11-04.md`; the red banner names the failure), answer **movement-axis-choice** (fixed VENUE_NORTH built; "follow the camera but hold through the swing" offered; one-line switch), then the review cards.
+- **No worker running; local main = origin 17be2af.** 🔍 verify-rollback PASSED 8889dce (17/17; report 17be2af). Sessions to archive on Daniele's side: verify-rollback local_cb77f901, web-labels-debug local_50480d64.
+- **Next for Daniele:** redeploy (`python tools/build_web.py --deploy --out %LOCALAPPDATA%c-web`), retest on an iPhone (checklist in `handoffs/iphone-load-2026-11-04.md`; the red banner names the failure), then the review cards (movement-axis-choice is closed: rolled back). Open idea if the camera jump still bothers: "follow the camera but hold the drag through a swing", not built.
 - Multiplayer direction recorded (owner item 24, 11-04): simulated presence via real check-ins + table QR, not live sync; 🎲 design job after the character creator.
 - 🏗️ venue-fixes (local_0ea22856) parked by Daniele's wish: venue changes from the real place are coming.
 
