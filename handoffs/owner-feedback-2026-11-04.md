@@ -1,0 +1,11 @@
+# Owner feedback, 2026-11-04 (Daniele, after the Black Cabin night of 2026-11-03: "the game was a huge success")
+
+Decision: **polish the base game before any new feature.** Items numbered by the orchestrator; owner words kept.
+
+17. Movement is super clunky. The camera panning is good (it shows the area), but the controls follow the camera, which is annoying: controls should be on a fixed axis, not follow the camera. → 🎮 movement-polish.
+18. Walking between tables often gets the character stuck. → 🎮 movement-polish (navmesh margins, agent radius, collider gaps between tables and chairs).
+19. Many in-game buttons still show raw keys like `name.something.something`. → 🛠️ web-labels-debug (the per-module runtime CSV loaders: `game/scripts/minigames/strings.gd`, `zones/venue_strings.gd`, `zones/nightlife_strings.gd`, `menu/bar_menu.gd`, `ui/ui_strings.gd`; in the web export the raw CSV is replaced by imported translations).
+20. On iPhone the game was not loading. → 🛠️ iphone-load (Safari/WebKit: WebGL2, wasm size and memory, service worker/PWA, https, console errors).
+21. Keep the venue worker active: changes to the venue based on the real venue are coming. → 🏗️ venue-fixes session stays parked, not archived.
+22. Next feature after the polish: the character creator. → queued (STATE NEXT JOBS).
+23. Until pre-alpha, resurrection and the reset after WASTED need a debug button to bypass or try them: Daniele got locked out of the game on 11-03 after being WASTED. → 🛠️ web-labels-debug (debug panel reachable on the phone: clear WASTED lockout, force resurrection/ghost flow, skip the game clock; visible only while the pre-alpha flag is on).
