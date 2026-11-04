@@ -3,6 +3,7 @@ extends RefCounted
 ## Translation per language, so tr() works without importing the CSV or touching project settings.
 
 const CSV_PATH := "res://i18n/strings.csv"
+const PROBE := "need.music.name"
 const LANGS := ["en", "th"]
 
 static var _translations: Array = []
@@ -25,8 +26,12 @@ static func rows() -> Array:
 static func install(force := false) -> bool:
 	if not _translations.is_empty() and not force:
 		return true
+	if not force and String(TranslationServer.translate(PROBE)) != PROBE:
+		_translations = [null]   # registered by project.godot (always in the web export, where the raw CSV is not shipped)
+		return true
 	for t in _translations:
-		TranslationServer.remove_translation(t)
+		if t != null:
+			TranslationServer.remove_translation(t)
 	_translations.clear()
 	var by_lang := {}
 	for l in LANGS:

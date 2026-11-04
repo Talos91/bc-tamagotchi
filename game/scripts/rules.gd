@@ -87,6 +87,11 @@ const NOTIFY_LOWEST_METER_CROSSES := 40.0
 const NOTIFY_MAX_PER_WEEK := 2
 const NOTIFY_QUIET_AFTER_HOUR := 22
 
+## Pre-alpha switch (owner 2026-11-04): while true, a small Debug button (scripts/ui/debug_panel.gd) shows on every
+## screen of every build, the phone and the web build included, to bypass the WASTED lockout, jump the clock, try the
+## ghost/revival flow and reset the save. Set it to false for the first public build; nothing else needs to change.
+const PRE_ALPHA := true
+
 # --- Debug clock (GDD §14: 1 real minute = 1 game hour) ------------------------------------------
 const DEBUG_CLOCK_MULTIPLIER := 60.0
 

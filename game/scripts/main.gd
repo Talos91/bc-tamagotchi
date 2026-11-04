@@ -23,10 +23,12 @@ const WelcomeScene = preload("res://scenes/ui/welcome_back.tscn")
 const StartScreen = preload("res://scripts/start_screen.gd")
 const ExitShot = preload("res://scripts/exit_shot.gd")
 const MenuList = preload("res://scripts/menu/menu_list.gd")
+const Rules = preload("res://scripts/rules.gd")
 const Nightlife = preload("res://scripts/zones/nightlife.gd")
 const WastedShot = preload("res://scripts/wasted_shot.gd")
 const DrunkOverlay = preload("res://scripts/ui/drunk_overlay.gd")
 const FarewellCard = preload("res://scripts/ui/farewell_card.gd")
+const DebugPanel = preload("res://scripts/ui/debug_panel.gd")
 
 @onready var player: Player = $Player
 @onready var zones: VenueZones = $Zones
@@ -91,6 +93,10 @@ func _ready() -> void:
 		dbg._toggle.visible = false
 	needs.character_deleted.connect(show_farewell)
 	_parse_capture()
+	if Rules.PRE_ALPHA and _capture.is_empty():
+		var dp_node := DebugPanel.new()
+		add_child(dp_node)
+		dp_node.setup(self, needs)
 	if needs.is_deleted():
 		show_farewell()  # the ghost window ran out while the app was closed
 	elif Nightlife.locked(needs) and _capture.is_empty():

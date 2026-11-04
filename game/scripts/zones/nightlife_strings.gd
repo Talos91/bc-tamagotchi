@@ -2,6 +2,7 @@ extends RefCounted
 ## Nightlife string table (res://i18n/strings_nightlife.csv, same columns as strings.csv: key,en,th,context,max), read
 ## at runtime like scripts/ui/ui_strings.gd, so no project setting is needed.
 
+const PROBE := "nightlife.prompt.toilet"
 const CSV_PATH := "res://i18n/strings_nightlife.csv"
 
 static var _installed := false
@@ -11,6 +12,8 @@ static func install() -> void:
 	if _installed:
 		return
 	_installed = true
+	if String(TranslationServer.translate(PROBE)) != PROBE:
+		return   # project.godot registered the imported translations (always the case in the web export)
 	var f := FileAccess.open(CSV_PATH, FileAccess.READ)
 	if f == null:
 		return
