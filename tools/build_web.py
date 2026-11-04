@@ -16,6 +16,73 @@ PRESET = 'Web'
 HEAVY = ('wasm', 'pck', 'js')
 
 
+# Injected before the engine script: says in words why the game did not start (the next iPhone report then carries
+# the reason). Plain ES5-ish JS, no optional chaining, so even an old Safari runs it. Shows a banner over the page;
+# tapping it hides it. "BC-DIAG" line in the banner = copyable one-liner for a screenshot.
+SHELL_GUARD = r'''<script>
+(function () {
+	var msgs = [], box = null;
+	function ua() { return (navigator.userAgent || '').replace(/^Mozilla\/5.0 /, ''); }
+	function show() {
+		if (!document.body) { document.addEventListener('DOMContentLoaded', show); return; }
+		if (!box) {
+			box = document.createElement('div');
+			box.id = 'bc-diag';
+			box.setAttribute('style', 'position:fixed;left:0;right:0;top:0;z-index:99999;background:#5b1f2a;color:#fff;font:13px/1.35 -apple-system,Arial,sans-serif;padding:12px 14px;max-height:70%;overflow:auto;white-space:pre-wrap;word-break:break-word');
+			box.addEventListener('click', function () { box.style.display = 'none'; });
+			document.body.appendChild(box);
+		}
+		box.style.display = 'block';
+		box.textContent = 'Black Cabin could not start (tap to hide)\n\n' + msgs.join('\n') + '\n\nBC-DIAG ' + ua();
+	}
+	function fail(m) { if (msgs.indexOf(m) < 0) { msgs.push(m); } show(); }
+	window.bcFail = fail;
+	// Hard requirements, checked before the 50 MB download starts.
+	try {
+		var c = document.createElement('canvas');
+		if (!c.getContext('webgl2')) { fail('WebGL2 is not available in this browser (iOS 15 or newer is needed, and Low Power Mode or a memory-starved tab can switch it off). Try closing other tabs, restarting Safari, or updating iOS.'); }
+	} catch (e) { fail('WebGL2 check failed: ' + e); }
+	if (typeof WebAssembly !== 'object') { fail('WebAssembly is not available in this browser.'); }
+	try { window.localStorage.setItem('bc-probe', '1'); window.localStorage.removeItem('bc-probe'); }
+	catch (e) { fail('Browser storage is blocked (private browsing or "Block all cookies"); progress could not be saved. Open the page in a normal tab.'); }
+	window.addEventListener('error', function (e) {
+		var t = e && e.target;
+		if (t && t.src) { fail('A game file failed to load: ' + t.src.split('/').pop()); return; }
+		fail('Script error: ' + (e && e.message ? e.message : 'unknown') + (e && e.filename ? ' @' + e.filename.split('/').pop() + ':' + e.lineno : ''));
+	}, true);
+	window.addEventListener('unhandledrejection', function (e) {
+		var r = e && e.reason, m = r && r.message ? r.message : String(r);
+		// Audio worklet failures are not fatal: the engine goes on without sound.
+		// Same for the PWA service worker (offline cache only; the game runs without it).
+		if (/worklet|ServiceWorker/i.test(m)) { try { console.warn('BC audio worklet:', m); } catch (x) {} return; }
+		fail('Startup failed: ' + m);
+	});
+	window.addEventListener('webglcontextlost', function () { fail('The graphics context was lost (the phone ran out of graphics memory). Reload the page; if it keeps happening, close other tabs/apps first.'); }, true);
+	// Safari kills a tab that runs out of memory and reloads it silently: leave a trace in sessionStorage so the
+	// reloaded page can say so.
+	try {
+		var s = window.sessionStorage;
+		if (s.getItem('bc-started') === '1' && s.getItem('bc-ok') !== '1') {
+			fail('The previous start did not finish: the browser probably ran out of memory and reloaded the tab (or the page was reloaded while loading). Close other tabs/apps and try again.');
+		}
+		s.setItem('bc-started', '1'); s.removeItem('bc-ok');
+		window.bcOk = function () { try { s.setItem('bc-ok', '1'); } catch (x) {} };
+	} catch (e) { window.bcOk = function () {}; }
+	// 25 s without the first frame: say what we know.
+	var t0 = Date.now(), warned = false;
+	var iv = setInterval(function () {
+		var st = document.getElementById('status');
+		if (!st || !document.body || !document.body.contains(st)) {
+			if (document.body && Date.now() - t0 > 300) { window.bcOk(); clearInterval(iv); if (warned && box) { box.style.display = 'none'; } }
+			return;
+		}
+		if (!warned && Date.now() - t0 > 25000) { warned = true; fail('Still loading after 25 s. Slow connection, or the browser stalled. The 50 MB download needs a stable connection.'); }
+	}, 500);
+}());
+</script>
+'''
+
+
 def npx(*args):
     """npx is npx.cmd on Windows (PowerShell blocks npx.ps1 under the default execution policy)."""
     run('npx.cmd' if os.name == 'nt' else 'npx', '--yes', *args)
@@ -60,12 +127,21 @@ def hash_rename():
     tag = 'bc-' + h.hexdigest()[:8]
     for ext in HEAVY:
         os.replace(os.path.join(WEB, 'index.' + ext), os.path.join(WEB, tag + '.' + ext))
+    # The engine loads the audio worklets as "<executable>.audio.worklet.js", so they must follow the rename
+    # (until 2026-11-04 they stayed index.audio.*.js and answered 404 on the live site).
+    worklets = [f for f in os.listdir(WEB) if f.startswith('index.audio.') and f.endswith('.js')]
+    for f in worklets:
+        os.replace(os.path.join(WEB, f), os.path.join(WEB, tag + f[len('index'):]))
     for name in ('index.html', 'index.service.worker.js'):
         p = os.path.join(WEB, name)
         s = read(p)
         for ext in HEAVY:
             s = s.replace('index.' + ext, tag + '.' + ext)
+        for f in worklets:
+            s = s.replace(f, tag + f[len('index'):])
         s = re.sub(r'"executable"\s*:\s*"index"', '"executable":"%s"' % tag, s)
+        if name == 'index.html':
+            s = s.replace('<script src="%s.js"></script>' % tag, SHELL_GUARD + '<script src="%s.js"></script>' % tag, 1)
         write(p, s)
     return tag
 
