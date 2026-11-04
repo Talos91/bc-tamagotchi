@@ -52,14 +52,15 @@ func heading(p: Player, n: int) -> Vector3:
 	d.y = 0.0
 	return d.normalized() if d.length() > 0.05 else Vector3.ZERO
 
-## Owner item 17: the stick maps to a fixed world axis, not to the camera's current yaw. A drag "up" is held in the
-## lobby (camera yaw 0), the player is moved to the main room (camera yaw -90, the view turns a quarter) and then
-## to the bar (yaw 180) with the finger still down: the walk keeps its world direction. The frame's yaw never reads
-## the camera (VENUE_NORTH and FIRST_CAMERA); the old CAMERA frame does follow it (the switch still works).
+## Owner item 17, rolled back by Daniele 2026-11-04 (the fixed axis was "very hard to manoeuvre"): the stick is
+## camera-relative again (Player.ControlFrame.CAMERA), latched for the length of a press. A drag "up" is held in the
+## lobby (camera yaw 0), the player is moved to the main room (yaw -90) and then to the bar (yaw 180) with the finger
+## still down: the walk keeps its world direction (the latch). After the finger lifts, a new drag up walks screen-up of
+## the bar camera. The fixed frames (the one-line switch) still ignore the camera, CAMERA follows it.
 func fixed_axis(p: Player, start: Vector2) -> void:
 	var rig := p.rig
 	var frame := Player.control_frame
-	check(frame != Player.ControlFrame.CAMERA, "the stick is on a fixed axis by default (%s)" % Player.ControlFrame.keys()[frame])
+	check(frame == Player.ControlFrame.CAMERA, "the stick is camera-relative by default (%s)" % Player.ControlFrame.keys()[frame])
 	p.walking_to = false
 	p.global_position = Vector3(1.5, 0.05, 9.5)   # lobby
 	rig.snap()
@@ -73,7 +74,7 @@ func fixed_axis(p: Player, start: Vector2) -> void:
 	var h0: Vector3 = await heading(p, 20)
 	var cy0 := p.control_yaw()
 	var want := Basis(Vector3.UP, cy0) * Vector3(0, 0, -1)
-	check(h0.dot(want) > 0.97, "drag up in the lobby walks screen-up of the fixed frame (%s, want %s)" % [h0, want])
+	check(h0.dot(want) > 0.97, "drag up in the lobby walks screen-up of the lobby camera (%s, want %s)" % [h0, want])
 	var seen := [rad_to_deg(yaw0)]
 	for spot in [Vector3(26.0, 0.05, 8.5), Vector3(30.0, 0.05, 10.8)]:   # main room floor, then the bar
 		p.global_position = spot
@@ -83,10 +84,10 @@ func fixed_axis(p: Player, start: Vector2) -> void:
 		var h: Vector3 = await heading(p, 20)
 		check(absf(angle_difference(rig.yaw, yaw0)) > deg_to_rad(45.0), "  the camera turned (yaw %.0f -> %.0f)" % [rad_to_deg(yaw0), rad_to_deg(rig.yaw)])
 		check(h.dot(h0) > 0.97, "  the held drag walks the same world way at (%.0f, %.0f): %s vs %s" % [spot.x, spot.z, h, h0])
-		check(absf(angle_difference(p.control_yaw(), cy0)) < 0.001, "  the control yaw did not move with the camera (%.0f)" % rad_to_deg(p.control_yaw()))
+		check(absf(angle_difference(p.control_yaw(), cy0)) < 0.001, "  the press keeps its latched yaw while the camera turns (%.0f)" % rad_to_deg(p.control_yaw()))
 	touch(0, pos, false)
 	await frames(30)
-	# A fresh drag after the swing still means the same world way (the old stick re-latched the new camera yaw)
+	# A fresh drag after the swing follows the new camera: screen-up of the bar view
 	p.global_position = Vector3(30.0, 0.05, 10.8)   # back on the open floor in front of the bar
 	rig.snap()
 	await frames(3)
@@ -96,7 +97,8 @@ func fixed_axis(p: Player, start: Vector2) -> void:
 		pos += Vector2(0, -15)
 		drag(0, pos, Vector2(0, -15))
 	var h2: Vector3 = await heading(p, 10)
-	check(h2.dot(h0) > 0.97, "a new drag up under the bar camera (yaw %.0f) walks the same world way: %s" % [rad_to_deg(rig.yaw), h2])
+	var up2 := Basis(Vector3.UP, rig.yaw) * Vector3(0, 0, -1)
+	check(h2.dot(up2) > 0.97, "a new drag up under the bar camera (yaw %.0f) walks screen-up of that camera: %s (want %s)" % [rad_to_deg(rig.yaw), h2, up2])
 	touch(0, pos, false)
 	await frames(20)
 	# The switch: CAMERA follows the camera's yaw, the fixed frames do not
@@ -225,7 +227,7 @@ func _init() -> void:
 	toggle.pressed.emit()
 	await frames(30)
 
-	# 7. fixed axis (owner item 17): a held drag keeps walking the same world direction when the camera swings
+	# 7. stick frame (owner item 17, fixed axis rolled back 11-04): camera-relative, a held drag keeps its way through a swing
 	await fixed_axis(p, start)
 
 	print("test_touch: ", "PASS" if failed == 0 else "FAIL (%d)" % failed)

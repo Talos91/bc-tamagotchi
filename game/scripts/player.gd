@@ -1,7 +1,7 @@
 class_name Player
 extends CharacterBody3D
-## Diorama controller. Move with WASD / arrows or by dragging anywhere on empty play area (touch_joystick.gd), on a
-## fixed axis (`control_frame`, below); or tap / click the floor to walk there along the venue's navmesh (NavigationAgent3D). Any stick or key
+## Diorama controller. Move with WASD / arrows or by dragging anywhere on empty play area (touch_joystick.gd), relative to
+## the camera (`control_frame`, below); or tap / click the floor to walk there along the venue's navmesh (NavigationAgent3D). Any stick or key
 ## input cancels a tap-walk. The camera is the CameraRig child (camera_rig.gd); the body is a PatronFigure
 ## (scenes/venue/patron_figure.tscn) with the `look` below, and a warm ring on the floor marks the player.
 ## main.gd sets `tap_handler` (a tap on a zone walks there and opens it), `input_enabled` (off under sheets and
@@ -13,9 +13,9 @@ extends CharacterBody3D
 ## toward where it really goes (`facing()` / `face()`, always world yaw) and keeps its facing when it stops;
 ## tap-walks follow the navmesh path by pure pursuit and ease in at the end.
 ## Movement polish (owner feedback 2026-11-04, items 17 and 18):
-##   fixed axis  the stick and the keys map to a fixed world frame (`control_frame`), never to the camera's current
-##       yaw, so a drag keeps meaning the same world direction whatever the camera does. One-line switch: the default
-##       of `control_frame` (VENUE_NORTH: screen-up = venue north, -z; FIRST_CAMERA: the yaw of the camera the first
+##   axis        `control_frame` picks the frame of the stick and the keys. Default CAMERA (camera-relative, the
+##       camera yaw latched for the length of a press, as before): the fixed axis tried for item 17 was rolled back
+##       by Daniele on 2026-11-04 ("very hard to manoeuvre"). One-line switch: the default of `control_frame` (VENUE_NORTH: screen-up = venue north, -z; FIRST_CAMERA: the yaw of the camera the first
 ##       time the stick is used, the lobby's after the start screen, which is north today; MAIN_ROOM: screen-up =
 ##       east, the main room's view; CAMERA: the old camera-relative stick, latched for the length of a press).
 ##   not stuck   tap-walk paths are cleaned of repeated points (a run of them filled the pursuit's search window and
@@ -50,7 +50,8 @@ const NAV_OFF := 0.15           ## metres off the navmesh beyond which the stick
 
 enum ControlFrame { VENUE_NORTH, FIRST_CAMERA, MAIN_ROOM, CAMERA }
 ## Which frame the stick / keys move in (owner item 17). THE one-line switch: change this default.
-static var control_frame := ControlFrame.VENUE_NORTH
+## Rolled back to CAMERA by Daniele 2026-11-04 after playing the live build: the fixed axis was "very hard to manoeuvre".
+static var control_frame := ControlFrame.CAMERA
 const MAIN_ROOM_YAW := -PI / 2.0     ## the main room's camera yaw (screen-up = east)
 static var _first_yaw := NAN         ## FIRST_CAMERA: latched on first use, kept for the session
 
