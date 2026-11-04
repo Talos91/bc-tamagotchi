@@ -44,6 +44,79 @@ func frames(n: int) -> void:
 	for i in n:
 		await physics_frame
 
+## World direction (flat, unit) the player moved over `n` physics frames.
+func heading(p: Player, n: int) -> Vector3:
+	var a := p.global_position
+	await frames(n)
+	var d := p.global_position - a
+	d.y = 0.0
+	return d.normalized() if d.length() > 0.05 else Vector3.ZERO
+
+## Owner item 17: the stick maps to a fixed world axis, not to the camera's current yaw. A drag "up" is held in the
+## lobby (camera yaw 0), the player is moved to the main room (camera yaw -90, the view turns a quarter) and then
+## to the bar (yaw 180) with the finger still down: the walk keeps its world direction. The frame's yaw never reads
+## the camera (VENUE_NORTH and FIRST_CAMERA); the old CAMERA frame does follow it (the switch still works).
+func fixed_axis(p: Player, start: Vector2) -> void:
+	var rig := p.rig
+	var frame := Player.control_frame
+	check(frame != Player.ControlFrame.CAMERA, "the stick is on a fixed axis by default (%s)" % Player.ControlFrame.keys()[frame])
+	p.walking_to = false
+	p.global_position = Vector3(1.5, 0.05, 9.5)   # lobby
+	rig.snap()
+	await frames(5)
+	var yaw0 := rig.yaw
+	touch(0, start, true)
+	var pos := start
+	for i in 6:
+		pos += Vector2(0, -15)
+		drag(0, pos, Vector2(0, -15))
+	var h0: Vector3 = await heading(p, 20)
+	var cy0 := p.control_yaw()
+	var want := Basis(Vector3.UP, cy0) * Vector3(0, 0, -1)
+	check(h0.dot(want) > 0.97, "drag up in the lobby walks screen-up of the fixed frame (%s, want %s)" % [h0, want])
+	var seen := [rad_to_deg(yaw0)]
+	for spot in [Vector3(26.0, 0.05, 8.5), Vector3(30.0, 0.05, 10.8)]:   # main room floor, then the bar
+		p.global_position = spot
+		rig.snap()
+		await frames(3)
+		seen.append(rad_to_deg(rig.yaw))
+		var h: Vector3 = await heading(p, 20)
+		check(absf(angle_difference(rig.yaw, yaw0)) > deg_to_rad(45.0), "  the camera turned (yaw %.0f -> %.0f)" % [rad_to_deg(yaw0), rad_to_deg(rig.yaw)])
+		check(h.dot(h0) > 0.97, "  the held drag walks the same world way at (%.0f, %.0f): %s vs %s" % [spot.x, spot.z, h, h0])
+		check(absf(angle_difference(p.control_yaw(), cy0)) < 0.001, "  the control yaw did not move with the camera (%.0f)" % rad_to_deg(p.control_yaw()))
+	touch(0, pos, false)
+	await frames(30)
+	# A fresh drag after the swing still means the same world way (the old stick re-latched the new camera yaw)
+	p.global_position = Vector3(30.0, 0.05, 10.8)   # back on the open floor in front of the bar
+	rig.snap()
+	await frames(3)
+	touch(0, start, true)
+	pos = start
+	for i in 6:
+		pos += Vector2(0, -15)
+		drag(0, pos, Vector2(0, -15))
+	var h2: Vector3 = await heading(p, 10)
+	check(h2.dot(h0) > 0.97, "a new drag up under the bar camera (yaw %.0f) walks the same world way: %s" % [rad_to_deg(rig.yaw), h2])
+	touch(0, pos, false)
+	await frames(20)
+	# The switch: CAMERA follows the camera's yaw, the fixed frames do not
+	for f in [Player.ControlFrame.VENUE_NORTH, Player.ControlFrame.FIRST_CAMERA, Player.ControlFrame.MAIN_ROOM]:
+		Player.control_frame = f
+		var a := p.input_to_world(Vector2(0, -1))
+		var saved := rig.yaw
+		rig.yaw = saved + 1.3
+		var b := p.input_to_world(Vector2(0, -1))
+		rig.yaw = saved
+		check(a.distance_to(b) < 0.001, "frame %s ignores the camera yaw" % Player.ControlFrame.keys()[f])
+	Player.control_frame = Player.ControlFrame.CAMERA
+	var c0 := p.input_to_world(Vector2(0, -1))
+	rig.yaw += 1.3
+	var c1 := p.input_to_world(Vector2(0, -1))
+	rig.yaw -= 1.3
+	check(c0.distance_to(c1) > 0.5, "frame CAMERA (the old stick) follows the camera yaw")
+	Player.control_frame = frame
+	print("  camera yaws seen: ", seen)
+
 func _init() -> void:
 	main = load("res://scenes/main.tscn").instantiate()
 	root.add_child(main)
@@ -151,6 +224,9 @@ func _init() -> void:
 	check(not main.hud.areas_shown(), "state kept (hidden) for the next press")
 	toggle.pressed.emit()
 	await frames(30)
+
+	# 7. fixed axis (owner item 17): a held drag keeps walking the same world direction when the camera swings
+	await fixed_axis(p, start)
 
 	print("test_touch: ", "PASS" if failed == 0 else "FAIL (%d)" % failed)
 	quit(1 if failed else 0)

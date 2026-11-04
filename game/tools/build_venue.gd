@@ -1910,6 +1910,11 @@ func _navigation() -> void:
 	nm.cell_size = 0.1
 	nm.cell_height = 0.05
 	nm.agent_radius = 0.4
+	# Movement polish 2026-11-04 (owner item 18, stuck between tables): Recast simplifies the walkable outline by up
+	# to edge_max_error cells (default 1.3 = 0.13 m), so edges crept to ~0.27 m from a chair or table, inside the
+	# player's 0.35 m capsule; paths and tap goals on them pinned the capsule (buffer tall tables). 0.4 cells keeps
+	# every edge >= 0.36 m off the colliders.
+	nm.edge_max_error = 0.4
 	nm.agent_height = 1.7
 	nm.agent_max_climb = 0.05   # ramps only from their foot: the player cannot step onto a ramp side edge
 	nm.agent_max_slope = 45.0
