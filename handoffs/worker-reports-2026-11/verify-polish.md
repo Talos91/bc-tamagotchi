@@ -1,0 +1,11 @@
+# 🔍 verify-polish (2026-11-04): PASS 17/17, dd45503 pushed
+
+EVIDENCE
+- SHA verified: dd45503 (clean detached worktree, `--import` exit 0, fresh empty APPDATA per suite, one Godot at a time, no reruns). Local HEAD had moved to 007b71d (docs-only line in owner-feedback-2026-11-04.md); that commit was NOT pushed, only dd45503.
+- Pushed: `1ecb8d9..dd45503 dd45503 -> main`; `git ls-remote origin main` = dd45503ef51d83b650b615ea34a2feee8f5f6795. Commits in origin/main..dd45503 (9): dd45503 f5227f4 c21d7eb ac8d0ac 2364605 c3cbe5b c11c419 1f4a64a a23243e (ebed591 is the first).
+- 17/17 PASS, all exit 0, no SCRIPT ERROR: smoke_stairs, smoke_tap, smoke_hud, test_needs, test_minigames, smoke_loop, smoke_doors_sit, smoke_start, test_menu, smoke_version, test_nightlife, test_seats, test_feel, test_lounge, test_touch, test_string_keys, test_walk (315 walks, 0 failed, 0 stalls).
+- Web build: `build_web.py --out <scratch>` exit 0, bc-4bf66c44, 54.1 MB; index.html, ONE exe js (bc-4bf66c44.js), .wasm, .pck, bc-4bf66c44.audio.worklet.js (7298 B), bc-4bf66c44.audio.position.worklet.js (2973 B). index.html names executable bc-4bf66c44; loader asks godot.audio*.worklet.js and maps to the renamed files: server log shows both GET .../bc-4bf66c44.audio*.worklet.js 200 (no 404 from the page).
+- Browser 375x812 (port 8797): start screen shows BLACK CABIN, "Ty" by the door, "Tap to enter", Debug button, stamp v0.2.0 · dd45503 · dirty; no dotted key visible. Console: only an error "Failed to register a ServiceWorker ... unknown error fetching the script" (file serves 200; a bare navigator.serviceWorker.register in the pane fails the same way: pane limitation, not seen as a build fault) plus WebGL zero-size framebuffer warnings from my viewport resize.
+- Caveat: build_web.py ran in the same worktree while suites 2..5 were running (it only re-stamps version/imports); all passed regardless, smoke_version ran after it.
+- Logs: side-session-notes/local_ddbbfc1d-.../verify-polish-logs/. Worktree, build, my server removed, pruned. Port 8793 PID 16244 is someone else's, left.
+- Not verified: real iPhone/Safari load (service worker path in a real browser), tapping past the start screen in the web build, audio actually playing.
