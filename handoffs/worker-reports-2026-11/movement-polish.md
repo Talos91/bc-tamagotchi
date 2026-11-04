@@ -36,7 +36,7 @@
 ## Axis choice (item 17) — my call and why
 - Built: **VENUE_NORTH** (screen-up = -z). "Fixed to the first camera" is identical today: the first camera after the start
   screen is the lobby's, yaw 0 = north. So the real alternative is **MAIN_ROOM** (screen-up = east); both captured.
-- The catch, measured on 4000+ navmesh samples by area: the area cameras face all four ways, so any fixed axis is ~90° off
+- The catch, measured on random navmesh points (6000 probes, seed 7) by area: the area cameras face all four ways, so any fixed axis is ~90° off
   the screen on average; drag-up is within 45° of screen-up on 20 % of the floor (north) vs 29 % (main-room east). North is
   reversed at the bar/toilets/smoking room, sideways in the main room and lounge; main-room east is reversed in the lounge.
 - I recommend north: it is the axis the game opens on (lobby, start screen), matches the stage/buffer/merch/memory views,
