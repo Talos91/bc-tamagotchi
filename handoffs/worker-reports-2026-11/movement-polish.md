@@ -1,6 +1,13 @@
 # 🎮 Movement polish: worker report (2026-11-04)
 
 ## EVIDENCE
+- **Rollback 2026-11-04 (Daniele played the live build: fixed axis "very hard to manoeuvre"): commit 80fc8a4.** Default
+  `Player.control_frame` is **CAMERA** again (camera-relative, latched for one press, as before ac8d0ac); the hold-through-
+  the-swing variant was not built, so plain camera-relative. Every navigation and stuck fix kept. test_touch section 7
+  now checks: default CAMERA; a held drag keeps its world way through two swings (latch); a fresh drag after the swing
+  walks screen-up of the new camera; fixed frames still ignore the camera. Suites (empty APPDATA, headless, from game/):
+  test_touch PASS, test_walk PASS (0/315 tap, 0/92 stick wedges), smoke_tap PASS, smoke_loop PASS, test_feel PASS.
+  Card movement-axis-choice note: "rolled back by Daniele 11-04". The axis section below is history.
 - Code commit **ac8d0ac** (local main, not pushed; on top of c11c419/c3cbe5b/2364605 web-labels). Role note + this report: next commit.
 - Suites, run one at a time from `game/` with APPDATA on an empty folder, headless, shared tree at ac8d0ac's content:
   test_touch PASS, test_walk PASS, smoke_tap PASS, smoke_loop PASS, test_feel PASS, test_seats PASS, smoke_doors_sit PASS,

@@ -5,7 +5,10 @@ items 17 (stick follows the camera, wants a fixed axis) and 18 (stuck between ta
 `handoffs/worker-reports-2026-11/movement-polish.md`. Captures: `docs/art/screens/movement-polish/`.
 
 ## What exists now (`game/scripts/player.gd`)
-- **Control frame** `Player.control_frame` (static var, THE one-line switch, its default): `VENUE_NORTH` (built: screen-up =
+- **Default control frame: CAMERA** (camera-relative, yaw latched for one press), since 80fc8a4: Daniele played the live
+  build on 2026-11-04 and found the fixed axis "very hard to manoeuvre"; rolled back, nav and stuck fixes kept. The
+  "hold through the swing" variant is not built. The fixed frames below remain behind the switch.
+- **Control frame** `Player.control_frame` (static var, THE one-line switch, its default): `VENUE_NORTH` (was the default ac8d0ac–80fc8a4: screen-up =
   -z, the venue's north), `FIRST_CAMERA` (yaw of the camera at the first stick use, the lobby's = north today, so
   identical now), `MAIN_ROOM` (screen-up = east, the main room's view), `CAMERA` (the old stick: camera-relative, latched
   for one press). `control_yaw()`, `input_to_world()`, `world_to_input()` all go through it; keys use it too.
