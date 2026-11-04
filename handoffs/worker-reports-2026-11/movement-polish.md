@@ -53,7 +53,6 @@
 
 ## Not verified
 - Real phone (touch feel, iPhone). Web build not rebuilt by me. Captures are windowed desktop renders.
-- STATE/LOG not touched (orchestrator's files).
 
 ## Files
 game/scripts/player.gd, game/tools/build_venue.gd, game/scenes/venue/venue.tscn (rebuilt), game/tests/test_walk.gd (+uid),
