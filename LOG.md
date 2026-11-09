@@ -188,3 +188,4 @@ Append-only. One dated line per event, newest last. Never edit earlier lines.
 - 2026-11-09 (+7) — Daniele: verified, push all live, then one redeploy. 🔍 verify-creator-hair started on 5ffb219 (waits for the 8368a40 verify's Godot to finish). Context ~37 %.
 - 2026-11-09 (+7) — 🔍 verify-creator-name PASSED 8368a40 (19/19 + web build), pushed, archived. Hair verify on 5ffb219 next; one redeploy after. Context ~38 %.
 - 2026-11-09 (+7) — 🔍 verify-creator-hair PASSED 5ffb219, pushed; docs pushed after (fbba6ad). Creator fix (items 26–27) fully on origin; redeploy is Daniele's. Hair verifier archived; creator-fix archive refused (live task), retry later. Context ~39 %.
+- 2026-11-10 (+7) — Daniele deployed 30e0cda; friend's iPhone loads (item 28 fixed) then 'WebGL context lost' at the start screen (item 29, screenshot). 🛠️ perf-iphone started (local_55efd269, Opus): measure, banner hook, cuts. Context ~40 %: own handover due at the next clean point.
