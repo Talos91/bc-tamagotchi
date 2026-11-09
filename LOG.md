@@ -180,3 +180,4 @@ Append-only. One dated line per event, newest last. Never edit earlier lines.
 - 2026-11-09 (+7) — Daniele: done sessions must archive themselves at once. Rule added to PROJECT.md; archived verify-char-creator, housekeeping-designs, presence-design. verify-iphone-load-2 running (local_e3873238). Context ~29 %.
 - 2026-11-09 (+7) — 🔍 verify-iphone-load-2 PASSED 63a5e71 (19/19 + web build), pushed; docs pushed after (ab83bb8); iphone-load-2 and its verifier archived. Redeploy + iPhone retest are Daniele's. Context ~30 %.
 - 2026-11-09 (+7) — Daniele deployed 63a5e71; still trapped in the creator (item 26 not landed). Creator-fix worker told: land item 26 first and alone, hair second. Context ~31 %.
+- 2026-11-09 (+7) — Creator exit fix (item 26) committed alone, 9cb6bc9 (cause: refusal reason + name field below the fold; × always leaves). 🔍 verify-creator-exit proposed. Item 27 follows as a second commit. Context ~32 %.
