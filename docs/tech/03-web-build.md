@@ -33,3 +33,6 @@ pck 15.7 MB, wasm 37.7 MB, js 0.3 MB; Vercel serves them brotli-compressed.
 
 ## Testing locally
 `python -m http.server 8791 --directory <out dir>` (do not start it with `web/` as its working folder: it keeps the folder locked), open `http://localhost:8791/index.html`. A hidden browser pane throttles `requestAnimationFrame` to about 1 fps, so frame rates only count on a visible browser or a real phone.
+
+## Download watch and resume (item 28, 2026-11-09)
+The engine reads the 37.7 MB wasm and the pck as one stream and never catches an error in the middle of it, so one dropped connection (iPhone, Chrome for iOS: "Startup failed: Load failed" at ~45 %) killed the start with no retry. The shell guard in `build_web.py` wraps `fetch()` for `bc-<hash>.wasm/.pck` only: it resumes a broken stream from the received byte with a `Range` request (Vercel answers ranges with plain bytes, so offsets match) and the banner ends with "Last download: <file> HTTP <status> <encoding>, <MB> received, resumed Nx". Test a cut yourself: serve the build with a server that closes the first wasm response at ~24 MB; the log shows a second GET and the game still reaches "Tap to enter". Pick a port with `netstat -ano | findstr :<port>` first: another session's server on the same port silently serves a different build.

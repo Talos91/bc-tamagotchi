@@ -37,6 +37,59 @@ SHELL_GUARD = r'''<script>
 	}
 	function fail(m) { if (msgs.indexOf(m) < 0) { msgs.push(m); } show(); }
 	window.bcFail = fail;
+	// Download watch + resume (item 28: iPhone "Load failed" at ~45 %). The engine reads the 37 MB wasm / 16 MB pck as
+	// one long stream and does not catch a network error in the middle of it, so one dropped connection killed the
+	// start with a bare "Load failed" and no retry. This wraps fetch() for the two big files only: it records file,
+	// HTTP status, encoding and bytes received (named in the banner), and when the stream breaks it resumes from the
+	// byte already received with a Range request (the server answers ranges with plain bytes, so offsets match).
+	var net = { file: '', status: '', enc: '', got: 0, resumes: 0, err: '' };
+	function mb(n) { return (n / 1048576).toFixed(1) + ' MB'; }
+	function netInfo() {
+		return net.file ? ('Last download: ' + net.file + ' HTTP ' + net.status + (net.enc ? ' ' + net.enc : '') + ', ' + mb(net.got) + ' received' + (net.resumes ? ', resumed ' + net.resumes + 'x' : '') + (net.err ? ', error: ' + net.err : '')) : 'No game file download had started.';
+	}
+	var origFetch = window.fetch;
+	if (typeof origFetch === 'function' && typeof ReadableStream === 'function') {
+		window.fetch = function (input, init) {
+			var url = typeof input === 'string' ? input : (input && input.url) || '';
+			var m = /(bc-[0-9a-f]{8}\.(wasm|pck))(\?|$)/.exec(url);
+			if (!m || init) { return origFetch.apply(this, arguments); }
+			var name = m[1], got = 0, reader = null, resumes = 0, tries = 0;
+			net = { file: name, status: '', enc: '', got: 0, resumes: 0, err: '' };
+			function open(range) {
+				return origFetch(url, range ? { headers: { Range: 'bytes=' + got + '-' } } : undefined).then(function (r) {
+					net.status = r.status; net.enc = r.headers.get('Content-Encoding') || '';
+					if (!(range ? r.status === 206 : r.ok)) { var e = new Error('HTTP ' + r.status); e.http = true; throw e; }
+					return r;
+				});
+			}
+			function again(err, c) {
+				net.err = String(err && err.message ? err.message : err); net.resumes = ++resumes;
+				if (resumes > 8 || (err && err.http && !got)) {
+					fail('Game file ' + name + ' could not be downloaded.\n' + netInfo());
+					throw err;
+				}
+				return new Promise(function (ok) { setTimeout(ok, Math.min(4000, 700 * resumes)); }).then(function () {
+					return open(got > 0).then(function (r) { reader = r.body.getReader(); net.err = ''; return pump(c); }, function (e2) { return again(e2, c); });
+				});
+			}
+			function pump(c) {
+				return reader.read().then(function (r) {
+					if (r.done) { c.close(); return; }
+					got += r.value.length; net.got = got; c.enqueue(r.value);
+					return pump(c);
+				}, function (err) { return again(err, c); });
+			}
+			return open(false).then(function (r) {
+				reader = r.body.getReader();
+				var h = new Headers(); h.set('Content-Type', r.headers.get('Content-Type') || 'application/octet-stream');
+				return new Response(new ReadableStream({ start: function (c) { return pump(c).catch(function (e) { c.error(e); }); } }), { status: 200, headers: h });
+			}, function (err) {
+				if (tries++ < 3) { return new Promise(function (ok) { setTimeout(ok, 800 * tries); }).then(function () { return window.fetch(input, init); }); }
+				net.err = String(err && err.message ? err.message : err);
+				fail('Game file ' + name + ' could not be downloaded.\n' + netInfo()); throw err;
+			});
+		};
+	}
 	// Hard requirements, checked before the 50 MB download starts.
 	try {
 		var c = document.createElement('canvas');
@@ -55,7 +108,7 @@ SHELL_GUARD = r'''<script>
 		// Audio worklet failures are not fatal: the engine goes on without sound.
 		// Same for the PWA service worker (offline cache only; the game runs without it).
 		if (/worklet|ServiceWorker/i.test(m)) { try { console.warn('BC audio worklet:', m); } catch (x) {} return; }
-		fail('Startup failed: ' + m);
+		fail('Startup failed: ' + m + '\n' + netInfo());
 	});
 	window.addEventListener('webglcontextlost', function () { fail('The graphics context was lost (the phone ran out of graphics memory). Reload the page; if it keeps happening, close other tabs/apps first.'); }, true);
 	// Safari kills a tab that runs out of memory and reloads it silently: leave a trace in sessionStorage so the
