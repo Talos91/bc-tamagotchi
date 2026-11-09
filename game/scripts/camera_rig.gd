@@ -270,13 +270,20 @@ func _spot_at(flat: Vector2, v: Vector2) -> Node3D:
 			return z
 	return null
 
-## A spot with a heading is taken only while the player walks that way and kept until they walk clearly back.
-static func _heading_ok(z: Node3D, v: Vector2, held: bool) -> bool:
+## A spot with a heading is taken only while the player walks that way (or, standing, faces that way: a walk that
+## ended there) and kept until they walk clearly back.
+func _heading_ok(z: Node3D, v: Vector2, held: bool) -> bool:
 	if not z.has_meta("heading"):
 		return true
+	var h: Vector2 = z.get_meta("heading")
 	if v.length() < 0.5:
-		return held
-	var d := v.normalized().dot(z.get_meta("heading") as Vector2)
+		if held:
+			return true
+		if not _target.has_method("facing"):
+			return false
+		var f: float = _target.call("facing")
+		return Vector2(sin(f), cos(f)).dot(h) > 0.7
+	var d := v.normalized().dot(h)
 	return d > -0.3 if held else d > 0.3
 
 ## The item spot of the current area holding the end of the player's tap-walk, "" if none (or not walking).
