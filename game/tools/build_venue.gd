@@ -1893,7 +1893,7 @@ func _camera_zones() -> void:
 		# wall in frame. Just inside the door: a view from the lounge looking back south-south-west at the door, the
 		# high counter and the game machine's corner; taken at once on coming through (the area changes there).
 		{"name": "corridor_end", "spot": true, "area": "corridor", "heading": Vector2(1, 0), "solid_beyond": true, "rect": Rect2(11.6, CORRIDOR.position.y, CORRIDOR.end.x - 11.6, CORRIDOR.size.y), "clamp": Rect2(13.0, 13.7, 0.8, 0.1), "yaw": -35.0, "pitch": -36.0, "dist": 5.0, "look_y": 1.3},
-		{"name": "door", "spot": true, "area": "lounge", "rect": Rect2(12.9, 10.4, LOUNGE.end.x - 12.9, LOUNGE.end.y - 10.4), "clamp": Rect2(12.4, 11.4, 0.8, 0.5), "yaw": 165.0, "pitch": -40.0, "dist": 5.0, "look_y": 1.2},
+		{"name": "door", "spot": true, "area": "lounge", "rect": Rect2(12.9, 10.4, LOUNGE.end.x - 12.9, LOUNGE.end.y - 10.4), "clamp": Rect2(12.8, 11.4, 0.4, 0.5), "yaw": 150.0, "pitch": -40.0, "dist": 5.0, "look_y": 1.2},
 		# Owner item 32 (Daniele 2026-11-10: "if you are near the curtains and the entrance to the main room camera should
 		# face that side allowing you to enter in facing before flipping when in the pre main room small room and
 		# flipping back when you enter the main room"). Walking east towards the buffer's curtains the lounge's west
