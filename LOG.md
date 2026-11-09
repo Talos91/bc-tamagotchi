@@ -158,3 +158,4 @@ Append-only. One dated line per event, newest last. Never edit earlier lines.
 - 2026-11-09 (+7) — local_ddbbfc1d answered the not-in-the-files check (chase order of cards, venue-session gotchas, PRE_ALPHA flag, card-start race); folded into STATE. Old orchestrator may be archived. Context ~9 %.
 - 2026-11-09 (+7) — Master answered the check-in (handover clean, order confirmed). set_session_effort(self) refused; Daniele sets high in the picker. Archives of housekeeping-loader and web-labels-debug wait on Daniele's word (nested under local_ddbbfc1d). Context ~10 %.
 - 2026-11-09 (+7) — Daniele: archive both. housekeeping-loader and web-labels-debug archived, newest first. venue-fixes stays parked; local_ddbbfc1d left for Daniele to archive. Context ~10 %.
+- 2026-11-09 (+7) — Daniele: start it. 🎨 character-creator-design started (local_ea874820, Opus, voxel-art profile): design doc + portrait mocks + hub card, code only after his yes. Context ~11 %.
