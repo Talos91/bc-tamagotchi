@@ -65,6 +65,8 @@ The rules (files, roles and dose, brief and exit ritual, guards, orchestrator co
 - Docs, changelog inputs, handoffs archive, hub cards and the Backlog source `docs/design/backlog-board.html`, vault captures; never touches code, rules or tests. Commits only its own docs paths; the orchestrator pushes.
 ### Researcher
 - Reference hunts and web research for briefs (venue photos, real-bar facts, art and UI references, engine questions). Reports conclusions in at most 20 lines with sources; never sends images to the orchestrator (it describes them; files go under `docs/` or a scratch folder). Read-only: no code, no pushes.
+### Map builder
+- The venue worker (🏗️): the venue is regenerated from `game/tools/build_venue.gd` (then commit `game/scenes/venue/venue.tscn`), kit pieces from `tools/blender/bc_kit.py`; `game/assets/kit/layout.json` is frozen (Never) and opened only for owner-authorised items, merging own lines only while card look-followups-layout-export is unanswered. Role note `handoffs/venue-fixes-2026-11-02.md` (State now, gotchas: SEAT_MARGIN, `_navigation()`, the walled bar area). Role suites `test_seats`, `smoke_doors_sit`, `smoke_loop`, `test_walk`, `test_lounge`; captures portrait + landscape under `docs/art/screens/`. The owner decides venue facts and layout changes.
 ### Voxel art
 - Generators: `tools/blender/bc_kit.py` (venue kit), `tools/blender/bc_chars.py` (characters), `tools/blender/bc_review.py` (review scene). Venue generator `game/tools/build_venue.gd`; parity capture `game/tools/capture_parity.gd` + `game/tools/parity_compose.py`. Outputs: `game/assets/kit/`, `game/assets/chars/`, `blender/`, captures in `docs/art/screens/`. Acceptance target: direction renders 05 and 06. `layout.json` is frozen (Never).
 ### UI
