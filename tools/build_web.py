@@ -21,7 +21,7 @@ HEAVY = ('wasm', 'pck', 'js')
 # tapping it hides it. "BC-DIAG" line in the banner = copyable one-liner for a screenshot.
 SHELL_GUARD = r'''<script>
 (function () {
-	var msgs = [], box = null;
+	var msgs = [], box = null, title = '';
 	function ua() { return (navigator.userAgent || '').replace(/^Mozilla\/5.0 /, ''); }
 	function show() {
 		if (!document.body) { document.addEventListener('DOMContentLoaded', show); return; }
@@ -29,11 +29,16 @@ SHELL_GUARD = r'''<script>
 			box = document.createElement('div');
 			box.id = 'bc-diag';
 			box.setAttribute('style', 'position:fixed;left:0;right:0;top:0;z-index:99999;background:#5b1f2a;color:#fff;font:13px/1.35 -apple-system,Arial,sans-serif;padding:12px 14px;max-height:70%;overflow:auto;white-space:pre-wrap;word-break:break-word');
+			var txt = document.createElement('div'); txt.id = 'bc-diag-text';
+			var btn = document.createElement('button'); btn.id = 'bc-diag-reload'; btn.textContent = 'Reload';
+			btn.setAttribute('style', 'margin-top:10px;font:600 15px -apple-system,Arial,sans-serif;padding:10px 22px;border:0;border-radius:8px;background:#fff;color:#5b1f2a');
+			btn.addEventListener('click', function (e) { e.stopPropagation(); location.reload(); });
+			box.appendChild(txt); box.appendChild(btn);
 			box.addEventListener('click', function () { box.style.display = 'none'; });
 			document.body.appendChild(box);
 		}
 		box.style.display = 'block';
-		box.textContent = 'Black Cabin could not start (tap to hide)\n\n' + msgs.join('\n') + '\n\nBC-DIAG ' + ua();
+		document.getElementById('bc-diag-text').textContent = (title || 'Black Cabin could not start') + ' (tap to hide)\n\n' + msgs.join('\n') + '\n\nBC-DIAG ' + ua();
 	}
 	function fail(m) { if (msgs.indexOf(m) < 0) { msgs.push(m); } show(); }
 	window.bcFail = fail;
@@ -90,6 +95,51 @@ SHELL_GUARD = r'''<script>
 			});
 		};
 	}
+	// GPU and memory tally for the context-loss banner (item 29: an iPhone lost the WebGL context at the start screen
+	// and the engine only said "please reload"). Counts what the engine uploads to the WebGL2 context: textures
+	// (texStorage2D/3D, texImage2D/3D, compressed), render buffers, and the wasm heap; cheap (upload calls only).
+	var gpu = { tex: new Map(), rb: new Map(), rbBound: null, canvas: null, mem: null, t0: Date.now() };
+	var BPP = { 0x8058: 4, 0x8C43: 4, 0x881A: 8, 0x8814: 16, 0x8229: 1, 0x822B: 2, 0x822D: 2, 0x822F: 4, 0x822E: 4, 0x88F0: 4,
+		0x81A6: 4, 0x8CAC: 4, 0x8CAD: 8, 0x81A5: 2, 0x8059: 4, 0x8C3A: 4, 0x8051: 3, 0x8D62: 2, 0x8230: 8, 0x881B: 6, 0x8815: 12 };
+	function bpp(f, type) { return BPP[f] || (type === 0x1406 ? 16 : type === 0x140B ? 8 : 4); }
+	function total(m) { var n = 0; m.forEach(function (v) { n += v.b; }); return n; }
+	try {
+		var origCtx = HTMLCanvasElement.prototype.getContext;
+		HTMLCanvasElement.prototype.getContext = function (type) {
+			var gl = origCtx.apply(this, arguments);
+			if (!gl || type !== 'webgl2' || gl.bcTally) { return gl; }
+			gl.bcTally = true; gpu.canvas = this;
+			var unit = 0, bound = {};
+			function on(name, fn) { var o = gl[name]; if (typeof o !== 'function') { return; } gl[name] = function () { try { fn(arguments); } catch (x) {} return o.apply(gl, arguments); }; }
+			function texOf(t) { return bound[unit + ':' + (t >= 0x8515 && t <= 0x851A ? 0x8513 : t)]; }
+			function put(t, key, bytes) { var x = texOf(t); if (!x) { return; } var e = gpu.tex.get(x) || { b: 0, p: {} }; e.b += bytes - (e.p[key] || 0); e.p[key] = bytes; gpu.tex.set(x, e); }
+			on('activeTexture', function (a) { unit = a[0] - 0x84C0; });
+			on('bindTexture', function (a) { bound[unit + ':' + a[0]] = a[1]; });
+			on('deleteTexture', function (a) { gpu.tex.delete(a[0]); });
+			on('texStorage2D', function (a) { var b = 0; for (var i = 0; i < a[1]; i++) { b += Math.max(1, a[3] >> i) * Math.max(1, a[4] >> i) * bpp(a[2]); } put(a[0], 's', b * (a[0] === 0x8513 ? 6 : 1)); });
+			on('texStorage3D', function (a) { var b = 0; for (var i = 0; i < a[1]; i++) { b += Math.max(1, a[3] >> i) * Math.max(1, a[4] >> i) * a[5] * bpp(a[2]); } put(a[0], 's', b); });
+			on('texImage2D', function (a) { if (a.length >= 8) { put(a[0], a[0] + ':' + a[1], a[3] * a[4] * bpp(a[2], a[7])); } });
+			on('texImage3D', function (a) { put(a[0], a[0] + ':' + a[1], a[3] * a[4] * a[5] * bpp(a[2], a[8])); });
+			on('compressedTexImage2D', function (a) { put(a[0], a[0] + ':' + a[1], a[8] || (a[6] && a[6].byteLength) || 0); });
+			on('bindRenderbuffer', function (a) { gpu.rbBound = a[1]; });
+			on('deleteRenderbuffer', function (a) { gpu.rb.delete(a[0]); });
+			on('renderbufferStorage', function (a) { gpu.rb.set(gpu.rbBound, { b: a[2] * a[3] * bpp(a[1]) }); });
+			on('renderbufferStorageMultisample', function (a) { gpu.rb.set(gpu.rbBound, { b: a[3] * a[4] * bpp(a[2]) * Math.max(1, a[1]) }); });
+			return gl;
+		};
+		var origInst = WebAssembly.instantiate, origStream = WebAssembly.instantiateStreaming;
+		var grab = function (r) { try { var i = r.instance || r; if (i.exports && i.exports.memory) { gpu.mem = i.exports.memory; } } catch (x) {} return r; };
+		WebAssembly.instantiate = function () { return origInst.apply(this, arguments).then(grab); };
+		if (origStream) { WebAssembly.instantiateStreaming = function () { return origStream.apply(this, arguments).then(grab); }; }
+	} catch (e) {}
+	window.bcGpu = function () {
+		var c = gpu.canvas, line = [];
+		line.push('Textures: ' + gpu.tex.size + ' (' + mb(total(gpu.tex)) + '), render buffers ' + mb(total(gpu.rb)));
+		line.push('Canvas: ' + (c ? c.width + 'x' + c.height : '?') + ' at pixel ratio ' + (window.devicePixelRatio || 1));
+		line.push('Wasm heap: ' + (gpu.mem ? mb(gpu.mem.buffer.byteLength) : '?') + (performance.memory ? ', JS heap ' + mb(performance.memory.usedJSHeapSize) : ''));
+		line.push('Last scene: ' + (window.bcScene || 'loading') + ', ' + Math.round((Date.now() - gpu.t0) / 1000) + ' s after the page opened');
+		return line.join('\n');
+	};
 	// Hard requirements, checked before the 50 MB download starts.
 	try {
 		var c = document.createElement('canvas');
@@ -110,7 +160,13 @@ SHELL_GUARD = r'''<script>
 		if (/worklet|ServiceWorker/i.test(m)) { try { console.warn('BC audio worklet:', m); } catch (x) {} return; }
 		fail('Startup failed: ' + m + '\n' + netInfo());
 	});
-	window.addEventListener('webglcontextlost', function () { fail('The graphics context was lost (the phone ran out of graphics memory). Reload the page; if it keeps happening, close other tabs/apps first.'); }, true);
+	// Capture phase on window runs before the engine's own canvas listener, whose bare alert("WebGL context lost,
+	// please reload the page") blocked the page; this banner says what was in use instead, with a Reload button.
+	window.addEventListener('webglcontextlost', function (e) {
+		try { e.preventDefault(); e.stopImmediatePropagation(); } catch (x) {}
+		title = 'Black Cabin lost its graphics';
+		fail('The phone took the graphics context back (out of graphics memory, or a frame too heavy for it).\n' + window.bcGpu() + '\nReload to continue. If it keeps happening, close other tabs and apps first.');
+	}, true);
 	// Safari kills a tab that runs out of memory and reloads it silently: leave a trace in sessionStorage so the
 	// reloaded page can say so.
 	try {

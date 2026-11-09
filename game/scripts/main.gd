@@ -60,6 +60,8 @@ var drunk: CanvasLayer      ## the drunk overlay
 var farewell: Control       ## the farewell card (ghost window over, or Retire)
 var creator: Control        ## the character creator, opened at the photo booth (07-character-creator.md §5.3)
 var _wasted_line := -1      ## WASTED during a minigame: the shot waits for the frame to close
+var _web := OS.has_feature("web")   ## web build: _mark_scene names the screen for the page's banner
+var _scene_mark := ""
 
 
 func _ready() -> void:
@@ -137,6 +139,29 @@ func _process(_delta: float) -> void:
 				open_sheet(z)
 	if not _capture.is_empty():
 		_capture_tick()
+	if _web:
+		_mark_scene()
+
+
+## Web builds: tell the page which screen is up, so the context-loss banner (tools/build_web.py) can name it
+## (perf-iphone 2026-11-10, owner item 29). Only sent when it changes.
+func _mark_scene() -> void:
+	var s := "venue:" + player.rig.zone
+	if is_instance_valid(start_screen):
+		s = "start:" + str(StartScreen.Phase.keys()[start_screen.phase]).to_lower() + (":creator" if is_instance_valid(start_screen._modal) else "")
+	elif is_instance_valid(creator):
+		s = "creator"
+	elif is_instance_valid(frame):
+		s = "minigame"
+	elif is_instance_valid(menu_list):
+		s = "menu"
+	elif is_instance_valid(exit_shot) or is_instance_valid(wasted_shot) or is_instance_valid(walk_out):
+		s = "leaving"
+	elif is_instance_valid(farewell):
+		s = "farewell"
+	if s != _scene_mark:
+		_scene_mark = s
+		JavaScriptBridge.eval("window.bcScene = " + JSON.stringify(s) + ";")
 
 
 ## The farewell card, then a new game from the street door with the account kept (Needs.complete_deletion).
