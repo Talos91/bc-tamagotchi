@@ -6,9 +6,9 @@
 - Commit of this report + role note `handoffs/presence-2026-11-09.md`: see the orchestrator message (SHA).
 - Hub card **presence-design-review** (Questions tab, kind design, multi-select, P1–P11, 2 pictures, 3 files).
 - No suites run: design only, no game code, no `rules.gd` / `save.gd` / `layout.json` / version / Supabase touched.
-- **Vault: `load_agent` and `capture` not run** — the `talos-vault` MCP server failed to connect (CONNECTION_CLOSED)
-  for this whole session. No load id. Profile read from the vault file by hand. The orchestrator (or a later session)
-  should capture this report to the vault.
+- **Vault:** `load_agent` not run (the `talos-vault` server was not connected at session start; no load id;
+  profile read from the vault file by hand). `capture` ran at the end once it reconnected:
+  `raw/agent-notes/2026-11-09-black-cabin-presence-design-v1-item-24-worker-report.md` (no `replies_to`).
 
 ## What the design says
 - Presence = events, not sync. A table-QR scan (`bc-tamagotchi.vercel.app/c/<code>`, opening hours, one per night)
