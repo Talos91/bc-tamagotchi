@@ -1894,6 +1894,14 @@ func _camera_zones() -> void:
 		# high counter and the game machine's corner; taken at once on coming through (the area changes there).
 		{"name": "corridor_end", "spot": true, "area": "corridor", "heading": Vector2(1, 0), "solid_beyond": true, "rect": Rect2(11.6, CORRIDOR.position.y, CORRIDOR.end.x - 11.6, CORRIDOR.size.y), "clamp": Rect2(13.0, 13.7, 0.8, 0.1), "yaw": -35.0, "pitch": -36.0, "dist": 5.0, "look_y": 1.3},
 		{"name": "door", "spot": true, "area": "lounge", "rect": Rect2(12.9, 10.4, LOUNGE.end.x - 12.9, LOUNGE.end.y - 10.4), "clamp": Rect2(12.4, 11.4, 0.8, 0.5), "yaw": 165.0, "pitch": -40.0, "dist": 5.0, "look_y": 1.2},
+		# Owner item 32 (Daniele 2026-11-10: "if you are near the curtains and the entrance to the main room camera should
+		# face that side allowing you to enter in facing before flipping when in the pre main room small room and
+		# flipping back when you enter the main room"). Walking east towards the buffer's curtains the lounge's west
+		# view turns to face the opening (east); inside the buffer its own view takes over (the flip), and the main
+		# room's east view after it (the flip back). Only while walking east: coming out of the buffer the lounge keeps
+		# its west view, which then faces the way the player walks. Every turn eases (swing); a doorway holds the old
+		# view HYSTERESIS metres past its edge, so standing on the line does not flap.
+		{"name": "curtains", "spot": true, "area": "lounge", "heading": Vector2(1, 0), "rect": Rect2(13.0, 3.6, LOUNGE.end.x - 13.0, BUFFER.end.y - 3.6), "clamp": Rect2(14.4, 4.8, 0.8, 1.2), "yaw": -90.0, "pitch": -38.0, "dist": 5.0, "look_y": 1.2},
 		{"name": "lounge", "base": true, "rect": Rect2(LOUNGE.position.x, LOUNGE.position.y, LOUNGE.size.x, LOUNGE.size.y), "clamp": Rect2(4.5, 1.6, 5.5, 9.4), "yaw": 90.0, "pitch": -40.0, "dist": 5.0, "look_y": 1.3},
 		{"name": "bar", "rect": Rect2(BAR_X0 + 1.2, 9.6, BAR_X1 - BAR_X0 - 1.2, MAIN_Z1 - 9.6), "clamp": Rect2(23.5, 10.6, 12.5, 0.6), "yaw": 180.0, "pitch": -40.0, "dist": 5.2, "look_y": 1.0},
 		{"name": "stage", "rect": Rect2(26.4, 0.0, 9.6, 6.6), "clamp": Rect2(28.4, 1.6, 5.0, 3.2), "yaw": 0.0, "pitch": -34.0, "dist": 5.2, "look_y": 1.3},

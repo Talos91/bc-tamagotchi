@@ -361,6 +361,7 @@ func _init() -> void:
 
 	await camera_areas()
 	await camera_areas_31()
+	await camera_areas_32()
 
 	print("occlusion")
 	for gi in main.find_children("*", "GeometryInstance3D", true, false):
@@ -445,6 +446,52 @@ func camera_areas_31() -> void:
 		if not p.walking_to:
 			break
 	check(not seen_end and rig.view == "corridor", "out of the lounge heading west: corridor view, never the corridor end's (%s)" % rig.view)
+
+
+## Owner item 32: the buffer's curtains and the main room.
+func camera_areas_32() -> void:
+	var rig: CameraRig = p.rig
+	var w := {}
+	# 32: walking east to the buffer the camera faces the opening, turns to the buffer's view inside and back to the
+	# main room's east view; walking west out of the buffer it never takes the east-facing approach view
+	teleport(Vector3(12.8, 0.1, 6.6))
+	await frames(10)
+	p.walk_to(Vector3(15.0, 0, 5.4))
+	w = await watch_walk()
+	await frames(40)
+	check(rig.spot == "curtains" and absf(angle_difference(rig.yaw, deg_to_rad(-90.0))) < deg_to_rad(10.0) and w.ok, "curtains: view %s, yaw %.0f° (east); %s" % [rig.view, rad_to_deg(rig.yaw), w.text])
+	p.walk_to(Vector3(17.7, 0, 5.4))
+	w = await watch_walk()
+	await frames(70)
+	var in_buffer := rig.view
+	p.walk_to(Vector3(22.8, 0, 6.6))
+	var w2 := await watch_walk()
+	await frames(70)
+	check(in_buffer == "buffer" and rig.view == "floor" and absf(angle_difference(rig.yaw, deg_to_rad(-90.0))) < deg_to_rad(5.0) and w.ok and w2.ok,
+		"buffer then main room: %s, then %s at %.0f°; %s; %s" % [in_buffer, rig.view, rad_to_deg(rig.yaw), w.text, w2.text])
+	teleport(Vector3(17.7, 0.1, 5.4))
+	await frames(10)
+	p.walk_to(Vector3(12.8, 0, 6.6))
+	var took := false
+	for i in 900:
+		await physics_frame
+		took = took or rig.spot == "curtains"
+		if not p.walking_to:
+			break
+	check(not took, "buffer -> lounge heading west: the east-facing curtains view is never taken")
+	# Hysteresis: standing on the lounge / buffer line and swaying across it does not flip the view back and forth
+	teleport(Vector3(14.8, 0.1, 5.4))
+	await frames(10)
+	p.walk_to(Vector3(15.6, 0, 5.4))
+	await watch_walk()
+	await frames(40)
+	var views := [rig.view]
+	for k in 12:
+		p.global_position.x = 15.25 if k % 2 == 0 else 15.75
+		await frames(8)
+		if rig.view != views[-1]:
+			views.append(rig.view)
+	check(views.size() <= 1, "swaying across the buffer line: the view holds (%s)" % " > ".join(views))
 
 
 ## Follows a walk to its end: the camera never steps more than 0.3 m in a tick and never turns faster than 260°/s.
