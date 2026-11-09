@@ -123,10 +123,20 @@ func tap_at(screen_pos: Vector2) -> bool:
 	var cam := rig.camera
 	var from := cam.project_ray_origin(screen_pos)
 	var q := PhysicsRayQueryParameters3D.create(from, from + cam.project_ray_normal(screen_pos) * 100.0)
-	q.exclude = [get_rid()]
-	var hit := get_world_3d().direct_space_state.intersect_ray(q)
-	if hit.is_empty():
-		return false
+	# A wall the camera has cut (hidden or sunk to its stub) keeps its full-height collider; a tap goes through it to
+	# what the player sees behind (the corridor's end view looks through the corridor's south wall, owner item 31)
+	var ex: Array[RID] = [get_rid()]
+	var hit := {}
+	for i in 4:
+		q.exclude = ex
+		hit = get_world_3d().direct_space_state.intersect_ray(q)
+		if hit.is_empty():
+			return false
+		var w := (hit.collider as Node).get_parent() as Node3D if hit.collider is Node else null
+		if w != null and w.is_in_group("cutaway") and not w.visible:
+			ex.append(hit.rid)
+			continue
+		break
 	if tap_handler.is_valid() and tap_handler.call(hit.position):
 		return true
 	walk_to(hit.position)

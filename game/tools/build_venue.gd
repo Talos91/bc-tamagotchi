@@ -1885,6 +1885,15 @@ func _camera_zones() -> void:
 		{"name": "pinball", "spot": true, "item": true, "area": "lounge", "rect": Rect2(LOUNGE.position.x, 6.6, 5.6 - LOUNGE.position.x, STAIR_UPPER.position.y - 6.6), "clamp": Rect2(3.9, 7.0, 0.6, 0.4), "yaw": 90.0, "pitch": -34.0, "dist": 3.6, "look_y": 1.1},
 		{"name": "cabinet", "spot": true, "item": true, "area": "lounge", "rect": Rect2(9.2, 10.4, 1.8, LOUNGE.end.y - 10.4), "clamp": Rect2(10.1, 11.4, 0.4, 0.4), "yaw": 180.0, "pitch": -34.0, "dist": 3.6, "look_y": 1.1},
 		{"name": "counter", "spot": true, "item": true, "area": "lounge", "rect": Rect2(11.0, 10.4, 1.9, LOUNGE.end.y - 10.4), "clamp": Rect2(11.8, 11.3, 0.4, 0.4), "yaw": 180.0, "pitch": -34.0, "dist": 3.6, "look_y": 1.1},
+		# Owner item 31 (Daniele 2026-11-10: "when you reach the entrance to the lounge the lounge camera should allow
+		# you to see that wall and the door clearly so you can enter, once entered the camera passes through the wall and
+		# gets on the other side so you can see the corner next to the game machine and the door where you just
+		# entered"). Corridor end, walking east: from the south-west through the corridor's own south wall (cut, an
+		# entrance view), the lounge wall and the Sticker door beyond the player stay standing, the neon on the end
+		# wall in frame. Just inside the door: a view from the lounge looking back south-south-west at the door, the
+		# high counter and the game machine's corner; taken at once on coming through (the area changes there).
+		{"name": "corridor_end", "spot": true, "area": "corridor", "heading": Vector2(1, 0), "solid_beyond": true, "rect": Rect2(11.6, CORRIDOR.position.y, CORRIDOR.end.x - 11.6, CORRIDOR.size.y), "clamp": Rect2(13.0, 13.7, 0.8, 0.1), "yaw": -35.0, "pitch": -36.0, "dist": 5.0, "look_y": 1.3},
+		{"name": "door", "spot": true, "area": "lounge", "rect": Rect2(12.9, 10.4, LOUNGE.end.x - 12.9, LOUNGE.end.y - 10.4), "clamp": Rect2(12.4, 11.4, 0.8, 0.5), "yaw": 165.0, "pitch": -40.0, "dist": 5.0, "look_y": 1.2},
 		{"name": "lounge", "base": true, "rect": Rect2(LOUNGE.position.x, LOUNGE.position.y, LOUNGE.size.x, LOUNGE.size.y), "clamp": Rect2(4.5, 1.6, 5.5, 9.4), "yaw": 90.0, "pitch": -40.0, "dist": 5.0, "look_y": 1.3},
 		{"name": "bar", "rect": Rect2(BAR_X0 + 1.2, 9.6, BAR_X1 - BAR_X0 - 1.2, MAIN_Z1 - 9.6), "clamp": Rect2(23.5, 10.6, 12.5, 0.6), "yaw": 180.0, "pitch": -40.0, "dist": 5.2, "look_y": 1.0},
 		{"name": "stage", "rect": Rect2(26.4, 0.0, 9.6, 6.6), "clamp": Rect2(28.4, 1.6, 5.0, 3.2), "yaw": 0.0, "pitch": -34.0, "dist": 5.2, "look_y": 1.3},

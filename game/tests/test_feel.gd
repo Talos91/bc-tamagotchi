@@ -36,6 +36,7 @@ extends SceneTree
 const FOLLOW_TRAIL := 0.35      ## metres the look point may fall behind the player while walking
 const FOLLOW_NEAR := 0.9        ## metres the look point may be from the player while walking (lead included)
 const SHAKE_MAX := 0.012        ## metres: largest tick-to-tick change of the camera's step
+const CORRIDOR_Z := Vector2(13.25, 14.75)   ## the corridor floor, z (inside its south wall)
 const MIN_HEIGHT_PX := 80.0     ## the character's height on screen, in a 450 x 800 portrait frame
 const MIN_HEIGHT_SMOKING := 72.0    ## the smoking view stays a little wider: its four tables show from the red door
 ## Camera feel 2 framings: area -> [pitch, distance] (build_venue.gd _camera_zones)
@@ -359,6 +360,7 @@ func _init() -> void:
 	check(rig.zone == "corridor" and lounge_cut == 0 and stub_shown == 0, "corridor: lounge walls solid (%d cut), no stubs (%d)" % [lounge_cut, stub_shown])
 
 	await camera_areas()
+	await camera_areas_31()
 
 	print("occlusion")
 	for gi in main.find_children("*", "GeometryInstance3D", true, false):
@@ -394,6 +396,55 @@ func camera_areas() -> void:
 		w = await watch_walk()
 		await frames(70)
 		check(rig.spot == "" and rig.view == "lounge" and w.ok, "item %s: back to the lounge view after walking away (%s); %s" % [it[0], rig.view, w.text])
+
+
+## Owner item 31: corridor end and the lounge door.
+func camera_areas_31() -> void:
+	var rig: CameraRig = p.rig
+	# 31: the corridor's end frames the lounge wall and the Sticker door; through the door the camera crosses to the
+	# lounge side and looks back at the door and the corner by the game machine
+	var venue: Node3D = main.get_node("Venue")
+	var door := venue.find_child("StickerDoor", true, false) as Node3D
+	var cabinet := venue.find_child("GameCabinet", true, false) as Node3D
+	teleport(Vector3(6.0, 0.1, 14.1))
+	await frames(10)
+	p.walk_to(Vector3(13.6, 0, 14.15))
+	var w := await watch_walk()
+	await frames(70)
+	var lounge_wall := standing_between(rig.global_position, Vector3(12.0, 1.5, 13.0))
+	check(rig.spot == "corridor end" and door.is_visible_in_tree() and on_screen(door.global_position + Vector3(0, 1.0, 0), 0.05) and not lounge_wall.is_empty() and w.ok,
+		"corridor end: view %s, Sticker door shown and on screen, lounge wall standing (%s); %s" % [rig.view, ", ".join(lounge_wall), w.text])
+	# The camera stands behind the corridor's (cut) south wall: a tap on the corridor floor still walks there
+	var spot_floor := Vector3(12.4, 0.0, 13.7)
+	var tapped := p.tap_at(rig.camera.unproject_position(spot_floor))
+	await frames(2)
+	var tgt: Vector3 = p.walk_target()
+	check(tapped and tgt.z > CORRIDOR_Z.x and tgt.z < CORRIDOR_Z.y and Vector2(tgt.x - spot_floor.x, tgt.z - spot_floor.z).length() < 0.8, "corridor end: a tap on the corridor floor walks there (or to the portrait it is by), not into the cut south wall (target %s)" % v2(tgt))
+	await watch_walk()
+	p.walk_to(Vector3(13.6, 0, 11.6))
+	var crossed := ""
+	for i in 600:
+		await physics_frame
+		if rig.zone == "lounge" and crossed == "":
+			crossed = rig.spot if rig.spot != "" else "-"
+		if not p.walking_to:
+			break
+	await frames(70)
+	var hide := standing_between(rig.camera.global_position, p.global_position + Vector3(0, 1.1, 0))
+	check(crossed == "door" and rig.view == "door" and on_screen(door.global_position + Vector3(0, 1.0, 0), 0.0) and on_screen(cabinet.global_position + Vector3(0, 1.0, 0), 0.0) and hide.is_empty() and rig.global_position.z < 13.0,
+		"through the door: view %s at once (%s), camera on the lounge side (z %.1f), door and game machine on screen, player in sight%s" % [rig.view, crossed, rig.global_position.z, "" if hide.is_empty() else " but behind " + ", ".join(hide)])
+	await occlusion_walk("corridor -> lounge", Vector3(6.0, 0.1, 14.1), [Vector3(13.6, 0, 14.15), Vector3(13.6, 0, 11.0)])
+	# Coming out of the lounge and walking west, the corridor's end view is not taken
+	teleport(Vector3(13.6, 0.1, 11.6))
+	await frames(10)
+	p.walk_to(Vector3(8.0, 0, 14.1))
+	var seen_end := false
+	for i in 900:
+		await physics_frame
+		seen_end = seen_end or rig.spot == "corridor end"
+		if not p.walking_to:
+			break
+	check(not seen_end and rig.view == "corridor", "out of the lounge heading west: corridor view, never the corridor end's (%s)" % rig.view)
 
 
 ## Follows a walk to its end: the camera never steps more than 0.3 m in a tick and never turns faster than 260°/s.
