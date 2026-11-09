@@ -24,6 +24,9 @@ func _line(tag: String) -> void:
 
 func _run() -> void:
 	var ua := OS.get_cmdline_user_args()
+	if "--variants" in ua:
+		variants(ua[ua.find("--variants") + 1], ua[ua.find("--variants") + 2])
+		return
 	if "--cull-final" in ua:
 		cull_final(ua[ua.find("--cull-final") + 1])
 		return
@@ -112,3 +115,43 @@ func cull_final(dir: String) -> void:
 	c.save_png(dir + "/start-after.png")
 	print("NOISE b1-b2 px=", _diff(b1, b2, dir + "/diff-noise.png"), "  CUT b2-cut px=", _diff(b2, c, dir + "/diff-cut.png"))
 	quit()
+
+## --variants <dir> <tag>: portrait captures of the look options for the owner card: base (MSAA 2x, full res), MSAA
+## off, 3D at 0.75 scale. Run at 1080x1920 for those, and at 720x1280 (tag dpr2) for the pixel-ratio cap at 2.
+func variants(dir: String, tag: String) -> void:
+	var vp := root.get_viewport()
+	for i in 180:
+		await process_frame
+	var main = current_scene
+	await _variant_set(vp, dir, tag, "start")
+	if main.start_screen:
+		main.start_screen.skip()
+	for i in 30:
+		await process_frame
+	for area in ["Floor", "Bar", "Lounge"]:
+		for z in main.player.rig._zones:
+			if str(z.name) == area:
+				var r: Rect2 = z.get_meta("rect")
+				main.player.global_position = Vector3(r.get_center().x, main.player.global_position.y, r.get_center().y)
+		for i in 90:
+			await process_frame
+		await _variant_set(vp, dir, tag, area.to_lower())
+	quit()
+
+func _variant_set(vp: Viewport, dir: String, tag: String, where: String) -> void:
+	var opts := [["base", Viewport.MSAA_2X, 1.0]]
+	if tag != "dpr2":
+		opts += [["msaa-off", Viewport.MSAA_DISABLED, 1.0], ["scale075", Viewport.MSAA_2X, 0.75]]
+	for o in opts:
+		vp.msaa_3d = o[1]
+		vp.scaling_3d_scale = o[2]
+		for i in 6:
+			await process_frame
+		var img := vp.get_texture().get_image()
+		if tag == "dpr2":
+			img.resize(1080, 1920, Image.INTERPOLATE_BILINEAR)
+		var nm: String = o[0] if tag != "dpr2" else "dpr2"
+		img.save_jpg("%s/%s-%s.jpg" % [dir, where, nm], 0.9)
+		_line("%s-%s" % [where, nm])
+	vp.msaa_3d = Viewport.MSAA_2X
+	vp.scaling_3d_scale = 1.0
