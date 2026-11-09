@@ -167,3 +167,4 @@ Append-only. One dated line per event, newest last. Never edit earlier lines.
 - 2026-11-09 (+7) — 🧹 housekeeping-designs DONE (e81c162): creator/presence answers folded into GDD, ORCHESTRATION, cast, stakes, engine note; 07 §9 and 08 §11–12 marked; hub untouched.
 - 2026-11-09 (+7) — 🧹 housekeeping-designs DONE (e81c162 amendments, e868684 report), pushed by SHA; hub untouched. Creator phase 2 build still running. Context ~17 %.
 - 2026-11-09 (+7) — Venue successor local_9543f6b2 started by Daniele, ready at c1a0216, idle for his venue list; old venue session told to archive itself. PROJECT.md: Map builder entry added (the loader had none). Context ~18 %.
+- 2026-11-09 (+7) — STATE IN FLIGHT rewritten clean (venue successor ready, two design workers done). talos-vault down for this session; reconnect requested. Creator build running. Context ~19 %.
