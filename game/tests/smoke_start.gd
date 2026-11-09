@@ -90,6 +90,11 @@ func _init() -> void:
 	check(lights_title <= 48, "start screen within max_renderable_lights 48")
 	await _frames(20)
 	check(not needs.visit_active, "still waiting after 20 frames")
+	# perf-iphone 2026-11-10: the venue groups the street camera cannot see are hidden on the title (6858 -> 1414 draws)
+	var vn: Node = main.get_node("Venue")
+	var unseen: Array = ss.UNSEEN_FROM_STREET.filter(func(n): return vn.get_node_or_null(n) != null)
+	check(unseen.size() >= 10 and unseen.all(func(n): return not vn.get_node(n).visible), "unseen venue groups hidden on the title (%d)" % unseen.size())
+	check(vn.get_node("Lobby").visible and vn.get_node("Lounge").visible, "lobby and lounge (seen from the street) stay drawn")
 
 	print("entry")
 	var t0 := Time.get_ticks_msec()
@@ -146,6 +151,7 @@ func _init() -> void:
 	check(root.get_viewport().get_camera_3d() == main.player.rig.camera, "diorama camera current")
 	check(main.player.rig.zone == "lobby", "lobby camera zone: %s" % main.player.rig.zone)
 	check(not street.visible, "street hidden inside")
+	check(unseen.all(func(n): return vn.get_node(n).visible), "every venue group drawn again inside")
 	await _wait(0.7)   # HUD fade 0.5 s, door shut
 	check(main.hud.visible and main.hud.modulate.a > 0.99, "HUD visible (alpha %.2f)" % main.hud.modulate.a)
 	check(main.get_node("UI/Joystick").visible, "joystick visible")

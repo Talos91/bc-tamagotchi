@@ -44,6 +44,16 @@ const PULL_TIME := 1.6       ## over the shoulder to the lobby's diorama camera,
 const FADE_TIME := 0.35      ## prompt fading out after the tap
 const CEILING_Y := 3.6       ## above this the camera stops drawing the ceiling, as the diorama camera does
 
+## Venue groups the still street camera cannot see behind the closed door (perf-iphone 2026-11-10, owner item 29: an
+## iPhone lost the WebGL context on this screen). The whole venue sits in the street camera's frustum, so the title
+## drew 6858 draw calls a frame (17 fps on a desktop GPU), three times any spot inside. Hidden, the picture stays
+## pixel-identical (tested at 750x1624 against a two-frame noise control: only the pulsing prompt differs) and the
+## frame drops to 1414 draws, visible lights 44 to 12. Lobby and Lounge are seen from the street and stay. The groups
+## are drawn for WARM_FRAMES first, so their shaders are compiled behind the title, not at the door (item 16); they
+## come back when the door starts to open (or on skip / pull-back / exit).
+const UNSEEN_FROM_STREET := ["Patrons", "Stairs", "Buffer", "MainRoom", "Stage", "Tables", "Raised", "Bar", "Vestibule", "Smoking", "ClosedRooms", "Outside"]
+const WARM_FRAMES := 3
+
 enum Phase { TITLE, WALK, PULL, DONE }
 
 var phase := Phase.TITLE
@@ -66,6 +76,8 @@ var _locale := ""
 var _modal: CanvasLayer         ## the creator or the one-time card, over everything
 var _edit_btn: Button           ## "Edit look" (characters that have a look)
 var _walk_after := false        ## the creator was opened by the first tap: walk in once it is done
+var _warm := WARM_FRAMES        ## title frames left before the unseen groups are hidden
+var _hidden: Array[Node3D] = [] ## the groups hidden by _hide_unseen, shown again by _show_unseen
 
 
 func begin(m: Node) -> void:
@@ -130,6 +142,10 @@ func _process(delta: float) -> void:
 	if phase == Phase.DONE:
 		return
 	if phase == Phase.TITLE:
+		if _warm > 0:
+			_warm -= 1
+			if _warm == 0:
+				_hide_unseen()
 		_place_view_camera()
 		_view = cam.global_transform
 		if TranslationServer.get_locale() != _locale:
@@ -157,6 +173,8 @@ func _walk(delta: float, portrait: bool) -> void:
 		pos = _p1.lerp(_p2, leg(tb, LEG_B, 0.3, 0.45))
 		speed = leg_speed(tb, LEG_B, 0.3, 0.45, _p1.distance_to(_p2))
 	_drive(pos, PI * 0.5, speed)
+	if not _hidden.is_empty() and (door_open() > 0.0 or _t > LEG_A):
+		_show_unseen()
 	# The camera: from the still view to over the shoulder, then following through the doorway
 	var e := smoothstep(0.0, EASE_IN, _t)
 	var inside := clampf((pos.x - (street.face_x - 0.5)) / 1.5, 0.0, 1.0)
@@ -178,6 +196,7 @@ func _walk(delta: float, portrait: bool) -> void:
 ## Arrived at the spawn, the door closing: hand the camera over to the diorama rig, up first, then back.
 func _start_pull() -> void:
 	phase = Phase.PULL
+	_show_unseen()
 	_pull_t0 = _t
 	_drive(_p2, PI * 0.5, 0.0)
 	var p: Player = main.player
@@ -221,11 +240,34 @@ func _pull() -> void:
 
 func _finish() -> void:
 	phase = Phase.DONE
+	_show_unseen()
 	_give_back_player()
 	if is_instance_valid(_layer):
 		_layer.queue_free()
 	queue_free()
 	main.start_play()
+
+
+func _hide_unseen() -> void:
+	var venue: Node = main.get_node_or_null("Venue")
+	if venue == null:
+		return
+	for n: String in UNSEEN_FROM_STREET:
+		var g := venue.get_node_or_null(n) as Node3D
+		if g != null and g.visible:
+			g.visible = false
+			_hidden.append(g)
+
+
+func _show_unseen() -> void:
+	for g in _hidden:
+		if is_instance_valid(g):
+			g.visible = true
+	_hidden.clear()
+
+
+func _exit_tree() -> void:
+	_show_unseen()
 
 
 # --- Prompt --------------------------------------------------------------------------------------
