@@ -173,3 +173,4 @@ Append-only. One dated line per event, newest last. Never edit earlier lines.
 - 2026-11-09 (+7) — 🔍 verify-char-creator PASSED c495a35 (19/19: the folder has test_debug_tools, missing from PROJECT.md Tests since 11-04; fixed), pushed; origin/main c495a35 confirmed. Docs commits pushed by SHA after. Redeploy + phone try are Daniele's. Context ~22 %.
 - 2026-11-09 (+7) — Daniele deployed c495a35 (character creator) to bc-tamagotchi.vercel.app. Phone pass + item-16 numbers are the next gate. Context ~23 %.
 - 2026-11-09 (+7) — Daniele on the phone: creator works but Done/exit traps him; no female hair (items 26–27, owner-feedback-2026-11-09.md). Fix brief sent to the creator worker. Context ~24 %.
+- 2026-11-09 (+7) — Creator worker self-handover at 40 % (ac0e91a role note, pushed); fix not started; successor card task_3cda11ac waits for Daniele. Context ~25 %.
