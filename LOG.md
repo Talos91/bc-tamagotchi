@@ -184,3 +184,4 @@ Append-only. One dated line per event, newest last. Never edit earlier lines.
 - 2026-11-09 (+7) — Item 26 second cause: the web build has no virtual keyboard, so a name can never be typed and Done is refused forever; browser-prompt fix in progress on top of 9cb6bc9. Redeploy on hold until it is verified. Context ~33 %.
 - 2026-11-09 (+7) — 🔍 verify-creator-exit PASSED 9cb6bc9, pushed; docs pushed after (9ad9177); verifier archived. Redeploy still on hold for the keyboard fix. Context ~34 %.
 - 2026-11-09 (+7) — Item 26 second fix committed 8368a40 (browser prompt for the name on touch web builds). 🔍 verify-creator-name proposed. Context ~35 %.
+- 2026-11-09 (+7) — Creator fix complete on local main: 56aca5c (item 27 hair/looks) + 5ffb219 (report); card char-creator-fix-review. Verify order: 8368a40 first, then 5ffb219. Context ~36 %.
