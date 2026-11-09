@@ -1,8 +1,24 @@
-# 🏗️ Venue fixes: role note (2026-11-03, state now)
+# 🏗️ Venue fixes: role note (2026-11-09, state now)
 
 Worker: venue (Opus), session local_0ea22856, briefed by the orchestrator local_ddbbfc1d. Owner words:
 `handoffs/owner-feedback-2026-11-02.md` items 4, 5, 6, 7, 8, 11 (authorised layout changes). Built on 86b40ab (look-followups).
 Report: `handoffs/worker-reports-2026-11/venue-fixes.md`. Captures: `docs/art/screens/venue-fixes/{before,after}/`.
+
+## State now (2026-11-09) and next step: read this first
+- Done and live: items 4, 5, 6, 7, 8, 11 (`e4d7e76`), the smoke_loop LongTable / test_minigames fixes, item 15
+  (`3492232`). Everything verified and pushed (orchestrator, 2026-11-04). Nothing of mine is uncommitted.
+- Since then, `ac8d0ac` (🎮 movement polish, owner items 17/18) changed `build_venue.gd` navigation settings: re-read
+  `_navigation()` and that worker's role note before touching the generator.
+- Next job: Daniele's venue changes from the real bar (the game was played there on 2026-11-03); the orchestrator sends
+  the list. Nothing is started.
+- Open cards: `venue-fixes-review` (v2, seven items), `venue-fixes-bar-height` (0.45 m as built),
+  `venue-fixes-bar-door` (staff-only). `look-followups-layout-export` is still unanswered, so `export_layout.gd` output
+  must NOT be committed whole: merge your own `layout.json` lines onto the committed file (how: "layout.json" below).
+- Gotchas: the venue is regenerated from `build_venue.gd` (`--script res://tools/build_venue.gd`, then commit
+  `scenes/venue/venue.tscn`); the walled bar area is never cut by the camera (`_uncut`) and its staff stay on the
+  0.45 m floor; seat-group table zones have a thin margin (SEAT_MARGIN 0.35 in `venue_zones.gd`), so a navmesh change
+  can push a walk end out of its zone (that is how smoke_loop broke); captures with
+  `tests/capture_venue_fixes.gd` (add views; `cam` for a fixed overview) and two-ups with `game/tools/venue_fixes_twoup.py`.
 
 ## What changed (all in `game/tools/build_venue.gd` unless named)
 4. **Door between the bar and the walled bar area:** `BAR_DOOR` (z 13.4–14.4) in the staff room's west wall (x 35.75),
