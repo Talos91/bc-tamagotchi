@@ -16,6 +16,7 @@ extends SceneTree
 ##             the phone) reach Next, × and Done; × leaves from every step, from the start screen and the booth;
 ##             Done with a refused or empty name stays and says why above the button, the name field first on screen;
 ##             Done with a good name leaves
+##   item 27   at least three of the eight hairs read as long or tied-up hair from the front; one look is a dress
 ##   godot --headless --path . --script res://tests/test_avatar.gd
 
 const Avatar = preload("res://scripts/avatar.gd")
@@ -62,6 +63,19 @@ func _data() -> void:
 	check(d["skins"].size() == 8 and d["hairs"].size() == 8 and d["hair_colours"].size() == 8, "8 skins, 8 hairs x 8 colours (Q2, Q3)")
 	check(d["heads"].size() == 4 and d["face_order"].size() == 3, "4 head shapes + 3 face sets (Q4)")
 	check(d["look_order"].size() == 3, "3 looks (Q5)")
+	var fem := ["long_straight", "pigtails", "double_bun", "ponytail", "chignon"]
+	var n_fem := 0
+	for h in d["hairs"]:
+		n_fem += 1 if fem.has(h) else 0
+	check(n_fem >= 3 and d["hairs"].has("long_straight"), "item 27: %d of 8 hairs read long / tied up from the front" % n_fem)
+	var skirts := 0
+	for l in d["look_order"]:
+		skirts += 1 if (d["looks"][l]["bottom"] in ["skirt", "dress"]) else 0
+	check(skirts >= 1, "item 27: a starter look with a dress or skirt")
+	var old_night: Dictionary = Avatar.resolve({"look": "night_out", "top_colour": "LeatherBlack"})
+	check(old_night["ids"].has("top_leather") and not d["look_order"].has("night_out"), "night_out (leather) hidden but kept for saves that chose it")
+	var dr: Dictionary = Avatar.resolve({"look": "dress", "top_colour": "Teal"})
+	check(dr["colours"]["bottom"] == dr["colours"]["top"], "the dress takes the top colour to the hem")
 	var six := true
 	for l in d["look_order"]:
 		six = six and d["looks"][l]["top_colours"].size() == 6
@@ -241,7 +255,7 @@ func _start_new() -> void:
 		await process_frame
 	check(tabs_seen == [0, 1, 2] and c.tab == 3, "Next walks Body -> Hair -> Outfit -> You")
 	c.choose("body", "tall")
-	c.choose("hair", "bun")
+	c.choose("hair", "pigtails")
 	c.choose("name", "Nam")
 	c._next.pressed.emit()
 	await process_frame
@@ -254,7 +268,7 @@ func _start_new() -> void:
 	check(needs.has_avatar() and needs.avatar()["body"] == "tall" and needs.profile["display_name"] == "Mai" and needs.personality == "music_nerd", "Into the bar saves look, name, personality")
 	check(not is_instance_valid(ss._modal) and ss.phase != ss.Phase.TITLE, "creator closed, the walk-in started")
 	var fig: Node = main.player.figure
-	check(main.player.look.get("avatar", {}).get("body", "") == "tall" and fig.find_child("hair_bun", true, false) != null, "the player wears the new look")
+	check(main.player.look.get("avatar", {}).get("body", "") == "tall" and fig.find_child("hair_pigtails", true, false) != null, "the player wears the new look")
 	main.queue_free()
 	await process_frame
 
@@ -418,10 +432,10 @@ func _exits() -> void:
 	ss._edit_btn.pressed.emit()
 	await process_frame
 	c = _creator(ss)
-	c.choose("hair", "quiff")
+	c.choose("hair", "double_bun")
 	await _touch(c._next)
 	await process_frame
-	check(not is_instance_valid(ss._modal) and needs.avatar()["hair"] == "quiff", "touch: Edit look, Done with the saved name leaves and saves")
+	check(not is_instance_valid(ss._modal) and needs.avatar()["hair"] == "double_bun", "touch: Edit look, Done with the saved name leaves and saves")
 	ss._edit_btn.pressed.emit()
 	await process_frame
 	c = _creator(ss)

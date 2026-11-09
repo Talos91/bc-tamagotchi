@@ -292,9 +292,12 @@ def build_mouth(v, D, C):
 
 
 # ---- hair. T = top row of the head; hair adds a cap above it and may rise up to 5. Below the head (z < Z) long
-# hair only falls behind the shoulders (y >= 2), so it never cuts through the arms.
+# hair only falls behind the shoulders (y >= 2), so it never cuts through the arms; the one exception is
+# `long_straight`, whose two front locks hang over the chest inside the torso width (clear of the arms).
+# `long_straight`, `pigtails` and `double_bun` (owner item 27, 2026-11-09) read as long or tied-up hair from the FRONT,
+# the creator's only view: the older long styles only show it from behind.
 HAIRS = ("shaggy", "wavy", "afro", "curly", "long", "bob", "crop", "buzz", "bun", "quiff", "ponytail", "side_part",
-         "swept", "spiky", "sideburns", "chignon", "two_block")
+         "swept", "spiky", "sideburns", "chignon", "two_block", "long_straight", "pigtails", "double_bun")
 
 
 def build_hair(style, D, C):
@@ -443,9 +446,44 @@ def build_hair(style, D, C):
     elif style == "chignon":
         cap(); sides(T - 5, HY0 + 1); back(Z + 2); fringe(T, (HX0, 1))
         b((-2, 1), (HY1 + 2, HY1 + 4), (Z + 1, Z + 4))              # low bun at the nape
+    elif style == "long_straight":
+        # long and straight with a blunt fringe: curtains frame the face down to the jaw, two locks fall over the
+        # shoulders onto the chest (in front of the top, inside the torso width), the back falls past the shoulders
+        cap(); fringe(Z)
+        b((HX0 - 1, HX0 - 1), (HY0 - 1, HY1 + 1), (Z, T))                  # full sides down to the jaw
+        b((HX1 + 1, HX1 + 1), (HY0 - 1, HY1 + 1), (Z, T))
+        b((HX0, HX0), (HY0 - 1, HY0 - 1), (Z, T))                          # the curtain over the face edges
+        b((HX1, HX1), (HY0 - 1, HY0 - 1), (Z, T))
+        back(Z)
+        b((HX0 - 1, HX1 + 1), (HY1, HY1 + 1), (Z - 7, Z - 1))              # behind the shoulders, to mid-back
+        lock_y = D["y0"] - 2                                                # one voxel in front of collars and lapels
+        for xr in ((HX0, HX0 + 1), (HX1 - 1, HX1)):
+            p.box(xr, (lock_y, HY0 - 1), (Z - 6, Z - 1), m, "head")
+        b((HX0 + 1, HX1 - 1), (HY0, HY1), (T + 2, T + 2))
+    elif style == "pigtails":
+        # two big tied bunches standing out at the sides of the head (seen from the front, the creator's view),
+        # centre-parted fringe, smooth cap
+        cap(); sides(T - 3); back(Z + 2)
+        fringe(T - 1, (HX0, -2)); fringe(T - 1, (1, HX1))
+        for x0, x1 in ((HX0 - 4, HX0 - 2), (HX1 + 2, HX1 + 4)):
+            p.box((x0, x1), (-1, 2), (Z + 1, T - 1), m, "head")
+            xo = x0 if x0 < 0 else x1                                        # rounded outer corners
+            for y in (-1, 2):
+                for z in (Z + 1, T - 1):
+                    p.cells.pop((xo, y, z), None)
+        b((HX0 + 1, HX1 - 1), (HY0, HY1), (T + 2, T + 2))
+    elif style == "double_bun":
+        # two round buns high on the crown (space buns), a soft straight fringe, short smooth sides
+        cap(); sides(T - 3); back(Z + 2); fringe(T - 1)
+        for x0, x1 in ((HX0 - 1, HX0 + 2), (HX1 - 2, HX1 + 1)):
+            p.box((x0, x1), (-1, 2), (T + 2, T + 5), m, "head")
+            for x in (x0, x1):
+                for y in (-1, 2):
+                    for z in (T + 2, T + 5):
+                        p.cells.pop((x, y, z), None)                       # rounded edges
     else:
         raise KeyError(style)
-    if style not in ("buzz", "afro", "curly", "two_block"):     # two-block stays sleek on the sides
+    if style not in ("buzz", "afro", "curly", "two_block", "pigtails", "double_bun"):   # sleek sides, clean ties
         tufts(p, m, style, Z)
     return p
 

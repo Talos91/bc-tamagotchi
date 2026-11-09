@@ -341,7 +341,10 @@
    "spiky",
    "sideburns",
    "chignon",
-   "two_block"
+   "two_block",
+   "long_straight",
+   "pigtails",
+   "double_bun"
   ],
   "eyes": [
    "dot",
@@ -868,6 +871,39 @@
       "hair__HairDarkBrown"
      ],
      "tris": 162
+    },
+    {
+     "id": "hair_long_straight",
+     "slot": "hair",
+     "bones": [
+      "head"
+     ],
+     "materials": [
+      "hair__HairDarkBrown"
+     ],
+     "tris": 238
+    },
+    {
+     "id": "hair_pigtails",
+     "slot": "hair",
+     "bones": [
+      "head"
+     ],
+     "materials": [
+      "hair__HairDarkBrown"
+     ],
+     "tris": 192
+    },
+    {
+     "id": "hair_double_bun",
+     "slot": "hair",
+     "bones": [
+      "head"
+     ],
+     "materials": [
+      "hair__HairDarkBrown"
+     ],
+     "tris": 232
     },
     {
      "id": "eyes_dot",
@@ -2087,6 +2123,39 @@
      "tris": 144
     },
     {
+     "id": "hair_long_straight",
+     "slot": "hair",
+     "bones": [
+      "head"
+     ],
+     "materials": [
+      "hair__HairDarkBrown"
+     ],
+     "tris": 242
+    },
+    {
+     "id": "hair_pigtails",
+     "slot": "hair",
+     "bones": [
+      "head"
+     ],
+     "materials": [
+      "hair__HairDarkBrown"
+     ],
+     "tris": 192
+    },
+    {
+     "id": "hair_double_bun",
+     "slot": "hair",
+     "bones": [
+      "head"
+     ],
+     "materials": [
+      "hair__HairDarkBrown"
+     ],
+     "tris": 232
+    },
+    {
      "id": "eyes_dot",
      "slot": "eyes",
      "bones": [
@@ -3304,6 +3373,39 @@
      "tris": 148
     },
     {
+     "id": "hair_long_straight",
+     "slot": "hair",
+     "bones": [
+      "head"
+     ],
+     "materials": [
+      "hair__HairDarkBrown"
+     ],
+     "tris": 224
+    },
+    {
+     "id": "hair_pigtails",
+     "slot": "hair",
+     "bones": [
+      "head"
+     ],
+     "materials": [
+      "hair__HairDarkBrown"
+     ],
+     "tris": 192
+    },
+    {
+     "id": "hair_double_bun",
+     "slot": "hair",
+     "bones": [
+      "head"
+     ],
+     "materials": [
+      "hair__HairDarkBrown"
+     ],
+     "tris": 232
+    },
+    {
      "id": "eyes_dot",
      "slot": "eyes",
      "bones": [
@@ -4519,6 +4621,39 @@
       "hair__HairDarkBrown"
      ],
      "tris": 148
+    },
+    {
+     "id": "hair_long_straight",
+     "slot": "hair",
+     "bones": [
+      "head"
+     ],
+     "materials": [
+      "hair__HairDarkBrown"
+     ],
+     "tris": 224
+    },
+    {
+     "id": "hair_pigtails",
+     "slot": "hair",
+     "bones": [
+      "head"
+     ],
+     "materials": [
+      "hair__HairDarkBrown"
+     ],
+     "tris": 192
+    },
+    {
+     "id": "hair_double_bun",
+     "slot": "hair",
+     "bones": [
+      "head"
+     ],
+     "materials": [
+      "hair__HairDarkBrown"
+     ],
+     "tris": 232
     },
     {
      "id": "eyes_dot",

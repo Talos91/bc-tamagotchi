@@ -1,5 +1,5 @@
 {
-	"_doc": "Character creator options (docs/design/07-character-creator.md, answers DECISIONS 2026-11-09). Ids are bc_chars part ids without the slot prefix; colours are manifest.json swatch names. Entries with hidden=true are never offered in the creator (legacy look of saves made before the creator).",
+	"_doc": "Character creator options (docs/design/07-character-creator.md, answers DECISIONS 2026-11-09). Ids are bc_chars part ids without the slot prefix; colours are manifest.json swatch names. Entries with hidden=true are never offered in the creator (legacy look of saves made before the creator; night_out, the leather look offered until 2026-11-09, kept so saves that chose it keep it). Hairs and the dress look re-cut for owner item 27 (2026-11-09): three styles that read as long or tied-up hair from the front, one look of three a dress (Q10 stands: no gender field). bottom_follows_top: the bottom takes the top colour (the dress).",
 	"bodies": ["petite", "regular", "broad", "tall"],
 	"heads": ["square", "round", "soft", "heart"],
 	"skins": ["Skin1", "Skin2", "Skin3", "Skin4", "Skin5", "Skin6", "Skin7", "Skin8"],
@@ -10,13 +10,16 @@
 		"legacy": {"eyes": "dot", "brows": "thick", "mouth": "flat", "hidden": true}
 	},
 	"face_order": ["easy", "bright", "soft"],
-	"hairs": ["crop", "quiff", "bob", "long", "curly", "bun", "side_part", "buzz"],
+	"hairs": ["long_straight", "crop", "pigtails", "quiff", "bob", "curly", "double_bun", "buzz"],
 	"hair_colours": ["HairBlack", "HairDarkBrown", "HairBrown", "HairAuburn", "HairBleach", "HairGrey", "HairRose", "HairSilver"],
 	"looks": {
 		"easy": {"top": "tee", "bottom": "jeans", "shoes": "sneakers",
 			"colours": {"top_trim": "Cream", "bottom": "Denim", "shoes": "Cream", "shoes_trim": "ColumnWhite"},
 			"top_colours": ["Cream", "Mustard", "Rust", "Teal", "Charcoal", "ShirtWhite"]},
-		"night_out": {"top": "leather", "bottom": "jeans", "shoes": "boots",
+		"dress": {"top": "dress", "bottom": "dress", "shoes": "boots", "bottom_follows_top": true,
+			"colours": {"top_trim": "Cream", "shoes": "StoolBlack", "shoes_trim": "Charcoal"},
+			"top_colours": ["DressRed", "LeatherBlack", "Teal", "VelvetRed", "Mustard", "Sky"]},
+		"night_out": {"top": "leather", "bottom": "jeans", "shoes": "boots", "hidden": true,
 			"colours": {"top_accent": "Cream", "top_trim": "Silver", "top_sheen": "LeatherSheen", "bottom": "JeansBlue", "shoes": "StoolBlack", "shoes_trim": "Charcoal"},
 			"top_colours": ["LeatherBlack", "Jacket", "Leather", "DressRed", "Olive", "Denim"]},
 		"smart": {"top": "shirt", "bottom": "trousers", "shoes": "loafers",
@@ -26,7 +29,7 @@
 			"colours": {"bottom": "Charcoal", "shoes": "StoolBlack", "shoes_trim": "Stone"},
 			"top_colours": ["Moss"]}
 	},
-	"look_order": ["easy", "night_out", "smart"],
+	"look_order": ["easy", "dress", "smart"],
 	"worn_items": {
 		"beard": {"slot": "face_hair", "colour_from": "hair_colour", "hidden": true}
 	},

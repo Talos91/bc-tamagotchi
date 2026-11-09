@@ -120,6 +120,8 @@ static func resolve(rec: Variant) -> Dictionary:
 	var colours := {"skin": hex(r["skin"]), "hair": hex(r["hair_colour"]), "top": hex(r["top_colour"])}
 	for slot in look["colours"]:
 		colours[slot] = hex(look["colours"][slot])
+	if look.get("bottom_follows_top", false):          # the dress: one colour top to hem
+		colours["bottom"] = colours["top"]
 	for slot in r["worn"]:
 		var item: String = r["worn"][slot]
 		ids.append(item)

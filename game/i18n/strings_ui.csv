@@ -36,8 +36,12 @@ ui.avatar.hair.curly,Curly,หยิก,Hair style,10
 ui.avatar.hair.bun,Bun,มวย,Hair style,10
 ui.avatar.hair.side_part,Side part,แสกข้าง,Hair style,10
 ui.avatar.hair.buzz,Buzz,เกรียน,Hair style,10
+ui.avatar.hair.long_straight,Long,ผมยาว,Hair style,10
+ui.avatar.hair.pigtails,Pigtails,ผมแกละ,Hair style,10
+ui.avatar.hair.double_bun,Space buns,มวยคู่,Hair style,10
 ui.avatar.look.easy,Easy,สบายๆ,Starter look,12
 ui.avatar.look.night_out,Night out,ออกเที่ยว,Starter look,12
+ui.avatar.look.dress,Dress,ชุดเดรส,Starter look,12
 ui.avatar.look.smart,Smart,เรียบร้อย,Starter look,12
 ui.avatar.vibe.night_owl,Night Owl,นกฮูกราตรี,Personality,18
 ui.avatar.vibe.music_nerd,Music Nerd,คอดนตรี,Personality,18

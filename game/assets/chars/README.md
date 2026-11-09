@@ -106,7 +106,7 @@ for the bartender's pair), so walking figures never carry a sideways glass.
 | Slot | Mesh node | Options |
 |---|---|---|
 | head | `head` | `square`, `round` (chamfered vertical and top edges), `soft` (top edges), `heart` (narrow jaw), each with a 2-voxel nose in relief. All fit the 8 x 7 x 7 box, so every hair, hat and face fits every head |
-| hair | `hair` | `shaggy`, `wavy`, `afro`, `curly`, `long`, `bob`, `crop`, `buzz`, `bun`, `quiff`, `ponytail`, `side_part`, `swept`, `spiky`, `sideburns`, `chignon`, `two_block` (17; Korean two-block with a curtain fringe parted off centre, sleek sides; all but `buzz`, `afro`, `curly` and `two_block` carry 2 x 2 clumps on the back, sides and crown) |
+| hair | `hair` | `shaggy`, `wavy`, `afro`, `curly`, `long`, `bob`, `crop`, `buzz`, `bun`, `quiff`, `ponytail`, `side_part`, `swept`, `spiky`, `sideburns`, `chignon`, `two_block`, `long_straight`, `pigtails`, `double_bun` (20; two-block: Korean, curtain fringe parted off centre, sleek sides. The last three (owner item 27, 2026-11-09) read as long or tied-up hair from the front, the creator's view: `long_straight` has a blunt fringe and two locks over the chest inside the torso width, `pigtails` two bunches at the sides, `double_bun` two buns on the crown. All but `buzz`, `afro`, `curly`, `two_block`, `pigtails` and `double_bun` carry 2 x 2 clumps on the back, sides and crown) |
 | eyes | `eyes` | `dot`, `wide`, `sleepy`, `happy`, `lashes` (1 x 2 pixel decals halfway down the face) |
 | brows | `brows` | `none`, `flat`, `arched`, `worried`, `thick`: voxels in relief, hair colour |
 | mouth | `mouth` | `smile`, `small`, `flat`, `open`, `grin` |
