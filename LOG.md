@@ -181,3 +181,4 @@ Append-only. One dated line per event, newest last. Never edit earlier lines.
 - 2026-11-09 (+7) — 🔍 verify-iphone-load-2 PASSED 63a5e71 (19/19 + web build), pushed; docs pushed after (ab83bb8); iphone-load-2 and its verifier archived. Redeploy + iPhone retest are Daniele's. Context ~30 %.
 - 2026-11-09 (+7) — Daniele deployed 63a5e71; still trapped in the creator (item 26 not landed). Creator-fix worker told: land item 26 first and alone, hair second. Context ~31 %.
 - 2026-11-09 (+7) — Creator exit fix (item 26) committed alone, 9cb6bc9 (cause: refusal reason + name field below the fold; × always leaves). 🔍 verify-creator-exit proposed. Item 27 follows as a second commit. Context ~32 %.
+- 2026-11-09 (+7) — Item 26 second cause: the web build has no virtual keyboard, so a name can never be typed and Done is refused forever; browser-prompt fix in progress on top of 9cb6bc9. Redeploy on hold until it is verified. Context ~33 %.
