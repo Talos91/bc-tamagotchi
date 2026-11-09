@@ -2,7 +2,7 @@
 
 Status: **design v1, 2026-11-09** (🎨 character-creator worker, phase 1: design only, no game code). Owner item 22
 (`handoffs/owner-feedback-2026-11-04.md`: "next feature after the polish: the character creator"). Owner calls are
-in §9 and on the hub card `char-creator-design-review`; nothing here is built until Daniele answers.
+in §9 and on the hub card `char-creator-design-review`. **Answered 2026-11-09 10:39 (all as recommended; Q8 changed: photo booth in the lounge; DECISIONS 2026-11-09). Housekeeping folded the answers into `02-gdd.md` §7 and §14 the same day.**
 
 Sources kept as they are: GDD §7.1 (creation) and §7.2 (wardrobe), the launch scope in GDD §14 ("Character creator
 lite: 3 body types, 6 skin tones, 4 hair styles, 3 outfits, 4 personalities"), `rules.gd` (`PERSONALITIES`,
@@ -250,19 +250,19 @@ combination in the data file resolves to part ids that exist in all four librari
 
 ## 9. Owner calls (one question each; on the hub card `char-creator-design-review`)
 
-| # | Question | Options | Recommendation |
-|---|---|---|---|
-| Q1 | How many body types in 0.3? | (a) 3 as the lite scope: petite, regular, broad; (b) **4, adding tall**; (c) GDD's 3 heights × 3 builds (new generator work) | **(b)**: tall exists and is the only clearly different silhouette (mock-01 shows the three lite bodies look alike) |
-| Q2 | How many skin tones? | (a) 6 as the lite scope; (b) **all 8 that exist**; (c) 12 now (generate 4 in-betweens) | **(b)**: no cost; 6 would drop the two deepest tones |
-| Q3 | How many hair styles (with 8 colours)? | (a) 4 as the lite scope; (b) **8**; (c) all 17 | **(b)**: all exist; keeps some for wardrobe drops later |
-| Q4 | A face choice in 0.3? | (a) one fixed face; (b) **4 head shapes + 3 face sets**; (c) eyes, brows, mouth separately | **(b)**: head shape is the silhouette cue; sets keep it to two rows |
-| Q5 | Outfits | (a) 3 fixed looks; (b) **3 looks, each with 6 top colours**; (c) free top/bottom/shoes now | **(b)** |
-| Q6 | Changing personality later | (a) **free, any time (GDD)**; (b) once a week; (c) only at creation | **(a)**: the gain from switching is at most 10 % of one meter's decay |
-| Q7 | Existing saves | (a) **keep today's look; one-time card "Make your character / Keep this look"**; (b) force the creator once; (c) keep it silently, Edit look only | **(a)** |
-| Q8 | Where "Edit look" lives | (a) **start screen + in-game menu**; (b) only the toilet mirror in the venue; (c) both now | **(a)** now; the mirror later as a fun extra |
-| Q9 | Name rules | (a) **2–16 letters, Latin + Thai, cast names blocked, local word filter, server check later**; (b) the same plus emoji; (c) no filter until the server | **(a)** |
-| Q10 | Gender | (a) **no gender field; every part on every body**; (b) a gender choice that filters parts | **(a)** |
-| Q11 | Greeters per personality | (a) **Jules, Tong, Tt, Nam** (§3); (b) another pairing (say which) | **(a)** |
+| # | Question | Options | Recommendation | Answer |
+|---|---|---|---|---|
+| Q1 | How many body types in 0.3? | (a) 3 as the lite scope: petite, regular, broad; (b) **4, adding tall**; (c) GDD's 3 heights × 3 builds (new generator work) | **(b)**: tall exists and is the only clearly different silhouette (mock-01 shows the three lite bodies look alike) | **Answered 2026-11-09: (b) 4 bodies, tall added** |
+| Q2 | How many skin tones? | (a) 6 as the lite scope; (b) **all 8 that exist**; (c) 12 now (generate 4 in-betweens) | **(b)**: no cost; 6 would drop the two deepest tones | **Answered 2026-11-09: (b) all 8 skin tones** |
+| Q3 | How many hair styles (with 8 colours)? | (a) 4 as the lite scope; (b) **8**; (c) all 17 | **(b)**: all exist; keeps some for wardrobe drops later | **Answered 2026-11-09: (b) 8 hair styles × 8 colours** |
+| Q4 | A face choice in 0.3? | (a) one fixed face; (b) **4 head shapes + 3 face sets**; (c) eyes, brows, mouth separately | **(b)**: head shape is the silhouette cue; sets keep it to two rows | **Answered 2026-11-09: (b) 4 head shapes + 3 face sets** |
+| Q5 | Outfits | (a) 3 fixed looks; (b) **3 looks, each with 6 top colours**; (c) free top/bottom/shoes now | **(b)** | **Answered 2026-11-09: (b) 3 looks × 6 top colours** |
+| Q6 | Changing personality later | (a) **free, any time (GDD)**; (b) once a week; (c) only at creation | **(a)**: the gain from switching is at most 10 % of one meter's decay | **Answered 2026-11-09: (a) free, any time** |
+| Q7 | Existing saves | (a) **keep today's look; one-time card "Make your character / Keep this look"**; (b) force the creator once; (c) keep it silently, Edit look only | **(a)** | **Answered 2026-11-09: (a) keep today's look + one-time "Make your character" card** |
+| Q8 | Where "Edit look" lives | (a) **start screen + in-game menu**; (b) only the toilet mirror in the venue; (c) both now | **(a)** now; the mirror later as a fun extra | **Answered 2026-11-09: changed by Daniele: start-screen entry stays, no menu entry; in game a photo booth in the lounge opens the creator** |
+| Q9 | Name rules | (a) **2–16 letters, Latin + Thai, cast names blocked, local word filter, server check later**; (b) the same plus emoji; (c) no filter until the server | **(a)** | **Answered 2026-11-09: (a) 2–16 letters, Latin + Thai, cast names blocked, local filter** |
+| Q10 | Gender | (a) **no gender field; every part on every body**; (b) a gender choice that filters parts | **(a)** | **Answered 2026-11-09: (a) no gender field** |
+| Q11 | Greeters per personality | (a) **Jules, Tong, Tt, Nam** (§3); (b) another pairing (say which) | **(a)** | **Answered 2026-11-09: (a) Jules, Tong, Tt, Nam** |
 
 ## 10. Phase 2 (build) outline, for the next brief
 

@@ -52,3 +52,5 @@ The skeleton in `game/` runs: Godot 4.6.1 (Ooze Syndicate's copy) loads it headl
 1. Open `game/` in the editor, check the look (glow, lights, scale against the photos) and tune `tools/build_venue.gd`.
 2. Web-export the skeleton and record pack size and load time as the baseline for risk 1.
 3. Test portrait layout and the touch joystick on a real phone.
+
+> **Amended 2026-11-09:** the 20–50-avatar live room (table row "20–50 avatars in one room" and risk 3 above) is no longer planned: multiplayer is simulated presence from real check-ins on Supabase (`docs/design/08-presence.md`, owner item 24, accepted as a baseline 2026-11-09). A relay is only needed for live table games later.

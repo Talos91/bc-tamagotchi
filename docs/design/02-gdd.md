@@ -253,6 +253,8 @@ bible (2A) owns names and personalities. Systems rules:
 
 ### 5.2 Other players
 
+> **Amended 2026-11-09 (wave 4 is simulated presence, not live sync):** P2 and P3 below are replaced by **P2 Presence** (real check-ins at Black Cabin appear in every player's bar; the table QR is the co-presence proof) and **P3 Together** (Flat visits, live table games), specified in `08-presence.md` and accepted on card presence-design-review (baseline: Daniele 2026-11-09, "all of these are just baseline and we might change"). The headcount rule below is kept. The table below is the original text, kept for the record.
+
 Phased (see the recommendation in §13):
 
 | Phase | What other players are | Presence |
@@ -330,6 +332,8 @@ live-ops content unit (§11).
 
 ### 7.1 Creation (under 2 minutes, all changeable later at no cost)
 
+> **Amended 2026-11-09 (creator answers accepted, card char-creator-design-review, DECISIONS 2026-11-09):** the table below is the full-launch target; **version 0.3 ships the accepted creator-lite counts**: 4 bodies (petite, regular, broad, tall), 8 skin tones, 8 hair styles × 8 colours, 4 head shapes + 3 face sets, 3 starter looks × 6 top colours, 4 personalities, **no gender field** (every part on every body), names 2–16 letters (Latin + Thai, cast names blocked, local word filter). **Edit look:** a **photo booth in the lounge** opens the creator in game (the start-screen entry stays; no menu entry). Spec: `07-character-creator.md`.
+
 | Slot | Launch options |
 |---|---|
 | Body | 3 heights × 3 builds |
@@ -339,7 +343,7 @@ live-ops content unit (§11).
 | Starter outfit | 6 full looks (mixable after creation) |
 | **Personality** | **Night Owl** (Nightlife decay −10%), **Music Nerd** (Music), **Social Butterfly** (Friends), **Easy Sipper** (Drinks). Also sets idle animations and which regular greets you first. |
 
-Name: free text, filtered.
+Name: free text, filtered (0.3: 2–16 letters, Latin + Thai, `07-character-creator.md` §5.4).
 
 ### 7.2 Wardrobe
 
@@ -570,6 +574,7 @@ as greybox tooling.
 - Build multiplayer-ready anyway: timestamp-based meters, one social-verb
   interface shared by NPCs, echoes and players, serialisable character data.
   P2 then becomes a backend feature and P3 reuses Ooze Syndicate's server.
+  *(Amended 2026-11-09: P2 is Presence on Supabase, `08-presence.md`; Ooze's server is only for live table games (`08-presence.md` §5.3), which are no longer a first-wave item.)*
 
 ---
 
@@ -580,8 +585,10 @@ compressed debug clock) and wants to return.
 
 **In:**
 - Home check-in screen (the street door now; character, four meters, Vibe state, stake chip)
-- Character creator lite: 3 body types, 6 skin tones, 4 hair styles, 3
-  outfits, 4 personalities
+- Character creator lite (counts accepted 2026-11-09, `07-character-creator.md`): 4 body types, 8 skin tones,
+  8 hair styles × 8 colours, 4 head shapes + 3 face sets, 3 looks × 6 top colours,
+  4 personalities, no gender field, names 2–16 Latin + Thai; Edit look = a photo
+  booth in the lounge (start-screen entry stays)
 - Venue zones: Entrance, Bar, Stage & Front Row, Candle Floor, Lounge
   (Banquette and Long Table as set dressing; dance floor = a spot under the
   disco ball with a dance emote)

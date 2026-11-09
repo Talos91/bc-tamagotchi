@@ -64,6 +64,8 @@ already happening when they walk in.
 
 ### 1.3 Presence rules with other players (P2 Echoes, P3 Live)
 
+> **Amended 2026-11-09:** read "P2 Echoes, P3 Live" as **presences** (real check-ins shown in the bar, `08-presence.md`); the Candle Talk row stays for P3 Together. Accepted as a baseline (DECISIONS 2026-11-09, "presence-design-review"). Rules below still hold.
+
 Restated from GDD §5.2 for the cast:
 
 | Rule | Detail |

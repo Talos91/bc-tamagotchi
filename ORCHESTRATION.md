@@ -131,6 +131,8 @@ assembly pass and a real-device test.
 Presence and persistence reusing Ooze Syndicate's relay + headless host +
 Supabase accounts. Not before the first playable is fun on a phone.
 
+**Amended 2026-11-09:** wave 4 is now **presence events on Supabase** (simulated presence from real check-ins and the table QR; no live movement sync), specified in `docs/design/08-presence.md`; the relay is kept only for live table games later. Design v1 accepted on card presence-design-review (baseline: Daniele 2026-11-09, "all of these are just baseline and we might change"); nothing built yet (build order: `08-presence.md` §10). The character creator (`07-character-creator.md`, accepted 2026-11-09) is built first.
+
 ## Decisions the orchestrator still owes
 
 - Engine confirmation after 1C's write-up.

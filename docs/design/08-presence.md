@@ -1,7 +1,7 @@
 # 08 — Presence: real check-ins in everyone's bar (owner item 24)
 
 Status: **design v1, 2026-11-09** (🌐 presence-design worker, design only: no game code, no backend created). Owner
-calls are in §12 and on the hub card `presence-design-review`; nothing here is built until Daniele answers.
+calls are in §12 and on the hub card `presence-design-review`. **Answered 2026-11-09 10:41: all eleven as recommended, as a baseline that may change (Daniele: "all of these are just baseline and we might change"; DECISIONS 2026-11-09). The §11 amendments are applied (Housekeeping, 2026-11-09). Nothing here is built yet.**
 
 Owner direction (item 24, `handoffs/owner-feedback-2026-11-04.md`, 2026-11-04): live movement of real customers on each
 other's phones makes no sense. Instead **simulated presence**: everyone who checks in at Black Cabin in real life
@@ -327,27 +327,27 @@ entry → anonymous room, no error; reconnect → queued wave delivered; `delete
 
 ## 11. What this replaces (amendments to apply after the answers)
 
-| Doc | Change |
-|---|---|
-| `02-gdd.md` §5.2 | P2 *Echoes* and P3 *Live rooms* → **P2 Presence** (this chapter), **P3 Together** (Flat visits, live table games). Headcount rule kept. |
-| `02-gdd.md` §13 | "P3 reuses Ooze Syndicate's server" → only for live table games (§5.3) |
-| `ORCHESTRATION.md` wave 4 | "Presence and persistence reusing Ooze's relay + headless host" → "Presence events on Supabase (08-presence); relay only for live table games later" |
-| `03-cast.md` §1.3 | "P2 Echoes, P3 Live" → "presences"; Candle Talk row stays for P3 |
-| `06-stakes.md` §10.8 | Check-in verification = `check_in(code)` here |
-| `docs/tech/01-engine-decision.md` | Note: the 20–50-avatar live room is no longer planned |
+| Doc | Change | Applied |
+|---|---|---|
+| `02-gdd.md` §5.2 | P2 *Echoes* and P3 *Live rooms* → **P2 Presence** (this chapter), **P3 Together** (Flat visits, live table games). Headcount rule kept. | **Applied 2026-11-09:** 02-gdd.md §5.2 (note above the table) |
+| `02-gdd.md` §13 | "P3 reuses Ooze Syndicate's server" → only for live table games (§5.3) | **Applied 2026-11-09:** 02-gdd.md §13 |
+| `ORCHESTRATION.md` wave 4 | "Presence and persistence reusing Ooze's relay + headless host" → "Presence events on Supabase (08-presence); relay only for live table games later" | **Applied 2026-11-09:** ORCHESTRATION.md wave 4 |
+| `03-cast.md` §1.3 | "P2 Echoes, P3 Live" → "presences"; Candle Talk row stays for P3 | **Applied 2026-11-09:** 03-cast.md §1.3 |
+| `06-stakes.md` §10.8 | Check-in verification = `check_in(code)` here | **Applied 2026-11-09:** 06-stakes.md §10.8 |
+| `docs/tech/01-engine-decision.md` | Note: the 20–50-avatar live room is no longer planned | **Applied 2026-11-09:** docs/tech/01-engine-decision.md |
 
 ## 12. Owner calls (one question each; on the hub card `presence-design-review`)
 
-| # | Question | Options | Recommendation |
-|---|---|---|---|
-| P1 | **Consent:** how does a player show up after checking in? | (a) **asked once at the first check-in: Everyone / Only people here tonight / Nobody, nothing preselected**; (b) Everyone by default, changeable in settings; (c) Nobody by default, opt in | **(a)** |
-| P2 | How long does a presence stay in everyone's bar? | (a) **from the scan until closing (02:00), then a "Last night" list on the lounge board until 19:00**; (b) 3 hours after the scan; (c) until closing, nothing after | **(a)** |
-| P3 | **Data shown:** who sees the real table someone sits at? | (a) **only players checked in tonight; others see them in the same zone, not the table**; (b) everyone; (c) nobody, seats are random | **(a)**: someone at home can't tell where a person is sitting right now |
-| P4 | **Data kept** about real people | (a) **check-ins 90 days, then monthly counts only; events 30 days; delete-my-data button**; (b) everything 13 months; (c) everything until the player deletes | **(a)** |
-| P5 | Accounts | (a) anonymous only; (b) **anonymous, plus an optional "keep my account" email link**; (c) required email or Google sign-in at the first check-in | **(b)**: no sign-up wall at the table, a way back for those who want it |
-| P6 | Friend check-in pushes vs "never after 22:00" | (a) **allowed 19:00–23:00, at most 1 a night, opt-in per friend, outside the 2-a-week budget**; (b) inside the budget and the 22:00 rule; (c) no social pushes, in-app only | **(a)** |
-| P7 | **What staff see** | (a) **counts only: check-ins per table and hour, Top patrons**; (b) a live list of names per table; (c) nothing | **(a)** |
-| P8 | **Money:** backend cost and who pays | (a) **Supabase free tier on Daniele's account until the bar launch, then decide Pro (US$25 a month) with Black Cabin**; (b) Pro from day one; (c) Black Cabin's own account | **(a)**: free tier covers 50,000 monthly users and 500 MB |
-| P9 | QR codes and cheating | (a) **one static code per table + one per night + opening hours + reprint a table's code if abused**; (b) the same plus a "word of the night" staff write on a board; (c) a changing QR on a staff tablet | **(a)** for wave 1; (b) if the audit shows home check-ins |
-| P10 | **Money (in-game):** "Send a drink" with coins | (a) **yes, at the drink's coin price, 1 per pair per night**; (b) verbs only, no coins between players | **(a)** |
-| P11 | The together layer in the first presence wave | (a) **tablemates: toast, table cheers, shared polaroid, friend link, nights together**; (b) (a) plus Flat visits now; (c) presence and verbs only | **(a)**; Flat visits wave 2, live table games wave 3 |
+| # | Question | Options | Recommendation | Answer |
+|---|---|---|---|---|
+| P1 | **Consent:** how does a player show up after checking in? | (a) **asked once at the first check-in: Everyone / Only people here tonight / Nobody, nothing preselected**; (b) Everyone by default, changeable in settings; (c) Nobody by default, opt in | **(a)** | **Answered 2026-11-09: (a) as recommended (baseline)** |
+| P2 | How long does a presence stay in everyone's bar? | (a) **from the scan until closing (02:00), then a "Last night" list on the lounge board until 19:00**; (b) 3 hours after the scan; (c) until closing, nothing after | **(a)** | **Answered 2026-11-09: (a) as recommended (baseline)** |
+| P3 | **Data shown:** who sees the real table someone sits at? | (a) **only players checked in tonight; others see them in the same zone, not the table**; (b) everyone; (c) nobody, seats are random | **(a)**: someone at home can't tell where a person is sitting right now | **Answered 2026-11-09: (a) as recommended (baseline)** |
+| P4 | **Data kept** about real people | (a) **check-ins 90 days, then monthly counts only; events 30 days; delete-my-data button**; (b) everything 13 months; (c) everything until the player deletes | **(a)** | **Answered 2026-11-09: (a) as recommended (baseline)** |
+| P5 | Accounts | (a) anonymous only; (b) **anonymous, plus an optional "keep my account" email link**; (c) required email or Google sign-in at the first check-in | **(b)**: no sign-up wall at the table, a way back for those who want it | **Answered 2026-11-09: (b) as recommended (baseline)** |
+| P6 | Friend check-in pushes vs "never after 22:00" | (a) **allowed 19:00–23:00, at most 1 a night, opt-in per friend, outside the 2-a-week budget**; (b) inside the budget and the 22:00 rule; (c) no social pushes, in-app only | **(a)** | **Answered 2026-11-09: (a) as recommended (baseline)** |
+| P7 | **What staff see** | (a) **counts only: check-ins per table and hour, Top patrons**; (b) a live list of names per table; (c) nothing | **(a)** | **Answered 2026-11-09: (a) as recommended (baseline)** |
+| P8 | **Money:** backend cost and who pays | (a) **Supabase free tier on Daniele's account until the bar launch, then decide Pro (US$25 a month) with Black Cabin**; (b) Pro from day one; (c) Black Cabin's own account | **(a)**: free tier covers 50,000 monthly users and 500 MB | **Answered 2026-11-09: (a) as recommended (baseline)** |
+| P9 | QR codes and cheating | (a) **one static code per table + one per night + opening hours + reprint a table's code if abused**; (b) the same plus a "word of the night" staff write on a board; (c) a changing QR on a staff tablet | **(a)** for wave 1; (b) if the audit shows home check-ins | **Answered 2026-11-09: (a) as recommended (baseline)** |
+| P10 | **Money (in-game):** "Send a drink" with coins | (a) **yes, at the drink's coin price, 1 per pair per night**; (b) verbs only, no coins between players | **(a)** | **Answered 2026-11-09: (a) as recommended (baseline)** |
+| P11 | The together layer in the first presence wave | (a) **tablemates: toast, table cheers, shared polaroid, friend link, nights together**; (b) (a) plus Flat visits now; (c) presence and verbs only | **(a)**; Flat visits wave 2, live table games wave 3 | **Answered 2026-11-09: (a) as recommended (baseline)** |

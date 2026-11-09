@@ -499,6 +499,8 @@ also clears `profile`; split it so `player_id` and settings survive while
 
 ### 10.8 What the server provides later [server]
 
+> **Amended 2026-11-09:** the first row's check-in verification is `check_in(code)` in `08-presence.md` §3 and §7 (one static code per table, one check-in per bar night; baseline, DECISIONS 2026-11-09).
+
 | Item | Stand-in until then |
 |---|---|
 | Table QR codes and check-in verification per bar night | Any in-game refill (§3); debug "Fake check-in" |
