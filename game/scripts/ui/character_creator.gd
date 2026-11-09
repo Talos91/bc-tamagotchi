@@ -6,9 +6,12 @@ extends Control
 ## lounge. It never writes the save itself: `done` hands the record, name and personality to the caller, which calls
 ## Needs.set_avatar(). Only the chosen body's parts library is loaded (one at a time); the hair thumbnails reuse it and
 ## render once.
-##   mode "new"  : steps in order, last button "Into the bar"; Back on the first step cancels
-##   mode "edit" : every tab open, "Done"; the × cancels
+##   mode "new"  : steps in order, last button "Into the bar"; ‹ goes back a step
+##   mode "edit" : every tab open, "Done"
 ##   mode "name" : opens on the You tab (a "Keep this look" save with no name yet)
+## The × (top right, every mode) always leaves without saving. A refused name never fails silently: the reason shows
+## right above the button, the You tab opens with the name field first (owner item 26, 2026-11-09: on the phone the
+## field and its reason were below the fold, so Done looked dead).
 
 signal done(record: Dictionary, display_name: String, personality: String)
 signal cancelled
@@ -37,6 +40,9 @@ var _main: BoxContainer
 var _content: VBoxContainer
 var _tabs: Array[Button] = []
 var _next: Button
+var _back: Button
+var _status: Label               ## why Done / Into the bar refused, always on screen above the button
+var _scroll: ScrollContainer
 var _name_edit: LineEdit
 var _name_err: Label
 var _step: Label
@@ -122,14 +128,18 @@ func _build() -> void:
 		b.name = "Tab_" + TABS[i]
 		tabs.add_child(b)
 		_tabs.append(b)
-	var scroll := ScrollContainer.new()
-	scroll.size_flags_vertical = Control.SIZE_EXPAND_FILL
-	scroll.horizontal_scroll_mode = ScrollContainer.SCROLL_MODE_DISABLED
-	col.add_child(scroll)
+	_scroll = ScrollContainer.new()
+	_scroll.size_flags_vertical = Control.SIZE_EXPAND_FILL
+	_scroll.horizontal_scroll_mode = ScrollContainer.SCROLL_MODE_DISABLED
+	col.add_child(_scroll)
 	_content = VBoxContainer.new()
 	_content.size_flags_horizontal = Control.SIZE_EXPAND_FILL
 	_content.add_theme_constant_override("separation", int(UI.dp(8)))
-	scroll.add_child(_content)
+	_scroll.add_child(_content)
+	_status = UI.wrap(UI.label("", 14, UI.RED_HI.lightened(0.2), HORIZONTAL_ALIGNMENT_CENTER))
+	_status.name = "Status"
+	_status.visible = false
+	col.add_child(_status)
 	_next = UI.button("", "primary")
 	_next.name = "Next"
 	_next.pressed.connect(_on_next)
@@ -142,22 +152,30 @@ func _title_bar() -> Control:
 	bar.add_theme_constant_override("separation", 0)
 	var top := HBoxContainer.new()
 	bar.add_child(top)
-	var back := UI.button("‹" if mode == "new" else "×", "ghost")
-	back.name = "Back"
-	back.custom_minimum_size = Vector2(UI.dp(48), UI.dp(48))
-	back.add_theme_font_size_override("font_size", int(UI.dp(24)))
-	back.pressed.connect(_on_back)
-	top.add_child(back)
+	# ‹ back a step (new character, step 2 on) on the left; × leave on the right. Both are big thumb targets
+	# (64 dp), not just the glyph.
+	_back = _corner("‹", "Back")
+	_back.pressed.connect(_on_back)
+	top.add_child(_back)
 	var t := UI.title(UIS.t("ui.avatar.title"), 24, UI.RED_HI.lightened(0.15))
 	t.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
 	t.size_flags_horizontal = Control.SIZE_EXPAND_FILL
 	top.add_child(t)
-	var spacer := Control.new()
-	spacer.custom_minimum_size = Vector2(UI.dp(48), 0)
-	top.add_child(spacer)
+	var close := _corner("×", "Close")
+	close.pressed.connect(_on_close)
+	top.add_child(close)
 	_step = UI.label("", 12, UI.ASH, HORIZONTAL_ALIGNMENT_CENTER)
 	bar.add_child(_step)
 	return bar
+
+
+func _corner(glyph: String, nm: String) -> Button:
+	var b := UI.button(glyph, "ghost")
+	b.name = nm
+	b.custom_minimum_size = Vector2(UI.dp(64), UI.dp(56))
+	b.size_flags_vertical = Control.SIZE_FILL
+	b.add_theme_font_size_override("font_size", int(UI.dp(30)))
+	return b
 
 
 func _preview_box() -> Control:
@@ -264,6 +282,10 @@ func _show_tab() -> void:
 		c.queue_free()
 	_name_edit = null
 	_name_err = null
+	_say("")
+	if is_instance_valid(_back):
+		_back.modulate.a = 1.0 if (mode == "new" and tab > 0) else 0.0
+		_back.disabled = not (mode == "new" and tab > 0)
 	for i in _tabs.size():
 		var b := _tabs[i]
 		var on := i == tab
@@ -295,10 +317,10 @@ func _show_tab() -> void:
 			var look: Dictionary = Avatar.data()["looks"].get(record["look"], {})
 			_swatches("top_colour", look.get("top_colours", []))
 		"you":
+			_row(UIS.t("ui.avatar.row.name"))         # the name first: it is the one thing Done can refuse
+			_name_row()
 			_row(UIS.t("ui.avatar.row.vibe"))
 			_vibes()
-			_row(UIS.t("ui.avatar.row.name"))
-			_name_row()
 	if tab < 3:
 		_next.text = UIS.t("ui.avatar.next", {"tab": UIS.t("ui.avatar.tab." + TABS[tab + 1])}) if mode == "new" else UIS.t("ui.avatar.done")
 	else:
@@ -417,6 +439,8 @@ func _vibes() -> void:
 		v.add_child(UI.label(UIS.t("ui.avatar.vibe.effect", {"need": tr("need.%s.name" % need)}), 11, UI.GOLD if on else UI.ASH))
 		v.add_child(UI.label(UIS.t("ui.avatar.vibe.greeter", {"name": Cast.name_of(Avatar.greeter(p))}), 11, UI.ASH))
 		b.pressed.connect(func():
+			if is_instance_valid(_name_edit):
+				display_name = _name_edit.text
 			personality = p
 			_show_tab())
 		g.add_child(b)
@@ -435,7 +459,8 @@ func _name_row() -> void:
 	_name_edit.text_changed.connect(func(s: String):
 		display_name = s
 		if is_instance_valid(_name_err):
-			_name_err.text = "")
+			_name_err.text = ""
+		_say(""))
 	_name_edit.text_submitted.connect(func(_s): _on_next())
 	_content.add_child(_name_edit)
 	_name_err = UI.wrap(UI.label("", 12, UI.RED_HI))
@@ -484,10 +509,33 @@ func _on_back() -> void:
 	if mode == "new" and tab > 0:
 		_go_tab(tab - 1)
 		return
+	_on_close()
+
+
+## × : leave without saving, from any step and any mode.
+func _on_close() -> void:
+	_drop_keyboard()
 	cancelled.emit()
 
 
+## The status line above the button (empty hides it).
+func _say(text: String) -> void:
+	if is_instance_valid(_status):
+		_status.text = text
+		_status.visible = text != ""
+
+
+## Take the name field's focus away so the phone keyboard closes and the next tap reaches the buttons.
+func _drop_keyboard() -> void:
+	if is_instance_valid(_name_edit):
+		display_name = _name_edit.text
+		_name_edit.release_focus()
+	if DisplayServer.has_feature(DisplayServer.FEATURE_VIRTUAL_KEYBOARD):
+		DisplayServer.virtual_keyboard_hide()
+
+
 func _on_next() -> void:
+	_drop_keyboard()
 	if tab < 3 and mode == "new":
 		reached = maxi(reached, tab + 1)
 		_go_tab(tab + 1)
@@ -508,7 +556,12 @@ func _finish() -> void:
 			reached = 3
 			tab = 3
 			_show_tab()
-		_name_err.text = UIS.t("ui.avatar.name.err." + why)
+		var msg := UIS.t("ui.avatar.name.err." + why)
+		if is_instance_valid(_name_err):
+			_name_err.text = msg
+		_say(msg)
+		if is_instance_valid(_scroll):
+			_scroll.scroll_vertical = 0               # the name field is the first row of the You tab
 		return
 	done.emit(record.duplicate(true), Avatar.clean_name(display_name), personality)
 

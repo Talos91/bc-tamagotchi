@@ -12,6 +12,10 @@ extends SceneTree
 ##             gets the one-time card (Keep this look keeps the legacy look; no name -> the You tab); Edit look
 ##   booth     the photo booth zone in the lounge (layout.json) opens the creator; Done changes the player's look
 ##   greeter   the personality's regular greets on arrival when in the room (Nam, Tt); none when not placed (Tong)
+##   exits     (owner item 26, 2026-11-09, phone) real touches (Input.parse_input_event, touch -> mouse emulation as on
+##             the phone) reach Next, × and Done; × leaves from every step, from the start screen and the booth;
+##             Done with a refused or empty name stays and says why above the button, the name field first on screen;
+##             Done with a good name leaves
 ##   godot --headless --path . --script res://tests/test_avatar.gd
 
 const Avatar = preload("res://scripts/avatar.gd")
@@ -40,6 +44,7 @@ func _init() -> void:
 	await _start_new()
 	await _start_old()
 	await _booth_and_greeter()
+	await _exits()
 	print("TEST AVATAR ", "PASS" if fails.is_empty() else "FAIL (%d)" % fails.size())
 	quit(0 if fails.is_empty() else 1)
 
@@ -336,5 +341,115 @@ func _booth_and_greeter() -> void:
 	needs.set_personality("")
 	main.session._greet()
 	check(main.session.greeted == "", "no personality, no greeter")
+	main.queue_free()
+	await process_frame
+
+
+## A finger tap on a control, the phone's way: ScreenTouch through Input, which emulates the mouse
+## (project.godot pointing/emulate_mouse_from_touch) before the GUI sees it.
+func _touch(ctrl: Control) -> void:
+	var at := ctrl.get_global_rect().get_center()
+	for down in [true, false]:
+		var t := InputEventScreenTouch.new()
+		t.index = 0
+		t.pressed = down
+		t.position = at
+		Input.parse_input_event(t)
+		Input.flush_buffered_events()
+		await process_frame
+	await process_frame
+
+
+func _exits() -> void:
+	print("exits (item 26)")
+	# New character, real touches: Next x3, Into the bar with no name
+	needs.new_game()
+	var main := await _main(true)
+	var ss: Node = main.start_screen
+	ss.tap()
+	await process_frame
+	var c := _creator(ss)
+	for i in 3:
+		await _touch(c._next)
+	check(c.tab == 3, "touch: Next reaches the You tab (tab %d)" % c.tab)
+	var first_input: Node = null
+	for n in c._content.get_children():
+		if n is LineEdit or n is GridContainer:
+			first_input = n
+			break
+	check(first_input is LineEdit, "the name field comes first on the You tab (it is what Done can refuse)")
+	c.choose("name", "")
+	await _touch(c._next)
+	check(is_instance_valid(ss._modal) and c.tab == 3, "Into the bar with no name stays on the You tab")
+	check(c._status.visible and c._status.text != "" and c._next.get_global_rect().position.y > c._status.get_global_rect().position.y, "... and says why right above the button: '%s'" % c._status.text)
+	c.choose("name", "Nam")
+	await _touch(c._next)
+	check(c._status.visible and c._status.text != "" and is_instance_valid(ss._modal), "a cast name: stays, reason shown")
+	# × leaves from the last step, no save
+	var close: Button = c.find_child("Close", true, false)
+	await _touch(close)
+	check(not is_instance_valid(ss._modal) and ss.phase == ss.Phase.TITLE and not needs.has_avatar(), "touch: × leaves the creator from step 4, nothing saved")
+	# ‹ steps back; × from step 2
+	ss.tap()
+	await process_frame
+	c = _creator(ss)
+	await _touch(c._next)
+	await _touch(c._back)
+	check(is_instance_valid(c) and c.tab == 0, "touch: ‹ goes back a step")
+	check(c._back.disabled, "no ‹ on the first step (× is the way out)")
+	await _touch(c.find_child("Close", true, false))
+	check(not is_instance_valid(ss._modal), "touch: × leaves from step 1")
+	# Done with a good name leaves and walks in
+	ss.tap()
+	await process_frame
+	c = _creator(ss)
+	for i in 3:
+		await _touch(c._next)
+	c.choose("name", "Mai")
+	await _touch(c._next)
+	await process_frame
+	check(not is_instance_valid(ss._modal) and needs.has_avatar() and needs.profile["display_name"] == "Mai", "touch: Into the bar with a good name leaves and saves")
+	main.queue_free()
+	await process_frame
+	# Edit look (start screen): Done with the saved name leaves at once; × leaves
+	main = await _main(true)
+	ss = main.start_screen
+	ss._edit_btn.pressed.emit()
+	await process_frame
+	c = _creator(ss)
+	c.choose("hair", "quiff")
+	await _touch(c._next)
+	await process_frame
+	check(not is_instance_valid(ss._modal) and needs.avatar()["hair"] == "quiff", "touch: Edit look, Done with the saved name leaves and saves")
+	ss._edit_btn.pressed.emit()
+	await process_frame
+	c = _creator(ss)
+	await _touch(c.find_child("Close", true, false))
+	check(not is_instance_valid(ss._modal) and ss.phase == ss.Phase.TITLE, "touch: Edit look, × leaves")
+	main.queue_free()
+	await process_frame
+	# Booth: Done with an empty saved name says why, then leaves once named; × leaves
+	needs.new_game()
+	needs.set_avatar(Avatar.default_record(), "Mai", "easy_sipper")
+	needs.profile["display_name"] = ""
+	main = await _main(false)
+	for i in 10:
+		await physics_frame
+	if is_instance_valid(main.welcome):
+		main.welcome.ok_button.pressed.emit()
+	main.open_creator()
+	await process_frame
+	c = main.creator
+	await _touch(c._next)
+	check(is_instance_valid(main.creator) and c.tab == 3 and c._status.visible, "booth: Done with no name opens the You tab and says why")
+	c.choose("name", "Ploy Two")
+	await _touch(c._next)
+	await process_frame
+	check(not is_instance_valid(main.creator) and needs.profile["display_name"] == "Ploy Two", "booth: named, Done leaves")
+	main.open_creator()
+	await process_frame
+	await _touch(main.creator.find_child("Close", true, false))
+	await process_frame
+	check(not is_instance_valid(main.creator) and main.player.input_enabled, "booth: × leaves, walking again")
 	main.queue_free()
 	await process_frame
