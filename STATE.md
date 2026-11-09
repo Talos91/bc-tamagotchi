@@ -5,19 +5,21 @@
 - 17 suites (run from `game/`, list in PROJECT.md Tests). Version 0.2.0 open (`docs/tech/versioning.md`). Play: `docs/tech/02-playtest-guide.md`. Live build: https://bc-tamagotchi.vercel.app at 8889dce (11-04; Daniele redeploys with `python tools/build_web.py --deploy --out %LOCALAPPDATA%\bc-web`).
 
 ## IN FLIGHT
-- Orchestrator: **local_7f958171** (Fable 5.1, from 2026-11-09 ~17:15; successor of local_ddbbfc1d, load id 2026-11-09-orchestrator-black-cabin-4e4cbd). **Context ~8 %** at this rewrite. Effort shows "medium" in the session metadata; the handover asked high (Daniele sets it in the picker). Old orchestrator's "not in the files" answer: asked 17:25, pending; Master check-in sent 17:30.
-- **No worker running.** 🏗️ venue-fixes local_0ea22856 parked for Daniele's venue changes from the real place (message it, no new venue worker). Idle, done, to archive from the newest end: housekeeping-loader local_d94fc4ff, web-labels-debug local_50480d64; old orchestrator local_ddbbfc1d after its answer (Daniele archives).
+- Orchestrator: **local_7f958171** (Fable 5.1, from 2026-11-09 ~17:15; successor of local_ddbbfc1d, load id 2026-11-09-orchestrator-black-cabin-4e4cbd). **Context ~8 %** at this rewrite. Effort shows "medium" in the session metadata; the handover asked high (Daniele sets it in the picker). Old orchestrator's "not in the files" answer folded in (17:50): no unwritten promises; Daniele archives local_ddbbfc1d. Master check-in sent 17:30, reply pending.
+- **No worker running.** 🏗️ venue-fixes local_0ea22856 parked for Daniele's venue changes from the real place (message it with the current tip first; it re-checks its gate; it knows the raised bar, doors, StaffRoomNorth, the 0.21 m inset, NavTopBlock; no new venue worker). Idle, done, to archive from the newest end: housekeeping-loader local_d94fc4ff, web-labels-debug local_50480d64; old orchestrator local_ddbbfc1d after its answer (Daniele archives).
 - Proposed this turn (cards; Daniele starts): 🎨 character-creator design (item 22, Opus, profile voxel-art; design doc + review card first, build after his yes).
 - Method state: vault server `talos-vault`; workers start with `load_agent(<role>, "black-cabin", ...)`, close with `capture(kind="report", replies_to=<load id>)`; briefs end with the §4 self-handover line; Verifier = `godot-verify-push` skill on Sonnet; orchestrator pushes only docs by SHA after a separate `git log origin/main..HEAD` check. No `### Social features` entry in PROJECT.md yet (needed before the item-24 worker loads; Housekeeping adds it).
 
 ## WAITING ON OWNER (Questions tab: https://claude.ai/artifact/BbpBxVWVVXMjz7TgJ7aFBW#questions)
 - **Live build 8889dce, no feedback yet:** phone pass numbers (load s, fps, model, first vs second entry) gate the performance pass (item 16); iPhone retest (banner names the failure); debug panel. Card web-build-review.
+- Chase order (old orchestrator): look-d-accept → movement-polish-review → venue-fixes-review (+ bar-height, bar-door) → needs-stakes-review (+4 calls) → look-followups-layout-export (full export into layout.json or not).
 - Cards open: needs-stakes-review (+4), look-followups-review (+3 incl. layout-export), touch-anywhere-review, venue-fixes-review (+2), web-labels-debug-review, iphone-load-review, movement-polish-review, cast-tonight-review, look-d-accept (0.2.0 close waits on it), camera-feel-2-accept, camera-closer-still, camera-patrons-in-front.
 - Menu spelling list for the bar: `docs/venue/menu/errata-for-black-cabin.md` (link it in chat). Facts pending: cocktail page, entrance/street photos, band and staff consent, Prae's lines, November poster, real merch list. Venue changes from the real place: his list → venue-fixes session.
 
 ## PROMISED, NOT DONE
 - Live manual (Claude Doc) §15 stale since venue v4; hub tabs Stakes rules / Game bible not yet viewed by Daniele. Needs build left out: Retire settings screen, audio duck, postcards beyond the home text. Camera rig: exit sign and sconces lag when the north wall sinks. Web: ♥ glyph missing in the web font; Thai names unverified in web.
 - Memory upload at the TV corner (D5); memory-corner props placeholders; raised couch places not walkable; Thai strings machine drafts; stale card "🎲 Real-world bridge chapter" (task_b873ccbd) to dismiss; export include filter `*.json`, `*.csv`.
+- Gotchas: Daniele often starts cards from the sidebar before the start call lands ("no longer pending" = already running; list_sessions linked) and archives workers early (verify what is on disk). Pre-alpha debug panel sits behind `PRE_ALPHA` in `rules.gd`: off before anything public. Performance pass never without the numbers.
 - Method v1.1 review by Daniele ~2026-11-16: LOG carries a "context %" per day.
 
 ## NEXT JOBS
