@@ -132,6 +132,10 @@ func tap_at(screen_pos: Vector2) -> bool:
 	walk_to(hit.position)
 	return true
 
+## Where the current tap-walk ends (CameraRig: a tap on a lounge item turns to its view at once).
+func walk_target() -> Vector3:
+	return _agent.target_position
+
 ## The agent's path query snaps the target to the navmesh, so off-mesh taps (a table top) walk to the nearest
 ## reachable point.
 func walk_to(world_pos: Vector3) -> void:

@@ -40,7 +40,7 @@ const MIN_HEIGHT_PX := 80.0     ## the character's height on screen, in a 450 x 
 const MIN_HEIGHT_SMOKING := 72.0    ## the smoking view stays a little wider: its four tables show from the red door
 ## Camera feel 2 framings: area -> [pitch, distance] (build_venue.gd _camera_zones)
 const FRAMING := {"lobby": [-40.0, 5.0], "corridor": [-36.0, 5.0], "buffer": [-40.0, 4.6], "alcove": [-50.0, 4.2],
-	"merch": [-38.0, 5.0], "memory": [-38.0, 5.0], "patrons": [-34.0, 4.8], "lounge": [-40.0, 5.0], "bar": [-40.0, 5.2],
+	"merch": [-36.0, 3.8], "memory": [-36.0, 3.8], "patrons": [-34.0, 3.8], "lounge": [-40.0, 5.0], "bar": [-40.0, 5.2],
 	"stage": [-34.0, 5.2], "toilets": [-42.0, 4.8], "smoking": [-46.0, 5.4], "floor": [-36.0, 5.6]}
 ## A spot in each area (framing check)
 const AREA_SPOTS := {"floor": Vector3(30.0, 0.1, 6.8), "bar": Vector3(29.0, 0.1, 11.4), "stage": Vector3(30.75, 0.1, 4.6),
@@ -358,6 +358,8 @@ func _init() -> void:
 			stub_shown += 1
 	check(rig.zone == "corridor" and lounge_cut == 0 and stub_shown == 0, "corridor: lounge walls solid (%d cut), no stubs (%d)" % [lounge_cut, stub_shown])
 
+	await camera_areas()
+
 	print("occlusion")
 	for gi in main.find_children("*", "GeometryInstance3D", true, false):
 		if not p.is_ancestor_of(gi) and not in_figure(gi):
@@ -367,6 +369,50 @@ func _init() -> void:
 
 	print("\n%s (%d failures)" % ["PASS" if fails.is_empty() else "FAIL", fails.size()])
 	quit(0 if fails.is_empty() else 1)
+
+
+## Camera-areas pass (owner items 30-32, Daniele 2026-11-10). Each walk is a real tap-to-move walk.
+func camera_areas() -> void:
+	print("camera areas")
+	var rig: CameraRig = p.rig
+	# 30: every main lounge item: its spot view when the walk starts (a tap on it), settled nearer on arrival, and
+	# eased back out to the lounge's own view after walking away
+	for it in [["booth", Vector3(9.2, 0, 1.5)], ["couch", Vector3(5.3, 0, 5.0)], ["pinball", Vector3(3.9, 0, 7.2)],
+			["cabinet", Vector3(10.3, 0, 11.6)], ["counter", Vector3(12.3, 0, 11.3)]]:
+		teleport(Vector3(8.0, 0.1, 6.0))
+		await frames(10)
+		p.walk_to(it[1])
+		await frames(2)
+		var at_tap: String = rig.spot
+		var w := await watch_walk()
+		await frames(70)
+		var m := zone_marker(it[0])
+		var want := float(m.get_meta("dist")) * (1.0 if root.get_visible_rect().size.aspect() < 1.0 else rig.landscape_dist_scale)
+		check(at_tap == it[0] and rig.view == it[0] and absf(rig._dist - want) < 0.05 and on_screen(p.global_position + Vector3(0, 0.9, 0), 0.05) and w.ok,
+			"item %s: view on the tap (%s), settled at %.2f m (want %.2f), player on screen; %s" % [it[0], at_tap, rig._dist, want, w.text])
+		p.walk_to(Vector3(8.0, 0, 6.0))
+		w = await watch_walk()
+		await frames(70)
+		check(rig.spot == "" and rig.view == "lounge" and w.ok, "item %s: back to the lounge view after walking away (%s); %s" % [it[0], rig.view, w.text])
+
+
+## Follows a walk to its end: the camera never steps more than 0.3 m in a tick and never turns faster than 260°/s.
+func watch_walk() -> Dictionary:
+	var rig: CameraRig = p.rig
+	var last := rig.global_position
+	var last_yaw := rig.yaw
+	var step := 0.0
+	var spin := 0.0
+	var dt := 1.0 / float(Engine.physics_ticks_per_second)
+	for i in 900:
+		await physics_frame
+		step = maxf(step, rig.global_position.distance_to(last))
+		spin = maxf(spin, absf(angle_difference(last_yaw, rig.yaw)) / dt)
+		last = rig.global_position
+		last_yaw = rig.yaw
+		if not p.walking_to:
+			break
+	return {"ok": step <= 0.3 and spin <= deg_to_rad(260.0), "text": "biggest step %.2f m, fastest turn %.0f°/s" % [step, rad_to_deg(spin)]}
 
 
 ## Area button `area` pressed in the middle of the main room: see the header.
@@ -393,17 +439,23 @@ func area_button(area: String, kind: String) -> void:
 	var sheet_ok: bool = is_instance_valid(main.sheet) and main.sheet_zone.get("kind", "") == kind
 	main.close_sheet()
 	await frames(120)
+	# Arriving at a lounge item (the Lounge button walks to the pinball) settles on that item's nearer spot view
+	# (camera-areas, owner item 30); the area itself is still the button's
+	var framing := area
+	if rig.spot != "" and zone_marker(rig.spot) != null and zone_marker(rig.spot).get_meta("area", "") == area:
+		framing = rig.spot
+		want = zone_marker(rig.spot)
 	var portrait := root.get_visible_rect().size.aspect() < 1.0
 	var dist: float = want.get_meta("dist") * (1.0 if portrait else rig.landscape_dist_scale)
 	var c: Rect2 = want.get_meta("clamp")
 	var look := rig.global_position - rig.global_basis.z * dist   # the look point, in front of the camera
-	var framed := rig.zone == area and rig.view == area and rig.focus == "" \
+	var framed := rig.zone == area and rig.view == framing and rig.focus == "" \
 		and absf(angle_difference(rig.yaw, deg_to_rad(want.get_meta("yaw")))) < deg_to_rad(1.5) \
 		and absf(angle_difference(rig._pitch, deg_to_rad(want.get_meta("pitch")))) < deg_to_rad(1.5) and absf(rig._dist - dist) < 0.1 \
 		and c.grow(0.15).has_point(Vector2(look.x, look.z))
 	check(sheet_ok and rig.area_at(p.global_position) == area, "%s button: walked into the area (%s), its %s sheet opened" % [area, rig.area_at(p.global_position), kind])
 	check(off == 0 and jump < 0.3, "  player on screen all the walk (%d of %d frames off), no camera jumps (%.2f m)" % [off, steps, jump])
-	check(framed and on_screen(p.global_position + Vector3(0, 0.9, 0), 0.04), "  camera settled on the %s framing (view %s, yaw %.0f°)" % [area, rig.view, rad_to_deg(rig.yaw)])
+	check(framed and on_screen(p.global_position + Vector3(0, 0.9, 0), 0.04), "  camera settled on the %s framing (view %s, yaw %.0f°)" % [framing, rig.view, rad_to_deg(rig.yaw)])
 
 
 func zone_marker(nm: String) -> Node3D:

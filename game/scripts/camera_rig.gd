@@ -47,6 +47,17 @@ extends Node3D
 ##       buffer's curtains and PAR stand filled the foreground of its own view: owner feedback 2026-11-02, item 6).
 ##   Swing doors (group "swing_door") are tested with their box as they stand now (open or shut), so an open leaf
 ##   between the camera and the player is hidden.
+## Spots (camera-areas pass, owner items 30-32, Daniele 2026-11-10): a zone with meta spot=true is a view, not an area.
+## It never sets `zone` (HUD title, area buttons, band earshot stay the area's); while the player is inside its rect
+## and `zone` is its meta `area`, `spot` names it and its framing replaces the area's. Spots come and go like areas
+## inside a room: after ZONE_DWELL, held HYSTERESIS metres past their edge, eased by the swing; at once when the area
+## itself just changed (through a door) or on a snap. Meta item=true (the lounge's main items, item 30): a nearer
+## view, also taken at once when the player starts a tap-walk to a point inside it (Player.walk_target). Meta heading
+## (Vector2, x,z): only taken while the player walks that way (dot > 0.3), held until they walk clearly back
+## (dot < -0.3), so a view facing a doorway shows when you approach it and not when you come out of it (item 32's
+## lounge approach to the buffer, item 31's corridor end). Meta solid_beyond=true (the corridor end, an entrance
+## view): a wall facing the camera stays standing when it lies wholly beyond the player, so the lounge wall and the
+## Sticker door read while the corridor's own south wall, in front, is cut.
 ## Hanging props in group "occluder" (metas occluder_center, occluder_radius) between the camera and the look point
 ## are hidden. Render layer 2 (ceiling) is never drawn by this camera.
 ##
@@ -87,8 +98,12 @@ var fx_fov_scale := 1.0
 var zone := ""                  ## the area the player is in, "" before the first frame
 var view := ""                  ## the framing in use: `zone`, or the area of focus_on() while it holds
 var focus := ""                 ## area an area button is walking the player to ("" = none); see focus_on()
+var spot := ""                  ## the spot view in use inside `zone` ("" = the area's own framing); see the header
 var _cand := ""                 ## area the player has stepped into, waiting for ZONE_DWELL
 var _cand_t := 0.0
+var _spot_cand := ""            ## spot waiting for ZONE_DWELL ("" = leaving the spot)
+var _spot_t := 0.0
+var _spot_cand_set := false
 var _swing := 1.0               ## settle time of the current turn
 var yaw := 0.0                  ## current yaw in radians (player input is relative to it)
 var _zones: Array[Node3D] = []
@@ -203,7 +218,7 @@ func area_at(p: Vector3) -> String:
 	var flat := Vector2(p.x, p.z)
 	var fallback := ""
 	for z in _zones:
-		if (z.get_meta("rect") as Rect2).has_point(flat):
+		if not _is_spot(z) and (z.get_meta("rect") as Rect2).has_point(flat):
 			if not z.get_meta("fallback", false):
 				return z.name.to_lower()
 			fallback = z.name.to_lower()
@@ -223,12 +238,12 @@ func world_to_input(d: Vector3) -> Vector2:
 func _zone_for(p: Vector3) -> Node3D:
 	var flat := Vector2(p.x, p.z)
 	for z in _zones:
-		if z.name.to_lower() == zone and not z.get_meta("fallback", false) and (z.get_meta("rect") as Rect2).grow(HYSTERESIS).has_point(flat):
+		if z.name.to_lower() == zone and not _is_spot(z) and not z.get_meta("fallback", false) and (z.get_meta("rect") as Rect2).grow(HYSTERESIS).has_point(flat):
 			if not (z.get_meta("base", false) and _inner_at(flat, z) != null):
 				return z
 	var fallback: Node3D = null
 	for z in _zones:
-		if (z.get_meta("rect") as Rect2).has_point(flat):
+		if not _is_spot(z) and (z.get_meta("rect") as Rect2).has_point(flat):
 			if not z.get_meta("fallback", false):
 				return z
 			fallback = z
@@ -237,9 +252,73 @@ func _zone_for(p: Vector3) -> Node3D:
 ## An area other than `base` whose rect holds the point, or null.
 func _inner_at(flat: Vector2, base: Node3D) -> Node3D:
 	for z in _zones:
-		if z != base and not z.get_meta("fallback", false) and (z.get_meta("rect") as Rect2).has_point(flat):
+		if z != base and not _is_spot(z) and not z.get_meta("fallback", false) and (z.get_meta("rect") as Rect2).has_point(flat):
 			return z
 	return null
+
+static func _is_spot(z: Node3D) -> bool:
+	return z.get_meta("spot", false)
+
+## The spot of the current area the player is in (the held one first, grown by HYSTERESIS), or null. `v` is their
+## velocity in x,z, for spots with a heading.
+func _spot_at(flat: Vector2, v: Vector2) -> Node3D:
+	var held := _marker(spot) if spot != "" else null
+	if held != null and held.get_meta("area", "") == zone and (held.get_meta("rect") as Rect2).grow(HYSTERESIS).has_point(flat) and _heading_ok(held, v, true):
+		return held
+	for z in _zones:
+		if z != held and _is_spot(z) and z.get_meta("area", "") == zone and (z.get_meta("rect") as Rect2).has_point(flat) and _heading_ok(z, v, false):
+			return z
+	return null
+
+## A spot with a heading is taken only while the player walks that way and kept until they walk clearly back.
+static func _heading_ok(z: Node3D, v: Vector2, held: bool) -> bool:
+	if not z.has_meta("heading"):
+		return true
+	if v.length() < 0.5:
+		return held
+	var d := v.normalized().dot(z.get_meta("heading") as Vector2)
+	return d > -0.3 if held else d > 0.3
+
+## The item spot of the current area holding the end of the player's tap-walk, "" if none (or not walking).
+func _tapped_spot() -> String:
+	if not _target.has_method("walk_target") or not _target.get("walking_to"):
+		return ""
+	var t: Vector3 = _target.call("walk_target")
+	for z in _zones:
+		if _is_spot(z) and z.get_meta("item", false) and z.get_meta("area", "") == zone and (z.get_meta("rect") as Rect2).has_point(Vector2(t.x, t.z)):
+			return z.name.to_lower()
+	return ""
+
+## Picks the spot view (see the header): `now` takes the change without the dwell.
+func _update_spot(p: Vector3, delta: float, now: bool) -> void:
+	if focus != "":
+		spot = ""
+		_spot_cand_set = false
+		return
+	var v := Vector2.ZERO
+	if _target is CharacterBody3D:
+		var rv := (_target as CharacterBody3D).get_real_velocity()
+		v = Vector2(rv.x, rv.z)
+	var s := _spot_at(Vector2(p.x, p.z), v)
+	var want := s.name.to_lower() if s != null else ""
+	var tapped := _tapped_spot()
+	if tapped != "":
+		now = now or tapped != want
+		want = tapped
+	if want == spot:
+		_spot_cand_set = false
+	elif now:
+		spot = want
+		_spot_cand_set = false
+	elif not _spot_cand_set or want != _spot_cand:
+		_spot_cand = want
+		_spot_cand_set = true
+		_spot_t = 0.0
+	else:
+		_spot_t += delta
+		if _spot_t >= ZONE_DWELL:
+			spot = want
+			_spot_cand_set = false
 
 ## Critically damped spring step toward `to` (exact for any delta): returns [value, velocity]. Works on floats and
 ## vectors; `t` is roughly the time to settle.
@@ -262,6 +341,8 @@ func _physics_process(delta: float) -> void:
 	if z == null:
 		return
 	# The area the player is in: at once across a door (another room) or while snapping, after ZONE_DWELL inside a room
+	var was := zone
+	var snapping := _snap
 	var nm := z.name.to_lower()
 	if nm == zone or zone == "" or _snap or room_of(nm) != room_of(zone) or nm == focus:
 		zone = nm
@@ -274,12 +355,17 @@ func _physics_process(delta: float) -> void:
 		if _cand_t >= ZONE_DWELL:
 			zone = nm
 			_cand = ""
-	# The framing: the focus area's anywhere in its room, else the area's
+	_update_spot(p, delta, snapping or zone != was)
+	# The framing: the focus area's anywhere in its room, else the spot's, else the area's
 	var free := false
 	z = _marker(zone)
 	if focus != "" and room_of(focus) == room_of(zone):
 		z = _marker(focus)
 		free = focus != zone   # not there yet: follow the player, settle on the area's clamp once they arrive
+	elif spot != "" and _marker(spot) != null:
+		z = _marker(spot)
+		# a tap-walk to an item: follow the player there unclamped, settle on the spot's clamp once they arrive
+		free = not (z.get_meta("rect") as Rect2).grow(HYSTERESIS).has_point(Vector2(p.x, p.z))
 	if z.name.to_lower() != view:
 		var turn := 0.0 if view == "" else absf(angle_difference(yaw, deg_to_rad(z.get_meta("yaw"))))
 		_swing = swing_time + SWING_PER_HALF_TURN * turn / PI
@@ -337,7 +423,7 @@ func _physics_process(delta: float) -> void:
 	var at := _look + b.z * _dist
 	global_transform = Transform3D(b * Basis.from_euler(fx_tilt), at + fx_offset)
 	var fwd := Vector3(-b.z.x, 0, -b.z.z).normalized()
-	_update_cutaway(fwd, global_position, p, z.get_meta("see_through", []), 1e6 if jump else delta)
+	_update_cutaway(fwd, global_position, p, z.get_meta("see_through", []), 1e6 if jump else delta, z.get_meta("solid_beyond", false))
 	_update_occluders(global_position, _look)
 
 ## Look point for the player at `p`: clamped to the zone's clamp rect, at the zone's look height above the player's
@@ -345,7 +431,7 @@ func _physics_process(delta: float) -> void:
 func _want_look(p: Vector3, c: Rect2, z: Node3D) -> Vector3:
 	return Vector3(clampf(p.x, c.position.x, c.end.x), float(z.get_meta("look_y")) + maxf(_target.global_position.y, 0.0), clampf(p.z, c.position.y, c.end.y))
 
-func _update_cutaway(fwd: Vector3, cam: Vector3, player: Vector3, see_through: Array, delta: float) -> void:
+func _update_cutaway(fwd: Vector3, cam: Vector3, player: Vector3, see_through: Array, delta: float, solid_beyond := false) -> void:
 	var entrance := zone in ENTRANCE_ZONES
 	var back := -fwd
 	var ends := [player + Vector3(0, 0.3, 0), player + Vector3(0, 1.1, 0), player + Vector3(0, 1.8, 0)]
@@ -373,6 +459,8 @@ func _update_cutaway(fwd: Vector3, cam: Vector3, player: Vector3, see_through: A
 			if not cut and rooms != null and own:   # ... and, in their own rooms' views, when nearer than the player
 				cut = _max_depth(box, cam, fwd) < player_depth - 0.3 and _in_view(box, planes)
 		elif entrance:
+			if faces and solid_beyond and _min_depth(box, cam, fwd) > player_depth:
+				faces = false   # beyond the player (the lounge wall and its door from the corridor's end)
 			cut = own and (faces or on_line)
 		elif on_line or _on_rects(box, see_through) or (own and faces):
 			cut = true
@@ -414,6 +502,13 @@ static func _max_depth(box: AABB, cam: Vector3, fwd: Vector3) -> float:
 	var m := -INF
 	for k in 8:
 		m = maxf(m, (box.get_endpoint(k) - cam).dot(fwd))
+	return m
+
+## Nearest distance of the box along the camera's horizontal forward.
+static func _min_depth(box: AABB, cam: Vector3, fwd: Vector3) -> float:
+	var m := INF
+	for k in 8:
+		m = minf(m, (box.get_endpoint(k) - cam).dot(fwd))
 	return m
 
 ## False when the whole box is outside one frustum plane (the planes' normals point out of the frustum).

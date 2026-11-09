@@ -1872,10 +1872,19 @@ func _camera_zones() -> void:
 		{"name": "alcove", "rect": Rect2(STUB.position.x, STUB.position.y, STUB.size.x, STUB.size.y), "clamp": Rect2(16.4, 11.3, 2.2, 0.1), "yaw": 180.0, "pitch": -50.0, "dist": 4.2, "look_y": 1.0},
 		# The lounge's two top corners look north at their wall (merch shop top right, memory corner top left); the
 		# rest of the lounge keeps its west view (the top-patrons board and the game machine are in it)
-		{"name": "merch", "rect": Rect2(10.6, 0.0, LOUNGE.end.x - 10.6, 3.6), "clamp": Rect2(12.4, 2.0, 1.4, 0.6), "yaw": 0.0, "pitch": -38.0, "dist": 5.0, "look_y": 1.1},
-		{"name": "memory", "rect": Rect2(LOUNGE.position.x, 0.0, 8.0 - LOUNGE.position.x, 2.8), "clamp": Rect2(4.2, 1.7, 2.4, 0.5), "yaw": 0.0, "pitch": -38.0, "dist": 5.0, "look_y": 1.1},
+		# Nearer since the camera-areas pass (owner item 30, Daniele 2026-11-10: "camera should zoom in on photoboot as
+		# well as all other main items in the lounge"): 5.0 -> 3.8, patrons 4.8 -> 3.8
+		{"name": "merch", "rect": Rect2(10.6, 0.0, LOUNGE.end.x - 10.6, 3.6), "clamp": Rect2(12.4, 2.0, 1.4, 0.6), "yaw": 0.0, "pitch": -36.0, "dist": 3.8, "look_y": 1.1},
+		{"name": "memory", "rect": Rect2(LOUNGE.position.x, 0.0, 8.0 - LOUNGE.position.x, 2.8), "clamp": Rect2(4.2, 1.7, 2.4, 0.5), "yaw": 0.0, "pitch": -36.0, "dist": 3.8, "look_y": 1.1},
 		# In front of the Top patrons board under the stairs: a view from the north-east, past the column
-		{"name": "patrons", "rect": Rect2(STAIR_UPPER.end.x, STAIR_UPPER.position.y, 2.6, STAIR_LOWER.position.y - STAIR_UPPER.position.y), "clamp": Rect2(4.6, 9.2, 0.5, 0.6), "yaw": 130.0, "pitch": -34.0, "dist": 4.8, "look_y": 1.0},
+		{"name": "patrons", "rect": Rect2(STAIR_UPPER.end.x, STAIR_UPPER.position.y, 2.6, STAIR_LOWER.position.y - STAIR_UPPER.position.y), "clamp": Rect2(4.6, 9.2, 0.5, 0.6), "yaw": 130.0, "pitch": -34.0, "dist": 3.8, "look_y": 1.0},
+		# Item spots in the lounge (owner item 30): views, not areas (camera_rig.gd header, "Spots"). Taken when the
+		# player stands at the item or taps it, eased back out when they leave; nearer than the lounge's 5.0
+		{"name": "booth", "spot": true, "item": true, "area": "lounge", "rect": Rect2(8.0, 0.0, 2.6, 2.8), "clamp": Rect2(9.0, 1.2, 0.4, 0.5), "yaw": 0.0, "pitch": -34.0, "dist": 3.6, "look_y": 1.2},
+		{"name": "couch", "spot": true, "item": true, "area": "lounge", "rect": Rect2(LOUNGE.position.x, 3.0, 5.6 - LOUNGE.position.x, 3.6), "clamp": Rect2(4.2, 4.0, 0.6, 2.0), "yaw": 90.0, "pitch": -36.0, "dist": 3.6, "look_y": 1.0},
+		{"name": "pinball", "spot": true, "item": true, "area": "lounge", "rect": Rect2(LOUNGE.position.x, 6.6, 5.6 - LOUNGE.position.x, STAIR_UPPER.position.y - 6.6), "clamp": Rect2(3.9, 7.0, 0.6, 0.4), "yaw": 90.0, "pitch": -34.0, "dist": 3.6, "look_y": 1.1},
+		{"name": "cabinet", "spot": true, "item": true, "area": "lounge", "rect": Rect2(9.2, 10.4, 1.8, LOUNGE.end.y - 10.4), "clamp": Rect2(10.1, 11.4, 0.4, 0.4), "yaw": 180.0, "pitch": -34.0, "dist": 3.6, "look_y": 1.1},
+		{"name": "counter", "spot": true, "item": true, "area": "lounge", "rect": Rect2(11.0, 10.4, 1.9, LOUNGE.end.y - 10.4), "clamp": Rect2(11.8, 11.3, 0.4, 0.4), "yaw": 180.0, "pitch": -34.0, "dist": 3.6, "look_y": 1.1},
 		{"name": "lounge", "base": true, "rect": Rect2(LOUNGE.position.x, LOUNGE.position.y, LOUNGE.size.x, LOUNGE.size.y), "clamp": Rect2(4.5, 1.6, 5.5, 9.4), "yaw": 90.0, "pitch": -40.0, "dist": 5.0, "look_y": 1.3},
 		{"name": "bar", "rect": Rect2(BAR_X0 + 1.2, 9.6, BAR_X1 - BAR_X0 - 1.2, MAIN_Z1 - 9.6), "clamp": Rect2(23.5, 10.6, 12.5, 0.6), "yaw": 180.0, "pitch": -40.0, "dist": 5.2, "look_y": 1.0},
 		{"name": "stage", "rect": Rect2(26.4, 0.0, 9.6, 6.6), "clamp": Rect2(28.4, 1.6, 5.0, 3.2), "yaw": 0.0, "pitch": -34.0, "dist": 5.2, "look_y": 1.3},
