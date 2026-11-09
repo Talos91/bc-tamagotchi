@@ -1,22 +1,33 @@
 # 🎨 Character creator — role note (2026-11-09)
 
-Session local_ea874820 (Opus), voxel-art profile, load id 2026-11-09-voxel-art-black-cabin-bca013. Phase 1 (design) done.
+Session local_ea874820 (Opus), voxel-art profile, load id 2026-11-09-voxel-art-black-cabin-bca013 (vault server down
+at phase 2 start: same load id kept). Phase 1 (design) 083e0c8; phase 2 (build) this note's commit.
 
 ## State now
-- Design v1: `docs/design/07-character-creator.md` (commit 083e0c8). Mocks: `docs/art/screens/char-creator/mock-0{1,2,3}-*.png`
-  (1080×1920), built by `tools/mock/char_creator_mock.gd` (review only; run with a GPU window:
-  `Godot --path game --resolution 270x480 --script "<abs>/tools/mock/char_creator_mock.gd" -- "<abs out dir>"`).
-- Hub card `char-creator-design-review` (Questions tab, multi-select): Q1–Q11 with recommendations, 3 pictures, files.
-- No game code, `rules.gd`, `save.gd`, `layout.json` or version touched.
+- Built per `docs/design/07-character-creator.md` §10 and DECISIONS 2026-11-09 (all as recommended; Q8 = photo booth).
+  - Record: `game/scripts/avatar.gd` + `game/data/avatar.json` (options, legacy look = patron_06 with beard, name rules,
+    greeters). `needs.gd`: `has_avatar / avatar / is_new_character / set_avatar` (calls `set_personality`, writes
+    `display_name`). `save.gd`: comment only, VERSION unchanged.
+  - Figure: `PatronFigure.set_look({"avatar": rec})` loads one parts library, prunes and recolours it before it enters
+    the tree (venue.gd's lift sees only kept meshes). `Player.set_avatar()`; `main.gd` applies the saved look.
+  - Screen: `game/scripts/ui/character_creator.gd` (portrait / landscape rebuild on resize; hair cards are UPDATE_ONCE
+    3D renders; strings `ui.avatar.*` in `strings_ui.csv`).
+  - Entries: start screen (new character → creator on first tap; old save → one-time card; Edit look button), photo
+    booth (zone `booth` → `main.open_creator()`; prompt `venue.prompt.booth`).
+  - Booth: `photo_booth` in `tools/blender/bc_kit.py` (full kit run, deterministic: only manifest + new glb changed),
+    `_photo_booth()` in `game/tools/build_venue.gd` at (9.2, 0, 0.55) on the lounge north wall, one entry merged into
+    `layout.json` by hand (no export), venue.tscn regenerated (structurally only PhotoBooth + its collider added).
+  - Greeter: `VenueSession._greet()` on visit start; Nam and Tt are in the room, Tong and Jules are not placed yet.
+  - Suite `test_avatar` (eighteenth); captures `game/tests/capture_char_creator.gd`.
 
-## Next step (phase 2, new brief after Daniele's answer)
-Order in doc §10: data file `game/data/avatar.json` + `profile.avatar` record + legacy migration + `test_avatar` →
-`PatronFigure` avatar form + lean node → creator screen (portrait + landscape, EN/TH) + Edit look + one-time card →
-greeter order → captures and card.
+## Next step
+Daniele reviews the card `char-creator-build-review`. Later: wardrobe (doc §8), personality idles, Tong/Jules placed so
+their greeting fires, server-side name check with presence (item 24).
 
 ## Gotchas
-- The player is drawn as `patron_06` today (broad, beard): the legacy default must reproduce it exactly, beard included.
-- `needs.set_personality()` has no caller; `profile.display_name` is never written. Both are wired by the creator.
-- Parts libraries are 1.37 MB each (the README says 0.85): load one body at a time on the web build.
-- Library hats do not trim hair (presets trim at build time): hats need generator work before the wardrobe.
-- GDScript in the mock: typed `var x: T = [...][i]`, and `look_at_from_position` before the node is in the tree.
+- The headless dummy renderer prints "Parameter material is null (material_get_instance_shader_parameters)" while
+  materials are duplicated; harmless, not a failure.
+- A method named `_set` on a Control clashes with `Object._set`: the creator uses `_pick`.
+- `bc_kit.py --only` does not write `manifest.json`: a new kit object needs a full run.
+- Tests that start a fresh character with `intro = true` now get the creator on the first tap; give the character a
+  look first (`needs.set_avatar(...)`) if a test wants the walk-in.

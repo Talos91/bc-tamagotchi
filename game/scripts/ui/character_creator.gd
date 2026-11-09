@@ -192,11 +192,11 @@ func _preview_box() -> Control:
 	over.offset_right = -UI.dp(12)
 	over.mouse_filter = Control.MOUSE_FILTER_IGNORE
 	box.add_child(over)
-	var hint := UI.label("⟲  " + UIS.t("ui.avatar.turn"), 12, UI.ASH)
+	var hint := UI.label(UIS.t("ui.avatar.turn"), 12, UI.ASH)
 	hint.size_flags_horizontal = Control.SIZE_EXPAND_FILL
 	hint.vertical_alignment = VERTICAL_ALIGNMENT_CENTER
 	over.add_child(hint)
-	var dice := UI.button("⚄  " + UIS.t("ui.avatar.surprise"))
+	var dice := UI.button(UIS.t("ui.avatar.surprise"))
 	dice.name = "Surprise"
 	dice.custom_minimum_size.y = UI.dp(40)
 	dice.add_theme_font_size_override("font_size", int(UI.dp(13)))
