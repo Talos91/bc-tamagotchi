@@ -175,3 +175,4 @@ Append-only. One dated line per event, newest last. Never edit earlier lines.
 - 2026-11-09 (+7) — Daniele on the phone: creator works but Done/exit traps him; no female hair (items 26–27, owner-feedback-2026-11-09.md). Fix brief sent to the creator worker. Context ~24 %.
 - 2026-11-09 (+7) — Creator worker self-handover at 40 % (ac0e91a role note, pushed); fix not started; successor card task_3cda11ac waits for Daniele. Context ~25 %.
 - 2026-11-09 (+7) — Daniele started the creator-fix successor (card task_3cda11ac, Opus, nested under local_ea874820); items 26–27 in work. Context ~25 %.
+- 2026-11-09 (+7) — Daniele: a friend's iPhone (Chrome iOS, iOS 26.6.1) gets 'Startup failed: Load failed' on live c495a35 (item 28, screenshot in docs/art/screens/iphone-load/). 🛠️ iphone-load-2 started (local_52917cc7, Sonnet). Creator-fix local_50b36cba working. Context ~27 %.
