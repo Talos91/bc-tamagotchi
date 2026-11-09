@@ -18,6 +18,7 @@ extends SceneTree
 
 const StartScreen = preload("res://scripts/start_screen.gd")
 const ExitShot = preload("res://scripts/exit_shot.gd")
+const Avatar = preload("res://scripts/avatar.gd")
 
 var needs: Node
 var fails: Array[String] = []
@@ -44,6 +45,7 @@ func _init() -> void:
 	needs.autosave = false
 	var inside := await _venue_lights()
 	needs.new_game()
+	needs.set_avatar(Avatar.default_record(), "Mai", "")   # a character with a look walks in on the tap (the creator is test_avatar's)
 
 	print("title")
 	var main := await _main(true)
@@ -200,6 +202,7 @@ func _init() -> void:
 
 	print("skip")
 	needs.new_game()
+	needs.set_avatar(Avatar.default_record(), "Mai", "")   # a character with a look walks in on the tap (the creator is test_avatar's)
 	main = await _main(true)
 	ss = main.start_screen
 	ss.tap()

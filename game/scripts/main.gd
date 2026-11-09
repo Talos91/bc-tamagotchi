@@ -29,6 +29,7 @@ const WastedShot = preload("res://scripts/wasted_shot.gd")
 const DrunkOverlay = preload("res://scripts/ui/drunk_overlay.gd")
 const FarewellCard = preload("res://scripts/ui/farewell_card.gd")
 const DebugPanel = preload("res://scripts/ui/debug_panel.gd")
+const Creator = preload("res://scripts/ui/character_creator.gd")
 
 @onready var player: Player = $Player
 @onready var zones: VenueZones = $Zones
@@ -38,7 +39,7 @@ const DebugPanel = preload("res://scripts/ui/debug_panel.gd")
 @onready var needs: Node = get_node("/root/Needs")
 
 ## HUD zone name for an interaction zone; elsewhere the camera framing's name is used.
-const ZONE_TITLES := {"bar": "bar", "stage": "stage", "arcade": "lounge", "exit": "lobby", "memory": "memory", "merch": "merch", "patrons": "patrons"}   # tables: the room they stand in
+const ZONE_TITLES := {"bar": "bar", "stage": "stage", "arcade": "lounge", "exit": "lobby", "memory": "memory", "merch": "merch", "patrons": "patrons", "booth": "lounge"}   # tables: the room they stand in
 
 var sheet: Control
 var sheet_zone: Dictionary = {}
@@ -57,6 +58,7 @@ var exit_shot: Node         ## the exit shot while it runs
 var wasted_shot: Node       ## the WASTED shot and screen while they run
 var drunk: CanvasLayer      ## the drunk overlay
 var farewell: Control       ## the farewell card (ghost window over, or Retire)
+var creator: Control        ## the character creator, opened at the photo booth (07-character-creator.md §5.3)
 var _wasted_line := -1      ## WASTED during a minigame: the shot waits for the frame to close
 
 
@@ -68,6 +70,7 @@ func _ready() -> void:
 	if needs.meters.is_empty():  # built before the Needs autoload's _ready (tests that skip a frame)
 		await get_tree().process_frame
 	player.tap_handler = _on_world_tap
+	player.set_avatar(needs.avatar())
 	zones.player = player
 	session.setup(needs, zones, player)
 	hud.setup(session, needs)
@@ -157,7 +160,7 @@ func show_farewell() -> void:
 
 
 func _blocked() -> bool:
-	return is_instance_valid(farewell) or is_instance_valid(start_screen) or is_instance_valid(exit_shot) or is_instance_valid(wasted_shot) or is_instance_valid(sheet) or is_instance_valid(menu_list) or is_instance_valid(frame) or is_instance_valid(walk_out) or is_instance_valid(welcome)
+	return is_instance_valid(farewell) or is_instance_valid(creator) or is_instance_valid(start_screen) or is_instance_valid(exit_shot) or is_instance_valid(wasted_shot) or is_instance_valid(sheet) or is_instance_valid(menu_list) or is_instance_valid(frame) or is_instance_valid(walk_out) or is_instance_valid(welcome)
 
 
 func _sync_block() -> void:
@@ -165,7 +168,7 @@ func _sync_block() -> void:
 	player.input_enabled = not b
 	session.busy = b
 	hud.prompt.visible = not b
-	hud.visible = not (is_instance_valid(frame) or is_instance_valid(walk_out) or is_instance_valid(start_screen) or is_instance_valid(exit_shot) or is_instance_valid(wasted_shot))
+	hud.visible = not (is_instance_valid(creator) or is_instance_valid(frame) or is_instance_valid(walk_out) or is_instance_valid(start_screen) or is_instance_valid(exit_shot) or is_instance_valid(wasted_shot))
 	$UI/Joystick.visible = not b
 
 
@@ -238,6 +241,9 @@ func walk_to_kind(kind: String) -> void:
 func open_sheet(z: Dictionary) -> void:
 	if z.is_empty() or _blocked():
 		return
+	if z.get("kind", "") == "booth":
+		open_creator()
+		return
 	sheet_zone = z
 	sheet = SheetScene.instantiate()
 	overlay.add_child(sheet)
@@ -286,6 +292,31 @@ func close_menu() -> void:
 func _on_leave() -> void:
 	if not _blocked():
 		session.leave()
+
+
+# --- Photo booth: the character creator (Daniele 2026-11-09) ----------------------------------------
+
+## Edit look from the photo booth: every tab open, "Done" saves look, name and personality (all free, any time).
+func open_creator() -> void:
+	if _blocked():
+		return
+	creator = Creator.new()
+	creator.name = "CharacterCreator"
+	overlay.add_child(creator)
+	creator.open("edit", needs.avatar(), str(needs.profile.get("display_name", "")), needs.personality)
+	creator.done.connect(func(rec: Dictionary, who: String, p: String):
+		needs.set_avatar(rec, who, p)
+		player.set_avatar(needs.avatar())
+		close_creator())
+	creator.cancelled.connect(close_creator)
+	_sync_block()
+
+
+func close_creator() -> void:
+	if is_instance_valid(creator):
+		creator.queue_free()
+	creator = null
+	_sync_block.call_deferred()
 
 
 # --- Minigames -----------------------------------------------------------------------------------

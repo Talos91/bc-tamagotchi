@@ -1,0 +1,45 @@
+{
+	"_doc": "Character creator options (docs/design/07-character-creator.md, answers DECISIONS 2026-11-09). Ids are bc_chars part ids without the slot prefix; colours are manifest.json swatch names. Entries with hidden=true are never offered in the creator (legacy look of saves made before the creator).",
+	"bodies": ["petite", "regular", "broad", "tall"],
+	"heads": ["square", "round", "soft", "heart"],
+	"skins": ["Skin1", "Skin2", "Skin3", "Skin4", "Skin5", "Skin6", "Skin7", "Skin8"],
+	"faces": {
+		"easy": {"eyes": "dot", "brows": "flat", "mouth": "smile"},
+		"bright": {"eyes": "wide", "brows": "arched", "mouth": "grin"},
+		"soft": {"eyes": "lashes", "brows": "flat", "mouth": "small"},
+		"legacy": {"eyes": "dot", "brows": "thick", "mouth": "flat", "hidden": true}
+	},
+	"face_order": ["easy", "bright", "soft"],
+	"hairs": ["crop", "quiff", "bob", "long", "curly", "bun", "side_part", "buzz"],
+	"hair_colours": ["HairBlack", "HairDarkBrown", "HairBrown", "HairAuburn", "HairBleach", "HairGrey", "HairRose", "HairSilver"],
+	"looks": {
+		"easy": {"top": "tee", "bottom": "jeans", "shoes": "sneakers",
+			"colours": {"top_trim": "Cream", "bottom": "Denim", "shoes": "Cream", "shoes_trim": "ColumnWhite"},
+			"top_colours": ["Cream", "Mustard", "Rust", "Teal", "Charcoal", "ShirtWhite"]},
+		"night_out": {"top": "leather", "bottom": "jeans", "shoes": "boots",
+			"colours": {"top_accent": "Cream", "top_trim": "Silver", "top_sheen": "LeatherSheen", "bottom": "JeansBlue", "shoes": "StoolBlack", "shoes_trim": "Charcoal"},
+			"top_colours": ["LeatherBlack", "Jacket", "Leather", "DressRed", "Olive", "Denim"]},
+		"smart": {"top": "shirt", "bottom": "trousers", "shoes": "loafers",
+			"colours": {"top_trim": "Cream", "top_accent": "Cream", "bottom": "Charcoal", "shoes": "StoolBlack", "shoes_trim": "StoolBlack"},
+			"top_colours": ["ShirtWhite", "Sky", "Sand", "Stone", "VelvetRed", "Moss"]},
+		"legacy": {"top": "tee", "bottom": "jeans", "shoes": "boots", "hidden": true,
+			"colours": {"bottom": "Charcoal", "shoes": "StoolBlack", "shoes_trim": "Stone"},
+			"top_colours": ["Moss"]}
+	},
+	"look_order": ["easy", "night_out", "smart"],
+	"worn_items": {
+		"beard": {"slot": "face_hair", "colour_from": "hair_colour", "hidden": true}
+	},
+	"props": ["drink_mug"],
+	"personalities": ["night_owl", "music_nerd", "social_butterfly", "easy_sipper"],
+	"greeters": {"night_owl": "jules", "music_nerd": "tong", "social_butterfly": "tt", "easy_sipper": "nam"},
+	"default": {"body": "regular", "head": "round", "face": "easy", "skin": "Skin3", "hair": "crop", "hair_colour": "HairBlack", "look": "easy", "top_colour": "Cream"},
+	"legacy": {"body": "broad", "head": "square", "face": "legacy", "skin": "Skin5", "hair": "shaggy", "hair_colour": "HairDarkBrown", "look": "legacy", "top_colour": "Moss", "worn": {"face_hair": "beard"}},
+	"name": {
+		"min": 2,
+		"max": 16,
+		"allowed": "^[A-Za-z\\x{00C0}-\\x{00FF}\\x{0E00}-\\x{0E7F}0-9 .'\\-]+$",
+		"cast": ["nam", "fern", "big", "golf", "prae", "tong", "ploy", "jules", "tt", "ty", "dougie", "lung nop", "lungnop", "bow", "hiro", "jo", "pete", "boy", "ทีที", "น้ำ", "เฟิร์น", "บิ๊ก", "กอล์ฟ", "แพร", "ต้อง", "พลอย", "ลุงนพ", "โบว์"],
+		"blocked": ["fuck", "shit", "cunt", "bitch", "nigg", "fag", "whore", "slut", "dick", "cock", "pussy", "rape", "nazi", "hitler", "porn", "penis", "vagina", "asshole", "bastard", "retard", "เหี้ย", "ควย", "เย็ด", "แม่ง", "ส้นตีน", "กะหรี่", "ระยำ", "อีดอก", "สัส"]
+	}
+}

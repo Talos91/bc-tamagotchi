@@ -12,9 +12,13 @@ extends Node3D
 ## are shown only in the poses that hold them. Presets are drawn at FIG_SCALE (renders 05/06: 1.2-1.3 m figures);
 ## seated poses put the thighs on a seat at SEAT_H * FIG_SCALE above the root, so lower the root by that much
 ## below the real seat. Loops start at a random phase so a crowd never moves in step.
+##   {"avatar": record}                -> the player's own character (scripts/avatar.gd): the parts library of the
+##                                        record's body, only its parts kept (the rest freed), recoloured per slot
 ## To swap placeholders for the final characters, replace this scene; the venue only calls set_look() and play().
 
 const PRESET_DIR := "res://assets/chars/presets/"
+const Avatar = preload("res://scripts/avatar.gd")
+const Chars = preload("res://assets/chars/bc_chars.gd")
 const SEAT_H := 0.45
 const FIG_SCALE := 0.75
 ## Prop meshes (accessory ids) that only show in the poses that use them
@@ -74,6 +78,12 @@ func set_look(d: Dictionary) -> void:
 		var ps := load(path) as PackedScene
 		if ps:
 			_build_preset(ps)
+	elif d.has("avatar"):
+		var res := Avatar.resolve(d["avatar"])
+		if ResourceLoader.exists(res["library"]):
+			var lib := load(res["library"]) as PackedScene
+			if lib:
+				_build_preset(lib, res)
 	if _model == null:
 		_build_boxes(d)
 	play(state, true)
@@ -98,8 +108,10 @@ func play(s: String, force := false) -> void:
 	elif _hips:
 		_pose_boxes(0.0)
 
-func _build_preset(ps: PackedScene) -> void:
+func _build_preset(ps: PackedScene, avatar := {}) -> void:
 	_model = ps.instantiate()
+	if not avatar.is_empty():
+		_apply_avatar(avatar)   # before it enters the tree: nothing freed is ever seen by node_added listeners
 	_model.name = "Model"
 	_model.scale = Vector3.ONE * FIG_SCALE
 	add_child(_model)
@@ -125,6 +137,20 @@ func _build_preset(ps: PackedScene) -> void:
 				break
 	for mi in _model.find_children("*", "GeometryInstance3D", true, false):
 		(mi as GeometryInstance3D).cast_shadow = GeometryInstance3D.SHADOW_CASTING_SETTING_OFF
+
+## Parts library -> one character: keep the record's parts, free every other mesh (a lean node: nothing hidden
+## stays in the tree), then recolour per material slot.
+func _apply_avatar(res: Dictionary) -> void:
+	var keep: Array = res["ids"]
+	for mi: MeshInstance3D in _model.find_children("*", "MeshInstance3D", true, false):
+		if not (String(mi.name) in keep):
+			mi.get_parent().remove_child(mi)
+			mi.free()
+	var colours: Dictionary = res["colours"]
+	for slot in colours:
+		if str(colours[slot]) != "":
+			Chars.recolour(_model, slot, Color(colours[slot]))
+
 
 func _mat(c: Color) -> StandardMaterial3D:
 	var m := StandardMaterial3D.new()

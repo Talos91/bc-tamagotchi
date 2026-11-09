@@ -2152,6 +2152,41 @@
    "tris_unmerged": 4400
   },
   {
+   "name": "photo_booth",
+   "zone": "lounge",
+   "size_class": "L",
+   "anchor": "floor",
+   "path": "res://assets/kit/lounge/photo_booth.glb",
+   "footprint_m": [
+    1.2,
+    1.1
+   ],
+   "height_m": 2.3,
+   "size_vox": [
+    24,
+    22,
+    46
+   ],
+   "emissive": true,
+   "materials": [
+    "BeamBlack",
+    "ColumnWhite",
+    "CymbalGold",
+    "DrumRed",
+    "LampGold_emissive",
+    "PanelRed_emissive",
+    "ScreenSky_emissive",
+    "StageBlue",
+    "SteelDark",
+    "StoneDark",
+    "StoolBlack",
+    "VelvetRed"
+   ],
+   "voxels": 14162,
+   "tris": 528,
+   "tris_unmerged": 15692
+  },
+  {
    "name": "pinball_machine",
    "zone": "lounge",
    "size_class": "L",

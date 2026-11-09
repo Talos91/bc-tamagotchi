@@ -178,3 +178,4 @@ venue.annoy.earworm,Earworm,เพลงติดหู,HUD annoyance chip besid
 venue.annoy.phone_face,Phone face,จมอยู่กับมือถือ,HUD annoyance chip beside the Friends ring; TH machine draft,14
 venue.annoy.rusty,Rusty,มือสนิม,HUD annoyance chip beside the Nightlife ring; TH machine draft,14
 venue.annoy.out_of_loop,Out of the loop,ตกข่าว,HUD annoyance chip for the event calendar habit (off until the calendar exists); TH machine draft,20
+venue.prompt.booth,Tap for the photo booth: change your look,แตะเพื่อเข้าตู้ถ่ายรูป เปลี่ยนลุคของคุณ,Zone prompt pill at the photo booth (opens the character creator); TH machine draft,44

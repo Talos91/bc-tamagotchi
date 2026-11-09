@@ -3,6 +3,10 @@
 Status: **design v1, 2026-11-09** (🎨 character-creator worker, phase 1: design only, no game code). Owner item 22
 (`handoffs/owner-feedback-2026-11-04.md`: "next feature after the polish: the character creator"). Owner calls are
 in §9 and on the hub card `char-creator-design-review`. **Answered 2026-11-09 10:39 (all as recommended; Q8 changed: photo booth in the lounge; DECISIONS 2026-11-09). Housekeeping folded the answers into `02-gdd.md` §7 and §14 the same day.**
+**Phase 2 built 2026-11-09** (🎨 character-creator worker): `scripts/avatar.gd` + `data/avatar.json` (record, legacy look,
+name filter, greeters), `scripts/ui/character_creator.gd`, start-screen entry and one-time card, the photo booth
+(`photo_booth` in `bc_kit.py`, `PhotoBooth` in `build_venue.gd` / `layout.json`, zone `booth`), suite `test_avatar`;
+report `handoffs/worker-reports-2026-11/char-creator-build.md`.
 
 Sources kept as they are: GDD §7.1 (creation) and §7.2 (wardrobe), the launch scope in GDD §14 ("Character creator
 lite: 3 body types, 6 skin tones, 4 hair styles, 3 outfits, 4 personalities"), `rules.gd` (`PERSONALITIES`,

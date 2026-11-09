@@ -1866,6 +1866,50 @@ def game_cabinet_bc(v):
     v.box(5, -1, 5, 8, -1, 10, "CymbalGold")                         # coin door
 
 
+@kit4("photo_booth", "lounge", "L")
+def photo_booth(v):
+    """Photo booth (lounge north wall, Daniele 2026-11-09: "a photo booth in the lounge where you can enter and the
+    character creator pops up"): 1.2 x 1.0 x 2.3 m black cabin, the booth on the left with a red velvet curtain half
+    drawn over the doorway, a stool and a lit screen inside; the right block carries a strip of four photos and the
+    coin slot; a lit red PHOTO marquee with gold bulbs on top. Emissive only, no light of its own. Player at -y."""
+    W, D, H = 24, 20, 46
+    v.box(0, 0, 0, W - 1, D - 1, H - 1, "StoolBlack")
+    v.clear_box(1, 0, 1, 13, D - 3, 38)                              # the booth: open front, floor kept
+    v.box(1, 0, 0, 13, D - 3, 0, "StoneDark")
+    v.box(4, 9, 0, 8, 13, 8, "BeamBlack")                            # stool
+    v.box(4, 9, 9, 8, 13, 9, "VelvetRed")
+    v.box(3, D - 3, 20, 11, D - 3, 30, E("ScreenSky"))               # screen on the back wall
+    v.box(2, D - 3, 19, 12, D - 3, 19, "SteelDark")
+    v.box(2, D - 3, 31, 12, D - 3, 31, "SteelDark")
+    for x in range(1, 8):                                            # curtain, half drawn, folds in and out
+        y = 1 if x % 2 else 2
+        v.box(x, y, 3, x, y, 38, "VelvetRed")
+    v.box(1, 1, 39, 13, 2, 39, "SteelDark")                          # curtain rail
+    v.box(0, 0, 0, 0, 0, 39, "VelvetRed")                            # red trim on the doorway edges
+    v.box(14, 0, 0, 14, 0, 39, "VelvetRed")
+    v.box(16, -1, 17, 21, -1, 36, "ColumnWhite")                     # photo strip: white frame, four photos
+    for i, m in enumerate(("VelvetRed", "CymbalGold", "StageBlue", "DrumRed")):
+        z = 32 - i * 5
+        v.box(17, -2, z, 20, -2, z + 3, m)
+        v.set(18, -2, z + 2, "BeamBlack")                            # two dots of a face per photo
+        v.set(19, -2, z + 2, "BeamBlack")
+    v.box(17, -1, 10, 20, -1, 12, "CymbalGold")                      # coin slot
+    v.set(18, -2, 11, "BeamBlack")
+    v.box(0, -1, 40, W - 1, -1, H - 2, E("PanelRed"))                # marquee
+    for x in range(0, W, 3):
+        v.set(x, -2, 40, E("LampGold"))
+        v.set(x, -2, H - 2, E("LampGold"))
+    font = {"P": ("111", "101", "111", "100", "100"), "H": ("101", "101", "111", "101", "101"),
+            "O": ("111", "101", "101", "101", "111"), "T": ("111", "010", "010", "010", "010")}
+    x0 = 2
+    for ch in "PHOTO":
+        for row, bits in enumerate(font[ch]):
+            for c, b in enumerate(bits):
+                if b == "1":
+                    v.set(x0 + c, -2, 44 - row, E("LampGold"))
+        x0 += 4
+
+
 @kit4("pinball_machine", "lounge", "L")
 def pinball_machine(v):
     """Classic pinball table (lounge west wall): 0.7 x 1.4 m cabinet on four steel legs, red / black sides,

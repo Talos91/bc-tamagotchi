@@ -29,6 +29,8 @@ const BarMenu = preload("res://scripts/menu/bar_menu.gd")
 const Nightlife = preload("res://scripts/zones/nightlife.gd")
 const N = preload("res://scripts/zones/nightlife_strings.gd")
 const Patrons = preload("res://scripts/zones/patrons.gd")
+const Avatar = preload("res://scripts/avatar.gd")
+const UIS = preload("res://scripts/ui/ui_strings.gd")
 ## Merch shop (lounge, BACKLOG B11; Daniele 2026-11-02: in-game cosmetic merch for the character, paid in coins). Coins and
 ## wardrobe items do not exist yet, so every row shows its price and "coming soon". Item names are placeholders; the
 ## prices are the wardrobe tiers of docs/design/04-coins.md 3.2 (small 30, mid 60, performer tee 80, statement 120).
@@ -55,6 +57,7 @@ const GAMES := {
 }
 
 var needs: Node
+var greeted := ""   ## cast id who greeted the player this visit (personality greeter, _greet)
 var zones: VenueZones
 var player: Player
 var band: HouseBand
@@ -110,6 +113,7 @@ func _on_visit_started(info: Dictionary) -> void:
 	_heard = 0.0
 	_apply_mood()
 	visit_begun.emit(info)
+	_greet()
 
 
 func _on_visit_ended(summary: Dictionary) -> void:
@@ -122,6 +126,17 @@ func _on_visit_ended(summary: Dictionary) -> void:
 	s["end_meters"] = needs.meters.duplicate()
 	s["tipsy"] = tipsy.state()
 	visit_finished.emit(s)
+
+
+## Who greets you first (GDD §7.1, Q11): the personality's regular, if they are in the room tonight (Nam always is,
+## Tt hosts the Long Table every night; Tong and Jules are not placed yet, so their players get no line yet).
+func _greet() -> void:
+	greeted = ""
+	var who := Avatar.greeter(needs.personality)
+	if who == "" or not (who == BARTENDER or Cast.hosts().values().has(who)):
+		return
+	greeted = who
+	action_done.emit({"line": UIS.t("ui.avatar.greet", {"name": Cast.name_of(who)}), "gains": {}, "ok": true})
 
 
 ## Debug (F4): as if the player stayed away a week, then walks back in. Welcome Back fires.

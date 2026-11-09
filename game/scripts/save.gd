@@ -7,7 +7,8 @@ extends RefCounted
 ##   "version": 1,
 ##   "saved_at_unix": float,       # real wall clock at write time
 ##   "last_seen_unix": float,      # real wall clock; elapsed time since this is decayed on load
-##   "profile": { "player_id": "", "display_name": "", ... },   # reserved for accounts / multiplayer
+##   "profile": { "player_id": "", "display_name": "", "avatar": {...}, ... },   # accounts / multiplayer; avatar =
+##              the character creator's record (scripts/avatar.gd, 07-character-creator.md §4); absent in older saves
 ##   "needs":   { owned by needs.gd: meters, clock_unix, personality, tab, daily, visit state, ... },
 ##   "visits":  [ { start, end, day, number, gains{meter:pts}, actions, welcome }, ... ],
 ##   "ext":     { "<system>": {...} }                         # namespace for systems added later

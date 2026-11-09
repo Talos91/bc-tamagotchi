@@ -104,6 +104,7 @@ const CASHIER_X := 29.65
 
 ## Kit names the 🧱 session is modelling (brief 2026-11-01): box size (w, d, h) until the .glb lands.
 const PLACEHOLDERS := {
+	"photo_booth": Vector3(1.2, 1.0, 2.3),
 	"tall_table_square": Vector3(0.6, 0.6, 1.05), "tall_table_round": Vector3(0.6, 0.6, 1.05), "tall_stool": Vector3(0.35, 0.35, 0.75),
 	"tiny_table": Vector3(0.5, 0.5, 0.5), "couch_long": Vector3(1.0, 0.5, 0.85), "shelf_wall_tile": Vector3(1.0, 0.25, 0.05),
 	"raised_edge_neon": Vector3(1.0, 0.04, 0.04), "cashier_counter": Vector3(1.4, 0.4, 1.1), "reindeer_head": Vector3(0.5, 0.45, 0.7),
@@ -884,6 +885,7 @@ func _lounge() -> void:
 		_cut(_kit(g, "white_column", p, 0.0, "Column%d" % i), Vector3.ZERO)   # hides only when it stands in front of the player
 		_collider(g, "Column%dCollider" % i, p + Vector3(0, ROOM_H * 0.5, 0), Vector3(0.4, ROOM_H, 0.4))
 	_merch_shop(g)
+	_photo_booth(g)
 	# The high counter and its two stools (R02) moved from the top right to the south wall, east of the game machine
 	_box(g, "HighCounter", Vector3(LEDGE_X.x, 0, LOUNGE.end.y - 0.5), Vector3(LEDGE_X.y - LEDGE_X.x, 0.95, 0.5), _mat("wood_mid", WOOD_MID, 0.4))
 	for i in 2:
@@ -923,6 +925,13 @@ func _merch_shop(g: Node) -> void:
 	_ph(g, "merch_rack", Vector3(11.85, 0, 0.3), 0.0, "MerchRack")
 	_ph(g, "merch_stand", MERCH, 0.0, "MerchStand")
 	_ph(g, "potted_plant", Vector3(15.05, 0, 0.45), 0.0, "MerchPlant")
+
+## Photo booth on the lounge's north wall, between the memory corner and the merch rack (Daniele 2026-11-09: "a
+## photo booth in the lounge where you can enter and the character creator pops up"; the one authorised lounge
+## addition). Solid; its front (south) is zone "booth" (scripts/zones/venue_zones.gd), which opens the creator.
+const PHOTO_BOOTH := Vector3(9.2, 0, 0.55)
+func _photo_booth(g: Node) -> void:
+	_ph(g, "photo_booth", PHOTO_BOOTH, 0.0, "PhotoBooth")
 
 ## Lounge dressing (Daniele 2026-11-02, "decorations around the room"): the top-patrons board under the second flight
 ## of the stairs, gig posters climbing the wall over the first flight, vinyl records over the high counter, two snake

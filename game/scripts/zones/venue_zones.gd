@@ -15,6 +15,7 @@ extends Node3D
 ##   cabinet  the Black Cabin game machine (game_cabinet_bc) by the stairs: stub, generic sheet for now
 ##   memory   the memory corner in the lounge's north-west (around its crt_monitor): share a photo (coming soon), sit
 ##   merch    the merch counter (merch_stand) top right of the lounge: the merch list, placeholders (BACKLOG B11)
+##   booth    the photo booth (photo_booth) on the lounge's north wall: opens the character creator (main.gd)
 ##   patrons  the "Top patrons" board (patrons_board) under the lounge stairs: the ten names (B10, scripts/zones/patrons.gd)
 ##   portrait one per frame on the entrance corridor's south wall (portrait_frame Portrait<rank>): the patron's portrait
 ##            and a message from the owner (placeholder); id "portrait:<rank>" (B7)
@@ -140,6 +141,15 @@ static func defs_from_layout(path: String) -> Array[Dictionary]:
 			var fwd := Vector3(0, 0, 1).rotated(Vector3.UP, deg_to_rad(float(k["rotation_y"])))
 			var a := p + fwd * 1.1
 			var z := _zone("merch", "merch", Rect2(), a)
+			z["shape"] = "circle"
+			z["center"] = Vector2(a.x, a.z)
+			z["radius"] = FRONT_RADIUS
+			out.append(z)
+		elif k["object"] == "photo_booth":
+			var p := _v3(k["position"])
+			var fwd := Vector3(0, 0, 1).rotated(Vector3.UP, deg_to_rad(float(k["rotation_y"])))
+			var a := p + fwd * 1.0
+			var z := _zone("booth", "booth", Rect2(), a)
 			z["shape"] = "circle"
 			z["center"] = Vector2(a.x, a.z)
 			z["radius"] = FRONT_RADIUS

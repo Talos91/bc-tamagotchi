@@ -1106,6 +1106,22 @@
    "zone": "Lounge"
   },
   {
+   "name": "PhotoBooth",
+   "object": "photo_booth",
+   "position": [
+    9.2,
+    0.0,
+    0.55
+   ],
+   "rotation_y": 0.0,
+   "scale": [
+    1.0,
+    1.0,
+    1.0
+   ],
+   "zone": "Lounge"
+  },
+  {
    "name": "MerchPlant",
    "object": "potted_plant",
    "position": [

@@ -97,6 +97,12 @@ func _ready() -> void:
 	floor_constant_speed = true
 	floor_max_angle = deg_to_rad(50.0)
 
+## The player's own character (scripts/avatar.gd record; main.gd applies the saved one once the save is loaded).
+func set_avatar(rec: Dictionary) -> void:
+	look = {"avatar": rec}
+	figure.set_look(look)
+
+
 func _unhandled_input(event: InputEvent) -> void:
 	if not input_enabled:
 		_press_index = -1

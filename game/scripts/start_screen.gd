@@ -18,11 +18,18 @@ extends "res://scripts/street_shot.gd"
 ## are off once inside, so the venue keeps its own light count. main.gd adds this when main.tscn runs as the game;
 ## tests set `main.intro = true` (tests/smoke_start.gd). Debug builds: Esc on the start screen goes straight in.
 ## Command line: `-- --skip-intro` never shows it.
+## Character creator (07-character-creator.md §4.3, §5; DECISIONS 2026-11-09): a new character (no look yet, never out)
+## opens the creator on the first tap and walks in after "Into the bar"; a save from before the creator gets a
+## one-time card ("Make your character" / "Keep this look"); everyone else has an "Edit look" button. The photo booth
+## in the lounge is the in-game way back to the creator (main.gd). While the creator or the card is up, taps go to them.
 
 const UI = preload("res://scripts/minigames/mg_ui.gd")
 const T = preload("res://scripts/zones/venue_strings.gd")
 const VersionInfo = preload("res://scripts/version_info.gd")
 const Rules = preload("res://scripts/rules.gd")
+const Creator = preload("res://scripts/ui/character_creator.gd")
+const Avatar = preload("res://scripts/avatar.gd")
+const UIS = preload("res://scripts/ui/ui_strings.gd")
 
 const FOLLOW_H := 1.75       ## camera height behind the character (1.35 m tall)
 const FOLLOW := 1.3          ## camera this far behind the character outside ...
@@ -56,6 +63,9 @@ var _screen: Control
 var _prompt: Label
 var _stake_box: VBoxContainer   ## stage chip, ghost rule, postcard, annoyance chips, lives (06-stakes §10.5)
 var _locale := ""
+var _modal: CanvasLayer         ## the creator or the one-time card, over everything
+var _edit_btn: Button           ## "Edit look" (characters that have a look)
+var _walk_after := false        ## the creator was opened by the first tap: walk in once it is done
 
 
 func begin(m: Node) -> void:
@@ -76,12 +86,18 @@ func begin(m: Node) -> void:
 	main.player.visible = false
 	main.session.process_mode = Node.PROCESS_MODE_DISABLED
 	_build_ui()
+	if not main.needs.has_avatar() and not main.needs.is_new_character():
+		_offer_card()
 
 
 ## Tap on the start screen: walk in. Any tap after that: skip to the end.
 func tap() -> void:
 	match phase:
 		Phase.TITLE:
+			if main.needs.is_new_character():
+				_walk_after = true
+				open_creator("new")
+				return
 			phase = Phase.WALK
 			_t = 0.0
 			main.player.visible = true
@@ -97,6 +113,17 @@ func skip() -> void:
 	_shut_door()
 	street.set_on(false)
 	_finish()
+
+
+## Taps reach the creator, the card and the Edit look button, not the street (street_shot.gd takes every tap first).
+func _input(event: InputEvent) -> void:
+	if is_instance_valid(_modal):
+		return
+	if phase == Phase.TITLE and is_instance_valid(_edit_btn) and _edit_btn.visible:
+		var pos: Variant = event.get("position") if (event is InputEventScreenTouch or event is InputEventMouseButton) else null
+		if pos != null and _edit_btn.get_global_rect().grow(UI.dp(6)).has_point(pos):
+			return
+	super(event)
 
 
 func _process(delta: float) -> void:
@@ -249,12 +276,25 @@ func _build_ui() -> void:
 	_stake_box.offset_top = UI.dp(44)
 	_stake_box.add_theme_constant_override("separation", int(UI.dp(6)))
 	_screen.add_child(_stake_box)
+	_edit_btn = UI.button(UIS.t("ui.avatar.edit"), "ghost")
+	_edit_btn.name = "EditLook"
+	_edit_btn.set_anchors_preset(Control.PRESET_BOTTOM_LEFT)
+	_edit_btn.offset_left = UI.dp(12)
+	_edit_btn.offset_top = -UI.dp(58)
+	_edit_btn.offset_bottom = -UI.dp(10)
+	_edit_btn.offset_right = UI.dp(130)
+	_edit_btn.add_theme_font_size_override("font_size", int(UI.dp(13)))
+	_edit_btn.visible = main.needs.has_avatar()
+	_edit_btn.pressed.connect(func(): open_creator("edit"))
+	_screen.add_child(_edit_btn)
 	_retitle()
 
 
 func _retitle() -> void:
 	_locale = TranslationServer.get_locale()
 	_prompt.text = text_for("venue.start.tap")
+	if is_instance_valid(_edit_btn):
+		_edit_btn.text = UIS.t("ui.avatar.edit")
 	_fill_stake_box()
 
 
@@ -322,3 +362,93 @@ static func text_for(key: String) -> String:
 		if r.size() > col and r[0] == key:
 			return r[col]
 	return key
+
+
+# --- Character creator ---------------------------------------------------------------------------
+
+func _modal_layer() -> CanvasLayer:
+	_close_modal()
+	_modal = CanvasLayer.new()
+	_modal.name = "CreatorLayer"
+	_modal.layer = 6
+	main.add_child(_modal)
+	return _modal
+
+
+func _close_modal() -> void:
+	if is_instance_valid(_modal):
+		_modal.queue_free()
+	_modal = null
+
+
+## mode "new" (first tap of a new character; starts from a random look), "edit", "make" (from the card: the old
+## look, every tab open), "name" (Keep this look with no name yet).
+func open_creator(mode: String) -> void:
+	var needs: Node = main.needs
+	var rec: Dictionary = Avatar.random_record() if mode == "new" else needs.avatar()
+	var p: String = needs.personality
+	if mode == "new" and p == "":
+		p = Avatar.data()["personalities"][0]
+	var c := Creator.new()
+	_modal_layer().add_child(c)
+	c.open("new" if mode == "new" else ("name" if mode == "name" else "edit"), rec, str(needs.profile.get("display_name", "")), p)
+	c.done.connect(func(r: Dictionary, who: String, pp: String):
+		needs.set_avatar(r, who, pp)
+		main.player.set_avatar(needs.avatar())
+		_close_modal()
+		_edit_btn.visible = true
+		if _walk_after:
+			_walk_after = false
+			tap())
+	c.cancelled.connect(func():
+		_walk_after = false
+		_close_modal()
+		if mode in ["make", "name"]:
+			_offer_card())
+
+
+## Saves from before the creator: one card, once (either answer writes the look, 07-character-creator.md §4.3).
+func _offer_card() -> void:
+	var root := Control.new()
+	root.set_anchors_and_offsets_preset(Control.PRESET_FULL_RECT)
+	root.mouse_filter = Control.MOUSE_FILTER_STOP
+	_modal_layer().add_child(root)
+	var dim := ColorRect.new()
+	dim.color = Color(UI.BG_DEEP, 0.85)
+	dim.set_anchors_preset(Control.PRESET_FULL_RECT)
+	root.add_child(dim)
+	var center := CenterContainer.new()
+	center.set_anchors_preset(Control.PRESET_FULL_RECT)
+	root.add_child(center)
+	var panel := PanelContainer.new()
+	panel.name = "OfferCard"
+	panel.custom_minimum_size = Vector2(UI.dp(330), 0)
+	panel.add_theme_stylebox_override("panel", UI.box(UI.BG_BASE, 20, UI.LINE, 2.0))
+	center.add_child(panel)
+	var pad := MarginContainer.new()
+	for side in ["left", "right", "top", "bottom"]:
+		pad.add_theme_constant_override("margin_" + side, int(UI.dp(18)))
+	panel.add_child(pad)
+	var col := VBoxContainer.new()
+	col.add_theme_constant_override("separation", int(UI.dp(10)))
+	pad.add_child(col)
+	col.add_child(UI.title(UIS.t("ui.avatar.offer.title"), 26))
+	col.add_child(UI.wrap(UI.label(UIS.t("ui.avatar.offer.body"), 14, UI.SMOKE)))
+	var make := UI.button(UIS.t("ui.avatar.offer.make"), "primary")
+	make.name = "Make"
+	make.pressed.connect(func(): open_creator("make"))
+	col.add_child(make)
+	var keep := UI.button(UIS.t("ui.avatar.offer.keep"))
+	keep.name = "Keep"
+	keep.pressed.connect(_keep_look)
+	col.add_child(keep)
+
+
+func _keep_look() -> void:
+	var needs: Node = main.needs
+	if Avatar.check_name(str(needs.profile.get("display_name", ""))) != "":
+		open_creator("name")
+		return
+	needs.set_avatar(needs.avatar(), str(needs.profile.get("display_name", "")), needs.personality)
+	_close_modal()
+	_edit_btn.visible = true

@@ -9,6 +9,7 @@ extends Node
 
 const Rules = preload("res://scripts/rules.gd")
 const Save = preload("res://scripts/save.gd")
+const Avatar = preload("res://scripts/avatar.gd")
 
 signal meter_changed(meter_id: String, value: float)
 signal vibe_changed(vibe: float, state: String)
@@ -731,6 +732,38 @@ func set_personality(p: String) -> void:
 	sync()
 	personality = p
 	_dirty = true
+
+
+## Avatar (docs/design/07-character-creator.md §4): profile.avatar, written by the character creator.
+func has_avatar() -> bool:
+	return profile.get("avatar") is Dictionary
+
+
+## The look to draw: the saved record, or for a save made before the creator the old player figure (legacy look).
+func avatar() -> Dictionary:
+	return Avatar.normalize(profile["avatar"]) if has_avatar() else Avatar.legacy_record()
+
+
+## A character nobody has played yet (new game, or after the farewell card): the creator opens before the first visit.
+## A save from before the creator has nights or visits: it keeps its look and gets the one-time card instead.
+func is_new_character() -> bool:
+	return not has_avatar() and nights_out == 0 and visit_log.is_empty()
+
+
+## The creator's "Into the bar" / "Done": look, name and personality in one write (all free, any time; Q6).
+func set_avatar(rec: Dictionary, display_name: String, p: String) -> void:
+	var r := Avatar.normalize(rec)
+	var now := real_now()
+	var old: Dictionary = profile["avatar"] if has_avatar() else {}
+	r["created_at"] = float(old.get("created_at", now))
+	r["edited_at"] = now
+	profile["avatar"] = r
+	profile["display_name"] = Avatar.clean_name(display_name)
+	if p != personality and (p == "" or Rules.PERSONALITIES.has(p)):
+		set_personality(p)
+	_dirty = true
+	if autosave:
+		save_game()
 
 
 func new_game() -> void:

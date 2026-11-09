@@ -1,3 +1,65 @@
 key,en,th,context,max
 ui.orientation.to_landscape,Landscape,แนวนอน,"HUD orientation toggle (top right) in portrait: tooltip and accessible name, switches to landscape",14
 ui.orientation.to_portrait,Portrait,แนวตั้ง,"HUD orientation toggle (top right) in landscape: tooltip and accessible name, switches to portrait",14
+ui.avatar.title,Who are you tonight?,คืนนี้คุณคือใคร,Creator title (Kristi),28
+ui.avatar.step,Step {n} of 4,ขั้นที่ {n} จาก 4,Creator step line,20
+ui.avatar.tab.body,Body,รูปร่าง,Creator tab,10
+ui.avatar.tab.hair,Hair,ทรงผม,Creator tab,10
+ui.avatar.tab.outfit,Outfit,ชุด,Creator tab,10
+ui.avatar.tab.you,You,ตัวคุณ,Creator tab,10
+ui.avatar.row.build,Build,รูปร่าง,Creator row,16
+ui.avatar.row.skin,Skin,สีผิว,Creator row,16
+ui.avatar.row.head,Head,รูปหน้า,Creator row,16
+ui.avatar.row.face,Face,หน้าตา,Creator row,16
+ui.avatar.row.style,Style,ทรง,Creator row,16
+ui.avatar.row.hair_colour,Colour,สีผม,Creator row,16
+ui.avatar.row.look,Look,ลุค,Creator row,16
+ui.avatar.row.top_colour,Top colour,สีเสื้อ,Creator row,16
+ui.avatar.row.vibe,Your vibe,สไตล์ของคุณ,Creator row (personality),20
+ui.avatar.row.name,Your name,ชื่อของคุณ,Creator row,20
+ui.avatar.body.petite,Petite,เล็ก,Body type,10
+ui.avatar.body.regular,Regular,กลาง,Body type,10
+ui.avatar.body.broad,Broad,ล่ำ,Body type,10
+ui.avatar.body.tall,Tall,สูง,Body type,10
+ui.avatar.head.square,Square,เหลี่ยม,Head shape,10
+ui.avatar.head.round,Round,กลม,Head shape,10
+ui.avatar.head.soft,Soft,มน,Head shape,10
+ui.avatar.head.heart,Heart,หน้าหัวใจ,Head shape,10
+ui.avatar.face.easy,Easy,สบายๆ,Face set,10
+ui.avatar.face.bright,Bright,สดใส,Face set,10
+ui.avatar.face.soft,Soft,อ่อนโยน,Face set,10
+ui.avatar.hair.crop,Crop,สั้น,Hair style,10
+ui.avatar.hair.quiff,Quiff,ควิฟ,Hair style,10
+ui.avatar.hair.bob,Bob,บ็อบ,Hair style,10
+ui.avatar.hair.long,Long,ยาว,Hair style,10
+ui.avatar.hair.curly,Curly,หยิก,Hair style,10
+ui.avatar.hair.bun,Bun,มวย,Hair style,10
+ui.avatar.hair.side_part,Side part,แสกข้าง,Hair style,10
+ui.avatar.hair.buzz,Buzz,เกรียน,Hair style,10
+ui.avatar.look.easy,Easy,สบายๆ,Starter look,12
+ui.avatar.look.night_out,Night out,ออกเที่ยว,Starter look,12
+ui.avatar.look.smart,Smart,เรียบร้อย,Starter look,12
+ui.avatar.vibe.night_owl,Night Owl,นกฮูกราตรี,Personality,18
+ui.avatar.vibe.music_nerd,Music Nerd,คอดนตรี,Personality,18
+ui.avatar.vibe.social_butterfly,Social Butterfly,ผีเสื้อสังคม,Personality,18
+ui.avatar.vibe.easy_sipper,Easy Sipper,จิบชิลๆ,Personality,18
+ui.avatar.vibe.effect,{need} fades 10% slower,{need} ลดช้าลง 10%,Personality card: its meter,28
+ui.avatar.vibe.greeter,{name} waves first,{name} ทักคุณก่อน,Personality card: who greets first,28
+ui.avatar.name.placeholder,Your name,ชื่อของคุณ,Name field placeholder,16
+ui.avatar.name.hint,"Shown to staff and regulars. Change it any time, free.",พนักงานและขาประจำจะเห็นชื่อนี้ เปลี่ยนได้ตลอด ฟรี,Under the name field,60
+ui.avatar.name.err.short,"At least 2 letters, please.",ขออย่างน้อย 2 ตัวอักษร,Name refused,40
+ui.avatar.name.err.long,16 letters at most.,ไม่เกิน 16 ตัวอักษร,Name refused,40
+ui.avatar.name.err.chars,"Letters, numbers, spaces and . - ' only.",ใช้ได้แค่ตัวอักษร ตัวเลข เว้นวรรค และ . - ',Name refused,48
+ui.avatar.name.err.cast,That's one of the regulars' or staff's names. Pick another?,ชื่อนี้เป็นของคนในร้านแล้ว ลองชื่ออื่นนะ,Name refused,60
+ui.avatar.name.err.blocked,Let's keep it friendly.,ขอชื่อที่สุภาพหน่อยนะ,Name refused,40
+ui.avatar.surprise,Surprise me,สุ่มให้หน่อย,Random look button,16
+ui.avatar.turn,Drag to turn,ลากเพื่อหมุน,Preview hint,16
+ui.avatar.next,Next: {tab},ถัดไป: {tab},Creator button,20
+ui.avatar.enter,Into the bar,เข้าร้านเลย,Creator last button (new character),16
+ui.avatar.done,Done,เสร็จแล้ว,Creator button (editing),12
+ui.avatar.edit,Edit look,แก้ลุค,Start screen button,14
+ui.avatar.offer.title,Make your character,สร้างตัวละครของคุณ,One-time card title (Kristi),24
+ui.avatar.offer.body,"Your character can look like you now. Make your own, or keep the look you have. You can change it any time at the photo booth in the lounge.",ตอนนี้ตัวละครของคุณหน้าตาเหมือนคุณได้แล้ว สร้างเองเลย หรือจะใช้ลุคเดิมก็ได้ เปลี่ยนได้ตลอดที่ตู้ถ่ายรูปในเลานจ์,One-time card for saves made before the creator,160
+ui.avatar.offer.make,Make your character,สร้างตัวละคร,One-time card button,20
+ui.avatar.offer.keep,Keep this look,ใช้ลุคเดิม,One-time card button,20
+ui.avatar.greet,{name} waves you over.,{name} โบกมือเรียกคุณ,Arrival line: the personality's greeter is in tonight,40
