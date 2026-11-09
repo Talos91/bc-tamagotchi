@@ -174,3 +174,4 @@ Append-only. One dated line per event, newest last. Never edit earlier lines.
 - 2026-11-09 (+7) — Daniele deployed c495a35 (character creator) to bc-tamagotchi.vercel.app. Phone pass + item-16 numbers are the next gate. Context ~23 %.
 - 2026-11-09 (+7) — Daniele on the phone: creator works but Done/exit traps him; no female hair (items 26–27, owner-feedback-2026-11-09.md). Fix brief sent to the creator worker. Context ~24 %.
 - 2026-11-09 (+7) — Creator worker self-handover at 40 % (ac0e91a role note, pushed); fix not started; successor card task_3cda11ac waits for Daniele. Context ~25 %.
+- 2026-11-09 (+7) — Daniele started the creator-fix successor (card task_3cda11ac, Opus, nested under local_ea874820); items 26–27 in work. Context ~25 %.
