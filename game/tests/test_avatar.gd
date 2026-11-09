@@ -45,6 +45,7 @@ func _init() -> void:
 	await _start_old()
 	await _booth_and_greeter()
 	await _exits()
+	await _phone_name()
 	print("TEST AVATAR ", "PASS" if fails.is_empty() else "FAIL (%d)" % fails.size())
 	quit(0 if fails.is_empty() else 1)
 
@@ -451,5 +452,48 @@ func _exits() -> void:
 	await _touch(main.creator.find_child("Close", true, false))
 	await process_frame
 	check(not is_instance_valid(main.creator) and main.player.input_enabled, "booth: × leaves, walking again")
+	main.queue_free()
+	await process_frame
+
+
+## Phone web build (owner item 26): no on-screen keyboard bridge in the export, so a tap on the name field opens the
+## browser's prompt; the typed name fills the field and Into the bar leaves.
+func _phone_name() -> void:
+	print("phone name (item 26)")
+	needs.new_game()
+	var main := await _main(true)
+	var ss: Node = main.start_screen
+	ss.tap()
+	await process_frame
+	var c := _creator(ss)
+	c.use_prompt = true
+	var asked := []
+	c.prompt_name = func(cur: String) -> Variant:
+		asked.append(cur)
+		return "  Mai  "
+	for i in 3:
+		await _touch(c._next)
+	await _touch(c._name_edit)
+	check(asked.size() == 1 and c._name_edit.text == "Mai" and not c._name_edit.has_focus(), "touch on the name field: the prompt asks once, the name fills the field (%s)" % [asked])
+	await _touch(c._next)
+	await process_frame
+	check(not is_instance_valid(ss._modal) and needs.profile.get("display_name", "") == "Mai", "... and Into the bar leaves with it")
+	c = null
+	main.queue_free()
+	await process_frame
+	# Cancelled prompt: the field stays empty, Into the bar says why
+	needs.new_game()
+	main = await _main(true)
+	ss = main.start_screen
+	ss.tap()
+	await process_frame
+	c = _creator(ss)
+	c.use_prompt = true
+	c.prompt_name = func(_cur: String) -> Variant: return null
+	for i in 3:
+		await _touch(c._next)
+	await _touch(c._name_edit)
+	await _touch(c._next)
+	check(is_instance_valid(ss._modal) and c._status.visible, "prompt cancelled: stays, says why")
 	main.queue_free()
 	await process_frame

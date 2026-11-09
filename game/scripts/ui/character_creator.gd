@@ -47,6 +47,12 @@ var _name_edit: LineEdit
 var _name_err: Label
 var _step: Label
 var _landscape := false
+## Phone browsers: the web export has no on-screen keyboard bridge (export preset html/experimental_virtual_keyboard
+## is off), so a LineEdit never gets a keyboard there and a new character could never type a name (owner item 26).
+## On a touch web build a tap on the name field opens the browser's own prompt instead. Tests set both.
+var use_prompt := OS.has_feature("web") and DisplayServer.is_touchscreen_available()
+var prompt_name: Callable = _browser_prompt
+var _prompting := false
 
 
 ## `rec` the look to start from, `who` and `p` the current name and personality.
@@ -462,11 +468,41 @@ func _name_row() -> void:
 			_name_err.text = ""
 		_say(""))
 	_name_edit.text_submitted.connect(func(_s): _on_next())
+	_name_edit.focus_entered.connect(_on_name_focus)
 	_content.add_child(_name_edit)
 	_name_err = UI.wrap(UI.label("", 12, UI.RED_HI))
 	_name_err.name = "NameError"
 	_content.add_child(_name_err)
 	_content.add_child(UI.wrap(UI.label(UIS.t("ui.avatar.name.hint"), 12, UI.ASH)))
+
+
+## Phone web build: the browser's prompt types the name (see use_prompt).
+func _on_name_focus() -> void:
+	if use_prompt and not _prompting:
+		_prompting = true
+		_ask_name.call_deferred()              # not inside the LineEdit's own focus handling (it re-grabs focus)
+
+
+func _ask_name() -> void:
+	if not is_instance_valid(_name_edit):
+		_prompting = false
+		return
+	_name_edit.release_focus()
+	var v: Variant = prompt_name.call(_name_edit.text)
+	if v is String:
+		var s := String(v).strip_edges().left(int(Avatar.data()["name"]["max"]) + 4)
+		_name_edit.text = s
+		display_name = s
+		if is_instance_valid(_name_err):
+			_name_err.text = ""
+		_say("")
+	_prompting = false
+
+
+func _browser_prompt(current: String) -> Variant:
+	var js := "(function(){var r = window.prompt(%s, %s); return r === null ? null : String(r);})()" % [
+		JSON.stringify(UIS.t("ui.avatar.name.placeholder")), JSON.stringify(current)]
+	return JavaScriptBridge.eval(js, true)
 
 
 # --- Choices -------------------------------------------------------------------------------------
