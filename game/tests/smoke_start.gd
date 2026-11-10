@@ -20,6 +20,7 @@ const StartScreen = preload("res://scripts/start_screen.gd")
 const ExitShot = preload("res://scripts/exit_shot.gd")
 const Avatar = preload("res://scripts/avatar.gd")
 const SeamShare = preload("res://scripts/seam_share.gd")
+const PhoneGraphics = preload("res://scripts/phone_graphics.gd")
 
 var needs: Node
 var fails: Array[String] = []
@@ -96,6 +97,8 @@ func _init() -> void:
 					seam_tex[m.albedo_texture.get_instance_id()] = true
 					seam_mats += 1
 	check(seam_mats > 500 and seam_tex.size() <= 2, "%d seam material slots share %d textures" % [seam_mats, seam_tex.size()])
+	# Phone graphics is the web shell's call (phone_graphics.gd): off here, the game view keeps its MSAA and full 3D
+	check(PhoneGraphics.parts().is_empty() and root.get_viewport().msaa_3d == Viewport.MSAA_2X and is_equal_approx(root.get_viewport().scaling_3d_scale, 1.0), "phone graphics off outside a phone browser")
 	# The cast names are registered with the engine from project.godot, so they resolve without the runtime CSV read
 	# (the web export showed the raw key over Ty's table: the runtime read is not what a phone should depend on)
 	var reg: PackedStringArray = ProjectSettings.get_setting("internationalization/locale/translations", PackedStringArray())

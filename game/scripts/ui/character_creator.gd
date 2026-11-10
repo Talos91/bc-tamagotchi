@@ -16,6 +16,7 @@ extends Control
 signal done(record: Dictionary, display_name: String, personality: String)
 signal cancelled
 
+const PhoneGraphics = preload("res://scripts/phone_graphics.gd")
 const UI = preload("res://scripts/minigames/mg_ui.gd")
 const UIS = preload("res://scripts/ui/ui_strings.gd")
 const Avatar = preload("res://scripts/avatar.gd")
@@ -194,7 +195,7 @@ func _preview_box() -> Control:
 	box.gui_input.connect(_on_preview_input)
 	_preview = SubViewport.new()
 	_preview.own_world_3d = true
-	_preview.msaa_3d = Viewport.MSAA_2X
+	_preview.msaa_3d = PhoneGraphics.preview_msaa()   # off with phone graphics (phone_graphics.gd)
 	_preview.use_hdr_2d = true
 	_preview.render_target_update_mode = SubViewport.UPDATE_WHEN_VISIBLE
 	box.add_child(_preview)

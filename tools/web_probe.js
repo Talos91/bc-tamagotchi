@@ -2,7 +2,7 @@
 // ?ios=1 hides the desktop texture-compression extensions (an iPhone's WebGL2 has no S3TC/BPTC/RGTC).
 (function () {
 	var IOS = /[?&]ios=1/.test(location.search);
-	var DPR = /[?&]dpr=(\d+(\.\d+)?)/.exec(location.search); if (DPR) { Object.defineProperty(window, 'devicePixelRatio', { get: function () { return +DPR[1]; } }); }
+	var DPR = /[?&]dpr=(\d+(\.\d+)?)/.exec(location.search); if (DPR) { Object.defineProperty(window, 'devicePixelRatio', { configurable: true, get: function () { return +DPR[1]; } }); }
 	var P = window.bcP = { tex: new Map(), rb: new Map(), buf: new Map(), programs: 0, shaders: 0, linkMs: 0, draws: 0,
 		frames: [], wasm: null, ext: [], hidden: [], log: [], fmt: {} };
 	var SZ = { 0x8058: 4, 0x8C43: 4, 0x881A: 8, 0x8814: 16, 0x8229: 1, 0x822B: 2, 0x822D: 2, 0x822F: 4, 0x822E: 4,
@@ -41,6 +41,7 @@
 		w('texImage2D', function (o, a) { if (a.length >= 8) { rec(a[0], a[1], a[3], a[4], 1, a[3] * a[4] * bpp(a[2], a[7]), a[2]); P.fmt[a[2]] = (P.fmt[a[2]] || 0) + 1; } return o.apply(null, a); });
 		w('texImage3D', function (o, a) { rec(a[0], a[1], a[3], a[4], a[5], a[3] * a[4] * a[5] * bpp(a[2], a[8]), a[2]); return o.apply(null, a); });
 		w('compressedTexImage2D', function (o, a) { var d = a[6]; var n = a.length > 7 && a[8] ? a[8] : (d && d.byteLength) || 0; rec(a[0], a[1], a[3], a[4], 1, n, a[2]); P.fmt['c' + a[2]] = (P.fmt['c' + a[2]] || 0) + 1; return o.apply(null, a); });
+		w('framebufferTexture2D', function (o, a) { (P.fboT = P.fboT || new Set()).add(a[3]); return o.apply(null, a); });   // render targets
 		w('bindRenderbuffer', function (o, a) { boundRb = a[1]; return o(a[0], a[1]); });
 		w('deleteRenderbuffer', function (o, a) { P.rb.delete(a[0]); return o(a[0]); });
 		w('renderbufferStorage', function (o, a) { P.rb.set(boundRb, a[2] * a[3] * bpp(a[1])); return o.apply(null, a); });
@@ -62,9 +63,19 @@
 	var last = 0, lastT = performance.now();
 	function tick() { var t = performance.now(); P.frames.push([t - lastT, P.draws - last]); if (P.frames.length > 120) { P.frames.shift(); } last = P.draws; lastT = t; requestAnimationFrame(tick); }
 	requestAnimationFrame(tick);
+	// Textures grouped by size and format, render targets marked RT: [[MB, count, 'RT 1125x2436 0x881a'], ...]
+	window.bcGroups = function () {
+		var g = {}; P.tex.forEach(function (v, k) { var key = (P.fboT && P.fboT.has(k) ? 'RT ' : '') + v.w + 'x' + v.h + ' 0x' + (v.f || 0).toString(16);
+			g[key] = g[key] || [0, 0]; g[key][0]++; g[key][1] += v.bytes; });
+		return Object.keys(g).map(function (k) { return [+(g[k][1] / 1048576).toFixed(2), g[k][0], k]; }).sort(function (a, b) { return b[0] - a[0]; });
+	};
+	// Peak per scene (window.bcScene) of textures + render buffers + buffers, sampled every 250 ms
+	window.bcPeak = {};
+	setInterval(function () { if (!P.gl) { return; } var r = window.bcProbe(), tot = r.texMB + r.rbMB + r.bufMB, s = window.bcScene || 'loading', p = window.bcPeak[s];
+		if (!p || tot > p.tot) { window.bcPeak[s] = { tot: +tot.toFixed(1), tex: r.texMB, texN: r.texCount, rt: r.rtMB, rb: r.rbMB, buf: r.bufMB, wasm: r.wasmMB, draws: r.drawsPerFrame, canvas: r.canvas }; } }, 250);
 	window.bcProbe = function () {
 		var f = P.frames.slice(-30), dc = 0, ms = 0; f.forEach(function (x) { ms += x[0]; dc += x[1]; });
-		var top = []; P.tex.forEach(function (v) { top.push([v.bytes, v.w + 'x' + v.h, '0x' + (v.f || 0).toString(16)]); }); top.sort(function (a, b) { return b[0] - a[0]; });
+		var top = []; P.tex.forEach(function (v, k) { top.push([v.bytes, v.w + 'x' + v.h, '0x' + (v.f || 0).toString(16), P.fboT && P.fboT.has(k) ? 'RT' : 'asset']); }); top.sort(function (a, b) { return b[0] - a[0]; });
 		var MB = function (n) { return +(n / 1048576).toFixed(1); };
 		return { t: +(performance.now() / 1000).toFixed(1), dpr: devicePixelRatio, css: innerWidth + 'x' + innerHeight,
 			canvas: P.canvas ? P.canvas.width + 'x' + P.canvas.height : null, attrs: P.attrs, ios: IOS, hidden: P.hidden.length,
@@ -72,7 +83,8 @@
 			jsHeapMB: performance.memory ? MB(performance.memory.usedJSHeapSize) : null,
 			texCount: P.tex.size, texMB: MB(sum(P.tex)), rbCount: P.rb.size, rbMB: MB(sum(P.rb)), bufCount: P.buf.size, bufMB: MB(sum(P.buf)),
 			programs: P.programs, shaders: P.shaders, linkMs: Math.round(P.linkMs), drawsPerFrame: f.length ? Math.round(dc / f.length) : 0, drawsTotal: P.draws, rafFrames: P.frames.length,
-			frameMs: f.length ? +(ms / f.length).toFixed(1) : 0, topTex: top.slice(0, 12).map(function (x) { return MB(x[0]) + 'MB ' + x[1] + ' ' + x[2]; }),
+			frameMs: f.length ? +(ms / f.length).toFixed(1) : 0, topTex: top.slice(0, 20).map(function (x) { return MB(x[0]) + 'MB ' + x[1] + ' ' + x[2] + ' ' + x[3]; }),
+			rtMB: MB(top.filter(function (x) { return x[3] === 'RT'; }).reduce(function (a, x) { return a + x[0]; }, 0)), phone: window.bcPhone || null,
 			fmt: P.fmt, log: P.log };
 	};
 }());

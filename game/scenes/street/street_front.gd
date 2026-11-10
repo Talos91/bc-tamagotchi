@@ -20,6 +20,8 @@ const ROAD_W := 2.4          ## a narrow soi
 const FAR_PAVE := 0.34       ## the opposite pavement (the start camera stands on it), up to build_venue.gd's StreetFacade across
 const SIGN_TEX := "res://assets/street/street_sign.png"
 const SIGN_SIZE := Vector2(3.6, 1.8)   ## the texture is 2:1; BLACK is about 2.6 m wide
+const PHONE_SIGN_W := 1024             ## sign texture width with phone graphics (pixel ratio cap)
+const PhoneGraphics = preload("res://scripts/phone_graphics.gd")
 const VIEW_EYE := 1.6                  ## the still camera's eye height
 
 const C_FACADE := Color("17141a")      ## black-painted render, a little warm
@@ -153,6 +155,12 @@ func _sign(c: Vector3) -> void:
 	if tex == null:   # not imported yet (a fresh checkout run from the command line): read the PNG itself
 		var img := Image.load_from_file(ProjectSettings.globalize_path(SIGN_TEX))
 		tex = ImageTexture.create_from_image(img) if img else null
+	if tex and PhoneGraphics.on("dpr") and tex.get_width() > PHONE_SIGN_W:
+		# Phone graphics (phone_graphics.gd): at pixel ratio 2 the sign never covers more than ~600 device pixels, so
+		# the 2048x1024 texture (6 MB on the GPU) goes up as 1024x512 (1.5 MB); the full one is freed
+		var small := tex.get_image()
+		small.resize(PHONE_SIGN_W, PHONE_SIGN_W * small.get_height() / small.get_width(), Image.INTERPOLATE_LANCZOS)
+		tex = ImageTexture.create_from_image(small)
 	var m := StandardMaterial3D.new()
 	m.resource_name = "street_sign"
 	m.shading_mode = BaseMaterial3D.SHADING_MODE_UNSHADED

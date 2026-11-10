@@ -135,11 +135,33 @@ SHELL_GUARD = r'''<script>
 	window.bcGpu = function () {
 		var c = gpu.canvas, line = [];
 		line.push('Textures: ' + gpu.tex.size + ' (' + mb(total(gpu.tex)) + '), render buffers ' + mb(total(gpu.rb)));
-		line.push('Canvas: ' + (c ? c.width + 'x' + c.height : '?') + ' at pixel ratio ' + (window.devicePixelRatio || 1));
+		var ph = window.bcPhone, phs = ph ? [ph.dpr ? 'ratio cap ' + PHONE_DPR + ' of ' + ph.real : '', ph.msaa ? 'MSAA off' : '', ph.scale ? '3D 0.75' : ''].filter(function (x) { return x; }).join(', ') : '';
+		line.push('Canvas: ' + (c ? c.width + 'x' + c.height : '?') + ' at pixel ratio ' + (window.devicePixelRatio || 1) + '; phone graphics ' + (ph ? 'on' + (phs ? ' (' + phs + ')' : ' (no parts)') : 'off'));
 		line.push('Wasm heap: ' + (gpu.mem ? mb(gpu.mem.buffer.byteLength) : '?') + (performance.memory ? ', JS heap ' + mb(performance.memory.usedJSHeapSize) : ''));
 		line.push('Last scene: ' + (window.bcScene || 'loading') + ', ' + Math.round((Date.now() - gpu.t0) / 1000) + ' s after the page opened');
 		return line.join('\n');
 	};
+	// Phone graphics (DECISIONS 2026-11-10, Daniele "Yes, allow it"; owner item 33: an iPhone at pixel ratio 3 lost its
+	// graphics entering the venue, ~250 MB of WebGL memory of which ~150 MB scale with the screen's pixels). On a touch
+	// phone only: the PHONE_PARTS of: pixel ratio cap (the canvas is drawn at most PHONE_DPR device pixels per CSS pixel, the
+	// browser stretches it), MSAA off and 3D at 0.75 (both applied by game/scripts/phone_graphics.gd from window.bcPhone).
+	// Desktop browsers are unchanged. ?phone=0 / ?phone=1 force it; ?pg=dpr,msaa,scale picks the parts (measuring).
+	// Default: ratio cap + MSAA off, the fewest that fit the budget (measured 2026-11-10, report perf-iphone-2.md);
+	// 'scale' (3D at 0.75, about -7 MB more) stays available via ?pg=dpr,msaa,scale.
+	var PHONE_PARTS = ['dpr', 'msaa'], PHONE_DPR = 2;
+	try {
+		var q = location.search, coarse = false;
+		try { coarse = window.matchMedia('(pointer: coarse)').matches; } catch (x) {}
+		var phone = /[?&]phone=1/.test(q) || (!/[?&]phone=0/.test(q) && (navigator.maxTouchPoints || 0) > 0 && coarse);
+		var pm = /[?&]pg=([a-z,]*)/.exec(q), parts = pm ? pm[1].split(',') : PHONE_PARTS;
+		window.bcPhone = phone ? { dpr: parts.indexOf('dpr') >= 0, msaa: parts.indexOf('msaa') >= 0, scale: parts.indexOf('scale') >= 0 } : null;
+		if (phone && window.bcPhone.dpr) {
+			var dd = Object.getOwnPropertyDescriptor(window, 'devicePixelRatio') || Object.getOwnPropertyDescriptor(Window.prototype, 'devicePixelRatio');
+			var real = function () { return dd && dd.get ? dd.get.call(window) : 1; };
+			window.bcPhone.real = real();
+			Object.defineProperty(window, 'devicePixelRatio', { configurable: true, get: function () { return Math.min(PHONE_DPR, real()); } });
+		}
+	} catch (e) { window.bcPhone = null; }
 	// Hard requirements, checked before the 50 MB download starts.
 	try {
 		var c = document.createElement('canvas');
