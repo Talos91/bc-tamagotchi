@@ -30,6 +30,12 @@ func _run() -> void:
 	if "--cull-final" in ua:
 		cull_final(ua[ua.find("--cull-final") + 1])
 		return
+	if "--door" in ua:
+		door(int(ua[ua.find("--door") + 1]) if ua.size() > ua.find("--door") + 1 and ua[ua.find("--door") + 1].is_valid_int() else 2)
+		return
+	if "--door-cull" in ua:
+		door_cull(ua[ua.find("--door-cull") + 1])
+		return
 	if "--cull-test" in OS.get_cmdline_user_args():
 		cull_test()
 		return
@@ -155,3 +161,169 @@ func _variant_set(vp: Viewport, dir: String, tag: String, where: String) -> void
 		_line("%s-%s" % [where, nm])
 	vp.msaa_3d = Viewport.MSAA_2X
 	vp.scaling_3d_scale = 1.0
+
+
+# --- Door entrance (perf-door 2026-11-11, owner item 16) -----------------------------------------------------------
+
+func _door_setup() -> Node:
+	if "--phone" in OS.get_cmdline_user_args():
+		root.msaa_3d = Viewport.MSAA_DISABLED   # phone graphics (phone_graphics.gd); the ratio cap is the window size
+	DisplayServer.window_set_vsync_mode(DisplayServer.VSYNC_DISABLED)
+	RenderingServer.viewport_set_measure_render_time(root.get_viewport_rid(), true)
+	for i in 120:
+		await process_frame
+	var main = current_scene
+	if not main.needs.has_avatar():
+		main.needs.set_avatar(preload("res://scripts/avatar.gd").default_record(), "Probe", "")
+	return main
+
+func _phase_name(ss) -> String:
+	if not is_instance_valid(ss):
+		return "play"
+	return ["title", "walk", "pull", "done"][ss.phase]
+
+## --door [entries]: tap the start screen and log the entrance frame by frame (draws, objects, visible lights, CPU and
+## GPU ms of the viewport, wall ms), then a summary per stretch: title, walk to the door, walk through the open door,
+## pull-back, the first second of play. Entries after the first reload main.tscn in the same process (second entry).
+func door(entries: int) -> void:
+	for n in entries:
+		if n > 0:
+			change_scene_to_file("res://scenes/main.tscn")
+			for i in 3:
+				await process_frame
+		var main = await _door_setup()
+		print("DOOR entry=%d viewport=%s msaa=%d" % [n + 1, str(root.get_visible_rect().size), root.msaa_3d])
+		var ss = main.start_screen
+		var stats := {}
+		var t0 := Time.get_ticks_usec()
+		var last := t0
+		var play_frames := 0
+		ss.tap()
+		while play_frames < 45:
+			await process_frame
+			var now := Time.get_ticks_usec()
+			var ph := _phase_name(ss)
+			if ph == "walk" and is_instance_valid(ss) and ss.door_open() > 0.0:
+				ph = "walk-door"
+			if ph == "play":
+				play_frames += 1
+			var lit := 0
+			for l in current_scene.find_children("*", "Light3D", true, false):
+				if l.is_visible_in_tree():
+					lit += 1
+			var d := Performance.get_monitor(Performance.RENDER_TOTAL_DRAW_CALLS_IN_FRAME)
+			var cpu := RenderingServer.viewport_get_measured_render_time_cpu(root.get_viewport_rid())
+			var gpu := RenderingServer.viewport_get_measured_render_time_gpu(root.get_viewport_rid())
+			var wall := (now - last) / 1000.0
+			last = now
+			if "--frames" in OS.get_cmdline_user_args():
+				print("F t=%.2f %s draws=%d obj=%d lights=%d cpu=%.2f gpu=%.2f wall=%.1f" % [(now - t0) / 1e6, ph, d, Performance.get_monitor(Performance.RENDER_TOTAL_OBJECTS_IN_FRAME), lit, cpu, gpu, wall])
+			if not stats.has(ph):
+				stats[ph] = {"n": 0, "draws": [], "gpu": [], "cpu": [], "wall": [], "lights": 0}
+			var st: Dictionary = stats[ph]
+			st.n += 1
+			st.draws.append(d)
+			st.gpu.append(gpu)
+			st.cpu.append(cpu)
+			st.wall.append(wall)
+			st.lights = maxi(st.lights, lit)
+		for ph in ["walk", "walk-door", "pull", "play"]:
+			if not stats.has(ph):
+				continue
+			var st: Dictionary = stats[ph]
+			print("DOOR entry=%d %-9s frames=%3d draws mean=%5d max=%5d  lights max=%2d  gpu ms mean=%.2f max=%.2f  cpu ms mean=%.2f max=%.2f  wall ms mean=%.1f max=%.1f" % [n + 1, ph, st.n,
+				_mean(st.draws), _max(st.draws), st.lights, _mean(st.gpu), _max(st.gpu), _mean(st.cpu), _max(st.cpu), _mean(st.wall), _max(st.wall)])
+	quit()
+
+func _mean(a: Array) -> float:
+	var s := 0.0
+	for v in a:
+		s += v
+	return s / maxf(1.0, a.size())
+
+func _max(a: Array) -> float:
+	var m := 0.0
+	for v in a:
+		m = maxf(m, v)
+	return m
+
+## Pixels that differ between two captures (any channel by more than 1/255), counted on every pixel.
+func _count_diff(a: PackedByteArray, b: PackedByteArray) -> int:
+	if a == b:
+		return 0
+	var n := 0
+	for i in range(0, a.size(), 4):
+		if absi(a[i] - b[i]) > 1 or absi(a[i + 1] - b[i + 1]) > 1 or absi(a[i + 2] - b[i + 2]) > 1:
+			n += 1
+	return n
+
+func _grab() -> PackedByteArray:
+	await RenderingServer.frame_post_draw
+	await RenderingServer.frame_post_draw
+	var img := root.get_texture().get_image()
+	img.convert(Image.FORMAT_RGBA8)
+	return img.get_data()
+
+## --door-cull <groups|path,path>: run the entrance at a fixed 30 fps (start with --fixed-fps 30), pause every
+## SAMPLE frames and hide each candidate alone; a candidate is seen at that moment if any pixel changes. Prints, per
+## candidate, the first and last time (seconds since the tap) it was seen. "groups" = the venue's top-level groups;
+## otherwise a comma list of venue paths whose children are the candidates.
+const SAMPLE := 2
+func door_cull(what: String) -> void:
+	var main = await _door_setup()
+	var venue: Node = main.get_node("Venue")
+	var cands: Array[Node3D] = []
+	if what == "groups":
+		for g in venue.get_children():
+			if g is Node3D and not g is Light3D and not g.name in ["CameraZones", "Thresholds"]:
+				cands.append(g)
+	else:
+		for path in what.split(","):
+			for c in venue.get_node(path).get_children():
+				if c is Node3D:
+					cands.append(c)
+	var seen := {}
+	var ss = main.start_screen
+	ss.tap()
+	var frame := 0
+	var samples := 0
+	var noise := 0
+	var after := 0
+	while after < 4:
+		await process_frame
+		frame += 1
+		if not is_instance_valid(ss):
+			after += 1
+		if frame % SAMPLE != 0 and is_instance_valid(ss):
+			continue
+		var t := frame / 30.0
+		var ph := _phase_name(ss)
+		paused = true
+		var base := await _grab()
+		var base2 := await _grab()
+		noise = maxi(noise, _count_diff(base, base2))
+		for c in cands:
+			if not c.visible:
+				continue
+			c.visible = false
+			var img := await _grab()
+			c.visible = true
+			var d := _count_diff(base, img)
+			if d > 0:
+				var key := str(venue.get_path_to(c))
+				if not seen.has(key):
+					seen[key] = [t, t, 0, ph, d]
+				seen[key][1] = t
+				seen[key][2] += 1
+				seen[key][4] = maxi(seen[key][4], d)
+		paused = false
+		samples += 1
+	print("DOORCULL viewport=%s samples=%d noise_px=%d" % [str(root.get_visible_rect().size), samples, noise])
+	for c in cands:
+		var key := str(venue.get_path_to(c))
+		if seen.has(key):
+			var s: Array = seen[key]
+			print("DOORCULL SEEN %-28s first=%.2f (%s) last=%.2f samples=%d max_px=%d" % [key, s[0], s[3], s[1], s[2], s[4]])
+		else:
+			print("DOORCULL NEVER %s" % key)
+	quit()
