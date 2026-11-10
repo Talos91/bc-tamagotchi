@@ -33,6 +33,12 @@ func _run() -> void:
 	if "--door" in ua:
 		door(int(ua[ua.find("--door") + 1]) if ua.size() > ua.find("--door") + 1 and ua[ua.find("--door") + 1].is_valid_int() else 2)
 		return
+	if "--door-gpu" in ua:
+		door_gpu(float(ua[ua.find("--door-gpu") + 1]))
+		return
+	if "--door-shots" in ua:
+		door_shots(ua[ua.find("--door-shots") + 1])
+		return
 	if "--door-cull" in ua:
 		door_cull(ua[ua.find("--door-cull") + 1])
 		return
@@ -169,6 +175,16 @@ func _door_setup() -> Node:
 	if "--phone" in OS.get_cmdline_user_args():
 		root.msaa_3d = Viewport.MSAA_DISABLED   # phone graphics (phone_graphics.gd); the ratio cap is the window size
 	DisplayServer.window_set_vsync_mode(DisplayServer.VSYNC_DISABLED)
+	# --win WxH: set the window size from here (Windows shrank --resolution windows on this machine)
+	if "--win" in OS.get_cmdline_user_args():
+		var wh: PackedStringArray = OS.get_cmdline_user_args()[OS.get_cmdline_user_args().find("--win") + 1].split("x")
+		get_root().mode = Window.MODE_WINDOWED
+		get_root().size = Vector2i(int(wh[0]), int(wh[1]))
+		for i in 10:
+			await process_frame
+		print("DOOR window=%s pixels=%s" % [str(get_root().size), str(root.get_texture().get_size())])
+	# --old: every venue group back on at the door, as before perf-door (start_screen.gd HIDDEN_THROUGH_DOOR)
+	preload("res://scripts/start_screen.gd").hide_through_door = not "--old" in OS.get_cmdline_user_args()
 	RenderingServer.viewport_set_measure_render_time(root.get_viewport_rid(), true)
 	for i in 120:
 		await process_frame
@@ -192,7 +208,8 @@ func door(entries: int) -> void:
 			for i in 3:
 				await process_frame
 		var main = await _door_setup()
-		print("DOOR entry=%d viewport=%s msaa=%d" % [n + 1, str(root.get_visible_rect().size), root.msaa_3d])
+		remove_meta("said") if has_meta("said") else null
+		print("DOOR entry=%d viewport=%s pixels=%s msaa=%d" % [n + 1, str(root.get_visible_rect().size), str(root.get_texture().get_size()), root.msaa_3d])
 		var ss = main.start_screen
 		var stats := {}
 		var t0 := Time.get_ticks_usec()
@@ -207,6 +224,24 @@ func door(entries: int) -> void:
 				ph = "walk-door"
 			if ph == "play":
 				play_frames += 1
+			if ph == "pull" and not has_meta("said"):
+				set_meta("said", true)
+				print("DOOR entry=%d seen rects %s, patrons hidden %d of %d" % [n + 1, str(ss._seen_rects), ss._hidden_figs.size(), current_scene.get_node("Venue/Patrons").get_child_count() - 1])
+			# --hide-layer2: hide every mesh on render layer 2 (the ceiling the diorama camera never draws) from door to play
+			if "--hide-layer2" in OS.get_cmdline_user_args():
+				if not has_meta("l2"):
+					var l2: Array = []
+					for v in current_scene.find_children("*", "VisualInstance3D", true, false):
+						if (v as VisualInstance3D).layers & 2 and v.visible:
+							l2.append(v)
+					set_meta("l2", l2)
+					print("DOOR layer2 meshes=%d: %s" % [l2.size(), ", ".join(l2.slice(0, 12).map(func(n): return str(current_scene.get_path_to(n))))])
+				for v in get_meta("l2"):
+					v.visible = ph == "play" or ph == "walk"
+			# --hide A,B: keep these venue groups off from the door to play (what-if, not the game's own hiding)
+			if "--hide" in OS.get_cmdline_user_args():
+				for gname in OS.get_cmdline_user_args()[OS.get_cmdline_user_args().find("--hide") + 1].split(","):
+					current_scene.get_node("Venue/" + gname).visible = ph == "play" or ph == "walk"
 			var lit := 0
 			for l in current_scene.find_children("*", "Light3D", true, false):
 				if l.is_visible_in_tree():
@@ -273,7 +308,12 @@ func door_cull(what: String) -> void:
 	var main = await _door_setup()
 	var venue: Node = main.get_node("Venue")
 	var cands: Array[Node3D] = []
-	if what == "groups":
+	var rects: Array[Rect2] = preload("res://scripts/start_screen.gd").seen_rects(venue)
+	if what == "figs":
+		for f in venue.get_node("Patrons").get_children():
+			if f is Node3D and f.name != "Spots":
+				cands.append(f)
+	elif what == "groups":
 		for g in venue.get_children():
 			if g is Node3D and not g is Light3D and not g.name in ["CameraZones", "Thresholds"]:
 				cands.append(g)
@@ -313,6 +353,8 @@ func door_cull(what: String) -> void:
 				var key := str(venue.get_path_to(c))
 				if not seen.has(key):
 					seen[key] = [t, t, 0, ph, d]
+					if what == "figs":
+						print("DOORCULL FIG %s seen at %.2f (%s) px=%d pos=%s in_sight=%s" % [key, t, ph, d, str(c.global_position), preload("res://scripts/start_screen.gd").in_sight(c.global_position, rects)])
 				seen[key][1] = t
 				seen[key][2] += 1
 				seen[key][4] = maxi(seen[key][4], d)
@@ -327,3 +369,119 @@ func door_cull(what: String) -> void:
 		else:
 			print("DOORCULL NEVER %s" % key)
 	quit()
+
+
+func _gpu_ms(n: int) -> float:
+	var s := 0.0
+	for i in n:
+		await RenderingServer.frame_post_draw
+		s += RenderingServer.viewport_get_measured_render_time_gpu(root.get_viewport_rid())
+	return s / n
+
+## --door-gpu <seconds after the door starts to open>: pause the entrance there and time the GPU with each candidate
+## hidden alone (venue groups and the Lobby's / Lounge's children, the street's children, every visible light).
+func door_gpu(after: float) -> void:
+	var main = await _door_setup()
+	var ss = main.start_screen
+	ss.tap()
+	var t_open := -1.0
+	var t := 0.0
+	while true:
+		await process_frame
+		t += 1.0 / 30.0
+		if t_open < 0.0 and ss.door_open() > 0.0:
+			t_open = t
+		if t_open >= 0.0 and t - t_open >= after:
+			break
+	paused = true
+	var base := await _gpu_ms(30)
+	print("DOORGPU at door+%.2fs phase=%s base gpu=%.2f ms draws=%d cam_y=%.2f" % [after, _phase_name(ss), base, Performance.get_monitor(Performance.RENDER_TOTAL_DRAW_CALLS_IN_FRAME), ss.cam.global_position.y])
+	var cands: Array = []
+	var venue: Node = main.get_node("Venue")
+	for g in venue.get_children():
+		if g is Node3D and g.is_visible_in_tree():
+			cands.append(g)
+	for path in ["Venue/Lobby", "Venue/Lounge", "Street"]:
+		var n := main.get_node_or_null(path)
+		if n:
+			for c in n.get_children():
+				if c is Node3D and c.is_visible_in_tree():
+					cands.append(c)
+	for c in main.get_children():
+		if c is Node3D and c.name != "Venue" and c.name != "Street" and c.is_visible_in_tree():
+			cands.append(c)
+	for l in main.find_children("*", "Light3D", true, false):
+		if l.is_visible_in_tree():
+			cands.append(l)
+	var rows: Array = []
+	for c in cands:
+		c.visible = false
+		var g := await _gpu_ms(20)
+		c.visible = true
+		rows.append([base - g, str(main.get_path_to(c)) + (" (shadow)" if c is Light3D and c.shadow_enabled else "")])
+	rows.sort_custom(func(a, b): return a[0] > b[0])
+	for r in rows.slice(0, 25):
+		print("DOORGPU saves %6.2f ms  %s" % [r[0], r[1]])
+	paused = false
+	quit()
+
+
+## --door-shots <dir>: the entrance at a fixed 30 fps (start with --fixed-fps 30); every 3rd frame from the door
+## opening to play, pause and capture the frame twice: as the game draws it (perf-door hiding on) and with every
+## group and patron the entrance hides shown again (as before perf-door). Same frame, same patrons, so any changed
+## pixel is the hiding's. Prints the changed pixels per frame; saves both captures at the moments in SHOT_AT.
+const SHOT_AT := {"door-open": 0.3, "doorway": 1.0, "pull-start": 2.0, "pull-mid": 2.6, "play": 3.6}
+func door_shots(dir: String) -> void:
+	var main = await _door_setup()
+	var ss = main.start_screen
+	ss.tap()
+	var t := 0.0
+	var t_open := -1.0
+	var frame := 0
+	var after := 0
+	var worst := 0
+	var n := 0
+	var saved := {}
+	while after < 10:
+		await process_frame
+		t += 1.0 / 30.0
+		frame += 1
+		if not is_instance_valid(ss):
+			after += 1
+		elif t_open < 0.0 and ss.door_open() > 0.0:
+			t_open = t
+		if t_open < 0.0 or frame % 3 != 0:
+			continue
+		var tt := t - t_open
+		var shot := ""
+		for k in SHOT_AT:
+			if not saved.has(k) and tt >= SHOT_AT[k]:
+				shot = k
+		paused = true
+		var hid: Array = []
+		if is_instance_valid(ss):
+			hid = ss._hidden.duplicate() + ss._hidden_figs.duplicate()
+		var a := await _grab_img()
+		for h in hid:
+			h.visible = true
+		var b := await _grab_img()
+		for h in hid:
+			h.visible = false
+		var d := _count_diff(a.get_data(), b.get_data())
+		worst = maxi(worst, d)
+		n += 1
+		print("SHOTS t=%.2f (%s) hidden=%d diff_px=%d" % [tt, _phase_name(ss), hid.size(), d])
+		if shot != "":
+			saved[shot] = true
+			a.save_png("%s/after-%s.png" % [dir, shot])
+			b.save_png("%s/before-%s.png" % [dir, shot])
+		paused = false
+	print("SHOTS frames=%d worst diff_px=%d viewport=%s" % [n, worst, str(root.get_texture().get_size())])
+	quit()
+
+func _grab_img() -> Image:
+	await RenderingServer.frame_post_draw
+	await RenderingServer.frame_post_draw
+	var img := root.get_texture().get_image()
+	img.convert(Image.FORMAT_RGBA8)
+	return img

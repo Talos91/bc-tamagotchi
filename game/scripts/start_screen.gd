@@ -53,6 +53,23 @@ const CEILING_Y := 3.6       ## above this the camera stops drawing the ceiling,
 ## come back when the door starts to open (or on skip / pull-back / exit).
 const UNSEEN_FROM_STREET := ["Patrons", "Stairs", "Buffer", "MainRoom", "Stage", "Tables", "Raised", "Bar", "Vestibule", "Smoking", "ClosedRooms", "Outside"]
 const WARM_FRAMES := 3
+## Of those, the groups that stay hidden through the door and the first part of the pull-back (perf-door 2026-11-11,
+## owner item 16). From the doorway and over the shoulder in the lobby only the Lobby, the Lounge and the Stairs are
+## seen; the door frames drew ~6,500 draw calls and 44 lights (30-39 ms GPU on a desktop) with every group back on.
+## Tested by hiding each group alone at every second frame of the entrance at a fixed 30 fps (tools/perf_probe.gd
+## --door-cull; portrait 19.5:9 and 16:9, landscape): none of these changes a pixel until the pull-back has risen
+## above the ceiling, and then 1-5 px, as the Navigation node (no mesh) does. They come back as the camera rises
+## past CEILING_Y (or on skip / finish / exit). The Patrons group stays on; its figures are culled one by one below.
+const HIDDEN_THROUGH_DOOR := ["Buffer", "MainRoom", "Stage", "Tables", "Raised", "Bar", "Vestibule", "Smoking", "ClosedRooms", "Outside"]
+## The patrons were most of the cost, not the draw calls: from the door to play the ~70 animated figures (crowd,
+## band, staff) cost ~25 ms of GPU a frame (desktop, 640x1386, MSAA off; 1.3 ms with none). A figure is drawn through
+## the entrance only while it stands on the floor plan of a group in SEEN_THROUGH_DOOR (checked every frame, so a
+## wanderer that steps in shows at once); ~55 are off, all are back when play starts. Hiding any one figure alone
+## (perf_probe.gd --door-cull figs) changes 1 px late in the pull-back, the same toggle artifact as above.
+const SEEN_THROUGH_DOOR := ["Lobby", "Lounge", "Stairs"]
+const SEEN_MARGIN := 1.0       ## metres added around those groups' floor plans
+## Test hook (tools/perf_probe.gd): false brings every group and patron back at the door, as before perf-door.
+static var hide_through_door := true
 
 enum Phase { TITLE, WALK, PULL, DONE }
 
@@ -78,6 +95,8 @@ var _edit_btn: Button           ## "Edit look" (characters that have a look)
 var _walk_after := false        ## the creator was opened by the first tap: walk in once it is done
 var _warm := WARM_FRAMES        ## title frames left before the unseen groups are hidden
 var _hidden: Array[Node3D] = [] ## the groups hidden by _hide_unseen, shown again by _show_unseen
+var _seen_rects: Array[Rect2] = [] ## floor plans (x, z) of SEEN_THROUGH_DOOR, grown by SEEN_MARGIN
+var _hidden_figs: Array[Node3D] = [] ## patrons out of sight through the entrance, shown again by _show_figures
 
 
 func begin(m: Node) -> void:
@@ -174,7 +193,9 @@ func _walk(delta: float, portrait: bool) -> void:
 		speed = leg_speed(tb, LEG_B, 0.3, 0.45, _p1.distance_to(_p2))
 	_drive(pos, PI * 0.5, speed)
 	if not _hidden.is_empty() and (door_open() > 0.0 or _t > LEG_A):
-		_show_unseen()
+		_show_unseen(HIDDEN_THROUGH_DOOR if hide_through_door else [])
+	if door_open() > 0.0 or _t > LEG_A:
+		_cull_figures()
 	# The camera: from the still view to over the shoulder, then following through the doorway
 	var e := smoothstep(0.0, EASE_IN, _t)
 	var inside := clampf((pos.x - (street.face_x - 0.5)) / 1.5, 0.0, 1.0)
@@ -196,7 +217,7 @@ func _walk(delta: float, portrait: bool) -> void:
 ## Arrived at the spawn, the door closing: hand the camera over to the diorama rig, up first, then back.
 func _start_pull() -> void:
 	phase = Phase.PULL
-	_show_unseen()
+	_show_unseen(HIDDEN_THROUGH_DOOR if hide_through_door else [])
 	_pull_t0 = _t
 	_drive(_p2, PI * 0.5, 0.0)
 	var p: Player = main.player
@@ -230,6 +251,9 @@ func _pull() -> void:
 	cam.keep_aspect = rc.keep_aspect
 	cam.fov = lerpf(_pull_fov, rc.fov, e)
 	cam.cull_mask = rc.cull_mask if cam.global_position.y > CEILING_Y else 0xFFFFF
+	if not _hidden.is_empty() and cam.global_position.y > CEILING_Y:
+		_show_unseen()
+	_cull_figures()
 	# Out of sight and dark once the door is shut
 	if street.visible and door_open() < 0.001:
 		street.set_on(false)
@@ -241,6 +265,7 @@ func _pull() -> void:
 func _finish() -> void:
 	phase = Phase.DONE
 	_show_unseen()
+	_show_figures()
 	_give_back_player()
 	if is_instance_valid(_layer):
 		_layer.queue_free()
@@ -259,15 +284,76 @@ func _hide_unseen() -> void:
 			_hidden.append(g)
 
 
-func _show_unseen() -> void:
+## Patrons through the entrance: drawn only on the floor plans of SEEN_THROUGH_DOOR (see the constant).
+func _cull_figures() -> void:
+	if not hide_through_door:
+		return
+	var venue: Node = main.get_node_or_null("Venue")
+	var crowd: Node = venue.get_node_or_null("Patrons") if venue else null
+	if crowd == null:
+		return
+	if _seen_rects.is_empty():
+		_seen_rects = seen_rects(venue)
+	for f in crowd.get_children():
+		if not f is Node3D or f.name == "Spots":
+			continue
+		var seen := in_sight((f as Node3D).global_position, _seen_rects)
+		if seen and f in _hidden_figs:
+			f.visible = true
+			_hidden_figs.erase(f)
+		elif not seen and f.visible:
+			f.visible = false
+			_hidden_figs.append(f)
+
+
+## Floor plans (x, z) of the SEEN_THROUGH_DOOR groups, grown by SEEN_MARGIN.
+static func seen_rects(venue: Node) -> Array[Rect2]:
+	var out: Array[Rect2] = []
+	for n: String in SEEN_THROUGH_DOOR:
+		var g := venue.get_node_or_null(n) as Node3D
+		if g == null:
+			continue
+		var box := AABB()
+		var first := true
+		for v in g.find_children("*", "VisualInstance3D", true, false):
+			var b := (v as VisualInstance3D).global_transform * (v as VisualInstance3D).get_aabb()
+			box = b if first else box.merge(b)
+			first = false
+		if not first:
+			out.append(Rect2(box.position.x, box.position.z, box.size.x, box.size.z).grow(SEEN_MARGIN))
+	return out
+
+
+static func in_sight(p: Vector3, rects: Array[Rect2]) -> bool:
+	for r in rects:
+		if r.has_point(Vector2(p.x, p.z)):
+			return true
+	return false
+
+
+func _show_figures() -> void:
+	for f in _hidden_figs:
+		if is_instance_valid(f):
+			f.visible = true
+	_hidden_figs.clear()
+
+
+## Shows the hidden groups again, all but those named in `keep`.
+func _show_unseen(keep: Array = []) -> void:
+	var still: Array[Node3D] = []
 	for g in _hidden:
-		if is_instance_valid(g):
+		if not is_instance_valid(g):
+			continue
+		if str(g.name) in keep:
+			still.append(g)
+		else:
 			g.visible = true
-	_hidden.clear()
+	_hidden = still
 
 
 func _exit_tree() -> void:
 	_show_unseen()
+	_show_figures()
 
 
 # --- Prompt --------------------------------------------------------------------------------------
