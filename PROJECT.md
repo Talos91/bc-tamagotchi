@@ -56,7 +56,7 @@ The rules (files, roles and dose, brief and exit ritual, guards, orchestrator co
 
 ## Per-role notes
 ### Orchestrator
-- Session local_ddbbfc1d (from 2026-11-02; before: local_9bb3d41c, local_78d0c67d, fdaed712). Briefs, has work verified by the Verifier, writes STATE.md and LOG.md, owns DECISIONS.md "Still open", regenerates the changelog. Builds nothing.
+- Session local_060ea4b4 (from 2026-11-10; before: local_7f958171, local_ddbbfc1d, local_9bb3d41c, local_78d0c67d, fdaed712). Briefs, has work verified by the Verifier, writes STATE.md and LOG.md, owns DECISIONS.md "Still open", regenerates the changelog. Builds nothing.
 - Session start: `load_agent("orchestrator", "black-cabin", ...)`; read STATE.md; then `changes_since(<date of STATE's last rewrite>)` and `agent_log(project="black-cabin", days=7)`.
 - Own handover at ~40 % context, or ~30 % when the 5-hour limit is near; it ends with the full stint recap in the vault (method section 5) and `handoffs/ORCHESTRATOR-HANDOVER.md`. An inherited worker finishes only its current task; the old orchestrator is not archived until it has.
 ### Verifier
