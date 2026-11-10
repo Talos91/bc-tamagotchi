@@ -19,6 +19,7 @@ extends SceneTree
 const StartScreen = preload("res://scripts/start_screen.gd")
 const ExitShot = preload("res://scripts/exit_shot.gd")
 const Avatar = preload("res://scripts/avatar.gd")
+const SeamShare = preload("res://scripts/seam_share.gd")
 
 var needs: Node
 var fails: Array[String] = []
@@ -78,6 +79,23 @@ func _init() -> void:
 		if n is Label and "cast." in (n as Label).text or n is Label3D and "cast." in (n as Label3D).text:
 			raw.append(str(n.name))
 	check(raw.is_empty(), "no raw cast. label in the scene tree: %s" % [raw])
+	# Seam textures shared (perf-iphone-2, item 33): the 164 extracted <glb>_bc_seam[2].png hold 2 images, and every
+	# material of the venue, the street and the figures uses one texture per kind (scripts/seam_share.gd)
+	var md5s := {}
+	for f in _seam_files("res://assets", []):
+		var k: String = "bc_seam2" if f.ends_with("_bc_seam2.png") else "bc_seam"
+		md5s[k + " " + FileAccess.get_md5(f)] = true
+	check(md5s.size() == 2, "seam files hold exactly 2 images (1 per kind): %d" % md5s.size())
+	var seam_tex := {}
+	var seam_mats := 0
+	for n in _all(main, []):
+		if n is MeshInstance3D and (n as MeshInstance3D).mesh:
+			for i in (n as MeshInstance3D).mesh.get_surface_count():
+				var m := (n as MeshInstance3D).get_active_material(i) as BaseMaterial3D
+				if m and SeamShare.kind(m.albedo_texture) != "":
+					seam_tex[m.albedo_texture.get_instance_id()] = true
+					seam_mats += 1
+	check(seam_mats > 500 and seam_tex.size() <= 2, "%d seam material slots share %d textures" % [seam_mats, seam_tex.size()])
 	# The cast names are registered with the engine from project.godot, so they resolve without the runtime CSV read
 	# (the web export showed the raw key over Ty's table: the runtime read is not what a phone should depend on)
 	var reg: PackedStringArray = ProjectSettings.get_setting("internationalization/locale/translations", PackedStringArray())
@@ -274,6 +292,15 @@ func _all(n: Node, acc: Array) -> Array:
 	acc.append(n)
 	for c in n.get_children():
 		_all(c, acc)
+	return acc
+
+
+func _seam_files(dir: String, acc: Array) -> Array:
+	for f in DirAccess.get_files_at(dir):
+		if f.ends_with("_bc_seam.png") or f.ends_with("_bc_seam2.png"):
+			acc.append(dir.path_join(f))
+	for d in DirAccess.get_directories_at(dir):
+		_seam_files(dir.path_join(d), acc)
 	return acc
 
 

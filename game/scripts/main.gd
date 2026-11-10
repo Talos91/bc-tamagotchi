@@ -30,6 +30,7 @@ const DrunkOverlay = preload("res://scripts/ui/drunk_overlay.gd")
 const FarewellCard = preload("res://scripts/ui/farewell_card.gd")
 const DebugPanel = preload("res://scripts/ui/debug_panel.gd")
 const Creator = preload("res://scripts/ui/character_creator.gd")
+const SeamShare = preload("res://scripts/seam_share.gd")
 
 @onready var player: Player = $Player
 @onready var zones: VenueZones = $Zones
@@ -65,6 +66,7 @@ var _scene_mark := ""
 
 
 func _ready() -> void:
+	SeamShare.share(self)   # 2 seam textures on the GPU instead of ~137 (item 33; seam_share.gd)
 	S.install()
 	T.install()
 	_spawn = player.global_transform

@@ -19,6 +19,7 @@ extends Node3D
 const PRESET_DIR := "res://assets/chars/presets/"
 const Avatar = preload("res://scripts/avatar.gd")
 const Chars = preload("res://assets/chars/bc_chars.gd")
+const SeamShare = preload("res://scripts/seam_share.gd")
 const SEAT_H := 0.45
 const FIG_SCALE := 0.75
 ## Prop meshes (accessory ids) that only show in the poses that use them
@@ -110,6 +111,7 @@ func play(s: String, force := false) -> void:
 
 func _build_preset(ps: PackedScene, avatar := {}) -> void:
 	_model = ps.instantiate()
+	SeamShare.share(_model)   # one shared seam texture per kind (seam_share.gd)
 	if not avatar.is_empty():
 		_apply_avatar(avatar)   # before it enters the tree: nothing freed is ever seen by node_added listeners
 	_model.name = "Model"
