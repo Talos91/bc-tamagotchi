@@ -4,6 +4,7 @@ Daniele playtests builds and names the build in their feedback, so every build s
 
 ## The scheme
 - **One source of truth:** `application/config/version` in `game/project.godot`, semantic `MAJOR.MINOR.PATCH`.
+- **Every deploy bumps the number (Daniele 2026-11-10: "we are not pushing the number of version but just the code, number should go up too").** Each batch the orchestrator hands Daniele to deploy gets the next **PATCH** (0.2.0 → 0.2.1 → 0.2.2 …), committed in `game/project.godot` before the Verifier's push, so the footer always names a different release. 0.2.1 is the first (iPhone memory + camera + creator fixes).
 - **MINOR** is bumped by the orchestrator when it closes a version (0.1.0 closed 2026-11-02, 0.2.0 is in progress). **PATCH** is for a hotfix to a closed version. **MAJOR** stays 0 until Daniele calls a release. Workers never bump it.
 - **Build stamp:** the version number says which release, the stamp says which commit. `python tools/version.py` writes `game/build_info.json` (gitignored) with `sha` (short commit), `dirty` (uncommitted changes under `game/`, tracked or not) and `date` (UTC). `python tools/version.py --print` shows it without writing.
 - **In the game:** a small dim label, bottom right, on the start screen and on the HUD in play: `v0.2.0 · 33dc5b9`, plus ` · dirty` for a stamp taken from a dirty tree. Without `build_info.json` it shows `v0.2.0` only. The string is built in one place, `game/scripts/version_info.gd` (`VersionInfo.text()`); never format it anywhere else.

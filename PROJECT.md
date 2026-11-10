@@ -37,7 +37,7 @@ The rules (files, roles and dose, brief and exit ritual, guards, orchestrator co
 - Windowed runs: omit `--headless`; screenshots go next to the renders they are compared with. Known slow: `test_minigames` (hundreds of checks).
 
 ## Release path
-- Versioning (2026-11-02, `docs/tech/versioning.md`): the version lives in `application/config/version` in `game/project.godot` (0.1.0 closed 2026-11-02; 0.2.0 in progress). The orchestrator bumps MINOR when it closes a version and PATCH for a hotfix; workers never bump it. The game shows `v<version> · <sha>` bottom right (`game/scripts/version_info.gd`). Stamp a build with `python tools/version.py` before handing it to Daniele; add the closed version to `RELEASES` in `tools/changelog.py` when cutting one.
+- Versioning (2026-11-02, `docs/tech/versioning.md`): the version lives in `application/config/version` in `game/project.godot` (0.1.0 closed 2026-11-02; 0.2.0 in progress). The orchestrator bumps **PATCH on every batch handed to Daniele to deploy** (Daniele 2026-11-10; 0.2.1 first), and MINOR when it closes a version; the bump is its own commit and goes through the Verifier like code; workers never bump it. The game shows `v<version> · <sha>` bottom right (`game/scripts/version_info.gd`). Stamp a build with `python tools/version.py` before handing it to Daniele; add the closed version to `RELEASES` in `tools/changelog.py` when cutting one.
 - No build, export or publish path exists yet. The game is mobile only (Daniele 2026-11-02); no phone export exists yet (web export untested).
 - Docs updated together after a wave: `ORCHESTRATION.md` wave status, `docs/MANUAL.md` section 15, `STATE.md`, `LOG.md`, and `docs/CHANGELOG.md` via `python tools/changelog.py` (orchestrator only).
 
