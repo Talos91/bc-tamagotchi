@@ -87,6 +87,7 @@ GDD is updated.
 | 2026-11-10 | **Version number goes up with every deploy (Daniele, in chat): "a note on versioning, we are not pushing the number of version but just the code, number should go up too".** Every batch handed to Daniele to deploy bumps PATCH (0.2.0 → 0.2.1 …); MINOR still at version close. Rule in `docs/tech/versioning.md` and PROJECT.md Release path; 0.2.1 is the first. |
 | 2026-11-11 | **Door pull-back lag: fix it now (Daniele, in chat): "the door pull back always lags so atleast we should fix it a bit now".** Item 16 starts without waiting for the iPhone numbers: cut the draw calls of the door entrance / camera pull-back (~7,300–8,400 per frame, all venue groups on, 44 lights) with no look change; measured headless and in emulation, the phone check stays his. |
 | 2026-11-11 | **One-Godot exception (Daniele, in chat, to "Let it run Black Cabin probes beside the open Ooze fog windows, but never during an Ooze test run?"): "Yes, allow it".** perf-door may run Black Cabin probes and suites while long-open Ooze `fog_playground` windows stay open, never during an Ooze test run; its frame times carry a note. The one-Godot rule otherwise stands. |
+| 2026-11-11 | **Door pull-back accepted (Daniele, in chat, on his phone with live v0.2.2): "Smooth now".** Item 16 entrance lag closed by 166918d (patrons and unseen groups held off through the entrance); the "Lounge off until control" option on card perf-door-review is not needed. Friend's iPhone still unconfirmed (card iphone-v021-friend). |
 
 ## Still open
 

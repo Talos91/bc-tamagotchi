@@ -215,3 +215,4 @@ Append-only. One dated line per event, newest last. Never edit earlier lines.
 - 2026-11-11 (+7) — 🔍 verify-perf-door (local_49b458c0, Sonnet) PASSED 166918d 19/19 + web (54.3 MB), pushed; perf-door archived. Version 0.2.2 bump bd50d36 (one-line diff) sent to the same Verifier. Context ~22 %.
 - 2026-11-11 (+7) — 🔍 verify PASSED bd50d36 (0.2.2) 19/19 + web after one import crash (exit 3221225477) and a clean rerun; pushed. v0.2.2 ready for Daniele to deploy. Verifier archived. Context ~24 %.
 - 2026-11-11 (+7) — Daniele: v0.2.2 "Deployed". Waiting on his phone check of the door and the hub cards (iphone-v021-friend, presence-supabase-setup, perf-door-review). Context ~25 %.
+- 2026-11-11 (+7) — Daniele on his phone, v0.2.2: door pull-back "Smooth now" → DECISIONS row; item 16 entrance closed. Context ~26 %.
