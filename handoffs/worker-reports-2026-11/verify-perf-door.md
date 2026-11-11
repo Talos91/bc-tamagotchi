@@ -15,3 +15,7 @@
 
 ## Not verified
 Real device / phone feel, perf numbers, pixel identity.
+
+## Addendum: bd50d36 (Version 0.2.2, one-line project.godot bump)
+- `VERIFY bd50d36: PASS 19/19`, web build exit 0 (54.3 MB). Pushed 166918d..bd50d36 (also carried 1eae307, 1abfaf0); `ls-remote origin main` = bd50d3652f65ff160100474ef8b8defd5abc1de2.
+- **Rerun once:** first attempt failed at the import step (Godot exit 3221225477, access violation, 0 suites run); identical command passed clean on rerun. Likely a flake (Ooze fog_playground window open); logs `verify-bd50d36\_import.log` vs `verify-bd50d36b\`.
