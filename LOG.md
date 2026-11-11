@@ -216,3 +216,4 @@ Append-only. One dated line per event, newest last. Never edit earlier lines.
 - 2026-11-11 (+7) — 🔍 verify PASSED bd50d36 (0.2.2) 19/19 + web after one import crash (exit 3221225477) and a clean rerun; pushed. v0.2.2 ready for Daniele to deploy. Verifier archived. Context ~24 %.
 - 2026-11-11 (+7) — Daniele: v0.2.2 "Deployed". Waiting on his phone check of the door and the hub cards (iphone-v021-friend, presence-supabase-setup, perf-door-review). Context ~25 %.
 - 2026-11-11 (+7) — Daniele on his phone, v0.2.2: door pull-back "Smooth now" → DECISIONS row; item 16 entrance closed. Context ~26 %.
+- 2026-11-11 (+7) — Master (new: local_9a0f2f8a): Daniele's rule, test plays never take his focus (background tabs, Godot on the side screen) → PROJECT.md Tests + Verifier/Map builder/Voxel art/UI notes; goes into every brief that opens a build. Context ~27 %.
