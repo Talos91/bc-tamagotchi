@@ -1,8 +1,8 @@
 # STATE — Black Cabin Tamagotchi (rewritten, never appended; as of 2026-11-15, orchestrator local_ca1e0f15, first rewrite)
 
-## LIVE (origin/main 37c5a65 + docs; every code SHA verified in a clean worktree, APPDATA empty per suite; 23 suites)
+## LIVE (origin/main b1d9716 = v0.2.3 + docs; every code SHA verified in a clean worktree, APPDATA empty per suite; 23 suites)
 - Live build https://bc-tamagotchi.vercel.app = **v0.2.2** (bd50d36; Daniele deployed 11-11). Everything before: see LOG.
-- On main, not deployed: **Tonight + upcoming events** (0c1b11f; October 2026 data only), **A Coaster Flip** (b2de123), **D Neon Moth** (a1a43b8), **C Soi Dash** (37c5a65, 23/23 + web). Version 0.2.2; next deploy closes **0.3.0**. Redeploy: `python tools/build_web.py --deploy --out %LOCALAPPDATA%c-web`.
+- **v0.2.3 on main, verified 23/23 + web (b1d9716), handed to Daniele to redeploy 11-15**: Tonight + upcoming events (October data only), A Coaster Flip, D Neon Moth, C Soi Dash. Next deploy closes **0.3.0** (adds B Shake & Serve). Redeploy: `python tools/build_web.py --deploy --out %LOCALAPPDATA%c-web`.
 
 ## IN FLIGHT
 - Orchestrator: **local_ca1e0f15** (Opus 5.5, medium) since 2026-11-15, successor of local_060ea4b4 (handoff `handoffs/ORCHESTRATOR-HANDOVER-2026-11-15.md`, stint recap vault `raw/agent-notes/2026-11-15-black-cabin-orchestrator-stint-session-local-060ea4b4-2026-1.md`). Load id 2026-11-15-orchestrator-black-cabin-e0c77f. Context ~12 % at this rewrite.
