@@ -221,3 +221,4 @@ Append-only. One dated line per event, newest last. Never edit earlier lines.
 - 2026-11-15 — 🧹 hk-backlog-refresh: BACKLOG.md refreshed (48 rows; T1 32 / T2 10 / T3 6); hub Backlog tab is hand-written, not republished.
 - 2026-11-15 — 🧹 hub Backlog tab now generated from BACKLOG.md (build_hub_tabs.py); G/H kept in backlog-gh.html; hub republished v20.
 - 2026-11-15 — 🧹 G/H folded into BACKLOG.md; backlog-gh.html removed; hub v21.
+- 2026-11-15 (+7) — Owner item 34: Black Cabin's own song as background + Spotify credit top left instead of song 1/4 (rotation later). Needs the audio file from Daniele; UI job queued after ui-tonight-events (HUD overlap). hk-backlog-refresh: hub Backlog tab generated from BACKLOG.md (4e8d56f, hub v20) pushed; G/H fold in progress. Context ~33 %.
