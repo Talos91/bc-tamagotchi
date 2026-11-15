@@ -1,0 +1,11 @@
+# Verify 4d30b35 (Tonight + events D1/D2) — verifier, 2026-11-15
+- Verified SHA: 0c1b11f (= 4d30b35 + docs commit; 4d30b35..0c1b11f touches only LOG.md, PROJECT.md).
+- `VERIFY 0c1b11f: PASS 20/20 suites` in a clean worktree, import exit 0, fresh empty APPDATA per suite, one Godot at a time. No flakes, no reruns.
+- Suites: 7 smoke_* + test_avatar, debug_tools, feel, lounge, menu, minigames, needs, nightlife, seats, string_keys, tonight (6.7s), touch, walk — all exit 0, 0 script errors.
+- Web build: exit 0, 54.3 MB.
+- Push: fast-forward a885b04..0c1b11f (3 commits: 1311e91, 4d30b35, 0c1b11f); `git ls-remote origin main` = 0c1b11f (match). Check and push were separate calls.
+- Shared tree's untracked test_coaster_flip is not in the commit, so the worktree ran 20 suites as PROJECT.md says.
+- Waited for a running Ooze Godot (test_feel) to end before starting.
+- Logs: scratchpad v/verify-0c1b11f (session temp).
+- Done-when: 20/20 pass; ls-remote 0c1b11f; report committed locally, not pushed.
+- Not verified: real device / feel by hand, the Tonight view's content correctness beyond test_tonight, anything above 0c1b11f (nothing existed).
