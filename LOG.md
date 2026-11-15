@@ -234,3 +234,4 @@ Append-only. One dated line per event, newest last. Never edit earlier lines.
 - 2026-11-15 (+7) — 🔍 verify-neon-moth PASSED a1a43b8 22/22 + web, pushed (ls-remote match; import crash rerun once).
 - 2026-11-15 (+7) — 🔍 standing Verifier PASSED a1a43b8 (Neon Moth) 22/22 + web after one import crash (3221225477) and a clean rerun; pushed. Context ~44 %, successor card still unclicked.
 - 2026-11-15 (+7) — 🎲 Soi Dash (C) done: 1354f66, 23/23 (shared tree), card minigame-soi-dash-review; test_soi_dash in Tests; sent to the standing Verifier. Builder on B Shake & Serve.
+- 2026-11-15 (+7) — 🎛️ New orchestrator local_ca1e0f15 (Opus 5.5, medium; load id 2026-11-15-orchestrator-black-cabin-e0c77f) took over from local_060ea4b4: files read, builder + standing Verifier told the new id, handover answer folded into STATE (one 0.3.0 deploy after all four games; song after the builder's last commit). Soi Dash 37c5a65 with the Verifier, builder on Shake & Serve. Context ~12 %.
