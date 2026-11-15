@@ -15,3 +15,10 @@ UNSOURCED / GUESSES
 - Status of cards after 11-11 taken from STATE (not re-checked on the hub).
 
 PROFILE NOTE: housekeeping profile has no step for "hub tab is not generated"; PROJECT.md should say which tabs the script builds.
+
+## Addendum: hub Backlog tab now generated (2026-11-15)
+- `docs/design/build_hub_tabs.py` now also splices #p-backlog (markers BEGIN/END:backlog in backlog-board.html) from BACKLOG.md: same pills/table look, new Track column, "0.3.0 now" section, E (questions pointer) skipped. Never hand-edit #p-backlog.
+- DRIFT FOUND: the live hub (v16, 10 Nov) had two Backlog sections, G "User psychology" and H "Monetization", that were never in the repo or BACKLOG.md. Kept verbatim in new `docs/design/backlog-gh.html` (static fragment the script appends after the generated block). They are NOT in BACKLOG.md: fold them in or accept the fragment (orchestrator/Daniele call).
+- Republished the same artifact (v20, https://claude.ai/artifact/BbpBxVWVVXMjz7TgJ7aFBW), capabilities carried forward (assets, db, user); title kept "Black Cabin Hub". Questions/Coins db untouched (page JS and db not edited).
+- Other tabs vs live v16: Questions, Coins, Stakes, Ask, JS identical; Game bible gains one row (`PRE_ALPHA` = true) because the script regenerates the rules table from rules.gd; footer line updated.
+- Rows on the tab: 48 (A–D) + G/H as before.

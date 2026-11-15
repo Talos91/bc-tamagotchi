@@ -1,4 +1,4 @@
-"""Regenerate the rules table in game-bible.md and splice stakes-rules.md and game-bible.md into the hub page
+"""Also generates the Backlog tab from BACKLOG.md (one source, never hand-edit #p-backlog). Regenerate the rules table in game-bible.md and splice stakes-rules.md and game-bible.md into the hub page
 (docs/design/backlog-board.html) between <!--BEGIN:x--> and <!--END:x--> markers. Housekeeping only."""
 import re, html, pathlib
 D = pathlib.Path(__file__).parent
@@ -52,6 +52,37 @@ def md(text):
         i += 1
     close(); return "\n".join(out)
 
+
+def backlog_html(text):
+    """Render BACKLOG.md (0.3.0 now, sections A-D, F) as the Backlog tab: same table look, plus a Track column."""
+    def pill(st):
+        k = "ok" if st.startswith("live") else "wait" if st.startswith("built-awaiting") else "idea" if st.startswith(("idea", "parked")) else "plan"
+        return f'<span class="pill {k}">{inline(st)}</span>'
+    out = ['<div class="legend"><span class="s-ok">live</span><span class="s-wait">built, awaiting your acceptance</span><span class="s-plan">built / designed</span><span class="s-idea">idea or parked</span>'
+           '<span>Effort: S a day · M a wave · L several waves · Track: T1 no server (0.3.0) · T2 needs Supabase · T3 needs a business decision</span></div>']
+    for sec in re.split(r"(?m)^## ", text)[1:]:
+        title, _, body = sec.partition(chr(10))
+        if title.startswith("E.") or title.startswith("Log"): continue
+        m = re.match(r"([A-F])\. (.+)", title)
+        letter, name = (m.group(1), m.group(2)) if m else ("★", title)
+        out.append(f'<section><h2><span class="letter">{letter}</span>{inline(name)}</h2>')
+        lines, i = body.splitlines(), 0
+        while i < len(lines):
+            l = lines[i]
+            if l.startswith("|"):
+                rows = []
+                while i < len(lines) and lines[i].startswith("|"):
+                    rows.append([c.strip() for c in lines[i].strip().strip("|").split("|")]); i += 1
+                out.append('<div class="tablewrap"><table><tr>' + "".join(f"<th>{inline(c)}</th>" for c in rows[0]) + "</tr>")
+                for r in rows[2:]:
+                    out.append(f'<tr><td class="id">{inline(r[0])}</td><td>{inline(r[1])}</td><td class="eff">{inline(r[2])}</td><td class="needs">{inline(r[3])}</td><td>{pill(r[4])}</td><td class="eff">{inline(r[5])}</td></tr>')
+                out.append("</table></div>"); continue
+            i += 1
+        rest = chr(10).join(x for x in lines if not x.startswith("|"))
+        out.append(md(rest) if rest.strip() else "")
+        out.append("</section>")
+    return chr(10).join(out)
+
 bible = (D / "game-bible.md").read_text(encoding="utf-8")
 head = bible.split("<!-- RULES-TABLE -->")[0]
 bible = head + "<!-- RULES-TABLE -->\n" + rules_table() + "\n"
@@ -62,5 +93,8 @@ for key, src in (("stakes", D / "stakes-rules.md"), ("bible", D / "game-bible.md
     pat = re.compile(rf"(?s)<!--BEGIN:{key}-->.*?<!--END:{key}-->")
     page, n = pat.subn(lambda m: f"<!--BEGIN:{key}-->\n{body}\n<!--END:{key}-->", page)
     assert n == 1, key
+body = backlog_html((D / "BACKLOG.md").read_text(encoding="utf-8")) + chr(10) + (D / "backlog-gh.html").read_text(encoding="utf-8").rstrip()  # G and H: static, owner-session ideas not in BACKLOG.md
+page, n = re.subn(r"(?s)<!--BEGIN:backlog-->.*?<!--END:backlog-->", lambda m: f"<!--BEGIN:backlog-->\n{body}\n<!--END:backlog-->", page)
+assert n == 1, "backlog"
 (D / "backlog-board.html").write_text(page, encoding="utf-8", newline="\n")
 print("ok")

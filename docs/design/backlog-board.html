@@ -1,4 +1,4 @@
-<title>Black Cabin Backlog</title>
+<title>🎸 Black Cabin Hub</title>
 <meta name="claude:viewport-fit-sides" content="cover">
 <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Kanit:wght@400;500;600&family=IBM+Plex+Sans:wght@400;500&display=swap">
 <style>
@@ -112,90 +112,147 @@ table.doc td, table.doc th { vertical-align: top; text-align: left; }
 </header>
 <nav class="tabs" role="tablist" aria-label="Board sections"><button class="tab" role="tab" id="t-backlog" aria-controls="p-backlog" aria-selected="true">Backlog</button><button class="tab" role="tab" id="t-questions" aria-controls="p-questions" aria-selected="false">Questions <span class="badge zero" id="q-badge">…</span></button><button class="tab" role="tab" id="t-coins" aria-controls="p-coins" aria-selected="false">Coins</button><button class="tab" role="tab" id="t-stakes" aria-controls="p-stakes" aria-selected="false">Stakes rules</button><button class="tab" role="tab" id="t-bible" aria-controls="p-bible" aria-selected="false">Game bible</button><button class="tab" role="tab" id="t-ask" aria-controls="p-ask" aria-selected="false">Ask Black Cabin</button></nav>
 <div id="p-backlog" role="tabpanel" aria-labelledby="t-backlog">
-<div class="legend"><span class="s-plan">planned / in STATE</span><span class="s-wait">waiting on an input</span><span class="s-idea">idea, not scheduled</span><span class="s-ok">done</span><span>Effort: S a day · M a wave · L several waves</span></div>
-
-<section id="fix">
-<h2><span class="letter">A</span>Fix first, the gate</h2>
-<p class="sub">The real floor map is built as venue v4. The layout freezes again once you accept it on the Questions tab.</p>
-<div class="tablewrap"><table>
-<tr><th>#</th><th>Item</th><th>Effort</th><th>Needs</th><th>Status</th></tr>
-<tr><td class="id">A1</td><td>Baseline map of the club rebuilt to the real floor map and photos (venue v4, main room 21.7 × 15 m)</td><td class="eff">M</td><td class="needs">nothing</td><td><span class="pill ok">done, accepted, layout frozen</span></td></tr>
-<tr><td class="id">A2</td><td>Bar-counter strip connected to the walkable floor (known navmesh gap)</td><td class="eff">S</td><td class="needs">nothing</td><td><span class="pill ok">done</span></td></tr>
-<tr><td class="id">A3</td><td>Playtest fixes: doors you can walk through, real sitting at every seat, stairs reoriented, memory corner, corridor sign, walls solid until the door</td><td class="eff">M</td><td class="needs">nothing</td><td><span class="pill ok">done</span></td></tr>
-<tr><td class="id">A4</td><td>Real Black Cabin menu at the bar and in Pour Perfect; brand fonts Lato + Kristi; portrait first with a landscape toggle</td><td class="eff">M</td><td class="needs">your answers on the Questions tab</td><td><span class="pill ok">done</span></td></tr>
-<tr><td class="id">A5</td><td>Playtest fixes: smoother camera, walls see-through but their bottom 10 % (corridor excepted), fluid movement, facing bug, seats facing the right way; Prae as an owner with her real look</td><td class="eff">M</td><td class="needs">nothing</td><td><span class="pill ok">done; area views and buttons back</span></td></tr>
-<tr><td class="id">A7</td><td>Camera feel, round 2: tighter follow, walls and furniture out of the way, distance and angle (your 2 Nov answer)</td><td class="eff">M</td><td class="needs">your answers on the Questions tab</td><td><span class="pill wait">built (406d2fd, c97abde); awaiting your acceptance on camera-feel-2-accept, camera-closer-still and camera-patrons-in-front</span></td></tr>
-<tr><td class="id">A8</td><td>Web build on Vercel: the game playable on your phone from a link (Godot 4.6.1 Web export, Compatibility renderer, single-threaded, PWA), for first feedback from your friends at Black Cabin</td><td class="eff">M</td><td class="needs">phone check (load time, frame rate with 42 lights, touch, portrait HUD, save survives reload)</td><td><span class="pill wait">built; you deploy it (redeploy from the repo root, see docs/tech/03-web-build.md), then the phone pass</span></td></tr>
-<tr><td class="id">A9</td><td>Look-D follow-ups: darker with the player readable, corridor west-end neon line, sconces on the line, symmetric stage curtain, electric-piano player, second Top-patrons poster; owner items 1, 3, 9, 10, 12</td><td class="eff">M</td><td class="needs">your acceptance (card look-followups-review)</td><td><span class="pill wait">built (84c58e5, 86b40ab); card open</span></td></tr>
-<tr><td class="id">A10</td><td>Needs and stakes build: stake clock, ghost, annoyances, minigame misses and tries, Retire, farewell card (stakes v3 with O1–O3); Ty named (owner item 2)</td><td class="eff">M</td><td class="needs">your acceptance (card needs-stakes-review)</td><td><span class="pill wait">built (dd4e03c); card open</span></td></tr>
-<tr><td class="id">A11</td><td>Touch anywhere instead of the fixed joystick; area buttons slide away and back (owner items 13, 14)</td><td class="eff">S</td><td class="needs">your acceptance, phone feel (card touch-anywhere-review)</td><td><span class="pill wait">built (b8f6d50); card open</span></td></tr>
-<tr><td class="id">A12</td><td>Venue fixes: bar door, raised bar and walled area, buffer curtains, toilet door, rope in the unused corridor (owner items 4–8, 11)</td><td class="eff">M</td><td class="needs">your acceptance (card venue-fixes-review)</td><td><span class="pill wait">built (e4d7e76); card open</span></td></tr>
-<tr><td class="id">A6</td><td>Version number in the game (v0.2.0 plus the build), changelog by version</td><td class="eff">S</td><td class="needs">nothing</td><td><span class="pill ok">done (v0.2.0)</span></td></tr>
-</table></div>
+<!--BEGIN:backlog-->
+<div class="legend"><span class="s-ok">live</span><span class="s-wait">built, awaiting your acceptance</span><span class="s-plan">built / designed</span><span class="s-idea">idea or parked</span><span>Effort: S a day · M a wave · L several waves · Track: T1 no server (0.3.0) · T2 needs Supabase · T3 needs a business decision</span></div>
+<section><h2><span class="letter">★</span>0.3.0 now (2026-11-15; Daniele: &quot;Yes, go&quot;)</h2>
+<p class="sub">1. <b>Backlog refresh</b> — this file (Housekeeping, done with this commit).</p>
+<p class="sub">2. <b>D1 + D2 Tonight + events</b> — worker running (T1: real October calendar in <code>docs/venue/events/</code>; no live feed yet).</p>
+<p class="sub">3. <b>New minigame</b> — design worker running (B3); build only after Daniele&#x27;s yes on the design.</p>
+<p class="sub">4. <b>Venue list</b> — Daniele&#x27;s real-place changes go to the parked venue worker (local_9543f6b2) → B14.</p>
+<p class="sub">5. <b>T2 waits</b> on card <code>presence-supabase-setup</code> (a Supabase project on Daniele&#x27;s account): then presence wave 1</p>
+<p class="sub">   (P1), accounts, check-ins, real top-patrons, leaderboards, chat.</p>
+<p class="sub">6. Still gating the close of 0.2.x: acceptance cards (look-d-accept and the camera, creator, perf ones in STATE).</p>
 </section>
-
-<section id="world">
-<h2><span class="letter">B</span>The playable world</h2>
-<div class="tablewrap"><table>
-<tr><th>#</th><th>Item</th><th>Effort</th><th>Needs</th><th>Status</th></tr>
-<tr><td class="id">B1</td><td>More interactive places beyond bar, stage, tables and pinball</td><td class="eff">M</td><td class="needs">map fixed (A1)</td><td><span class="pill idea">idea</span></td></tr>
-<tr><td class="id">B2</td><td>Character creation on the accepted v2 presets</td><td class="eff">M</td><td class="needs">nothing</td><td><span class="pill plan">planned</span></td></tr>
-<tr><td class="id">B3</td><td>More minigames (today: Pour Perfect, Rhythm, pinball, Candle Talk)</td><td class="eff">M each</td><td class="needs">nothing</td><td><span class="pill idea">idea</span></td></tr>
-<tr><td class="id">B4</td><td>Achievements as stickers on the club's entry door, shown when you leave and in the Flat before you go out</td><td class="eff">M</td><td class="needs">nothing</td><td><span class="pill idea">idea</span></td></tr>
-<tr><td class="id">B5</td><td>Voxel quality push: more cubes per object without killing a phone; pairs with the performance pass</td><td class="eff">L</td><td class="needs">phone measurement first</td><td><span class="pill idea">idea</span></td></tr>
-<tr><td class="id">B6</td><td>Leaderboard per minigame, weekly and monthly</td><td class="eff">M</td><td class="needs">online backend, accounts</td><td><span class="pill idea">idea</span></td></tr>
-<tr><td class="id">B7</td><td>Entrance corridor portraits of characters in the game's own graphics; the top 10 customers will hang there. Walk past one to open it and read a message from the owner</td><td class="eff">S</td><td class="needs">messages written by each patron, once accounts exist</td><td><span class="pill ok">ten portraits in; placeholder messages</span></td></tr>
-<tr><td class="id">B8</td><td>Start screen as the club's front door: a still first-person view from outside, facing the street door under a lit Black Cabin neon sign. Tap to enter, the door opens, the camera follows your character's view inside, the door closes behind, the camera pulls back to the normal game view and play starts</td><td class="eff">M</td><td class="needs">real street photos for the facade</td><td><span class="pill ok">done (sign from your photo)</span></td></tr>
-<tr><td class="id">B9</td><td>Lounge revamp: merch shop top right, memory corner and the game machine top left, a top-patrons leaderboard under the stairs (left), decorations around the room</td><td class="eff">M</td><td class="needs">nothing</td><td><span class="pill ok">done, accepted, layout frozen</span></td></tr>
-<tr><td class="id">B10</td><td>Top-patrons board under the lounge stairs: placeholder names now, real customers later</td><td class="eff">S</td><td class="needs">QR check-ins for the real monthly ranking</td><td><span class="pill ok">board in; placeholder names</span></td></tr>
-<tr><td class="id">B11</td><td>Merch shop in the lounge: in-game cosmetics for coins; a second shop for real-life merch comes later</td><td class="eff">M</td><td class="needs">coins and cosmetics in the game</td><td><span class="pill plan">stand in; coin shop sheet in progress</span></td></tr>
-<tr><td class="id">B12</td><td>Nightlife actions: "Light one up" in the smoking room, secret "Check the plumbing" in the toilet, drunk from 3 drinks, WASTED screen with a 12 h lockout</td><td class="eff">M</td><td class="needs">nothing</td><td><span class="pill ok">done</span></td></tr>
-<tr><td class="id">B13</td><td>Venue look D: blackish walls, grey-top stage wall with a red neon line, voxel cement floor, red neon and dim candles, lighting halfway to the real bar; bar fixes (stray frame, reindeer head)</td><td class="eff">M</td><td class="needs">nothing</td><td><span class="pill wait">landed; your acceptance on the Questions tab</span></td></tr>
+<section><h2><span class="letter">A</span>Fix first — the gate (Daniele 2026-11-01)</h2>
+<div class="tablewrap"><table><tr><th>#</th><th>Item</th><th>Effort</th><th>Needs</th><th>Status</th><th>Track</th></tr>
+<tr><td class="id">A1</td><td>Baseline map of the club rebuilt to the real floor map (venue v4), layout frozen</td><td class="eff">M</td><td class="needs">—</td><td><span class="pill ok">live (v0.2.x); accepted 11-02</span></td><td class="eff">T1</td></tr>
+<tr><td class="id">A2</td><td>Bar-counter strip connected to the walkable floor</td><td class="eff">S</td><td class="needs">—</td><td><span class="pill ok">live (228eb2e)</span></td><td class="eff">T1</td></tr>
+<tr><td class="id">A3</td><td>Playtest fixes: walk-through doors, real sitting, stairs reoriented, memory corner, corridor sign</td><td class="eff">M</td><td class="needs">—</td><td><span class="pill ok">live (v0.2.x)</span></td><td class="eff">T1</td></tr>
+<tr><td class="id">A4</td><td>Real Black Cabin menu (121 drinks, 34 dishes) at the bar and in Pour Perfect; Lato + Kristi; portrait first + landscape toggle</td><td class="eff">M</td><td class="needs">—</td><td><span class="pill ok">live (v0.2.x); menu follow-ups accepted</span></td><td class="eff">T1</td></tr>
+<tr><td class="id">A5</td><td>Smoother camera, see-through walls (bottom 10 %), fluid movement, facing bug, seats; Prae as owner; area views and buttons</td><td class="eff">M</td><td class="needs">—</td><td><span class="pill ok">live (v0.2.x)</span></td><td class="eff">T1</td></tr>
+<tr><td class="id">A6</td><td>Version number in the game, changelog by version</td><td class="eff">S</td><td class="needs">—</td><td><span class="pill ok">live (v0.2.0 → v0.2.2, <code>docs/tech/versioning.md</code>)</span></td><td class="eff">T1</td></tr>
+<tr><td class="id">A7</td><td>Camera feel round 2: tighter follow, walls and furniture out of the way, distance/angle (owner 11-02)</td><td class="eff">M</td><td class="needs">—</td><td><span class="pill wait">built-awaiting-acceptance (cards camera-feel-2-accept, camera-closer-still, camera-patrons-in-front; 406d2fd, c97abde)</span></td><td class="eff">T1</td></tr>
+<tr><td class="id">A8</td><td>Web build on Vercel, playable on phones from a link</td><td class="eff">M</td><td class="needs">—</td><td><span class="pill ok">live (v0.2.2, https://bc-tamagotchi.vercel.app; <code>docs/tech/03-web-build.md</code>)</span></td><td class="eff">T1</td></tr>
+<tr><td class="id">A9</td><td>Look-D follow-ups (owner items 1, 3, 9, 10, 12: piano player, shelving, library artefacts, band-door shadow, symmetric stage curtain)</td><td class="eff">M</td><td class="needs">—</td><td><span class="pill wait">built-awaiting-acceptance (cards look-followups-review, look-followups-layout-export; 84c58e5, 86b40ab)</span></td><td class="eff">T1</td></tr>
+<tr><td class="id">A10</td><td>Needs and stakes build: stake clock, ghost, annoyances, Retire, farewell card; Ty named (item 2)</td><td class="eff">M</td><td class="needs">—</td><td><span class="pill wait">built-awaiting-acceptance (card needs-stakes-review +4; dd4e03c)</span></td><td class="eff">T1</td></tr>
+<tr><td class="id">A11</td><td>Touch anywhere instead of the fixed joystick; area buttons slide away and back (items 13, 14)</td><td class="eff">S</td><td class="needs">—</td><td><span class="pill ok">live (v0.2.x); card touch-anywhere-review open</span></td><td class="eff">T1</td></tr>
+<tr><td class="id">A12</td><td>Venue fixes: bar door, raised bar and walled area, curtains, toilet door, barrier in unused corridor (items 4–8, 11, 15)</td><td class="eff">M</td><td class="needs">—</td><td><span class="pill wait">built-awaiting-acceptance (card venue-fixes-review +2; e4d7e76)</span></td><td class="eff">T1</td></tr>
 </table></div>
-</section>
 
-<section id="online">
-<h2><span class="letter">C</span>Online and community</h2>
-<p class="sub">Everything here needs a backend and player accounts, which the game does not have yet. Decide the chat policy before C1.</p>
-<div class="tablewrap"><table>
-<tr><th>#</th><th>Item</th><th>Effort</th><th>Needs</th><th>Status</th></tr>
-<tr><td class="id">C1</td><td>Chat with other players in the club</td><td class="eff">L</td><td class="needs">backend, accounts, chat policy (phrase wheel vs free text, 21+)</td><td><span class="pill idea">idea</span></td></tr>
-<tr><td class="id">C2</td><td>Cheer button during a set; the band sees a live cheer count</td><td class="eff">M</td><td class="needs">backend, a band-side view</td><td><span class="pill idea">idea</span></td></tr>
-<tr><td class="id">C3</td><td>Crew quests: weekly goals for a friend group (“try the featured cocktail”, “catch two new bands”), brandable by sponsors</td><td class="eff">L</td><td class="needs">online, friends, sponsor deals</td><td><span class="pill idea">idea</span></td></tr>
-<tr><td class="id">C4</td><td>Referral reward for bringing a first-time visitor who checks in</td><td class="eff">M</td><td class="needs">online, check-in proof</td><td><span class="pill idea">idea</span></td></tr>
-<tr><td class="id">C5</td><td>Seasonal cosmetics for holidays and themed nights that expire</td><td class="eff">M</td><td class="needs">content calendar</td><td><span class="pill idea">idea</span></td></tr>
+</section>
+<section><h2><span class="letter">B</span>The playable world</h2>
+<div class="tablewrap"><table><tr><th>#</th><th>Item</th><th>Effort</th><th>Needs</th><th>Status</th><th>Track</th></tr>
+<tr><td class="id">B1</td><td>More interactive places beyond bar, stage, tables, pinball</td><td class="eff">M</td><td class="needs">map fixed (A1 done)</td><td><span class="pill idea">idea</span></td><td class="eff">T1</td></tr>
+<tr><td class="id">B2</td><td>Character creator (4 bodies, 8 skins, 8 hair × 8 colours, 3 looks; photo booth in the lounge; items 22, 26, 27)</td><td class="eff">M</td><td class="needs">—</td><td><span class="pill ok">live (v0.2.1, c495a35 + fixes); card char-creator-build-review open</span></td><td class="eff">T1</td></tr>
+<tr><td class="id">B3</td><td>More minigames (today: Pour Perfect, Rhythm, pinball, Candle Talk); a new one now in design</td><td class="eff">M each</td><td class="needs">—</td><td><span class="pill plan">designed in progress (design worker running, 0.3.0)</span></td><td class="eff">T1</td></tr>
+<tr><td class="id">B4</td><td>Achievements as stickers on the club&#x27;s entry door; shown when you leave and in the Flat</td><td class="eff">M</td><td class="needs">the Flat (not built)</td><td><span class="pill idea">idea</span></td><td class="eff">T1</td></tr>
+<tr><td class="id">B5</td><td>Voxel quality push: more cubes per object without killing a phone</td><td class="eff">L</td><td class="needs">phone measurement (items 16, 29, 33)</td><td><span class="pill idea">idea</span></td><td class="eff">T1</td></tr>
+<tr><td class="id">B6</td><td>Leaderboard per minigame, weekly and monthly</td><td class="eff">M</td><td class="needs">accounts, backend</td><td><span class="pill idea">idea</span></td><td class="eff">T2</td></tr>
+<tr><td class="id">B7</td><td>Entrance corridor portraits of the top 10 customers; open one to read the patron&#x27;s message</td><td class="eff">S now, M later</td><td class="needs">patrons&#x27; messages once accounts exist</td><td><span class="pill plan">built (50a0623): ten placeholder portraits and messages; real content later</span></td><td class="eff">T2</td></tr>
+<tr><td class="id">B8</td><td>Start screen as the club&#x27;s front door (street, neon sign, tap to enter, door, pull-back)</td><td class="eff">M</td><td class="needs">—</td><td><span class="pill ok">live (0dc0b68, v0.2.x); door pull-back smooth on phone (item 16, 166918d, v0.2.2)</span></td><td class="eff">T1</td></tr>
+<tr><td class="id">B9</td><td>Lounge revamp: merch shop, memory corner, game machine, top-patrons board, decorations</td><td class="eff">M</td><td class="needs">—</td><td><span class="pill ok">live (50a0623 + follow-up, v0.2.x); accepted, layout frozen</span></td><td class="eff">T1</td></tr>
+<tr><td class="id">B10</td><td>Top-patrons board: ranking = real QR check-ins per month</td><td class="eff">S now, M later</td><td class="needs">check-ins</td><td><span class="pill plan">built (50a0623): placeholder names; real data later</span></td><td class="eff">T2</td></tr>
+<tr><td class="id">B11</td><td>Merch shop in the lounge: in-game coin cosmetics now; a real-life merch shop later</td><td class="eff">M</td><td class="needs">real merch list from Black Cabin; coins economy (<code>04-coins.md</code>)</td><td><span class="pill plan">built (50a0623): stand in; coin cosmetics sheet pending. Real-life merch shop</span></td><td class="eff">T3</td></tr>
+<tr><td class="id">B12</td><td>Nightlife actions: Light one up, Check the plumbing, drunk debuff, WASTED + 12 h lockout; debug bypass (item 23)</td><td class="eff">M</td><td class="needs">—</td><td><span class="pill ok">live (2bde243, v0.2.x)</span></td><td class="eff">T1</td></tr>
+<tr><td class="id">B13</td><td>Venue look D: blackish walls, voxel cement floor, red neon, dim candles</td><td class="eff">M</td><td class="needs">—</td><td><span class="pill wait">built-awaiting-acceptance (card look-d-accept; 6cd9735 + 6df5288; closes 0.2.x)</span></td><td class="eff">T1</td></tr>
+<tr><td class="id">B14</td><td>Venue changes from Daniele&#x27;s real-place list (street front, entrance and cocktail photos pending)</td><td class="eff">M</td><td class="needs">his list; real photos</td><td><span class="pill idea">parked (venue worker local_9543f6b2 waits for the list)</span></td><td class="eff">T1</td></tr>
+<tr><td class="id">B15</td><td>Per-area camera: zoom on photo booth and main lounge items, corridor-end framing and wall crossing, curtains facing (items 30–32)</td><td class="eff">M</td><td class="needs">—</td><td><span class="pill ok">live (v0.2.1, camera-areas); cards camera-areas-review, -door-dark, -buffer-view open</span></td><td class="eff">T1</td></tr>
+<tr><td class="id">B16</td><td>Presence P1: real check-ins appear as avatars in everyone&#x27;s bar, notifications, same-table QR together layer (item 24; <code>08-presence.md</code>, all 11 answers as baseline 11-09)</td><td class="eff">L</td><td class="needs">Supabase project (card presence-supabase-setup), accounts, check-ins, consent (P1)</td><td><span class="pill plan">designed (v1, a6ca189); wave-1 build waits on T2</span></td><td class="eff">T2</td></tr>
+<tr><td class="id">B17</td><td>iPhone works: download, context loss, entry crash (items 20, 28, 29, 33)</td><td class="eff">M</td><td class="needs">friend&#x27;s iPhone confirmation on v0.2.2</td><td><span class="pill ok">live (v0.2.2); fix chain 11-09…11-11; iPhone still to be confirmed (card iphone-v021-friend)</span></td><td class="eff">T1</td></tr>
+<tr><td class="id">B18</td><td>Item 16 deeper cut: mesh merge if the door/entry still stutters (~8,000 draw calls)</td><td class="eff">M</td><td class="needs">phone numbers</td><td><span class="pill idea">parked (only if lag returns; entrance closed 11-11)</span></td><td class="eff">T1</td></tr>
+<tr><td class="id">B19</td><td>Camera gaps: area-button focus held after a tap; Sticker door not tappable from the corridor</td><td class="eff">S</td><td class="needs">—</td><td><span class="pill idea">idea (STATE job 4)</span></td><td class="eff">T1</td></tr>
+<tr><td class="id">B20</td><td>Retire settings screen, audio duck, postcards beyond home text, Going bonus, notifications, stitched-scar sticker (needs build left out)</td><td class="eff">M</td><td class="needs">audio bus; notifications need T2</td><td><span class="pill idea">idea (card needs-stakes-retire-ui)</span></td><td class="eff">T1</td></tr>
+<tr><td class="id">B21</td><td>The Flat, coins and the memories album (not built; stakes v3 docs <code>06-stakes.md</code>, <code>04-coins.md</code>)</td><td class="eff">L</td><td class="needs">stakes-v3 review</td><td><span class="pill plan">designed (docs only; card needs-stakes-review)</span></td><td class="eff">T1</td></tr>
+<tr><td class="id">B22</td><td>Thai pass: native-speaker review of machine-drafted strings; Thai names in the web font; ♥ glyph</td><td class="eff">S</td><td class="needs">native Thai speaker</td><td><span class="pill idea">idea</span></td><td class="eff">T1</td></tr>
 </table></div>
-</section>
 
-<section id="bridge">
-<h2><span class="letter">D</span>Real-life bridge</h2>
-<p class="sub">These need data or systems from Black Cabin itself. Scaffolding can be built before the real wiring exists.</p>
-<div class="tablewrap"><table>
-<tr><th>#</th><th>Item</th><th>Effort</th><th>Needs</th><th>Status</th></tr>
-<tr><td class="id">D1</td><td>Upcoming events list</td><td class="eff">S–M</td><td class="needs">events feed, even a spreadsheet</td><td><span class="pill idea">idea</span></td></tr>
-<tr><td class="id">D2</td><td>“Tonight” tab with the band lineup</td><td class="eff">S</td><td class="needs">tonight's lineup source</td><td><span class="pill idea">idea</span></td></tr>
-<tr><td class="id">D3</td><td>Table booking, scaffold only, not wired to a real system</td><td class="eff">M</td><td class="needs">later: Black Cabin's booking flow</td><td><span class="pill idea">idea</span></td></tr>
-<tr><td class="id">D4</td><td>Band info and band pages: followers, past set lists, a “bands you've seen” passport filled by check-ins</td><td class="eff">L</td><td class="needs">band data, check-ins</td><td><span class="pill idea">idea</span></td></tr>
-<tr><td class="id">D5</td><td>Post a picture taken at the club; counts as the monthly refill of one need</td><td class="eff">M</td><td class="needs">photo upload, moderation, consent for faces</td><td><span class="pill idea">idea</span></td></tr>
-<tr><td class="id">D6</td><td>Tip a band through the app</td><td class="eff">L</td><td class="needs">payments provider, legal, band payout</td><td><span class="pill idea">idea</span></td></tr>
-<tr><td class="id">D7</td><td>Ride-home button at last call (Grab link; Grab could sponsor)</td><td class="eff">S</td><td class="needs">Grab deep link</td><td><span class="pill idea">idea</span></td></tr>
-<tr><td class="id">D8</td><td>Guest list and tickets for special nights: RSVP and a QR that works at the door</td><td class="eff">L</td><td class="needs">door-side scanner, ticketing</td><td><span class="pill idea">idea</span></td></tr>
-<tr><td class="id">D9</td><td>Dashboard for the bar: attendance per band, busiest hours, redemptions</td><td class="eff">L</td><td class="needs">backend, check-ins</td><td><span class="pill idea">idea</span></td></tr>
+</section>
+<section><h2><span class="letter">C</span>Online and community (all need the Supabase backend)</h2>
+<div class="tablewrap"><table><tr><th>#</th><th>Item</th><th>Effort</th><th>Needs</th><th>Status</th><th>Track</th></tr>
+<tr><td class="id">C1</td><td>Chat with other players in the club</td><td class="eff">L</td><td class="needs">accounts, chat policy (phrase wheel vs free text, 21+)</td><td><span class="pill idea">idea (presence uses the phrase wheel only)</span></td><td class="eff">T2</td></tr>
+<tr><td class="id">C2</td><td>Cheer button during a set; the band sees a live cheer count</td><td class="eff">M</td><td class="needs">backend, band-side view</td><td><span class="pill idea">idea</span></td><td class="eff">T2</td></tr>
+<tr><td class="id">C3</td><td>Crew quests: weekly goals for a friend group; sponsors can brand them</td><td class="eff">L</td><td class="needs">friends, backend; sponsor deals (business)</td><td><span class="pill idea">idea</span></td><td class="eff">T3</td></tr>
+<tr><td class="id">C4</td><td>Referral reward for bringing a first-time visitor who checks in</td><td class="eff">M</td><td class="needs">check-in proof</td><td><span class="pill idea">idea</span></td><td class="eff">T2</td></tr>
+<tr><td class="id">C5</td><td>Seasonal cosmetics for holidays and themed nights that expire</td><td class="eff">M</td><td class="needs">content calendar</td><td><span class="pill idea">idea</span></td><td class="eff">T1</td></tr>
 </table></div>
-</section>
 
-<section id="debt">
-<h2><span class="letter">F</span>Accepted debt</h2>
+</section>
+<section><h2><span class="letter">D</span>Real-life bridge</h2>
+<div class="tablewrap"><table><tr><th>#</th><th>Item</th><th>Effort</th><th>Needs</th><th>Status</th><th>Track</th></tr>
+<tr><td class="id">D1</td><td>Upcoming events list</td><td class="eff">S–M</td><td class="needs">calendar in <code>docs/venue/events/</code> (October filed; November poster pending)</td><td><span class="pill plan">designed in progress (worker running, 0.3.0)</span></td><td class="eff">T1</td></tr>
+<tr><td class="id">D2</td><td>&quot;Tonight&quot; tab with the band lineup</td><td class="eff">S</td><td class="needs">tonight&#x27;s lineup source (the events JSON for now)</td><td><span class="pill plan">designed in progress (worker running, 0.3.0)</span></td><td class="eff">T1</td></tr>
+<tr><td class="id">D3</td><td>Table booking, scaffold only</td><td class="eff">M</td><td class="needs">Black Cabin&#x27;s booking flow</td><td><span class="pill idea">idea</span></td><td class="eff">T3</td></tr>
+<tr><td class="id">D4</td><td>Band pages: followers, past set lists, &quot;bands you&#x27;ve seen&quot; passport from check-ins</td><td class="eff">L</td><td class="needs">band data, check-ins; band consent</td><td><span class="pill idea">idea</span></td><td class="eff">T2</td></tr>
+<tr><td class="id">D5</td><td>Post a picture from the club at the lounge TV memory corner; counts as a real visit</td><td class="eff">M</td><td class="needs">photo upload and storage, moderation, consent for faces</td><td><span class="pill idea">idea</span></td><td class="eff">T2</td></tr>
+<tr><td class="id">D6</td><td>Tip a band through the app</td><td class="eff">L</td><td class="needs">payments provider, legal, band payout</td><td><span class="pill idea">idea</span></td><td class="eff">T3</td></tr>
+<tr><td class="id">D7</td><td>Ride-home button at last call (Grab link; Grab could sponsor)</td><td class="eff">S</td><td class="needs">Grab deep link, sponsor</td><td><span class="pill idea">idea</span></td><td class="eff">T3</td></tr>
+<tr><td class="id">D8</td><td>Guest list and tickets for special nights: RSVP and a door QR</td><td class="eff">L</td><td class="needs">door-side scanner, ticketing</td><td><span class="pill idea">idea</span></td><td class="eff">T3</td></tr>
+<tr><td class="id">D9</td><td>Dashboard for the bar: attendance per band, busiest hours, redemptions</td><td class="eff">L</td><td class="needs">backend, check-ins</td><td><span class="pill idea">idea</span></td><td class="eff">T2</td></tr>
+</table></div>
+
+</section>
+<section><h2><span class="letter">F</span>Accepted debt (not features)</h2>
 <ul class="q">
-<li>Performance: 42 lights, about 1,850 draw calls, 24 ms GPU on desktop. Phone measurement before any phone build.</li>
-<li>Lounge camera partly blocked by the curtain wall.</li>
-<li>Figure lighting and head proportions (heads 37–43 % of height vs 27–34 % in the renders).</li>
-<li>Native Thai pass, Thai line-height override, web export check.</li>
-<li>Coins, the Flat, memories album and performances schedule not built.</li>
-<li>Needs build left out: Retire settings screen, audio duck, postcards beyond the home text.</li>
+<li>Performance: 42 lights; the phone measurement gates any further cut (B5, B18). Web build uses lower phone graphics (pixel ratio cap 2, MSAA off).</li>
+<li>Pre-alpha debug panel behind <code>PRE_ALPHA</code> in <code>rules.gd</code>: off before anything public.</li>
+<li>Camera rig: exit sign and sconces lag when the north wall sinks; lounge camera partly blocked by the curtain wall.</li>
+<li>Figure lighting and head proportions (heads 37–43 % vs 27–34 % in the renders).</li>
+<li>Live manual §15 stale since venue v4.</li>
 </ul>
 </section>
+<section id="psych">
+<h2><span class="letter">G</span>User psychology: what players may want to engage with</h2>
+<p class="sub">Ideas, not decisions. They build on the attachment the stakes already create (character card, “the usual”, the ghost) and on the real-visit loop. Each row says what pulls the player and what could be built. Rows tagged with an existing item (B4, C3, D4…) extend it rather than replace it.</p>
+<div class="tablewrap"><table>
+<tr><th>Who</th><th>What they come for</th><th>What keeps them</th><th>What loses them</th></tr>
+<tr><td class="id">Regular</td><td>Their place, their people, “the usual”</td><td>Being recognised, status on the Top patrons board, a character with history</td><td>A streak that feels like a chore; a dead character that feels punishing</td></tr>
+<tr><td class="id">Band fan</td><td>Tonight's lineup, the band's songs</td><td>Bands-seen passport, set lists, cheering a set, saving a table</td><td>Stale or wrong lineup data</td></tr>
+<tr><td class="id">Friend-group planner</td><td>A reason to pick this bar tonight</td><td>Crew quests, shared table, “who's going”</td><td>Nobody else in the group plays</td></tr>
+<tr><td class="id">Curious first-timer</td><td>A free, charming voxel game; a story to tell</td><td>A first session that pays off in 2 minutes; one clear reason to visit the real bar</td><td>A slow start; asking for sign-up before any fun</td></tr>
+</table></div>
+<div class="tablewrap"><table>
+<tr><th>#</th><th>Idea (the motive it serves)</th><th>Effort</th><th>Needs</th><th>Status</th></tr>
+<tr><td class="id">G1</td><td><b>Attachment: a character with a history.</b> A “your story” page: first night, nights out, close calls, scars, favourite drink, best minigame score, written as a short diary the player can read back. The more history, the more it hurts to lose, and the more the farewell card means</td><td class="eff">M</td><td class="needs">nothing; extends the character card</td><td><span class="pill idea">idea</span></td></tr>
+<tr><td class="id">G2</td><td><b>Status and showing off.</b> A shareable character card and “night out” polaroid sized for Instagram and LINE stories, with the club's neon sign on it. Free marketing for the bar</td><td class="eff">S–M</td><td class="needs">share sheet in the web build; the memory/polaroid system</td><td><span class="pill idea">idea</span></td></tr>
+<tr><td class="id">G3</td><td><b>Belonging.</b> Regulars react to you by name; after N visits Prae or Nam says something only a regular hears; friends' characters can appear at your table (ties to C1, C3)</td><td class="eff">M–L</td><td class="needs">accounts for the friends part; the cast lines can start now</td><td><span class="pill idea">idea</span></td></tr>
+<tr><td class="id">G4</td><td><b>Collecting and completing.</b> Stamp books: try every drink category on the real menu (121 drinks), catch every band, find every secret room. Progress bars pull people back to finish. Extends B4 and D4</td><td class="eff">M</td><td class="needs">menu data is in; band data later</td><td><span class="pill idea">idea</span></td></tr>
+<tr><td class="id">G5</td><td><b>Curiosity and surprise.</b> Rare events that are not paid: a stranger at the bar with a one-line story, a rare polaroid, a secret behind the toilet door, a “tonight only” patron. Surprise without loot boxes</td><td class="eff">M</td><td class="needs">cast content; an event table in the rules</td><td><span class="pill idea">idea</span></td></tr>
+<tr><td class="id">G6</td><td><b>Mastery and a quick win.</b> Every minigame session under 60 seconds, a clear personal best, weekly leaderboard (B6). Good on a phone in a queue or a taxi</td><td class="eff">M</td><td class="needs">backend for the shared board; the personal best works now</td><td><span class="pill idea">idea</span></td></tr>
+<tr><td class="id">G7</td><td><b>Loss aversion, with a kind face.</b> The stakes clock works because the player cares; keep the tone playful (the character “dies of boredom”) and always show a way back. Test whether day 21 reads as fun or as pressure, and watch for players who quit rather than return</td><td class="eff">S</td><td class="needs">playtest with real regulars (retention at day 7, 14, 21)</td><td><span class="pill idea">idea</span></td></tr>
+<tr><td class="id">G8</td><td><b>The rhythm of nightlife.</b> The game as the warm-up and the afterglow: a “who's playing tonight” nudge at the hour people plan their evening, an “I'm going” tap, a morning-after recap of the night out. Respects the 2-a-week notification cap and the 22:00 quiet hour</td><td class="eff">M</td><td class="needs">D1 and D2 (events feed, lineup); push in the web build</td><td><span class="pill idea">idea</span></td></tr>
+<tr><td class="id">G9</td><td><b>Story and lore.</b> Each regular has a chapter that unlocks by visiting, not by playing: Prae's founding story, Nam's night, Ty's habit. Gives a reason to come back that is not a meter</td><td class="eff">M</td><td class="needs">their real consent and lines (see Ask Black Cabin, People)</td><td><span class="pill idea">idea</span></td></tr>
+<tr><td class="id">G10</td><td><b>Self-expression.</b> Wardrobe, nickname, Flat decoration, a toast or catchphrase the character says. People pay and return for things that look like them</td><td class="eff">M</td><td class="needs">character creation (B2), the coin shop (B11), the Flat</td><td><span class="pill idea">idea</span></td></tr>
+<tr><td class="id">G11</td><td><b>Nostalgia.</b> Memories album with “a year ago tonight”, photos from the real nights, the band you first saw</td><td class="eff">M</td><td class="needs">photo upload (D5), moderation, consent for faces</td><td><span class="pill idea">idea</span></td></tr>
+<tr><td class="id">G12</td><td><b>Check the idea with real people before building.</b> Ask five regulars and five first-timers: what would make you open this on a Tuesday? What would make you delete it? Record the first thing each says</td><td class="eff">S</td><td class="needs">the web build on phones (A8), the Black Cabin visit</td><td><span class="pill plan">suggested next</span></td></tr>
+</table></div>
+</section>
 
+<section id="money">
+<h2><span class="letter">H</span>Monetization</h2>
+<p class="sub">Starting rule, to confirm: the game's job is to bring people into the real bar, so the first revenue is the bar's. The existing stakes rules already say no coin buys relief from needs and every meter fills to 100 with no coins; the ideas below keep that. Revenue figures and prices are deliberately left open until Black Cabin shares its numbers (average spend, visits per regular).</p>
+<div class="tablewrap"><table>
+<tr><th>#</th><th>Idea</th><th>Effort</th><th>Needs</th><th>Status</th></tr>
+<tr><td class="id">H1</td><td><b>Real-visit rewards.</b> Check-ins earn real perks the bar chooses (a welcome shot, a free snack on the 10th visit, a birthday toast). Coins can be redeemed at the bar. Lowest risk and easiest to measure</td><td class="eff">M</td><td class="needs">QR check-ins, a bar-side way to redeem, the bar's yes (Ask Black Cabin, Facts)</td><td><span class="pill idea">idea</span></td></tr>
+<tr><td class="id">H2</td><td><b>Bookings and tickets.</b> Table deposit or booking fee, paid guest list for special nights, QR at the door (D3, D8). A small fee per booking or a share of ticket sales</td><td class="eff">L</td><td class="needs">payments provider, door scanner, legal</td><td><span class="pill idea">idea</span></td></tr>
+<tr><td class="id">H3</td><td><b>Sponsored quests and branded items.</b> A spirits or beer brand sponsors a crew quest or a bottle on the shelf; Grab sponsors the ride-home button (C3, D7). Sponsors pay for measured visits and check-ins, not impressions</td><td class="eff">L</td><td class="needs">sponsor deals, check-in data. Alcohol advertising is restricted in Thailand: take legal advice before any branded alcohol content</td><td><span class="pill idea">idea</span></td></tr>
+<tr><td class="id">H4</td><td><b>In-game cosmetics shop.</b> Coins are earned in play; an optional paid coin pack buys cosmetics only (wardrobe, Flat decoration, nameplate). Nothing that revives a character, fills a meter or skips the clock</td><td class="eff">M</td><td class="needs">coin shop (B11), app-store or web payments, a policy on minors</td><td><span class="pill idea">idea</span></td></tr>
+<tr><td class="id">H5</td><td><b>Real merch with an in-game twin.</b> Buy the tee or cap at the bar and unlock the same item in the game with a code; the merch list is still to be confirmed (Ask Black Cabin, Facts)</td><td class="eff">M</td><td class="needs">real merch list, a code or QR on the item</td><td><span class="pill idea">idea</span></td></tr>
+<tr><td class="id">H6</td><td><b>Band tips and band merch.</b> Tip through the app with a small platform fee, or sell the band's merch in the lounge shop (D6)</td><td class="eff">L</td><td class="needs">payments, band payout, consent from each band</td><td><span class="pill idea">idea</span></td></tr>
+<tr><td class="id">H7</td><td><b>Regular's Card (monthly).</b> A small subscription: seasonal cosmetics, a Flat decoration slot, priority table booking, a perk at the bar. Price to be set from the bar's own numbers</td><td class="eff">M</td><td class="needs">accounts, payments, H1 first so the card has real perks</td><td><span class="pill idea">idea</span></td></tr>
+<tr><td class="id">H8</td><td><b>License the model to other venues.</b> The voxel Tamagotchi for any bar: a branded replica of the venue, a stakes clock tied to real visits, a dashboard (D9). Black Cabin is the proof. Setup fee plus monthly fee per venue</td><td class="eff">L</td><td class="needs">Black Cabin's retention numbers, a repeatable way to model a venue, an agreement on who owns what</td><td><span class="pill idea">idea</span></td></tr>
+<tr><td class="id">H9</td><td><b>Measure first.</b> Before any of these, count what the game does: check-ins per player per month, repeat visits versus non-players, spend per visit if the bar can share it. That number is the case for every sponsor and for H8</td><td class="eff">S</td><td class="needs">check-in backend, the bar's willingness to share spend data</td><td><span class="pill plan">suggested next</span></td></tr>
+</table></div>
+<p class="sub" style="margin-top:14px"><b>Guard rails, proposed.</b></p>
+<ul class="q">
+<li>No pay-to-revive and no paid relief from needs. It would break the stakes and the “go to the real bar” promise.</li>
+<li>No loot boxes or random paid rewards. Surprises (G5) are earned in play.</li>
+<li>21+ for anything about alcohol; no paid content aimed at minors; real-money payments need an age and consent check.</li>
+<li>No ads that cover the room. Sponsors appear as items inside the club.</li>
+<li>Real people appear only with signed consent, and bands approve any merch that uses their name.</li>
+<li>Decide where the money goes (bar, game developer, band) in writing before H2, H5, H6 or H7 ship.</li>
+</ul>
+</section>
+<!--END:backlog-->
 </div>
 
 <div id="p-questions" role="tabpanel" aria-labelledby="t-questions" hidden>
@@ -369,6 +426,7 @@ table.doc td, table.doc th { vertical-align: top; text-align: left; }
 <tr><td>Notifications</td><td><code>NOTIFY_LOWEST_METER_CROSSES</code></td><td><code>40.0</code></td><td></td></tr>
 <tr><td>Notifications</td><td><code>NOTIFY_MAX_PER_WEEK</code></td><td><code>2</code></td><td></td></tr>
 <tr><td>Notifications</td><td><code>NOTIFY_QUIET_AFTER_HOUR</code></td><td><code>22</code></td><td></td></tr>
+<tr><td>Notifications</td><td><code>PRE_ALPHA</code></td><td><code>true</code></td><td></td></tr>
 <tr><td>Debug clock</td><td><code>DEBUG_CLOCK_MULTIPLIER</code></td><td><code>60.0</code></td><td></td></tr>
 <tr><td>Persistence</td><td><code>AUTOSAVE_SECONDS</code></td><td><code>30.0</code></td><td></td></tr>
 <tr><td>Persistence</td><td><code>VISIT_LOG_MAX</code></td><td><code>200</code></td><td></td></tr>
@@ -485,7 +543,7 @@ table.doc td, table.doc th { vertical-align: top; text-align: left; }
   <div class="lb-nav" id="lb-nav"><button class="qbtn ghost" id="lb-prev">← Previous</button><button class="qbtn ghost" id="lb-next">Next →</button></div>
 </dialog>
 
-<p class="foot">Updated 3 Nov 2026, v15 (new tab Ask Black Cabin, the list for the bar visit; all fourteen owner items built and verified; Stakes rules and Game bible tabs added; web build A8 built, deploy is yours). Backlog items are never silently deleted: shipped ones get the commit, dropped ones get the reason. Answers on the Questions tab are copied into <code>docs/design/DECISIONS.md</code>.</p>
+<p class="foot">Updated 15 Nov 2026, v17 (Backlog tab is generated from BACKLOG.md by build_hub_tabs.py, with G and H kept from backlog-gh.html until they are folded into BACKLOG.md; before: v16 10 Nov: new sections G User psychology and H Monetization on the Backlog tab, ideas only; not yet mirrored in <code>docs/design/BACKLOG.md</code>). Earlier, 3 Nov 2026, v15 (new tab Ask Black Cabin, the list for the bar visit; all fourteen owner items built and verified; Stakes rules and Game bible tabs added; web build A8 built, deploy is yours). Backlog items are never silently deleted: shipped ones get the commit, dropped ones get the reason. Answers on the Questions tab are copied into <code>docs/design/DECISIONS.md</code>.</p>
 </div>
 <script>
 (function(){

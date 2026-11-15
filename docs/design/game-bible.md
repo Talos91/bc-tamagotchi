@@ -86,6 +86,7 @@ A voxel-art Tamagotchi-style game commissioned by the real Black Cabin bar (466 
 | Notifications | `NOTIFY_LOWEST_METER_CROSSES` | `40.0` |  |
 | Notifications | `NOTIFY_MAX_PER_WEEK` | `2` |  |
 | Notifications | `NOTIFY_QUIET_AFTER_HOUR` | `22` |  |
+| Notifications | `PRE_ALPHA` | `true` |  |
 | Debug clock | `DEBUG_CLOCK_MULTIPLIER` | `60.0` |  |
 | Persistence | `AUTOSAVE_SECONDS` | `30.0` |  |
 | Persistence | `VISIT_LOG_MAX` | `200` |  |
