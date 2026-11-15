@@ -8,6 +8,9 @@ import subprocess, io, collections, re
 # (version, last commit of that version, inclusive), oldest first
 RELEASES = [
     ('0.1.0', '51603f0'),
+    ('0.2.1', '4620eb5'),
+    ('0.2.2', 'bd50d36'),
+    ('0.2.3', 'b1d9716'),
 ]
 
 PREAMBLE = ['# Changelog', '', 'Every commit on `main`, grouped by game version, newest first (days newest first inside each),',
