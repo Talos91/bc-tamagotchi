@@ -230,3 +230,4 @@ Append-only. One dated line per event, newest last. Never edit earlier lines.
 - 2026-11-15 (+7) — 🎲 Coaster Flip (A) done: 03177a7, 21/21 (shared tree), card minigame-coaster-flip-review; test_coaster_flip added to Tests. 🔍 verify-coaster-flip proposed. Builder on D Neon Moth.
 - 2026-11-15 (+7) — 🔍 verify-coaster-flip PASSED b2de123 21/21 + web, pushed (ls-remote match); report handoffs/worker-reports-2026-11/verify-coaster-flip.md.
 - 2026-11-15 (+7) — 🔍 verify-coaster-flip (local_7e192135) PASSED b2de123 21/21 + web, pushed. Held idle as the standing Verifier for the minigame round (SendMessage, no card). Context ~42 %.
+- 2026-11-15 (+7) — 🎲 Neon Moth (D) done: 8ff310c, 22/22 (shared tree), card minigame-neon-moth-review (payouts for Daniele); test_neon_moth in Tests; sent to the standing Verifier. Builder on C Soi Dash.
