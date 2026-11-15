@@ -244,3 +244,4 @@ Append-only. One dated line per event, newest last. Never edit earlier lines.
 - 2026-11-15 (+7) — 🎲 Shake & Serve (B) done: ff37dfd, 24/24 (shared tree), card minigame-shake-serve-review; test_shake_serve in Tests (24 suites). Verifier after the builder's exit ritual. Context ~21 %.
 - 2026-11-15 (+7) — 🎲 builder DONE (ace6349). 0.3.0 assembled: changelog RELEASES 0.2.1–0.2.3 + regen (f4eafda), bump 0.3.0 (09f0d24). Verifier card verify-030 (task_44413781) proposed — peer-started turn. Context ~23 %.
 - 2026-11-15 (+7) — 🔍 verify-030 PASSED 09f0d24 (v0.3.0) 24/24 + web, pushed (ls-remote match); builder + verifier archived; Daniele to redeploy 0.3.0. Context ~25 %.
+- 2026-11-15 (+7) — Daniele (via Master): no windowed Godot on his visible desktop; headless, or a private hidden desktop (hd.ps1/batch.ps1), else NOT DONE + ask → PROJECT.md Tests + role notes, every Godot brief. Context ~26 %.
