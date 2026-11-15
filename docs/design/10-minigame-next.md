@@ -117,6 +117,17 @@ venue session, not the base). **Blocked on facts:** the real cocktail page is st
 pending"); without it the recipes would be invented, which is the bar's call. Fallback: six public classics
 (Negroni, Margarita, Mojito, Daiquiri, Old Fashioned, Gin Sour) labelled as such.
 
+**As built (2026-11-15).** Shelf: five spirits labelled with the real bottles Pour Perfect features (Roku, Absolut,
+Phraya 8Y, Don Julio Blanco, Monkey Shoulder, from the menu in `docs/venue/menu/`) and seven mixers. Eight classic
+house mixes (sour, gin & tonic, mule, old fashioned, paloma, rum & cola, daiquiri, gin highball), each ordered by
+mood; three different ones a round, the same per night. Recipe shows 2 s; 12 s to pick; four nods 0.55 s apart,
+a tap within 0.22 s of a nod counts (relaxed 0.33 s). Score as designed. Feeds `pour_perfect` (Drinks 20–30); a
+great round or better adds `shake_serve_friends` (Friends +5) on the same result card (generic
+`extra.bonus_action`). Shares the bar's 3 tries with Pour Perfect (`Rules.MINIGAME_TRY_POOL`). A served round
+counts as an alcoholic drink, like Pour Perfect (it does not mark a menu drink as tried). Free, like Pour
+Perfect: the money call stays on its card. The cocktail page stays a pending fact; real recipes replace the
+house mixes when it comes.
+
 **Why not first.** Drinks is the best-served meter already; it waits on bar facts; it is M with a new screen.
 It is the strongest showcase of the real bar once the cocktail page arrives: a good 0.3.x follow-up.
 

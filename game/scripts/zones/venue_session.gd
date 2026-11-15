@@ -48,7 +48,7 @@ const EARSHOT_ZONES := ["stage", "floor"]  ## camera zones within earshot of the
 const TRIED_KEY := "drinks_tried"  ## Needs.ext[TRIED_KEY][drink_id] = true (persists with the save)
 const CIGARETTE_AT := Vector3(0.2, 1.05, 0.22)  ## in the player's Body: the drink hand of the stand_drink pose
 ## Sheet row -> the minigame it opens (for the tries per visit).
-const ROW_GAMES := {"pour": "pour_perfect", "rhythm": "front_row_rhythm", "talk": "candle_talk", "pinball": "neon_pinball", "coaster": "coaster_flip", "moth": "neon_moth", "dash": "soi_dash"}
+const ROW_GAMES := {"pour": "pour_perfect", "rhythm": "front_row_rhythm", "talk": "candle_talk", "pinball": "neon_pinball", "coaster": "coaster_flip", "moth": "neon_moth", "dash": "soi_dash", "shake": "shake_serve"}
 const GAMES := {
 	"pour_perfect": "res://scenes/minigames/pour_perfect/pour_perfect.tscn",
 	"front_row_rhythm": "res://scenes/minigames/front_row_rhythm/front_row_rhythm.tscn",
@@ -57,6 +57,7 @@ const GAMES := {
 	"coaster_flip": "res://scenes/minigames/coaster_flip/coaster_flip.tscn",
 	"neon_moth": "res://scenes/minigames/neon_moth/neon_moth.tscn",
 	"soi_dash": "res://scenes/minigames/soi_dash/soi_dash.tscn",
+	"shake_serve": "res://scenes/minigames/shake_serve/shake_serve.tscn",
 }
 
 var needs: Node
@@ -165,6 +166,9 @@ func rows_for(zone: Dictionary) -> Array[Dictionary]:
 			rows.append(_row("order", "venue.sheet.bar.order", order_sub, "drinks"))
 			rows.append(_row("menu", "menu.bar.menu", BarMenu.t("menu.bar.menu_sub", {"n": BarMenu.items("drinks").size()}), "drinks"))
 			rows.append(_row("pour", "venue.sheet.bar.pour", T.t("venue.sheet.bar.pour_sub", {"best": _best("pour_perfect")}), "drinks", true))
+			var srow := _row("shake", "", T.t("mg.shake_serve.row_sub", {"best": _best("shake_serve")}), "drinks", true)
+			srow["title"] = T.t("mg.shake_serve.row")
+			rows.append(srow)
 			var nxt := next_new_drink()
 			if nxt == "":
 				rows.append(_row("try", "venue.sheet.bar.try", "", "drinks", false, T.t("venue.sheet.bar.try_done")))
@@ -411,6 +415,12 @@ func do_row(zone: Dictionary, row_id: String) -> bool:
 		"front":
 			player.walk_to(zone["approach"])
 			action_done.emit({"line": T.t("venue.card.front"), "gains": {}, "tab": 0.0, "ok": true, "reason": "", "quiet": false})
+		"shake":
+			# Shake & Serve (10-minigame-next §B): a served round is a drink like Pour Perfect (alcoholic; Nam's real
+			# spirits), counted in _on_action_applied; the bar's 3 tries are shared with Pour Perfect
+			_pour_drink = ""
+			_request("shake_serve", {"night": BarMenu.night_of(needs.real_now()), "n": pours_this_visit})
+			pours_this_visit += 1
 		"rhythm":
 			_request("front_row_rhythm", {"song": band.song})
 		"applaud":

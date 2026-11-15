@@ -444,7 +444,7 @@ func minigame_miss_below() -> float:
 
 
 func minigame_tries_left(game_id: String) -> int:
-	return maxi(0, Rules.MINIGAME_TRIES_PER_VISIT - int(minigame_tries.get(game_id, 0)))
+	return maxi(0, Rules.MINIGAME_TRIES_PER_VISIT - int(minigame_tries.get(Rules.MINIGAME_TRY_POOL.get(game_id, game_id), 0)))
 
 
 ## A round finished: it uses a try (misses included) and sees to Rusty. False, nothing recorded, when no tries were left.
@@ -453,7 +453,8 @@ func note_minigame_round(game_id: String) -> bool:
 		begin_visit()  # the tries belong to the visit; begin_visit clears them
 	if minigame_tries_left(game_id) <= 0:
 		return false
-	minigame_tries[game_id] = int(minigame_tries.get(game_id, 0)) + 1
+	var pool: String = Rules.MINIGAME_TRY_POOL.get(game_id, game_id)  # a shared pool counts under its owner's id
+	minigame_tries[pool] = int(minigame_tries.get(pool, 0)) + 1
 	visit_minigame_rounds += 1
 	annoy_cleared["rusty"] = true
 	_dirty = true

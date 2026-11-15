@@ -73,6 +73,10 @@ func apply(result: Dictionary) -> Dictionary:
 		if applied.get("ok", false) and bool(result.get("extra", {}).get("lean", false)):
 			var lean: Dictionary = n.apply_action(LEAN_ACTION, 1.0, str(result.get("key", "")))
 			_fold(applied, lean)
+		# A game's own bonus action (Shake & Serve: shake_serve_friends on a great round), shown as one gain with the round.
+		var bonus_id := str(result.get("extra", {}).get("bonus_action", ""))
+		if applied.get("ok", false) and bonus_id != "" and Rules.ACTIONS.has(bonus_id):
+			_fold(applied, n.apply_action(bonus_id, 1.0))
 		# Any round that is not a miss is "play a minigame" (06-stakes §2): +3 Nightlife, capped +9 a visit
 		if applied.get("ok", false):
 			_fold(applied, n.apply_action(PLAYED_ACTION))

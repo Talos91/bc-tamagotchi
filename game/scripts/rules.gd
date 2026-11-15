@@ -106,6 +106,10 @@ const VISIT_LOG_MAX := 200
 ## once_per_visit: only the first call per visit counts ("First time ... each visit").
 ## daily_once: needs a key (e.g. the regular's id); one gain per key per day ("once per regular per day").
 ## Source of each base value: GDD §2.3, except candle_talk_lean (DECISIONS (k); 03-cast §3.1).
+## Minigames that share another's tries per visit (06-stakes §7.2): Shake & Serve uses the bar's 3 with Pour Perfect
+## (10-minigame-next §B), so Drinks never gets two sets of rounds.
+const MINIGAME_TRY_POOL := {"shake_serve": "pour_perfect"}
+
 const ACTIONS := {
 	"order_drink": {"label": "Order a drink (free one is on the house)", "zone": "Bar", "gains": {"drinks": 15.0}},
 	"pour_perfect": {"label": "Pour Perfect / Shake & Serve", "zone": "Bar", "gains": {"drinks": [20.0, 30.0]}},
@@ -133,6 +137,9 @@ const ACTIONS := {
 	"neon_moth": {"label": "Neon Moth (game cabinet)", "zone": "Lounge", "gains": {"nightlife": [10.0, 20.0]}},
 	## Soi Dash on the lounge game cabinet (10-minigame-next §C; DECISIONS 2026-11-15): pinball's band, no cap.
 	"soi_dash": {"label": "Soi Dash (game cabinet)", "zone": "Lounge", "gains": {"nightlife": [10.0, 20.0]}},
+	## Shake & Serve bonus (GDD §9 #2 "Friends +5"; 10-minigame-next §B): a great round or better, via result extra.bonus_action.
+	## The round itself feeds "pour_perfect" (Drinks +20-30).
+	"shake_serve_friends": {"label": "Shake & Serve bonus (great or better)", "zone": "Bar", "gains": {"friends": 5.0}},
 	"enter_lounge": {"label": "First time in the Lounge", "zone": "Lounge", "gains": {"nightlife": 5.0}, "once_per_visit": true},
 	"last_song": {"label": "Stay until the last song", "zone": "Any", "gains": {"nightlife": 10.0}, "once_per_visit": true},
 	## Provisional (DECISIONS "Playtest of 33dc5b9", BACKLOG B12): a cigarette by the smoking-room window is a chat
