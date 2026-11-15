@@ -16,6 +16,7 @@ const GAMES := [
 	{"id": "candle_talk", "scene": "res://scenes/minigames/candle_talk/candle_talk.tscn", "need": "friends"},
 	{"id": "neon_pinball", "scene": "res://scenes/minigames/neon_pinball/neon_pinball.tscn", "need": "nightlife"},
 	{"id": "coaster_flip", "scene": "res://scenes/minigames/coaster_flip/coaster_flip.tscn", "need": "friends"},
+	{"id": "neon_moth", "scene": "res://scenes/minigames/neon_moth/neon_moth.tscn", "need": "nightlife"},
 ]
 
 var needs: Node
@@ -105,7 +106,7 @@ func _build_menu() -> void:
 
 	for g in GAMES:
 		var b := UI.button("", "secondary")
-		b.custom_minimum_size = Vector2(0, UI.dp(76))
+		b.custom_minimum_size = Vector2(0, UI.dp(76 if GAMES.size() <= 4 else 56))  # 8 games still fit a phone
 		b.pressed.connect(_launch.bind(g))
 		col.add_child(b)
 		var inner := HBoxContainer.new()

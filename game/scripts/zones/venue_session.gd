@@ -48,13 +48,14 @@ const EARSHOT_ZONES := ["stage", "floor"]  ## camera zones within earshot of the
 const TRIED_KEY := "drinks_tried"  ## Needs.ext[TRIED_KEY][drink_id] = true (persists with the save)
 const CIGARETTE_AT := Vector3(0.2, 1.05, 0.22)  ## in the player's Body: the drink hand of the stand_drink pose
 ## Sheet row -> the minigame it opens (for the tries per visit).
-const ROW_GAMES := {"pour": "pour_perfect", "rhythm": "front_row_rhythm", "talk": "candle_talk", "pinball": "neon_pinball", "coaster": "coaster_flip"}
+const ROW_GAMES := {"pour": "pour_perfect", "rhythm": "front_row_rhythm", "talk": "candle_talk", "pinball": "neon_pinball", "coaster": "coaster_flip", "moth": "neon_moth"}
 const GAMES := {
 	"pour_perfect": "res://scenes/minigames/pour_perfect/pour_perfect.tscn",
 	"front_row_rhythm": "res://scenes/minigames/front_row_rhythm/front_row_rhythm.tscn",
 	"candle_talk": "res://scenes/minigames/candle_talk/candle_talk.tscn",
 	"neon_pinball": "res://scenes/minigames/neon_pinball/neon_pinball.tscn",
 	"coaster_flip": "res://scenes/minigames/coaster_flip/coaster_flip.tscn",
+	"neon_moth": "res://scenes/minigames/neon_moth/neon_moth.tscn",
 }
 
 var needs: Node
@@ -241,10 +242,10 @@ func rows_for(zone: Dictionary) -> Array[Dictionary]:
 				T.t("venue.sheet.table.sat") if needs.daily_keys.has("sit_with|" + sit_key(zone)) else "")
 			rows.append(tsit)
 		"cabinet":
-			# Plan v4 stubs (game cabinet, tall tables): the generic table sheet until their own content lands
-			var sit := _row("sit", "venue.sheet.table.sit", T.t("venue.sheet.table.sit_sub"), "friends", false,
-				T.t("venue.sheet.table.sat") if needs.daily_keys.has("sit_with|" + sit_key(zone)) else "")
-			rows.append(sit)
+			# The Black Cabin game machine (10-minigame-next §C, §D): a pick of its games, each with its own tries
+			var mrow := _row("moth", "", T.t("mg.neon_moth.row_sub", {"best": _best("neon_moth")}), "nightlife", true)
+			mrow["title"] = T.t("mg.neon_moth.row")
+			rows.append(mrow)
 		"exit":
 			rows.append(_row("leave", "venue.sheet.exit.leave", T.t("venue.sheet.exit.leave_sub"), ""))
 	for r in rows:
@@ -431,6 +432,8 @@ func do_row(zone: Dictionary, row_id: String) -> bool:
 			_request("neon_pinball", {})
 		"coaster":
 			_request("coaster_flip", {"regular": str(zone.get("regular", ""))})
+		"moth":
+			_request("neon_moth", {})
 		"leave":
 			leave()
 		"smoke":

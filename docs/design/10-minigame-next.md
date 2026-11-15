@@ -165,8 +165,8 @@ red neon sign at the end.
 ceiling singes a wing: the moth blinks for 1.2 s (no second bump in that time) and is put back in the middle of
 the lane. **3 singes and the flight ends.** Same gap heights for everyone each night (seed from the Bangkok date).
 
-**Score.** `score = 0.9 × gates passed / 15 + 0.1 if the moth reaches the sign`. Read: 3 gates or fewer =
-miss (< 0.25); 4–9 good; 10–13 great; 14–15 perfect only with the sign (14 + sign = 0.94).
+**Score (as built).** `score = 0.8 × gates passed / 15 + 0.2 if the moth reaches the sign`. Read: 4 gates or
+fewer = miss (< 0.25); 5–11 good; 12–15 great; perfect needs the sign and 13+ gates (13 + sign = 0.89).
 
 **Feeds.** New action `neon_moth`: Nightlife **[10, 20]**, pinball's band, no cap (like pinball). Coins: standard
 2 / 3 / 5 (04-coins), first 4 results per visit, then 1. Balance knob for Daniele: three Nightlife games now live

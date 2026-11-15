@@ -129,6 +129,8 @@ const ACTIONS := {
 	## Coaster Flip at a tall table (docs/design/10-minigame-next.md §A; DECISIONS 2026-11-15 "build them all"): Friends
 	## [8, 12] (GDD §9 #7), at most 20 a visit so a second Friends source never outgrows Candle Talk.
 	"coaster_flip": {"label": "Coaster Flip (tall table)", "zone": "Tall table", "gains": {"friends": [8.0, 12.0]}, "cap_per_visit": 20.0},
+	## Neon Moth on the lounge game cabinet (10-minigame-next §D; owner item 35): pinball's band, no cap like pinball.
+	"neon_moth": {"label": "Neon Moth (game cabinet)", "zone": "Lounge", "gains": {"nightlife": [10.0, 20.0]}},
 	"enter_lounge": {"label": "First time in the Lounge", "zone": "Lounge", "gains": {"nightlife": 5.0}, "once_per_visit": true},
 	"last_song": {"label": "Stay until the last song", "zone": "Any", "gains": {"nightlife": 10.0}, "once_per_visit": true},
 	## Provisional (DECISIONS "Playtest of 33dc5b9", BACKLOG B12): a cigarette by the smoking-room window is a chat

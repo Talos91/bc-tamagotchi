@@ -169,3 +169,13 @@ mg.coaster_flip.beat,You beat {who}!,ชนะ {who} แล้ว!,Hint the mome
 mg.coaster_flip.row,Coaster Flip,Coaster Flip,Tall table sheet row title (opens the minigame),26
 mg.coaster_flip.row_with,Coaster Flip with {regular},Coaster Flip กับ {regular},Tall table sheet row title when a regular hosts it. {regular} name,30
 mg.coaster_flip.row_sub,Beat the stack · {best},ชนะสถิติ · {best},Tall table row sub-line. {best} the player's best,34
+mg.neon_moth.title,Neon Moth,Neon Moth,Minigame name (stays English),18
+mg.neon_moth.subtitle,The Black Cabin game machine,ตู้เกม Black Cabin,Subtitle under the name in the lab menu,34
+mg.neon_moth.how_to,"Tap to flutter, let go to sink. Slip between the bulb strings and the speakers to reach the BLACK CABIN sign. Three bumps and the moth goes home.",แตะเพื่อกระพือปีก ปล่อยเพื่อร่อนลง ลอดระหว่างสายหลอดไฟกับลำโพงให้ถึงป้าย BLACK CABIN ชนสามครั้งผีเสื้อกลับบ้าน,Pause sheet help text. BLACK CABIN is brand-fixed,150
+mg.neon_moth.tier_1,Night flyer,นักบินกลางคืน,Result card tier word,18
+mg.neon_moth.tier_2,Drawn to the light,ถูกแสงดึงดูด,Result card tier word,18
+mg.neon_moth.tier_3,Neon reached,ถึงนีออนแล้ว,Result card tier word,18
+mg.neon_moth.status,gates {gates} of {total} · wings {wings},ประตู {gates} จาก {total} · ปีก {wings},Frame status line. {gates} passed; {total} gates; {wings} bumps left,40
+mg.neon_moth.hint,Tap to flutter,แตะเพื่อกระพือปีก,Hint before the first tap,40
+mg.neon_moth.row,Play Neon Moth,เล่น Neon Moth,Game cabinet sheet row title,26
+mg.neon_moth.row_sub,One flight · {best},บินหนึ่งรอบ · {best},Game cabinet row sub-line. {best} the player's best,34

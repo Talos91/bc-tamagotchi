@@ -108,7 +108,7 @@ venue.prompt.cabinet,Tap to try the Black Cabin game,แตะเพื่อล
 venue.prompt.tall,Tap to lean on the table,แตะเพื่อยืนพิงโต๊ะ,Zone prompt pill at a tall table (stub),40
 venue.prompt.smoking,Tap to step outside,แตะเพื่อออกไปสูบบุหรี่,Zone prompt pill in the smoking room (stub),40
 venue.sheet.cabinet.head,THE LOUNGE · Game machine,เลานจ์ · ตู้เกม,Game cabinet sheet header (stub),26
-venue.sheet.cabinet.greet,A skull blinks on the marquee. Coming soon.,หัวกะโหลกกะพริบบนป้าย เร็ว ๆ นี้,Line on the game cabinet sheet (stub),90
+venue.sheet.cabinet.greet,A skull blinks on the marquee. Pick a game.,หัวกะโหลกกะพริบบนป้าย เลือกเกมเลย,Line on the game cabinet sheet (its games: Neon Moth, Soi Dash),90
 venue.sheet.tall.head,TALL TABLE,โต๊ะสูง,Tall table sheet header (stub),26
 venue.sheet.tall.greet,A candle and a free stool.,เทียนหนึ่งเล่มกับเก้าอี้ว่าง,Line on the tall table sheet (stub),90
 venue.sheet.smoking.head,SMOKING ROOM,ห้องสูบบุหรี่,Smoking room sheet header (stub),26
