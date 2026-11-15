@@ -48,12 +48,13 @@ const EARSHOT_ZONES := ["stage", "floor"]  ## camera zones within earshot of the
 const TRIED_KEY := "drinks_tried"  ## Needs.ext[TRIED_KEY][drink_id] = true (persists with the save)
 const CIGARETTE_AT := Vector3(0.2, 1.05, 0.22)  ## in the player's Body: the drink hand of the stand_drink pose
 ## Sheet row -> the minigame it opens (for the tries per visit).
-const ROW_GAMES := {"pour": "pour_perfect", "rhythm": "front_row_rhythm", "talk": "candle_talk", "pinball": "neon_pinball"}
+const ROW_GAMES := {"pour": "pour_perfect", "rhythm": "front_row_rhythm", "talk": "candle_talk", "pinball": "neon_pinball", "coaster": "coaster_flip"}
 const GAMES := {
 	"pour_perfect": "res://scenes/minigames/pour_perfect/pour_perfect.tscn",
 	"front_row_rhythm": "res://scenes/minigames/front_row_rhythm/front_row_rhythm.tscn",
 	"candle_talk": "res://scenes/minigames/candle_talk/candle_talk.tscn",
 	"neon_pinball": "res://scenes/minigames/neon_pinball/neon_pinball.tscn",
+	"coaster_flip": "res://scenes/minigames/coaster_flip/coaster_flip.tscn",
 }
 
 var needs: Node
@@ -230,7 +231,16 @@ func rows_for(zone: Dictionary) -> Array[Dictionary]:
 			var ssit := _row("sit", "venue.sheet.table.sit", T.t("venue.sheet.table.sit_sub"), "friends", false,
 				T.t("venue.sheet.table.sat") if needs.daily_keys.has("sit_with|" + sit_key(zone)) else "")
 			rows.append(ssit)
-		"cabinet", "tall":
+		"tall":
+			# Coaster Flip (10-minigame-next §A): with the table's regular when one hosts it, else the house stack
+			var creg: String = zone.get("regular", "")
+			var crow := _row("coaster", "", T.t("mg.coaster_flip.row_sub", {"best": _best("coaster_flip")}), "friends", true)
+			crow["title"] = T.t("mg.coaster_flip.row_with", {"regular": _name(creg)}) if creg != "" else T.t("mg.coaster_flip.row")
+			rows.append(crow)
+			var tsit := _row("sit", "venue.sheet.table.sit", T.t("venue.sheet.table.sit_sub"), "friends", false,
+				T.t("venue.sheet.table.sat") if needs.daily_keys.has("sit_with|" + sit_key(zone)) else "")
+			rows.append(tsit)
+		"cabinet":
 			# Plan v4 stubs (game cabinet, tall tables): the generic table sheet until their own content lands
 			var sit := _row("sit", "venue.sheet.table.sit", T.t("venue.sheet.table.sit_sub"), "friends", false,
 				T.t("venue.sheet.table.sat") if needs.daily_keys.has("sit_with|" + sit_key(zone)) else "")
@@ -419,6 +429,8 @@ func do_row(zone: Dictionary, row_id: String) -> bool:
 			state_changed.emit()
 		"pinball":
 			_request("neon_pinball", {})
+		"coaster":
+			_request("coaster_flip", {"regular": str(zone.get("regular", ""))})
 		"leave":
 			leave()
 		"smoke":

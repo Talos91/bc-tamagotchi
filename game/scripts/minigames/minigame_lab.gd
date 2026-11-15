@@ -15,6 +15,7 @@ const GAMES := [
 	{"id": "front_row_rhythm", "scene": "res://scenes/minigames/front_row_rhythm/front_row_rhythm.tscn", "need": "music"},
 	{"id": "candle_talk", "scene": "res://scenes/minigames/candle_talk/candle_talk.tscn", "need": "friends"},
 	{"id": "neon_pinball", "scene": "res://scenes/minigames/neon_pinball/neon_pinball.tscn", "need": "nightlife"},
+	{"id": "coaster_flip", "scene": "res://scenes/minigames/coaster_flip/coaster_flip.tscn", "need": "friends"},
 ]
 
 var needs: Node

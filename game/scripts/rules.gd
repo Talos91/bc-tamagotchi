@@ -126,6 +126,9 @@ const ACTIONS := {
 	"dance_30s": {"label": "Dance under the disco ball (30 s)", "zone": "Dance floor", "gains": {"nightlife": 3.0}, "cap_per_visit": 15.0},
 	"dance_off": {"label": "Dance-off minigame", "zone": "Dance floor", "gains": {"nightlife": [12.0, 20.0]}},
 	"pinball": {"label": "Pinball (one game)", "zone": "Lounge", "gains": {"nightlife": [10.0, 20.0]}},
+	## Coaster Flip at a tall table (docs/design/10-minigame-next.md §A; DECISIONS 2026-11-15 "build them all"): Friends
+	## [8, 12] (GDD §9 #7), at most 20 a visit so a second Friends source never outgrows Candle Talk.
+	"coaster_flip": {"label": "Coaster Flip (tall table)", "zone": "Tall table", "gains": {"friends": [8.0, 12.0]}, "cap_per_visit": 20.0},
 	"enter_lounge": {"label": "First time in the Lounge", "zone": "Lounge", "gains": {"nightlife": 5.0}, "once_per_visit": true},
 	"last_song": {"label": "Stay until the last song", "zone": "Any", "gains": {"nightlife": 10.0}, "once_per_visit": true},
 	## Provisional (DECISIONS "Playtest of 33dc5b9", BACKLOG B12): a cigarette by the smoking-room window is a chat

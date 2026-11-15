@@ -1,5 +1,9 @@
 # 10 — The next minigame (BACKLOG B3): three concepts, one pick
 
+**Update 2026-11-15, build round:** Daniele: "buiuld them all why not" (DECISIONS 2026-11-15), plus "also the
+flappy birds game like for the cabinet" (owner item 35): concept **D. Neon Moth** below, an original one-tap flyer.
+Build order A → D → C → B; each lands on its own review card. Numbers as built are in each section ("As built").
+
 Design only, 2026-11-15 (🎲 design-minigame, 0.3.0 round; load id 2026-11-15-rules-powers-black-cabin-c33dc1).
 **Nothing here is built or decided.** Rules, balance and money are Daniele's call: he picks one on the hub card
 `minigame-next-pick` (https://claude.ai/artifact/BbpBxVWVVXMjz7TgJ7aFBW#questions), then a build round follows.
@@ -38,6 +42,9 @@ design mock of the play screen in the style-guide palette; the mocks are drawing
 | Needs from the bar | Nothing (coaster look from the photos; a real coaster photo would help) | The **cocktail page** (still pending) or a classic list | Nothing (street look is generic Bangkok, no real shop names) |
 | Picture | `a-coaster-flip.jpg` | `b-shake-serve.jpg` | `c-soi-dash.jpg` |
 
+D (added for the build round): **Neon Moth**, the game cabinet (shared with Soi Dash: the cabinet offers a pick),
+one tap = one flutter, Nightlife +10–20 (new action `neon_moth`), coins 2 / 3 / 5 standard, 45 s, effort S.
+
 ## A. Coaster Flip (recommended)
 
 ![Coaster Flip](../art/screens/minigame-next/a-coaster-flip.jpg)
@@ -68,6 +75,14 @@ Coins: standard 2 / 3 / 5. `minigame_played` +3 Nightlife as for every non-miss.
 
 **Effect on the week.** Sample visit (GDD §2.3) with one good round: Friends +23 → +33 (of ~84 weekly decay):
 three visits now cover Friends with room to spare instead of exactly. Daniele's call whether that's welcome.
+
+**As built (2026-11-15).** `score = min(best run, 10) / 10 × (0.85 + 0.15 × mean catch quality)`, where quality
+is how flat the coasters were at the tap. Best run 2 or less = miss; 3–6 good; 7–9 great; 10 perfect (9 with
+clean catches also reaches perfect). A run of 10 ends the round. The flat window narrows with each catch
+(|cos spin| ≥ 0.75 + 0.02 per catch, max 0.95; relaxed timing −0.15) and the spin speeds up (1.2 + 0.12 turns/s
+per catch). Stacks to beat: Tt 7, Dougie 5, Bow 6, Tong 4, Ploy 6, Jules 8, Lung Nop 3, Hiro 9, the house 6.
+Beating it shows "You beat <name>!" and is in the result; the +2 cheers bonus was left out (it would have
+needed a hook outside the game; easy to add at acceptance). Friends [8, 12], cap 20 a visit, as designed.
 
 **Build (S).** One scene `coaster_flip.gd` on the base (draw code like `pour_perfect.gd`: one stack, one arc,
 one ring), one `ACTIONS` row, one sheet row for zone kind `tall` in `venue_session.gd`, strings (EN + TH
@@ -132,6 +147,34 @@ it ours, no borrowed look.
 
 **Why not first.** Nightlife already has pinball next door plus dancing and lounge entry; the Friends gap is the
 bigger one; M effort for less need.
+
+## D. Neon Moth (added 2026-11-15, owner item 35)
+
+**Pitch.** A moth that lives in the lounge has seen the BLACK CABIN neon at the end of the room and wants it.
+Tap to flutter up, let go to sink; slip through the gaps between the hanging bulb strings above and the speaker
+stacks below; reach the sign. A one-tap flyer in that genre, but ours: no bird, no pipes, nothing taken from any
+existing game's name, art or sound. The look is the venue's: dark red room, warm Edison bulbs, amp cabinets, the
+red neon sign at the end.
+
+**Where.** The game cabinet in the lounge (zone `cabinet`). The cabinet sheet becomes a pick of its games:
+"Neon Moth" and, once built, "Soi Dash", each with its own best and its own 3 tries.
+
+**Controls.** One tap anywhere = one flutter (an upward kick); gravity does the rest.
+
+**Rules.** A fixed 45 s flight with **15 gates**, then the sign. Bumping a bulb string, a speaker or the floor or
+ceiling singes a wing: the moth blinks for 1.2 s (no second bump in that time) and is put back in the middle of
+the lane. **3 singes and the flight ends.** Same gap heights for everyone each night (seed from the Bangkok date).
+
+**Score.** `score = 0.9 × gates passed / 15 + 0.1 if the moth reaches the sign`. Read: 3 gates or fewer =
+miss (< 0.25); 4–9 good; 10–13 great; 14–15 perfect only with the sign (14 + sign = 0.94).
+
+**Feeds.** New action `neon_moth`: Nightlife **[10, 20]**, pinball's band, no cap (like pinball). Coins: standard
+2 / 3 / 5 (04-coins), first 4 results per visit, then 1. Balance knob for Daniele: three Nightlife games now live
+in the lounge (pinball, Neon Moth, Soi Dash), each 3 tries; the needs' diminishing returns (GDD §2.4) flatten the
+stacking, and a shared cabinet cap is a one-line change if he wants it.
+
+**Build (S).** One scene `neon_moth.gd` on the base, one `ACTIONS` row, the cabinet sheet rows, strings, suite
+`test_neon_moth`.
 
 ## Recommendation
 
