@@ -222,3 +222,4 @@ Append-only. One dated line per event, newest last. Never edit earlier lines.
 - 2026-11-15 — 🧹 hub Backlog tab now generated from BACKLOG.md (build_hub_tabs.py); G/H kept in backlog-gh.html; hub republished v20.
 - 2026-11-15 — 🧹 G/H folded into BACKLOG.md; backlog-gh.html removed; hub v21.
 - 2026-11-15 (+7) — Owner item 34: Black Cabin's own song as background + Spotify credit top left instead of song 1/4 (rotation later). Needs the audio file from Daniele; UI job queued after ui-tonight-events (HUD overlap). hk-backlog-refresh: hub Backlog tab generated from BACKLOG.md (4e8d56f, hub v20) pushed; G/H fold in progress. Context ~33 %.
+- 2026-11-15 (+7) — 🧹 hk-backlog-refresh DONE: BACKLOG.md 48 rows + G/H folded, sole source of the hub Backlog tab (hub v21); pushed bfb1e2d; archived. 🎲 design-minigame DONE (a02298f, eca06be): card minigame-next-pick, rec A Coaster Flip (S); held idle for the build after Daniele's pick. Context ~35 %.
