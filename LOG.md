@@ -233,3 +233,4 @@ Append-only. One dated line per event, newest last. Never edit earlier lines.
 - 2026-11-15 (+7) — 🎲 Neon Moth (D) done: 8ff310c, 22/22 (shared tree), card minigame-neon-moth-review (payouts for Daniele); test_neon_moth in Tests; sent to the standing Verifier. Builder on C Soi Dash.
 - 2026-11-15 (+7) — 🔍 verify-neon-moth PASSED a1a43b8 22/22 + web, pushed (ls-remote match; import crash rerun once).
 - 2026-11-15 (+7) — 🔍 standing Verifier PASSED a1a43b8 (Neon Moth) 22/22 + web after one import crash (3221225477) and a clean rerun; pushed. Context ~44 %, successor card still unclicked.
+- 2026-11-15 (+7) — 🎲 Soi Dash (C) done: 1354f66, 23/23 (shared tree), card minigame-soi-dash-review; test_soi_dash in Tests; sent to the standing Verifier. Builder on B Shake & Serve.
