@@ -1,20 +1,23 @@
-# Report: 🎲 design-minigame — next minigame (B3), design only — 2026-11-15
+# Report: 🎲 minigame-next — design (B3) and build round — 2026-11-15
 
 ## Evidence
-- Commit **a02298f** (local main, not pushed): `docs/design/10-minigame-next.md` + 7 pictures in `docs/art/screens/minigame-next/`.
-- Hub card **`minigame-next-pick`** (Backlog items, version 1, order 360): 3 options, rec = A, 3 images (/_blob/631b1ca3…, 608a2fe4…, edc7b506…), files list (doc, pictures, this report).
-- Load id 2026-11-15-rules-powers-black-cabin-c33dc1 (profile rules-powers; no game-designer profile exists, rules-powers carries the project's minigame entry).
-- No code, no tests run (design only); no Godot launched. Mocks are PIL drawings in the style-guide palette, venue halves are existing captures annotated.
+- Design: a02298f (10-minigame-next.md + concept pictures), eca06be (note/report v1). Card minigame-next-pick.
+- Build (Daniele 2026-11-15 "buiuld them all why not" + owner item 35), local commits, never pushed:
+  | Game | SHA | Suites at commit | Card | New suite |
+  |---|---|---|---|---|
+  | A Coaster Flip | 03177a7 | 21/21 | minigame-coaster-flip-review | test_coaster_flip |
+  | D Neon Moth | 8ff310c | 22/22 | minigame-neon-moth-review | test_neon_moth |
+  | C Soi Dash | 1354f66 | 23/23 (+ test_soi_dash, test_minigames after a draw-only tweak) | minigame-soi-dash-review | test_soi_dash |
+  | B Shake & Serve | ff37dfd | 24/24 | minigame-shake-serve-review | test_shake_serve |
+- Suites run headless from `game/` with APPDATA set to an empty temp folder, in the shared tree (which also holds other sessions' uncommitted work, e.g. test_tonight). Captures 540x960 in a windowed Godot on `--screen 1`; not checked on a phone.
 
-## Concepts
-- **A. Coaster Flip ★** — tall tables (zone `tall`, stub today); swipe up / tap to catch; Friends +8–12, cap 20/visit; S.
-- **B. Shake & Serve** — bar; tap bottles + tap on beat; Drinks +20–30 (existing `pour_perfect` action) +5 Friends at great; shares bar's 3 tries; free drink (money call); M; needs the cocktail page.
-- **C. Soi Dash** — lounge game cabinet (zone `cabinet`, stub, "Tap to try the Black Cabin game"); lane swipes; Nightlife +10–20; M.
-- All pay standard 2/3/5 coins (04-coins); misses and 3 tries per 06-stakes §7.2; all fit `minigame_base.gd` unchanged.
+## What changed outside the new files
+- `rules.gd`: ACTIONS coaster_flip (friends [8,12], cap 20), neon_moth and soi_dash (nightlife [10,20]), shake_serve_friends (friends 5); MINIGAME_TRY_POOL {shake_serve: pour_perfect}.
+- `needs.gd`: tries counted per pool. `result_card.gd`: applies `extra.bonus_action`. `venue_session.gd`: registry + rows (tall, cabinet pick, bar). `minigame_lab.gd`: entries, smaller rows. `strings.csv` + one `strings_venue.csv` line.
 
-## Open calls for Daniele (on the card / in the doc)
-- The pick. A: Friends cap 20/visit vs daily-once per table; stack-to-beat per regular vs own best. B: free drink extension of "Pour Perfect free, always".
+## Open for Daniele (on the cards)
+- Coaster Flip tuning / +2 cheers; Neon Moth payout and a cabinet Nightlife cap; Soi Dash look; Shake & Serve free drink. Cocktail page still pending.
 
 ## Notes
-- `git pull --rebase` refused (other sessions' unstaged files); committed own paths only, no stash. Local main was ahead 3 of origin at commit time.
-- Profile feedback: no generic "game designer" profile; rules-powers fits implement-a-mechanic, its "branch off in your own worktree" step conflicts with this project's single shared checkout rule (PROJECT wins).
+- Bible lines (for the release worker): GDD §9 gains Coaster Flip (tall table), Neon Moth and Soi Dash (game cabinet), Shake & Serve built (shares Pour Perfect's tries). Changelog: "Four new minigames: Coaster Flip, Neon Moth, Soi Dash, Shake & Serve."
+- Lab overflows with 8 games (dev tool). Profile feedback: rules-powers says "own worktree"; this project uses the shared checkout (PROJECT wins).
