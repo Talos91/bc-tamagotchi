@@ -91,6 +91,57 @@ waits on card `presence-supabase-setup`) · **T3** needs a business decision (pa
 | D8 | Guest list and tickets for special nights: RSVP and a door QR | L | door-side scanner, ticketing | idea | T3 |
 | D9 | Dashboard for the bar: attendance per band, busiest hours, redemptions | L | backend, check-ins | idea | T2 |
 
+## G. User psychology: what players may want to engage with
+
+Ideas, not decisions. They build on the attachment the stakes already create (character card, “the usual”, the ghost) and on the real-visit loop. Each row says what pulls the player and what could be built. Rows tagged with an existing item (B4, C3, D4…) extend it rather than replace it.
+
+| Who | What they come for | What keeps them | What loses them |
+|---|---|---|---|
+| Regular | Their place, their people, “the usual” | Being recognised, status on the Top patrons board, a character with history | A streak that feels like a chore; a dead character that feels punishing |
+| Band fan | Tonight's lineup, the band's songs | Bands-seen passport, set lists, cheering a set, saving a table | Stale or wrong lineup data |
+| Friend-group planner | A reason to pick this bar tonight | Crew quests, shared table, “who's going” | Nobody else in the group plays |
+| Curious first-timer | A free, charming voxel game; a story to tell | A first session that pays off in 2 minutes; one clear reason to visit the real bar | A slow start; asking for sign-up before any fun |
+
+| # | Idea (the motive it serves) | Effort | Needs | Status | Track |
+|---|---|---|---|---|---|
+| G1 | **Attachment: a character with a history.** A “your story” page: first night, nights out, close calls, scars, favourite drink, best minigame score, written as a short diary the player can read back. The more history, the more it hurts to lose, and the more the farewell card means | M | nothing; extends the character card | idea | T1 |
+| G2 | **Status and showing off.** A shareable character card and “night out” polaroid sized for Instagram and LINE stories, with the club's neon sign on it. Free marketing for the bar | S–M | share sheet in the web build; the memory/polaroid system | idea | T1 |
+| G3 | **Belonging.** Regulars react to you by name; after N visits Prae or Nam says something only a regular hears; friends' characters can appear at your table (ties to C1, C3) | M–L | accounts for the friends part; the cast lines can start now | idea | T2 |
+| G4 | **Collecting and completing.** Stamp books: try every drink category on the real menu (121 drinks), catch every band, find every secret room. Progress bars pull people back to finish. Extends B4 and D4 | M | menu data is in; band data later | idea | T1 |
+| G5 | **Curiosity and surprise.** Rare events that are not paid: a stranger at the bar with a one-line story, a rare polaroid, a secret behind the toilet door, a “tonight only” patron. Surprise without loot boxes | M | cast content; an event table in the rules | idea | T1 |
+| G6 | **Mastery and a quick win.** Every minigame session under 60 seconds, a clear personal best, weekly leaderboard (B6). Good on a phone in a queue or a taxi | M | backend for the shared board; the personal best works now | idea | T2 |
+| G7 | **Loss aversion, with a kind face.** The stakes clock works because the player cares; keep the tone playful (the character “dies of boredom”) and always show a way back. Test whether day 21 reads as fun or as pressure, and watch for players who quit rather than return | S | playtest with real regulars (retention at day 7, 14, 21) | idea | T1 |
+| G8 | **The rhythm of nightlife.** The game as the warm-up and the afterglow: a “who's playing tonight” nudge at the hour people plan their evening, an “I'm going” tap, a morning-after recap of the night out. Respects the 2-a-week notification cap and the 22:00 quiet hour | M | D1 and D2 (events feed, lineup); push in the web build | idea | T2 |
+| G9 | **Story and lore.** Each regular has a chapter that unlocks by visiting, not by playing: Prae's founding story, Nam's night, Ty's habit. Gives a reason to come back that is not a meter | M | their real consent and lines (see Ask Black Cabin, People) | idea | T1 |
+| G10 | **Self-expression.** Wardrobe, nickname, Flat decoration, a toast or catchphrase the character says. People pay and return for things that look like them | M | character creation (B2), the coin shop (B11), the Flat | idea | T1 |
+| G11 | **Nostalgia.** Memories album with “a year ago tonight”, photos from the real nights, the band you first saw | M | photo upload (D5), moderation, consent for faces | idea | T2 |
+| G12 | **Check the idea with real people before building.** Ask five regulars and five first-timers: what would make you open this on a Tuesday? What would make you delete it? Record the first thing each says | S | the web build on phones (A8), the Black Cabin visit | suggested next | T1 |
+
+## H. Monetization
+
+Starting rule, to confirm: the game's job is to bring people into the real bar, so the first revenue is the bar's. The existing stakes rules already say no coin buys relief from needs and every meter fills to 100 with no coins; the ideas below keep that. Revenue figures and prices are deliberately left open until Black Cabin shares its numbers (average spend, visits per regular).
+
+| # | Idea | Effort | Needs | Status | Track |
+|---|---|---|---|---|---|
+| H1 | **Real-visit rewards.** Check-ins earn real perks the bar chooses (a welcome shot, a free snack on the 10th visit, a birthday toast). Coins can be redeemed at the bar. Lowest risk and easiest to measure | M | QR check-ins, a bar-side way to redeem, the bar's yes (Ask Black Cabin, Facts) | idea | T3 |
+| H2 | **Bookings and tickets.** Table deposit or booking fee, paid guest list for special nights, QR at the door (D3, D8). A small fee per booking or a share of ticket sales | L | payments provider, door scanner, legal | idea | T3 |
+| H3 | **Sponsored quests and branded items.** A spirits or beer brand sponsors a crew quest or a bottle on the shelf; Grab sponsors the ride-home button (C3, D7). Sponsors pay for measured visits and check-ins, not impressions | L | sponsor deals, check-in data. Alcohol advertising is restricted in Thailand: take legal advice before any branded alcohol content | idea | T3 |
+| H4 | **In-game cosmetics shop.** Coins are earned in play; an optional paid coin pack buys cosmetics only (wardrobe, Flat decoration, nameplate). Nothing that revives a character, fills a meter or skips the clock | M | coin shop (B11), app-store or web payments, a policy on minors | idea | T3 |
+| H5 | **Real merch with an in-game twin.** Buy the tee or cap at the bar and unlock the same item in the game with a code; the merch list is still to be confirmed (Ask Black Cabin, Facts) | M | real merch list, a code or QR on the item | idea | T3 |
+| H6 | **Band tips and band merch.** Tip through the app with a small platform fee, or sell the band's merch in the lounge shop (D6) | L | payments, band payout, consent from each band | idea | T3 |
+| H7 | **Regular's Card (monthly).** A small subscription: seasonal cosmetics, a Flat decoration slot, priority table booking, a perk at the bar. Price to be set from the bar's own numbers | M | accounts, payments, H1 first so the card has real perks | idea | T3 |
+| H8 | **License the model to other venues.** The voxel Tamagotchi for any bar: a branded replica of the venue, a stakes clock tied to real visits, a dashboard (D9). Black Cabin is the proof. Setup fee plus monthly fee per venue | L | Black Cabin's retention numbers, a repeatable way to model a venue, an agreement on who owns what | idea | T3 |
+| H9 | **Measure first.** Before any of these, count what the game does: check-ins per player per month, repeat visits versus non-players, spend per visit if the bar can share it. That number is the case for every sponsor and for H8 | S | check-in backend, the bar's willingness to share spend data | suggested next | T3 |
+
+**Guard rails, proposed.**
+
+- No pay-to-revive and no paid relief from needs. It would break the stakes and the “go to the real bar” promise.
+- No loot boxes or random paid rewards. Surprises (G5) are earned in play.
+- 21+ for anything about alcohol; no paid content aimed at minors; real-money payments need an age and consent check.
+- No ads that cover the room. Sponsors appear as items inside the club.
+- Real people appear only with signed consent, and bands approve any merch that uses their name.
+- Decide where the money goes (bar, game developer, band) in writing before H2, H5, H6 or H7 ship.
+
 ## E. Questions Daniele still has to answer
 
 Live on the Questions tab of the hub (https://claude.ai/artifact/BbpBxVWVVXMjz7TgJ7aFBW#questions); the binding
@@ -108,4 +159,5 @@ list is "Still open" in `DECISIONS.md`. Gating now: `presence-supabase-setup`, `
 
 - 2026-11-01 — Created from Daniele's alpha verdict and the todo list relayed from the Ooze project.
 - 2026-11-02 — Playtest rounds: B7–B13 added, statuses updated (see git history for the detail).
+- 2026-11-15 — G (user psychology, G1–G12, ideas) and H (monetization, H1–H9, all T3 ideas, no decision implied) folded in from the hub; BACKLOG.md is now the only source of the hub Backlog tab.
 - 2026-11-15 — Full refresh (Housekeeping): every idea one row with status and track (T1/T2/T3); A4–A12 pulled from the hub; owner items 13–33 and presence (item 24) folded in (B14–B22); B2 creator live (v0.2.1), item 16 door entrance closed (DECISIONS 2026-11-11, v0.2.2); "0.3.0 now" section added. Dropped nothing; A-items 1–6, 8, 11 marked live.

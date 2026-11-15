@@ -63,7 +63,7 @@ def backlog_html(text):
     for sec in re.split(r"(?m)^## ", text)[1:]:
         title, _, body = sec.partition(chr(10))
         if title.startswith("E.") or title.startswith("Log"): continue
-        m = re.match(r"([A-F])\. (.+)", title)
+        m = re.match(r"([A-H])\. (.+)", title)
         letter, name = (m.group(1), m.group(2)) if m else ("★", title)
         out.append(f'<section><h2><span class="letter">{letter}</span>{inline(name)}</h2>')
         lines, i = body.splitlines(), 0
@@ -75,6 +75,8 @@ def backlog_html(text):
                     rows.append([c.strip() for c in lines[i].strip().strip("|").split("|")]); i += 1
                 out.append('<div class="tablewrap"><table><tr>' + "".join(f"<th>{inline(c)}</th>" for c in rows[0]) + "</tr>")
                 for r in rows[2:]:
+                    if len(r) != 6:
+                        out.append("<tr>" + "".join(f'<td class="id">{inline(c)}</td>' if k == 0 else f'<td>{inline(c)}</td>' for k, c in enumerate(r)) + "</tr>"); continue
                     out.append(f'<tr><td class="id">{inline(r[0])}</td><td>{inline(r[1])}</td><td class="eff">{inline(r[2])}</td><td class="needs">{inline(r[3])}</td><td>{pill(r[4])}</td><td class="eff">{inline(r[5])}</td></tr>')
                 out.append("</table></div>"); continue
             i += 1
@@ -93,7 +95,7 @@ for key, src in (("stakes", D / "stakes-rules.md"), ("bible", D / "game-bible.md
     pat = re.compile(rf"(?s)<!--BEGIN:{key}-->.*?<!--END:{key}-->")
     page, n = pat.subn(lambda m: f"<!--BEGIN:{key}-->\n{body}\n<!--END:{key}-->", page)
     assert n == 1, key
-body = backlog_html((D / "BACKLOG.md").read_text(encoding="utf-8")) + chr(10) + (D / "backlog-gh.html").read_text(encoding="utf-8").rstrip()  # G and H: static, owner-session ideas not in BACKLOG.md
+body = backlog_html((D / "BACKLOG.md").read_text(encoding="utf-8"))
 page, n = re.subn(r"(?s)<!--BEGIN:backlog-->.*?<!--END:backlog-->", lambda m: f"<!--BEGIN:backlog-->\n{body}\n<!--END:backlog-->", page)
 assert n == 1, "backlog"
 (D / "backlog-board.html").write_text(page, encoding="utf-8", newline="\n")

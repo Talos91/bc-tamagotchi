@@ -22,3 +22,9 @@ PROFILE NOTE: housekeeping profile has no step for "hub tab is not generated"; P
 - Republished the same artifact (v20, https://claude.ai/artifact/BbpBxVWVVXMjz7TgJ7aFBW), capabilities carried forward (assets, db, user); title kept "Black Cabin Hub". Questions/Coins db untouched (page JS and db not edited).
 - Other tabs vs live v16: Questions, Coins, Stakes, Ask, JS identical; Game bible gains one row (`PRE_ALPHA` = true) because the script regenerates the rules table from rules.gd; footer line updated.
 - Rows on the tab: 48 (A–D) + G/H as before.
+
+## Addendum 2: G and H folded in (2026-11-15)
+- G (User psychology: persona table + G1–G12) and H (Monetization H1–H9 + guard rails) are now sections of BACKLOG.md, content unchanged in meaning. G rows ideas with my track guess (T1 mostly; G3, G6, G8, G11 T2); H rows all T3, ideas / "suggested next" (H9), no decision implied (per orchestrator). G12 stays "suggested next".
+- `backlog-gh.html` and its append in `build_hub_tabs.py` removed: BACKLOG.md is the only source. The script now also handles non-6-column tables (persona table) and sections A–H.
+- Hub republished, same URL, version 21, capabilities kept; G and H still on the tab (generated: 2 section headings, rows present). Row total on the tab: 48 + 21 (G 12, H 9).
+- Exit ritual: role note `handoffs/hk-backlog-refresh-2026-11-15.md` updated; capture sent earlier (addenda here, not re-captured).

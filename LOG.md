@@ -220,3 +220,4 @@ Append-only. One dated line per event, newest last. Never edit earlier lines.
 - 2026-11-15 (+7) — Daniele asked how to implement all his ideas; plan (backlog refresh → T1 offline 0.3.0, T2 Supabase, T3 business) → "Yes, go". Started 🧹 hk-backlog-refresh (local_c5b8d8ee, Sonnet), 🖼️ ui-tonight-events (local_8920a9cc, Opus), 🎲 design-minigame (local_d32ef88c, Opus, design only). Connectors found on again (Claude Data, Vercel, Webflow, Drive) → off. Context ~30 %.
 - 2026-11-15 — 🧹 hk-backlog-refresh: BACKLOG.md refreshed (48 rows; T1 32 / T2 10 / T3 6); hub Backlog tab is hand-written, not republished.
 - 2026-11-15 — 🧹 hub Backlog tab now generated from BACKLOG.md (build_hub_tabs.py); G/H kept in backlog-gh.html; hub republished v20.
+- 2026-11-15 — 🧹 G/H folded into BACKLOG.md; backlog-gh.html removed; hub v21.
