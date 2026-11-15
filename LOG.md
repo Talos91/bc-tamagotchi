@@ -232,3 +232,4 @@ Append-only. One dated line per event, newest last. Never edit earlier lines.
 - 2026-11-15 (+7) — 🔍 verify-coaster-flip (local_7e192135) PASSED b2de123 21/21 + web, pushed. Held idle as the standing Verifier for the minigame round (SendMessage, no card). Context ~42 %.
 - 2026-11-15 (+7) — 🎲 Neon Moth (D) done: 8ff310c, 22/22 (shared tree), card minigame-neon-moth-review (payouts for Daniele); test_neon_moth in Tests; sent to the standing Verifier. Builder on C Soi Dash.
 - 2026-11-15 (+7) — 🔍 verify-neon-moth PASSED a1a43b8 22/22 + web, pushed (ls-remote match; import crash rerun once).
+- 2026-11-15 (+7) — 🔍 standing Verifier PASSED a1a43b8 (Neon Moth) 22/22 + web after one import crash (3221225477) and a clean rerun; pushed. Context ~44 %, successor card still unclicked.
