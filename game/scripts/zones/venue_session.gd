@@ -48,7 +48,7 @@ const EARSHOT_ZONES := ["stage", "floor"]  ## camera zones within earshot of the
 const TRIED_KEY := "drinks_tried"  ## Needs.ext[TRIED_KEY][drink_id] = true (persists with the save)
 const CIGARETTE_AT := Vector3(0.2, 1.05, 0.22)  ## in the player's Body: the drink hand of the stand_drink pose
 ## Sheet row -> the minigame it opens (for the tries per visit).
-const ROW_GAMES := {"pour": "pour_perfect", "rhythm": "front_row_rhythm", "talk": "candle_talk", "pinball": "neon_pinball", "coaster": "coaster_flip", "moth": "neon_moth"}
+const ROW_GAMES := {"pour": "pour_perfect", "rhythm": "front_row_rhythm", "talk": "candle_talk", "pinball": "neon_pinball", "coaster": "coaster_flip", "moth": "neon_moth", "dash": "soi_dash"}
 const GAMES := {
 	"pour_perfect": "res://scenes/minigames/pour_perfect/pour_perfect.tscn",
 	"front_row_rhythm": "res://scenes/minigames/front_row_rhythm/front_row_rhythm.tscn",
@@ -56,6 +56,7 @@ const GAMES := {
 	"neon_pinball": "res://scenes/minigames/neon_pinball/neon_pinball.tscn",
 	"coaster_flip": "res://scenes/minigames/coaster_flip/coaster_flip.tscn",
 	"neon_moth": "res://scenes/minigames/neon_moth/neon_moth.tscn",
+	"soi_dash": "res://scenes/minigames/soi_dash/soi_dash.tscn",
 }
 
 var needs: Node
@@ -246,6 +247,9 @@ func rows_for(zone: Dictionary) -> Array[Dictionary]:
 			var mrow := _row("moth", "", T.t("mg.neon_moth.row_sub", {"best": _best("neon_moth")}), "nightlife", true)
 			mrow["title"] = T.t("mg.neon_moth.row")
 			rows.append(mrow)
+			var drow := _row("dash", "", T.t("mg.soi_dash.row_sub", {"best": _best("soi_dash")}), "nightlife", true)
+			drow["title"] = T.t("mg.soi_dash.row")
+			rows.append(drow)
 		"exit":
 			rows.append(_row("leave", "venue.sheet.exit.leave", T.t("venue.sheet.exit.leave_sub"), ""))
 	for r in rows:
@@ -434,6 +438,8 @@ func do_row(zone: Dictionary, row_id: String) -> bool:
 			_request("coaster_flip", {"regular": str(zone.get("regular", ""))})
 		"moth":
 			_request("neon_moth", {})
+		"dash":
+			_request("soi_dash", {})
 		"leave":
 			leave()
 		"smoke":

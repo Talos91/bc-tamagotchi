@@ -140,6 +140,12 @@ score at 0.5. Miss < 0.25 = arrived late with almost no notes.
 
 **Feeds.** New action `soi_dash`: Nightlife **[10, 20]** (pinball's band). Coins standard.
 
+**As built (2026-11-15).** The clock starts at 19:59:10 (50 s to 20:00); the street takes 40 s; each bump −2 s
+and a 0.8 s blink. Rows of bikes / carts (one or two lanes, never three) and dogs / kerbs (hop them), with notes
+between rows (about 30 a street). Score as designed: `0.6 × notes / notes in the street + 0.4 × spare / 10 s`,
+late caps at 0.5. Leaving early scores the notes only. It shares the cabinet with Neon Moth (a pick on its sheet),
+each with its own 3 tries.
+
 **Build (M).** Scene with a scrolling three-lane road (2D draw, like the others), obstacle spawner on a seeded
 RNG, the night seed from the Bangkok date. No venue change. Risk: two Nightlife cabinets in the same lounge and
 the genre is a familiar one (lane runner); the theme (soi at night, the Black Cabin sign, the 20:00 show) keeps
