@@ -1,0 +1,50 @@
+key,en,th,context,max
+tonight.button,Tonight,คืนนี้,"HUD button, top right next to the orientation toggle: opens the Tonight sheet (TH machine draft)",10
+tonight.head,TONIGHT AT BLACK CABIN,คืนนี้ที่ Black Cabin,Tonight sheet header,30
+tonight.close,Close,ปิด,Tonight sheet close button,10
+tonight.hours,"Open Tue–Sun, 19:00–02:00","เปิด อังคาร–อาทิตย์ 19:00–02:00",Opening hours line at the foot of the sheet,40
+tonight.state.open,Open now · until 02:00,เปิดอยู่ · ถึงตี 2,State line when the bar is open (19:00–02:00),32
+tonight.state.later,Doors open at 19:00,เปิด 19:00,State line between 02:00 and 19:00 on an opening day,32
+tonight.state.closed,Closed on Mondays · back {day} at 19:00,ปิดทุกวันจันทร์ · เปิดอีกครั้ง{day} 19:00,"State line on the Monday evening; {day} = short weekday (Tue)",40
+tonight.none,No special event tonight: a regular night at the bar.,คืนนี้ไม่มีอีเวนต์พิเศษ เป็นคืนปกติที่บาร์,"Tonight's card when the month has data but no event on this date",60
+tonight.closed_card,The bar is closed tonight.,คืนนี้บาร์ปิด,Tonight's card on the Monday evening,40
+tonight.no_data,{month}'s calendar isn't in the game yet.,ปฏิทินของ{month}ยังไม่มีในเกม,"Tonight's card when res://data/events/<yyyy-mm>.json is missing; never invent events",50
+tonight.time.showtime,Showtime {time},เริ่มโชว์ {time},"Event time, poster says SHOWTIME",20
+tonight.time.onwards,From {time},ตั้งแต่ {time},"Event time, poster says ONWARDS",20
+tonight.lineup,Lineup: {names},ไลน์อัพ: {names},Lineup line under the event title (The Cabin Jam),60
+tonight.upcoming,Coming up,อีเวนต์ถัดไป,Upcoming events section title,20
+tonight.upcoming.none,Nothing else on the calendar yet.,ยังไม่มีอีเวนต์อื่นในปฏิทิน,Upcoming list when the known months hold nothing after tonight,40
+tonight.upcoming.missing,{month}: calendar not in yet.,{month}: ยังไม่มีปฏิทิน,"Upcoming list, one line per month (this or next) without data",40
+tonight.date_fmt,{wd} {d} {mon},{wd} {d} {mon},Date on a row: Wed 21 Oct,16
+tonight.month_year,{mon} {y},{mon} {y},Month and year: November 2026,20
+tonight.day.0,Sun,อา.,Short weekday,4
+tonight.day.1,Mon,จ.,Short weekday,4
+tonight.day.2,Tue,อ.,Short weekday,4
+tonight.day.3,Wed,พ.,Short weekday,4
+tonight.day.4,Thu,พฤ.,Short weekday,4
+tonight.day.5,Fri,ศ.,Short weekday,4
+tonight.day.6,Sat,ส.,Short weekday,4
+tonight.month.1,Jan,ม.ค.,Short month,5
+tonight.month.2,Feb,ก.พ.,Short month,5
+tonight.month.3,Mar,มี.ค.,Short month,5
+tonight.month.4,Apr,เม.ย.,Short month,5
+tonight.month.5,May,พ.ค.,Short month,5
+tonight.month.6,Jun,มิ.ย.,Short month,5
+tonight.month.7,Jul,ก.ค.,Short month,5
+tonight.month.8,Aug,ส.ค.,Short month,5
+tonight.month.9,Sep,ก.ย.,Short month,5
+tonight.month.10,Oct,ต.ค.,Short month,5
+tonight.month.11,Nov,พ.ย.,Short month,5
+tonight.month.12,Dec,ธ.ค.,Short month,5
+tonight.month_long.1,January,มกราคม,Month name,10
+tonight.month_long.2,February,กุมภาพันธ์,Month name,10
+tonight.month_long.3,March,มีนาคม,Month name,10
+tonight.month_long.4,April,เมษายน,Month name,10
+tonight.month_long.5,May,พฤษภาคม,Month name,10
+tonight.month_long.6,June,มิถุนายน,Month name,10
+tonight.month_long.7,July,กรกฎาคม,Month name,10
+tonight.month_long.8,August,สิงหาคม,Month name,10
+tonight.month_long.9,September,กันยายน,Month name,10
+tonight.month_long.10,October,ตุลาคม,Month name,10
+tonight.month_long.11,November,พฤศจิกายน,Month name,10
+tonight.month_long.12,December,ธันวาคม,Month name,10

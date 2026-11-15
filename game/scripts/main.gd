@@ -23,6 +23,7 @@ const WelcomeScene = preload("res://scenes/ui/welcome_back.tscn")
 const StartScreen = preload("res://scripts/start_screen.gd")
 const ExitShot = preload("res://scripts/exit_shot.gd")
 const MenuList = preload("res://scripts/menu/menu_list.gd")
+const TonightSheet = preload("res://scenes/tonight_sheet.gd")
 const Rules = preload("res://scripts/rules.gd")
 const Nightlife = preload("res://scripts/zones/nightlife.gd")
 const WastedShot = preload("res://scripts/wasted_shot.gd")
@@ -46,6 +47,7 @@ const ZONE_TITLES := {"bar": "bar", "stage": "stage", "arcade": "lounge", "exit"
 var sheet: Control
 var sheet_zone: Dictionary = {}
 var menu_list: Control
+var tonight: Control        ## the Tonight sheet (HUD button; docs/design/09-tonight-events.md)
 var frame: Control
 var walk_out: Control
 var welcome: Control
@@ -84,6 +86,7 @@ func _ready() -> void:
 	hud.prompt_pressed.connect(func(): open_sheet(zones.current))
 	hud.leave_pressed.connect(_on_leave)
 	hud.area_pressed.connect(walk_to_area)
+	hud.tonight_pressed.connect(open_tonight)
 	session.minigame_requested.connect(open_minigame)
 	session.menu_requested.connect(open_menu)
 	session.visit_finished.connect(_on_visit_finished)
@@ -189,7 +192,7 @@ func show_farewell() -> void:
 
 
 func _blocked() -> bool:
-	return is_instance_valid(farewell) or is_instance_valid(creator) or is_instance_valid(start_screen) or is_instance_valid(exit_shot) or is_instance_valid(wasted_shot) or is_instance_valid(sheet) or is_instance_valid(menu_list) or is_instance_valid(frame) or is_instance_valid(walk_out) or is_instance_valid(welcome)
+	return is_instance_valid(farewell) or is_instance_valid(creator) or is_instance_valid(start_screen) or is_instance_valid(exit_shot) or is_instance_valid(wasted_shot) or is_instance_valid(sheet) or is_instance_valid(menu_list) or is_instance_valid(frame) or is_instance_valid(walk_out) or is_instance_valid(welcome) or is_instance_valid(tonight)
 
 
 func _sync_block() -> void:
@@ -308,6 +311,20 @@ func open_menu(tab: String) -> void:
 		close_menu()
 		session.order_item(id))
 	menu_list.closed.connect(close_menu)
+	_sync_block()
+
+
+## The Tonight sheet: tonight's lineup and the coming events (scenes/tonight_sheet.gd), offline.
+func open_tonight() -> void:
+	if is_instance_valid(tonight) or _blocked():
+		return
+	tonight = TonightSheet.new()
+	overlay.add_child(tonight)
+	tonight.open()
+	tonight.closed.connect(func():
+		tonight.queue_free()
+		tonight = null
+		_sync_block.call_deferred())
 	_sync_block()
 
 

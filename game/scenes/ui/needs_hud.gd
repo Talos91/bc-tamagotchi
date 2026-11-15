@@ -10,6 +10,7 @@ extends Control
 signal leave_pressed
 signal prompt_pressed
 signal area_pressed(area: String)
+signal tonight_pressed   ## the Tonight button (docs/design/09-tonight-events.md); main.gd opens the sheet
 
 const UI = preload("res://scripts/minigames/mg_ui.gd")
 const S = preload("res://scripts/minigames/strings.gd")
@@ -22,6 +23,7 @@ const CardScene = preload("res://scenes/ui/action_card.tscn")
 const Orientation = preload("res://scripts/ui/orientation.gd")
 const OrientationToggle = preload("res://scenes/ui/orientation_toggle.gd")
 const VersionInfo = preload("res://scripts/version_info.gd")
+const TonightEvents = preload("res://scripts/tonight_events.gd")
 
 ## Area buttons, top to bottom: camera area, label key, the zone walked to in that area (a zone id, or the first zone
 ## of that kind whose approach is in the area; main.walk_to_area), the need it refills ("" none). The floor's is the
@@ -151,6 +153,12 @@ func _build() -> void:
 	_title.size_flags_horizontal = Control.SIZE_EXPAND_FILL
 	_title.text_overrun_behavior = TextServer.OVERRUN_TRIM_ELLIPSIS  # a long name never pushes the toggle off screen
 	title_row.add_child(_title)
+	var tonight := UI.button(TonightEvents.t("tonight.button"), "secondary")   # backlog D1/D2, 09-tonight-events.md
+	tonight.name = "Tonight"
+	tonight.custom_minimum_size = Vector2(UI.dp(72), UI.dp(36))
+	tonight.add_theme_font_size_override("font_size", int(UI.dp(13)))
+	tonight.pressed.connect(func(): tonight_pressed.emit())
+	title_row.add_child(tonight)
 	orientation_toggle = OrientationToggle.new()
 	orientation_toggle.pressed.connect(func():
 		Orientation.toggle(needs)
@@ -235,6 +243,9 @@ func retitle() -> void:
 	_zone_name = ""
 	set_zone_name(z)
 	orientation_toggle.refresh()
+	var tb: Button = find_child("Tonight", true, false)
+	if tb != null:
+		tb.text = TonightEvents.t("tonight.button")
 
 
 ## Space the shown area column keeps clear at the right edge: the slide-away tab sits there.

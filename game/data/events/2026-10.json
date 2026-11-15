@@ -1,0 +1,15 @@
+{
+  "source": "docs/venue/events/2026-10-upcoming-events.jpg (Black Cabin poster, supplied by Daniele 2026-11-02, @blackcabinbar)",
+  "month": "2026-10",
+  "events": [
+    {"date": "2026-10-06", "day": "Tue", "title": "Coldplay & Oasis Night", "time": "21:15", "time_kind": "onwards"},
+    {"date": "2026-10-07", "day": "Wed", "title": "Moderndog Concert", "time": "22:45", "time_kind": "showtime"},
+    {"date": "2026-10-08", "day": "Thu", "title": "Noi Pru Concert", "time": "22:45", "time_kind": "showtime"},
+    {"date": "2026-10-09", "day": "Fri", "title": "Black Cabin 10 Year Anniversary", "time": "21:00", "time_kind": "onwards"},
+    {"date": "2026-10-14", "day": "Wed", "title": "Charlie Puth Night", "time": "22:45", "time_kind": "showtime"},
+    {"date": "2026-10-21", "day": "Wed", "title": "The Cabin Jam", "lineup": ["Jayson Creer", "Far", "Adam", "Rachael"], "time": "23:45", "time_kind": "onwards"},
+    {"date": "2026-10-25", "day": "Sun", "title": "Cabin's Visitor: Eldon", "time": "20:00", "time_kind": "showtime"},
+    {"date": "2026-10-29", "day": "Thu", "title": "Damien Rice Night", "time": "21:15", "time_kind": "onwards"},
+    {"date": "2026-10-31", "day": "Sat", "title": "Halloween", "time": "20:45", "time_kind": "onwards", "note": "title partly covered by profile bubbles in the screenshot; read as HALLOWEEN"}
+  ]
+}
