@@ -238,3 +238,4 @@ Append-only. One dated line per event, newest last. Never edit earlier lines.
 - 2026-11-15 (+7) — 👑 Master answer folded: no standing Verifier (7e192135 finishes Soi Dash only; Shake & Serve gets a fresh one), one merged minigame review card, song needs Black Cabin's rights OK before the worker starts (else credit link only), chase order trimmed to 0.3.0 gates. Context ~14 %.
 - 2026-11-15 (+7) — 🔍 verify-soi-dash PASSED 37c5a65 23/23 + web, pushed (ls-remote match).
 - 2026-11-15 (+7) — 🔍 Soi Dash 37c5a65 PASSED 23/23 + web, pushed (ls-remote match); inherited Verifier local_7e192135 archived. Docs pushed by SHA. Context ~15 %.
+- 2026-11-15 (+7) — Daniele: orchestrator title gets the 🎸 (renamed '🎸 Black Cabin orchestrator (from 2026-11-15, v0.2.2)'); archive old chats → local_060ea4b4, venue successor local_9543f6b2, 'Black Cabin backlog sharing' archived. Builder local_d32ef88c kept (working). Context ~17 %.
