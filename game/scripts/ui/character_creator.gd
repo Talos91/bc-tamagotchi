@@ -50,10 +50,23 @@ var _step: Label
 var _landscape := false
 ## Phone browsers: the web export has no on-screen keyboard bridge (export preset html/experimental_virtual_keyboard
 ## is off), so a LineEdit never gets a keyboard there and a new character could never type a name (owner item 26).
-## On a touch web build a tap on the name field opens the browser's own prompt instead. Tests set both.
-var use_prompt := OS.has_feature("web") and DisplayServer.is_touchscreen_available()
+## On a phone (finger as the main pointer) a tap on the name field opens the browser's own prompt instead. Not
+## DisplayServer.is_touchscreen_available(): pointing/emulate_touch_from_mouse makes that true on every web build,
+## so on a PC the click opened a prompt and dropped the field's focus at once and no typing reached it (item 36).
+## If the browser blocks the prompt, the field takes typing itself. Tests set both.
+var use_prompt := OS.has_feature("web") and finger_pointer()
 var prompt_name: Callable = _browser_prompt
 var _prompting := false
+const PROMPT_BLOCKED_MS := 60          ## a prompt answered faster than a person can: the browser refused to show it
+
+
+## The web page's main pointer is a finger (phones, tablets), from the CSS pointer media query; false off the web.
+static func finger_pointer() -> bool:
+	if not OS.has_feature("web"):
+		return false
+	# A number, not a JS boolean: the bridge hands booleans back as 0 / 1 on this build
+	var v: Variant = JavaScriptBridge.eval("(window.matchMedia && window.matchMedia('(pointer: coarse)').matches) ? 1 : 0", true)
+	return (v is int or v is float) and int(v) == 1
 
 
 ## `rec` the look to start from, `who` and `p` the current name and personality.
@@ -489,8 +502,12 @@ func _ask_name() -> void:
 		_prompting = false
 		return
 	_name_edit.release_focus()
+	var t0 := Time.get_ticks_msec()
 	var v: Variant = prompt_name.call(_name_edit.text)
-	if v is String:
+	if v == null and OS.has_feature("web") and Time.get_ticks_msec() - t0 < PROMPT_BLOCKED_MS:
+		use_prompt = false                     # the browser refused the dialog: type in the field from now on
+		_name_edit.grab_focus()
+	elif v is String:
 		var s := String(v).strip_edges().left(int(Avatar.data()["name"]["max"]) + 4)
 		_name_edit.text = s
 		display_name = s

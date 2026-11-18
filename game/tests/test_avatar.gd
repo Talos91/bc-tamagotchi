@@ -47,6 +47,7 @@ func _init() -> void:
 	await _booth_and_greeter()
 	await _exits()
 	await _phone_name()
+	await _pc_name()
 	print("TEST AVATAR ", "PASS" if fails.is_empty() else "FAIL (%d)" % fails.size())
 	quit(0 if fails.is_empty() else 1)
 
@@ -509,5 +510,55 @@ func _phone_name() -> void:
 	await _touch(c._name_edit)
 	await _touch(c._next)
 	check(is_instance_valid(ss._modal) and c._status.visible, "prompt cancelled: stays, says why")
+	main.queue_free()
+	await process_frame
+
+
+## PC web build (owner item 36): a mouse click on the name field keeps the focus and typing lands at once. The web
+## build sends every click twice (ScreenTouch from pointing/emulate_touch_from_mouse, then the mouse button), and
+## is_touchscreen_available() is true there, which used to send PCs down the phone prompt path and drop the focus.
+func _pc_name() -> void:
+	print("pc name (item 36)")
+	check(not Creator.finger_pointer(), "off a phone browser there is no finger pointer")
+	needs.new_game()
+	var main := await _main(true)
+	var ss: Node = main.start_screen
+	ss.tap()
+	await process_frame
+	var c := _creator(ss)
+	check(c != null and not c.use_prompt, "a PC build types in the field, no prompt")
+	var asked := []
+	c.prompt_name = func(_cur: String) -> Variant:
+		asked.append(1)
+		return null
+	for i in 3:
+		c._next.pressed.emit()
+		await process_frame
+	await process_frame
+	var at: Vector2 = c._name_edit.get_global_rect().get_center()
+	for down in [true, false]:
+		var t := InputEventScreenTouch.new()
+		t.pressed = down
+		t.position = at
+		root.push_input(t, true)
+		var m := InputEventMouseButton.new()
+		m.button_index = MOUSE_BUTTON_LEFT
+		m.pressed = down
+		m.position = at
+		m.global_position = at
+		root.push_input(m, true)
+		await process_frame
+	for i in 3:
+		await process_frame
+	check(c._name_edit.has_focus() and asked.is_empty(), "one click: the field keeps the focus, no prompt")
+	for ch in "Mai":
+		for down in [true, false]:
+			var k := InputEventKey.new()
+			k.keycode = OS.find_keycode_from_string(ch)
+			k.unicode = ch.unicode_at(0) if down else 0
+			k.pressed = down
+			root.push_input(k)
+		await process_frame
+	check(c._name_edit.text == "Mai" and c.display_name == "Mai", "typing lands at once ('%s')" % c._name_edit.text)
 	main.queue_free()
 	await process_frame
