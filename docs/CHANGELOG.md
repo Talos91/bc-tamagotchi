@@ -8,6 +8,36 @@ delivered in `ORCHESTRATION.md`.
 
 ## 0.3.0 (in progress)
 
+### 2026-11-18
+
+- `fd6fe86` STATE/LOG: v0.3.0 live
+- `1be2d17` Owner items 36-38: 0.3.0 playtest feedback
+- `061940c` STATE: fix-031 running, item 38 plan pending
+- `6c52f61` DECISIONS/LOG: minigame quality pass planned (item 38)
+- `e993a5c` STATE: design-quality running
+- `75ce1a7` fix-031: creator name field takes typing on PC web (item 36)
+- `80a1038` Design: minigame quality bar (owner item 38), mock-ups
+- `0f96088` Handoffs: minigame-quality role note and report (owner item 38)
+- `7d7529c` STATE/LOG: design-quality done
+- `3f0879b` DECISIONS/LOG: minigame quality answers (14 cards)
+- `756c560` STATE/LOG/handoff: orchestrator local_ca1e0f15 handover
+- `cf26ab1` STATE/handoff: stint recap path
+- `aaaa3d9` LOG: successor orchestrator started
+- `012e64e` STATE/LOG: orchestrator local_96f4e96d takes over
+- `c89b3ca` STATE/LOG: Master check-in answer
+- `c2fd63b` fix-031: Coaster Flip catch is playable, one glow per flight in the ring (item 37)
+- `c4c7641` fix-031: Soi Dash road, lanes and runner stay on screen (item 37)
+- `8cca6b9` handoffs: fix-031 role note and report; LOG
+
+### 2026-11-15
+
+- `c8c3716` STATE/LOG: 0.3.0 assembled, verifier card
+- `4ae4c86` handoffs: verify-030 report (09f0d24 PASS 24/24, pushed)
+- `da71d5d` STATE/LOG: v0.3.0 pushed, ready to redeploy
+- `a77c054` PROJECT/STATE/LOG: no windowed Godot on Daniele's desktop (hidden desktop rule)
+
+## 0.3.0
+
 ### 2026-11-15
 
 - `afa12f1` LOG: 0.2.3 bump sent to verify
@@ -16,6 +46,8 @@ delivered in `ORCHESTRATION.md`.
 - `ff37dfd` Shake & Serve: Nam's orders by mood at the bar (Drinks 20-30, +5 Friends at great)
 - `ace6349` handoffs: minigame-next role note + report (build round: A, D, C, B)
 - `7d439e0` PROJECT/LOG: test_shake_serve in Tests (24 suites)
+- `f4eafda` Changelog: 0.2.1-0.2.3 releases, regenerated
+- `09f0d24` Version 0.3.0: closes Tonight + events and four minigames (Coaster Flip, Neon Moth, Soi Dash, Shake & Serve)
 
 ## 0.2.3
 
