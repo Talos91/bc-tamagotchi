@@ -260,14 +260,21 @@ func _gui_input(event: InputEvent) -> void:
 
 # --- Drawing ---------------------------------------------------------------------------------------
 
-## Screen point for street distance d ahead (0 = the runner) in lane position l (-1..1).
+## Half the road's width at the runner, in px: the kerbs (l = +-3) stay inside the screen in portrait, and the road
+## does not stretch across a wide landscape screen. 0.3.1 (item 37): it was size.x * 0.40 * 0.66 per lane unit, which
+## put the side lanes (l = +-2) at 0.5 +- 0.53 of the width at the runner, off the screen.
+func road_half() -> float:
+	return minf(size.x * 0.42, size.y * 0.32)
+
+
+## Screen point for street distance d ahead (0 = the runner) in lane position l (-3..3: kerb to kerb, lanes at
+## -2 / 0 / 2).
 func _pt(d: float, l: float) -> Vector2:
 	var horizon := size.y * 0.16
 	var base := size.y * 0.86
 	var k := 1.0 / (1.0 + d * 0.45)          # 1 at the runner, smaller far away
 	var yy := horizon + (base - horizon) * k
-	var half := size.x * 0.40 * k
-	return Vector2(size.x * 0.5 + l * half * 0.66, yy)
+	return Vector2(size.x * 0.5 + l / 3.0 * road_half() * k, yy)
 
 
 func _draw() -> void:
@@ -286,9 +293,9 @@ func _draw() -> void:
 		var cols: Array[Color] = [UI.CYAN, UI.AMBER, UI.GOLD, UI.RED_HI]
 		var c := cols[k % 4]
 		for side in [-1, 1]:
-			var p := _pt(d, side * 3.6)
+			var p := _pt(d, side * 3.35)          # just past the kerb, inside the screen
 			var s := (p.y - horizon) / (size.y * 0.7)
-			draw_rect(Rect2(p.x - 40 * s + side * 30 * s, p.y - 160 * s, 60 * s, 110 * s), c, false, maxf(2.0, 6.0 * s))
+			draw_rect(Rect2(p.x - 30 * s - side * 20 * s, p.y - 160 * s, 60 * s, 110 * s), c, false, maxf(2.0, 6.0 * s))
 	# the sign at the end of the soi
 	var left := RUN_SECONDS * SPEED - dist
 	if left < VIEW:

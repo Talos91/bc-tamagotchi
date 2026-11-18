@@ -23,6 +23,7 @@ func _initialize() -> void:
 	test_good_runner()
 	test_idle_runner()
 	test_swipes()
+	test_bounds()
 	test_action_strings_registry()
 	print("")
 	print("%d checks, %d failed" % [checks, failures])
@@ -183,3 +184,36 @@ func test_action_strings_registry() -> void:
 		check(keys.has(k) and keys[k]["en"] != "" and keys[k]["th"] != "", "string " + k)
 	check(Session.GAMES.has("soi_dash") and ResourceLoader.exists(Session.GAMES["soi_dash"]), "venue registry has the scene")
 	check(Session.ROW_GAMES.get("dash", "") == "soi_dash", "the cabinet row counts its tries")
+
+
+## Item 37 (0.3.1): the road, the three lanes, the runner, the obstacles and the clock stay on screen. Play-area
+## sizes are the minigame frame's content at phone portrait (450x800, 390x844), phone landscape (844x390) and PC
+## web windows (1280x720, 1920x969), through the project's 1080x1920 canvas_items / expand stretch.
+func test_bounds() -> void:
+	print("[layout] everything inside the play area, portrait and landscape")
+	var top := 200.0   # the frame's title bar and status line above the play area
+	for vp in [Vector2(450, 800), Vector2(390, 844), Vector2(844, 390), Vector2(1280, 720), Vector2(1920, 969)]:
+		var k := minf(vp.x / 1080.0, vp.y / 1920.0)
+		var area: Vector2 = vp / k - Vector2(0, top)
+		var g := spawn()
+		g.size = area
+		var r := Rect2(Vector2.ZERO, area)
+		var ok := true
+		var why := ""
+		for lane in [-1, 0, 1]:
+			var p: Vector2 = g._pt(0.0, lane * 2.0)
+			# the runner (shadow +-50, body 200 tall, a hop lifts 110) and the widest obstacle (cart +-80, 170 tall)
+			for q in [p + Vector2(-80, 16), p + Vector2(80, 16), p + Vector2(-80, -310), p + Vector2(80, -310)]:
+				if not r.has_point(q):
+					ok = false
+					why = "lane %d at %s" % [lane, q]
+		for l in [-3.0, 3.0]:
+			for d in [0.0, Game.VIEW]:
+				var e: Vector2 = g._pt(d, l)
+				if not r.has_point(e):
+					ok = false
+					why = "kerb %s at d %s: %s" % [l, d, e]
+		var lane_w: float = g._pt(0.0, 2.0).x - g._pt(0.0, 0.0).x
+		check(ok, "%dx%d (play area %dx%d): road, lanes, runner inside %s" % [vp.x, vp.y, area.x, area.y, why])
+		check(lane_w >= 200.0, "%dx%d: lanes wide enough for a cart (%d px)" % [vp.x, vp.y, lane_w])
+		g.queue_free()
