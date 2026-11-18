@@ -63,6 +63,7 @@ var wasted_shot: Node       ## the WASTED shot and screen while they run
 var drunk: CanvasLayer      ## the drunk overlay
 var farewell: Control       ## the farewell card (ghost window over, or Retire)
 var creator: Control        ## the character creator, opened at the photo booth (07-character-creator.md §5.3)
+var venue_covered := false  ## the 3D venue is paused behind a minigame frame (_cover_venue)
 var _wasted_line := -1      ## WASTED during a minigame: the shot waits for the frame to close
 var _web := OS.has_feature("web")   ## web build: _mark_scene names the screen for the page's banner
 var _scene_mark := ""
@@ -202,6 +203,19 @@ func _sync_block() -> void:
 	hud.prompt.visible = not b
 	hud.visible = not (is_instance_valid(creator) or is_instance_valid(frame) or is_instance_valid(walk_out) or is_instance_valid(start_screen) or is_instance_valid(exit_shot) or is_instance_valid(wasted_shot))
 	$UI/Joystick.visible = not b
+	_cover_venue(is_instance_valid(frame))
+
+
+## A minigame frame is opaque and covers the screen: stop drawing the 3D world (Viewport.disable_3d: no draw calls,
+## lights or shadow passes) and stop the venue's own processing (patron walks, flicker, disco ball). The player, the
+## camera rig, Session and Needs keep running, so positions and real-time needs are untouched; the venue wakes on close.
+## (docs/design/11-minigame-quality.md 1.3, job Q2.)
+func _cover_venue(on: bool) -> void:
+	if venue_covered == on:
+		return
+	venue_covered = on
+	get_viewport().disable_3d = on
+	$Venue.process_mode = Node.PROCESS_MODE_DISABLED if on else Node.PROCESS_MODE_INHERIT
 
 
 ## The start screen has walked the player in: HUD fades in and the visit starts as it does without one.
