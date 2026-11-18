@@ -246,3 +246,4 @@ Append-only. One dated line per event, newest last. Never edit earlier lines.
 - 2026-11-15 (+7) — 🔍 verify-030 PASSED 09f0d24 (v0.3.0) 24/24 + web, pushed (ls-remote match); builder + verifier archived; Daniele to redeploy 0.3.0. Context ~25 %.
 - 2026-11-15 (+7) — Daniele (via Master): no windowed Godot on his visible desktop; headless, or a private hidden desktop (hd.ps1/batch.ps1), else NOT DONE + ask → PROJECT.md Tests + role notes, every Godot brief. Context ~26 %.
 - 2026-11-18 (+7) — v0.3.0 LIVE (curl: live bc-df75bc04.pck holds version 0.3.0 + shake_serve). Context ~30 %.
+- 2026-11-18 (+7) — Owner items 36–38 (live 0.3.0 playtest on PC): name field won't take typing; Coaster Flip seems bugged; Soi Dash goes off screen; Neon Moth fun; asks about a quality pass. → one 🖼️ fix-031 worker (Opus). Context ~32 %.
