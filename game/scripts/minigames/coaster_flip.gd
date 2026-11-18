@@ -156,8 +156,7 @@ func _catch(a: float) -> void:
 		beat = true
 	state = State.CAUGHT
 	_state_t = 0.0
-	if OS.has_feature("mobile"):
-		Input.vibrate_handheld(18)
+	vibrate(18)
 	_update_status()
 
 

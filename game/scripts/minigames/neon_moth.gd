@@ -173,6 +173,7 @@ func _fly(dt: float) -> void:
 			if not hit[i]:
 				gates_passed += 1
 				_update_status()
+				_juice_gate(i)
 		if blink <= 0.0 and not hit[i] and MOTH_X + MOTH_R > gx and MOTH_X - MOTH_R < gx + GATE_W:
 			if y - MOTH_R < gap_y[i] - g * 0.5 or y + MOTH_R > gap_y[i] + g * 0.5:
 				hit[i] = true
@@ -186,13 +187,19 @@ func _fly(dt: float) -> void:
 	y = clampf(y, MOTH_R, FIELD.y - MOTH_R)
 	if sign_x() <= MOTH_X + MOTH_R:
 		reached_sign = true
+		haptic("strong")
+		fx().burst("confetti", _xf() * Vector2(MOTH_X, y))
 		_end()
 
 
 func _singe() -> void:
 	singes_left -= 1
-	if OS.has_feature("mobile"):
-		Input.vibrate_handheld(30)
+	haptic("fail")
+	var f := fx()
+	f.shake(Fx.TRAUMA_BUMP)
+	f.fail_edge()
+	f.combo_break()
+	f.burst("ember", _xf() * Vector2(MOTH_X, y))
 	_update_status()
 	if singes_left <= 0:
 		_end()
@@ -200,6 +207,18 @@ func _singe() -> void:
 	blink = BLINK_SECONDS
 	y = FIELD.y * 0.5
 	vy = 0.0
+
+
+## Q1 proof of the shared juice kit (mg_fx): a gate passed answers with "+1", a gold flare in the gap, sparks, a
+## tick and the combo. The full Neon Moth beats (§2.3: wing snap, wing icon breaking, neon flare) are job Q4.
+func _juice_gate(i: int) -> void:
+	var f := fx()
+	var at := _xf() * Vector2(gate_x(i) + GATE_W * 0.5, gap_y[i])
+	f.pop("+1", at + Vector2(0, -20))
+	f.flare(at, 90.0)
+	f.burst("spark", at, 8)
+	f.combo_step("", Vector2(size.x * 0.5, size.y * 0.16))
+	haptic("tick")
 
 
 func _end() -> void:

@@ -114,8 +114,7 @@ func _lock_layer() -> void:
 	locked.append(level)
 	state = State.SETTLE
 	_state_t = 0.0
-	if OS.has_feature("mobile"):
-		Input.vibrate_handheld(18)
+	vibrate(18)
 	_update_status()
 
 

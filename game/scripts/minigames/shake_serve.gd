@@ -209,8 +209,7 @@ func advance(dt: float) -> void:
 				order_scores.append(order_score(wrongs, _score_shake()))
 				state = State.SERVE
 				_state_t = 0.0
-				if OS.has_feature("mobile"):
-					Input.vibrate_handheld(18)
+				vibrate(18)
 		State.SERVE:
 			if _state_t >= SERVE_SECONDS:
 				order += 1

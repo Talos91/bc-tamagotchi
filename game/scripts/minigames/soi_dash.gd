@@ -223,8 +223,7 @@ func _bump(it: Dictionary) -> void:
 	bumps += 1
 	clock -= BUMP_COST
 	bump_t = BUMP_SECONDS
-	if OS.has_feature("mobile"):
-		Input.vibrate_handheld(30)
+	vibrate(30)
 	_update_status()
 
 

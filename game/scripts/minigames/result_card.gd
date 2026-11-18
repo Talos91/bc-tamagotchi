@@ -1,5 +1,9 @@
 extends Control
 ## Shared result card (wireframes section 7): score tier word, number, best, need gained, AGAIN / DONE.
+## The result is a moment (11-minigame-quality §2.2, job Q1): the tier stamp slams in with a short shake and a haptic,
+## the score counts up, a NEW BEST ribbon lands, then the competition lines (§4.1: over your best, tonight's regular
+## to beat from result.extra.rival = {regular, points}; ghost and board come later per game). The buttons work from
+## the first frame: the moment never blocks. Its clock is advance_anim(dt), driven by _process; tests drive it.
 ## show_result() applies the result to the Needs autoload exactly once, via Needs.apply_action(action_id,
 ## score, key), then renders what actually landed. `needs` can be injected (tests, lab fallback).
 
@@ -12,6 +16,7 @@ const Glyph = preload("res://scripts/minigames/need_glyph.gd")
 const Base = preload("res://scripts/minigames/minigame_base.gd")
 const Rules = preload("res://scripts/rules.gd")
 const Cast = preload("res://scripts/cast.gd")
+const Fx = preload("res://scripts/minigames/mg_fx.gd")
 
 const BEST_KEY := "minigame_best"  # Needs.ext[BEST_KEY][game_id] = best points (0..100)
 const HEARTS_KEY := "hearts"  # Needs.ext[HEARTS_KEY][regular_id] = 0..MAX_HEARTS (DECISIONS: hearts 0-3), regulars only
@@ -20,8 +25,38 @@ const LEAN_ACTION := "candle_talk_lean"  # Rules.ACTIONS key for the extra.lean 
 const PLAYED_ACTION := "minigame_played"  # Rules.ACTIONS key applied after every round that is not a miss
 const GAIN_EPSILON := 0.05
 
+# Result moment timeline (seconds from the card opening); starting values, tunable.
+const STAMP_SECONDS := 0.22  # the stamp falls from STAMP_FROM_SCALE to 1 and lands
+const STAMP_FROM_SCALE := 2.4
+const STAMP_FROM_DEG := -16.0
+const STAMP_REST_DEG := -4.0
+const STAMP_BOUNCE_SECONDS := 0.12  # the landing dip
+const STAMP_BOUNCE := 0.08
+const STAMP_TRAUMA := 0.35  # card shake on landing (off with reduce motion)
+const COUNT_SECONDS := 0.6  # the score counts up after the landing
+const RIBBON_AT := STAMP_SECONDS + COUNT_SECONDS
+const RIBBON_SECONDS := 0.22
+const RIBBON_DEG := -6.0
+const LINES_AT := RIBBON_AT
+const LINES_FADE_SECONDS := 0.25
+const ANIM_END := RIBBON_AT + 0.25
+const STAMP_LINE := 1.3  # stamp holder height per px of font size
+const TIER_COLORS :={-1: UI.ASH, 0: UI.CREAM, 1: UI.GOLD, 2: UI.NEON}
+
 var needs: Node
-var outcome: Dictionary = {}  # filled by apply(): ok, reason, gains, tab, best, new_best, hearts, again_ok
+var outcome: Dictionary = {}  # filled by apply(): ok, reason, gains, tab, best, prev_best, new_best, hearts, again_ok
+var anim_t := 0.0
+var animate := true  # false: the card opens in its end state (no slam, no shake, no haptic)
+var _points := 0
+var _tier := 0
+var _landed := true
+var _stamp: Label
+var _stamp_holder: Control
+var _glow: TextureRect
+var _score_label: Label
+var _ribbon: Control
+var _comp: VBoxContainer
+var _fx: Fx
 
 
 func _get_needs() -> Node:
@@ -44,15 +79,18 @@ func apply(result: Dictionary) -> Dictionary:
 	var new_best := false
 	var best := points
 	var hearts := -1
+	var prev := int(n.ext.get(BEST_KEY, {}).get(game_id, 0)) if n != null else 0
 	if n != null and not n.note_minigame_round(game_id):
-		return _outcome({"ok": false, "reason": "tries", "gains": {}, "tab": 0.0}, 0, false, -1, false, true, missed)
+		_outcome({"ok": false, "reason": "tries", "gains": {}, "tab": 0.0}, 0, false, -1, false, true, missed)
+		outcome["prev_best"] = prev
+		return outcome
 	if missed:
-		var prev_best := int(n.ext.get(BEST_KEY, {}).get(game_id, 0)) if n != null else 0
-		return _outcome({"ok": false, "reason": "miss", "gains": {}, "tab": 0.0}, prev_best, false, -1,
+		_outcome({"ok": false, "reason": "miss", "gains": {}, "tab": 0.0}, prev, false, -1,
 			n == null or n.minigame_tries_left(game_id) > 0, false, true)
+		outcome["prev_best"] = prev
+		return outcome
 	if n != null:
 		var bests: Dictionary = n.ext.get(BEST_KEY, {})
-		var prev := int(bests.get(game_id, 0))
 		best = maxi(prev, points)
 		new_best = points > prev and prev > 0
 		bests[game_id] = best
@@ -81,7 +119,9 @@ func apply(result: Dictionary) -> Dictionary:
 		if applied.get("ok", false):
 			_fold(applied, n.apply_action(PLAYED_ACTION))
 	var again: bool = n == null or n.minigame_tries_left(game_id) > 0
-	return _outcome(applied, best, new_best, hearts, again, false, false, str(result.get("action_id", "")))
+	_outcome(applied, best, new_best, hearts, again, false, false, str(result.get("action_id", "")))
+	outcome["prev_best"] = prev
+	return outcome
 
 
 func _fold(applied: Dictionary, extra: Dictionary) -> void:
@@ -141,17 +181,30 @@ func _build(result: Dictionary, o: Dictionary) -> void:
 
 	var game_id := str(result.get("game_id", ""))
 	var tier := int(result.get("tier", 0))
+	_tier = tier
+	_points = int(result.get("points", 0))
 	var word := S.t("mg.result.miss") if tier < 0 else S.t("mg.%s.tier_%d" % [game_id, tier + 1])
-	col.add_child(UI.title(word, 32))
+	col.add_child(_build_stamp(word, tier))
 
 	var score_row := HBoxContainer.new()
 	score_row.add_theme_constant_override("separation", int(UI.dp(14)))
+	score_row.alignment = BoxContainer.ALIGNMENT_CENTER
 	col.add_child(score_row)
-	score_row.add_child(UI.label(str(result.get("points", 0)), 32, UI.CREAM))
+	_score_label = UI.label(str(_points), 32, UI.CREAM, HORIZONTAL_ALIGNMENT_RIGHT)
+	_score_label.custom_minimum_size.x = _score_label.get_combined_minimum_size().x  # no jitter while counting
+	score_row.add_child(_score_label)
 	if o.get("new_best", false):
-		score_row.add_child(UI.label(S.t("mg.result.new_best"), 15, UI.GOLD))
+		score_row.add_child(_build_ribbon(S.t("mg.result.new_best").to_upper()))
 	else:
 		score_row.add_child(UI.label(S.t("mg.result.best", {"score": o.get("best", 0)}), 15, UI.SMOKE))
+
+	_comp = VBoxContainer.new()
+	_comp.add_theme_constant_override("separation", int(UI.dp(2)))
+	col.add_child(_comp)
+	for line in competition_lines(result, o):
+		var l := UI.wrap(UI.label(line["text"], 15, line["color"], HORIZONTAL_ALIGNMENT_CENTER))
+		l.name = "Compete_" + str(line["id"])
+		_comp.add_child(l)
 
 	# Need gained: glyph, bar, +N chip. Bars show the meter value after the gain.
 	var n := _get_needs()
@@ -214,3 +267,177 @@ func _build(result: Dictionary, o: Dictionary) -> void:
 	done_btn.size_flags_horizontal = Control.SIZE_EXPAND_FILL
 	done_btn.pressed.connect(func(): done.emit())
 	btns.add_child(done_btn)
+
+	_fx = Fx.new()
+	_fx.target = panel
+	_fx.reduce_motion = Fx.reduce_motion_on(_get_needs())
+	add_child(_fx)
+	anim_t = 0.0
+	_landed = false
+	if animate:
+		_apply_anim()
+	else:
+		skip_anim()
+
+
+# --- Result moment -------------------------------------------------------------------------------------------------
+
+## The tier word as a stamp: a plain Control holds it so containers never reset its scale and rotation.
+func _build_stamp(word: String, tier: int) -> Control:
+	var holder := Control.new()
+	holder.mouse_filter = Control.MOUSE_FILTER_IGNORE
+	var gc: Color = TIER_COLORS.get(tier, UI.GOLD)
+	_glow = TextureRect.new()
+	_glow.texture = Fx.glow_texture()
+	_glow.expand_mode = TextureRect.EXPAND_IGNORE_SIZE
+	_glow.stretch_mode = TextureRect.STRETCH_SCALE
+	_glow.set_anchors_preset(Control.PRESET_FULL_RECT)
+	_glow.mouse_filter = Control.MOUSE_FILTER_IGNORE
+	_glow.modulate = Color(gc, 0.0)
+	_glow.visible = tier >= 1
+	holder.add_child(_glow)
+	_stamp = UI.title(word, 32, gc)
+	_stamp.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
+	_stamp.vertical_alignment = VERTICAL_ALIGNMENT_CENTER
+	_stamp.add_theme_constant_override("outline_size", int(UI.dp(4)))
+	_stamp.add_theme_color_override("font_outline_color", UI.BG_DEEP)
+	_stamp.set_anchors_preset(Control.PRESET_FULL_RECT)
+	holder.add_child(_stamp)
+	# Kristi's tall strokes: size the holder from the font size (measuring off-tree under-reports it).
+	var font_px := float(_stamp.get_theme_font_size("font_size"))
+	holder.custom_minimum_size = Vector2(0, maxf(_stamp.get_combined_minimum_size().y, font_px * STAMP_LINE) + UI.dp(6))
+	_stamp_holder = holder
+	return holder
+
+
+func _build_ribbon(text: String) -> Control:
+	var holder := Control.new()
+	holder.mouse_filter = Control.MOUSE_FILTER_IGNORE
+	var ribbon := PanelContainer.new()
+	ribbon.name = "NewBestRibbon"
+	var sb := UI.box(UI.GOLD, 6)
+	sb.content_margin_left = UI.dp(10)
+	sb.content_margin_right = UI.dp(10)
+	sb.content_margin_top = UI.dp(3)
+	sb.content_margin_bottom = UI.dp(3)
+	ribbon.add_theme_stylebox_override("panel", sb)
+	ribbon.mouse_filter = Control.MOUSE_FILTER_IGNORE
+	ribbon.add_child(UI.label(text, 15, UI.BG_DEEP, HORIZONTAL_ALIGNMENT_CENTER))
+	holder.add_child(ribbon)
+	var sz := ribbon.get_combined_minimum_size()
+	ribbon.size = sz
+	holder.custom_minimum_size = sz
+	holder.size_flags_vertical = Control.SIZE_SHRINK_CENTER
+	_ribbon = ribbon
+	return holder
+
+
+## Lines under the score: how far over your best, and tonight's regular to beat (result.extra.rival =
+## {regular, points} or {name, points}). Each line: {id, text, color}. Ghost and board lines come later (Q4+).
+static func competition_lines(result: Dictionary, o: Dictionary) -> Array:
+	var out: Array = []
+	var points := int(result.get("points", 0))
+	var prev := int(o.get("prev_best", 0))
+	if o.get("new_best", false) and prev > 0:
+		out.append({"id": "over_best", "text": S.t("mg.result.over_best", {"gap": points - prev}), "color": UI.GOLD})
+	var rival: Variant = result.get("extra", {}).get("rival")
+	if rival is Dictionary and rival.has("points"):
+		var who := str(rival.get("name", ""))
+		if who == "":
+			who = Cast.name_of(str(rival.get("regular", "")))
+		var rp := int(rival["points"])
+		var vars := {"regular": who, "score": rp, "gap": absi(points - rp)}
+		if points > rp:
+			out.append({"id": "rival", "text": S.t("mg.result.rival_beat", vars), "color": UI.GOLD})
+		elif points == rp:
+			out.append({"id": "rival", "text": S.t("mg.result.rival_level", vars), "color": UI.CREAM})
+		else:
+			out.append({"id": "rival", "text": S.t("mg.result.rival_short", vars), "color": UI.SMOKE})
+	return out
+
+
+## Score shown at time t of the count-up (ease-out cubic over COUNT_SECONDS).
+static func count_up(points: int, t: float) -> int:
+	var k := clampf(t / COUNT_SECONDS, 0.0, 1.0)
+	return roundi(float(points) * (1.0 - pow(1.0 - k, 3.0)))
+
+
+static func stamp_scale_at(t: float) -> float:
+	if t < STAMP_SECONDS:
+		var k := t / STAMP_SECONDS
+		return lerpf(STAMP_FROM_SCALE, 1.0, k * k)
+	var u := t - STAMP_SECONDS
+	if u < STAMP_BOUNCE_SECONDS:
+		return 1.0 - STAMP_BOUNCE * sin(u / STAMP_BOUNCE_SECONDS * PI)
+	return 1.0
+
+
+## Ease-out-back 0 -> 1 with an overshoot: the ribbon lands.
+static func ribbon_scale_at(t: float) -> float:
+	var r := clampf((t - RIBBON_AT) / RIBBON_SECONDS, 0.0, 1.0)
+	if r <= 0.0:
+		return 0.0
+	var c1 := 1.70158
+	return 1.0 + (c1 + 1.0) * pow(r - 1.0, 3.0) + c1 * pow(r - 1.0, 2.0)
+
+
+func _process(delta: float) -> void:
+	if anim_t < ANIM_END:
+		advance_anim(delta)
+
+
+func advance_anim(dt: float) -> void:
+	anim_t += dt
+	_apply_anim()
+
+
+## Jumps to the end state without the landing effects.
+func skip_anim() -> void:
+	_landed = true
+	anim_t = ANIM_END
+	_apply_anim()
+
+
+func score_shown() -> int:
+	return int(_score_label.text) if _score_label != null else 0
+
+
+func _apply_anim() -> void:
+	if _stamp != null:
+		var k := clampf(anim_t / STAMP_SECONDS, 0.0, 1.0)
+		var s := stamp_scale_at(anim_t)
+		_stamp.pivot_offset = _stamp.size * 0.5
+		_stamp.scale = Vector2(s, s)
+		_stamp.rotation_degrees = lerpf(STAMP_FROM_DEG, STAMP_REST_DEG, k)
+		_stamp.modulate.a = clampf(k * 3.0, 0.0, 1.0)
+		if _glow != null and _glow.visible:
+			var after := clampf((anim_t - STAMP_SECONDS) / 0.3, 0.0, 1.0)
+			_glow.modulate.a = (0.55 if _tier >= 2 else 0.3) * after
+	if not _landed and anim_t >= STAMP_SECONDS:
+		_land()
+	if _score_label != null:
+		_score_label.text = str(count_up(_points, anim_t - STAMP_SECONDS))
+	if _ribbon != null:
+		var rs := ribbon_scale_at(anim_t)
+		_ribbon.visible = rs > 0.0
+		_ribbon.pivot_offset = _ribbon.size * 0.5
+		_ribbon.scale = Vector2(rs, rs)
+		_ribbon.rotation_degrees = RIBBON_DEG
+	if _comp != null:
+		_comp.modulate.a = clampf((anim_t - LINES_AT) / LINES_FADE_SECONDS, 0.0, 1.0)
+
+
+## The stamp hits the card: a short shake, a haptic by tier, sparks or confetti for great and perfect.
+func _land() -> void:
+	_landed = true
+	if _fx == null:
+		return
+	_fx.shake(STAMP_TRAUMA)
+	Base.haptic("strong" if _tier >= 2 else ("fail" if _tier < 0 else "tick"))
+	var at := size * 0.5
+	if _stamp_holder != null and _stamp_holder.is_inside_tree():
+		at = _stamp_holder.get_global_rect().get_center() - get_global_rect().position
+	if _tier >= 2:
+		_fx.burst("confetti", at)
+	elif _tier == 1:
+		_fx.burst("spark", at)

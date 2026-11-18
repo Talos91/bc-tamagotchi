@@ -11,6 +11,13 @@ signal finished(result: Dictionary)
 signal status_changed(text: String)
 
 const Rules = preload("res://scripts/rules.gd")
+const Fx = preload("res://scripts/minigames/mg_fx.gd")
+
+## Haptics (11-minigame-quality §2.2, §2.4): light tick on success, double on failure, strong on perfect.
+const HAPTIC_TICK_MS := 15
+const HAPTIC_FAIL_MS := 25
+const HAPTIC_FAIL_GAP := 0.09  # seconds between the two pulses of a failure
+const HAPTIC_STRONG_MS := 45
 
 const TIER_MISS := -1
 const TIER_GREAT := 0.6
@@ -30,6 +37,8 @@ var running := false
 var paused := false
 var done := false
 var last_status := ""
+var hit_stop_left := 0.0  # seconds the real clock skips advance() (mg_fx hit-stop); advance(dt) itself ignores it
+var _fx: Fx
 
 
 func start() -> void:
@@ -47,6 +56,9 @@ func set_paused(on: bool) -> void:
 func _process(delta: float) -> void:
 	if fumble > 0.0:
 		fumble -= delta
+		return
+	if hit_stop_left > 0.0:
+		hit_stop_left -= delta
 		return
 	if running and not paused:
 		advance(delta)
@@ -72,6 +84,57 @@ func finish(score: float) -> void:
 		"title_key": title_key, "score": s, "points": points_for(s), "tier": tier_for(s, miss_below), "miss": s < miss_below,
 		"extra": _result_extra(),
 	})
+
+
+## The shared juice overlay (mg_fx.gd), created on first use as the game's top child.
+func fx() -> Fx:
+	if _fx == null or not is_instance_valid(_fx):
+		_fx = Fx.new()
+		_fx.target = self
+		add_child(_fx)
+	return _fx
+
+
+## Freezes the game for `seconds` on the real clock (a big hit). Tests driving advance(dt) are not affected.
+func hit_stop(seconds: float) -> void:
+	hit_stop_left = maxf(hit_stop_left, seconds)
+
+
+## Vibration is possible on native phones and on Android browsers (Vibration API). The web export never sets
+## "mobile" (Godot feature tags: web + web_android / web_ios), which is why the old `OS.has_feature("mobile")` guard
+## never fired on the live build. iPhone browsers (WebKit) have no Vibration API: no haptics there from the web.
+static func vibrate_supported_by(has_feature: Callable) -> bool:
+	if has_feature.call("web_ios"):
+		return false
+	return has_feature.call("mobile") or has_feature.call("web_android")
+
+
+static func vibrate_supported() -> bool:
+	return vibrate_supported_by(Callable(OS, "has_feature"))
+
+
+## One pulse of `ms` milliseconds where the platform can vibrate. Returns whether it fired.
+static func vibrate(ms: int) -> bool:
+	if not vibrate_supported():
+		return false
+	Input.vibrate_handheld(ms)
+	return true
+
+
+## kind: "tick" (success), "fail" (double pulse), "strong" (perfect). Returns whether it fired.
+static func haptic(kind: String) -> bool:
+	match kind:
+		"fail":
+			if not vibrate(HAPTIC_FAIL_MS):
+				return false
+			var tree := Engine.get_main_loop() as SceneTree
+			if tree != null:
+				tree.create_timer(HAPTIC_FAIL_GAP).timeout.connect(func(): vibrate(HAPTIC_FAIL_MS))
+			return true
+		"strong":
+			return vibrate(HAPTIC_STRONG_MS)
+		_:
+			return vibrate(HAPTIC_TICK_MS)
 
 
 func set_status(text: String) -> void:
