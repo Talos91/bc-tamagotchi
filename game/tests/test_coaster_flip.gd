@@ -25,6 +25,7 @@ func _initialize() -> void:
 	test_clumsy_player()
 	test_no_catch_and_time_limit()
 	test_swipe_and_regular()
+	test_human_player()
 	test_action()
 	test_strings_and_registry()
 	print("")
@@ -74,7 +75,7 @@ func test_rules() -> void:
 	check(Game.flat_needed(5) > Game.flat_needed(0), "each catch needs flatter coasters")
 	check(Game.flat_needed(50) <= Game.FLAT_MAX, "the threshold is capped")
 	check(Game.flat_needed(3, true) < Game.flat_needed(3), "relaxed timing widens the catch")
-	check(is_equal_approx(Game.flatness(0, 0.0), 1.0), "flat at the flick")
+	check(is_equal_approx(Game.flatness(0, Game.FLIGHT_SECONDS * 0.5), 1.0), "flat at the top of the arc, in the ring")
 	check(Base.tier_for(Game.score_for(2, [1.0, 1.0])) == Base.TIER_MISS, "a best run of 2 is a miss")
 	check(Base.tier_for(Game.score_for(3, [0.8, 0.8, 0.8])) == 0, "a run of 3 is good")
 	check(Base.tier_for(Game.score_for(7, [0.9, 0.9, 0.9, 0.9, 0.9, 0.9, 0.9])) == 1, "a run of 7 is great")
@@ -222,3 +223,55 @@ func test_strings_and_registry() -> void:
 	var inst: Node = load(Session.GAMES["coaster_flip"]).instantiate()
 	check(inst.get("game_id") == "coaster_flip", "the scene runs the game script")
 	inst.free()
+
+
+## Item 37 (0.3.1): a person, not a frame-perfect bot. The ring must light once per flight, only with the stack in it,
+## and a player who taps a human reaction time after it lights, or aims at the top of the arc, must catch. Before the
+## fix the ring flickered 3-5 times a flight for 50-190 ms and a 200 ms reaction never caught.
+func test_human_player() -> void:
+	print("[human] one glow per flight, in the ring; reacting or aiming at the top catches")
+	for run in [0, 3, 6, 9]:
+		var onsets: Array[float] = []
+		var prev := false
+		var t := 0.0
+		while t < Game.FLIGHT_SECONDS:
+			var lit := Game.in_ring(t) and Game.flatness(run, t) >= Game.flat_needed(run)
+			if lit and not prev:
+				onsets.append(t)
+			prev = lit
+			t += 1.0 / 240.0
+		check(onsets.size() == 1, "run %d: the ring lights once per flight (%d)" % [run, onsets.size()])
+	# Reacting to the glow: tap 150 ms after it lights, early stacks
+	for run in [0, 2]:
+		var g := spawn()
+		run_for(g, Game.INTRO_SECONDS + 0.05)
+		for i in run:
+			g.flick()
+			wait_flat(g)
+			g.tap()
+			run_for(g, Game.RESULT_SECONDS + 0.02)
+		g.flick()
+		while g.state == Game.State.FLIGHT and not (g.catchable() and g.alignment() >= Game.flat_needed(g.run)):
+			g.advance(STEP)
+		run_for(g, 0.15)
+		g.tap()
+		check(g.state == Game.State.CAUGHT and g.run == run + 1, "run %d: a tap 150 ms after the ring lights catches" % run)
+		g.queue_free()
+	# Aiming at the top of the arc, 30 ms late: a full run of 10
+	var h := spawn()
+	run_for(h, Game.INTRO_SECONDS + 0.05)
+	for i in Game.FULL_RUN:
+		h.flick()
+		run_for(h, Game.FLIGHT_SECONDS * 0.5 + 0.03)
+		h.tap()
+		run_for(h, Game.RESULT_SECONDS + 0.02)
+	check(h.best_run == Game.FULL_RUN, "aiming at the top of the arc catches all ten (best %d)" % h.best_run)
+	h.queue_free()
+	# A tap at the flick, low by the table, drops it
+	var k := spawn()
+	run_for(k, Game.INTRO_SECONDS + 0.05)
+	k.flick()
+	run_for(k, 0.05)
+	k.tap()
+	check(k.state == Game.State.DROPPED, "a tap by the table, outside the ring, drops the stack")
+	k.queue_free()

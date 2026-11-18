@@ -83,6 +83,11 @@ clean catches also reaches perfect). A run of 10 ends the round. The flat window
 per catch). Stacks to beat: Tt 7, Dougie 5, Bow 6, Tong 4, Ploy 6, Jules 8, Lung Nop 3, Hiro 9, the house 6.
 Beating it shows "You beat <name>!" and is in the result; the +2 cheers bonus was left out (it would have
 needed a hook outside the game; easy to add at acceptance). Friends [8, 12], cap 20 a visit, as designed.
+**0.3.1 fix (2026-11-18, item 37 "seems bugged"):** the catch counted anywhere from 15 % to 92 % of the flight and
+the spin was flat from the flick, so the ring glowed 3–5 times a flight for 50–190 ms wherever the stack was; a
+player tapping when it lit (~200 ms to react) never caught. Now the spin is flat at the top of the arc and a catch
+counts only while the stack is in the ring (±15 % of the flight around the top), with 50 ms allowed for input lag:
+one glow per flight, timed by the arc. Threshold and spin numbers unchanged.
 
 **Build (S).** One scene `coaster_flip.gd` on the base (draw code like `pour_perfect.gd`: one stack, one arc,
 one ring), one `ACTIONS` row, one sheet row for zone kind `tall` in `venue_session.gd`, strings (EN + TH

@@ -1,7 +1,7 @@
 extends "res://scripts/minigames/minigame_base.gd"
 ## Coaster Flip (docs/design/10-minigame-next.md concept A; DECISIONS 2026-11-15 "build them all"). At a tall table:
 ## a stack of Black Cabin coasters on the table edge. Swipe up to flick the stack into the air; it tumbles, and the
-## catch ring glows each time the coasters spin flat: tap then to catch. A catch adds a coaster (the next flip spins
+## catch ring glows when the coasters reach it at the top of the arc, spinning flat: tap then to catch. A catch adds a coaster (the next flip spins
 ## faster, the flat moment gets shorter). A missed catch drops the stack: 3 drops, 45 s, or 10 caught in a run ends it.
 ## Score = min(best run, 10) / 10 x (0.85 + 0.15 x mean catch quality): best run 2 or less is a miss.
 ## config.regular: the table's regular (cast id); their stack to beat shows on a card. Feeds action "coaster_flip".
@@ -14,8 +14,13 @@ const DROPS := 3
 const TIME_LIMIT := 45.0
 const FULL_RUN := 10                 ## a run of this many catches scores 1.0 (with clean catches) and ends the round
 const FLIGHT_SECONDS := 1.3          ## one flip, up and down
-const CATCH_FROM := 0.15             ## catchable part of the flight (fraction of FLIGHT_SECONDS)
-const CATCH_TO := 0.92
+## Catchable while the stack is in the ring: within this fraction of the flight either side of the top of the arc.
+## 0.3.1 (item 37): the catch used to count anywhere from 15 % to 92 % of the flight, the coasters spun flat from the
+## flick, and the ring glowed 3-5 times a flight for 50-190 ms wherever the stack was; a player tapping when it lit
+## (about 200 ms to react) never caught. Now the spin is flat at the top, in the ring: one glow per flight, timed by
+## the arc. Threshold and spin speed are unchanged.
+const RING_HALF := 0.15
+const TAP_LATENCY := 0.05            ## a tap also counts if the coasters were flat this long before (input lag on web)
 const SPIN_BASE := 1.2               ## turns per second at run 0
 const SPIN_PER_CATCH := 0.12
 const FLAT_BASE := 0.75              ## |cos(spin)| needed to count as flat at run 0
@@ -87,9 +92,14 @@ static func flat_needed(caught: int, relaxed_timing := false) -> float:
 	return f - (RELAXED_EASE if relaxed_timing else 0.0)
 
 
-## How flat the spinning coasters are at time t of a flight (1 = flat, 0 = edge on).
+## How flat the spinning coasters are at time t of a flight (1 = flat, 0 = edge on): flat at the top of the arc.
 static func flatness(caught: int, t: float) -> float:
-	return absf(cos(TAU * spin_rate(caught) * t))
+	return absf(cos(TAU * spin_rate(caught) * (t - FLIGHT_SECONDS * 0.5)))
+
+
+## The stack is inside the catch ring at time t of a flight.
+static func in_ring(t: float) -> bool:
+	return absf(t / FLIGHT_SECONDS - 0.5) <= RING_HALF
 
 
 static func score_for(best: int, quals: Array) -> float:
@@ -112,7 +122,7 @@ func alignment() -> float:
 
 
 func catchable() -> bool:
-	return state == State.FLIGHT and flight_t >= FLIGHT_SECONDS * CATCH_FROM and flight_t <= FLIGHT_SECONDS * CATCH_TO
+	return state == State.FLIGHT and in_ring(flight_t)
 
 
 # --- Play ------------------------------------------------------------------------------------------
@@ -127,6 +137,9 @@ func tap() -> void:
 	if state != State.FLIGHT or not running or paused:
 		return
 	var a := alignment()
+	var late := flight_t - TAP_LATENCY
+	if in_ring(late):
+		a = maxf(a, flatness(run, late))
 	if catchable() and a >= flat_needed(run, relaxed):
 		_catch(a)
 	else:
