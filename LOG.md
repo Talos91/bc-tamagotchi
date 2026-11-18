@@ -249,3 +249,4 @@ Append-only. One dated line per event, newest last. Never edit earlier lines.
 - 2026-11-18 (+7) — Owner items 36–38 (live 0.3.0 playtest on PC): name field won't take typing; Coaster Flip seems bugged; Soi Dash goes off screen; Neon Moth fun; asks about a quality pass. → one 🖼️ fix-031 worker (Opus). Context ~32 %.
 - 2026-11-18 (+7) — Daniele: "Yes, plan it" (item 38 quality pass) → DECISIONS row; 🎲 design-quality (Opus) started, design only, parallel to fix-031 (no shared files).
 - 2026-11-18 (+7) — 🎲 design-quality DONE (80a1038, 0f96088): 11-minigame-quality.md, card minigame-quality-plan + 6 questions; archived. Docs not pushed: fix-031 code 75ce1a7 sits below, awaiting its Verifier. Context ~35 %.
+- 2026-11-18 (+7) — Daniele answered 14 hub cards (quality plan B, no sound, offline compete best/regular/ghost/board, no practice, all games in one pass; per-game notes; Tonight placement A; posters via chat) → 3 DECISIONS rows. Context ~38 %.
