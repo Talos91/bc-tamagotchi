@@ -1,0 +1,265 @@
+{
+ "game": "neon_pinball",
+ "sprites": {
+  "bumper": {
+   "file": "bumper.png",
+   "frames": 2,
+   "frame_w": 148,
+   "frame_h": 148,
+   "frame_names": [
+    "idle",
+    "hit"
+   ],
+   "anchor_px": [
+    74.0,
+    76.7
+   ],
+   "points": {},
+   "ppv": 8,
+   "view_yaw_elev": [
+    0,
+    70
+   ],
+   "note": "pop bumper, radius 38 field units = 6 voxels; flash frame 1 for bumper_flash; anchor = centre",
+   "bytes": 175232,
+   "glow_file": "bumper_glow.png",
+   "glow_scale": 2,
+   "glow_bytes": 43808
+  },
+  "flipper": {
+   "file": "flipper.png",
+   "frames": 1,
+   "frame_w": 148,
+   "frame_h": 52,
+   "frame_names": null,
+   "anchor_px": [
+    26.0,
+    26.0
+   ],
+   "points": {},
+   "ppv": 8,
+   "view_yaw_elev": [
+    0,
+    90
+   ],
+   "note": "left flipper at rest pointing right (+x); anchor = pivot; rotate by the flipper angle; mirror for the right",
+   "bytes": 30784
+  },
+  "ball": {
+   "file": "ball.png",
+   "frames": 1,
+   "frame_w": 36,
+   "frame_h": 40,
+   "frame_names": null,
+   "anchor_px": [
+    18.0,
+    20.0
+   ],
+   "points": {},
+   "ppv": 4,
+   "view_yaw_elev": [
+    0,
+    60
+   ],
+   "note": "steel ball, BALL_R 13 field units; anchor = centre",
+   "bytes": 5760
+  },
+  "letter_B": {
+   "file": "letter_B.png",
+   "frames": 2,
+   "frame_w": 88,
+   "frame_h": 98,
+   "frame_names": [
+    "off",
+    "lit"
+   ],
+   "anchor_px": [
+    44.0,
+    49.0
+   ],
+   "points": {},
+   "ppv": 5,
+   "view_yaw_elev": [
+    0,
+    0
+   ],
+   "note": "BLACK CABIN rollover letter; anchor = centre",
+   "bytes": 68992,
+   "glow_file": "letter_B_glow.png",
+   "glow_scale": 2,
+   "glow_bytes": 17248
+  },
+  "letter_L": {
+   "file": "letter_L.png",
+   "frames": 2,
+   "frame_w": 88,
+   "frame_h": 98,
+   "frame_names": [
+    "off",
+    "lit"
+   ],
+   "anchor_px": [
+    44.0,
+    49.0
+   ],
+   "points": {},
+   "ppv": 5,
+   "view_yaw_elev": [
+    0,
+    0
+   ],
+   "note": "BLACK CABIN rollover letter; anchor = centre",
+   "bytes": 68992,
+   "glow_file": "letter_L_glow.png",
+   "glow_scale": 2,
+   "glow_bytes": 17248
+  },
+  "letter_A": {
+   "file": "letter_A.png",
+   "frames": 2,
+   "frame_w": 88,
+   "frame_h": 98,
+   "frame_names": [
+    "off",
+    "lit"
+   ],
+   "anchor_px": [
+    44.0,
+    49.0
+   ],
+   "points": {},
+   "ppv": 5,
+   "view_yaw_elev": [
+    0,
+    0
+   ],
+   "note": "BLACK CABIN rollover letter; anchor = centre",
+   "bytes": 68992,
+   "glow_file": "letter_A_glow.png",
+   "glow_scale": 2,
+   "glow_bytes": 17248
+  },
+  "letter_C": {
+   "file": "letter_C.png",
+   "frames": 2,
+   "frame_w": 88,
+   "frame_h": 98,
+   "frame_names": [
+    "off",
+    "lit"
+   ],
+   "anchor_px": [
+    44.0,
+    49.0
+   ],
+   "points": {},
+   "ppv": 5,
+   "view_yaw_elev": [
+    0,
+    0
+   ],
+   "note": "BLACK CABIN rollover letter; anchor = centre",
+   "bytes": 68992,
+   "glow_file": "letter_C_glow.png",
+   "glow_scale": 2,
+   "glow_bytes": 17248
+  },
+  "letter_K": {
+   "file": "letter_K.png",
+   "frames": 2,
+   "frame_w": 88,
+   "frame_h": 98,
+   "frame_names": [
+    "off",
+    "lit"
+   ],
+   "anchor_px": [
+    44.0,
+    49.0
+   ],
+   "points": {},
+   "ppv": 5,
+   "view_yaw_elev": [
+    0,
+    0
+   ],
+   "note": "BLACK CABIN rollover letter; anchor = centre",
+   "bytes": 68992,
+   "glow_file": "letter_K_glow.png",
+   "glow_scale": 2,
+   "glow_bytes": 17248
+  },
+  "letter_I": {
+   "file": "letter_I.png",
+   "frames": 2,
+   "frame_w": 88,
+   "frame_h": 98,
+   "frame_names": [
+    "off",
+    "lit"
+   ],
+   "anchor_px": [
+    44.0,
+    49.0
+   ],
+   "points": {},
+   "ppv": 5,
+   "view_yaw_elev": [
+    0,
+    0
+   ],
+   "note": "BLACK CABIN rollover letter; anchor = centre",
+   "bytes": 68992,
+   "glow_file": "letter_I_glow.png",
+   "glow_scale": 2,
+   "glow_bytes": 17248
+  },
+  "letter_N": {
+   "file": "letter_N.png",
+   "frames": 2,
+   "frame_w": 88,
+   "frame_h": 98,
+   "frame_names": [
+    "off",
+    "lit"
+   ],
+   "anchor_px": [
+    44.0,
+    49.0
+   ],
+   "points": {},
+   "ppv": 5,
+   "view_yaw_elev": [
+    0,
+    0
+   ],
+   "note": "BLACK CABIN rollover letter; anchor = centre",
+   "bytes": 68992,
+   "glow_file": "letter_N_glow.png",
+   "glow_scale": 2,
+   "glow_bytes": 17248
+  },
+  "playfield": {
+   "file": "playfield.png",
+   "frames": 1,
+   "frame_w": 360,
+   "frame_h": 600,
+   "frame_names": null,
+   "anchor_px": [
+    0.0,
+    600.0
+   ],
+   "points": {},
+   "ppv": 3,
+   "view_yaw_elev": [
+    0,
+    90
+   ],
+   "note": "playfield art, field 600 x 1000 units (5 per voxel); draw under the walls; launch lane at the right",
+   "bytes": 864000
+  }
+ },
+ "texture_bytes_all_files": 1723264,
+ "texture_bytes_loaded": 1723264,
+ "texture_mb_loaded": 1.64
+}

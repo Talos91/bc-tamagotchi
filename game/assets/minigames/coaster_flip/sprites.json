@@ -1,0 +1,280 @@
+{
+ "game": "coaster_flip",
+ "sprites": {
+  "coaster": {
+   "file": "coaster.png",
+   "frames": 8,
+   "frame_w": 166,
+   "frame_h": 176,
+   "frame_names": null,
+   "anchor_px": [
+    83.0,
+    88.0
+   ],
+   "points": {},
+   "ppv": 9,
+   "view_yaw_elev": [
+    0,
+    16
+   ],
+   "note": "spin: frame = round(spin_turns * 8) % 8; frame 0 flat top up, 2 edge on (vertical), 4 flat bottom up. Stack on the table: frame 0 repeated, stack_step 10 px as today",
+   "bytes": 934912
+  },
+  "ring": {
+   "file": "ring.png",
+   "frames": 2,
+   "frame_w": 322,
+   "frame_h": 322,
+   "frame_names": [
+    "lit",
+    "dim"
+   ],
+   "anchor_px": [
+    161.0,
+    161.0
+   ],
+   "points": {},
+   "ppv": 9,
+   "view_yaw_elev": [
+    0,
+    0
+   ],
+   "note": "catch ring; lit when flat enough (alignment() >= flat_needed)",
+   "bytes": 829472,
+   "glow_file": "ring_glow.png",
+   "glow_scale": 2,
+   "glow_bytes": 207368
+  },
+  "table_top": {
+   "file": "table_top.png",
+   "frames": 1,
+   "frame_w": 688,
+   "frame_h": 76,
+   "frame_names": null,
+   "anchor_px": [
+    344.0,
+    45.4
+   ],
+   "points": {},
+   "ppv": 9,
+   "view_yaw_elev": [
+    0,
+    16
+   ],
+   "note": "tall table top + edge, 0.88 x the play width; anchor = front top edge centre (the table line)",
+   "bytes": 209152
+  },
+  "table_leg": {
+   "file": "table_leg.png",
+   "frames": 1,
+   "frame_w": 54,
+   "frame_h": 88,
+   "frame_names": null,
+   "anchor_px": [
+    27.0,
+    8.2
+   ],
+   "points": {},
+   "ppv": 9,
+   "view_yaw_elev": [
+    0,
+    16
+   ],
+   "note": "the table post; tile downward from the table edge",
+   "bytes": 19008
+  },
+  "regular_tt": {
+   "file": "regular_tt.png",
+   "frames": 2,
+   "frame_w": 100,
+   "frame_h": 90,
+   "frame_names": [
+    "calm",
+    "cheer"
+   ],
+   "anchor_px": [
+    51.0,
+    83.8
+   ],
+   "points": {},
+   "ppv": 8,
+   "view_yaw_elev": [
+    -15,
+    8
+   ],
+   "note": "the table's regular (config.regular); load only this one; anchor = neck",
+   "bytes": 72000
+  },
+  "regular_tong": {
+   "file": "regular_tong.png",
+   "frames": 2,
+   "frame_w": 120,
+   "frame_h": 104,
+   "frame_names": [
+    "calm",
+    "cheer"
+   ],
+   "anchor_px": [
+    61.0,
+    96.8
+   ],
+   "points": {},
+   "ppv": 8,
+   "view_yaw_elev": [
+    -15,
+    8
+   ],
+   "note": "the table's regular (config.regular); load only this one; anchor = neck",
+   "bytes": 99840
+  },
+  "regular_ploy": {
+   "file": "regular_ploy.png",
+   "frames": 2,
+   "frame_w": 104,
+   "frame_h": 100,
+   "frame_names": [
+    "calm",
+    "cheer"
+   ],
+   "anchor_px": [
+    51.2,
+    93.3
+   ],
+   "points": {},
+   "ppv": 8,
+   "view_yaw_elev": [
+    -15,
+    8
+   ],
+   "note": "the table's regular (config.regular); load only this one; anchor = neck",
+   "bytes": 83200
+  },
+  "regular_jules": {
+   "file": "regular_jules.png",
+   "frames": 2,
+   "frame_w": 106,
+   "frame_h": 96,
+   "frame_names": [
+    "calm",
+    "cheer"
+   ],
+   "anchor_px": [
+    56.9,
+    89.7
+   ],
+   "points": {},
+   "ppv": 8,
+   "view_yaw_elev": [
+    -15,
+    8
+   ],
+   "note": "the table's regular (config.regular); load only this one; anchor = neck",
+   "bytes": 81408
+  },
+  "regular_dougie": {
+   "file": "regular_dougie.png",
+   "frames": 2,
+   "frame_w": 110,
+   "frame_h": 102,
+   "frame_names": [
+    "calm",
+    "cheer"
+   ],
+   "anchor_px": [
+    57.1,
+    95.1
+   ],
+   "points": {},
+   "ppv": 8,
+   "view_yaw_elev": [
+    -15,
+    8
+   ],
+   "note": "the table's regular (config.regular); load only this one; anchor = neck",
+   "bytes": 89760
+  },
+  "regular_lung_nop": {
+   "file": "regular_lung_nop.png",
+   "frames": 2,
+   "frame_w": 100,
+   "frame_h": 86,
+   "frame_names": [
+    "calm",
+    "cheer"
+   ],
+   "anchor_px": [
+    51.3,
+    79.2
+   ],
+   "points": {},
+   "ppv": 8,
+   "view_yaw_elev": [
+    -15,
+    8
+   ],
+   "note": "the table's regular (config.regular); load only this one; anchor = neck",
+   "bytes": 68800
+  },
+  "regular_bow": {
+   "file": "regular_bow.png",
+   "frames": 2,
+   "frame_w": 114,
+   "frame_h": 110,
+   "frame_names": [
+    "calm",
+    "cheer"
+   ],
+   "anchor_px": [
+    61.1,
+    97.1
+   ],
+   "points": {},
+   "ppv": 8,
+   "view_yaw_elev": [
+    -15,
+    8
+   ],
+   "note": "the table's regular (config.regular); load only this one; anchor = neck",
+   "bytes": 100320
+  },
+  "regular_hiro": {
+   "file": "regular_hiro.png",
+   "frames": 2,
+   "frame_w": 106,
+   "frame_h": 86,
+   "frame_names": [
+    "calm",
+    "cheer"
+   ],
+   "anchor_px": [
+    56.9,
+    79.3
+   ],
+   "points": {},
+   "ppv": 8,
+   "view_yaw_elev": [
+    -15,
+    8
+   ],
+   "note": "the table's regular (config.regular); load only this one; anchor = neck",
+   "bytes": 72928
+  },
+  "backdrop": {
+   "file": "backdrop.png",
+   "frames": 1,
+   "frame_w": 360,
+   "frame_h": 640,
+   "frame_names": null,
+   "anchor_px": [
+    0,
+    0
+   ],
+   "points": {},
+   "note": "the game's room from the venue (the main-room tables), blurred and darkened; stretch to cover the play area",
+   "bytes": 921600
+  }
+ },
+ "texture_bytes_all_files": 3789768,
+ "texture_bytes_loaded": 3221832,
+ "texture_mb_loaded": 3.07
+}

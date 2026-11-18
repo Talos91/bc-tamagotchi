@@ -1,0 +1,180 @@
+{
+ "game": "shake_serve",
+ "sprites": {
+  "bottles": {
+   "file": "bottles.png",
+   "frames": 12,
+   "frame_w": 70,
+   "frame_h": 150,
+   "frame_names": [
+    "gin",
+    "vodka",
+    "rum",
+    "tequila",
+    "whisky",
+    "lime",
+    "sugar",
+    "soda",
+    "tonic",
+    "ginger",
+    "bitters",
+    "cola"
+   ],
+   "anchor_px": [
+    35.0,
+    141.4
+   ],
+   "points": {},
+   "ppv": 7,
+   "view_yaw_elev": [
+    -15,
+    12
+   ],
+   "note": "one frame per shelf id (SPIRITS then MIXERS order); anchor = bottom centre; lift it on a tap",
+   "bytes": 504000
+  },
+  "shaker": {
+   "file": "shaker.png",
+   "frames": 4,
+   "frame_w": 162,
+   "frame_h": 250,
+   "frame_names": null,
+   "anchor_px": [
+    81.0,
+    233.0
+   ],
+   "points": {},
+   "ppv": 12,
+   "view_yaw_elev": [
+    -15,
+    10
+   ],
+   "note": "shake cycle (tilt -18, -6, +6, +18 degrees): ping-pong 0-1-2-3-2-1 on the nods; anchor = bottom centre",
+   "bytes": 648000
+  },
+  "glass_highball": {
+   "file": "glass_highball.png",
+   "frames": 2,
+   "frame_w": 62,
+   "frame_h": 134,
+   "frame_names": [
+    "empty",
+    "full"
+   ],
+   "anchor_px": [
+    30.0,
+    124.7
+   ],
+   "points": {},
+   "ppv": 8,
+   "view_yaw_elev": [
+    -15,
+    14
+   ],
+   "note": "serve glass; slides across the bar top; anchor = bottom centre",
+   "bytes": 66464
+  },
+  "glass_rocks": {
+   "file": "glass_rocks.png",
+   "frames": 2,
+   "frame_w": 76,
+   "frame_h": 76,
+   "frame_names": [
+    "empty",
+    "full"
+   ],
+   "anchor_px": [
+    38.0,
+    65.2
+   ],
+   "points": {},
+   "ppv": 8,
+   "view_yaw_elev": [
+    -15,
+    14
+   ],
+   "note": "serve glass; slides across the bar top; anchor = bottom centre",
+   "bytes": 46208
+  },
+  "glass_coupe": {
+   "file": "glass_coupe.png",
+   "frames": 2,
+   "frame_w": 92,
+   "frame_h": 108,
+   "frame_names": [
+    "empty",
+    "full"
+   ],
+   "anchor_px": [
+    43.2,
+    99.2
+   ],
+   "points": {},
+   "ppv": 8,
+   "view_yaw_elev": [
+    -15,
+    14
+   ],
+   "note": "serve glass; slides across the bar top; anchor = bottom centre",
+   "bytes": 79488
+  },
+  "nam": {
+   "file": "nam.png",
+   "frames": 2,
+   "frame_w": 110,
+   "frame_h": 96,
+   "frame_names": [
+    "up",
+    "nod"
+   ],
+   "anchor_px": [
+    52.8,
+    82.7
+   ],
+   "points": {},
+   "ppv": 8,
+   "view_yaw_elev": [
+    -15,
+    8
+   ],
+   "note": "Nam's head; frame 1 on each nod; anchor = neck",
+   "bytes": 84480
+  },
+  "bar_top": {
+   "file": "bar_top.png",
+   "frames": 1,
+   "frame_w": 724,
+   "frame_h": 96,
+   "frame_names": null,
+   "anchor_px": [
+    362.0,
+    55.5
+   ],
+   "points": {},
+   "ppv": 10,
+   "view_yaw_elev": [
+    0,
+    18
+   ],
+   "note": "the bar top the glass slides on (dark stone, bar front, gold rail); anchor = front top edge centre",
+   "bytes": 278016
+  },
+  "backdrop": {
+   "file": "backdrop.png",
+   "frames": 1,
+   "frame_w": 360,
+   "frame_h": 640,
+   "frame_names": null,
+   "anchor_px": [
+    0,
+    0
+   ],
+   "points": {},
+   "note": "the game's room from the venue (the backlit bar shelf over the counter), blurred and darkened; stretch to cover the play area",
+   "bytes": 921600
+  }
+ },
+ "texture_bytes_all_files": 2628256,
+ "texture_bytes_loaded": 2628256,
+ "texture_mb_loaded": 2.51
+}

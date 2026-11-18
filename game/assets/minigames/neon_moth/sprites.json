@@ -1,0 +1,190 @@
+{
+ "game": "neon_moth",
+ "sprites": {
+  "moth": {
+   "file": "moth.png",
+   "frames": 4,
+   "frame_w": 104,
+   "frame_h": 70,
+   "frame_names": null,
+   "anchor_px": [
+    50.0,
+    38.0
+   ],
+   "points": {},
+   "ppv": 4,
+   "view_yaw_elev": [
+    -90,
+    68
+   ],
+   "note": "seen from above, head up, wings spread left and right (rotate 90 deg clockwise to face the flight, tilt with the vertical speed); flap cycle: frame 0 wings up, 2 down; one tap = play 0-1-2-3 once (or loop at 12 fps)",
+   "bytes": 116480
+  },
+  "moth_singe": {
+   "file": "moth_singe.png",
+   "frames": 2,
+   "frame_w": 104,
+   "frame_h": 68,
+   "frame_names": null,
+   "anchor_px": [
+    50.0,
+    38.2
+   ],
+   "points": {},
+   "ppv": 4,
+   "view_yaw_elev": [
+    -90,
+    68
+   ],
+   "note": "singed wing tips with embers; alternate during the 1.2 s blink",
+   "bytes": 56576
+  },
+  "wing_icon": {
+   "file": "wing_icon.png",
+   "frames": 2,
+   "frame_w": 38,
+   "frame_h": 40,
+   "frame_names": [
+    "whole",
+    "broken"
+   ],
+   "anchor_px": [
+    23.5,
+    20.0
+   ],
+   "points": {},
+   "ppv": 3,
+   "view_yaw_elev": [
+    0,
+    90
+   ],
+   "note": "life pip: one per singe left",
+   "bytes": 12160
+  },
+  "bulb_drop": {
+   "file": "bulb_drop.png",
+   "frames": 2,
+   "frame_w": 72,
+   "frame_h": 152,
+   "frame_names": [
+    "lit",
+    "off"
+   ],
+   "anchor_px": [
+    36.0,
+    26.3
+   ],
+   "points": {},
+   "ppv": 5,
+   "view_yaw_elev": [
+    0,
+    10
+   ],
+   "note": "anchor = top of the cord; hang the drop's top at the batten, tile 'cord' above",
+   "bytes": 87552,
+   "glow_file": "bulb_drop_glow.png",
+   "glow_scale": 2,
+   "glow_bytes": 21888
+  },
+  "cord": {
+   "file": "cord.png",
+   "frames": 1,
+   "frame_w": 6,
+   "frame_h": 42,
+   "frame_names": null,
+   "anchor_px": [
+    0.5,
+    41.1
+   ],
+   "points": {},
+   "ppv": 5,
+   "view_yaw_elev": [
+    0,
+    10
+   ],
+   "note": "tile vertically above a bulb_drop (texture repeat)",
+   "bytes": 1008
+  },
+  "batten": {
+   "file": "batten.png",
+   "frames": 1,
+   "frame_w": 124,
+   "frame_h": 32,
+   "frame_names": null,
+   "anchor_px": [
+    62.0,
+    21.9
+   ],
+   "points": {},
+   "ppv": 6,
+   "view_yaw_elev": [
+    0,
+    10
+   ],
+   "note": "the wooden batten across the top of the gap (GATE_W wide); anchor = its bottom centre",
+   "bytes": 15872
+  },
+  "speaker_cab": {
+   "file": "speaker_cab.png",
+   "frames": 2,
+   "frame_w": 112,
+   "frame_h": 124,
+   "frame_names": [
+    "woofer",
+    "horn"
+   ],
+   "anchor_px": [
+    56.0,
+    120.4
+   ],
+   "points": {},
+   "ppv": 6,
+   "view_yaw_elev": [
+    0,
+    12
+   ],
+   "note": "stack from the floor up to the gap; anchor = bottom centre of the front; next cab sits stack_step_px higher",
+   "bytes": 111104,
+   "stack_step_px": 105.6
+  },
+  "neon_sign": {
+   "file": "neon_sign.png",
+   "frames": 1,
+   "frame_w": 416,
+   "frame_h": 272,
+   "frame_names": null,
+   "anchor_px": [
+    208.0,
+    235.0
+   ],
+   "points": {},
+   "ppv": 11,
+   "view_yaw_elev": [
+    0,
+    0
+   ],
+   "note": "the kit's own BLACK CABIN neon (bc_kit.neon_sign); anchor = bottom centre",
+   "bytes": 452608,
+   "glow_file": "neon_sign_glow.png",
+   "glow_scale": 2,
+   "glow_bytes": 113152
+  },
+  "backdrop": {
+   "file": "backdrop.png",
+   "frames": 1,
+   "frame_w": 360,
+   "frame_h": 640,
+   "frame_names": null,
+   "anchor_px": [
+    0,
+    0
+   ],
+   "points": {},
+   "note": "the game's room from the venue (the lounge toward the BLACK CABIN neon), blurred and darkened; stretch to cover the play area",
+   "bytes": 921600
+  }
+ },
+ "texture_bytes_all_files": 1910000,
+ "texture_bytes_loaded": 1910000,
+ "texture_mb_loaded": 1.82
+}

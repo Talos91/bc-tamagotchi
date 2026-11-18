@@ -1,0 +1,280 @@
+{
+ "game": "soi_dash",
+ "sprites": {
+  "runner": {
+   "file": "runner.png",
+   "frames": 6,
+   "frame_w": 150,
+   "frame_h": 206,
+   "frame_names": [
+    "run0",
+    "run1",
+    "run2",
+    "run3",
+    "hop_tuck",
+    "hop_reach"
+   ],
+   "anchor_px": [
+    86.5,
+    202.9
+   ],
+   "points": {},
+   "ppv": 6,
+   "view_yaw_elev": [
+    155,
+    14
+   ],
+   "note": "seen from behind; frames 0-3 run (advance by distance), 4-5 hop (tuck on the way up, reach at the top). Default avatar: the player's own avatar needs a runtime render (builder's call)",
+   "bytes": 741600
+  },
+  "motorbike": {
+   "file": "motorbike.png",
+   "frames": 1,
+   "frame_w": 170,
+   "frame_h": 152,
+   "frame_names": null,
+   "anchor_px": [
+    89.0,
+    131.6
+   ],
+   "points": {},
+   "ppv": 6,
+   "view_yaw_elev": [
+    -25,
+    22
+   ],
+   "note": "parked scooter across the lane; anchor = ground centre",
+   "bytes": 103360
+  },
+  "tuk_tuk": {
+   "file": "tuk_tuk.png",
+   "frames": 1,
+   "frame_w": 228,
+   "frame_h": 214,
+   "frame_names": null,
+   "anchor_px": [
+    120.5,
+    184.5
+   ],
+   "points": {},
+   "ppv": 6,
+   "view_yaw_elev": [
+    -25,
+    22
+   ],
+   "note": "parked tuk-tuk, blocks a lane; anchor = ground centre",
+   "bytes": 195168
+  },
+  "food_cart": {
+   "file": "food_cart.png",
+   "frames": 1,
+   "frame_w": 198,
+   "frame_h": 238,
+   "frame_names": null,
+   "anchor_px": [
+    107.0,
+    213.3
+   ],
+   "points": {},
+   "ppv": 6,
+   "view_yaw_elev": [
+    -25,
+    22
+   ],
+   "note": "noodle cart with umbrella, blocks a lane; anchor = ground centre",
+   "bytes": 188496
+  },
+  "soi_dog": {
+   "file": "soi_dog.png",
+   "frames": 2,
+   "frame_w": 186,
+   "frame_h": 90,
+   "frame_names": [
+    "asleep",
+    "ear_up"
+   ],
+   "anchor_px": [
+    81.6,
+    65.6
+   ],
+   "points": {},
+   "ppv": 6,
+   "view_yaw_elev": [
+    -25,
+    22
+   ],
+   "note": "sleeping soi dog across the lane, hop it; anchor = ground centre",
+   "bytes": 133920
+  },
+  "monitor_lizard": {
+   "file": "monitor_lizard.png",
+   "frames": 2,
+   "frame_w": 298,
+   "frame_h": 78,
+   "frame_names": [
+    "still",
+    "tongue"
+   ],
+   "anchor_px": [
+    173.5,
+    47.2
+   ],
+   "points": {},
+   "ppv": 6,
+   "view_yaw_elev": [
+    -25,
+    22
+   ],
+   "note": "water monitor crossing the soi, hop it; anchor = ground centre",
+   "bytes": 185952
+  },
+  "kerb": {
+   "file": "kerb.png",
+   "frames": 1,
+   "frame_w": 170,
+   "frame_h": 64,
+   "frame_names": null,
+   "anchor_px": [
+    86.3,
+    44.1
+   ],
+   "points": {},
+   "ppv": 6,
+   "view_yaw_elev": [
+    -25,
+    22
+   ],
+   "note": "black and white kerb block, hop it; anchor = ground centre",
+   "bytes": 43520
+  },
+  "note": {
+   "file": "note.png",
+   "frames": 1,
+   "frame_w": 102,
+   "frame_h": 134,
+   "frame_names": null,
+   "anchor_px": [
+    42.0,
+    92.3
+   ],
+   "points": {},
+   "ppv": 5,
+   "view_yaw_elev": [
+    -15,
+    10
+   ],
+   "note": "music note to collect; anchor = centre of the note head",
+   "bytes": 54672,
+   "glow_file": "note_glow.png",
+   "glow_scale": 2,
+   "glow_bytes": 13668
+  },
+  "shopfront": {
+   "file": "shopfront.png",
+   "frames": 3,
+   "frame_w": 172,
+   "frame_h": 252,
+   "frame_names": null,
+   "anchor_px": [
+    86.0,
+    226.0
+   ],
+   "points": {},
+   "ppv": 4,
+   "view_yaw_elev": [
+    0,
+    0
+   ],
+   "note": "shophouse fronts for both sides of the soi, scrolling; anchor = bottom centre; mirror for the right side",
+   "bytes": 520128,
+   "glow_file": "shopfront_glow.png",
+   "glow_scale": 2,
+   "glow_bytes": 130032
+  },
+  "road_tile": {
+   "file": "road_tile.png",
+   "frames": 1,
+   "frame_w": 128,
+   "frame_h": 128,
+   "frame_names": null,
+   "anchor_px": [
+    -0.0,
+    128.0
+   ],
+   "points": {},
+   "ppv": 4,
+   "view_yaw_elev": [
+    0,
+    90
+   ],
+   "note": "top-down asphalt, tiles seamlessly (32 x 32 voxels); map onto the road polygon",
+   "bytes": 65536
+  },
+  "lane_dash": {
+   "file": "lane_dash.png",
+   "frames": 1,
+   "frame_w": 8,
+   "frame_h": 48,
+   "frame_names": null,
+   "anchor_px": [
+    -0.0,
+    48.0
+   ],
+   "points": {},
+   "ppv": 4,
+   "view_yaw_elev": [
+    0,
+    90
+   ],
+   "note": "painted lane dash, top-down",
+   "bytes": 1536
+  },
+  "door_front": {
+   "file": "door_front.png",
+   "frames": 2,
+   "frame_w": 278,
+   "frame_h": 302,
+   "frame_names": [
+    "closed",
+    "open"
+   ],
+   "anchor_px": [
+    136.5,
+    276.0
+   ],
+   "points": {},
+   "ppv": 5,
+   "view_yaw_elev": [
+    0,
+    0
+   ],
+   "note": "Black Cabin at the end of the soi; open when the runner arrives; anchor = ground centre",
+   "bytes": 671648,
+   "glow_file": "door_front_glow.png",
+   "glow_scale": 2,
+   "glow_bytes": 167912
+  },
+  "backdrop": {
+   "file": "backdrop.png",
+   "frames": 1,
+   "frame_w": 270,
+   "frame_h": 480,
+   "frame_names": null,
+   "anchor_px": [
+    0,
+    0
+   ],
+   "points": {},
+   "ppv": 1,
+   "view_yaw_elev": [
+    0,
+    20
+   ],
+   "note": "night soi far layer (blurred); draw behind the road, scroll slowly",
+   "bytes": 518400
+  }
+ },
+ "texture_bytes_all_files": 3735548,
+ "texture_bytes_loaded": 3735548,
+ "texture_mb_loaded": 3.56
+}

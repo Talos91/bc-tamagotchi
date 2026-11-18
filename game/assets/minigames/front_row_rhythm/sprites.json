@@ -1,0 +1,134 @@
+{
+ "game": "front_row_rhythm",
+ "sprites": {
+  "clap": {
+   "file": "clap.png",
+   "frames": 3,
+   "frame_w": 196,
+   "frame_h": 176,
+   "frame_names": [
+    "open",
+    "closing",
+    "clap"
+   ],
+   "anchor_px": [
+    104.4,
+    127.7
+   ],
+   "points": {},
+   "ppv": 10,
+   "view_yaw_elev": [
+    -40,
+    12
+   ],
+   "note": "tap = play 0-1-2 fast; anchor = between the palms",
+   "bytes": 413952
+  },
+  "puck": {
+   "file": "puck.png",
+   "frames": 3,
+   "frame_w": 164,
+   "frame_h": 158,
+   "frame_names": [
+    "incoming",
+    "perfect",
+    "missed"
+   ],
+   "anchor_px": [
+    82.0,
+    85.9
+   ],
+   "points": {},
+   "ppv": 8,
+   "view_yaw_elev": [
+    0,
+    55
+   ],
+   "note": "beat puck scrolling down a lane; anchor = centre",
+   "bytes": 310944,
+   "glow_file": "puck_glow.png",
+   "glow_scale": 2,
+   "glow_bytes": 77736
+  },
+  "target": {
+   "file": "target.png",
+   "frames": 2,
+   "frame_w": 212,
+   "frame_h": 188,
+   "frame_names": [
+    "lit",
+    "dim"
+   ],
+   "anchor_px": [
+    106.0,
+    96.3
+   ],
+   "points": {},
+   "ppv": 8,
+   "view_yaw_elev": [
+    0,
+    55
+   ],
+   "note": "hit pad on the hit line, one per lane; anchor = centre",
+   "bytes": 318848,
+   "glow_file": "target_glow.png",
+   "glow_scale": 2,
+   "glow_bytes": 79712
+  },
+  "band_jo": {
+   "file": "band_jo.png",
+   "frames": 2,
+   "frame_w": 82,
+   "frame_h": 152,
+   "frame_names": null,
+   "anchor_px": [
+    38.4,
+    147.8
+   ],
+   "points": {},
+   "ppv": 5,
+   "view_yaw_elev": [
+    -10,
+    6
+   ],
+   "note": "band member on the stage strip, frame 1 on the beat; anchor = feet centre",
+   "bytes": 99712
+  },
+  "band_pete": {
+   "file": "band_pete.png",
+   "frames": 2,
+   "frame_w": 92,
+   "frame_h": 180,
+   "frame_names": null,
+   "anchor_px": [
+    38.7,
+    175.2
+   ],
+   "points": {},
+   "ppv": 5,
+   "view_yaw_elev": [
+    -10,
+    6
+   ],
+   "note": "band member on the stage strip, frame 1 on the beat; anchor = feet centre",
+   "bytes": 132480
+  },
+  "backdrop": {
+   "file": "backdrop.png",
+   "frames": 1,
+   "frame_w": 360,
+   "frame_h": 640,
+   "frame_names": null,
+   "anchor_px": [
+    0,
+    0
+   ],
+   "points": {},
+   "note": "the game's room from the venue (the stage from the front row), blurred and darkened; stretch to cover the play area",
+   "bytes": 921600
+  }
+ },
+ "texture_bytes_all_files": 2354984,
+ "texture_bytes_loaded": 2354984,
+ "texture_mb_loaded": 2.25
+}

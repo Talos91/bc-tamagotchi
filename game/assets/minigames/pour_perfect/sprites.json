@@ -1,0 +1,115 @@
+{
+ "game": "pour_perfect",
+ "sprites": {
+  "pint": {
+   "file": "pint.png",
+   "frames": 2,
+   "frame_w": 316,
+   "frame_h": 682,
+   "frame_names": [
+    "back",
+    "front"
+   ],
+   "anchor_px": [
+    158.0,
+    676.6
+   ],
+   "points": {
+    "inner_bottom_left": [
+     26.0,
+     643.2
+    ],
+    "inner_top_right": [
+     290.0,
+     20.7
+    ]
+   },
+   "ppv": 12,
+   "view_yaw_elev": [
+    0,
+    4
+   ],
+   "note": "frame 0 (back wall) first, then the fill inside the inner box, then frame 1 (walls, rim, ribs) over it; anchor = bottom centre",
+   "bytes": 1724096
+  },
+  "tap": {
+   "file": "tap.png",
+   "frames": 1,
+   "frame_w": 156,
+   "frame_h": 326,
+   "frame_names": null,
+   "anchor_px": [
+    61.6,
+    306.9
+   ],
+   "points": {
+    "spout": [
+     146.0,
+     179.9
+    ]
+   },
+   "ppv": 10,
+   "view_yaw_elev": [
+    -12,
+    8
+   ],
+   "note": "beer tap over the glass; anchor = bottom centre of the tower; point spout = where the stream starts",
+   "bytes": 203424
+  },
+  "stream": {
+   "file": "stream.png",
+   "frames": 1,
+   "frame_w": 32,
+   "frame_h": 128,
+   "frame_names": null,
+   "anchor_px": [
+    8.0,
+    128.0
+   ],
+   "points": {},
+   "ppv": 8,
+   "view_yaw_elev": [
+    0,
+    0
+   ],
+   "note": "white pour stream, tile vertically and tint (modulate) with the layer colour",
+   "bytes": 16384
+  },
+  "foam": {
+   "file": "foam.png",
+   "frames": 3,
+   "frame_w": 172,
+   "frame_h": 66,
+   "frame_names": null,
+   "anchor_px": [
+    82.0,
+    60.7
+   ],
+   "points": {},
+   "ppv": 8,
+   "view_yaw_elev": [
+    0,
+    20
+   ],
+   "note": "foam head blobs (white, tint if needed); anchor = blob bottom centre; frames are three shapes",
+   "bytes": 136224
+  },
+  "backdrop": {
+   "file": "backdrop.png",
+   "frames": 1,
+   "frame_w": 360,
+   "frame_h": 640,
+   "frame_names": null,
+   "anchor_px": [
+    0,
+    0
+   ],
+   "points": {},
+   "note": "the game's room from the venue (the bar top close up), blurred and darkened; stretch to cover the play area",
+   "bytes": 921600
+  }
+ },
+ "texture_bytes_all_files": 3001728,
+ "texture_bytes_loaded": 3001728,
+ "texture_mb_loaded": 2.86
+}

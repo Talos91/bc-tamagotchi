@@ -1,0 +1,273 @@
+{
+ "game": "candle_talk",
+ "sprites": {
+  "candle": {
+   "file": "candle.png",
+   "frames": 1,
+   "frame_w": 148,
+   "frame_h": 200,
+   "frame_names": null,
+   "anchor_px": [
+    74.0,
+    170.5
+   ],
+   "points": {
+    "wick_top": [
+     74.0,
+     5.5
+    ]
+   },
+   "ppv": 10,
+   "view_yaw_elev": [
+    -12,
+    14
+   ],
+   "note": "pillar candle; draw 'flame' at point wick_top; anchor = bottom centre",
+   "bytes": 118400
+  },
+  "flame": {
+   "file": "flame.png",
+   "frames": 6,
+   "frame_w": 136,
+   "frame_h": 156,
+   "frame_names": [
+    "full0",
+    "full1",
+    "full2",
+    "full3",
+    "gutter0",
+    "gutter1"
+   ],
+   "anchor_px": [
+    68.0,
+    126.3
+   ],
+   "points": {},
+   "ppv": 10,
+   "view_yaw_elev": [
+    -12,
+    14
+   ],
+   "note": "flame: 0-3 flicker loop (8 fps), 4-5 guttering (a miss); scale by the candle light; anchor = wick top",
+   "bytes": 509184,
+   "glow_file": "flame_glow.png",
+   "glow_scale": 2,
+   "glow_bytes": 127296
+  },
+  "regular_tt": {
+   "file": "regular_tt.png",
+   "frames": 2,
+   "frame_w": 206,
+   "frame_h": 290,
+   "frame_names": [
+    "listen",
+    "smile"
+   ],
+   "anchor_px": [
+    104.5,
+    283.7
+   ],
+   "points": {},
+   "ppv": 14,
+   "view_yaw_elev": [
+    -12,
+    6
+   ],
+   "note": "the regular across the candle, chest up; load only this one; smile on the best card; anchor = chest cut centre",
+   "bytes": 477920
+  },
+  "regular_tong": {
+   "file": "regular_tong.png",
+   "frames": 2,
+   "frame_w": 228,
+   "frame_h": 296,
+   "frame_names": [
+    "listen",
+    "smile"
+   ],
+   "anchor_px": [
+    126.7,
+    289.8
+   ],
+   "points": {},
+   "ppv": 14,
+   "view_yaw_elev": [
+    -12,
+    6
+   ],
+   "note": "the regular across the candle, chest up; load only this one; smile on the best card; anchor = chest cut centre",
+   "bytes": 539904
+  },
+  "regular_ploy": {
+   "file": "regular_ploy.png",
+   "frames": 2,
+   "frame_w": 224,
+   "frame_h": 280,
+   "frame_names": [
+    "listen",
+    "smile"
+   ],
+   "anchor_px": [
+    103.7,
+    272.0
+   ],
+   "points": {},
+   "ppv": 14,
+   "view_yaw_elev": [
+    -12,
+    6
+   ],
+   "note": "the regular across the candle, chest up; load only this one; smile on the best card; anchor = chest cut centre",
+   "bytes": 501760
+  },
+  "regular_jules": {
+   "file": "regular_jules.png",
+   "frames": 2,
+   "frame_w": 206,
+   "frame_h": 288,
+   "frame_names": [
+    "listen",
+    "smile"
+   ],
+   "anchor_px": [
+    104.5,
+    280.7
+   ],
+   "points": {},
+   "ppv": 14,
+   "view_yaw_elev": [
+    -12,
+    6
+   ],
+   "note": "the regular across the candle, chest up; load only this one; smile on the best card; anchor = chest cut centre",
+   "bytes": 474624
+  },
+  "regular_dougie": {
+   "file": "regular_dougie.png",
+   "frames": 2,
+   "frame_w": 232,
+   "frame_h": 310,
+   "frame_names": [
+    "listen",
+    "smile"
+   ],
+   "anchor_px": [
+    117.5,
+    302.1
+   ],
+   "points": {},
+   "ppv": 14,
+   "view_yaw_elev": [
+    -12,
+    6
+   ],
+   "note": "the regular across the candle, chest up; load only this one; smile on the best card; anchor = chest cut centre",
+   "bytes": 575360
+  },
+  "regular_lung_nop": {
+   "file": "regular_lung_nop.png",
+   "frames": 2,
+   "frame_w": 228,
+   "frame_h": 266,
+   "frame_names": [
+    "listen",
+    "smile"
+   ],
+   "anchor_px": [
+    104.2,
+    259.6
+   ],
+   "points": {},
+   "ppv": 14,
+   "view_yaw_elev": [
+    -12,
+    6
+   ],
+   "note": "the regular across the candle, chest up; load only this one; smile on the best card; anchor = chest cut centre",
+   "bytes": 485184
+  },
+  "regular_bow": {
+   "file": "regular_bow.png",
+   "frames": 2,
+   "frame_w": 276,
+   "frame_h": 286,
+   "frame_names": [
+    "listen",
+    "smile"
+   ],
+   "anchor_px": [
+    175.1,
+    277.6
+   ],
+   "points": {},
+   "ppv": 14,
+   "view_yaw_elev": [
+    -12,
+    6
+   ],
+   "note": "the regular across the candle, chest up; load only this one; smile on the best card; anchor = chest cut centre",
+   "bytes": 631488
+  },
+  "regular_hiro": {
+   "file": "regular_hiro.png",
+   "frames": 2,
+   "frame_w": 220,
+   "frame_h": 268,
+   "frame_names": [
+    "listen",
+    "smile"
+   ],
+   "anchor_px": [
+    118.3,
+    260.3
+   ],
+   "points": {},
+   "ppv": 14,
+   "view_yaw_elev": [
+    -12,
+    6
+   ],
+   "note": "the regular across the candle, chest up; load only this one; smile on the best card; anchor = chest cut centre",
+   "bytes": 471680
+  },
+  "card": {
+   "file": "card.png",
+   "frames": 2,
+   "frame_w": 204,
+   "frame_h": 126,
+   "frame_names": [
+    "normal",
+    "picked"
+   ],
+   "anchor_px": [
+    102.0,
+    63.0
+   ],
+   "points": {},
+   "ppv": 10,
+   "view_yaw_elev": [
+    0,
+    12
+   ],
+   "note": "topic card blank (text drawn by the game); picked = gold edge; anchor = centre",
+   "bytes": 205632
+  },
+  "backdrop": {
+   "file": "backdrop.png",
+   "frames": 1,
+   "frame_w": 360,
+   "frame_h": 640,
+   "frame_names": null,
+   "anchor_px": [
+    0,
+    0
+   ],
+   "points": {},
+   "note": "the game's room from the venue (a candle table close up), blurred and darkened; stretch to cover the play area",
+   "bytes": 921600
+  }
+ },
+ "texture_bytes_all_files": 6040032,
+ "texture_bytes_loaded": 2513600,
+ "texture_mb_loaded": 2.4
+}
