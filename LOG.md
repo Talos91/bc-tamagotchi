@@ -253,3 +253,4 @@ Append-only. One dated line per event, newest last. Never edit earlier lines.
 - 2026-11-18 (+7) — 🎨 art-mg-sprites (Opus, local_d5735f76) started: voxel sprites for all 8 games (Q3). Orchestrator local_ca1e0f15 at ~40 %: STATE final rewrite, handoff handoffs/ORCHESTRATOR-HANDOVER-2026-11-18.md, stint recap in the vault; successor next.
 - 2026-11-18 (+7) — Successor orchestrator local_96f4e96d (Opus 5.5, medium) started; local_ca1e0f15 answers its one question, then Daniele archives it.
 - 2026-11-18 (+7) — 🎸 local_96f4e96d took over: role loaded, detached, connectors off (Resend was on), origin/main e993a5c confirmed, both workers given the new id; predecessor: nothing outside the files → STATE. Context ~13 %.
+- 2026-11-18 (+7) — 👑 Master check-in answered: keep local_ca1e0f15 unarchived until its nested workers close; fix-forward only; branch-per-worker proposal (ask Daniele); dose 3; 4 untracked lounge shots not ours → STATE. Context ~14 %.
