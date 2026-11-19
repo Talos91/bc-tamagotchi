@@ -154,7 +154,7 @@ mg.result.miss_line.1,"Nothing earned. Go again, or come back later.",ไม่�
 mg.result.miss_line.2,The room saw nothing. Shake it off.,ไม่มีใครเห็นหรอก สะบัดๆ ไปเลย,"Result card line under MISS, variant 2; TH machine draft",50
 mg.coaster_flip.title,Coaster Flip,Coaster Flip,Minigame name (stays English),18
 mg.coaster_flip.subtitle,The tall-table bar trick,มุกโต๊ะสูงสายบาร์,Subtitle under the name in the lab menu,34
-mg.coaster_flip.how_to,Swipe up to flick the stack of coasters. Tap when the ring glows: the coasters are flat. Each catch adds one. Three drops and you're done.,ปัดขึ้นเพื่อดีดกองที่รองแก้ว แตะตอนวงแหวนเรืองแสง ตอนที่รองแก้ววางแบน รับได้ครั้งละหนึ่งแผ่นเพิ่ม ทำหล่นสามครั้งจบเกม,Pause sheet help text,150
+mg.coaster_flip.how_to,Swipe up to flip the stack. Tap the moment it reaches the ring and the ring glows: a catch adds a coaster. Three drops and you are done.,ปัดขึ้นเพื่อโยนกองที่รองแก้ว แตะตอนกองถึงวงแหวนและวงแหวนเรืองแสง รับได้จะเพิ่มอีกแผ่น ทำหล่นสามครั้งจบเกม,Pause sheet help text (Q5 rewrite; TH machine draft),150
 mg.coaster_flip.tier_1,Steady hand,มือนิ่ง,Result card tier word,18
 mg.coaster_flip.tier_2,Table legend,ตำนานโต๊ะสูง,Result card tier word,18
 mg.coaster_flip.tier_3,Coaster king,ราชาที่รองแก้ว,Result card tier word,18
@@ -162,14 +162,22 @@ mg.coaster_flip.status,stack {stack} · best run {best},กอง {stack} · ด
 mg.coaster_flip.drops,drops left,หล่นได้อีก,Label under the drops-left circles,18
 mg.coaster_flip.house,The house,ทางร้าน,Who sets the stack to beat at a table with no regular,18
 mg.coaster_flip.to_beat,{who}'s stack to beat: {n},สถิติของ {who} ที่ต้องชนะ: {n},Top line. {who} regular's name; {n} catches to beat,40
-mg.coaster_flip.hint_flick,Swipe up to flick the stack,ปัดขึ้นเพื่อดีดกอง,Hint while the stack waits on the table,40
-mg.coaster_flip.hint_catch,Tap when the ring glows,แตะตอนวงแหวนเรืองแสง,Hint while the stack is in the air,40
+mg.coaster_flip.hint_flick,Swipe UP to flip the stack,ปัดขึ้นเพื่อโยนกอง,Coach line while the stack waits on the table (Q5; TH machine draft),40
+mg.coaster_flip.hint_catch,Tap when the rings meet!,แตะตอนวงแหวนชนกัน!,Coach line in the air: the closing ring meets the catch ring at the top of the arc (Q5; TH machine draft),40
 mg.coaster_flip.caught,Caught! One more.,รับได้! อีกแผ่น,Hint after a catch,40
 mg.coaster_flip.dropped,All over the floor. Again.,หล่นเต็มพื้น เอาใหม่,Hint after a drop,40
 mg.coaster_flip.beat,You beat {who}!,ชนะ {who} แล้ว!,Hint the moment the player beats the regular's stack. {who} name,40
 mg.coaster_flip.row,Coaster Flip,Coaster Flip,Tall table sheet row title (opens the minigame),26
 mg.coaster_flip.row_with,Coaster Flip with {regular},Coaster Flip กับ {regular},Tall table sheet row title when a regular hosts it. {regular} name,30
 mg.coaster_flip.row_sub,Beat the stack · {best},ชนะสถิติ · {best},Tall table row sub-line. {best} the player's best,34
+mg.coaster_flip.goal,Catch it in the ring. Each catch adds one.,รับให้ได้ในวงแหวน รับได้ครั้งละหนึ่งแผ่น,Coach second line before the first catch (Q5; TH machine draft),46
+mg.coaster_flip.zone,CATCH HERE,รับตรงนี้,Label over the catch ring until the first catch (Q5; TH machine draft),14
+mg.coaster_flip.nudge,Swipe up!,ปัดขึ้น!,Pop when the player taps instead of swiping (Q5; TH machine draft),16
+mg.coaster_flip.early,Too early!,เร็วไป!,Pop on a drop: tapped before the top of the arc (Q5; TH machine draft),16
+mg.coaster_flip.late,Too late!,ช้าไป!,Pop on a drop: tapped after the top or never (Q5; TH machine draft),16
+mg.coaster_flip.early_hint,Wait for the rings to meet,รอให้วงแหวนชนกันก่อน,Coach line after an early drop (Q5; TH machine draft),40
+mg.coaster_flip.late_hint,Tap as it reaches the ring,แตะตอนกองถึงวงแหวน,Coach line after a late drop (Q5; TH machine draft),40
+mg.coaster_flip.ghost,The faint stack is your best tonight,กองจางๆ คือสถิติดีสุดของคุณคืนนี้,Intro line when tonight's best shows as a ghost stack (mg_rivals; TH machine draft),40
 mg.neon_moth.title,Neon Moth,Neon Moth,Minigame name (stays English),18
 mg.neon_moth.subtitle,The Black Cabin game machine,ตู้เกม Black Cabin,Subtitle under the name in the lab menu,34
 mg.neon_moth.how_to,"Tap to flutter, let go to sink. Slip between the bulb strings and the speakers to reach the BLACK CABIN sign. Three bumps and the moth goes home.",แตะเพื่อกระพือปีก ปล่อยเพื่อร่อนลง ลอดระหว่างสายหลอดไฟกับลำโพงให้ถึงป้าย BLACK CABIN ชนสามครั้งผีเสื้อกลับบ้าน,Pause sheet help text. BLACK CABIN is brand-fixed,150

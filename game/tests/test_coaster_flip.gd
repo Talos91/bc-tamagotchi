@@ -1,6 +1,7 @@
 extends SceneTree
 ## Headless tests for Coaster Flip (docs/design/10-minigame-next.md §A): rules, scoring tiers, scripted players,
-## the swipe gesture, the action's gains and cap, strings and the venue registry.
+## the swipe gesture, the action's gains and cap, strings and the venue registry. Q5 (11-minigame-quality): clarity
+## cues (coach, closing ring, early/late), voxel art, every §2.3 beat via mg_fx, the §3 drift ramp, mg_rivals.
 ##   godot --headless --path . --script res://tests/test_coaster_flip.gd
 ## Exit code 0 = all pass.
 
@@ -10,13 +11,21 @@ const Base = preload("res://scripts/minigames/minigame_base.gd")
 const S = preload("res://scripts/minigames/strings.gd")
 const Game = preload("res://scripts/minigames/coaster_flip.gd")
 const Session = preload("res://scripts/zones/venue_session.gd")
+const Rivals = preload("res://scripts/minigames/mg_rivals.gd")
 
 const T0 := 1_800_000_000.0
 const STEP := 1.0 / 120.0
 
+## Stands in for Needs: mg_rivals only reads and writes `ext`.
+class Store:
+	extends RefCounted
+	var ext := {}
+
+
 var failures := 0
 var checks := 0
 var _result: Dictionary = {}
+var store := Store.new()
 
 
 func _initialize() -> void:
@@ -28,6 +37,13 @@ func _initialize() -> void:
 	test_human_player()
 	test_action()
 	test_strings_and_registry()
+	test_clarity()
+	test_ramp_drift()
+	test_average_and_relaxed()
+	test_art_and_juice()
+	test_rivals_in_game()
+	# a game script that fails to compile makes every test error out before any check runs: never call that a pass
+	check(checks >= 100, "the suite ran its checks (%d)" % checks)
 	print("")
 	print("%d checks, %d failed" % [checks, failures])
 	print("COASTER FLIP TESTS ", "PASS" if failures == 0 else "FAIL")
@@ -45,6 +61,7 @@ func spawn(config := {}) -> Control:
 	var g: Control = Game.new()
 	g.size = Vector2(1080, 1400)
 	g.config = config
+	g.rivals_store = store
 	root.add_child(g)
 	_result = {}
 	g.finished.connect(func(r: Dictionary) -> void: _result = r)
@@ -150,13 +167,15 @@ func test_no_catch_and_time_limit() -> void:
 
 
 func test_swipe_and_regular() -> void:
-	print("[input] swipe up flicks, a tap in the air catches; the regular's stack to beat")
+	print("[input] swipe up flicks, a tap in the air catches; the table's regular stays on the result")
+	store = Store.new()
 	var g := spawn({"regular": "tt"})
-	check(g.to_beat == 7, "Tt's stack to beat is 7")
+	check(g.regular == "tt", "the table's regular is Tt")
 	run_for(g, Game.INTRO_SECONDS + 0.05)
 	_mouse(g, true, Vector2(500, 1100))
 	_mouse(g, false, Vector2(500, 1100))
 	check(g.state == Game.State.READY, "a tap on the table does not flick")
+	check(g._nudge > 0.0, "a tap instead of a swipe is answered (swipe-up nudge)")
 	_mouse(g, true, Vector2(500, 1100))
 	_mouse(g, false, Vector2(500, 1000))
 	check(g.state == Game.State.FLIGHT, "a swipe up flicks")
@@ -165,17 +184,23 @@ func test_swipe_and_regular() -> void:
 	check(g.state == Game.State.CAUGHT and g.run == 1, "touch-down in the air catches")
 	_mouse(g, false, Vector2(500, 600))
 	run_for(g, Game.RESULT_SECONDS + 0.02)
-	for i in 7:
-		g.flick()
-		wait_flat(g)
-		g.tap()
-		run_for(g, Game.RESULT_SECONDS + 0.02)
-	check(g.beat, "eight caught beats Tt's seven")
+	# the flick fires during the drag, as soon as the finger is SWIPE_PX up (no wait for the lift)
+	_mouse(g, true, Vector2(500, 1100))
+	var m := InputEventMouseMotion.new()
+	m.position = Vector2(500, 1100 - Game.SWIPE_PX - 1.0)
+	g._gui_input(m)
+	check(g.state == Game.State.FLIGHT, "the drag itself flicks once far enough up")
+	_mouse(g, false, Vector2(500, 900))
+	check(g.state == Game.State.FLIGHT, "the lift after a drag-flick does nothing more")
 	g.abandon()
-	check(bool(_result.get("extra", {}).get("beat", false)), "result extra says the regular was beaten")
+	check(str(_result.get("extra", {}).get("regular", "")) == "tt", "result extra keeps the table's regular (hearts)")
 	g.queue_free()
+	# a swipe during the intro starts at once
 	var h := spawn({"regular": "nobody_here"})
-	check(h.to_beat == Game.DEFAULT_TO_BEAT, "an unknown host uses the default stack")
+	_mouse(h, true, Vector2(500, 1100))
+	_mouse(h, false, Vector2(500, 900))
+	check(h.state == Game.State.FLIGHT, "a swipe in the intro flicks at once")
+	check(h.loaded_regulars() <= 1, "an unknown host loads no table sprite")
 	h.queue_free()
 
 
@@ -262,7 +287,7 @@ func test_human_player() -> void:
 	run_for(h, Game.INTRO_SECONDS + 0.05)
 	for i in Game.FULL_RUN:
 		h.flick()
-		run_for(h, Game.FLIGHT_SECONDS * 0.5 + 0.03)
+		run_for(h, h.apex_time() + 0.03)
 		h.tap()
 		run_for(h, Game.RESULT_SECONDS + 0.02)
 	check(h.best_run == Game.FULL_RUN, "aiming at the top of the arc catches all ten (best %d)" % h.best_run)
@@ -274,4 +299,230 @@ func test_human_player() -> void:
 	run_for(k, 0.05)
 	k.tap()
 	check(k.state == Game.State.DROPPED, "a tap by the table, outside the ring, drops the stack")
+	k.queue_free()
+	# relaxed keeps one glow a flight
+	for run in [0, 9]:
+		var on := 0
+		var was := false
+		var t2 := 0.0
+		while t2 < Game.FLIGHT_SECONDS:
+			var lit2 := Game.catch_window(run, t2) and Game.flatness(run, t2) >= Game.flat_needed(run, true)
+			if lit2 and not was:
+				on += 1
+			was = lit2
+			t2 += 1.0 / 240.0
+		check(on == 1, "relaxed, run %d: still one glow a flight (%d)" % [run, on])
+
+
+## Q5 (Daniele 2026-11-18: "very unclear"): what to do, when, and why a miss happened must read on screen.
+func test_clarity() -> void:
+	print("[clarity] coach lines, the closing ring, the catch label, early/late on a drop")
+	var keys := {}
+	for r in S.rows():
+		keys[r["key"]] = r
+	for suffix in ["goal", "zone", "nudge", "early", "late", "early_hint", "late_hint", "ghost"]:
+		var k: String = "mg.coaster_flip." + suffix
+		check(keys.has(k) and keys[k]["en"] != "" and keys[k]["th"] != "", "string " + k)
+	var g := spawn()
+	check(g.closing() < 0.0, "no closing ring before the flick")
+	run_for(g, Game.INTRO_SECONDS + 0.05)
+	g.flick()
+	check(is_equal_approx(g.closing(), 1.0), "the closing ring starts wide at the flick")
+	run_for(g, g.apex_time() * 0.5)
+	var mid: float = g.closing()
+	check(mid > 0.3 and mid < 0.7, "halfway up it is halfway in (%.2f)" % mid)
+	while g.state == Game.State.FLIGHT and g.flight_t < g.apex_time():
+		g.advance(STEP)
+	check(absf(g.closing()) < 0.02, "the rings meet at the top of the arc")
+	check(g.ring_lit(), "and the ring is lit right there")
+	g.tap()
+	check(g.state == Game.State.CAUGHT, "tapping when the rings meet catches")
+	check(g.catches == 1, "catches counted (the coach's catch line goes after the first)")
+	run_for(g, Game.RESULT_SECONDS + 0.02)
+	g.flick()
+	run_for(g, 0.1)
+	g.tap()
+	check(g.state == Game.State.DROPPED and g.drop_reason == "early", "a tap before the top is too early")
+	run_for(g, Game.RESULT_SECONDS + 0.02)
+	g.flick()
+	run_for(g, g.apex_time() + 0.3)
+	g.tap()
+	check(g.state == Game.State.DROPPED and g.drop_reason == "late", "a tap after the top is too late")
+	run_for(g, Game.RESULT_SECONDS + 0.02)
+	g.flick()
+	run_for(g, g.flight_dur + 0.05)
+	check(g.drop_reason == "late", "no tap at all is too late")
+	g.queue_free()
+	# the stack rises from the table into the ring and lands back
+	var h := spawn()
+	run_for(h, Game.INTRO_SECONDS + 0.05)
+	var base: Vector2 = h.stack_pos()
+	h.flick()
+	while h.flight_t < h.apex_time():
+		h.advance(STEP)
+	var top: Vector2 = h.stack_pos()
+	check(top.distance_to(h.ring_now) < 20.0, "at the top of the arc the stack is in the ring")
+	check(top.y < base.y - 250.0, "the flight goes well up from the table")
+	h.tap()
+	run_for(h, Game.LAND_SECONDS + 0.01)
+	check(h.stack_pos().distance_to(base) < 1.0, "a caught stack lands back on the table")
+	check(Game.spin_frame(0.0) == 0 and Game.spin_frame(0.25) == 2 and Game.spin_frame(0.5) == 4 and Game.spin_frame(-0.25) == 6, "spin frames: flat, edge on, flat bottom up")
+	h.queue_free()
+
+
+## §3: as built (spin and flat need tighten per catch); from catch DRIFT_FROM the ring drifts and the flight time moves.
+func test_ramp_drift() -> void:
+	print("[ramp] the ring stays put early, drifts from catch %d; flight time follows its height" % Game.DRIFT_FROM)
+	check(is_equal_approx(Game.flight_for(Game.TABLE_Y - Game.RING_REST.y), Game.FLIGHT_SECONDS), "ring at rest: the old flight")
+	check(Game.flight_for(500.0) > Game.FLIGHT_SECONDS and Game.flight_for(300.0) < Game.FLIGHT_SECONDS, "higher ring, longer flight")
+	var g := spawn({"seed": 4242})
+	run_for(g, Game.INTRO_SECONDS + 0.05)
+	var moved := 0
+	var durs := {}
+	var guard := 0
+	while not g.done and guard < 30:
+		var before: int = g.run
+		g.flick()
+		if before < Game.DRIFT_FROM:
+			check(g.ring_center() == Game.RING_REST, "catch %d: the ring is at rest" % before)
+		elif g.ring_center() != Game.RING_REST:
+			moved += 1
+			durs[snappedf(g.flight_dur, 0.01)] = true
+		wait_flat(g)
+		g.tap()
+		run_for(g, Game.RESULT_SECONDS + 0.02)
+		guard += 1
+	check(g.best_run == Game.FULL_RUN, "a bot still catches all ten with the drift (%d)" % g.best_run)
+	check(moved >= 3, "the ring drifted on the late catches (%d)" % moved)
+	check(durs.size() >= 2, "drifting changes the flight time (%d values)" % durs.size())
+	check(g.drops_left == Game.DROPS, "no drops")
+	g.queue_free()
+	# a drop sends the ring home
+	var h := spawn({"seed": 4242})
+	run_for(h, Game.INTRO_SECONDS + 0.05)
+	for i in Game.DRIFT_FROM:
+		h.flick()
+		wait_flat(h)
+		h.tap()
+		run_for(h, Game.RESULT_SECONDS + 0.02)
+	check(h.ring_center() != Game.RING_REST, "after %d catches the ring has drifted" % Game.DRIFT_FROM)
+	h.flick()
+	h.tap()
+	check(h.ring_center() == Game.RING_REST, "a drop sends the ring home")
+	h.queue_free()
+
+
+## A person: aims at the top of the arc with a reaction jitter. Average lands above a miss; relaxed scores >= normal.
+func play_human(seed_v: int, sigma: float, is_relaxed: bool) -> float:
+	var rng := RandomNumberGenerator.new()
+	rng.seed = seed_v
+	var g := spawn({"seed": seed_v})
+	g.relaxed = is_relaxed
+	run_for(g, Game.INTRO_SECONDS + 0.05)
+	var guard := 0
+	while not g.done and guard < 60:
+		if g.state == Game.State.READY:
+			g.flick()
+			var at: float = g.apex_time() + rng.randfn(0.0, sigma)
+			while g.state == Game.State.FLIGHT and g.flight_t < at:
+				g.advance(STEP)
+			g.tap()
+		run_for(g, Game.RESULT_SECONDS + 0.02)
+		guard += 1
+	if not g.done:
+		g.abandon()
+	var sc := float(_result.get("score", 0.0))
+	g.queue_free()
+	return sc
+
+
+func test_average_and_relaxed() -> void:
+	print("[players] sharp, average and sloppy hands; relaxed never scores less")
+	var sums := {}
+	for kind in [["sharp", 0.02], ["average", 0.06], ["sloppy", 0.11]]:
+		for rl in [false, true]:
+			var tot := 0.0
+			for n in 8:
+				tot += play_human(1000 + n, kind[1], rl)
+			sums["%s%s" % [kind[0], "_r" if rl else ""]] = tot / 8.0
+	print("  mean scores: ", sums)
+	check(float(sums["sharp"]) >= Base.TIER_PERFECT - 0.05, "a sharp hand reaches perfect-ish (%.2f)" % sums["sharp"])
+	check(float(sums["average"]) >= Rules.MINIGAME_MISS_BELOW and float(sums["average"]) < float(sums["sharp"]), "an average hand lands above a miss (%.2f)" % sums["average"])
+	check(float(sums["sloppy"]) < float(sums["average"]), "a sloppy hand scores less (%.2f)" % sums["sloppy"])
+	for k in ["sharp", "average", "sloppy"]:
+		check(float(sums[k + "_r"]) >= float(sums[k]) - 0.001, "relaxed scores at least normal: %s (%.2f vs %.2f)" % [k, sums[k + "_r"], sums[k]])
+
+
+func test_art_and_juice() -> void:
+	print("[art + juice] voxel sprites; every §2.3 beat answers")
+	store = Store.new()
+	var g := spawn({"regular": "jules"})
+	check(g.has_art(), "all Coaster Flip sprites load (import first)")
+	check(g._art.has("regular_jules"), "the table's regular sprite loads")
+	check(g.loaded_regulars() <= 2, "at most two regular sprites loaded (memory rule: %d)" % g.loaded_regulars())
+	var f = g.fx()
+	f.auto_step = false
+	run_for(g, Game.INTRO_SECONDS + 0.05)
+	g.flick()
+	check(f.squash_scale("stack") != Vector2.ONE, "swipe: the stack whooshes (squash)")
+	check(f.particles_alive() > 0, "swipe: a puff off the table")
+	while g.state == Game.State.FLIGHT and not g.ring_lit():
+		g.advance(STEP)
+	check(f.flash_amount("ring") > 0.0, "ring flat: the ring pulses")
+	var pops: int = f.pops_alive()
+	g.tap()
+	check(g.state == Game.State.CAUGHT, "caught")
+	check(f.pops_alive() > pops, "catch: +1 pop")
+	check(g.hit_stop_left > 0.0, "catch: hit-stop")
+	check(g._cheer > 0.0, "catch: the table's regular cheers")
+	run_for(g, Game.LAND_SECONDS + 0.02)
+	check(g._landed and f.squash_scale("stack") != Vector2.ONE, "the stack lands with a clack (squash)")
+	run_for(g, Game.RESULT_SECONDS)
+	g.flick()
+	g.tap()
+	check(g.state == Game.State.DROPPED, "dropped")
+	check(f.trauma > 0.0, "drop: shake")
+	check(f.edge_amount() > 0.0, "drop: red edge")
+	check(f.combo == 0, "drop: the combo breaks")
+	check(g._scatter.size() >= 1, "drop: the coasters scatter")
+	run_for(g, 1.6)
+	check(g._scatter.size() == 0, "the scattered coasters leave the screen")
+	g.queue_free()
+
+
+func test_rivals_in_game() -> void:
+	print("[rivals] tonight's regular to beat, the ghost stack, the board line (as Neon Moth)")
+	store = Store.new()
+	var g := spawn()
+	check(not g.rival.is_empty() and g.rival.has("points") and g.rival.has("name"), "a regular to beat tonight")
+	check(g.ghost.is_empty(), "no ghost before a first round tonight")
+	var target := int(g.rival["points"])
+	run_for(g, Game.INTRO_SECONDS + 0.05)
+	var guard := 0
+	while not g.done and guard < 30:
+		g.flick()
+		wait_flat(g)
+		g.tap()
+		run_for(g, Game.RESULT_SECONDS + 0.02)
+		guard += 1
+	var ex: Dictionary = _result.get("extra", {})
+	check(ex.get("rival") is Dictionary and int(ex["rival"].get("points", -1)) == target, "the result names the regular to beat")
+	check(ex.get("board") is Dictionary and int(ex["board"].get("rank", 0)) >= 1, "the result carries the board line")
+	check(bool(ex.get("beat", false)) == (Base.points_for(float(_result.get("score", 0.0))) > target), "beat = passed the regular's points")
+	var mine := Rivals.mine("coaster_flip", store)
+	check(int(mine["best"]) == Base.points_for(float(_result.get("score", 0.0))), "tonight's best is kept")
+	check(int(mine["ghost"].get("stack", 0)) == Game.FULL_RUN, "the ghost keeps the stack reached")
+	g.queue_free()
+	var h := spawn()
+	check(int(h.ghost.get("stack", 0)) == Game.FULL_RUN, "next round: the ghost stack shows")
+	h.queue_free()
+	# a weak round does not overwrite tonight's best or ghost
+	var k := spawn()
+	run_for(k, Game.INTRO_SECONDS + 0.05)
+	k.flick()
+	wait_flat(k)
+	k.tap()
+	run_for(k, Game.RESULT_SECONDS + 0.02)
+	k.abandon()
+	check(int(Rivals.mine("coaster_flip", store)["ghost"].get("stack", 0)) == Game.FULL_RUN, "a weaker round keeps the best ghost")
 	k.queue_free()
