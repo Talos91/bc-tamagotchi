@@ -281,3 +281,4 @@ Append-only. One dated line per event, newest last. Never edit earlier lines.
 - 2026-11-19 — 🎮 Q8 DONE d82b10d (archived); local main rebased onto it so 0.3.2 includes it (bump 0247086, tip 0ba2486); verify-032 re-proposed (task_36bdafd6). Q6 Soi Dash card (task_fd1e7474). Context 31 %.
 - 2026-11-19 — 🎮 Q4 Neon Moth DONE 01ca88a (mg_rivals.gd), archived; local main rebased onto it: 0.3.2 = Q4 + Q8 (bump 9056caf, tip 14f989a); verify-032 re-proposed (task_fcc0d4af). Q5 Coaster Flip card (task_c5ff2575). Context 33 %.
 - 2026-11-19 — Started (Daniele's clicks): verify-032 local_e910ea7c, q5-coaster-flip local_abaee0ed, q6-soi-dash local_7fb4948e. Context 34 %.
+- 2026-11-19 — 🔍 verify-032 PUSHED 14f989a = v0.3.2 (26/27, test_feel known; web OK 19.70 MB); archived; redeploy command to Daniele. Context 35 %.
