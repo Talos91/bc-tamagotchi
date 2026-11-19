@@ -266,3 +266,4 @@ Append-only. One dated line per event, newest last. Never edit earlier lines.
 - 2026-11-18 (+7) — 🖼️ q1-juice DONE 66f5023 (25/25, card q1-juice-review). Both Q1/Q2 based on 4313aed and both edit PROJECT Tests: q1 rebases onto Q2 98ffee2, one Verifier pushes both; verify-q2 card withdrawn. Context ~26 %.
 - 2026-11-18 (+7) — q1-juice rebased onto Q2: tip 14bb707 (26 suites listed). Verifier card verify-q1q2 (task_1d96f67b) proposed. Context ~27 %.
 - 2026-11-18 (+7) — Owner item 39: need icons unclear, UI too generic, "go up a notch" → 🖼️ ui-notch design worker (Opus, local_e0977981), options on hub cards first. Context ~29 %.
+- 2026-11-19 — Daniele redeployed (live .pck 19.6 MB = cafe83f size); asks for the voxel minigames + new menu/icons: "continue until all is wired". Connectors were on again (5) → off. Context ~31 %.
