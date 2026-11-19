@@ -297,3 +297,4 @@ Append-only. One dated line per event, newest last. Never edit earlier lines.
 - 2026-11-19 — presence-backend: Supabase project LIVE (czrbsjalcjekcslylwbt, ethos paused); blocked on 'Allow anonymous sign-ins' (Daniele, card presence-anon-signins).
 - 2026-11-19 — Daniele: "Worker may do it" (anonymous sign-ins switch) → relayed to presence-backend. UI build started by Daniele (local_69a8748d). Running: presence-backend, presence-client, ui-build.
 - 2026-11-19 — Daniele flipped anonymous sign-ins ("done"), relayed. 🌐 presence-client DONE 746475c (28/28), held for integration with backend; archived.
+- 2026-11-19 — 🌐 presence-backend DONE 97ecebb (Supabase live, two-client 14/14; push device NOT DONE; domain not resolving). Backend + client cherry-picked onto main, Tests 29 (15a5346); verify-presence card (task_46ad4743). Both workers archived. Running: ui-build.
