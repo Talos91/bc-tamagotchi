@@ -141,7 +141,7 @@ create table private.vapid (
   id int primary key default 1 check (id = 1),
   public_key text not null,      -- base64url, uncompressed P-256 point (applicationServerKey)
   private_jwk jsonb not null,
-  subject text not null default 'mailto:presence@bc-tamagotchi.vercel.app',
+  subject text not null default 'https://blackcabin.app',
   created_at timestamptz not null default now()
 );
 

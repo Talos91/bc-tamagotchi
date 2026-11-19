@@ -72,6 +72,18 @@ func _offline() -> void:
 	await _offline_queue()
 	await _report_and_delete()
 	await _autoload_hook()
+	await _perf()
+
+
+func _perf() -> void:
+	var p: Node = await client("")
+	var r: Dictionary = await p.perf_report("v0.3.0 test", {"ua": "test", "dpr": 2}, {"fps_p50": 58, "fps_p5": 31})
+	check(r.get("ok") and mock.perf_reports[-1]["player_id"] == p.player_id() and mock.perf_reports[-1]["numbers"]["fps_p5"] == 31,
+		"perf report stored with the player id (%s)" % r)
+	for i in 29:
+		await p.perf_report("v", {}, {})
+	r = await p.perf_report("v", {}, {})
+	check(r.get("reason") == "limit", "31st perf report in a day: limit")
 
 
 func _off_switch() -> void:
@@ -419,6 +431,8 @@ func _live() -> void:
 	check(v.get("ok") and int(v.get("event_id", -1)) == 0, "live: cheers to a hider dropped silently (%s)" % v)
 	var k: Dictionary = await a._edge("verb", {"action": "public_key"}, 8.0)
 	check(k.get("ok") and str(k.get("public_key", "")).length() == 87, "live: VAPID public key served (65-byte point)")
+	var pr: Dictionary = await a.perf_report("live-test", {"ua": "headless"}, {"fps_p50": 60})
+	check(pr.get("ok") and int(pr.get("id", 0)) > 0, "live: perf report inserted (%s)" % pr)
 	var da: Dictionary = await a.delete_me()
 	var db: Dictionary = await b.delete_me()
 	check(da.get("ok") and db.get("ok"), "live: both players deleted (no rows left)")

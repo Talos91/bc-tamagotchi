@@ -251,6 +251,13 @@ func delete_me() -> Dictionary:
 	return r
 
 
+## Perf telemetry beacon (08b §3.7): one report per visit; the client hook comes later.
+func perf_report(version: String, device: Dictionary, numbers: Dictionary) -> Dictionary:
+	if not is_active():
+		return {"ok": false, "reason": "off"}
+	return await _rpc("bc_perf_report", {"p_version": version, "p_device": device, "p_numbers": numbers}, LONG_TIMEOUT_S)
+
+
 # ------------------------------------------------------------------ polling (venue on screen)
 
 func start_polling() -> void:

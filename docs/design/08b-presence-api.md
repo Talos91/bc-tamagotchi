@@ -112,6 +112,15 @@ Signal `inbox_changed(count)` after each poll while polling runs.
 | `push_disable()` | unsubscribes and deletes the server row |
 | `push_enabled() -> bool` | local flag |
 
+### 3.7 Perf telemetry (card telemetry-beacon: "auto", not anonymous)
+
+`perf_report(version: String, device: Dictionary, numbers: Dictionary) -> Dictionary`: one report per visit, sent
+automatically at the end of the visit (client hook later, from `PerfTelemetry`'s report). Signs in anonymously if
+needed; the row carries the player id (Daniele 2026-11-19: "no need to be anonymous"). `device`: user agent, GPU,
+pixel ratio, screen/canvas, cores, memory class, phone parts. `numbers`: fps p50/p5 overall and per screen/area,
+spikes, draws/objects/primitives, video MB, load times, quality changes. Answer `{ok, id}`; reasons `limit` (30 a
+day per player), `offline`, `off`. Server: table `perf_reports`, RPC `bc_perf_report`, kept 90 days.
+
 ### 3.6 Signals
 
 `checked_in(answer)`, `tonight_changed(list, added, removed)`, `inbox_changed(count)`, `status_changed(s)` with
@@ -130,7 +139,7 @@ Signal `inbox_changed(count)` after each poll while polling runs.
 
 ## 5. The QR / page address
 
-Check-in URL per table: `https://bc-tamagotchi.vercel.app/?t=<code>` (`code` = 10 random characters, not the table
+Check-in URL per table: `https://blackcabin.app/?t=<code>` (`code` = 10 random characters, not the table
 number; P9). `Presence.pending_code()` returns the code from the address (web only; once, then the address is
 cleaned with `history.replaceState`). The start flow: creator/name done → consent card if `mode()==""` →
 `checkin(code)`. Codes and the printable sheet: `docs/venue/qr/`.
@@ -156,4 +165,5 @@ Venue entry never waits more than 4 s; a check-in is never queued; verbs are que
 
 | Date | Change |
 |---|---|
+| 2026-11-19 | v1.1: check-in host is `blackcabin.app` (Daniele's domain); perf telemetry §3.7 (`bc_perf_report`). |
 | 2026-11-19 | v1. URL is `/?t=<code>` (orchestrator brief) instead of 08 §3.1's `/c/<code>`: no Vercel rewrite needed. |

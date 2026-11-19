@@ -36,6 +36,7 @@ var blocks := {}              ## "blocker|blocked" -> true
 var reports: Array = []
 var subs := {}                ## uid -> [endpoint]
 var push_log: Array = []      ## {to, from, night, status}
+var perf_reports: Array = []
 var pushes_sent: Array = []   ## {to, title, body} — what a phone would have shown
 var _seq := 0
 var _uid_seq := 0
@@ -125,6 +126,13 @@ func rpc(fn: String, args: Dictionary, token: String, _timeout: float) -> Dictio
 			subs.erase(uid)
 			return {"ok": true}
 		"bc_delete_me": return _delete_me(uid)
+		"bc_perf_report":
+			var today := perf_reports.filter(func(r): return r["player_id"] == uid and r["at"] > now() - 86400.0)
+			if today.size() >= 30:
+				return {"ok": false, "reason": "limit"}
+			perf_reports.append({"player_id": uid, "at": now(), "version": str(args.get("p_version", "")).left(40),
+				"device": args.get("p_device", {}), "numbers": args.get("p_numbers", {})})
+			return {"ok": true, "id": perf_reports.size()}
 	return {"ok": false, "reason": "server", "detail": "no function " + fn}
 
 

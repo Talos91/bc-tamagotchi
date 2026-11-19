@@ -13,7 +13,7 @@ from PIL import Image, ImageDraw, ImageFont
 
 HERE = os.path.dirname(os.path.abspath(__file__))
 ROOT = os.path.abspath(os.path.join(HERE, '..', '..', '..'))
-BASE = 'https://bc-tamagotchi.vercel.app/?t='
+BASE = 'https://blackcabin.app/?t='
 # The venue tables (layout.json ids and zones) + one code for the bar counter. Card presence-qr-tables confirms.
 TABLES = [
     ('Table0', 'Tables'), ('Table1', 'Tables'), ('Table2', 'Tables'), ('Table3', 'Tables'), ('Table4', 'Tables'),
