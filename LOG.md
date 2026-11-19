@@ -299,3 +299,4 @@ Append-only. One dated line per event, newest last. Never edit earlier lines.
 - 2026-11-19 — Daniele flipped anonymous sign-ins ("done"), relayed. 🌐 presence-client DONE 746475c (28/28), held for integration with backend; archived.
 - 2026-11-19 — 🌐 presence-backend DONE 97ecebb (Supabase live, two-client 14/14; push device NOT DONE; domain not resolving). Backend + client cherry-picked onto main, Tests 29 (15a5346); verify-presence card (task_46ad4743). Both workers archived. Running: ui-build.
 - 2026-11-19 — 🖼️ ui-build DONE 58f4335 (U1–U6, 28/28, card ui-build-review); folded with presence into v0.4.0 (Tests 30, bump a929206); verify-040 card (task_fda6cd97); verify-presence card withdrawn; ui-build archived. No workers running.
+- 2026-11-20 — 🔍 verify-040 BLOCKED: a929206 26/30 (presence on by default with real autoload; network reply callbacks on freed scenes in 3 suites). Not pushed. Fix card fix-presence-int proposed (Opus).
