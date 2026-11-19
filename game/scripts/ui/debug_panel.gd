@@ -72,6 +72,8 @@ func setup(main_node: Node, needs_node: Node) -> void:
 	_row(box, "WASTED", [["Clear lockout", _clear_lockout], ["Force WASTED", _force_wasted]])
 	_row(box, "Clock", [["+1 hour", _jump.bind(3600.0)], ["+12 hours", _jump.bind(12.0 * 3600.0)], ["+1 night", _jump_night]])
 	_row(box, "Stakes (ghost, revival)", [["Make ghost", _make_ghost], ["Fake check-in (revive)", _check_in]])
+	# Performance (owner item 41): the live overlay and the copyable report (scripts/perf_telemetry.gd)
+	_row(box, "Performance", [["Perf overlay", _perf_overlay], ["Copy perf report", _perf_copy]])
 	reset_btn = _button(box, "Reset save", _reset)
 	var close := _button(box, "Close", func(): set_open(false))
 	close.size_flags_horizontal = Control.SIZE_EXPAND_FILL
@@ -157,3 +159,21 @@ func _reset() -> void:
 	set_open(false)
 	if main != null and main.get_tree().current_scene == main:
 		main.get_tree().reload_current_scene()
+
+
+func _perf() -> Node:
+	return get_node_or_null("/root/PerfTelemetry")
+
+
+func _perf_overlay() -> void:
+	var p := _perf()
+	if p:
+		p.show_overlay(not p.overlay_shown())
+		set_open(false)
+
+
+func _perf_copy() -> void:
+	var p := _perf()
+	if p:
+		_say("Perf report copied: paste it in the chat.
+" + p.copy_report())

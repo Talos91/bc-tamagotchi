@@ -8,6 +8,7 @@ const CEILING_LAYER_MASK := 1 << 1
 ## player's figure also emits its own albedo at this energy, a hero light that costs no Light3D (budget 42) and lights
 ## nothing else. Patrons are not lifted, so the player stands out from the crowd.
 const PLAYER_LIFT := 0.15
+const VenueBatch = preload("res://scripts/venue_batch.gd")
 
 var _tealights: Array[Light3D] = []
 var _base_energy: Array[float] = []
@@ -35,6 +36,7 @@ func _ready() -> void:
 			_phase.append(rng.randf() * TAU)
 			_rate.append(rng.randf_range(1.0, 2.0))
 	_find_player.call_deferred()
+	VenueBatch.shadow_proxies.call_deferred(self)   # one shadow-only mesh per group (venue_batch.gd, owner item 41)
 
 ## The player (a Player sibling under the same main scene): lift its figure now and whenever it is rebuilt (set_look).
 func _find_player() -> void:

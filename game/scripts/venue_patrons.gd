@@ -226,6 +226,7 @@ func _spawn(preset: String, nm: String, anims := {}) -> PatronFigure:
 		"shoes": Color("d9c9a6") if _rng.randf() < 0.5 else Color("221110"),
 		"height": _rng.randf_range(1.2, 1.4),
 		"anims": anims,
+		"merge": true,   # one skinned mesh per figure (venue_batch.gd, owner item 41)
 	}
 	add_child(f)
 	figures.append(f)
