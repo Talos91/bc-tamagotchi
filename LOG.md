@@ -283,3 +283,4 @@ Append-only. One dated line per event, newest last. Never edit earlier lines.
 - 2026-11-19 — Started (Daniele's clicks): verify-032 local_e910ea7c, q5-coaster-flip local_abaee0ed, q6-soi-dash local_7fb4948e. Context 34 %.
 - 2026-11-19 — 🔍 verify-032 PUSHED 14f989a = v0.3.2 (26/27, test_feel known; web OK 19.70 MB); archived; redeploy command to Daniele. Context 35 %.
 - 2026-11-19 — 🎮 Q6 Soi Dash DONE 342fd1a (archived), held for a joint verify with Q5 → 0.3.3. Q7 Shake & Serve card proposed. Context 28 % (measured; the 33–35 % lines above were guesses).
+- 2026-11-19 — 🎮 Q5 Coaster Flip DONE ca0efb5; Q6 + Q5 combined on local main, 0.3.3 bump b1a2e70; verify-033 card (task_e7a12adf); Q9 Rhythm + Candle card proposed; Q5/Q6 archived.
