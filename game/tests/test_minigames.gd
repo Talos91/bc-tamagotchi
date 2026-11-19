@@ -11,6 +11,7 @@ const Pour = preload("res://scripts/minigames/pour_perfect.gd")
 const Rhythm = preload("res://scripts/minigames/front_row_rhythm.gd")
 const Candle = preload("res://scripts/minigames/candle_talk.gd")
 const Pinball = preload("res://scripts/minigames/neon_pinball.gd")
+const Rivals = preload("res://scripts/minigames/mg_rivals.gd")
 const CardScript = preload("res://scripts/minigames/result_card.gd")
 const Glyph = preload("res://scripts/minigames/need_glyph.gd")
 const Cast = preload("res://scripts/cast.gd")
@@ -44,6 +45,7 @@ func _initialize() -> void:
 	await test_chat_cast()
 	test_cast()
 	test_pinball()
+	test_pinball_pour_rivals()
 	test_result_card()
 	print("")
 	print("%d checks, %d failed" % [checks, failures])
@@ -707,3 +709,98 @@ func test_q9_sprites_fx_rivals() -> void:
 	check(c._gutter_t > 0.0 and c.fx().trauma == 0.0, "candle: a miss gutters the flame, no shake")
 	check(not c.rival.is_empty(), "candle: tonight's regular to beat is set")
 	c.queue_free()
+
+## Stands in for Needs: mg_rivals only reads and writes `ext`.
+class Store:
+	extends RefCounted
+	var ext := {}
+
+
+func test_pinball_pour_rivals() -> void:
+	print("[rivals] pinball and pour: regular to beat, passing it, the board line, the pour ghost")
+	# --- pinball
+	var store := Store.new()
+	var pb: Control = Pinball.new()
+	pb.size = SIZE
+	pb.rivals_store = store
+	root.add_child(pb)
+	var res := []
+	pb.finished.connect(func(r): res.append(r))
+	pb.start()
+	check(not pb.rival.is_empty() and str(pb.rival.get("name", "")) != "" and pb.rival.has("points"), "pinball: a regular to beat in play")
+	check(not pb.rival_passed, "pinball: not past the regular at 0 points")
+	pb.points = 4000
+	pb.launch(0.9)
+	pb.advance(1.0 / 60.0)
+	check(pb.live_points() == 100 and pb.rival_passed, "pinball: points above the regular flag the pass")
+	pb.finish(pb.current_score())
+	var ex: Dictionary = res[0].get("extra", {}) if res.size() == 1 else {}
+	check(ex.get("rival") is Dictionary and ex["rival"].has("points"), "pinball: result carries the rival")
+	check(ex.get("board") is Dictionary and int(ex["board"].get("rank", 0)) >= 1 and int(ex["board"].get("count", 0)) >= 2, "pinball: result carries the board place")
+	check(res.size() == 1 and int(res[0].get("points", -1)) == 100, "pinball: payout points unchanged")
+	check(int(Rivals.tonight("neon_pinball", store)["best"]) == 100, "pinball: tonight's best saved")
+	check(Rivals.tonight("neon_pinball", store)["ghost"].is_empty(), "pinball: no ghost kept (a physics run is not replayable)")
+	pb.queue_free()
+	# --- pour
+	store = Store.new()
+	var a: Control = pour_run(store, true)
+	check(a.ghost.is_empty(), "pour: no ghost before the first pour tonight")
+	check(not a.rival.is_empty() and a.rival.has("points"), "pour: a regular to beat in play")
+	var rr: Array = a.get_meta("results")
+	check(rr.size() == 1, "pour: the precise pour finished")
+	var pex: Dictionary = rr[0].get("extra", {}) if rr.size() == 1 else {}
+	check(pex.get("rival") is Dictionary and pex["rival"].has("points"), "pour: result carries the rival")
+	check(pex.get("board") is Dictionary and int(pex["board"].get("rank", 0)) >= 1, "pour: result carries the board place")
+	check(a.live_points() >= 95 and a.rival_passed == (a.live_points() > int(a.rival["points"])), "pour: a precise pour scores %d and flags the pass" % a.live_points())
+	var best := int(Rivals.tonight("pour_perfect", store)["best"])
+	check(best == a.live_points(), "pour: tonight's best saved")
+	a.queue_free()
+	var b: Control = pour_run(store, false)
+	var lv: Array = b.ghost.get("levels", [])
+	check(lv.size() == Pour.TARGETS.size(), "pour: the next glass shows tonight's best levels as the ghost")
+	var near := true
+	for i in lv.size():
+		near = near and absf(float(lv[i]) - Pour.TARGETS[i]) < 0.05
+	check(near, "pour: the ghost levels sit near the lines")
+	check(not b.rival.is_empty(), "pour: still a regular to beat")
+	b.queue_free()
+	# a worse pour does not replace tonight's ghost or best
+	var c: Control = Pour.new()
+	c.size = SIZE
+	c.rivals_store = store
+	root.add_child(c)
+	c.start()
+	_advance(c, 1.6)
+	for i in 3:
+		c.press()
+		_advance(c, 14.0)
+		c.release()
+		_advance(c, 1.0)
+	check(c.done, "pour: the sloppy pour finished")
+	check(int(Rivals.tonight("pour_perfect", store)["best"]) == best, "pour: a worse pour keeps tonight's best")
+	check(Rivals.tonight("pour_perfect", store)["ghost"].get("levels", []) == lv, "pour: a worse pour keeps the ghost")
+	c.queue_free()
+
+
+## A precise pour on pour_perfect with `store` as tonight's record (or only the started game); results land in meta.
+func pour_run(store: Object, play: bool) -> Control:
+	var g: Control = Pour.new()
+	g.size = SIZE
+	g.rivals_store = store
+	root.add_child(g)
+	var results := []
+	g.finished.connect(func(r): results.append(r))
+	g.set_meta("results", results)
+	g.start()
+	if not play:
+		return g
+	_advance(g, 1.6)
+	for i in Pour.TARGETS.size():
+		g.press()
+		var guard := 0
+		while g.level < Pour.TARGETS[i] and guard < 5000:
+			g.advance(1.0 / 240.0)
+			guard += 1
+		g.release()
+		_advance(g, 1.0)
+	return g

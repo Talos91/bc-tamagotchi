@@ -17,6 +17,7 @@ extends "res://scripts/minigames/minigame_base.gd"
 
 const UI = preload("res://scripts/minigames/mg_ui.gd")
 const S = preload("res://scripts/minigames/strings.gd")
+const Rivals = preload("res://scripts/minigames/mg_rivals.gd")
 
 const ART := "res://assets/minigames/soi_dash/"
 
@@ -34,6 +35,7 @@ const INTRO_SECONDS := 1.2
 const SWIPE_PX := 50.0
 const FIRST_AT := 2.5                ## first obstacle this far into the street
 const BKK_OFFSET := 7 * 3600
+const GHOST_STEP := 0.25             ## ghost: the runner's lane every this many street units
 
 # --- The ramp (§3): the first 10 s are a warm-up, the middle teaches, the last third tests
 const STEP_START := 1.9              ## gap between obstacle rows at the start ...
@@ -90,6 +92,13 @@ var _dash_t := 0.0
 var _puffs: Array = []               ## {pos, t, size}
 var _tex := {}
 var _glow: Control
+## §4.1 competition: tonight's regular to beat, your best run tonight as a ghost runner, the board line.
+var rival: Dictionary = {}           ## {regular, name, points}
+var rival_passed := false
+var ghost: Dictionary = {}           ## your best run tonight {seed, relaxed, step, lanes: [int -1..1]}, or {}
+var ghost_lanes: Array[int] = []     ## this run, recorded for the next ghost
+var rivals_store: Object = null      ## tests: where mg_rivals keeps tonight's record (default Needs, else memory)
+var _record: Dictionary = {}
 
 static var _meta := {}
 
@@ -126,6 +135,14 @@ func _on_start() -> void:
 	_puffs.clear()
 	seed_used = int(config.get("seed", night_seed()))
 	items = street(seed_used, relaxed)
+	_record = {}
+	var t := Rivals.tonight(game_id, rivals_store)
+	rival = t["rival"]
+	rival_passed = false
+	var g: Dictionary = t["ghost"]
+	# the ghost only runs the same street: same seed and same timing mode
+	ghost = g if int(g.get("seed", -1)) == seed_used and bool(g.get("relaxed", false)) == relaxed and g.get("lanes") is Array else {}
+	ghost_lanes.clear()
 	notes_total = 0
 	for it in items:
 		if it["kind"] == Kind.NOTE:
@@ -235,6 +252,32 @@ static func score_for(got: int, total: int, spare: float) -> float:
 	return clampf(s, 0.0, 1.0)
 
 
+func live_points() -> int:
+	return points_for(current_score())
+
+
+## The run that just ended, as tonight's ghost (only kept if it is your best tonight): the lane at every step.
+func ghost_data() -> Dictionary:
+	return {"seed": seed_used, "relaxed": relaxed, "step": GHOST_STEP, "lanes": ghost_lanes.duplicate()}
+
+
+## The ghost runner's lane at a street distance (NAN when the ghost run ended before that point).
+func ghost_lane_at(d: float) -> float:
+	var lanes: Array = ghost.get("lanes", [])
+	var i := int(floor(d / float(ghost.get("step", GHOST_STEP))))
+	if i < 0 or i >= lanes.size():
+		return NAN
+	return float(lanes[i])
+
+
+## §4.1: passing tonight's regular on the street.
+func _check_rival() -> void:
+	if rival_passed or rival.is_empty() or live_points() <= int(rival.get("points", 0)):
+		return
+	rival_passed = true
+	fx().pop(S.t("mg.rivals.passed", {"regular": str(rival.get("name", ""))}), Vector2(size.x * 0.5, size.y * 0.3), UI.NEON, 44)
+
+
 func spare() -> float:
 	return clock - maxf(0.0, (RUN_SECONDS * SPEED - dist) / SPEED)
 
@@ -315,6 +358,8 @@ func advance(dt: float) -> void:
 func _run(dt: float) -> void:
 	dist += SPEED * dt
 	clock -= dt
+	while float(ghost_lanes.size()) * GHOST_STEP <= dist:
+		ghost_lanes.append(lane)
 	var was_air := airborne()
 	hop_t = maxf(0.0, hop_t - dt)
 	if was_air and not airborne():
@@ -334,6 +379,7 @@ func _run(dt: float) -> void:
 				it["done"] = true
 				notes += 1
 				_note_beat(it)
+				_check_rival()
 				_update_status()
 			Kind.DOG, Kind.KERB, Kind.STRAY, Kind.LIZARD:
 				if not airborne():
@@ -389,10 +435,10 @@ func _puff(pos: Vector2, size_k: float) -> void:
 
 
 func _result_extra() -> Dictionary:
-	# TODO(Q4 mg_rivals.gd): competition (regular to beat, ghost run, board) adds {"rival": {...}} here once Q4's
-	# shared rivals API lands; the street per night is the ghost's track (seed_used + relaxed).
+	if _record.is_empty():
+		_record = Rivals.record(game_id, points_for(score_for(notes, notes_total, clock)), ghost_data(), rivals_store)
 	return {"notes": notes, "notes_total": notes_total, "bumps": bumps, "spare": clock, "arrived": arrived, "seed": seed_used,
-		"best_combo": best_combo, "relaxed": relaxed}
+		"best_combo": best_combo, "relaxed": relaxed, "rival": rival, "board": _record["board_line"]}
 
 
 func _update_status() -> void:
@@ -550,12 +596,16 @@ func _draw() -> void:
 		_spr(self, "door_front", 1 if state == State.DOOR or state == State.DONE else 0, _pt(left, 0.0), Vector2(sc, sc))
 	for it in _visible():
 		_draw_item(it, float(it["at"]) - dist)
+	_draw_ghost()
 	_draw_runner()
 	_draw_puffs()
 	var cc := UI.GOLD if clock > 5.0 else UI.NEON
 	UI.draw_text(self, S.t("mg.soi_dash.clock", {"clock": clock_text(clock)}), clock_px(), 40, f.flash_color("clock", cc))
+	_draw_rivals()
 	if state == State.INTRO:
 		UI.draw_text(self, S.t("mg.soi_dash.hint"), Vector2(size.x * 0.5, size.y - 60), 40, UI.SMOKE)
+		if not ghost.is_empty():
+			UI.draw_text(self, S.t("mg.soi_dash.ghost"), Vector2(size.x * 0.5, size.y - 108), 26, Color(0.75, 0.9, 1.0, 0.8))
 
 
 ## The far soi (blurred render): covers the play area, its vanishing point on the horizon, creeping closer as the
@@ -719,6 +769,30 @@ func _draw_runner() -> void:
 	_spr(self, "runner", fr, p - Vector2(0, lift), Vector2(sc * sq.x, sc * sq.y), col)
 
 
+## Your best run tonight, a faint runner on the lane it took at this point of the street.
+func _draw_ghost() -> void:
+	if ghost.is_empty() or state != State.RUNNING:
+		return
+	var gl := ghost_lane_at(dist)
+	if is_nan(gl):
+		return
+	var p := _pt(0.0, gl * 2.0)
+	var sc := art_scale()
+	if _sprites():
+		_spr(self, "runner", int(dist * 8.0) % 4, p, Vector2(sc, sc), Color(0.75, 0.9, 1.0, 0.35))
+	else:
+		draw_rect(Rect2(p + Vector2(-30, -200), Vector2(60, 200)), Color(0.75, 0.9, 1.0, 0.3))
+
+
+func _draw_rivals() -> void:
+	# §4.1: tonight's regular to beat, and you
+	if not rival.is_empty():
+		var rc := UI.GOLD if rival_passed else UI.CREAM
+		_text_right(S.t("mg.rivals.to_beat"), Vector2(size.x - 20.0, 120.0), 20, UI.SMOKE)
+		_text_right("%s %d" % [str(rival.get("name", "")), int(rival.get("points", 0))], Vector2(size.x - 20.0, 152.0), 28, rc)
+		_text_right(S.t("mg.rivals.you_now", {"score": live_points()}), Vector2(size.x - 20.0, 180.0), 22, UI.GOLD if rival_passed else UI.SMOKE)
+
+
 func _draw_puffs() -> void:
 	for pf in _puffs:
 		var u: float = pf["t"] / PUFF_SECONDS
@@ -782,4 +856,14 @@ func _draw_flat() -> void:
 	var lift := sin(clampf(hop_t / HOP_SECONDS, 0.0, 1.0) * PI) * 110.0
 	if not (bump_t > 0.0 and int(bump_t * 10.0) % 2 == 0):
 		draw_rect(Rect2(p + Vector2(-30, -200 - lift), Vector2(60, 200)), UI.RED)
+	_draw_ghost()
+	_draw_rivals()
 	UI.draw_text(self, S.t("mg.soi_dash.clock", {"clock": clock_text(clock)}), clock_px(), 40, UI.GOLD if clock > 5.0 else UI.NEON)
+
+
+func _text_right(text: String, pos: Vector2, size_px: int, col: Color) -> void:
+	var theme := ThemeDB.get_project_theme()
+	var font: Font = theme.default_font if theme != null and theme.default_font != null else ThemeDB.fallback_font
+	var w := font.get_string_size(text, HORIZONTAL_ALIGNMENT_LEFT, -1, size_px).x
+	draw_string_outline(font, pos - Vector2(w, 0), text, HORIZONTAL_ALIGNMENT_LEFT, -1, size_px, 6, Color(0, 0, 0, 0.7))
+	draw_string(font, pos - Vector2(w, 0), text, HORIZONTAL_ALIGNMENT_LEFT, -1, size_px, col)

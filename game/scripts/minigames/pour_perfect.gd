@@ -8,6 +8,7 @@ extends "res://scripts/minigames/minigame_base.gd"
 const UI = preload("res://scripts/minigames/mg_ui.gd")
 const S = preload("res://scripts/minigames/strings.gd")
 const BarMenu = preload("res://scripts/menu/bar_menu.gd")
+const Rivals = preload("res://scripts/minigames/mg_rivals.gd")
 
 ## Cumulative fill (0 = empty, 1 = rim) each layer must reach.
 const TARGETS: Array[float] = [0.30, 0.58, 0.82]
@@ -55,6 +56,12 @@ var layer_colors: Array[Color] = LAYER_COLORS
 var _tex := {}
 var _foam := 0.0  # 0..1: how high the foam head has risen on the layer being poured
 var _spill_t := 0.0
+## §4.1 competition: tonight's regular to beat, your best pour tonight as ghost ticks on the glass, the board line.
+var rival: Dictionary = {}           ## {regular, name, points}
+var rival_passed := false
+var ghost: Dictionary = {}           ## your best pour tonight {levels: [fill per layer]}, or {}
+var rivals_store: Object = null      ## tests: where mg_rivals keeps tonight's record (default Needs, else memory)
+var _record: Dictionary = {}
 
 
 func _init() -> void:
@@ -81,6 +88,12 @@ func _on_start() -> void:
 	_pressed = false
 	_foam = 0.0
 	_spill_t = 0.0
+	_record = {}
+	var t := Rivals.tonight(game_id, rivals_store)
+	rival = t["rival"]
+	rival_passed = false
+	var g: Dictionary = t["ghost"]
+	ghost = g if g.get("levels") is Array and (g["levels"] as Array).size() == TARGETS.size() else {}
 	drink_id = str(config.get("drink", ""))
 	var cols := BarMenu.pour_colors(drink_id) if drink_id != "" else ([] as Array[Color])
 	layer_colors = cols if cols.size() == TARGETS.size() else LAYER_COLORS
@@ -122,6 +135,18 @@ func current_score() -> float:
 	return total_score(lv, spill, relaxed)
 
 
+func live_points() -> int:
+	return points_for(current_score())
+
+
+## The pour that just ended, as tonight's ghost (kept only if it is your best tonight): where each layer was locked.
+func ghost_data() -> Dictionary:
+	var lv: Array = []
+	for i in TARGETS.size():
+		lv.append(snappedf(float(locked[i]) if i < locked.size() else 0.0, 0.001))
+	return {"levels": lv}
+
+
 # --- Play ------------------------------------------------------------------------------------------
 
 func press() -> void:
@@ -147,7 +172,16 @@ func _lock_layer() -> void:
 	state = State.SETTLE
 	_state_t = 0.0
 	_lock_beat(layer, level)
+	_check_rival()
 	_update_status()
+
+
+## §4.1: passing tonight's regular as the layers lock in.
+func _check_rival() -> void:
+	if rival_passed or rival.is_empty() or live_points() <= int(rival.get("points", 0)):
+		return
+	rival_passed = true
+	fx().pop(S.t("mg.rivals.passed", {"regular": str(rival.get("name", ""))}), Vector2(size.x * 0.5, size.y * 0.2), UI.NEON, 44)
 
 
 ## Release beat: on the line (inside the perfect band) the line flashes with a PERFECT pop; otherwise the pour
@@ -226,9 +260,10 @@ func _spill_beat(first: bool, dt: float) -> void:
 		f.burst("spark", rim, 6)
 
 
-# TODO(mg_rivals): return {"rival": {...}} here when the shared rivals API lands (competition is not in Q8).
 func _result_extra() -> Dictionary:
-	return {}
+	if _record.is_empty():
+		_record = Rivals.record(game_id, live_points(), ghost_data(), rivals_store)
+	return {"rival": rival, "board": _record["board_line"]}
 
 
 func _update_status() -> void:
@@ -398,9 +433,21 @@ func _draw() -> void:
 		draw_line(Vector2(g.position.x - 30, ty), Vector2(g.end.x + 30, ty), col, lw)
 		if i < locked.size():
 			UI.draw_text(self, str(roundi(layer_score(locked[i], TARGETS[i], relaxed) * 100.0)), Vector2(g.end.x + 90, ty + 12), 36, UI.CREAM)
+		if not ghost.is_empty():
+			# your best pour tonight: a faint cyan tick where that layer was locked
+			var gy := y_bottom - float(ghost["levels"][i]) * inner_h
+			draw_line(Vector2(g.position.x - 14, gy), Vector2(g.end.x + 14, gy), Color(0.75, 0.9, 1.0, 0.55), 3.0)
 	# The drink being poured.
 	if drink_id != "" and BarMenu.has(drink_id):
 		UI.draw_text(self, BarMenu.t("menu.pour.pouring", {"drink": BarMenu.name_of(drink_id)}), Vector2(size.x * 0.5, maxf(60.0, geo["tap_top"] - 30.0)), 40, UI.GOLD)
+	# §4.1: tonight's regular to beat, and you
+	if not rival.is_empty():
+		var rc := UI.GOLD if rival_passed else UI.CREAM
+		_text_right(S.t("mg.rivals.to_beat"), Vector2(size.x - 20.0, 40.0), 20, UI.SMOKE)
+		_text_right("%s %d" % [str(rival.get("name", "")), int(rival.get("points", 0))], Vector2(size.x - 20.0, 72.0), 28, rc)
+		_text_right(S.t("mg.rivals.you_now", {"score": live_points()}), Vector2(size.x - 20.0, 100.0), 22, UI.GOLD if rival_passed else UI.SMOKE)
+	if not ghost.is_empty() and (state == State.INTRO or (state == State.READY and layer == 0)):
+		UI.draw_text(self, S.t("mg.pour_perfect.ghost"), Vector2(size.x * 0.5, size.y - 200), 28, Color(0.75, 0.9, 1.0, 0.8))
 	# Hint.
 	var hint := ""
 	match state:
@@ -416,3 +463,11 @@ func _draw() -> void:
 	if state == State.READY or state == State.POURING:
 		var c := Vector2(size.x * 0.5, size.y - 300)
 		draw_arc(c, 90.0, 0, TAU, 48, UI.GOLD if _pressed else UI.LINE, 6.0, true)
+
+
+func _text_right(text: String, pos: Vector2, size_px: int, col: Color) -> void:
+	var theme := ThemeDB.get_project_theme()
+	var font: Font = theme.default_font if theme != null and theme.default_font != null else ThemeDB.fallback_font
+	var w := font.get_string_size(text, HORIZONTAL_ALIGNMENT_LEFT, -1, size_px).x
+	draw_string_outline(font, pos - Vector2(w, 0), text, HORIZONTAL_ALIGNMENT_LEFT, -1, size_px, 6, Color(0, 0, 0, 0.7))
+	draw_string(font, pos - Vector2(w, 0), text, HORIZONTAL_ALIGNMENT_LEFT, -1, size_px, col)

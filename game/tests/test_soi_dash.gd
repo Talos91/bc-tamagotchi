@@ -9,12 +9,21 @@ const Base = preload("res://scripts/minigames/minigame_base.gd")
 const S = preload("res://scripts/minigames/strings.gd")
 const Game = preload("res://scripts/minigames/soi_dash.gd")
 const Session = preload("res://scripts/zones/venue_session.gd")
+const Rivals = preload("res://scripts/minigames/mg_rivals.gd")
+
+
+## Stands in for Needs: mg_rivals only reads and writes `ext`.
+class Store:
+	extends RefCounted
+	var ext := {}
+
 
 const STEP := 1.0 / 120.0
 
 var failures := 0
 var checks := 0
 var _result: Dictionary = {}
+var store := Store.new()
 
 
 func _initialize() -> void:
@@ -30,6 +39,8 @@ func _initialize() -> void:
 	test_swipes()
 	test_bounds()
 	test_action_strings_registry()
+	test_rivals()
+	check(checks >= 120, "the suite ran its checks (%d)" % checks)
 	print("")
 	print("%d checks, %d failed" % [checks, failures])
 	print("SOI DASH TESTS ", "PASS" if failures == 0 else "FAIL")
@@ -48,6 +59,7 @@ func spawn(config := {"seed": 20261115}, relaxed := false) -> Control:
 	g.size = Vector2(1080, 1400)
 	g.config = config
 	g.relaxed = relaxed
+	g.rivals_store = store
 	root.add_child(g)
 	_result = {}
 	g.finished.connect(func(r: Dictionary) -> void: _result = r)
@@ -385,3 +397,45 @@ func test_bounds() -> void:
 		check(ok, "%dx%d (play area %dx%d): road, lanes, runner inside %s" % [vp.x, vp.y, area.x, area.y, why])
 		check(lane_w >= 200.0, "%dx%d: lanes wide enough for a cart (%d px)" % [vp.x, vp.y, lane_w])
 		g.queue_free()
+
+
+func test_rivals() -> void:
+	print("[rivals] the regular to beat, the ghost runner, the board line")
+	store = Store.new()
+	var g := spawn()
+	check(not g.rival.is_empty() and g.rival.has("points") and str(g.rival.get("name", "")) != "", "a regular to beat in play")
+	check(g.ghost.is_empty(), "no ghost before the first run tonight")
+	run_bot(g)
+	check(g.ghost_lanes.size() >= int(Game.RUN_SECONDS * Game.SPEED / Game.GHOST_STEP) - 1, "the run recorded its lanes (%d)" % g.ghost_lanes.size())
+	var ex: Dictionary = _result.get("extra", {})
+	check(ex.get("rival") is Dictionary and ex["rival"].has("points"), "result carries the rival")
+	check(ex.get("board") is Dictionary and int(ex["board"].get("rank", 0)) >= 1 and int(ex["board"].get("count", 0)) >= 2, "result carries the board place")
+	check(g.rival_passed == (g.live_points() > int(g.rival["points"])), "passing the regular is flagged in play")
+	var points: int = int(_result.get("points", 0))
+	check(int(Rivals.tonight("soi_dash", store)["best"]) == points, "tonight's best is that run")
+	g.queue_free()
+	var h := spawn()
+	check(h.ghost.get("lanes") is Array and h.ghost["lanes"].size() > 100 and h.ghost["lanes"].size() < 400, "the next run has tonight's best as a small ghost")
+	h.advance(Game.INTRO_SECONDS + 0.01)
+	for i in 120:
+		h.advance(STEP)
+	check(not is_nan(h.ghost_lane_at(h.dist)), "the ghost has a lane on the street")
+	check(is_nan(h.ghost_lane_at(Game.RUN_SECONDS * Game.SPEED + 5.0)), "the ghost ends with the street")
+	h.queue_free()
+	var other := spawn({"seed": 77})
+	check(other.ghost.is_empty(), "a ghost from another night's street is not shown")
+	other.queue_free()
+	var rel := spawn({"seed": 20261115}, true)
+	check(rel.ghost.is_empty(), "a ghost from the other timing mode is not shown")
+	rel.queue_free()
+	# an idle run is worse: tonight's best and ghost stay
+	var lanes_before: Array = Rivals.tonight("soi_dash", store)["ghost"].get("lanes", [])
+	var k := spawn()
+	var t := 0.0
+	while not k.done and t < 70.0:
+		k.advance(STEP)
+		t += STEP
+	check(k.done and int(_result.get("points", 100)) < points, "an idle run scores less than the bot")
+	check(int(Rivals.tonight("soi_dash", store)["best"]) == points, "a worse run keeps tonight's best")
+	check(Rivals.tonight("soi_dash", store)["ghost"].get("lanes", []) == lanes_before, "a worse run keeps the ghost")
+	k.queue_free()

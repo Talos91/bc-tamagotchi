@@ -7,6 +7,7 @@ extends "res://scripts/minigames/minigame_base.gd"
 
 const UI = preload("res://scripts/minigames/mg_ui.gd")
 const S = preload("res://scripts/minigames/strings.gd")
+const Rivals = preload("res://scripts/minigames/mg_rivals.gd")
 
 # Field coordinates: 600 x 1000, y down. Playfield x 0..540, launch lane x 540..600.
 const FIELD := Vector2(600, 1000)
@@ -81,6 +82,11 @@ var _origin := Vector2.ZERO
 var _tex := {}
 var _trail: Array[Vector2] = []
 var _glow: Control
+## §4.1 competition (no ghost: a pinball run is physics and chance, there is no run to replay).
+var rival: Dictionary = {}           ## tonight's regular to beat {regular, name, points}
+var rival_passed := false
+var rivals_store: Object = null      ## tests: where mg_rivals keeps tonight's record (default Needs, else memory)
+var _record: Dictionary = {}
 
 
 func _init() -> void:
@@ -144,6 +150,19 @@ func current_score() -> float:
 	return score_from(points)
 
 
+func live_points() -> int:
+	return points_for(current_score())
+
+
+## §4.1: passing tonight's regular in play.
+func _check_rival() -> void:
+	if rival_passed or rival.is_empty() or live_points() <= int(rival.get("points", 0)):
+		return
+	rival_passed = true
+	_layout()
+	fx().pop(S.t("mg.rivals.passed", {"regular": str(rival.get("name", ""))}), _f(Vector2(270, 250)), UI.NEON, 44)
+
+
 func _on_start() -> void:
 	points = 0
 	balls_left = BALLS
@@ -155,6 +174,9 @@ func _on_start() -> void:
 		lit[i] = false
 	flip_angle = [FLIPPER_REST, FLIPPER_REST]
 	flip_held = [false, false]
+	_record = {}
+	rival = Rivals.tonight(game_id, rivals_store)["rival"]
+	rival_passed = false
 	_serve()
 	_update_status()
 
@@ -225,6 +247,7 @@ func advance(dt: float) -> void:
 		_step(h)
 		if done:
 			return
+	_check_rival()
 	if play_time >= TIME_CAP:
 		finish(score_from(points))
 		return
@@ -372,9 +395,10 @@ func _update_status() -> void:
 	set_status(S.t("mg.neon_pinball.status", {"ball": BALLS - balls_left + 1, "balls": BALLS, "points": points}))
 
 
-# TODO(mg_rivals): add {"rival": {...}} here when the shared rivals API lands (competition is not in Q8).
 func _result_extra() -> Dictionary:
-	return {"points": points, "letters": lit.count(true), "word": word_done}
+	if _record.is_empty():
+		_record = Rivals.record(game_id, live_points(), {}, rivals_store)
+	return {"points": points, "letters": lit.count(true), "word": word_done, "rival": rival, "board": _record["board_line"]}
 
 
 # --- Input -----------------------------------------------------------------------------------------
@@ -515,6 +539,12 @@ func _draw() -> void:
 		draw_circle(_f(pos), BALL_R * _scale, UI.CREAM)
 	# Score and tilt on the screen.
 	UI.draw_text(self, str(points), _f(Vector2(270, 60)), 58, UI.CYAN)
+	# §4.1: tonight's regular to beat, and you
+	if not rival.is_empty():
+		var rc := UI.GOLD if rival_passed else UI.CREAM
+		_text_right(S.t("mg.rivals.to_beat"), _f(Vector2(530, 32)), 20, UI.SMOKE)
+		_text_right("%s %d" % [str(rival.get("name", "")), int(rival.get("points", 0))], _f(Vector2(530, 62)), 28, rc)
+		_text_right(S.t("mg.rivals.you_now", {"score": live_points()}), _f(Vector2(530, 88)), 22, UI.GOLD if rival_passed else UI.SMOKE)
 	if tilt > 0.05:
 		draw_rect(Rect2(_f(Vector2(20, 90)), Vector2(200 * _scale * tilt / tilt_limit(), 8)), UI.AMBER)
 	if _toast_t > 0.0:
@@ -546,3 +576,11 @@ func _draw_glow() -> void:
 			var a2 := 0.75 + 0.25 * sin(play_time * 5.0 + i)
 			var cell2 := Vector2(44.0, 49.0)  # lit frame of a half-size sheet
 			_glow.draw_texture_rect_region(lg, Rect2(_f(letter_pos[i]) - LETTER_ANCHOR * 0.5 * k, cell2 * k), Rect2(44, 0, 44, 49), Color(1, 1, 1, a2))
+
+
+func _text_right(text: String, pos: Vector2, size_px: int, col: Color) -> void:
+	var theme := ThemeDB.get_project_theme()
+	var font: Font = theme.default_font if theme != null and theme.default_font != null else ThemeDB.fallback_font
+	var w := font.get_string_size(text, HORIZONTAL_ALIGNMENT_LEFT, -1, size_px).x
+	draw_string_outline(font, pos - Vector2(w, 0), text, HORIZONTAL_ALIGNMENT_LEFT, -1, size_px, 6, Color(0, 0, 0, 0.7))
+	draw_string(font, pos - Vector2(w, 0), text, HORIZONTAL_ALIGNMENT_LEFT, -1, size_px, col)
