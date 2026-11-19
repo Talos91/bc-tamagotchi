@@ -129,7 +129,7 @@ func _pour_pour(g: Control, wobble: float) -> void:
 			g.fx().step(1.0 / 240.0)
 			guard += 1
 		g.release()
-		await _frames(g, 20)
+		await _frames(g, 60)
 
 
 func _pour(sz: Vector2i, tag: String) -> void:
@@ -150,7 +150,7 @@ func _pour(sz: Vector2i, tag: String) -> void:
 		g.advance(1.0 / 240.0)
 		g.fx().step(1.0 / 240.0)
 	g.release()
-	await _frames(g, 20)
+	await _frames(g, 60)
 	await _shot(vp, "%s-pour-2-play" % tag)
 	for i in range(1, Pour.TARGETS.size()):
 		g.press()
@@ -160,7 +160,7 @@ func _pour(sz: Vector2i, tag: String) -> void:
 			g.fx().step(1.0 / 240.0)
 			guard += 1
 		g.release()
-		await _frames(g, 20)
+		await _frames(g, 60)
 	await _frames(g, 60)
 	await _card(vp, sz, g, result, "pour_perfect", "%s-pour-3-result" % tag)
 	vp.queue_free()
