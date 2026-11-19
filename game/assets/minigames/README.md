@@ -43,7 +43,7 @@ Daniele's OK on hub card `minigame-sprites-review`).
 | Neon Moth | 11 | 1.82 MB | **1.82 MB** | 4 MB |
 | Coaster Flip | 14 | 3.61 MB | **3.07 MB** (one regular) | 4 MB |
 | Soi Dash | 19 | 3.94 MB | **3.94 MB** | 4 MB |
-| Shake & Serve | 8 | 2.51 MB | **2.51 MB** | 4 MB |
+| Shake & Serve | 8 | 2.61 MB | **2.61 MB** | 4 MB |
 | Pour Perfect | 5 | 2.86 MB | **2.86 MB** | 4 MB |
 | Front Row Rhythm | 8 | 2.25 MB | **2.25 MB** | 4 MB |
 | Candle Talk | 13 | 5.76 MB | **2.40 MB** (one regular) | 4 MB |
@@ -116,11 +116,11 @@ Loaded: **3.94 MB**. Contact sheet: `docs/art/screens/minigame-sprites/soi_dash.
 | `glass_highball.png` | 2: 0 empty, 1 full | 62 × 134 | [30.0, 124.7] |  | serve glass; slides across the bar top; anchor = bottom centre |
 | `glass_rocks.png` | 2: 0 empty, 1 full | 76 × 76 | [38.0, 65.2] |  | serve glass; slides across the bar top; anchor = bottom centre |
 | `glass_coupe.png` | 2: 0 empty, 1 full | 92 × 108 | [43.2, 99.2] |  | serve glass; slides across the bar top; anchor = bottom centre |
-| `nam.png` | 2: 0 up, 1 nod | 110 × 96 | [52.8, 82.7] |  | Nam's head; frame 1 on each nod; anchor = neck |
+| `nam.png` | 4: 0 up, 1 nod, 2 smile, 3 frown | 122 × 98 | [64.2, 84.8] |  | Nam's head; frame 1 on each nod; 2 smile (a clean pick, a served drink), 3 frown with a head tilt (a wrong bottle, a sloppy serve); anchor = neck |
 | `bar_top.png` | 1 | 724 × 96 | [362.0, 55.5] |  | the bar top the glass slides on (dark stone, bar front, gold rail); anchor = front top edge centre |
 | `backdrop.png` | 1 | 360 × 640 | [0, 0] |  | the game's room from the venue (the backlit bar shelf over the counter), blurred and darkened; stretch to cover the play area |
 
-Loaded: **2.51 MB**. Contact sheet: `docs/art/screens/minigame-sprites/shake_serve.png`.
+Loaded: **2.61 MB**. Contact sheet: `docs/art/screens/minigame-sprites/shake_serve.png`.
 
 ## Pour Perfect (`game/scripts/minigames/pour_perfect.gd`) — `game/assets/minigames/pour_perfect/`
 

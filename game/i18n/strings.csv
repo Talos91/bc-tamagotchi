@@ -203,7 +203,7 @@ mg.soi_dash.combo,NOTES,โน้ต,Soi Dash combo word for notes in a row with
 mg.soi_dash.bump,−{secs} s,−{secs} วิ,Pop over the clock when a bump costs time. {secs} seconds lost; TH machine draft,12
 mg.shake_serve.title,Shake & Serve,Shake & Serve,Minigame name (stays English),18
 mg.shake_serve.subtitle,Nam's orders by mood,ออเดอร์ตามอารมณ์ของนัม,Subtitle under the name in the lab menu,34
-mg.shake_serve.how_to,"Read the recipe, then tap its three bottles in order. Shake on Nam's four nods. Three orders a round. House mixes until the bar's own list comes.",จำสูตร แล้วแตะสามขวดตามลำดับ เขย่าตามจังหวะที่นัมพยักหน้าสี่ครั้ง รอบละสามออเดอร์ ใช้สูตรของร้านไปก่อนจนกว่าจะได้รายการค็อกเทลจริง,Pause sheet help text,150
+mg.shake_serve.how_to,"Read the recipe, tap its bottles in order, shake on Nam's nods. Each order levels up: 2, 3, then 4 bottles. House mixes for now.",จำสูตร แตะขวดตามลำดับ แล้วเขย่าตามที่นัมพยักหน้า ทุกออเดอร์ยากขึ้น: 2, 3 แล้ว 4 ขวด ใช้สูตรของร้านไปก่อน,Pause sheet help text,150
 mg.shake_serve.tier_1,Served,เสิร์ฟแล้ว,Result card tier word,18
 mg.shake_serve.tier_2,Behind the bar,หลังบาร์ได้,Result card tier word,18
 mg.shake_serve.tier_3,Nam's pick,นัมเลือกเลย,Result card tier word,18
@@ -235,6 +235,25 @@ mg.shake_serve.bottle.tonic,Tonic,โทนิก,Shelf label (mixer),16
 mg.shake_serve.bottle.ginger,Ginger beer,จินเจอร์เบียร์,Shelf label (mixer),16
 mg.shake_serve.bottle.bitters,Bitters,บิตเทอร์ส,Shelf label (mixer),16
 mg.shake_serve.bottle.cola,Cola,โคล่า,Shelf label (mixer),16
+mg.shake_serve.order.gin_tonic,"Gin and tonic, keep it simple.",จินโทนิก ง่าย ๆ พอ,Nam's order by mood (level 1: gin + tonic),60
+mg.shake_serve.order.rum_cola,"Rum and cola, the classic.",รัมโคล่า คลาสสิก,Nam's order by mood (level 1: rum + cola),60
+mg.shake_serve.order.whisky_soda,"Whisky soda, nice and long.",วิสกี้โซดา ยาว ๆ,Nam's order by mood (level 1: whisky + soda),60
+mg.shake_serve.order.vodka_soda,"Clean and light, nothing sweet.",ใส ๆ เบา ๆ ไม่หวาน,Nam's order by mood (level 1: vodka + soda),60
+mg.shake_serve.order.tequila_soda,"Tequila, fizz, no fuss.",เตกีลาซ่า ๆ ไม่ยุ่งยาก,Nam's order by mood (level 1: tequila + soda),60
+mg.shake_serve.order.whisky_sour,"Sour, sweet, and a dash of bitter.",เปรี้ยว หวาน ขมนิด ๆ,"Nam's order by mood (level 3: whisky, lime, sugar, bitters)",60
+mg.shake_serve.order.collins,"Tall and bright, with bubbles.",แก้วสูง สดใส มีฟอง,"Nam's order by mood (level 3: gin, lime, sugar, soda)",60
+mg.shake_serve.order.rum_fizz,"Island fizz, sweet and sharp.",ซ่าแบบเกาะ หวานแหลม,"Nam's order by mood (level 3: rum, lime, sugar, soda)",60
+mg.shake_serve.order.tequila_fizz,"Party in a coupe.",ปาร์ตี้ในแก้วคูเป้,"Nam's order by mood (level 3: tequila, lime, sugar, soda)",60
+mg.shake_serve.order.gin_mule,"A gin with a ginger kick.",จินกับขิงซ่า ๆ,"Nam's order by mood (level 3: gin, lime, sugar, ginger beer)",60
+mg.shake_serve.order.stormy,"Dark and stormy, like the soi tonight.",มืดและพายุ เหมือนซอยคืนนี้,"Nam's order by mood (level 3: rum, lime, ginger beer, bitters)",60
+mg.shake_serve.level,Level {n} · {name},เลเวล {n} · {name},"HUD level readout. {n} 1-3; {name} the level name",30
+mg.shake_serve.level.easy,Easy pour,รินง่าย,Level 1 name (2 bottles),18
+mg.shake_serve.level.house,House mix,สูตรบ้าน,Level 2 name (3 bottles),18
+mg.shake_serve.level.special,Nam's special,สูตรพิเศษของนัม,"Level 3 name (4 bottles, shelf restocked)",18
+mg.shake_serve.wrong,Wrong bottle,ผิดขวด,Pop over a wrong bottle,18
+mg.shake_serve.on_beat,On the nod,ตรงจังหวะ,Pop on a shake tap on Nam's nod,18
+mg.shake_serve.off_beat,Off,พลาด,Pop on a shake tap off the nod,12
+mg.shake_serve.restock,Shelf restocked!,จัดชั้นใหม่!,Pop when level 3 reorders the shelf,24
 mg.fx.clean,CLEAN,เป๊ะ,Minigame hit pop / combo word for a clean step (mg_fx); TH machine draft,10
 mg.fx.perfect,PERFECT,เพอร์เฟกต์,Minigame hit pop for a perfect hit (mg_fx); TH machine draft,12
 mg.fx.combo,{word} ×{count},{word} ×{count},Minigame combo readout. {word} = CLEAN or a game's word; {count} = steps in a row,20

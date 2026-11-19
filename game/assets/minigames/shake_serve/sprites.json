@@ -120,16 +120,18 @@
   },
   "nam": {
    "file": "nam.png",
-   "frames": 2,
-   "frame_w": 110,
-   "frame_h": 96,
+   "frames": 4,
+   "frame_w": 122,
+   "frame_h": 98,
    "frame_names": [
     "up",
-    "nod"
+    "nod",
+    "smile",
+    "frown"
    ],
    "anchor_px": [
-    52.8,
-    82.7
+    64.2,
+    84.8
    ],
    "points": {},
    "ppv": 8,
@@ -137,8 +139,8 @@
     -15,
     8
    ],
-   "note": "Nam's head; frame 1 on each nod; anchor = neck",
-   "bytes": 84480
+   "note": "Nam's head; frame 1 on each nod; 2 smile (a clean pick, a served drink), 3 frown with a head tilt (a wrong bottle, a sloppy serve); anchor = neck",
+   "bytes": 191296
   },
   "bar_top": {
    "file": "bar_top.png",
@@ -174,7 +176,7 @@
    "bytes": 921600
   }
  },
- "texture_bytes_all_files": 2628256,
- "texture_bytes_loaded": 2628256,
- "texture_mb_loaded": 2.51
+ "texture_bytes_all_files": 2735072,
+ "texture_bytes_loaded": 2735072,
+ "texture_mb_loaded": 2.61
 }

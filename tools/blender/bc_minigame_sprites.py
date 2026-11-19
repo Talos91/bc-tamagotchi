@@ -985,13 +985,23 @@ for _gk in ("highball", "rocks", "coupe"):
     _mkg(_gk)
 
 
-@sprite("shake_serve", "nam", frames=2, ppv=8, view=(-15, 8), anchor=(0, 0, 0), frame_names=["up", "nod"],
-        note="Nam's head; frame 1 on each nod; anchor = neck")
+NAM_FROWN = dict(eyes="sleepy", brows="worried", mouth="flat")
+
+
+@sprite("shake_serve", "nam", frames=4, ppv=8, view=(-15, 8), anchor=(0, 0, 0),
+        frame_names=["up", "nod", "smile", "frown"],
+        note="Nam's head; frame 1 on each nod; 2 smile (a clean pick, a served drink), 3 frown with a head tilt "
+             "(a wrong bottle, a sloppy serve); anchor = neck")
 def s_nam(ctx, f):
     spec = preset("nam")
+    if f == 2:
+        spec = with_face(spec, **CHEER)
+    elif f == 3:
+        spec = with_face(spec, **NAM_FROWN)
     D = B.dims(spec["body"])
+    rot = ((0, 0, 0), (16, 0, 0), (-6, 0, 0), (4, -12, 0))[f]          # Q7: smile lifts the chin, frown tilts
     for p in head_parts(spec):
-        ctx.part(p, pivot=(0, 0, D["h"]), rot=(16 if f else 0, 0, 0))
+        ctx.part(p, pivot=(0, 0, D["h"]), rot=rot)
     ctx.anchor_z = D["h"]
 
 
