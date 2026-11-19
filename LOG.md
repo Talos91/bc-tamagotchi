@@ -272,3 +272,4 @@ Append-only. One dated line per event, newest last. Never edit earlier lines.
 - 2026-11-19 — Daniele: "Minigame wiring first" (before presence). Context ~37 %.
 - 2026-11-19 — Context measured 21 % (get_usage), not ~37 %: my LOG estimates since 11-18 were guessed too high; no handover yet. Context 21 %.
 - 2026-11-19 — Daniele: clear idle chats. q1-juice + q2-venue-pause archived (work at 14bb707, notes in branch). verify-q1q2 (idle since 11-18 16:02, nothing pushed) and ui-notch (idle since 11-18 14:47, one picture, no spec/cards) found stalled → nudged. Context 22 %.
+- 2026-11-19 — 🖼️ ui-notch DONE 2fa5861 (docs), cards ui-notch-icons + ui-notch-direction up; docs push held until verify-q1q2 pushes 14bb707 (a docs push now would break its fast-forward). Context 23 %.
