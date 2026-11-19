@@ -303,7 +303,7 @@ func test_venue() -> void:
 	check(is_instance_valid(screen), "the WASTED screen")
 	if not is_instance_valid(screen):
 		return
-	check(screen.title.text == "WASTED" and screen.title.theme_type_variation == &"LabelTitle", "WASTED in Kristi (LabelTitle)")
+	check(screen.title.text == "WASTED" and screen.title.theme_type_variation == &"LabelScript", "WASTED in Kristi (LabelScript; LabelTitle is Tilt Neon since the D2 skin)")
 	check(screen.line_label.text == N.t("nightlife.wasted.line.%d" % got[0]), "the funny line under it")
 	check(screen.try_button.disabled and (screen.try_button.text.contains("12:00:00") or screen.try_button.text.contains("11:59")), "Try again disabled with a countdown (%s)" % screen.try_button.text)
 	screen.try_button.pressed.emit()
