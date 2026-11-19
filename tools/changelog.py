@@ -12,6 +12,7 @@ RELEASES = [
     ('0.2.2', 'bd50d36'),
     ('0.2.3', 'b1d9716'),
     ('0.3.0', '09f0d24'),
+    ('0.3.1', 'e3be709'),
 ]
 
 PREAMBLE = ['# Changelog', '', 'Every commit on `main`, grouped by game version, newest first (days newest first inside each),',
