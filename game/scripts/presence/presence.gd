@@ -214,7 +214,8 @@ func inbox() -> Dictionary:
 func mark_read(ids: Array) -> Dictionary:
 	if not is_active():
 		return {"ok": false, "reason": "off"}
-	return await _rpc("bc_mark_read", {"p_ids": ids}, LONG_TIMEOUT_S)
+	var int_ids := ids.map(func(i): return int(i))   # JSON numbers parse as floats; bigint wants 12, not 12.0
+	return await _rpc("bc_mark_read", {"p_ids": int_ids}, LONG_TIMEOUT_S)
 
 
 func hide(other: String) -> Dictionary:

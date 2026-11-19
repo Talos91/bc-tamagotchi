@@ -1,0 +1,23 @@
+<!doctype html><meta charset="utf-8"><title>BC push test</title>
+<body style="font:14px monospace;background:#111;color:#eee"><h3>Black Cabin push receiver test</h3>
+<button id="go" style="font-size:18px">Subscribe as receiver</button><pre id="log"></pre>
+<script>
+const URL_='https://czrbsjalcjekcslylwbt.supabase.co', K='eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImN6cmJzamFsY2pla2NzbHlsd2J0Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3OTUwOTc2MzYsImV4cCI6MjExMDY3MzYzNn0.Ylr35L_4R63d9uJFDUvn7Qy9HPiy_rP8QKZw4_I15yY';
+const log=(m)=>{document.getElementById('log').textContent+=m+'\n'; window.bcLog=(window.bcLog||[]).concat([m]);};
+function b64u(s){s=s.replace(/-/g,'+').replace(/_/g,'/');while(s.length%4)s+='=';return Uint8Array.from(atob(s),c=>c.charCodeAt(0));}
+function enc(b){return btoa(String.fromCharCode(...new Uint8Array(b))).replace(/\+/g,'-').replace(/\//g,'_').replace(/=+$/,'');}
+async function post(p,body,tok){const r=await fetch(URL_+p,{method:'POST',headers:{apikey:K,'Content-Type':'application/json',Authorization:'Bearer '+(tok||K)},body:JSON.stringify(body)});return r.json();}
+navigator.serviceWorker.addEventListener('message',e=>{log('PUSH RECEIVED by service worker: '+e.data.push); window.bcPushGot=e.data;});
+document.getElementById('go').onclick=async()=>{try{
+  const reg=await navigator.serviceWorker.register('test-sw.js'); await navigator.serviceWorker.ready; log('sw ready');
+  const perm=await Notification.requestPermission(); log('permission '+perm); if(perm!=='granted')return;
+  const s=await post('/auth/v1/signup',{data:{}}); if(!s.access_token){log('signup failed '+JSON.stringify(s));return;}
+  window.bcTok=s.access_token; window.bcUid=s.user.id; log('receiver uid '+s.user.id);
+  const k=await post('/functions/v1/verb',{action:'public_key'}); log('vapid '+k.public_key.slice(0,12)+'...');
+  const sub=await reg.pushManager.subscribe({userVisibleOnly:true,applicationServerKey:b64u(k.public_key)});
+  log('endpoint '+sub.endpoint.slice(0,48)+'...');
+  log('save '+JSON.stringify(await post('/rest/v1/rpc/bc_save_push',{p_endpoint:sub.endpoint,p_p256dh:enc(sub.getKey('p256dh')),p_auth:enc(sub.getKey('auth'))},s.access_token)));
+  const c=await post('/rest/v1/rpc/bc_check_in',{p_code:'Kq58SDyTWS',p_display_name:'PushTest',p_avatar:{},p_mode:'everyone'},s.access_token);
+  log('checkin '+c.ok+' '+c.table_id+' '+(c.reason||'')); log('READY');
+}catch(e){log('ERROR '+e);}};
+</script></body>
