@@ -295,3 +295,4 @@ Append-only. One dated line per event, newest last. Never edit earlier lines.
 - 2026-11-19 — 🌐 presence-backend BLOCKED b17b328: Supabase free limit (2 active: ethos, ooze-syndicate) → card presence-supabase-limit; blackcabin.app does not resolve → card blackcabin-domain-dns. Rest built (101/101 offline).
 - 2026-11-19 — Daniele: "Pause Ethos" → DECISIONS; relayed to presence-backend (pause ethos, create BC project, continue). Domain DNS still open.
 - 2026-11-19 — presence-backend: Supabase project LIVE (czrbsjalcjekcslylwbt, ethos paused); blocked on 'Allow anonymous sign-ins' (Daniele, card presence-anon-signins).
+- 2026-11-19 — Daniele: "Worker may do it" (anonymous sign-ins switch) → relayed to presence-backend. UI build started by Daniele (local_69a8748d). Running: presence-backend, presence-client, ui-build.
