@@ -12,6 +12,7 @@ config/features=PackedStringArray("4.6", "GL Compatibility")
 
 Needs="*res://scripts/needs.gd"
 PerfTelemetry="*res://scripts/perf_telemetry.gd"
+Presence="*res://scripts/presence/presence.gd"
 
 [display]
 

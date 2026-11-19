@@ -68,7 +68,7 @@ Tonight's visible presences, cached; re-fetched when older than `POLL_S` or `for
 ```
 { player_id: "uuid", display_name: "Mai", avatar: { ...07 §4 record... },
   table_id: "Table3" | "",   # "" unless the viewer checked in tonight (P3)
-  zone: "candle" | "west" | "lounge" | "front" | "bar",   # always present: seat zone for viewers at home
+  zone: "Tables" | "Lounge" | "Buffer" | "Bar",   # layout.json zone of the real table; always present (P3 seat zone)
   at: 1763560000.0,          # unix seconds of the (last) scan
   tablemate: false, friend: false, regular: false, first_time: true,
   me: false }                # the viewer's own row (skip it when staging)

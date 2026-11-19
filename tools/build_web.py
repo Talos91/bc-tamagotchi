@@ -273,7 +273,11 @@ def hash_rename():
         s = re.sub(r'"executable"\s*:\s*"index"', '"executable":"%s"' % tag, s)
         if name == 'index.html':
             s = s.replace('<script src="%s.js"></script>' % tag, SHELL_GUARD + '<script src="%s.js"></script>' % tag, 1)
+        else:
+            # Web Push (presence, docs/design/08b-presence-api.md §4): the push / notificationclick handlers.
+            s = "importScripts('push-sw.js');\n" + s
         write(p, s)
+    shutil.copyfile(os.path.join(ROOT, 'tools', 'push-sw.js'), os.path.join(WEB, 'push-sw.js'))
     return tag
 
 
@@ -284,7 +288,7 @@ def vercel_json():
         'cleanUrls': False,
         'headers': [
             {'source': r'/bc-(.*)\.(wasm|pck|js)', 'headers': long_cache},
-            {'source': r'/(index\.html|index\.service\.worker\.js|index\.manifest\.json|)', 'headers': no_cache},
+            {'source': r'/(index\.html|index\.service\.worker\.js|index\.manifest\.json|push-sw\.js|)', 'headers': no_cache},
             {'source': r'/(.*)\.(png|ico)', 'headers': [{'key': 'Cache-Control', 'value': 'public, max-age=86400'}]},
         ],
     }
