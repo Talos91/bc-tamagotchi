@@ -5,6 +5,7 @@ extends Control
 signal done
 
 const UI = preload("res://scripts/minigames/mg_ui.gd")
+const Skin = preload("res://scripts/ui/bc_skin.gd")
 const T = preload("res://scripts/zones/venue_strings.gd")
 
 
@@ -21,7 +22,10 @@ func open(who: String, nights: int, lives: int) -> void:
 	add_child(center)
 	var panel := PanelContainer.new()
 	panel.custom_minimum_size = Vector2(UI.dp(330), 0)
-	panel.add_theme_stylebox_override("panel", UI.box(UI.BG_BASE, 20, UI.LINE, 2.0))
+	var pb := Skin.panel_box(20.0, true, 0.97)   # D2 Back-bar (bc_skin.gd)
+	pb.set_content_margin_all(0)
+	panel.add_theme_stylebox_override("panel", pb)
+	Skin.led_strip(panel)
 	center.add_child(panel)
 	var pad := MarginContainer.new()
 	for side in ["left", "right", "top", "bottom"]:
