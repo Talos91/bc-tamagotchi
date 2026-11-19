@@ -286,3 +286,4 @@ Append-only. One dated line per event, newest last. Never edit earlier lines.
 - 2026-11-19 — 🎮 Q5 Coaster Flip DONE ca0efb5; Q6 + Q5 combined on local main, 0.3.3 bump b1a2e70; verify-033 card (task_e7a12adf); Q9 Rhythm + Candle card proposed; Q5/Q6 archived.
 - 2026-11-19 — 🔍 verify-033 PUSHED b1a2e70 = v0.3.3 (Soi Dash + Coaster Flip; 26/27, test_feel known; web OK 19.80 MB); redeploy command to Daniele. Running: Q7 local_07e36920, Q9 local_3258f071.
 - 2026-11-19 — Daniele: no redeploy until all is ready. Q9 DONE 15e98b0 (held, archived). Started rivals-hooks (Sonnet, local_16095185) and fix-test-feel (Sonnet, local_a7655441). Menu/icons build waits on his card picks.
+- 2026-11-19 — 🛠️ fix-test-feel DONE c03f8f9: cause = date (Prae rotates tables per night; 11-19 her Tag_mali sign covers the buffer walk), test pinned to night 0; 27/27; held for the final verify; archived. Open: sign can hide the player on her buffer nights.
