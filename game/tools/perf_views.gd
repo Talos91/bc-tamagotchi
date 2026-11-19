@@ -47,7 +47,12 @@ func _run() -> void:
 	for mi in main.get_node("Venue/Patrons").find_children("*", "MeshInstance3D", true, false):
 		surf += mi.mesh.get_surface_count() if mi.mesh else 0
 	var prox := main.get_node("Venue").find_children("ShadowProxy*", "MeshInstance3D", true, false).size()
-	print("VIEWS crowd_surfaces=%d shadow_proxies=%d" % [surf, prox])
+	var chunks := main.get_node("Venue").find_children("Merged_*", "MeshInstance3D", true, false).size()
+	var hidden := 0
+	for mi: MeshInstance3D in main.get_node("Venue").find_children("*", "MeshInstance3D", true, false):
+		hidden += 1 if mi.layers == 0 else 0
+	print("VIEWS merged_away=%d" % hidden)
+	print("VIEWS crowd_surfaces=%d shadow_proxies=%d static_chunks=%d" % [surf, prox, chunks])
 	print("VIEWS window=%s pixels=%s msaa=%d" % [str(get_root().size), str(root.get_texture().get_size()), root.msaa_3d])
 	var frames := int(_arg("--frames", "120"))
 	var ablations := _arg("--ablate", "base").split(",")

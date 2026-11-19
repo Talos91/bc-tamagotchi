@@ -37,6 +37,8 @@ func _ready() -> void:
 			_rate.append(rng.randf_range(1.0, 2.0))
 	_find_player.call_deferred()
 	VenueBatch.shadow_proxies.call_deferred(self)   # one shadow-only mesh per group (venue_batch.gd, owner item 41)
+	if VenueBatch.MERGE_STATIC:
+		VenueBatch.merge_static.call_deferred(self)  # off: shifts some wall lighting (perf-telemetry report)
 
 ## The player (a Player sibling under the same main scene): lift its figure now and whenever it is rebuilt (set_look).
 func _find_player() -> void:
