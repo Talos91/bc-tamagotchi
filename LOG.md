@@ -269,3 +269,4 @@ Append-only. One dated line per event, newest last. Never edit earlier lines.
 - 2026-11-19 — Daniele redeployed (live .pck 19.6 MB = cafe83f size); asks for the voxel minigames + new menu/icons: "continue until all is wired". Connectors were on again (5) → off. Context ~31 %.
 - 2026-11-19 — Owner item 40: online basics → presence wave 1 (08-presence.md); gate Supabase card; offline client queued. Context ~33 %.
 - 2026-11-19 — Owner item 41 (lag, telemetry) → 🛠️ perf-telemetry started (Opus, local_21feab8f). Item 42: Daniele OKs creating Supabase via the connector → presence worker when a slot frees; Supabase connector off in the orchestrator. 3 workers running. Context ~36 %.
+- 2026-11-19 — Daniele: "Minigame wiring first" (before presence). Context ~37 %.
