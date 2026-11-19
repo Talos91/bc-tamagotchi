@@ -40,6 +40,8 @@ func _initialize() -> void:
 	test_art_and_juice()
 	test_rivals_api()
 	test_rivals_in_game()
+	# a game script that fails to compile makes every test error out before any check runs: never call that a pass
+	check(checks >= 100, "the suite ran its checks (%d)" % checks)
 	print("")
 	print("%d checks, %d failed" % [checks, failures])
 	print("NEON MOTH TESTS ", "PASS" if failures == 0 else "FAIL")

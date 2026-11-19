@@ -65,7 +65,7 @@ const GAP_MAX_STEP := STEP_END
 # Sprite scales (field px per sprite px): the batten and the cabinets are GATE_W wide.
 const SPR_GATE := GATE_W / 124.0
 const SPR_CAB := GATE_W / 112.0
-const SPR_MOTH := 0.6
+const SPR_MOTH := 0.8
 const SPR_SIGN := 0.7
 const SPR_WING := 1.2
 
@@ -511,6 +511,15 @@ func sign_center() -> Vector2:
 	return Vector2(sign_x() + 150.0, FIELD.y * 0.5)
 
 
+## Field x range on screen: the whole play area, so landscape shows the room past the 600-wide field.
+func _view_x() -> Vector2:
+	var xf := _xf()
+	var k := xf.get_scale().x
+	if k <= 0.0:
+		return Vector2(0.0, FIELD.x)
+	return Vector2(-xf.origin.x / k, (size.x - xf.origin.x) / k)
+
+
 func _flight_progress() -> float:
 	return clampf(scroll / maxf(1.0, course_length()), 0.0, 1.0)
 
@@ -530,14 +539,15 @@ func _draw() -> void:
 	else:
 		draw_rect(Rect2(Vector2.ZERO, size), Color("1A0A0C"))
 	var xf := _xf()
+	var vx := _view_x()
 	draw_set_transform_matrix(xf)
 	for i in GATES:
 		var gx := gate_x(i)
-		if gx > FIELD.x + 20.0 or gx + GATE_W < -20.0:
+		if gx > vx.y + 20.0 or gx + GATE_W < vx.x - 20.0:
 			continue
 		_draw_gate(i, gx)
 	# the BLACK CABIN neon at the end of the room
-	if sign_x() < FIELD.x + 40.0:
+	if sign_x() < vx.y + 40.0:
 		if _art.has("neon_sign"):
 			var sc := sign_center()
 			_blit(self, "neon_sign", 0, Vector2(sc.x, sc.y + 95.0), SPR_SIGN)
@@ -582,10 +592,6 @@ func _draw_gate(i: int, gx: float) -> void:
 	while bot + k * stepy < FIELD.y + 10.0 and k < 12:
 		_blit(self, "speaker_cab", 1 if k == 0 else 0, Vector2(cx, bot + ay + k * stepy), SPR_CAB, tint)
 		k += 1
-	if is_moving(i):
-		# a moving gate shows its track: two faint ticks at the ends of its bob
-		for s in [-1.0, 1.0]:
-			draw_line(Vector2(gx - 6.0, gap_y[i] + s * MOVE_AMP), Vector2(gx + 2.0, gap_y[i] + s * MOVE_AMP), Color(UI.AMBER, 0.5), 3.0)
 
 
 ## Additive halos on their own layer (Fx.glow_material): lit bulbs and the neon sign.
@@ -594,16 +600,17 @@ func _draw_glows() -> void:
 		return
 	_glow_layer.draw_set_transform_matrix(_xf())
 	var pulse := 0.75 + 0.25 * sin(_anim_t * 3.0)
+	var vx := _view_x()
 	for i in GATES:
 		var gx := gate_x(i)
-		if hit[i] or gx > FIELD.x + 20.0 or gx + GATE_W < -20.0:
+		if hit[i] or gx > vx.y + 20.0 or gx + GATE_W < vx.x - 20.0:
 			continue
 		var top := gap_center(i) - gap_size(i) * 0.5
 		var drop: Dictionary = _art["bulb_drop"]
 		var drop_top: float = top - (drop["fh"] - drop["anchor"].y) * SPR_GATE
 		for dx in [-21.0, 21.0]:
 			_blit(_glow_layer, "bulb_drop", 0, Vector2(gx + GATE_W * 0.5 + dx, drop_top), SPR_GATE, Color(1, 1, 1, 0.8 * pulse), true)
-	if sign_x() < FIELD.x + 40.0:
+	if sign_x() < vx.y + 40.0:
 		var sc := sign_center()
 		var a := clampf(0.7 + 0.2 * sin(_anim_t * 5.0) + _sign_flare, 0.0, 1.6)
 		_blit(_glow_layer, "neon_sign", 0, Vector2(sc.x, sc.y + 95.0), SPR_SIGN, Color(1, 1, 1, minf(1.0, a)), true)

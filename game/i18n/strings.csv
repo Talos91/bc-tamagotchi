@@ -237,4 +237,4 @@ mg.rivals.to_beat,to beat,คู่แข่ง,Minigame HUD label over tonight'
 mg.rivals.you_now,you {score},คุณ {score},Minigame HUD: the player's points so far under the regular to beat. {score} = 0-100; TH machine draft,14
 mg.rivals.passed,Past {regular}!,แซง{regular}แล้ว!,Minigame pop when the player's live points pass tonight's regular. {regular} = display name; TH machine draft,22
 mg.rivals.ghost,The faint moth is your best tonight,ผีเสื้อจางๆ คือรอบที่ดีที่สุดของคุณคืนนี้,Neon Moth intro line when a ghost run flies beside the player (mg_rivals); TH machine draft,40
-mg.result.board,#{rank} of {count} tonight,อันดับ {rank} จาก {count} คืนนี้,Result card competition line: this run's place on tonight's board (the regulars who played + you). TH machine draft,26
+mg.result.board,#{rank} of {count} tonight,ที่ {rank} จาก {count} คืนนี้,Result card competition line: this run's place on tonight's board (the regulars who played + you). TH machine draft,26

@@ -121,7 +121,7 @@ func _play(sz: Vector2i, tag: String) -> Dictionary:
 	g.blink = 0.0
 	g.y = keep_y
 	var result := {}
-	g.finished.connect(func(r: Dictionary) -> void: result = r)
+	g.finished.connect(func(r: Dictionary) -> void: result.merge(r, true))  # lambdas copy locals: fill the dict in place
 	# fly on to the sign
 	while not g.done and t < 120.0:
 		_bot(g, 30.0)
