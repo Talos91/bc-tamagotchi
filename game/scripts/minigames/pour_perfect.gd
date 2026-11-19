@@ -226,6 +226,11 @@ func _spill_beat(first: bool, dt: float) -> void:
 		f.burst("spark", rim, 6)
 
 
+# TODO(mg_rivals): return {"rival": {...}} here when the shared rivals API lands (competition is not in Q8).
+func _result_extra() -> Dictionary:
+	return {}
+
+
 func _update_status() -> void:
 	set_status(S.t("mg.pour_perfect.status", {"n": mini(layer + 1, TARGETS.size()), "total": TARGETS.size()}))
 

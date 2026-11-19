@@ -372,6 +372,7 @@ func _update_status() -> void:
 	set_status(S.t("mg.neon_pinball.status", {"ball": BALLS - balls_left + 1, "balls": BALLS, "points": points}))
 
 
+# TODO(mg_rivals): add {"rival": {...}} here when the shared rivals API lands (competition is not in Q8).
 func _result_extra() -> Dictionary:
 	return {"points": points, "letters": lit.count(true), "word": word_done}
 
