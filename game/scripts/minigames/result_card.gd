@@ -13,6 +13,7 @@ signal done
 const UI = preload("res://scripts/minigames/mg_ui.gd")
 const S = preload("res://scripts/minigames/strings.gd")
 const Glyph = preload("res://scripts/minigames/need_glyph.gd")
+const Skin = preload("res://scripts/ui/bc_skin.gd")
 const Base = preload("res://scripts/minigames/minigame_base.gd")
 const Rules = preload("res://scripts/rules.gd")
 const Cast = preload("res://scripts/cast.gd")
@@ -169,8 +170,13 @@ func _build(result: Dictionary, o: Dictionary) -> void:
 	add_child(center)
 	var panel := PanelContainer.new()
 	panel.custom_minimum_size = Vector2(UI.dp(358), 0)
-	panel.add_theme_stylebox_override("panel", UI.box(UI.BG_BASE, 20, UI.LINE, 2.0))
+	# D2 Back-bar (bc_skin.gd, Daniele 2026-11-19): wood card, brass line, LED strip under it; the tier word is the
+	# screen's neon sign; NEW BEST is a brass plaque. Motion (stamp, count-up, ribbon) unchanged from Q1.
+	var pb := Skin.panel_box(20.0, true, 0.97)
+	pb.set_content_margin_all(0)
+	panel.add_theme_stylebox_override("panel", pb)
 	center.add_child(panel)
+	Skin.led_strip(panel)
 	var pad := MarginContainer.new()
 	for side in ["left", "right", "top", "bottom"]:
 		pad.add_theme_constant_override("margin_" + side, int(UI.dp(18)))
@@ -190,7 +196,9 @@ func _build(result: Dictionary, o: Dictionary) -> void:
 	score_row.add_theme_constant_override("separation", int(UI.dp(14)))
 	score_row.alignment = BoxContainer.ALIGNMENT_CENTER
 	col.add_child(score_row)
-	_score_label = UI.label(str(_points), 32, UI.CREAM, HORIZONTAL_ALIGNMENT_RIGHT)
+	_score_label = UI.label(str(_points), 44, UI.CREAM, HORIZONTAL_ALIGNMENT_RIGHT)
+	_score_label.theme_type_variation = &"LabelDisplayXL"
+	_score_label.add_theme_font_size_override("font_size", int(UI.dp(44)))
 	_score_label.custom_minimum_size.x = _score_label.get_combined_minimum_size().x  # no jitter while counting
 	score_row.add_child(_score_label)
 	if o.get("new_best", false):
@@ -227,7 +235,7 @@ func _build(result: Dictionary, o: Dictionary) -> void:
 		bar.size_flags_horizontal = Control.SIZE_EXPAND_FILL
 		bar.size_flags_vertical = Control.SIZE_SHRINK_CENTER
 		bar.custom_minimum_size = Vector2(0, UI.dp(8))
-		bar.add_theme_stylebox_override("background", UI.box(UI.BG_RAISED, 4))
+		bar.add_theme_stylebox_override("background", UI.box(Color("0B0505"), 4, Color(Skin.BRASS_DIM, 0.8), 1.0))
 		bar.add_theme_stylebox_override("fill", UI.box(UI.need_color(m), 4))
 		row.add_child(bar)
 		row.add_child(UI.label("+%d" % roundi(float(gains[m])), 15, UI.need_color(m)))
@@ -299,11 +307,14 @@ func _build_stamp(word: String, tier: int) -> Control:
 	_stamp = UI.title(word, 32, gc)
 	_stamp.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
 	_stamp.vertical_alignment = VERTICAL_ALIGNMENT_CENTER
-	_stamp.add_theme_constant_override("outline_size", int(UI.dp(4)))
-	_stamp.add_theme_color_override("font_outline_color", UI.BG_DEEP)
+	if tier >= 0:
+		Skin.neon(_stamp, gc)
+	else:
+		_stamp.add_theme_constant_override("outline_size", int(UI.dp(4)))
+		_stamp.add_theme_color_override("font_outline_color", UI.BG_DEEP)
 	_stamp.set_anchors_preset(Control.PRESET_FULL_RECT)
 	holder.add_child(_stamp)
-	# Kristi's tall strokes: size the holder from the font size (measuring off-tree under-reports it).
+	# Title font's tall strokes: size the holder from the font size (measuring off-tree under-reports it).
 	var font_px := float(_stamp.get_theme_font_size("font_size"))
 	holder.custom_minimum_size = Vector2(0, maxf(_stamp.get_combined_minimum_size().y, font_px * STAMP_LINE) + UI.dp(6))
 	_stamp_holder = holder
@@ -315,14 +326,17 @@ func _build_ribbon(text: String) -> Control:
 	holder.mouse_filter = Control.MOUSE_FILTER_IGNORE
 	var ribbon := PanelContainer.new()
 	ribbon.name = "NewBestRibbon"
-	var sb := UI.box(UI.GOLD, 6)
+	var sb := UI.box(Color("3A2610"), 6, UI.GOLD, 2.0)
 	sb.content_margin_left = UI.dp(10)
 	sb.content_margin_right = UI.dp(10)
 	sb.content_margin_top = UI.dp(3)
 	sb.content_margin_bottom = UI.dp(3)
 	ribbon.add_theme_stylebox_override("panel", sb)
 	ribbon.mouse_filter = Control.MOUSE_FILTER_IGNORE
-	ribbon.add_child(UI.label(text, 15, UI.BG_DEEP, HORIZONTAL_ALIGNMENT_CENTER))
+	var rl := UI.label(text, 16, UI.GOLD, HORIZONTAL_ALIGNMENT_CENTER)
+	rl.theme_type_variation = &"LabelDisplayS"
+	rl.add_theme_font_size_override("font_size", int(UI.dp(16)))
+	ribbon.add_child(rl)
 	holder.add_child(ribbon)
 	var sz := ribbon.get_combined_minimum_size()
 	ribbon.size = sz

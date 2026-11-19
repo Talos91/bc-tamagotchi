@@ -54,9 +54,8 @@ func _build() -> void:
 	var pause_btn := Button.new()
 	pause_btn.focus_mode = Control.FOCUS_NONE
 	pause_btn.custom_minimum_size = Vector2(UI.dp(48), UI.dp(48))
-	pause_btn.add_theme_stylebox_override("normal", UI.box(UI.BG_BASE, 24, UI.LINE, 2.0))
-	pause_btn.add_theme_stylebox_override("hover", UI.box(UI.BG_BASE, 24, UI.LINE, 2.0))
-	pause_btn.add_theme_stylebox_override("pressed", UI.box(UI.BG_PLUM, 24, UI.LINE, 2.0))
+	for st in ["normal", "hover", "pressed"]:   # D2 Back-bar: wood + brass (bc_skin.gd)
+		pause_btn.add_theme_stylebox_override(st, UI.box(Color("38201A") if st == "pressed" else Color("231210"), 24, Color("B58A4C"), 2.0))
 	pause_btn.text = "II"
 	pause_btn.add_theme_font_size_override("font_size", int(UI.dp(15)))
 	pause_btn.add_theme_color_override("font_color", UI.CREAM)
