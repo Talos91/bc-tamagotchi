@@ -4,8 +4,10 @@ extends Control
 ## area, AREAS: a tap walks there and the camera focuses on it, main.walk_to_area; the area of the lowest meter gets
 ## its colour edge, the area the player is in is dimmed), the zone prompt at the bottom, rising +N chips and the action
 ## card after each plain action, and the orientation toggle at the top right, under the bar's right end on the zone
-## name's row (scripts/ui/orientation.gd). Drops to 60% while walking. Built in code with the minigame UI helpers;
-## the project theme supplies the fonts (zone names in Kristi, the brand script).
+## name's row (scripts/ui/orientation.gd). Drops to 60% while walking. Built in code with the minigame UI helpers and
+## the D2 Back-bar skin (scripts/ui/bc_skin.gd, Daniele 2026-11-19): Leave and Tonight are wood tiles either side of a
+## brass shelf of four lit cubbies (the meters) with an LED strip under it; the zone name is the screen's one neon sign;
+## the band line is a velvet LIVE chip; the chips (x2, tipsy, Last Call, annoyances) sit in one row under it.
 
 signal leave_pressed
 signal prompt_pressed
@@ -18,6 +20,7 @@ const T = preload("res://scripts/zones/venue_strings.gd")
 const N = preload("res://scripts/zones/nightlife_strings.gd")
 const Rules = preload("res://scripts/rules.gd")
 const Ring = preload("res://scenes/ui/meter_ring.gd")
+const Skin = preload("res://scripts/ui/bc_skin.gd")
 const PromptScene = preload("res://scenes/ui/zone_prompt.tscn")
 const CardScene = preload("res://scenes/ui/action_card.tscn")
 const Orientation = preload("res://scripts/ui/orientation.gd")
@@ -58,6 +61,7 @@ var orientation_toggle: Button
 var _zone_name := ""
 var _title_age := 0.0
 var _clock := 0.0
+var _low_area := "-"   ## the need whose area button carries its colour edge (restyled only when it changes)
 
 
 func _ready() -> void:
@@ -101,16 +105,8 @@ func _build() -> void:
 	bar.mouse_filter = Control.MOUSE_FILTER_IGNORE
 	bar.add_theme_constant_override("separation", 0)
 	_top.add_child(bar)
-	var leave := Button.new()
+	var leave := Skin.tile_button(T.t("venue.hud.leave"), "door")
 	leave.name = "Leave"
-	leave.focus_mode = Control.FOCUS_NONE
-	leave.custom_minimum_size = Vector2(UI.dp(76), UI.dp(48))
-	leave.text = T.t("venue.hud.leave")
-	leave.add_theme_font_size_override("font_size", int(UI.dp(13)))
-	for st in ["normal", "hover", "pressed"]:
-		leave.add_theme_stylebox_override(st, UI.box(UI.BG_PLUM if st == "pressed" else Color(UI.BG_BASE, 0.85), 24, UI.LINE, 2.0))
-	for c in ["font_color", "font_hover_color", "font_pressed_color"]:
-		leave.add_theme_color_override(c, UI.CREAM)
 	leave.pressed.connect(func(): leave_pressed.emit())
 	bar.add_child(leave)
 
@@ -118,10 +114,18 @@ func _build() -> void:
 	left_pad.size_flags_horizontal = Control.SIZE_EXPAND_FILL
 	left_pad.mouse_filter = Control.MOUSE_FILTER_IGNORE
 	bar.add_child(left_pad)
+	var shelf := PanelContainer.new()
+	shelf.name = "Shelf"
+	shelf.mouse_filter = Control.MOUSE_FILTER_IGNORE
+	var shelf_box := Skin.panel_box(12.0, true, 0.92)
+	shelf_box.set_content_margin_all(UI.dp(5))
+	shelf.add_theme_stylebox_override("panel", shelf_box)
+	bar.add_child(shelf)
+	Skin.led_strip(shelf)
 	var ring_row := HBoxContainer.new()
 	ring_row.mouse_filter = Control.MOUSE_FILTER_IGNORE
-	ring_row.add_theme_constant_override("separation", int(UI.dp(8)))
-	bar.add_child(ring_row)
+	ring_row.add_theme_constant_override("separation", int(UI.dp(4)))
+	shelf.add_child(ring_row)
 	for m in Rules.METERS:
 		var r := Ring.new()
 		r.need = m
@@ -133,38 +137,28 @@ func _build() -> void:
 	right_pad.mouse_filter = Control.MOUSE_FILTER_IGNORE
 	bar.add_child(right_pad)
 
-	var chips := VBoxContainer.new()
-	chips.custom_minimum_size.x = UI.dp(76)
-	chips.mouse_filter = Control.MOUSE_FILTER_IGNORE
-	chips.alignment = BoxContainer.ALIGNMENT_CENTER
-	bar.add_child(chips)
-	_x2 = _chip(UI.GOLD)
-	chips.add_child(_x2)
-	_tipsy = _chip(UI.AMBER)
-	chips.add_child(_tipsy)
-	_stake = _chip(UI.RED_HI)
-	chips.add_child(_stake)
+	var tonight := Skin.tile_button(TonightEvents.t("tonight.button"), "ticket")   # backlog D1/D2, 09-tonight-events.md
+	tonight.name = "Tonight"
+	tonight.pressed.connect(func(): tonight_pressed.emit())
+	bar.add_child(tonight)
 
 	var title_row := HBoxContainer.new()
 	title_row.mouse_filter = Control.MOUSE_FILTER_IGNORE
 	title_row.add_theme_constant_override("separation", int(UI.dp(8)))
 	_top.add_child(title_row)
 	_title = UI.title("", 30)
+	Skin.neon(_title)
 	_title.size_flags_horizontal = Control.SIZE_EXPAND_FILL
 	_title.text_overrun_behavior = TextServer.OVERRUN_TRIM_ELLIPSIS  # a long name never pushes the toggle off screen
 	title_row.add_child(_title)
-	var tonight := UI.button(TonightEvents.t("tonight.button"), "secondary")   # backlog D1/D2, 09-tonight-events.md
-	tonight.name = "Tonight"
-	tonight.custom_minimum_size = Vector2(UI.dp(72), UI.dp(36))
-	tonight.add_theme_font_size_override("font_size", int(UI.dp(13)))
-	tonight.pressed.connect(func(): tonight_pressed.emit())
-	title_row.add_child(tonight)
 	orientation_toggle = OrientationToggle.new()
 	orientation_toggle.pressed.connect(func():
 		Orientation.toggle(needs)
 		orientation_toggle.refresh())
 	title_row.add_child(orientation_toggle)
-	_caption = UI.label("", 14, UI.SMOKE)
+	_caption = Skin.chip("")
+	_caption.name = "Live"
+	_caption.size_flags_horizontal = Control.SIZE_SHRINK_BEGIN
 	_top.add_child(_caption)
 	_status = UI.label("", 14, UI.GOLD)
 	_top.add_child(_status)
@@ -173,6 +167,12 @@ func _build() -> void:
 	_annoy_row.mouse_filter = Control.MOUSE_FILTER_IGNORE
 	_annoy_row.add_theme_constant_override("separation", int(UI.dp(4)))
 	_top.add_child(_annoy_row)
+	_x2 = _chip(UI.GOLD)
+	_annoy_row.add_child(_x2)
+	_tipsy = _chip(UI.AMBER)
+	_annoy_row.add_child(_tipsy)
+	_stake = _chip(UI.RED_HI)
+	_annoy_row.add_child(_stake)
 	for id in Rules.ANNOYANCES:
 		var meter: String = Rules.ANNOYANCES[id]
 		var chip := _chip(UI.need_color(meter) if meter != "" else UI.SMOKE)
@@ -191,7 +191,7 @@ func _build() -> void:
 	for a in AREAS:
 		var b := UI.button(T.t(a[1]) + "  ›", "secondary")
 		b.name = "Area_" + a[0]
-		b.custom_minimum_size = Vector2(UI.dp(96), UI.dp(42))
+		b.custom_minimum_size = Vector2(UI.dp(100), UI.dp(42))
 		b.add_theme_font_size_override("font_size", int(UI.dp(13)))
 		b.pressed.connect(func(): area_pressed.emit(a[0]))
 		col.add_child(b)
@@ -219,7 +219,7 @@ func _build() -> void:
 
 func _chip(color: Color) -> Label:
 	var l := UI.label("", 13, color, HORIZONTAL_ALIGNMENT_CENTER)
-	var sb := UI.box(Color(UI.BG_DEEP, 0.85), 12, color, 2.0)
+	var sb := UI.box(Color(Skin.WOOD_DEEP, 0.9), 12, Color(color, 0.8), 2.0)
 	sb.content_margin_left = UI.dp(6)
 	sb.content_margin_right = UI.dp(6)
 	l.add_theme_stylebox_override("normal", sb)
@@ -304,13 +304,23 @@ func _refresh_status() -> void:
 	var low: String = needs.lowest_meter()
 	for m in rings:
 		rings[m].low = m == low
-	for a in AREAS:
-		var b: Button = _areas[a[0]]
-		var edge: Color = UI.need_color(a[3]) if a[3] == low else UI.LINE
-		b.add_theme_stylebox_override("normal", UI.box(UI.BG_RAISED, 14, edge, 3.0 if a[3] == low else 2.0))
-		b.add_theme_stylebox_override("hover", UI.box(UI.BG_RAISED, 14, edge, 3.0 if a[3] == low else 2.0))
-	_caption.text = session.band_text()
-	_caption.add_theme_color_override("font_color", UI.RED_HI if session.band.playing else UI.SMOKE)
+	if low != _low_area:
+		_low_area = low
+		for a in AREAS:
+			var b: Button = _areas[a[0]]
+			Skin.style_button(b, "secondary")
+			if a[3] == low:
+				for st in ["normal", "hover"]:
+					var sb: StyleBoxFlat = b.get_theme_stylebox(st)
+					sb.border_color = UI.need_color(a[3])
+					sb.set_border_width_all(int(UI.dp(1.8)))
+					sb.shadow_color = Color(UI.need_color(a[3]), 0.35)
+					sb.shadow_size = int(UI.dp(5))
+	var live: bool = session.band.playing
+	_caption.text = ("●  " if live else "") + session.band_text()
+	var cb: StyleBoxFlat = _caption.get_theme_stylebox("normal")
+	cb.bg_color = Color(Skin.VELVET, 0.9) if live else Color(Skin.WOOD_DEEP, 0.75)
+	_caption.add_theme_color_override("font_color", UI.CREAM if live else UI.SMOKE)
 	if needs.welcome_active():
 		_x2.text = T.t("venue.hud.welcome", {"m": ceili((needs.welcome_until - needs.clock) / 60.0)})
 		_x2.visible = true
