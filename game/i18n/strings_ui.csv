@@ -67,3 +67,73 @@ ui.avatar.offer.body,"Your character can look like you now. Make your own, or ke
 ui.avatar.offer.make,Make your character,สร้างตัวละคร,One-time card button,20
 ui.avatar.offer.keep,Keep this look,ใช้ลุคเดิม,One-time card button,20
 ui.avatar.greet,{name} waves you over.,{name} โบกมือเรียกคุณ,Arrival line: the personality's greeter is in tonight,40
+ui.presence.live,LIVE,ไลฟ์,"Live patron badge over a real player's avatar in the venue, and the card's first tag",8
+ui.presence.tablemate,At your table,โต๊ะเดียวกัน,Presence card tag: checked in at the same table tonight,18
+ui.presence.friend,Friend,เพื่อน,Presence card tag,10
+ui.presence.regular,Regular,ขาประจำ,Presence card tag: 5+ nights in 90 days,10
+ui.presence.nights,{n} nights together,มาด้วยกัน {n} คืน,"Presence card: nights at the same table, n >= 2",24
+ui.presence.nights_one,1 night together,มาด้วยกัน 1 คืน,Presence card: one night at the same table,24
+ui.presence.nights_none,No nights together yet,ยังไม่เคยมาด้วยกัน,Presence card: never at the same table,26
+ui.presence.wave,Wave,โบกมือ,Verb button on a live patron's card,12
+ui.presence.cheers,Cheers,ชนแก้ว,Verb button on a live patron's card,12
+ui.presence.drink,Send a drink,ส่งเครื่องดื่ม,Verb button: opens three drinks from the menu,16
+ui.presence.phrase,Say…,พูดว่า…,"Verb button: opens the phrase wheel (fixed lines, no chat)",12
+ui.presence.sent,Sent,ส่งแล้ว,Prefix on a verb button already used tonight for this player,8
+ui.presence.hide,Hide,ซ่อน,Card footer: hide this player from your bar (they are not told),10
+ui.presence.report,Report,รายงาน,Card footer: opens the fixed report reasons,10
+ui.presence.close,Close,ปิด,Card footer,10
+ui.presence.note,{name} sees it next time they open the game.,{name} จะเห็นตอนเปิดเกมครั้งหน้า,Card status under a sent verb: the other player is not live,48
+ui.presence.done.wave,You waved at {name},คุณโบกมือให้ {name},Card status after a wave,32
+ui.presence.done.cheers,Cheers with {name}!,ชนแก้วกับ {name}!,Card status after cheers,32
+ui.presence.done.drink,You sent {name} a {drink},คุณส่ง {drink} ให้ {name},Card status after sending a drink,40
+ui.presence.done.phrase,You told {name}: {line},คุณบอก {name}: {line},Card status after a phrase,48
+ui.presence.err.limit,Already sent tonight,คืนนี้ส่งไปแล้ว,Card status: per pair per night limit,28
+ui.presence.err.offline,No signal — try again when you're connected,ไม่มีสัญญาณ ลองใหม่เมื่อเชื่อมต่อได้,Card status: the send failed,48
+ui.presence.err.blocked,You can't send to this player,ส่งถึงผู้เล่นคนนี้ไม่ได้,Card status: the other player hid you,36
+ui.presence.bubble.wave,Hi!,ไฮ!,Bubble over both figures after a wave,8
+ui.presence.bubble.cheers,Cheers!,ชนแก้ว!,Bubble over both figures after cheers,10
+ui.presence.report.title,Report {name},รายงาน {name},Card: report reasons heading,28
+ui.presence.report.name,Offensive name,ชื่อไม่เหมาะสม,"Report reason (fixed list, 08-presence 7.4)",22
+ui.presence.report.harassment,Harassment,การคุกคาม,Report reason,22
+ui.presence.report.other,Something else,อื่น ๆ,Report reason,22
+ui.presence.phrase.01,This song!,เพลงนี้!,"Phrase wheel line (GDD 5.3 example; draft list, owner to review)",20
+ui.presence.phrase.02,Same again?,เอาอีกแก้วไหม,Phrase wheel line (GDD 5.3 example),20
+ui.presence.phrase.03,Last one?,แก้วสุดท้ายนะ?,Phrase wheel line (GDD 5.3 example),20
+ui.presence.phrase.04,Nice to see you!,ดีใจที่เจอนะ!,Phrase wheel line (draft),20
+ui.presence.phrase.05,Love your look,ชอบลุคคุณจัง,Phrase wheel line (draft),20
+ui.presence.phrase.06,Come say hi!,มาทักกันหน่อย!,Phrase wheel line (draft),20
+ui.presence.phrase.07,Great band tonight,วงคืนนี้เจ๋งมาก,Phrase wheel line (draft),20
+ui.presence.phrase.08,Dance?,เต้นกันไหม?,Phrase wheel line (draft),20
+ui.presence.phrase.09,See you next time,ไว้เจอกันใหม่,Phrase wheel line (draft),20
+ui.presence.phrase.10,Happy birthday!,สุขสันต์วันเกิด!,Phrase wheel line (draft),20
+ui.presence.phrase.11,Thanks for the drink!,ขอบคุณสำหรับเครื่องดื่ม!,Phrase wheel line (draft),22
+ui.presence.phrase.12,Good night!,ราตรีสวัสดิ์!,Phrase wheel line (draft),20
+ui.presence.inbox.button,Inbox · {n},กล่องข้อความ · {n},Start screen button while received verbs wait,16
+ui.presence.inbox.title,While you were out,ระหว่างที่คุณไม่อยู่,Inbox card title (script font),24
+ui.presence.inbox.empty,Nothing new,ไม่มีอะไรใหม่,Inbox card: nothing unread,20
+ui.presence.inbox.wave,{name} waved at you,{name} โบกมือให้คุณ,Inbox line,36
+ui.presence.inbox.cheers,{name} said cheers,{name} ชนแก้วกับคุณ,Inbox line,36
+ui.presence.inbox.drink,{name} sent you a {drink},{name} ส่ง {drink} ให้คุณ,Inbox line,44
+ui.presence.inbox.phrase,{name}: “{line}”,{name}: “{line}”,Inbox line: a phrase-wheel line received,44
+ui.presence.inbox.ok,Got it,รับทราบ,Inbox card button: marks the items read,14
+ui.presence.consent.title,How do you show up tonight?,คืนนี้อยากให้ใครเห็นคุณ?,"Check-in consent card title (P1, asked once)",30
+ui.presence.consent.body,Players who check in at Black Cabin appear in each other's bar until closing. You can change this any time in the menu.,ผู้เล่นที่เช็กอินที่ Black Cabin จะปรากฏในบาร์ของกันและกันจนถึงเวลาปิด เปลี่ยนได้ตลอดในเมนู,Check-in consent card body,140
+ui.presence.consent.everyone,Everyone,ทุกคน,Consent option (nothing preselected),24
+ui.presence.consent.everyone_sub,Your character and name are in every player's bar tonight,ตัวละครและชื่อของคุณจะอยู่ในบาร์ของผู้เล่นทุกคนคืนนี้,Consent option explanation,70
+ui.presence.consent.here,Only people here tonight,เฉพาะคนที่อยู่ที่นี่คืนนี้,Consent option,28
+ui.presence.consent.here_sub,Only players checked in tonight see you,เฉพาะผู้เล่นที่เช็กอินคืนนี้เท่านั้นที่เห็นคุณ,Consent option explanation,70
+ui.presence.consent.nobody,Nobody,ไม่มีใคร,Consent option,24
+ui.presence.consent.nobody_sub,Your visit still counts; nobody sees you,การมาของคุณยังนับ แต่ไม่มีใครเห็นคุณ,Consent option explanation,70
+ui.presence.checkin.go,Check in,เช็กอิน,Consent card button (off until an option is chosen),14
+ui.presence.checkin.wait,Checking in…,กำลังเช็กอิน…,Check-in card while the server answers,20
+ui.presence.checkin.ok,You're checked in tonight,คุณเช็กอินคืนนี้แล้ว,"Check-in done, title",30
+ui.presence.checkin.table,You're at {table},คุณอยู่ที่ {table},Check-in done: the in-game table,24
+ui.presence.checkin.mates,{names} at your table,{names} อยู่โต๊ะเดียวกับคุณ,Check-in done: tablemates (N1),60
+ui.presence.checkin.revived,Your character is back!,ตัวละครของคุณกลับมาแล้ว!,Check-in done: a ghost revived,30
+ui.presence.checkin.enter,Into the bar,เข้าบาร์,Check-in done: walks in,16
+ui.presence.checkin.fail,Not checked in,ยังไม่ได้เช็กอิน,"Check-in failed, title",24
+ui.presence.checkin.err.offline,No signal — scan again when you're connected,ไม่มีสัญญาณ สแกนใหม่อีกครั้งเมื่อเชื่อมต่อได้,Check-in failed: offline (nothing is queued),60
+ui.presence.checkin.err.closed,"Black Cabin is closed now. Check-ins work Tue–Sun, 19:00–02:00.",ตอนนี้ Black Cabin ปิดแล้ว เช็กอินได้ อังคาร–อาทิตย์ 19:00–02:00,Check-in failed: outside opening hours,80
+ui.presence.checkin.err.bad_code,This code doesn't work. Ask the staff for help.,โค้ดนี้ใช้ไม่ได้ ขอความช่วยเหลือจากพนักงาน,Check-in failed: unknown or retired code,60
+ui.presence.checkin.err.other,Check-in didn't work. Try again in a minute.,เช็กอินไม่สำเร็จ ลองใหม่อีกครั้งในอีกสักครู่,Check-in failed: anything else,60
+ui.presence.checkin.skip,Not now,ไว้ทีหลัง,Check-in card: walk in without checking in,14

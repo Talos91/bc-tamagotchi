@@ -30,6 +30,9 @@ const Rules = preload("res://scripts/rules.gd")
 const Creator = preload("res://scripts/ui/character_creator.gd")
 const Avatar = preload("res://scripts/avatar.gd")
 const UIS = preload("res://scripts/ui/ui_strings.gd")
+const PresenceClient = preload("res://scripts/presence_ui/presence_client.gd")
+const PresenceInbox = preload("res://scripts/presence_ui/presence_inbox.gd")
+const CheckInFlow = preload("res://scripts/presence_ui/checkin_flow.gd")
 
 const FOLLOW_H := 1.75       ## camera height behind the character (1.35 m tall)
 const FOLLOW := 1.3          ## camera this far behind the character outside ...
@@ -97,6 +100,8 @@ var _warm := WARM_FRAMES        ## title frames left before the unseen groups ar
 var _hidden: Array[Node3D] = [] ## the groups hidden by _hide_unseen, shown again by _show_unseen
 var _seen_rects: Array[Rect2] = [] ## floor plans (x, z) of SEEN_THROUGH_DOOR, grown by SEEN_MARGIN
 var _hidden_figs: Array[Node3D] = [] ## patrons out of sight through the entrance, shown again by _show_figures
+var _inbox_btn: Button          ## "Inbox · N" (presence on, 08-presence §4 N2; scripts/presence_ui/)
+var _checkin_done := false      ## the QR check-in flow ran this start (scripts/presence_ui/checkin_flow.gd)
 
 
 func begin(m: Node) -> void:
@@ -119,6 +124,8 @@ func begin(m: Node) -> void:
 	_build_ui()
 	if not main.needs.has_avatar() and not main.needs.is_new_character():
 		_offer_card()
+	elif PresenceClient.active() and PresenceClient.pending_code() != "":
+		tap.call_deferred()   # opened from a table QR: check in (after the creator for a new character), then walk in
 
 
 ## Tap on the start screen: walk in. Any tap after that: skip to the end.
@@ -128,6 +135,9 @@ func tap() -> void:
 			if main.needs.is_new_character():
 				_walk_after = true
 				open_creator("new")
+				return
+			if not _checkin_done and PresenceClient.active() and PresenceClient.pending_code() != "":
+				open_checkin()
 				return
 			phase = Phase.WALK
 			_t = 0.0
@@ -153,6 +163,10 @@ func _input(event: InputEvent) -> void:
 	if phase == Phase.TITLE and is_instance_valid(_edit_btn) and _edit_btn.visible:
 		var pos: Variant = event.get("position") if (event is InputEventScreenTouch or event is InputEventMouseButton) else null
 		if pos != null and _edit_btn.get_global_rect().grow(UI.dp(6)).has_point(pos):
+			return
+	if phase == Phase.TITLE and is_instance_valid(_inbox_btn) and _inbox_btn.visible:
+		var pos2: Variant = event.get("position") if (event is InputEventScreenTouch or event is InputEventMouseButton) else null
+		if pos2 != null and _inbox_btn.get_global_rect().grow(UI.dp(6)).has_point(pos2):
 			return
 	super(event)
 
@@ -415,6 +429,19 @@ func _build_ui() -> void:
 	_edit_btn.visible = main.needs.has_avatar()
 	_edit_btn.pressed.connect(func(): open_creator("edit"))
 	_screen.add_child(_edit_btn)
+	if PresenceClient.active():
+		_inbox_btn = UI.button("", "secondary")
+		_inbox_btn.name = "PresenceInbox"
+		_inbox_btn.set_anchors_preset(Control.PRESET_BOTTOM_RIGHT)
+		_inbox_btn.offset_right = -UI.dp(12)
+		_inbox_btn.offset_left = -UI.dp(150)
+		_inbox_btn.offset_top = -UI.dp(86)
+		_inbox_btn.offset_bottom = -UI.dp(38)
+		_inbox_btn.add_theme_font_size_override("font_size", int(UI.dp(13)))
+		_inbox_btn.visible = false
+		_inbox_btn.pressed.connect(open_inbox)
+		_screen.add_child(_inbox_btn)
+		refresh_inbox()
 	_retitle()
 
 
@@ -580,3 +607,38 @@ func _keep_look() -> void:
 	needs.set_avatar(needs.avatar(), str(needs.profile.get("display_name", "")), needs.personality)
 	_close_modal()
 	_edit_btn.visible = true
+
+
+# --- Presence (08-presence; scripts/presence_ui/) -------------------------------------------------
+
+## "Inbox · N" shows only while something unread waits.
+func refresh_inbox() -> void:
+	if not is_instance_valid(_inbox_btn):
+		return
+	PresenceClient.fetch_inbox(func(items: Array):
+		if is_instance_valid(_inbox_btn):
+			_inbox_btn.text = UIS.t("ui.presence.inbox.button", {"n": items.size()})
+			_inbox_btn.visible = not items.is_empty())
+
+
+func open_inbox() -> Control:
+	var box := PresenceInbox.new()
+	_modal_layer().add_child(box)
+	box.open(main.needs)
+	box.closed.connect(func():
+		_close_modal()
+		refresh_inbox())
+	return box
+
+
+## The table QR check-in (consent first time, P1), then walk in whatever the answer.
+func open_checkin() -> Control:
+	_checkin_done = true
+	var flow := CheckInFlow.new()
+	_modal_layer().add_child(flow)
+	flow.open(main.needs, PresenceClient.pending_code())
+	flow.finished.connect(func(_r: Dictionary):
+		_close_modal()
+		_fill_stake_box()
+		tap())
+	return flow
