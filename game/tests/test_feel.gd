@@ -33,6 +33,7 @@ extends SceneTree
 ## per tick (the old turn-speed check used the wall clock and flaked under load).
 ##   godot --headless --path . --script res://tests/test_feel.gd
 
+const Cast = preload("res://scripts/cast.gd")
 const FOLLOW_TRAIL := 0.35      ## metres the look point may fall behind the player while walking
 const FOLLOW_NEAR := 0.9        ## metres the look point may be from the player while walking (lead included)
 const SHAKE_MAX := 0.012        ## metres: largest tick-to-tick change of the camera's step
@@ -87,6 +88,10 @@ func _init() -> void:
 	var needs := root.get_node_or_null("Needs")
 	needs.autosave = false
 	needs.new_game()
+	# Pin the night: Prae's name sign (Zones/Tag_mali) moves between three tables by the calendar, and on her
+	# buffer-table nights (e.g. 2026-11-19) it sits over the player at the end of the buffer walk. Unpinned, the
+	# suite failed by date, not by code.
+	Cast.night_override = 0
 	main = load("res://scenes/main.tscn").instantiate()
 	root.add_child(main)
 	for i in 5:
