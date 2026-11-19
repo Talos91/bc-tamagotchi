@@ -1,32 +1,36 @@
 # 🌐 presence-backend — role note (2026-11-19)
 
-Branch `wk/presence-backend` in `C:/Users/itisf/bc-wt/presence-backend` (not pushed). Load id 2026-11-19-social-features-black-cabin-6868dc.
+Branch `wk/presence-backend` in `C:/Users/itisf/bc-wt/presence-backend` (rebased on origin/main 54b1e94, not pushed).
+Load id 2026-11-19-social-features-black-cabin-6868dc. Report: `handoffs/worker-reports-2026-11/presence-backend.md`.
 
 ## State now
-- DONE in branch: API contract `docs/design/08b-presence-api.md` (v1.1); migrations `supabase/migrations/2026111900000{1,2}*.sql`
-  (schema, RLS, bc_* RPCs, perf_reports, retention cron); Edge Function `supabase/functions/verb/index.ts` (verb + Web Push,
-  VAPID keys generated in-function into private.vapid); autoload `Presence` (`game/scripts/presence/`: presence.gd,
-  presence_api.gd, presence_mock.gd, presence_config.gd with EMPTY URL/key = presence off); push SW `tools/push-sw.js` +
-  `tools/build_web.py` hook (importScripts at top of index.service.worker.js, no-cache header); QR sheet `docs/venue/qr/`
-  (codes.json, qr-sheet.png/pdf, png/, make_qr.py) + `supabase/seed/venue_tables.sql`; suite `game/tests/test_presence_net.gd`
-  (offline 101/101; `-- --live` runs the two-client test against the real project).
-- BLOCKED: Supabase create_project refused — org Talos91 at free 2-active-project limit (ethos, ooze-syndicate). Card
-  `presence-supabase-limit`. Cost quoted $0.
-- blackcabin.app attached to Vercel project bc-tamagotchi (prj_N4jIo9OBOI6Rd2TNFFQAJkyMFzc6, team talos-projects00) but
-  misconfigured: not in the team's domain list, NS = .app registry. Card `blackcabin-domain-dns`. Vercel connector turned off.
-- Open cards: presence-supabase-limit, presence-push-caps, presence-qr-tables, blackcabin-domain-dns.
+- **Supabase project LIVE:** `bc-tamagotchi-presence`, ref `czrbsjalcjekcslylwbt`, Singapore, free tier, org Talos91
+  (`ethos` paused for it, Daniele "Pause Ethos"; restorable). Anonymous sign-ins ON (Daniele flipped it).
+  Both migrations applied, 20 table codes seeded (`supabase/seed/venue_tables.sql`), pg_cron `bc-retention` daily
+  21:17 UTC, Edge Function `verb` v1 (verify_jwt off), VAPID keys in `private.vapid` (made by the function).
+  URL + public anon key in `game/scripts/presence/presence_config.gd` -> `Presence.ON` is true in this branch.
+  The database is empty (test players deleted).
+- **Client:** autoload `Presence` (contract `docs/design/08b-presence-api.md` v1.1). No UI calls it yet: presence-client
+  builds the avatars / badge / verb sheet / consent and push cards against it.
+- **Tests:** `test_presence_net` offline 101/101; `-- --live` two-client 14/14 against the real project (needs the bar
+  open, or `update bc_settings set ignore_hours = true` then back to false).
+- **Push:** server path proven (FCM 201 with our VAPID; 410 -> subscription deleted). Delivery to a device NOT DONE:
+  throwaway Chrome profiles never keep a GCM registration. Test kit `supabase/tests/push-receiver/`.
+- **Domain:** blackcabin.app attached to Vercel project bc-tamagotchi but NXDOMAIN (not registered / purchase not
+  done). QR codes already point at it. Card `blackcabin-domain-dns`.
+- Cards: presence-backend-review, presence-push-caps, presence-qr-tables, blackcabin-domain-dns (presence-supabase-limit,
+  presence-anon-signins answered).
 
-## Next steps once a slot is free
-1. create_project bc-tamagotchi-presence, ap-southeast-1 (get_cost -> confirm_cost 0 -> create with confirm id).
-2. Turn on anonymous sign-ins (Auth settings; connector may not expose it -> ask Daniele, or test signup and see).
-3. apply_migration x2, execute_sql supabase/seed/venue_tables.sql, deploy_edge_function `verb` with verify_jwt=false.
-4. Put URL + anon (publishable) key into presence_config.gd (public by design). Then `ON` becomes true.
-5. Run `-s tests/test_presence_net.gd -- --live` (bar must be open or `update bc_settings set ignore_hours=true`, then false).
-6. Push test: local page on localhost with tools/push-sw.js registered, subscribe via the edge public_key, save via bc_save_push,
-   send a verb from a second client; desktop Chrome (Claude in Chrome) as proxy; Android = NOT DONE unless a device exists.
-7. get_advisors (security) and fix warnings; all PROJECT.md suites headless with empty APPDATA; rebase; exit ritual.
+## Next (for whoever continues)
+1. Real-device push check: deploy a build with this branch, open on an Android phone (Chrome), enable push from the
+   presence-client opt-in card, have a friend wave. Or open `supabase/tests/push-receiver/` in a real Chrome profile.
+2. When Daniele answers presence-push-caps: one `update public.bc_settings set ...` (no build).
+3. presence-qr-tables: table list changes -> edit TABLES in `docs/venue/qr/make_qr.py`, rerun, run the seed SQL.
+4. Friend links (P11) have a table but no RPCs yet; N3/N4 pushes (friend check-in, Friday headline) not built.
 
 ## Gotchas
+- Godot JSON numbers are floats: cast ids to int before sending to bigint params (mark_read bug found live).
 - GDScript min()/max() reject Strings (use _lo/_hi). `tools/web/` is gitignored (web/ pattern) -> push-sw.js lives in tools/.
 - Presence constants live in presence.gd (not rules.gd) to avoid collisions with presence-client.
-- The URL is `/?t=<code>` (no Vercel rewrite), host blackcabin.app (Daniele 2026-11-19).
+- The in-app browser pane cannot register service workers; Supabase dashboard there needs Daniele's sign-in.
+- Supabase free plan: 2 active projects per owner (now bc-tamagotchi-presence + ooze-syndicate).
