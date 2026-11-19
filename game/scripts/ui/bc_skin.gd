@@ -187,13 +187,13 @@ static func tile_button(text: String, icon := "") -> Button:
 
 static func neon(l: Label, color := LED, strength := 1.0) -> Label:
 	l.theme_type_variation = &"LabelNeon"
-	l.add_theme_color_override("font_color", color.lerp(LED_CORE, 0.78))
-	l.add_theme_color_override("font_outline_color", Color(color, 0.92 * strength))
-	l.add_theme_constant_override("outline_size", maxi(2, int(dp(2.2))))
-	l.add_theme_color_override("font_shadow_color", Color(color, 0.30 * strength))
+	l.add_theme_color_override("font_color", color.lerp(LED_CORE, 0.84))
+	l.add_theme_color_override("font_outline_color", Color(color, minf(1.0, strength)))
+	l.add_theme_constant_override("outline_size", maxi(3, int(dp(2.8))))
+	l.add_theme_color_override("font_shadow_color", Color(color, 0.38 * strength))
 	l.add_theme_constant_override("shadow_offset_x", 0)
 	l.add_theme_constant_override("shadow_offset_y", 0)
-	l.add_theme_constant_override("shadow_outline_size", maxi(4, int(dp(7))))
+	l.add_theme_constant_override("shadow_outline_size", maxi(6, int(dp(9))))
 	return l
 
 
@@ -265,13 +265,25 @@ class _LedStrip extends Control:
 	var at_top := false
 
 	func _draw() -> void:
-		var y := size.y * 0.5
-		var a := Vector2(0, y)
-		var b := Vector2(size.x, y)
+		# Drawn against the parent's own edge: a Container parent (PanelContainer) stretches this node over its
+		# content rect, so the node's rect alone does not say where the panel's edge is.
+		var par := get_parent() as Control
+		if par == null:
+			return
+		var inset := DP * 14.0
+		var y := (-position.y if at_top else par.size.y - position.y) + (-DP if at_top else DP)
+		var a := Vector2(-position.x + inset, y)
+		var b := Vector2(par.size.x - position.x - inset, y)
 		draw_line(a, b, Color(LED, 0.10), DP * 9.0, true)
 		draw_line(a, b, Color(LED, 0.22), DP * 4.5, true)
 		draw_line(a, b, Color(LED, 0.95), DP * 1.3, true)
 		draw_line(a, b, Color(LED_CORE, 0.6), maxf(1.0, DP * 0.4), true)
+
+	func _ready() -> void:
+		var par := get_parent() as Control
+		if par != null:
+			par.resized.connect(queue_redraw)
+		item_rect_changed.connect(queue_redraw)
 
 
 ## Small icon for tile buttons, gold, drawn with primitives.

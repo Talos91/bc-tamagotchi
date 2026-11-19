@@ -288,7 +288,7 @@ func set_area(area: String) -> void:
 func _process(delta: float) -> void:
 	_title_age += delta
 	if _title_age > 2.0 and _title_age - delta <= 2.0:
-		UI.title_size(_title, 18)
+		UI.title_size(_title, 22)   # the neon sign stays readable when it shrinks
 	_clock += delta
 	if _clock >= 0.25 and session != null:
 		_clock = 0.0

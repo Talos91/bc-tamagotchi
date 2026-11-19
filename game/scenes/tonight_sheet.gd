@@ -81,7 +81,7 @@ func open(unix := -1) -> void:
 
 	var head := HBoxContainer.new()
 	col.add_child(head)
-	var title := BCSkin.neon_title(TE.t("tonight.head"), 26)
+	var title := BCSkin.neon_title(TE.t("tonight.head"), 21)
 	title.name = "Head"
 	title.text_overrun_behavior = TextServer.OVERRUN_TRIM_ELLIPSIS
 	title.size_flags_horizontal = Control.SIZE_EXPAND_FILL
@@ -202,6 +202,7 @@ func _row(ev: Dictionary) -> Control:
 	h.add_child(_date_block(str(ev["date"])))
 	var mid := VBoxContainer.new()
 	mid.size_flags_horizontal = Control.SIZE_EXPAND_FILL
+	mid.alignment = BoxContainer.ALIGNMENT_CENTER
 	mid.add_theme_constant_override("separation", 0)
 	h.add_child(mid)
 	mid.add_child(UI.wrap(UI.label(str(ev["title"]), 15, UI.CREAM)))
