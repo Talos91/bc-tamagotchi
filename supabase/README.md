@@ -1,7 +1,7 @@
 # Supabase (presence backend)
 
 Project `bc-tamagotchi-presence`, region Singapore (ap-southeast-1), free tier, on Daniele's account (DECISIONS
-2026-11-09 P8; created 2026-11-19 by 🌐 presence-backend through the Supabase connector). URL and anon key (public)
+2026-11-09 P8). NOT CREATED YET (2026-11-19): the org is at the free plan's 2-active-project limit; card presence-supabase-limit. URL and anon key (public)
 are in `game/scripts/presence/presence_config.gd`. Contract: `docs/design/08b-presence-api.md`.
 
 - `migrations/` — schema, RLS, `bc_*` functions (apply in order).
