@@ -98,6 +98,7 @@ GDD is updated.
 | 2026-11-19 | **Reviews by screenshot (hub 14:44–14:48):** Daniele judged everything from the card pictures and will play once the first online features are in. OK: q4 Neon Moth, q5 Coaster Flip, q6 Soi Dash, q7 Shake & Serve, q8 Pinball + Pour, q9 Rhythm + Candle, rivals hooks. Coaster Flip rival = tonight's next rung on the one board (rec). Perf: keep the batching **and** auto quality on slow phones (rec). |
 | 2026-11-19 | **Telemetry beacon: send one perf report automatically at the end of each visit, keep 90 days, NOT anonymous** (card answer "auto"; note: "no need to be anonymous all my friends know is tracked right now"). Backend table via the presence worker; client hook later. Revisit before any public launch. |
 | 2026-11-19 | **Domain: Daniele bought blackcabin.app on Vercel** and enabled the Vercel connector; QR check-in URLs use https://blackcabin.app/?t=<table>. Online first features (item 43): QR → friend pops into your bar → phone push on interaction. |
+| 2026-11-19 | **Supabase slot: pause the Ethos project** (Daniele, chat: "Pause Ethos"; card presence-supabase-limit). The free org allows 2 active projects (ethos, ooze-syndicate); Ethos is paused (not deleted, restorable) so Black Cabin's presence project can be created on the free tier. |
 
 ## Still open
 

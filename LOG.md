@@ -293,3 +293,4 @@ Append-only. One dated line per event, newest last. Never edit earlier lines.
 - 2026-11-19 — Hub answers read (12): ui-notch I2 Neon tubes + D2 Back-bar; all wiring reviews OK by screenshot; perf keep + auto quality; coaster rival = board; telemetry auto, not anonymous, 90 days. Daniele bought blackcabin.app (Vercel) → presence-backend attaches it and uses it for QR. → 4 DECISIONS rows.
 - 2026-11-19 — 🔍 verify-games PUSHED 3e489c1: 27/27 green (test_feel fixed), web OK 19.86 MB; all 8 games wired on main; archived. Next slot: ui-notch build (I2 + D2) card.
 - 2026-11-19 — 🌐 presence-backend BLOCKED b17b328: Supabase free limit (2 active: ethos, ooze-syndicate) → card presence-supabase-limit; blackcabin.app does not resolve → card blackcabin-domain-dns. Rest built (101/101 offline).
+- 2026-11-19 — Daniele: "Pause Ethos" → DECISIONS; relayed to presence-backend (pause ethos, create BC project, continue). Domain DNS still open.
