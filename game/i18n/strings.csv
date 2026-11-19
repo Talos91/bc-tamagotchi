@@ -37,6 +37,7 @@ mg.pour_perfect.status,layer {n} of {total},ชั้นที่ {n} จาก 
 mg.pour_perfect.hint_intro,Nam slides you a glass,น้ำเลื่อนแก้วมาให้,Hint while the glass arrives (Nam is the head bartender),50
 mg.pour_perfect.hint_ready,Press and hold to pour,กดค้างเพื่อริน,Hint before pouring a layer,50
 mg.pour_perfect.hint_pour,Let go on the line,ปล่อยเมื่อถึงเส้น,Hint while pouring,50
+mg.pour_perfect.spill,Foam over,ฟองล้น,Pop when the glass overflows (foam only; the reward stays),14
 mg.front_row_rhythm.title,Front Row Rhythm,Front Row Rhythm,Minigame name (stays English),18
 mg.front_row_rhythm.subtitle,Clap with the band,ปรบมือตามวง,Subtitle under the name in the lab menu,34
 mg.front_row_rhythm.how_to,Tap the left or right half of the screen as each clap reaches the line.,แตะซ้ายหรือขวาของจอเมื่อจังหวะมาถึงเส้น,Pause sheet help text,150

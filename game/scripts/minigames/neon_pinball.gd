@@ -38,6 +38,20 @@ const FLIPPER_REST := 0.52  # radians below horizontal
 const FLIPPER_UP := -0.45
 const BUMPERS: Array[Vector3] = [Vector3(170, 340, 38), Vector3(370, 340, 38), Vector3(270, 470, 38)]
 const SENSOR_R := 24.0
+## Look B sprites (game/assets/minigames/README.md, Neon Pinball): art px per field unit 1.3 (780 px wide play area).
+const ASSET_DIR := "res://assets/minigames/neon_pinball/"
+const ART_PPU := 1.3
+const BEZEL := Vector2(36, 28)
+const BUMPER_ANCHOR := Vector2(74.0, 76.7)
+const BALL_ANCHOR := Vector2(18.0, 20.0)
+const FLIPPER_ANCHOR := Vector2(26.0, 26.0)
+const LETTER_ANCHOR := Vector2(44.0, 49.0)
+const TRAIL_LEN := 9
+const TRAIL_MIN_SPEED := 500.0
+const BUMPER_HIT_STOP := 0.04
+## Relaxed timing (11-minigame-quality section 3): ball save 15 s, tilt limit +1.
+const RELAXED_BALL_SAVE := 15.0
+const RELAXED_TILT_EXTRA := 1.0
 
 enum Ball { LANE, LIVE, GONE }
 
@@ -64,6 +78,9 @@ var _press_t := 0.0
 var _pressing := false
 var _scale := 1.0
 var _origin := Vector2.ZERO
+var _tex := {}
+var _trail: Array[Vector2] = []
+var _glow: Control
 
 
 func _init() -> void:
@@ -77,6 +94,15 @@ func _init() -> void:
 func _ready() -> void:
 	mouse_filter = Control.MOUSE_FILTER_STOP
 	clip_contents = true
+	_glow = Control.new()
+	_glow.name = "Glow"
+	_glow.mouse_filter = Control.MOUSE_FILTER_IGNORE
+	_glow.set_anchors_preset(Control.PRESET_FULL_RECT)
+	var mat := CanvasItemMaterial.new()
+	mat.blend_mode = CanvasItemMaterial.BLEND_MODE_ADD
+	_glow.material = mat
+	_glow.draw.connect(_draw_glow)
+	add_child(_glow)
 
 
 func _build_field() -> void:
@@ -138,6 +164,16 @@ func _serve() -> void:
 	pos = Vector2(LANE_X, LANE_REST_Y)
 	vel = Vector2.ZERO
 	ball_time = 0.0
+	_trail.clear()
+
+
+## Relaxed timing widens the ball save and the tilt limit; it never changes the payout.
+func ball_save_seconds() -> float:
+	return RELAXED_BALL_SAVE if relaxed else BALL_SAVE_SECONDS
+
+
+func tilt_limit() -> float:
+	return TILT_LIMIT + (RELAXED_TILT_EXTRA if relaxed else 0.0)
 
 
 func launch(power := 0.85) -> void:
@@ -146,6 +182,9 @@ func launch(power := 0.85) -> void:
 	ball_state = Ball.LIVE
 	ball_time = 0.0
 	vel = Vector2(0, -lerpf(LAUNCH_SPEED_MIN, LAUNCH_SPEED_MAX, clampf(power, 0.0, 1.0)))
+	_layout()
+	fx().burst("spark", _f(Vector2(LANE_X, LANE_REST_Y)), 8)
+	haptic("tick")
 
 
 func nudge(dir: int) -> void:
@@ -153,11 +192,13 @@ func nudge(dir: int) -> void:
 		return
 	vel.x += dir * NUDGE_SPEED
 	tilt += NUDGE_TILT
-	if tilt >= TILT_LIMIT:
+	if tilt >= tilt_limit():
 		tilt_lock = TILT_LOCK_SECONDS
 		tilt = 0.6
 		flip_held = [false, false]
 		_say(S.t("mg.neon_pinball.tilt"))
+		fx().fail_edge()
+		haptic("fail")
 
 
 func set_flipper(side: int, held: bool) -> void:
@@ -187,6 +228,12 @@ func advance(dt: float) -> void:
 	if play_time >= TIME_CAP:
 		finish(score_from(points))
 		return
+	if ball_state == Ball.LIVE and vel.length() > TRAIL_MIN_SPEED:
+		_trail.append(pos)
+		if _trail.size() > TRAIL_LEN:
+			_trail.pop_front()
+	elif not _trail.is_empty():
+		_trail.pop_front()
 	queue_redraw()
 
 
@@ -229,15 +276,18 @@ func _step(h: float) -> void:
 			vel = nrm * maxf(vel.length() * 0.9, 650.0)
 			bumper_flash[i] = 1.0
 			points += BUMPER_POINTS
+			_bumper_beat(i, c)
 			_update_status()
 	for i in letter_pos.size():
 		if not lit[i] and pos.distance_to(letter_pos[i]) < SENSOR_R + BALL_R * 0.5:
 			lit[i] = true
 			points += LETTER_POINTS
+			_letter_beat(i)
 			if not word_done and not lit.has(false):
 				word_done = true
 				points += WORD_BONUS
 				_say(S.t("mg.neon_pinball.word"))
+				_word_beat()
 			_update_status()
 	if pos.y > FIELD.y + 40.0 and pos.x < 540.0:
 		_drain()
@@ -261,11 +311,54 @@ func _collide_segment(a: Vector2, b: Vector2, thick: float, seg_vel: Vector2, e:
 		vel -= (1.0 + e) * vn * nrm
 
 
+## The §2.3 beats (all through mg_fx; positions are the game's local px).
+func _bumper_beat(i: int, c: Vector2) -> void:
+	_layout()
+	var f := fx()
+	var at := _f(c)
+	f.flash("b%d" % i)
+	f.squash("b%d" % i)
+	f.pop("+%d" % BUMPER_POINTS, at + Vector2(0, -50.0 * _scale), UI.CYAN, 48)
+	f.burst("spark", at, 8)
+	f.hit_stop(BUMPER_HIT_STOP)
+	haptic("tick")
+
+
+func _letter_beat(i: int) -> void:
+	_layout()
+	var f := fx()
+	var at := _f(letter_pos[i])
+	f.squash("l%d" % i)
+	f.pop("%s +%d" % [LETTERS[i], LETTER_POINTS], at + Vector2(0, -60.0 * _scale), UI.GOLD, 52)
+	f.flare(at, 90.0 * _scale, UI.NEON)
+	f.burst("spark", at, 10)
+	haptic("tick")
+
+
+func _word_beat() -> void:
+	_layout()
+	var f := fx()
+	var mid := _f(Vector2(270, 400))
+	f.pop(S.t("mg.neon_pinball.word"), mid, UI.NEON, 84)
+	f.flare(mid, 420.0 * _scale, UI.NEON)
+	f.burst("confetti", mid, 40)
+	f.hit_stop()
+	haptic("strong")
+
+
 func _drain() -> void:
-	if ball_time <= BALL_SAVE_SECONDS:
+	_layout()
+	var f := fx()
+	var at := _f(Vector2(clampf(pos.x, 40.0, 500.0), FIELD.y - 40.0))
+	if ball_time <= ball_save_seconds():
 		_say(S.t("mg.neon_pinball.ball_saved"))
+		f.pop(S.t("mg.neon_pinball.ball_saved"), at, UI.CREAM, 52)
 		_serve()
 		return
+	f.shake(Fx.TRAUMA_LOSS)
+	f.fail_edge()
+	f.burst("ember", at, 12)
+	haptic("fail")
 	balls_left -= 1
 	if balls_left <= 0:
 		ball_state = Ball.GONE
@@ -333,47 +426,122 @@ func _f(p: Vector2) -> Vector2:
 	return _origin + p * _scale
 
 
+func _t(file: String) -> Texture2D:
+	if not _tex.has(file):
+		var path := ASSET_DIR + file
+		_tex[file] = load(path) if ResourceLoader.exists(path) else null
+	return _tex[file]
+
+
+## Sets _scale / _origin from the play area (also called by the beats, which need field -> screen positions).
+func _layout() -> void:
+	_scale = maxf(0.01, minf((size.x - BEZEL.x * 2.0 - 40.0) / FIELD.x, (size.y - BEZEL.y * 2.0 - 20.0) / FIELD.y))
+	var fs := FIELD * _scale
+	_origin = Vector2((size.x - fs.x) * 0.5, (size.y - fs.y) * 0.5)
+
+
+## A sprite frame drawn so its anchor pixel sits on field point p; art px -> screen px is _scale / ART_PPU.
+func _spr(file: String, frame: int, frame_w: float, anchor: Vector2, p: Vector2, mul := 1.0, tint := Color.WHITE) -> void:
+	var tex := _t(file)
+	if tex == null:
+		return
+	var k := _scale / ART_PPU * mul
+	var h := tex.get_size().y
+	draw_texture_rect_region(tex, Rect2(_f(p) - anchor * k, Vector2(frame_w, h) * k), Rect2(frame * frame_w, 0, frame_w, h), tint)
+
+
 func _draw() -> void:
 	if size.x <= 0.0:
 		return
-	var bezel := Vector2(36, 28)
-	_scale = minf((size.x - bezel.x * 2.0 - 40.0) / FIELD.x, (size.y - bezel.y * 2.0 - 20.0) / FIELD.y)
+	_layout()
 	var fs := FIELD * _scale
-	_origin = Vector2((size.x - fs.x) * 0.5, (size.y - fs.y) * 0.5)
+	var f := fx()
+	var art := _t("playfield.png") != null
 	# Cabinet: dark body, bezel line, the screen in the one cool light.
 	draw_rect(Rect2(Vector2.ZERO, size), UI.BG_DEEP)
 	var screen := Rect2(_origin - Vector2(24, 24), fs + Vector2(48, 48))
 	draw_rect(screen.grow(26.0), UI.BG_BASE)
 	draw_rect(screen.grow(26.0), UI.LINE, false, 4.0)
 	draw_rect(screen, Color("06161B"))
-	for y in range(int(screen.position.y), int(screen.end.y), 8):
-		draw_line(Vector2(screen.position.x, y), Vector2(screen.end.x, y), Color(UI.CYAN, 0.04), 1.0)
+	if art:
+		draw_texture_rect(_t("playfield.png"), Rect2(_origin, fs), false)
+	else:
+		for y in range(int(screen.position.y), int(screen.end.y), 8):
+			draw_line(Vector2(screen.position.x, y), Vector2(screen.end.x, y), Color(UI.CYAN, 0.04), 1.0)
 	draw_rect(screen, Color(UI.CYAN, 0.5), false, 3.0)
-	# Walls.
+	# Walls (the physics truth; faint over the art).
 	for w in walls:
-		draw_line(_f(w[0]), _f(w[1]), UI.SMOKE, 5.0)
+		draw_line(_f(w[0]), _f(w[1]), Color(UI.SMOKE, 0.35 if art else 1.0), 5.0)
 	# Bumpers.
 	for i in BUMPERS.size():
 		var b := BUMPERS[i]
-		draw_circle(_f(Vector2(b.x, b.y)), b.z * _scale, Color(UI.CYAN, 0.18 + 0.6 * bumper_flash[i]))
-		draw_arc(_f(Vector2(b.x, b.y)), b.z * _scale, 0, TAU, 32, UI.CYAN, 4.0, true)
-	# Letters of BLACK CABIN: Neon Red when lit (brand moment), Ash otherwise.
+		var c := Vector2(b.x, b.y)
+		if _t("bumper.png") != null:
+			var sq := f.squash_scale("b%d" % i)
+			_spr("bumper.png", 1 if bumper_flash[i] > 0.35 else 0, 148.0, BUMPER_ANCHOR, c, (sq.x + sq.y) * 0.5)
+		else:
+			draw_circle(_f(c), b.z * _scale, Color(UI.CYAN, 0.18 + 0.6 * bumper_flash[i]))
+			draw_arc(_f(c), b.z * _scale, 0, TAU, 32, UI.CYAN, 4.0, true)
+	# Letters of BLACK CABIN: lit frame when lit (brand moment), off otherwise.
 	for i in letter_pos.size():
-		var col: Color = UI.NEON if lit[i] else UI.ASH
-		draw_arc(_f(letter_pos[i]), SENSOR_R * _scale, 0, TAU, 20, Color(col, 0.7), 3.0, true)
-		UI.draw_text(self, LETTERS[i], _f(letter_pos[i]) + Vector2(0, 14), 40, col)
+		var lf := "letter_%s.png" % LETTERS[i]
+		if _t(lf) != null:
+			var pulse := f.squash_scale("l%d" % i).x if lit[i] else 1.0
+			_spr(lf, 1 if lit[i] else 0, 88.0, LETTER_ANCHOR, letter_pos[i], pulse)
+		else:
+			var col: Color = UI.NEON if lit[i] else UI.ASH
+			draw_arc(_f(letter_pos[i]), SENSOR_R * _scale, 0, TAU, 20, Color(col, 0.7), 3.0, true)
+			UI.draw_text(self, LETTERS[i], _f(letter_pos[i]) + Vector2(0, 14), 40, col)
 	# Flippers.
 	for s in 2:
 		var p0 := flipper_pivot(s)
-		draw_line(_f(p0), _f(p0 + flipper_dir(s) * FLIPPER_LEN), UI.GOLD, FLIPPER_THICK * 2.0 * _scale, true)
-		draw_circle(_f(p0), FLIPPER_THICK * _scale, UI.GOLD)
-	# Ball.
-	draw_circle(_f(pos), BALL_R * _scale, UI.CREAM)
+		if _t("flipper.png") != null:
+			var k := _scale / ART_PPU
+			var a: float = flip_angle[s]
+			draw_set_transform(_f(p0), a if s == 0 else -a, Vector2(k, k) if s == 0 else Vector2(-k, k))
+			draw_texture_rect(_t("flipper.png"), Rect2(-FLIPPER_ANCHOR, Vector2(148, 52)), false)
+			draw_set_transform(Vector2.ZERO, 0.0, Vector2.ONE)
+		else:
+			draw_line(_f(p0), _f(p0 + flipper_dir(s) * FLIPPER_LEN), UI.GOLD, FLIPPER_THICK * 2.0 * _scale, true)
+			draw_circle(_f(p0), FLIPPER_THICK * _scale, UI.GOLD)
+	# Ball trail (fades with age) then the ball.
+	for j in _trail.size():
+		var u := float(j + 1) / float(_trail.size() + 1)
+		draw_circle(_f(_trail[j]), BALL_R * _scale * (0.35 + 0.55 * u), Color(UI.CYAN, 0.04 + 0.26 * u))
+	if _t("ball.png") != null:
+		_spr("ball.png", 0, 36.0, BALL_ANCHOR, pos)
+	else:
+		draw_circle(_f(pos), BALL_R * _scale, UI.CREAM)
 	# Score and tilt on the screen.
 	UI.draw_text(self, str(points), _f(Vector2(270, 60)), 58, UI.CYAN)
 	if tilt > 0.05:
-		draw_rect(Rect2(_f(Vector2(20, 90)), Vector2(200 * _scale * tilt / TILT_LIMIT, 8)), UI.AMBER)
+		draw_rect(Rect2(_f(Vector2(20, 90)), Vector2(200 * _scale * tilt / tilt_limit(), 8)), UI.AMBER)
 	if _toast_t > 0.0:
 		UI.draw_text(self, toast, _f(Vector2(270, 700)), 64, UI.GOLD)
 	if ball_state == Ball.LANE:
 		UI.draw_text(self, S.t("mg.neon_pinball.hint_launch"), _f(Vector2(270, 780)), 40, UI.SMOKE)
+	if _glow != null:
+		_glow.queue_redraw()
+
+
+## Neon halos: drawn on a child with an additive material, over the sprites (README, Glow).
+func _draw_glow() -> void:
+	if size.x <= 0.0:
+		return
+	_layout()
+	var gt := _t("bumper_glow.png")
+	var k := _scale / ART_PPU * 2.0
+	for i in BUMPERS.size():
+		if gt != null:
+			var b := BUMPERS[i]
+			var cell := Vector2(74.0, 74.0)  # a glow frame is half size: 74 x 74
+			var a := 0.45 + 0.55 * bumper_flash[i]
+			_glow.draw_texture_rect_region(gt, Rect2(_f(Vector2(b.x, b.y)) - BUMPER_ANCHOR * 0.5 * k, cell * k), Rect2(0, 0, 74, 74), Color(1, 1, 1, a))
+	for i in letter_pos.size():
+		if not lit[i]:
+			continue
+		var lg := _t("letter_%s_glow.png" % LETTERS[i])
+		if lg != null:
+			var a2 := 0.75 + 0.25 * sin(play_time * 5.0 + i)
+			var cell2 := Vector2(44.0, 49.0)  # lit frame of a half-size sheet
+			_glow.draw_texture_rect_region(lg, Rect2(_f(letter_pos[i]) - LETTER_ANCHOR * 0.5 * k, cell2 * k), Rect2(44, 0, 44, 49), Color(1, 1, 1, a2))
