@@ -39,7 +39,7 @@ func open(n: Node, l: int) -> void:
 	center.add_child(col)
 	# In capitals as Daniele wrote it (UI.title would title-case a script): Kristi, red, a dark red glow
 	title = UI.label(N.t("nightlife.wasted.title"), TITLE_DP, UI.NEON, HORIZONTAL_ALIGNMENT_CENTER)
-	title.theme_type_variation = &"LabelTitle"
+	title.theme_type_variation = &"LabelScript"
 	title.add_theme_font_size_override("font_size", int(UI.dp(TITLE_DP)))
 	title.add_theme_color_override("font_shadow_color", Color(UI.RED, 0.85))
 	title.add_theme_constant_override("shadow_outline_size", int(UI.dp(6)))

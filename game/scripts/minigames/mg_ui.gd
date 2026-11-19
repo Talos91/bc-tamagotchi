@@ -1,6 +1,8 @@
 extends RefCounted
 ## Flat-shape UI helpers in the style guide palette (docs/ui/style-guide.md sections 2 and 5). No theme resource yet.
 
+const Skin = preload("res://scripts/ui/bc_skin.gd")
+
 const BG_BASE := Color("1C0D0C")
 const BG_DEEP := Color("160A0C")
 const BG_RAISED := Color("2E1614")
@@ -19,7 +21,7 @@ const CYAN := Color("18D0FA")
 ## 1 dp at the 1080 px base width (design frame is 390 dp wide).
 const DP := 1080.0 / 390.0
 
-const NEED_COLORS := {"music": RED_HI, "friends": GOLD, "drinks": AMBER, "nightlife": CYAN}
+const NEED_COLORS := {"music": Color("FF4081"), "friends": GOLD, "drinks": AMBER, "nightlife": CYAN}
 
 
 static func dp(v: float) -> float:
@@ -47,10 +49,10 @@ static func label(text: String, size_dp := 15.0, color := CREAM, align := HORIZO
 	return l
 
 
-## Kristi, the brand script, is for stylish titles only (zone names, the result card heading, Welcome Back). It has
-## no Thai glyphs, so Thai falls back to IBM Plex Sans Thai Looped (bc_theme.tres); Kristi's small x-height needs a
-## bigger size than the fallback does, hence SCRIPT_SCALE outside Thai.
-const SCRIPT_SCALE := 1.4
+## Titles (zone names, sheet and card headings, Welcome Back) use Tilt Neon, the D2 neon-sign face (LabelTitle in
+## bc_theme.tres; Kristi stays only as LabelScript for WASTED). Neither has Thai glyphs: Thai falls back to IBM Plex
+## Sans Thai Looped. Tilt Neon has a normal x-height, so no size boost (Kristi needed 1.4).
+const SCRIPT_SCALE := 1.0
 
 
 static func title(text: String, size_dp: float, color := GOLD) -> Label:
@@ -77,36 +79,10 @@ static func wrap(l: Label) -> Label:
 	return l
 
 
-## kind: "primary" (Velvet Red), "secondary" (raised, gold label) or "ghost".
+## kind: "primary" (velvet red, gold rim), "secondary" (wood + brass, gold label), "ghost" or "tag": the D2 Back-bar
+## skin (scripts/ui/bc_skin.gd, Daniele 2026-11-19).
 static func button(text: String, kind := "secondary") -> Button:
-	var b := Button.new()
-	b.text = text
-	b.focus_mode = Control.FOCUS_NONE
-	b.custom_minimum_size = Vector2(0, dp(56.0 if kind == "primary" else 48.0))
-	b.add_theme_font_size_override("font_size", int(dp(17.0 if kind == "primary" else 15.0)))
-	var fill := BG_RAISED
-	var fill_hi := BG_PLUM
-	var fg := GOLD
-	var edge := LINE
-	match kind:
-		"primary":
-			fill = RED
-			fill_hi = RED_HI
-			fg = CREAM
-			edge = RED_HI
-		"ghost":
-			fill = Color(0, 0, 0, 0)
-			fill_hi = BG_PLUM
-			fg = SMOKE
-			edge = Color(0, 0, 0, 0)
-	b.add_theme_stylebox_override("normal", box(fill, 14, edge, 2.0))
-	b.add_theme_stylebox_override("hover", box(fill, 14, edge, 2.0))
-	b.add_theme_stylebox_override("pressed", box(fill_hi, 14, edge, 2.0))
-	b.add_theme_stylebox_override("disabled", box(fill, 14, edge, 2.0))
-	for c in ["font_color", "font_hover_color", "font_pressed_color", "font_focus_color"]:
-		b.add_theme_color_override(c, fg)
-	b.add_theme_color_override("font_disabled_color", ASH)
-	return b
+	return Skin.button(text, kind)
 
 
 static func need_color(need: String) -> Color:
