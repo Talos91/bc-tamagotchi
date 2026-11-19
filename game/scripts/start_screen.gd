@@ -27,7 +27,7 @@ const UI = preload("res://scripts/minigames/mg_ui.gd")
 const T = preload("res://scripts/zones/venue_strings.gd")
 const VersionInfo = preload("res://scripts/version_info.gd")
 const Rules = preload("res://scripts/rules.gd")
-const Skin = preload("res://scripts/ui/bc_skin.gd")
+const BCSkin = preload("res://scripts/ui/bc_skin.gd")
 const Creator = preload("res://scripts/ui/character_creator.gd")
 const Avatar = preload("res://scripts/avatar.gd")
 const UIS = preload("res://scripts/ui/ui_strings.gd")
@@ -399,7 +399,7 @@ func _build_ui() -> void:
 	g.anchor_bottom = 1.0
 	_screen.add_child(g)
 	_prompt = UI.label("", 22.0, UI.GOLD, HORIZONTAL_ALIGNMENT_CENTER)
-	Skin.neon(_prompt, Skin.LED)   # D2 Back-bar: the prompt is the screen's one neon sign (bc_skin.gd)
+	BCSkin.neon(_prompt, BCSkin.LED)   # D2 Back-bar: the prompt is the screen's one neon sign (bc_skin.gd)
 	_prompt.add_theme_font_size_override("font_size", int(UI.dp(22.0)))
 	_prompt.anchor_right = 1.0
 	_prompt.anchor_top = 0.9
@@ -495,7 +495,7 @@ func _fill_stake_box() -> void:
 
 func _start_chip(text: String, color: Color) -> Label:
 	var l := UI.label(text, 14, color, HORIZONTAL_ALIGNMENT_CENTER)
-	var sb := UI.box(Color(Skin.WOOD_DEEP, 0.9), 12, Color(color, 0.85), 2.0)
+	var sb := UI.box(Color(BCSkin.WOOD_DEEP, 0.9), 12, Color(color, 0.85), 2.0)
 	sb.content_margin_left = UI.dp(8)
 	sb.content_margin_right = UI.dp(8)
 	l.add_theme_stylebox_override("normal", sb)
@@ -579,10 +579,10 @@ func _offer_card() -> void:
 	var panel := PanelContainer.new()
 	panel.name = "OfferCard"
 	panel.custom_minimum_size = Vector2(UI.dp(330), 0)
-	var pb := Skin.panel_box(20.0, true, 0.97)
+	var pb := BCSkin.panel_box(20.0, true, 0.97)
 	pb.set_content_margin_all(0)
 	panel.add_theme_stylebox_override("panel", pb)
-	Skin.led_strip(panel)
+	BCSkin.led_strip(panel)
 	center.add_child(panel)
 	var pad := MarginContainer.new()
 	for side in ["left", "right", "top", "bottom"]:

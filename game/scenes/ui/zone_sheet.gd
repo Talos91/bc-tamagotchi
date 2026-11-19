@@ -13,7 +13,7 @@ signal closed
 const UI = preload("res://scripts/minigames/mg_ui.gd")
 const T = preload("res://scripts/zones/venue_strings.gd")
 const Glyph = preload("res://scripts/minigames/need_glyph.gd")
-const Skin = preload("res://scripts/ui/bc_skin.gd")
+const BCSkin = preload("res://scripts/ui/bc_skin.gd")
 
 const MAX_W := 430.0  ## dp; the sheet stays phone-width in landscape
 const SCROLL_FROM := 6     ## rows; from this many the list scrolls
@@ -46,11 +46,11 @@ func open(header: Array[String], rows: Array[Dictionary], picture: Texture2D = n
 	panel.set_anchors_preset(Control.PRESET_CENTER_BOTTOM)
 	panel.grow_horizontal = Control.GROW_DIRECTION_BOTH
 	panel.grow_vertical = Control.GROW_DIRECTION_BEGIN
-	var sb := Skin.sheet_box()
+	var sb := BCSkin.sheet_box()
 	sb.set_content_margin_all(0)
 	panel.add_theme_stylebox_override("panel", sb)
 	add_child(panel)
-	Skin.led_strip(panel, true)
+	BCSkin.led_strip(panel, true)
 	var pad := MarginContainer.new()
 	for side in ["left", "right", "top", "bottom"]:
 		pad.add_theme_constant_override("margin_" + side, int(UI.dp(16 if side != "bottom" else 28)))
@@ -59,7 +59,7 @@ func open(header: Array[String], rows: Array[Dictionary], picture: Texture2D = n
 	col.add_theme_constant_override("separation", int(UI.dp(6)))
 	pad.add_child(col)
 	var handle := ColorRect.new()
-	handle.color = Color(Skin.BRASS, 0.5)
+	handle.color = Color(BCSkin.BRASS, 0.5)
 	handle.custom_minimum_size = Vector2(UI.dp(40), UI.dp(4))
 	handle.size_flags_horizontal = Control.SIZE_SHRINK_CENTER
 	col.add_child(handle)
@@ -68,7 +68,7 @@ func open(header: Array[String], rows: Array[Dictionary], picture: Texture2D = n
 	head.text = header[0]
 	head.add_theme_font_size_override("font_size", int(UI.dp(24)))
 	head.text_overrun_behavior = TextServer.OVERRUN_TRIM_ELLIPSIS
-	Skin.neon(head, Skin.LED, 0.8)
+	BCSkin.neon(head, BCSkin.LED, 0.8)
 	col.add_child(head)
 	if header.size() > 1 and header[1] != "":
 		col.add_child(UI.wrap(UI.label(header[1], 16, UI.CREAM)))
@@ -106,7 +106,7 @@ func open(header: Array[String], rows: Array[Dictionary], picture: Texture2D = n
 func _info(r: Dictionary) -> Control:
 	var p := PanelContainer.new()
 	p.name = "Info_" + str(r["id"])
-	var sb := Skin.row_box()
+	var sb := BCSkin.row_box()
 	sb.content_margin_left = UI.dp(12)
 	sb.content_margin_right = UI.dp(12)
 	sb.content_margin_top = UI.dp(8)
@@ -128,9 +128,9 @@ func _row(r: Dictionary) -> Control:
 	b.custom_minimum_size = Vector2(0, UI.dp(64))
 	b.disabled = not r["enabled"]
 	for st in ["normal", "hover", "disabled"]:
-		b.add_theme_stylebox_override(st, Skin.row_box())
-	var pr := Skin.row_box(true)
-	pr.bg_color = Skin.WOOD_HI
+		b.add_theme_stylebox_override(st, BCSkin.row_box())
+	var pr := BCSkin.row_box(true)
+	pr.bg_color = BCSkin.WOOD_HI
 	b.add_theme_stylebox_override("pressed", pr)
 	b.pressed.connect(func(): row_chosen.emit(r["id"]))
 	buttons[r["id"]] = b
@@ -147,7 +147,7 @@ func _row(r: Dictionary) -> Control:
 		cub.mouse_filter = Control.MOUSE_FILTER_IGNORE
 		cub.size_flags_vertical = Control.SIZE_SHRINK_CENTER
 		cub.custom_minimum_size = Vector2(UI.dp(48), UI.dp(48))
-		cub.add_theme_stylebox_override("panel", Skin.cubby_box(UI.need_color(r["need"]), r["enabled"]))
+		cub.add_theme_stylebox_override("panel", BCSkin.cubby_box(UI.need_color(r["need"]), r["enabled"]))
 		inner.add_child(cub)
 		var g := Glyph.new()
 		g.need = r["need"]
@@ -169,7 +169,7 @@ func _row(r: Dictionary) -> Control:
 	if sub != "":
 		texts.add_child(UI.label(sub, 13, UI.SMOKE if r["enabled"] else UI.ASH))
 	if r["game"]:
-		var chip := Skin.tag(T.t("venue.sheet.game"))
+		var chip := BCSkin.tag(T.t("venue.sheet.game"))
 		chip.size_flags_vertical = Control.SIZE_SHRINK_CENTER
 		inner.add_child(chip)
 	return b

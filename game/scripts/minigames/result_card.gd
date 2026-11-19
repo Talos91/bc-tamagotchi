@@ -13,7 +13,7 @@ signal done
 const UI = preload("res://scripts/minigames/mg_ui.gd")
 const S = preload("res://scripts/minigames/strings.gd")
 const Glyph = preload("res://scripts/minigames/need_glyph.gd")
-const Skin = preload("res://scripts/ui/bc_skin.gd")
+const BCSkin = preload("res://scripts/ui/bc_skin.gd")
 const Base = preload("res://scripts/minigames/minigame_base.gd")
 const Rules = preload("res://scripts/rules.gd")
 const Cast = preload("res://scripts/cast.gd")
@@ -172,11 +172,11 @@ func _build(result: Dictionary, o: Dictionary) -> void:
 	panel.custom_minimum_size = Vector2(UI.dp(358), 0)
 	# D2 Back-bar (bc_skin.gd, Daniele 2026-11-19): wood card, brass line, LED strip under it; the tier word is the
 	# screen's neon sign; NEW BEST is a brass plaque. Motion (stamp, count-up, ribbon) unchanged from Q1.
-	var pb := Skin.panel_box(20.0, true, 0.97)
+	var pb := BCSkin.panel_box(20.0, true, 0.97)
 	pb.set_content_margin_all(0)
 	panel.add_theme_stylebox_override("panel", pb)
 	center.add_child(panel)
-	Skin.led_strip(panel)
+	BCSkin.led_strip(panel)
 	var pad := MarginContainer.new()
 	for side in ["left", "right", "top", "bottom"]:
 		pad.add_theme_constant_override("margin_" + side, int(UI.dp(18)))
@@ -235,7 +235,7 @@ func _build(result: Dictionary, o: Dictionary) -> void:
 		bar.size_flags_horizontal = Control.SIZE_EXPAND_FILL
 		bar.size_flags_vertical = Control.SIZE_SHRINK_CENTER
 		bar.custom_minimum_size = Vector2(0, UI.dp(8))
-		bar.add_theme_stylebox_override("background", UI.box(Color("0B0505"), 4, Color(Skin.BRASS_DIM, 0.8), 1.0))
+		bar.add_theme_stylebox_override("background", UI.box(Color("0B0505"), 4, Color(BCSkin.BRASS_DIM, 0.8), 1.0))
 		bar.add_theme_stylebox_override("fill", UI.box(UI.need_color(m), 4))
 		row.add_child(bar)
 		row.add_child(UI.label("+%d" % roundi(float(gains[m])), 15, UI.need_color(m)))
@@ -308,7 +308,7 @@ func _build_stamp(word: String, tier: int) -> Control:
 	_stamp.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
 	_stamp.vertical_alignment = VERTICAL_ALIGNMENT_CENTER
 	if tier >= 0:
-		Skin.neon(_stamp, gc)
+		BCSkin.neon(_stamp, gc)
 	else:
 		_stamp.add_theme_constant_override("outline_size", int(UI.dp(4)))
 		_stamp.add_theme_color_override("font_outline_color", UI.BG_DEEP)

@@ -5,7 +5,7 @@ extends RefCounted
 ## neon-sign title per screen (Tilt Neon, SIL OFL 1.1, assets/fonts/OFL-TiltNeon.txt). Body text stays Lato.
 ## Flat StyleBoxFlat shapes + shadows only (Compatibility renderer, iPhone budget): no shaders, no textures.
 ##
-## API (all static; `const Skin = preload("res://scripts/ui/bc_skin.gd")`). Sizes are in dp (1 dp = 1080/390 px).
+## API (all static; `const BCSkin = preload("res://scripts/ui/bc_skin.gd")`). Sizes are in dp (1 dp = 1080/390 px).
 ##   Palette .......... WOOD_DEEP WOOD WOOD_HI BRASS BRASS_DIM LED LED_CORE VELVET VELVET_HI CREAM GOLD SMOKE ASH
 ##   dp(v) ............ dp -> px
 ##   panel_box(radius := 18, led := true, alpha := 0.96) -> StyleBoxFlat

@@ -20,7 +20,7 @@ const T = preload("res://scripts/zones/venue_strings.gd")
 const N = preload("res://scripts/zones/nightlife_strings.gd")
 const Rules = preload("res://scripts/rules.gd")
 const Ring = preload("res://scenes/ui/meter_ring.gd")
-const Skin = preload("res://scripts/ui/bc_skin.gd")
+const BCSkin = preload("res://scripts/ui/bc_skin.gd")
 const PromptScene = preload("res://scenes/ui/zone_prompt.tscn")
 const CardScene = preload("res://scenes/ui/action_card.tscn")
 const Orientation = preload("res://scripts/ui/orientation.gd")
@@ -105,7 +105,7 @@ func _build() -> void:
 	bar.mouse_filter = Control.MOUSE_FILTER_IGNORE
 	bar.add_theme_constant_override("separation", 0)
 	_top.add_child(bar)
-	var leave := Skin.tile_button(T.t("venue.hud.leave"), "door")
+	var leave := BCSkin.tile_button(T.t("venue.hud.leave"), "door")
 	leave.name = "Leave"
 	leave.pressed.connect(func(): leave_pressed.emit())
 	bar.add_child(leave)
@@ -117,11 +117,11 @@ func _build() -> void:
 	var shelf := PanelContainer.new()
 	shelf.name = "Shelf"
 	shelf.mouse_filter = Control.MOUSE_FILTER_IGNORE
-	var shelf_box := Skin.panel_box(12.0, true, 0.92)
+	var shelf_box := BCSkin.panel_box(12.0, true, 0.92)
 	shelf_box.set_content_margin_all(UI.dp(5))
 	shelf.add_theme_stylebox_override("panel", shelf_box)
 	bar.add_child(shelf)
-	Skin.led_strip(shelf)
+	BCSkin.led_strip(shelf)
 	var ring_row := HBoxContainer.new()
 	ring_row.mouse_filter = Control.MOUSE_FILTER_IGNORE
 	ring_row.add_theme_constant_override("separation", int(UI.dp(4)))
@@ -137,7 +137,7 @@ func _build() -> void:
 	right_pad.mouse_filter = Control.MOUSE_FILTER_IGNORE
 	bar.add_child(right_pad)
 
-	var tonight := Skin.tile_button(TonightEvents.t("tonight.button"), "ticket")   # backlog D1/D2, 09-tonight-events.md
+	var tonight := BCSkin.tile_button(TonightEvents.t("tonight.button"), "ticket")   # backlog D1/D2, 09-tonight-events.md
 	tonight.name = "Tonight"
 	tonight.pressed.connect(func(): tonight_pressed.emit())
 	bar.add_child(tonight)
@@ -147,7 +147,7 @@ func _build() -> void:
 	title_row.add_theme_constant_override("separation", int(UI.dp(8)))
 	_top.add_child(title_row)
 	_title = UI.title("", 30)
-	Skin.neon(_title)
+	BCSkin.neon(_title)
 	_title.size_flags_horizontal = Control.SIZE_EXPAND_FILL
 	_title.text_overrun_behavior = TextServer.OVERRUN_TRIM_ELLIPSIS  # a long name never pushes the toggle off screen
 	title_row.add_child(_title)
@@ -156,7 +156,7 @@ func _build() -> void:
 		Orientation.toggle(needs)
 		orientation_toggle.refresh())
 	title_row.add_child(orientation_toggle)
-	_caption = Skin.chip("")
+	_caption = BCSkin.chip("")
 	_caption.name = "Live"
 	_caption.size_flags_horizontal = Control.SIZE_SHRINK_BEGIN
 	_top.add_child(_caption)
@@ -219,7 +219,7 @@ func _build() -> void:
 
 func _chip(color: Color) -> Label:
 	var l := UI.label("", 13, color, HORIZONTAL_ALIGNMENT_CENTER)
-	var sb := UI.box(Color(Skin.WOOD_DEEP, 0.9), 12, Color(color, 0.8), 2.0)
+	var sb := UI.box(Color(BCSkin.WOOD_DEEP, 0.9), 12, Color(color, 0.8), 2.0)
 	sb.content_margin_left = UI.dp(6)
 	sb.content_margin_right = UI.dp(6)
 	l.add_theme_stylebox_override("normal", sb)
@@ -308,7 +308,7 @@ func _refresh_status() -> void:
 		_low_area = low
 		for a in AREAS:
 			var b: Button = _areas[a[0]]
-			Skin.style_button(b, "secondary")
+			BCSkin.style_button(b, "secondary")
 			if a[3] == low:
 				for st in ["normal", "hover"]:
 					var sb: StyleBoxFlat = b.get_theme_stylebox(st)
@@ -319,7 +319,7 @@ func _refresh_status() -> void:
 	var live: bool = session.band.playing
 	_caption.text = ("●  " if live else "") + session.band_text()
 	var cb: StyleBoxFlat = _caption.get_theme_stylebox("normal")
-	cb.bg_color = Color(Skin.VELVET, 0.9) if live else Color(Skin.WOOD_DEEP, 0.75)
+	cb.bg_color = Color(BCSkin.VELVET, 0.9) if live else Color(BCSkin.WOOD_DEEP, 0.75)
 	_caption.add_theme_color_override("font_color", UI.CREAM if live else UI.SMOKE)
 	if needs.welcome_active():
 		_x2.text = T.t("venue.hud.welcome", {"m": ceili((needs.welcome_until - needs.clock) / 60.0)})

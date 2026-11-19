@@ -4,7 +4,7 @@ extends Control
 ## it sits above the prompt, does not block the room, and fades after SHOW_SECONDS. Tap to dismiss.
 
 const UI = preload("res://scripts/minigames/mg_ui.gd")
-const Skin = preload("res://scripts/ui/bc_skin.gd")
+const BCSkin = preload("res://scripts/ui/bc_skin.gd")
 const S = preload("res://scripts/minigames/strings.gd")
 const T = preload("res://scripts/zones/venue_strings.gd")
 const Glyph = preload("res://scripts/minigames/need_glyph.gd")
@@ -34,7 +34,7 @@ func show_card(c: Dictionary) -> void:
 	_panel.offset_right = w * 0.5
 	_panel.offset_bottom = -UI.dp(190)
 	_panel.offset_top = _panel.offset_bottom
-	var pb := Skin.panel_box(16.0, true, 0.95)   # D2 Back-bar: wood card, brass line, LED glow under it
+	var pb := BCSkin.panel_box(16.0, true, 0.95)   # D2 Back-bar: wood card, brass line, LED glow under it
 	pb.set_content_margin_all(0)
 	_panel.add_theme_stylebox_override("panel", pb)
 	_panel.mouse_filter = Control.MOUSE_FILTER_STOP
@@ -68,7 +68,7 @@ func show_card(c: Dictionary) -> void:
 		bar.size_flags_horizontal = Control.SIZE_EXPAND_FILL
 		bar.size_flags_vertical = Control.SIZE_SHRINK_CENTER
 		bar.custom_minimum_size = Vector2(0, UI.dp(8))
-		bar.add_theme_stylebox_override("background", UI.box(Color("0B0505"), 4, Color(Skin.BRASS_DIM, 0.7), 1.0))
+		bar.add_theme_stylebox_override("background", UI.box(Color("0B0505"), 4, Color(BCSkin.BRASS_DIM, 0.7), 1.0))
 		bar.add_theme_stylebox_override("fill", UI.box(UI.need_color(m), 4))
 		row.add_child(bar)
 		row.add_child(UI.label("+%d" % roundi(float(gains[m])), 15, UI.need_color(m)))

@@ -8,7 +8,7 @@ signal item_chosen(id: String)
 signal closed
 
 const UI = preload("res://scripts/minigames/mg_ui.gd")
-const Skin = preload("res://scripts/ui/bc_skin.gd")
+const BCSkin = preload("res://scripts/ui/bc_skin.gd")
 const BarMenu = preload("res://scripts/menu/bar_menu.gd")
 
 const MAX_W := 430.0  ## dp; phone width in landscape too, like the zone sheet
@@ -48,11 +48,11 @@ func open(start_tab := "drinks", is_merry := false) -> void:
 	panel.set_anchors_preset(Control.PRESET_CENTER_BOTTOM)
 	panel.grow_horizontal = Control.GROW_DIRECTION_BOTH
 	panel.grow_vertical = Control.GROW_DIRECTION_BEGIN
-	var sb := Skin.sheet_box()   # D2 Back-bar: wood sheet, LED strip on top, neon heading
+	var sb := BCSkin.sheet_box()   # D2 Back-bar: wood sheet, LED strip on top, neon heading
 	sb.set_content_margin_all(0)
 	panel.add_theme_stylebox_override("panel", sb)
 	add_child(panel)
-	Skin.led_strip(panel, true)
+	BCSkin.led_strip(panel, true)
 	var pad := MarginContainer.new()
 	for side in ["left", "right", "top", "bottom"]:
 		pad.add_theme_constant_override("margin_" + side, int(UI.dp(16 if side != "bottom" else 24)))
@@ -61,13 +61,13 @@ func open(start_tab := "drinks", is_merry := false) -> void:
 	col.add_theme_constant_override("separation", int(UI.dp(8)))
 	pad.add_child(col)
 	var handle := ColorRect.new()
-	handle.color = Color(Skin.BRASS, 0.5)
+	handle.color = Color(BCSkin.BRASS, 0.5)
 	handle.custom_minimum_size = Vector2(UI.dp(40), UI.dp(4))
 	handle.size_flags_horizontal = Control.SIZE_SHRINK_CENTER
 	col.add_child(handle)
 	var head := HBoxContainer.new()
 	col.add_child(head)
-	var title := Skin.neon_title(BarMenu.t("menu.head"), 26)
+	var title := BCSkin.neon_title(BarMenu.t("menu.head"), 26)
 	title.text_overrun_behavior = TextServer.OVERRUN_TRIM_ELLIPSIS
 	title.size_flags_horizontal = Control.SIZE_EXPAND_FILL
 	head.add_child(title)
@@ -88,9 +88,9 @@ func open(start_tab := "drinks", is_merry := false) -> void:
 		b.size_flags_horizontal = Control.SIZE_EXPAND_FILL
 		b.custom_minimum_size.y = UI.dp(40)
 		b.add_theme_font_size_override("font_size", int(UI.dp(15)))
-		b.add_theme_stylebox_override("normal", Skin.row_box())
-		b.add_theme_stylebox_override("hover", Skin.row_box())
-		var on := Skin.row_box(true)
+		b.add_theme_stylebox_override("normal", BCSkin.row_box())
+		b.add_theme_stylebox_override("hover", BCSkin.row_box())
+		var on := BCSkin.row_box(true)
 		on.bg_color = Color("2A0C0E")
 		on.border_color = Color(UI.GOLD, 0.85)
 		b.add_theme_stylebox_override("pressed", on)
@@ -196,9 +196,9 @@ func _row(it: Dictionary) -> Control:
 		b.focus_mode = Control.FOCUS_NONE
 		b.disabled = blocked
 		for st in ["normal", "hover", "disabled"]:
-			b.add_theme_stylebox_override(st, Skin.row_box())
-		var pr := Skin.row_box(true)
-		pr.bg_color = Skin.WOOD_HI
+			b.add_theme_stylebox_override(st, BCSkin.row_box())
+		var pr := BCSkin.row_box(true)
+		pr.bg_color = BCSkin.WOOD_HI
 		b.add_theme_stylebox_override("pressed", pr)
 		b.pressed.connect(func(): item_chosen.emit(id))
 		root = b

@@ -1,7 +1,7 @@
 extends RefCounted
 ## Flat-shape UI helpers in the style guide palette (docs/ui/style-guide.md sections 2 and 5). No theme resource yet.
 
-const Skin = preload("res://scripts/ui/bc_skin.gd")
+const BCSkin = preload("res://scripts/ui/bc_skin.gd")
 
 const BG_BASE := Color("1C0D0C")
 const BG_DEEP := Color("160A0C")
@@ -82,7 +82,7 @@ static func wrap(l: Label) -> Label:
 ## kind: "primary" (velvet red, gold rim), "secondary" (wood + brass, gold label), "ghost" or "tag": the D2 Back-bar
 ## skin (scripts/ui/bc_skin.gd, Daniele 2026-11-19).
 static func button(text: String, kind := "secondary") -> Button:
-	return Skin.button(text, kind)
+	return BCSkin.button(text, kind)
 
 
 static func need_color(need: String) -> Color:

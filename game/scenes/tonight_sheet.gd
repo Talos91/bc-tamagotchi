@@ -10,7 +10,7 @@ signal closed
 
 const UI = preload("res://scripts/minigames/mg_ui.gd")
 const TE = preload("res://scripts/tonight_events.gd")
-const Skin = preload("res://scripts/ui/bc_skin.gd")
+const BCSkin = preload("res://scripts/ui/bc_skin.gd")
 
 const MAX_W := 430.0  ## dp; phone width in landscape too, like the menu list
 const MAX_H := 0.78   ## share of the viewport height the scrolling part may take
@@ -61,11 +61,11 @@ func open(unix := -1) -> void:
 	panel.set_anchors_preset(Control.PRESET_CENTER_BOTTOM)
 	panel.grow_horizontal = Control.GROW_DIRECTION_BOTH
 	panel.grow_vertical = Control.GROW_DIRECTION_BEGIN
-	var sb := Skin.sheet_box()
+	var sb := BCSkin.sheet_box()
 	sb.set_content_margin_all(0)
 	panel.add_theme_stylebox_override("panel", sb)
 	add_child(panel)
-	Skin.led_strip(panel, true)
+	BCSkin.led_strip(panel, true)
 	var pad := MarginContainer.new()
 	for side in ["left", "right", "top", "bottom"]:
 		pad.add_theme_constant_override("margin_" + side, int(UI.dp(16 if side != "bottom" else 24)))
@@ -74,14 +74,14 @@ func open(unix := -1) -> void:
 	col.add_theme_constant_override("separation", int(UI.dp(8)))
 	pad.add_child(col)
 	var handle := ColorRect.new()
-	handle.color = Color(Skin.BRASS, 0.5)
+	handle.color = Color(BCSkin.BRASS, 0.5)
 	handle.custom_minimum_size = Vector2(UI.dp(40), UI.dp(4))
 	handle.size_flags_horizontal = Control.SIZE_SHRINK_CENTER
 	col.add_child(handle)
 
 	var head := HBoxContainer.new()
 	col.add_child(head)
-	var title := Skin.neon_title(TE.t("tonight.head"), 26)
+	var title := BCSkin.neon_title(TE.t("tonight.head"), 26)
 	title.name = "Head"
 	title.text_overrun_behavior = TextServer.OVERRUN_TRIM_ELLIPSIS
 	title.size_flags_horizontal = Control.SIZE_EXPAND_FILL
@@ -150,14 +150,14 @@ func _tonight_card() -> PanelContainer:
 	var card := PanelContainer.new()
 	card.name = "TonightCard"
 	var has_event: bool = not info["events"].is_empty()
-	var cs := Skin.row_box(has_event)
+	var cs := BCSkin.row_box(has_event)
 	cs.set_content_margin_all(0)
 	if has_event:
 		cs.bg_color = Color("2A0C0E")
 		cs.border_color = Color(UI.GOLD, 0.8)
 	card.add_theme_stylebox_override("panel", cs)
 	if has_event:
-		Skin.led_strip(card)
+		BCSkin.led_strip(card)
 	var m := MarginContainer.new()
 	for side in ["left", "right", "top", "bottom"]:
 		m.add_theme_constant_override("margin_" + side, int(UI.dp(12)))
@@ -187,7 +187,7 @@ func _tonight_card() -> PanelContainer:
 func _row(ev: Dictionary) -> Control:
 	var box := PanelContainer.new()
 	box.name = "Row_" + str(ev["date"])
-	var bs := Skin.row_box()
+	var bs := BCSkin.row_box()
 	bs.set_content_margin_all(0)
 	box.add_theme_stylebox_override("panel", bs)
 	var m := MarginContainer.new()
@@ -221,7 +221,7 @@ func _date_block(date: String) -> Control:
 	blk.name = "Date"
 	blk.tooltip_text = TE.date_text(date)
 	blk.custom_minimum_size = Vector2(UI.dp(52), UI.dp(50))
-	var sb := Skin.cubby_box(UI.GOLD)
+	var sb := BCSkin.cubby_box(UI.GOLD)
 	sb.set_content_margin_all(UI.dp(3))
 	blk.add_theme_stylebox_override("panel", sb)
 	var v := VBoxContainer.new()
