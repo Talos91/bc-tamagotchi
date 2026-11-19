@@ -10,6 +10,19 @@ delivered in `ORCHESTRATION.md`.
 
 ### 2026-11-19
 
+- `687f3d7` STATE/LOG: Q4 done, 0.3.2 = Q4 + Q8
+- `2d16ff3` LOG: verify-032, Q5, Q6 started
+- `247a19d` STATE/LOG: v0.3.2 pushed
+- `f363a6a` Q6: Soi Dash draws from the voxel sprites, street life (tuk-tuks, strays, lizards), mg_fx beats, ramp
+- `342fd1a` Q6: role note and worker report
+- `3c9487d` STATE/LOG: Q6 done, Q7 proposed
+- `59d9a09` Q5 Coaster Flip: clear goal (swipe coach, closing ring, early/late), voxel sprites, mg_fx beats, drift ramp, mg_rivals
+- `b834131` Q5 Coaster Flip: role note and worker report
+
+## 0.3.2
+
+### 2026-11-19
+
 - `f1db546` STATE/LOG: continue until all is wired (Daniele 11-19)
 - `51ed1f3` Owner item 40: online basics mapped to presence wave 1
 - `125b6fe` Owner items 41-42: perf telemetry started, Supabase OK
@@ -25,9 +38,18 @@ delivered in `ORCHESTRATION.md`.
 - `125e0cd` Perf pass: static-mesh merge measured and left off (look shift); captures
 - `687cc0b` test_feel skips shadow-only meshes; web-build doc §telemetry; perf-telemetry role note
 - `50cf6e7` perf-telemetry report (owner item 41)
-- `269da0d` STATE/LOG: perf-telemetry done, verify-perf proposed
-- `d87aded` LOG: wiring wave started
-- `0725313` PROJECT: test_perf_telemetry in Tests (27 suites)
+- `1c267ad` Q4 Neon Moth: voxel sprites, juice beats, ramp, mg_rivals (regular to beat, ghost, board)
+- `055f38a` Q4 Neon Moth: landscape view range, bigger moth, TH board string fits, check-count guard; captures; role note
+- `01ca88a` Q4 Neon Moth: worker report
+- `9ecd418` Q8: Neon Pinball and Pour Perfect draw from the voxel sprites, mg_fx beats, relaxed options
+- `fa032f3` Q8: TODO hooks for mg_rivals in both result extras
+- `1c01b88` STATE/LOG: perf-telemetry done, verify-perf proposed
+- `97fb33f` LOG: wiring wave started
+- `0d48723` PROJECT: test_perf_telemetry in Tests (27 suites)
+- `2da45f1` Changelog: close 0.3.1 at e3be709, regen
+- `9056caf` Version 0.3.2 (PATCH: Q1 juice kit, Q2 venue pause, perf + telemetry, minigame sprites)
+- `09a6bc8` STATE/LOG: perf pushed, 0.3.2 cut
+- `14f989a` STATE/LOG: Q8 done, folded into 0.3.2
 
 ### 2026-11-18
 
