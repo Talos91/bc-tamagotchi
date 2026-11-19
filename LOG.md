@@ -277,3 +277,4 @@ Append-only. One dated line per event, newest last. Never edit earlier lines.
 - 2026-11-19 — 🔍 verify-q1q2 pushed 14bb707 (Q1+Q2), archived; docs pushed e4e82dc. Wiring cards proposed: q4-neon-moth (task_5b9ac45a), q8-pinball-pour (task_fd909c7d). Context 25 %.
 - 2026-11-19 — 🛠️ perf-telemetry DONE 50cf6e7 (draws −37–75 %, same pixels; overlay + copy report; cards perf-telemetry-review + telemetry-beacon). Verifier card verify-perf (task_140dcbd4). Context 26 %.
 - 2026-11-19 — Started: verify-perf (local_e3b74c50, Daniele's click), 🎮 q4-neon-moth (Opus, local_93f992ce), 🎮 q8-pinball-pour (Sonnet, local_d9e65391). perf-telemetry archived (notes in branch). Context 27 %.
+- 2026-11-19 — verify-perf PUSHED 50cf6e7 (26/27, test_feel known; web OK); archived. 0.3.2 cut (0725313 Tests 27, abe6391 changelog, 55596a3 bump); Verifier card verify-032 (task_b4242215). Context 29 %.
