@@ -3,7 +3,9 @@ extends Control
 ## you'd do here: need glyph, title, sub-line, GAME chip on minigame rows. Disabled rows show the reason. Tapping
 ## the scene above the sheet, or Esc, closes it. Rows come from VenueSession.rows_for(). A row with "info" true is a
 ## plain line of text, not a button (the top-patrons list, a portrait's message). An optional picture shows under the
-## header (a corridor portrait); a long list scrolls within half the screen.
+## header (a corridor portrait); a long list scrolls within half the screen. D2 Back-bar skin (bc_skin.gd): a wood
+## sheet with an LED strip along its top edge, the zone name as a neon sign, each option in its own backlit cubby
+## (lit in the need's colour), GAME as a brass tag.
 
 signal row_chosen(row_id: String)
 signal closed
@@ -11,6 +13,7 @@ signal closed
 const UI = preload("res://scripts/minigames/mg_ui.gd")
 const T = preload("res://scripts/zones/venue_strings.gd")
 const Glyph = preload("res://scripts/minigames/need_glyph.gd")
+const Skin = preload("res://scripts/ui/bc_skin.gd")
 
 const MAX_W := 430.0  ## dp; the sheet stays phone-width in landscape
 const SCROLL_FROM := 6     ## rows; from this many the list scrolls
@@ -43,11 +46,11 @@ func open(header: Array[String], rows: Array[Dictionary], picture: Texture2D = n
 	panel.set_anchors_preset(Control.PRESET_CENTER_BOTTOM)
 	panel.grow_horizontal = Control.GROW_DIRECTION_BOTH
 	panel.grow_vertical = Control.GROW_DIRECTION_BEGIN
-	var sb := UI.box(Color(UI.BG_DEEP, 0.96), 20, UI.LINE, 2.0)
-	sb.corner_radius_bottom_left = 0
-	sb.corner_radius_bottom_right = 0
+	var sb := Skin.sheet_box()
+	sb.set_content_margin_all(0)
 	panel.add_theme_stylebox_override("panel", sb)
 	add_child(panel)
+	Skin.led_strip(panel, true)
 	var pad := MarginContainer.new()
 	for side in ["left", "right", "top", "bottom"]:
 		pad.add_theme_constant_override("margin_" + side, int(UI.dp(16 if side != "bottom" else 28)))
@@ -56,11 +59,17 @@ func open(header: Array[String], rows: Array[Dictionary], picture: Texture2D = n
 	col.add_theme_constant_override("separation", int(UI.dp(6)))
 	pad.add_child(col)
 	var handle := ColorRect.new()
-	handle.color = UI.LINE
+	handle.color = Color(Skin.BRASS, 0.5)
 	handle.custom_minimum_size = Vector2(UI.dp(40), UI.dp(4))
 	handle.size_flags_horizontal = Control.SIZE_SHRINK_CENTER
 	col.add_child(handle)
-	col.add_child(UI.label(header[0], 18, UI.GOLD))
+	var head := Label.new()
+	head.name = "Header"
+	head.text = header[0]
+	head.add_theme_font_size_override("font_size", int(UI.dp(24)))
+	head.text_overrun_behavior = TextServer.OVERRUN_TRIM_ELLIPSIS
+	Skin.neon(head, Skin.LED, 0.8)
+	col.add_child(head)
 	if header.size() > 1 and header[1] != "":
 		col.add_child(UI.wrap(UI.label(header[1], 16, UI.CREAM)))
 	if picture != null:
@@ -97,7 +106,7 @@ func open(header: Array[String], rows: Array[Dictionary], picture: Texture2D = n
 func _info(r: Dictionary) -> Control:
 	var p := PanelContainer.new()
 	p.name = "Info_" + str(r["id"])
-	var sb := UI.box(UI.BG_BASE, 12, UI.LINE, 1.0)
+	var sb := Skin.row_box()
 	sb.content_margin_left = UI.dp(12)
 	sb.content_margin_right = UI.dp(12)
 	sb.content_margin_top = UI.dp(8)
@@ -119,25 +128,36 @@ func _row(r: Dictionary) -> Control:
 	b.custom_minimum_size = Vector2(0, UI.dp(64))
 	b.disabled = not r["enabled"]
 	for st in ["normal", "hover", "disabled"]:
-		b.add_theme_stylebox_override(st, UI.box(UI.BG_BASE, 12, UI.LINE, 1.0))
-	b.add_theme_stylebox_override("pressed", UI.box(UI.BG_PLUM, 12, UI.LINE, 1.0))
+		b.add_theme_stylebox_override(st, Skin.row_box())
+	var pr := Skin.row_box(true)
+	pr.bg_color = Skin.WOOD_HI
+	b.add_theme_stylebox_override("pressed", pr)
 	b.pressed.connect(func(): row_chosen.emit(r["id"]))
 	buttons[r["id"]] = b
 	var inner := HBoxContainer.new()
 	inner.set_anchors_preset(Control.PRESET_FULL_RECT)
-	inner.offset_left = UI.dp(12)
+	inner.offset_left = UI.dp(8)
 	inner.offset_right = -UI.dp(12)
 	inner.mouse_filter = Control.MOUSE_FILTER_IGNORE
 	inner.add_theme_constant_override("separation", int(UI.dp(12)))
 	b.add_child(inner)
 	if r["need"] != "":
+		var cub := PanelContainer.new()
+		cub.name = "Cubby"
+		cub.mouse_filter = Control.MOUSE_FILTER_IGNORE
+		cub.size_flags_vertical = Control.SIZE_SHRINK_CENTER
+		cub.custom_minimum_size = Vector2(UI.dp(48), UI.dp(48))
+		cub.add_theme_stylebox_override("panel", Skin.cubby_box(UI.need_color(r["need"]), r["enabled"]))
+		inner.add_child(cub)
 		var g := Glyph.new()
 		g.need = r["need"]
-		g.custom_minimum_size = Vector2(UI.dp(24), UI.dp(24))
+		g.custom_minimum_size = Vector2(UI.dp(30), UI.dp(30))
+		g.size_flags_horizontal = Control.SIZE_SHRINK_CENTER
 		g.size_flags_vertical = Control.SIZE_SHRINK_CENTER
 		if not r["enabled"]:
 			g.tint = UI.ASH
-		inner.add_child(g)
+			g.glow = 0.0
+		cub.add_child(g)
 	var texts := VBoxContainer.new()
 	texts.alignment = BoxContainer.ALIGNMENT_CENTER
 	texts.size_flags_horizontal = Control.SIZE_EXPAND_FILL
@@ -149,12 +169,8 @@ func _row(r: Dictionary) -> Control:
 	if sub != "":
 		texts.add_child(UI.label(sub, 13, UI.SMOKE if r["enabled"] else UI.ASH))
 	if r["game"]:
-		var chip := UI.label(T.t("venue.sheet.game"), 13, UI.GOLD, HORIZONTAL_ALIGNMENT_CENTER)
+		var chip := Skin.tag(T.t("venue.sheet.game"))
 		chip.size_flags_vertical = Control.SIZE_SHRINK_CENTER
-		var sb := UI.box(Color(0, 0, 0, 0), 8, UI.GOLD, 2.0)
-		sb.content_margin_left = UI.dp(6)
-		sb.content_margin_right = UI.dp(6)
-		chip.add_theme_stylebox_override("normal", sb)
 		inner.add_child(chip)
 	return b
 

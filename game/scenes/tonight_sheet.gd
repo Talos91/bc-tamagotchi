@@ -3,12 +3,14 @@ extends Control
 ## from the HUD's Tonight button. Top: tonight's date and the bar's state (open / doors at 19:00 / closed Mondays), then
 ## tonight's card (event title, time, lineup; or a regular night, closed, or "calendar not in yet"); below, Coming up:
 ## the next events of this month and the next. Offline, from res://data/events/ (scripts/tonight_events.gd). Tapping
-## above the sheet, Close, or Esc closes it.
+## above the sheet, Close, or Esc closes it. D2 Back-bar skin (bc_skin.gd): wood sheet with an LED strip on top,
+## "Tonight" as the neon sign, tonight's card lit like the bar's LED shelf, Coming up rows with bar-tab date blocks.
 
 signal closed
 
 const UI = preload("res://scripts/minigames/mg_ui.gd")
 const TE = preload("res://scripts/tonight_events.gd")
+const Skin = preload("res://scripts/ui/bc_skin.gd")
 
 const MAX_W := 430.0  ## dp; phone width in landscape too, like the menu list
 const MAX_H := 0.78   ## share of the viewport height the scrolling part may take
@@ -59,11 +61,11 @@ func open(unix := -1) -> void:
 	panel.set_anchors_preset(Control.PRESET_CENTER_BOTTOM)
 	panel.grow_horizontal = Control.GROW_DIRECTION_BOTH
 	panel.grow_vertical = Control.GROW_DIRECTION_BEGIN
-	var sb := UI.box(Color(UI.BG_DEEP, 0.97), 20, UI.LINE, 2.0)
-	sb.corner_radius_bottom_left = 0
-	sb.corner_radius_bottom_right = 0
+	var sb := Skin.sheet_box()
+	sb.set_content_margin_all(0)
 	panel.add_theme_stylebox_override("panel", sb)
 	add_child(panel)
+	Skin.led_strip(panel, true)
 	var pad := MarginContainer.new()
 	for side in ["left", "right", "top", "bottom"]:
 		pad.add_theme_constant_override("margin_" + side, int(UI.dp(16 if side != "bottom" else 24)))
@@ -72,14 +74,16 @@ func open(unix := -1) -> void:
 	col.add_theme_constant_override("separation", int(UI.dp(8)))
 	pad.add_child(col)
 	var handle := ColorRect.new()
-	handle.color = UI.LINE
+	handle.color = Color(Skin.BRASS, 0.5)
 	handle.custom_minimum_size = Vector2(UI.dp(40), UI.dp(4))
 	handle.size_flags_horizontal = Control.SIZE_SHRINK_CENTER
 	col.add_child(handle)
 
 	var head := HBoxContainer.new()
 	col.add_child(head)
-	var title := UI.label(TE.t("tonight.head"), 18, UI.GOLD)
+	var title := Skin.neon_title(TE.t("tonight.head"), 26)
+	title.name = "Head"
+	title.text_overrun_behavior = TextServer.OVERRUN_TRIM_ELLIPSIS
 	title.size_flags_horizontal = Control.SIZE_EXPAND_FILL
 	head.add_child(title)
 	var x := UI.button(TE.t("tonight.close"), "secondary")
@@ -146,8 +150,14 @@ func _tonight_card() -> PanelContainer:
 	var card := PanelContainer.new()
 	card.name = "TonightCard"
 	var has_event: bool = not info["events"].is_empty()
-	card.add_theme_stylebox_override("panel", UI.box(UI.BG_PLUM if has_event else UI.BG_RAISED, 14,
-		UI.GOLD if has_event else UI.LINE, 2.0))
+	var cs := Skin.row_box(has_event)
+	cs.set_content_margin_all(0)
+	if has_event:
+		cs.bg_color = Color("2A0C0E")
+		cs.border_color = Color(UI.GOLD, 0.8)
+	card.add_theme_stylebox_override("panel", cs)
+	if has_event:
+		Skin.led_strip(card)
 	var m := MarginContainer.new()
 	for side in ["left", "right", "top", "bottom"]:
 		m.add_theme_constant_override("margin_" + side, int(UI.dp(12)))
@@ -177,7 +187,9 @@ func _tonight_card() -> PanelContainer:
 func _row(ev: Dictionary) -> Control:
 	var box := PanelContainer.new()
 	box.name = "Row_" + str(ev["date"])
-	box.add_theme_stylebox_override("panel", UI.box(UI.BG_BASE, 10, UI.LINE, 1.0))
+	var bs := Skin.row_box()
+	bs.set_content_margin_all(0)
+	box.add_theme_stylebox_override("panel", bs)
 	var m := MarginContainer.new()
 	for side in ["left", "right"]:
 		m.add_theme_constant_override("margin_" + side, int(UI.dp(10)))
@@ -187,9 +199,7 @@ func _row(ev: Dictionary) -> Control:
 	var h := HBoxContainer.new()
 	h.add_theme_constant_override("separation", int(UI.dp(10)))
 	m.add_child(h)
-	var d := UI.label(TE.date_text(str(ev["date"])), 13, UI.SMOKE)
-	d.custom_minimum_size.x = UI.dp(84)
-	h.add_child(d)
+	h.add_child(_date_block(str(ev["date"])))
 	var mid := VBoxContainer.new()
 	mid.size_flags_horizontal = Control.SIZE_EXPAND_FILL
 	mid.add_theme_constant_override("separation", 0)
@@ -198,5 +208,29 @@ func _row(ev: Dictionary) -> Control:
 	if ev.has("lineup"):
 		mid.add_child(UI.wrap(UI.label(", ".join(PackedStringArray(ev["lineup"])), 12, UI.ASH)))
 	var tm := UI.label(str(ev.get("time", "")), 13, UI.GOLD, HORIZONTAL_ALIGNMENT_RIGHT)
+	tm.size_flags_vertical = Control.SIZE_SHRINK_CENTER
 	h.add_child(tm)
 	return box
+
+
+## A bar-tab date block: the weekday in gold over the day number (the row's date, read as on a tab).
+func _date_block(date: String) -> Control:
+	var p := date.split("-")
+	var d: Dictionary = TE.local(TE.bkk_unix(int(p[0]), int(p[1]), int(p[2]), 12))
+	var blk := PanelContainer.new()
+	blk.name = "Date"
+	blk.tooltip_text = TE.date_text(date)
+	blk.custom_minimum_size = Vector2(UI.dp(52), UI.dp(50))
+	var sb := Skin.cubby_box(UI.GOLD)
+	sb.set_content_margin_all(UI.dp(3))
+	blk.add_theme_stylebox_override("panel", sb)
+	var v := VBoxContainer.new()
+	v.alignment = BoxContainer.ALIGNMENT_CENTER
+	v.add_theme_constant_override("separation", 0)
+	blk.add_child(v)
+	v.add_child(UI.label(TE.t("tonight.day.%d" % int(d["weekday"])), 12, UI.GOLD, HORIZONTAL_ALIGNMENT_CENTER))
+	var n := UI.label("%02d" % int(d["day"]), 20, UI.CREAM, HORIZONTAL_ALIGNMENT_CENTER)
+	n.theme_type_variation = &"LabelDisplayS"
+	n.add_theme_font_size_override("font_size", int(UI.dp(20)))
+	v.add_child(n)
+	return blk
