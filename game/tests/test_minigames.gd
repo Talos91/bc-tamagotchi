@@ -22,6 +22,11 @@ const T0 := 1_800_000_000.0
 const TEST_SAVE := "user://test_minigames_save.json"
 const SIZE := Vector2(1080, 1400)
 
+class RivalStore:
+	extends RefCounted
+	var ext := {}
+
+
 var failures := 0
 var checks := 0
 
@@ -35,6 +40,7 @@ func _initialize() -> void:
 	test_rhythm_play()
 	test_candle_logic()
 	test_candle_play()
+	test_q9_sprites_fx_rivals()
 	await test_chat_cast()
 	test_cast()
 	test_pinball()
@@ -645,3 +651,59 @@ func test_result_card() -> void:
 	check(not o4["ok"], "unknown action id is refused by Needs")
 	card4.free()
 	n4.free()
+
+
+# --- Q9: sprites, juice beats and rivals for Front Row Rhythm and Candle Talk -----------------------
+
+func test_q9_sprites_fx_rivals() -> void:
+	print("[q9] rhythm + candle: look B sprites, fx beats, rivals")
+	var rs := RivalStore.new()
+	var g: Control = spawn(Rhythm)
+	g.rivals_store = rs
+	g.config = {"song": 1}
+	g.start()
+	check(g.has_art(), "rhythm: all sprites load (import first)")
+	check(not g.rival.is_empty(), "rhythm: tonight's regular to beat is set")
+	while g.clock < g.notes[0]["time"]:
+		g.advance(1.0 / 60.0)
+	g.tap(g.notes[0]["lane"])
+	check(g.perfect == 1 and g.fx().pops_alive() >= 1, "rhythm: a perfect pops a word")
+	g.fx().step(0.01)
+	check(g.fx().flash_amount("lane%d" % g.notes[0]["lane"]) > 0.0, "rhythm: a perfect flashes the puck white")
+	check(g.fx().trauma == 0.0, "rhythm: no shake on a hit")
+	g.tap(1 - g.notes[0]["lane"])
+	g.fx().step(0.01)
+	check(g.fx().combo >= 1, "rhythm: combo counts")
+	g.advance(2.0)  # a missed note
+	check(g.missed >= 1 and g.fx().combo == 0 and g.fx().trauma == 0.0, "rhythm: a miss breaks the combo, never shakes")
+	g.queue_free()
+	var res := []
+	var g2: Control = spawn(Rhythm)
+	g2.rivals_store = rs
+	g2.config = {"song": 1}
+	g2.finished.connect(func(r): res.append(r))
+	g2.start()
+	for i in 20000:
+		if g2.done:
+			break
+		g2.advance(1.0 / 60.0)
+	check(res.size() == 1 and res[0]["extra"].has("board") and res[0]["extra"].has("rival"), "rhythm: the result carries rival and board")
+	g2.queue_free()
+	var c: Control = spawn(Candle)
+	c.rivals_store = rs
+	c.config = {"regular": "tt", "seed": 7}
+	c.start()
+	check(c.has_art() and c._art.has("regular_tt") and not c._art.has("regular_hiro"), "candle: sprites load, only this regular's")
+	c.choose(c.line["best"])
+	check(c._fly.size() == 1, "candle: the card flies")
+	c.advance(0.5)
+	check(c._flare_t > 0.0 and c._smile_t > 0.0 and c.fx().trauma == 0.0, "candle: best card flares the flame, the regular smiles, no shake")
+	c.advance(2.0)
+	for k in c.line["cards"]:
+		if Candle.card_light(c.line, k) == 0.0:
+			c.choose(k)
+			break
+	c.advance(0.5)
+	check(c._gutter_t > 0.0 and c.fx().trauma == 0.0, "candle: a miss gutters the flame, no shake")
+	check(not c.rival.is_empty(), "candle: tonight's regular to beat is set")
+	c.queue_free()
