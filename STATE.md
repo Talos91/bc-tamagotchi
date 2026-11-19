@@ -1,6 +1,6 @@
 # STATE — Black Cabin Tamagotchi (rewritten, never appended; as of 2026-11-18, first rewrite of orchestrator local_96f4e96d)
 
-## LIVE (origin/main = v0.3.1 e3be709 + sprites cafe83f + docs, live build still v0.3.0 until Daniele redeploys; every code SHA verified in a clean worktree, APPDATA empty per suite; 24 suites)
+## LIVE (origin/main = v0.3.1 e3be709 + sprites cafe83f + Q1 juice/Q2 venue pause 14bb707 + docs, live build still v0.3.0 until Daniele redeploys; every code SHA verified in a clean worktree, APPDATA empty per suite; 24 suites)
 - Live build https://bc-tamagotchi.vercel.app = **v0.3.0** (09f0d24; Daniele deployed by 11-18; checked 11-18 by curl: live .pck holds version 0.3.0 and shake_serve). Before: v0.2.2 (bd50d36, 11-11). Everything before: see LOG.
 - **v0.3.0 on main, verified 24/24 + web (09f0d24)**, now LIVE: Tonight + upcoming events (October data only) and four minigames A Coaster Flip, D Neon Moth, C Soi Dash, B Shake & Serve. v0.2.3 (b1d9716) handed over earlier the same day. Redeploy: `python tools/build_web.py --deploy --out %LOCALAPPDATA%c-web`.
 
@@ -23,6 +23,7 @@
 - **Owner item 41 (11-19): friend's live build lagged badly → 🛠️ perf-telemetry local_21feab8f (Opus, own worktree wk/perf-telemetry)**: local perf overlay + copy-report, profile, major optimization; cards perf-telemetry-review + telemetry-beacon. Asked Daniele for the friend's phone/browser.
 - **Owner item 42 (11-19): Daniele OKs creating the Supabase project via the connector** (free tier, P8) → 🌐 presence worker (Opus) creates it + migrations, enabling the connector itself; starts when a slot frees (3 running: verify-q1q2, ui-notch, perf-telemetry). **Daniele 11-19: "Minigame wiring first"**: next free slots → wiring wave Q4–Q9, then presence (offline client + Supabase backend).
 - **test_feel fails on 4313aed and 14bb707 (buffer walk, Zones/Tag_mali hides the player 8/147 ticks), passed on cafe83f 11-18 with code identical** → small Sonnet job: find why (cache, timing, load) and make the check robust; until then a test_feel fail of that shape is known.
+- **Q1+Q2 PUSHED 14bb707** (verify-q1q2: 25/26 + web, .pck 19.6 MB; test_feel pre-existing; archived). Docs pushed e4e82dc. **Wiring wave cards (peer-started turn) await Daniele's click: 🎮 q4-neon-moth (task_5b9ac45a, Opus; builds shared `mg_rivals.gd`) + 🎮 q8-pinball-pour (task_fd909c7d, Sonnet; no compete yet)**; slot 3 = perf-telemetry. Next when slots free: Q5 Coaster Flip, Q6 Soi Dash, Q7 Shake & Serve, Q9 Rhythm + Candle (after mg_rivals lands), test_feel fix, presence.
 - Rules now: orchestrator Opus 5.5 medium, handover 40 %; ≤ 3 workers; workers message only at done/blocked; done workers archived at once; one Godot at a time; **no windowed Godot on Daniele's desktop: headless, or a private hidden desktop (PROJECT Tests, 11-15)**; PATCH per deploy batch; verify only in clean worktrees. Flakes: test_seats exit 1 without FAIL; Godot import crash 3221225477 — rerun once. Peer-started turns cannot start sessions: Verifiers become cards Daniele clicks.
 
 ## WAITING ON OWNER (Questions tab: https://claude.ai/artifact/BbpBxVWVVXMjz7TgJ7aFBW#questions)
