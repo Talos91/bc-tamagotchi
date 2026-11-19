@@ -65,6 +65,28 @@
    "note": "parked tuk-tuk, blocks a lane; anchor = ground centre",
    "bytes": 195168
   },
+  "tuk_tuk_front": {
+   "file": "tuk_tuk_front.png",
+   "frames": 1,
+   "frame_w": 174,
+   "frame_h": 226,
+   "frame_names": null,
+   "anchor_px": [
+    90.2,
+    184.2
+   ],
+   "points": {},
+   "ppv": 5,
+   "view_yaw_elev": [
+    70,
+    12
+   ],
+   "note": "the same tuk-tuk driving at the runner (Q6): nose and headlight toward the camera; glow = headlight and fringe lights; anchor = ground centre",
+   "bytes": 157296,
+   "glow_file": "tuk_tuk_front_glow.png",
+   "glow_scale": 2,
+   "glow_bytes": 39324
+  },
   "food_cart": {
    "file": "food_cart.png",
    "frames": 1,
@@ -105,6 +127,28 @@
    ],
    "note": "sleeping soi dog across the lane, hop it; anchor = ground centre",
    "bytes": 133920
+  },
+  "soi_dog_trot": {
+   "file": "soi_dog_trot.png",
+   "frames": 2,
+   "frame_w": 174,
+   "frame_h": 146,
+   "frame_names": [
+    "stride",
+    "gather"
+   ],
+   "anchor_px": [
+    76.1,
+    128.1
+   ],
+   "points": {},
+   "ppv": 6,
+   "view_yaw_elev": [
+    -25,
+    22
+   ],
+   "note": "stray soi dog trotting across the soi (Q6), head toward +x (screen right); mirror to trot left; alternate the frames at ~8 fps while it moves; anchor = ground centre",
+   "bytes": 203232
   },
   "monitor_lizard": {
    "file": "monitor_lizard.png",
@@ -274,7 +318,7 @@
    "bytes": 518400
   }
  },
- "texture_bytes_all_files": 3735548,
- "texture_bytes_loaded": 3735548,
- "texture_mb_loaded": 3.56
+ "texture_bytes_all_files": 4135400,
+ "texture_bytes_loaded": 4135400,
+ "texture_mb_loaded": 3.94
 }

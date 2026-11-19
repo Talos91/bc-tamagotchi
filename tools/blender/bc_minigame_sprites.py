@@ -543,6 +543,10 @@ def s_bike(ctx, f):
 @sprite("soi_dash", "tuk_tuk", ppv=6, view=(-25, 22), anchor=(0, 0, 0),
         note="parked tuk-tuk, blocks a lane; anchor = ground centre")
 def s_tuktuk(ctx, f):
+    ctx.vox(tuk_model())
+
+
+def tuk_model():
     v = V()
     wheel(v, -11.5, 3, 6, -7, -6)
     wheel(v, -11.5, 3, 6, 6, 7)
@@ -562,6 +566,15 @@ def s_tuktuk(ctx, f):
     for x in range(-17, 9, 3):                                          # fringe lights under the roof
         v.set(x, -7, 24, E("MGNeonPink") if x % 2 else E("MGNeonGreen"))
     v.box(-17, -7, 8, 8, -7, 8, "MGChrome")                             # trim
+    return v
+
+
+@sprite("soi_dash", "tuk_tuk_front", ppv=5, view=(70, 12), glow=True, anchor=(0, 0, 0),
+        note="the same tuk-tuk driving at the runner (Q6): nose and headlight toward the camera; glow = headlight "
+        "and fringe lights; anchor = ground centre")
+def s_tuktuk_front(ctx, f):
+    v = tuk_model()
+    v.box(17, -2, 9, 17, 2, 12, E("LampGold"))                          # headlight, lit
     ctx.vox(v)
 
 
@@ -607,6 +620,34 @@ def s_dog(ctx, f):
     v.box(8, -6, 0, 15, -5, 1, "MGDog")                                 # front paws
     v.line((-9, 0, 2), (-15, -3, 1), "MGDog")                           # tail
     v.line((-15, -3, 1), (-16, -6, 1), "MGDogPale")
+    ctx.vox(v)
+
+
+@sprite("soi_dash", "soi_dog_trot", frames=2, ppv=6, view=(-25, 22), anchor=(0, 0, 0),
+        frame_names=["stride", "gather"],
+        note="stray soi dog trotting across the soi (Q6), head toward +x (screen right); mirror to trot left; "
+        "alternate the frames at ~8 fps while it moves; anchor = ground centre")
+def s_dog_trot(ctx, f):
+    v = V()
+    v.box(-8, -3, 6, 7, 2, 11, "MGDog")                                 # body, standing
+    v.box(-6, -2, 6, 5, 1, 6, "MGDogPale")                              # belly
+    v.box(-4, -2, 11, 2, 1, 11, "MGDogDark")                            # back patch
+    v.box(6, -2, 10, 9, 1, 14, "MGDog")                                 # neck
+    v.box(8, -2, 13, 13, 1, 17, "MGDog")                                # head
+    v.box(13, -1, 13, 16, 0, 15, "MGDogPale")                           # snout
+    v.set(16, -1, 15, "BeamBlack")                                      # nose
+    v.set(12, -3, 16, "BeamBlack")                                      # eyes
+    v.set(12, 2, 16, "BeamBlack")
+    v.box(9, -2, 18, 10, -1, 19, "MGDogDark")                           # ears up
+    v.box(9, 0, 18, 10, 1, 19, "MGDogDark")
+    swing = (3, -3) if f == 0 else (1, -1)                              # stride: legs apart; gather: under the body
+    for (lx, ly, k) in ((6, -3, 0), (6, 1, 1), (-7, -3, 1), (-7, 1, 0)):
+        o = swing[k]
+        for y in (ly, ly + 1):
+            v.line((lx, y, 6), (lx + o, y, 0), "MGDog")
+        v.set(lx + o, ly, 0, "MGDogPale")                               # paw
+    v.line((-8, 0, 10), (-12, 0, 13 + f), "MGDog")                      # tail up, wagging
+    v.line((-12, 0, 13 + f), (-13, 0, 15 + f), "MGDogPale")
     ctx.vox(v)
 
 

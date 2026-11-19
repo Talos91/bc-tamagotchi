@@ -19,9 +19,14 @@ var _result: Dictionary = {}
 
 func _initialize() -> void:
 	test_street()
+	test_ramp()
+	test_movers()
+	test_sprites()
 	test_scores()
 	test_good_runner()
 	test_idle_runner()
+	test_relaxed()
+	test_beats()
 	test_swipes()
 	test_bounds()
 	test_action_strings_registry()
@@ -38,10 +43,11 @@ func check(cond: bool, msg: String) -> void:
 		print("  FAIL: ", msg)
 
 
-func spawn(config := {"seed": 20261115}) -> Control:
+func spawn(config := {"seed": 20261115}, relaxed := false) -> Control:
 	var g: Control = Game.new()
 	g.size = Vector2(1080, 1400)
 	g.config = config
+	g.relaxed = relaxed
 	root.add_child(g)
 	_result = {}
 	g.finished.connect(func(r: Dictionary) -> void: _result = r)
@@ -73,6 +79,102 @@ func test_street() -> void:
 	check(Game.clock_text(-3.0) == "20:00:03", "past 20:00 reads late")
 
 
+## §3 ramp: warm-up rows are single-lane parked things and kerbs; street life joins on schedule; the gap shrinks.
+func test_ramp() -> void:
+	print("[ramp] warm-up first, street life on schedule, rows closer toward the door")
+	for sd in [1, 42, 20261115, 99]:
+		var a := Game.street(sd)
+		var rows := {}
+		var early_bad := ""
+		for it in a:
+			var at := float(it["at"])
+			var k := int(it["kind"])
+			if k == Game.Kind.NOTE:
+				continue
+			var key := snappedf(at, 0.001)
+			rows[key] = rows.get(key, 0) + 1
+			if k == Game.Kind.TUK and at < Game.TUK_FROM:
+				early_bad = "tuk-tuk at %.2f" % at
+			if (k == Game.Kind.DOG or k == Game.Kind.STRAY) and at < Game.DOG_FROM:
+				early_bad = "dog at %.2f" % at
+			if k == Game.Kind.LIZARD and at < Game.LIZARD_FROM:
+				early_bad = "lizard at %.2f" % at
+		var pair_early := false
+		for key in rows:
+			if rows[key] > 1 and float(key) < Game.PAIR_FROM:
+				pair_early = true
+		check(early_bad == "", "seed %d: street life waits for its time (%s)" % [sd, early_bad])
+		check(not pair_early, "seed %d: no two-lane row in the first 10 s" % sd)
+		var keys := rows.keys()
+		keys.sort()
+		var first := 0.0
+		var last := 0.0
+		var nf := 0
+		var nl := 0
+		for i in range(1, keys.size()):
+			var gap := float(keys[i]) - float(keys[i - 1])
+			if float(keys[i]) < 12.0:
+				first += gap
+				nf += 1
+			elif float(keys[i]) > 28.0:
+				last += gap
+				nl += 1
+		check(nf > 0 and nl > 0 and first / nf > last / nl + 0.3, "seed %d: rows closer at the end (%.2f -> %.2f)" % [sd, first / maxf(1, nf), last / maxf(1, nl)])
+	var kinds := {}
+	for sd in range(1, 30):
+		for it in Game.street(sd):
+			kinds[int(it["kind"])] = true
+	for k in [Game.Kind.BIKE, Game.Kind.CART, Game.Kind.TUK, Game.Kind.DOG, Game.Kind.STRAY, Game.Kind.LIZARD, Game.Kind.KERB, Game.Kind.NOTE]:
+		check(kinds.has(k), "the streets have kind %d" % k)
+	check(is_equal_approx(Game.row_step(0.0), 1.9) and is_equal_approx(Game.row_step(Game.RUN_SECONDS - 1.0), 1.2), "row gap 1.9 -> 1.2")
+	check(is_equal_approx(Game.row_step(20.0, true) - Game.row_step(20.0), 0.4), "relaxed gap +0.4")
+
+
+## Movers: a stray or a lizard is in its lane SETTLE ahead (0.5 earlier relaxed); a tuk-tuk rushes but meets the
+## runner at its own street point.
+func test_movers() -> void:
+	print("[movers] strays and lizards settle before the runner, tuk-tuks rush in")
+	var stray := {"at": 20.0, "lane": 1, "from": 0, "kind": Game.Kind.STRAY, "done": false}
+	var liz := {"at": 25.0, "lane": -1, "from": 1, "kind": Game.Kind.LIZARD, "done": false}
+	check(is_equal_approx(Game.mover_lane(stray, 3.0), 0.0), "a far stray is still in its first lane")
+	check(Game.mover_lane(stray, 1.5) > 0.0 and Game.mover_lane(stray, 1.5) < 1.0, "a stray trots across")
+	check(is_equal_approx(Game.mover_lane(stray, Game.SETTLE), 1.0), "a stray is in its lane SETTLE ahead")
+	check(is_equal_approx(Game.mover_lane(liz, Game.SETTLE), -1.0) and is_equal_approx(Game.mover_lane(liz, Game.SETTLE + Game.LIZARD_SPAN), 1.0), "a lizard crawls two lanes and settles")
+	check(is_equal_approx(Game.mover_lane(stray, Game.SETTLE + 0.5, true), 1.0) and Game.mover_lane(stray, Game.SETTLE + 0.5) < 1.0, "relaxed settles 0.5 earlier")
+	var tuk := {"at": 15.0, "lane": 0, "from": 0, "kind": Game.Kind.TUK, "done": false}
+	check(Game.drawn_dist(tuk, 2.0) > 2.0 and is_equal_approx(Game.drawn_dist(tuk, 0.0), 0.0), "a tuk-tuk shows further out and reaches the runner at its point")
+	check(Game.drawn_dist(tuk, 2.0, true) < Game.drawn_dist(tuk, 2.0), "relaxed tuk-tuks rush less")
+	check(Game.hoppable(Game.Kind.STRAY) and Game.hoppable(Game.Kind.LIZARD) and not Game.hoppable(Game.Kind.TUK), "dogs and lizards are hopped, tuk-tuks dodged")
+	# a hop clears a lizard; a stray in the lane bumps a runner on the ground
+	var g := spawn()
+	var one: Array[Dictionary] = [{"at": 3.0, "lane": 0, "from": 2, "kind": Game.Kind.LIZARD, "done": false}]
+	g.items = one
+	g.move(0)
+	while g.dist < 2.8:
+		g.advance(STEP)
+	g.hop()
+	while g.dist < 3.3:
+		g.advance(STEP)
+	check(g.bumps == 0, "hopping a lizard clears it")
+	var two: Array[Dictionary] = [{"at": 4.0, "lane": 0, "from": 1, "kind": Game.Kind.STRAY, "done": false}]
+	g.items = two
+	while g.dist < 4.3:
+		g.advance(STEP)
+	check(g.bumps == 1, "a stray in the lane bumps a runner on the ground")
+	g.queue_free()
+
+
+## Look B: every sprite the game draws is in the sheet, and the set fits the 4 MB texture budget (plan §1.3).
+func test_sprites() -> void:
+	print("[sprites] voxel sprites present, within budget")
+	for n in ["runner", "motorbike", "food_cart", "tuk_tuk_front", "soi_dog", "soi_dog_trot", "monitor_lizard", "kerb", "note", "shopfront", "road_tile", "lane_dash", "door_front", "backdrop"]:
+		var m: Dictionary = Game.sprite_meta(n)
+		check(not m.is_empty() and ResourceLoader.exists(Game.ART + str(m.get("file", ""))), "sprite " + n)
+	var f := FileAccess.open(Game.ART + "sprites.json", FileAccess.READ)
+	var j: Dictionary = JSON.parse_string(f.get_as_text())
+	check(float(j.get("texture_bytes_loaded", 1e9)) <= 4.0 * 1024 * 1024, "textures within 4 MB (%s)" % str(j.get("texture_mb_loaded")))
+
+
 func test_scores() -> void:
 	print("[score] notes, spare seconds, late cap")
 	check(is_equal_approx(Game.score_for(30, 30, 10.0), 1.0), "all notes, 10 s spare = 1.0")
@@ -91,7 +193,7 @@ func run_bot(g: Control, max_secs := 60.0) -> void:
 			if not ob.is_empty():
 				var d: float = float(ob["at"]) - g.dist
 				if d < 0.35:
-					if ob["kind"] == Game.Kind.DOG or ob["kind"] == Game.Kind.KERB:
+					if Game.hoppable(int(ob["kind"])):
 						if d < 0.25:
 							g.hop()
 					else:
@@ -142,6 +244,64 @@ func test_idle_runner() -> void:
 	run_bot(k, 10.0)
 	k.abandon()
 	check(float(_result.get("score", 1.0)) <= 0.6, "leaving early scores only the notes so far")
+	k.queue_free()
+
+
+## Relaxed timing (§3): longer gaps, earlier movers; the same bot does no worse.
+func test_relaxed() -> void:
+	print("[relaxed] a gentler street, never a worse run for the same bot")
+	for sd in [7, 20261115, 31337]:
+		var a := spawn({"seed": sd})
+		run_bot(a)
+		var sa := float(_result.get("score", 0.0))
+		var b := spawn({"seed": sd}, true)
+		run_bot(b)
+		var sb := float(_result.get("score", 0.0))
+		check(b.done and b.arrived, "seed %d relaxed: the runner reaches the door" % sd)
+		check(b.items.size() < a.items.size(), "seed %d relaxed: fewer rows (%d < %d)" % [sd, b.items.size(), a.items.size()])
+		check(b.bumps <= a.bumps + 1 and sb >= sa - 0.05, "seed %d relaxed: no worse (bumps %d vs %d, score %.2f vs %.2f)" % [sd, b.bumps, a.bumps, sb, sa])
+		a.queue_free()
+		b.queue_free()
+
+
+## §2.3 beats through mg_fx: note chime + combo, bump shake / clock flash / -2 s, hop dust, lane streak, the door.
+func test_beats() -> void:
+	print("[beats] notes, bumps, hops, swipes and the door answer")
+	var g := spawn()
+	var f = g.fx()
+	f.auto_step = false
+	g.move(1)
+	check(g._dash_t > 0.0, "a lane change draws a dash streak")
+	g.hop()
+	check(g._puffs.size() == 1 and f.squash_scale("runner") != Vector2.ONE, "a hop kicks up dust and squashes the runner")
+	var row: Array[Dictionary] = [{"at": 2.0, "lane": 1, "from": 1, "kind": Game.Kind.NOTE, "done": false},
+		{"at": 2.3, "lane": 1, "from": 1, "kind": Game.Kind.NOTE, "done": false},
+		{"at": 3.0, "lane": 1, "from": 1, "kind": Game.Kind.BIKE, "done": false}]
+	g.items = row
+	while g.dist < 2.4:
+		g.advance(STEP)
+	check(g.notes == 2 and f.combo == 2 and f.combo_text() != "", "two notes in a row make a combo (%d)" % f.combo)
+	check(f.pops_alive() >= 2, "each note pops")
+	while g.dist < 3.1:
+		g.advance(STEP)
+	check(g.bumps == 1 and f.combo == 0, "a bump breaks the combo")
+	check(f.flash_amount("clock") > 0.0 and f.edge_amount() > 0.0, "a bump flashes the clock and the edge")
+	check(f.reduce_motion or f.trauma > 0.0, "a bump shakes")
+	check(g.best_combo == 2, "best combo kept for the result")
+	g.queue_free()
+	var k := spawn()
+	var none: Array[Dictionary] = []
+	k.items = none
+	k.notes_total = 1
+	while not k.arrived:
+		k.advance(STEP)
+	check(k.state == Game.State.DOOR and not k.done, "at the door: doors swing before the result")
+	var t := 0.0
+	while not k.done and t < 2.0:
+		k.advance(STEP)
+		t += STEP
+	check(k.done and t <= Game.DOOR_SECONDS + 0.05, "the result follows the door (%.2f s)" % t)
+	check(not _result.is_empty() and _result["extra"].has("best_combo"), "the result carries the combo")
 	k.queue_free()
 
 
@@ -200,13 +360,21 @@ func test_bounds() -> void:
 		var r := Rect2(Vector2.ZERO, area)
 		var ok := true
 		var why := ""
+		var sc: float = g.art_scale()
 		for lane in [-1, 0, 1]:
 			var p: Vector2 = g._pt(0.0, lane * 2.0)
-			# the runner (shadow +-50, body 200 tall, a hop lifts 110) and the widest obstacle (cart +-80, 170 tall)
-			for q in [p + Vector2(-80, 16), p + Vector2(80, 16), p + Vector2(-80, -310), p + Vector2(80, -310)]:
-				if not r.has_point(q):
+			# Q6: the drawn sprites. The runner at the top of a hop, its shadow, and the widest street life at the
+			# runner: the food cart, the tuk-tuk, the monitor lizard facing either way (drawn at 0.85).
+			var rects: Array[Rect2] = [g.sprite_rect("runner", p - Vector2(0, g.hop_lift_px()), sc),
+				Rect2(p + Vector2(-60, -10) * sc, Vector2(120, 20) * sc),
+				g.sprite_rect("food_cart", p, sc), g.sprite_rect("tuk_tuk_front", p, sc)]
+			var lz: Rect2 = g.sprite_rect("monitor_lizard", p, sc * 0.85)
+			rects.append(lz)
+			rects.append(Rect2(Vector2(2.0 * p.x - lz.end.x, lz.position.y), lz.size))
+			for q in rects:
+				if q.size == Vector2.ZERO or not r.encloses(q):
 					ok = false
-					why = "lane %d at %s" % [lane, q]
+					why = "lane %d: %s" % [lane, q]
 		for l in [-3.0, 3.0]:
 			for d in [0.0, Game.VIEW]:
 				var e: Vector2 = g._pt(d, l)

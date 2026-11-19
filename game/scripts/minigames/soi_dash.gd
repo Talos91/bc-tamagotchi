@@ -1,13 +1,24 @@
 extends "res://scripts/minigames/minigame_base.gd"
 ## Soi Dash (docs/design/10-minigame-next.md concept C; DECISIONS 2026-11-15 "build them all"). On the lounge game
-## cabinet: late for the 20:00 show, run down a neon soi to the Black Cabin sign. Three lanes: swipe left / right to
-## change lane round motorbikes and food carts, swipe up to hop a kerb or a sleeping soi dog, run through the music
-## notes. A bump never ends the run: it costs 2 s of the clock. The street is the same for everyone each night.
+## cabinet: late for the 20:00 show, run down a neon soi to the Black Cabin door. Three lanes: swipe left / right to
+## change lane round parked motorbikes, food carts and tuk-tuks driving at you; swipe up to hop a kerb, a sleeping or
+## trotting soi dog, or a monitor lizard crossing the soi; run through the music notes. A bump never ends the run: it
+## costs 2 s of the clock. The street is the same for everyone each night (per timing mode).
 ## Score = 0.6 x notes / notes in the street + 0.4 x seconds to spare at the door / 10; arriving after 20:00 caps
 ## it at 0.5. config.seed: the street (default: the Bangkok date). Feeds action "soi_dash".
+##
+## Q6 (docs/design/11-minigame-quality.md, 2026-11-19): drawn from the look B voxel sprites in
+## res://assets/minigames/soi_dash/ (flat shapes stay as the fallback when a texture is missing); street life with its
+## own moves (§ Daniele 2026-11-18: monitor lizards, stray dogs, food carts, tuk-tuks); every §2.3 beat through mg_fx;
+## the §3 ramp (row gap 1.9 -> 1.2, two-lane rows and tuk-tuks after 10 s, dogs after 15 s, lizards after 20 s;
+## relaxed: gap +0.4, movers settle 0.5 s earlier, tuk-tuks rush less). Fair rule for movers: a stray or a lizard
+## is in its final lane SETTLE units before the runner reaches it; a tuk-tuk only looks faster (it is drawn further
+## out and rushes in) and reaches the runner at the same street point as a parked one would.
 
 const UI = preload("res://scripts/minigames/mg_ui.gd")
 const S = preload("res://scripts/minigames/strings.gd")
+
+const ART := "res://assets/minigames/soi_dash/"
 
 const RUN_SECONDS := 40.0            ## the street at full speed
 const CLOCK_SECONDS := 50.0          ## the clock to 20:00 when the run starts (19:59:10 on the display)
@@ -22,12 +33,38 @@ const BUMP_SECONDS := 0.8            ## blink after a bump (no second bump)
 const INTRO_SECONDS := 1.2
 const SWIPE_PX := 50.0
 const FIRST_AT := 2.5                ## first obstacle this far into the street
-const STEP_MIN := 1.3                ## gap between obstacle rows
-const STEP_MAX := 1.9
 const BKK_OFFSET := 7 * 3600
 
-enum State { INTRO, RUNNING, DONE }
-enum Kind { BIKE, CART, DOG, KERB, NOTE }
+# --- The ramp (§3): the first 10 s are a warm-up, the middle teaches, the last third tests
+const STEP_START := 1.9              ## gap between obstacle rows at the start ...
+const STEP_END := 1.2                ## ... and at the door
+const STEP_JITTER := 0.15
+const RAMP_FROM := 10.0              ## the gap starts shrinking here
+const PAIR_FROM := 10.0              ## two-lane rows from here
+const TIGHT_FROM := 27.0             ## the last third: two-lane rows come more often
+const TUK_FROM := 10.0
+const DOG_FROM := 15.0
+const LIZARD_FROM := 20.0
+const RELAXED_STEP := 0.4            ## relaxed: every gap this much longer
+
+# --- Street life moves
+const SETTLE := 0.9                  ## a stray or a lizard is in its final lane this far ahead of the runner
+const RELAXED_TELEGRAPH := 0.5       ## relaxed: movers settle this much earlier
+const STRAY_SPAN := 1.2              ## street units a stray takes to trot one lane over
+const LIZARD_SPAN := 2.4             ## a lizard crawls two lanes, slowly
+const TUK_RUSH := 1.6                ## a tuk-tuk is drawn this many times further out: it rushes in
+const TUK_RUSH_RELAXED := 1.3
+const DOG_WAKE := 1.2                ## a sleeping dog's ear goes up when the runner is this close
+
+# --- Beats
+const DASH_SECONDS := 0.18           ## lane dash streak
+const PUFF_SECONDS := 0.35           ## hop dust
+const DOOR_AHEAD := 0.5              ## the door stands this far past the end of the run
+const DOOR_SECONDS := 0.8            ## doors swing, neon flares, then the result
+const ART_LANE_PX := 240.0           ## sprite px that fill one lane at the runner (frames are drawn for a 780 px play)
+
+enum State { INTRO, RUNNING, DOOR, DONE }
+enum Kind { BIKE, CART, DOG, KERB, NOTE, TUK, STRAY, LIZARD }
 
 var state := State.INTRO
 var lane := 0                        ## -1 left, 0 middle, 1 right
@@ -35,16 +72,26 @@ var lane_anim := 0.0                 ## drawn lane position, eases toward lane
 var hop_t := 0.0                     ## > 0 while in the air
 var dist := 0.0                      ## street covered
 var clock := CLOCK_SECONDS           ## seconds to 20:00
-var items: Array[Dictionary] = []    ## {at, lane, kind, done}
+var items: Array[Dictionary] = []    ## {at, lane, from, kind, done}
 var notes_total := 0
 var notes := 0
 var bumps := 0
 var bump_t := 0.0
 var arrived := false
 var seed_used := 0
+var door_t := 0.0
+var best_combo := 0
 var _state_t := 0.0
+var _anim_t := 0.0
 var _press_pos := Vector2.ZERO
 var _pressed := false
+var _dash_from := 0.0
+var _dash_t := 0.0
+var _puffs: Array = []               ## {pos, t, size}
+var _tex := {}
+var _glow: Control
+
+static var _meta := {}
 
 
 func _init() -> void:
@@ -52,6 +99,7 @@ func _init() -> void:
 	action_id = "soi_dash"
 	need_id = "nightlife"
 	title_key = "mg.soi_dash.title"
+	texture_repeat = CanvasItem.TEXTURE_REPEAT_ENABLED   # the road tile and the lane dashes repeat
 
 
 func _ready() -> void:
@@ -70,9 +118,14 @@ func _on_start() -> void:
 	bumps = 0
 	bump_t = 0.0
 	arrived = false
+	door_t = 0.0
+	best_combo = 0
 	_state_t = 0.0
+	_anim_t = 0.0
+	_dash_t = 0.0
+	_puffs.clear()
 	seed_used = int(config.get("seed", night_seed()))
-	items = street(seed_used)
+	items = street(seed_used, relaxed)
 	notes_total = 0
 	for it in items:
 		if it["kind"] == Kind.NOTE:
@@ -88,35 +141,90 @@ static func night_seed(unix := -1.0) -> int:
 	return int(floor((t + BKK_OFFSET) / 86400.0))
 
 
-## The night's street: rows of obstacles (never all three lanes blocked; a dog or kerb blocks one lane and is hopped)
-## with notes in the free lanes between them.
-static func street(seed_value: int) -> Array[Dictionary]:
+## Obstacles hopped (low across the lane) rather than dodged.
+static func hoppable(kind: int) -> bool:
+	return kind == Kind.DOG or kind == Kind.KERB or kind == Kind.STRAY or kind == Kind.LIZARD
+
+
+## Gap to the next row at street point `at` (§3 ramp, before jitter).
+static func row_step(at: float, relaxed_on := false) -> float:
+	var t := clampf((at - RAMP_FROM) / (RUN_SECONDS * SPEED - 1.0 - RAMP_FROM), 0.0, 1.0)
+	return lerpf(STEP_START, STEP_END, t) + (RELAXED_STEP if relaxed_on else 0.0)
+
+
+## The night's street: rows of obstacles (never all three lanes blocked; a hoppable one blocks one lane) with notes
+## in the free lanes between them. Warm-up rows are parked bikes, carts and kerbs; the street life joins on the ramp.
+## Relaxed: the same rows in the same order, each gap RELAXED_STEP longer (the street ends sooner, so fewer rows).
+static func street(seed_value: int, relaxed_on := false) -> Array[Dictionary]:
 	var rng := RandomNumberGenerator.new()
 	rng.seed = seed_value
 	var out: Array[Dictionary] = []
-	var at := FIRST_AT
-	while at < RUN_SECONDS * SPEED - 1.0:
+	var at := FIRST_AT                   # the row's place in the normal street: decides what it is
+	var pos := FIRST_AT                  # where it stands (relaxed: every gap longer, same rows in the same order)
+	while pos < RUN_SECONDS * SPEED - 1.0:
 		var roll := rng.randi_range(0, 9)
 		var l := rng.randi_range(-1, 1)
+		var pair_below := 2 if at >= TIGHT_FROM else (1 if at >= PAIR_FROM else -1)
 		if roll <= 5:
-			out.append({"at": at, "lane": l, "kind": Kind.BIKE if rng.randf() < 0.6 else Kind.CART, "done": false})
-			if roll <= 1:  # two blocked lanes: the third stays open
+			var kind := Kind.BIKE if rng.randf() < 0.6 else Kind.CART
+			if at >= TUK_FROM and rng.randf() < 0.35:
+				kind = Kind.TUK
+			out.append(_item(pos, l, l, kind))
+			if roll <= pair_below:  # two blocked lanes: the third stays open
 				var l2 := l + (1 if l < 1 else -1)
-				out.append({"at": at, "lane": l2, "kind": Kind.BIKE, "done": false})
+				out.append(_item(pos, l2, l2, Kind.BIKE if rng.randf() < 0.6 else Kind.CART))
 		else:
-			out.append({"at": at, "lane": l, "kind": Kind.DOG if rng.randf() < 0.5 else Kind.KERB, "done": false})
+			var r := rng.randf()
+			var kind := Kind.KERB
+			var from := l
+			if at >= LIZARD_FROM and r < 0.3:
+				kind = Kind.LIZARD
+				from = l + (2 if rng.randf() < 0.5 else -2)       # crawls in two lanes from one side
+			elif at >= DOG_FROM and r < 0.7:
+				if rng.randf() < 0.5:
+					kind = Kind.DOG
+				else:
+					kind = Kind.STRAY
+					from = l + (1 if rng.randf() < 0.5 else -1)   # trots one lane over
+			out.append(_item(pos, l, from, kind))
 		# notes on the way to the next row, in a lane that row leaves open
 		var nl := rng.randi_range(-1, 1)
 		for k in 2:
-			var na := at + 0.45 + k * 0.3
+			var na := pos + 0.45 + k * 0.3
 			var blocked := false
 			for it in out:
 				if absf(float(it["at"]) - na) < 0.2 and int(it["lane"]) == nl:
 					blocked = true
 			if not blocked:
-				out.append({"at": na, "lane": nl, "kind": Kind.NOTE, "done": false})
-		at += rng.randf_range(STEP_MIN, STEP_MAX)
+				out.append(_item(na, nl, nl, Kind.NOTE))
+		var step := row_step(at) + rng.randf_range(-STEP_JITTER, STEP_JITTER)
+		at += step
+		pos += step + (RELAXED_STEP if relaxed_on else 0.0)
 	return out
+
+
+static func _item(at: float, l: int, from: int, kind: int) -> Dictionary:
+	return {"at": at, "lane": l, "from": from, "kind": kind, "done": false}
+
+
+## Where a mover is drawn (lane units, -1..1, beyond for the gutters) when it is `d` ahead of the runner. Parked
+## things and notes sit in their lane. A stray or a lizard eases from `from` to `lane` and is there SETTLE ahead.
+static func mover_lane(it: Dictionary, d: float, relaxed_on := false) -> float:
+	var k := int(it["kind"])
+	if k != Kind.STRAY and k != Kind.LIZARD:
+		return float(it["lane"])
+	var settle := SETTLE + (RELAXED_TELEGRAPH if relaxed_on else 0.0)
+	var span := STRAY_SPAN if k == Kind.STRAY else LIZARD_SPAN
+	var u := clampf((settle + span - d) / span, 0.0, 1.0)
+	u = u * u * (3.0 - 2.0 * u)
+	return lerpf(float(it["from"]), float(it["lane"]), u)
+
+
+## The distance a thing is drawn at: a tuk-tuk drives at the runner, so it shows further out and closes faster.
+static func drawn_dist(it: Dictionary, d: float, relaxed_on := false) -> float:
+	if int(it["kind"]) == Kind.TUK and d > 0.0:
+		return d * (TUK_RUSH_RELAXED if relaxed_on else TUK_RUSH)
+	return d
 
 
 static func score_for(got: int, total: int, spare: float) -> float:
@@ -153,18 +261,25 @@ func next_obstacle(in_lane: int) -> Dictionary:
 # --- Play ------------------------------------------------------------------------------------------
 
 func move(dir: int) -> void:
-	if state == State.DONE or not running or paused:
+	if state == State.DONE or state == State.DOOR or not running or paused:
 		return
 	_begin()
-	lane = clampi(lane + dir, -1, 1)
+	var to := clampi(lane + dir, -1, 1)
+	if to != lane:
+		_dash_from = lane_anim
+		_dash_t = DASH_SECONDS
+	lane = to
 
 
 func hop() -> void:
-	if state == State.DONE or not running or paused:
+	if state == State.DONE or state == State.DOOR or not running or paused:
 		return
 	_begin()
 	if hop_t <= 0.0:
 		hop_t = HOP_SECONDS
+		var f := fx()
+		f.squash("runner")
+		_puff(runner_px(), 1.0)
 
 
 func _begin() -> void:
@@ -175,20 +290,35 @@ func _begin() -> void:
 
 func advance(dt: float) -> void:
 	_state_t += dt
+	_anim_t += dt
 	match state:
 		State.INTRO:
 			if _state_t >= INTRO_SECONDS:
 				_begin()
 		State.RUNNING:
 			_run(dt)
+		State.DOOR:
+			door_t += dt
+			if door_t >= DOOR_SECONDS:
+				state = State.DONE
+				finish(score_for(notes, notes_total, clock))
 	lane_anim = move_toward(lane_anim, float(lane), dt / LANE_SECONDS)
+	_dash_t = maxf(0.0, _dash_t - dt)
+	for p in _puffs:
+		p["t"] += dt
+	_puffs = _puffs.filter(func(p): return p["t"] < PUFF_SECONDS)
 	queue_redraw()
+	if _glow != null:
+		_glow.queue_redraw()
 
 
 func _run(dt: float) -> void:
 	dist += SPEED * dt
 	clock -= dt
+	var was_air := airborne()
 	hop_t = maxf(0.0, hop_t - dt)
+	if was_air and not airborne():
+		_puff(runner_px(), 0.7)          # landing dust
 	bump_t = maxf(0.0, bump_t - dt)
 	for it in items:
 		if it["done"]:
@@ -203,17 +333,18 @@ func _run(dt: float) -> void:
 			Kind.NOTE:
 				it["done"] = true
 				notes += 1
+				_note_beat(it)
 				_update_status()
-			Kind.DOG, Kind.KERB:
+			Kind.DOG, Kind.KERB, Kind.STRAY, Kind.LIZARD:
 				if not airborne():
 					_bump(it)
 			_:
 				_bump(it)
 	if dist >= RUN_SECONDS * SPEED:
 		arrived = true
-		state = State.DONE
-		queue_redraw()
-		finish(score_for(notes, notes_total, clock))
+		state = State.DOOR
+		door_t = 0.0
+		_door_beat()
 
 
 func _bump(it: Dictionary) -> void:
@@ -223,12 +354,45 @@ func _bump(it: Dictionary) -> void:
 	bumps += 1
 	clock -= BUMP_COST
 	bump_t = BUMP_SECONDS
-	vibrate(30)
+	var f := fx()
+	f.combo_break()
+	f.shake(Fx.TRAUMA_BUMP)
+	f.fail_edge()
+	f.flash("clock")
+	f.pop(S.t("mg.soi_dash.bump", {"secs": int(BUMP_COST)}), clock_px() + Vector2(0, 100), UI.NEON)
+	haptic("fail")
 	_update_status()
 
 
+func _note_beat(it: Dictionary) -> void:
+	var f := fx()
+	var p := _pt(0.0, float(it["lane"]) * 2.0) - Vector2(0, 120.0 * art_scale())
+	f.pop("+1", p, UI.GOLD)
+	f.flare(p, 70.0 * art_scale(), UI.GOLD)
+	f.burst("spark", p, 6)
+	best_combo = maxi(best_combo, f.combo_step(S.t("mg.soi_dash.combo"), Vector2(size.x * 0.5, size.y * 0.25)))
+	haptic("tick")
+
+
+func _door_beat() -> void:
+	var f := fx()
+	var p := _pt(DOOR_AHEAD, 0.0)
+	var sc := art_scale() * _k(DOOR_AHEAD)
+	var sign_p := p - Vector2(0, 240.0 * sc)
+	f.flare(sign_p, 260.0 * sc, UI.NEON)
+	f.burst("confetti", sign_p)
+	haptic("strong")
+
+
+func _puff(pos: Vector2, size_k: float) -> void:
+	_puffs.append({"pos": pos, "t": 0.0, "size": size_k})
+
+
 func _result_extra() -> Dictionary:
-	return {"notes": notes, "notes_total": notes_total, "bumps": bumps, "spare": clock, "arrived": arrived, "seed": seed_used}
+	# TODO(Q4 mg_rivals.gd): competition (regular to beat, ghost run, board) adds {"rival": {...}} here once Q4's
+	# shared rivals API lands; the street per night is the ghost's track (seed_used + relaxed).
+	return {"notes": notes, "notes_total": notes_total, "bumps": bumps, "spare": clock, "arrived": arrived, "seed": seed_used,
+		"best_combo": best_combo, "relaxed": relaxed}
 
 
 func _update_status() -> void:
@@ -257,7 +421,7 @@ func _gui_input(event: InputEvent) -> void:
 				hop()
 
 
-# --- Drawing ---------------------------------------------------------------------------------------
+# --- Layout ----------------------------------------------------------------------------------------
 
 ## Half the road's width at the runner, in px: the kerbs (l = +-3) stay inside the screen in portrait, and the road
 ## does not stretch across a wide landscape screen. 0.3.1 (item 37): it was size.x * 0.40 * 0.66 per lane unit, which
@@ -266,89 +430,356 @@ func road_half() -> float:
 	return minf(size.x * 0.42, size.y * 0.32)
 
 
+## Perspective factor at street distance d: 1 at the runner, smaller far away.
+func _k(d: float) -> float:
+	return 1.0 / (1.0 + maxf(d, -0.5) * 0.45)
+
+
 ## Screen point for street distance d ahead (0 = the runner) in lane position l (-3..3: kerb to kerb, lanes at
 ## -2 / 0 / 2).
 func _pt(d: float, l: float) -> Vector2:
 	var horizon := size.y * 0.16
 	var base := size.y * 0.86
-	var k := 1.0 / (1.0 + d * 0.45)          # 1 at the runner, smaller far away
+	var k := _k(d)
 	var yy := horizon + (base - horizon) * k
 	return Vector2(size.x * 0.5 + l / 3.0 * road_half() * k, yy)
+
+
+## Sprite scale at the runner: one lane holds ART_LANE_PX of sprite; capped at 1.5 so the voxels stay crisp.
+func art_scale() -> float:
+	return clampf(road_half() * 2.0 / 3.0 / ART_LANE_PX, 0.4, 1.5)
+
+
+func runner_px() -> Vector2:
+	return _pt(0.0, lane_anim * 2.0)
+
+
+func clock_px() -> Vector2:
+	return Vector2(size.x * 0.5, 50.0)
+
+
+## Highest the runner's hop lifts the feet, px.
+func hop_lift_px() -> float:
+	return 110.0 * art_scale()
+
+
+## The screen rect a sprite frame covers when drawn with its anchor at `pos` and scale `sc` ({} sprites: zero).
+func sprite_rect(sprite: String, pos: Vector2, sc: float) -> Rect2:
+	var m := sprite_meta(sprite)
+	if m.is_empty():
+		return Rect2(pos, Vector2.ZERO)
+	var a := Vector2(m["anchor_px"][0], m["anchor_px"][1])
+	return Rect2(pos - a * sc, Vector2(m["frame_w"], m["frame_h"]) * sc)
+
+
+static func sprite_meta(sprite: String) -> Dictionary:
+	if _meta.is_empty():
+		var f := FileAccess.open(ART + "sprites.json", FileAccess.READ)
+		if f != null:
+			var j = JSON.parse_string(f.get_as_text())
+			if j is Dictionary:
+				_meta = j.get("sprites", {})
+	return _meta.get(sprite, {})
+
+
+# --- Drawing ---------------------------------------------------------------------------------------
+
+func _t(file: String) -> Texture2D:
+	if not _tex.has(file):
+		var path := ART + file
+		_tex[file] = load(path) if ResourceLoader.exists(path) else null
+	return _tex[file]
+
+
+func _sprites() -> bool:
+	return _t("runner.png") != null and not sprite_meta("runner").is_empty()
+
+
+## Draws frame `frame` of `sprite` with its anchor at `pos`, scale `sc` (negative x mirrors), on `ci`. glow: the
+## half-size `_glow` sheet stretched over the same frame rect (README: glow_scale 2).
+func _spr(ci: CanvasItem, sprite: String, frame: int, pos: Vector2, sc: Vector2, col := Color.WHITE, glow := false) -> void:
+	var m := sprite_meta(sprite)
+	if m.is_empty():
+		return
+	var tex := _t(m.get("glow_file", "") if glow else m["file"])
+	if tex == null:
+		return
+	var fw: float = m["frame_w"]
+	var fh: float = m["frame_h"]
+	var a := Vector2(m["anchor_px"][0], m["anchor_px"][1])
+	var src := Rect2(frame * fw, 0, fw, fh)
+	if glow:
+		src = Rect2(frame * fw * 0.5, 0, fw * 0.5, fh * 0.5)
+	ci.draw_set_transform(pos, 0.0, sc)
+	ci.draw_texture_rect_region(tex, Rect2(-a, Vector2(fw, fh)), src, col)
+	ci.draw_set_transform(Vector2.ZERO)
+
+
+func _ensure_glow() -> void:
+	if _glow != null and is_instance_valid(_glow):
+		return
+	_glow = Control.new()
+	_glow.name = "Glow"
+	_glow.mouse_filter = Control.MOUSE_FILTER_IGNORE
+	_glow.set_anchors_preset(Control.PRESET_FULL_RECT)
+	var mat := CanvasItemMaterial.new()
+	mat.blend_mode = CanvasItemMaterial.BLEND_MODE_ADD
+	_glow.material = mat
+	_glow.draw.connect(_draw_glow)
+	add_child(_glow)
+	move_child(_glow, 0)                 # under the mg_fx overlay
 
 
 func _draw() -> void:
 	if size.x <= 0.0:
 		return
-	var horizon := size.y * 0.16
-	draw_rect(Rect2(0, 0, size.x, size.y), Color("140A0C"))
-	# road
-	var road := PackedVector2Array([_pt(VIEW, -3.0), _pt(VIEW, 3.0), _pt(-0.2, 3.0), _pt(-0.2, -3.0)])
-	draw_colored_polygon(road, Color("24141A"))
-	for l in [-0.5, 0.5]:
-		draw_line(_pt(VIEW, l * 2.0), _pt(-0.2, l * 2.0), UI.LINE, 4.0)
-	# shophouse neon either side, scrolling
-	for k in 8:
-		var d := fposmod(k * 0.8 - dist, 6.4)
-		var cols: Array[Color] = [UI.CYAN, UI.AMBER, UI.GOLD, UI.RED_HI]
-		var c := cols[k % 4]
-		for side in [-1, 1]:
-			var p := _pt(d, side * 3.35)          # just past the kerb, inside the screen
-			var s := (p.y - horizon) / (size.y * 0.7)
-			draw_rect(Rect2(p.x - 30 * s - side * 20 * s, p.y - 160 * s, 60 * s, 110 * s), c, false, maxf(2.0, 6.0 * s))
-	# the sign at the end of the soi
-	var left := RUN_SECONDS * SPEED - dist
-	if left < VIEW:
-		var p := _pt(left, 0)
-		var s := (p.y - horizon) / (size.y * 0.7)
-		draw_rect(Rect2(p.x - 200 * s, p.y - 260 * s, 400 * s, 100 * s), UI.NEON, false, maxf(2.0, 8.0 * s))
-		UI.draw_text(self, "BLACK CABIN", Vector2(p.x, p.y - 190 * s), maxi(10, int(70 * s)), UI.NEON)
-	else:
-		UI.draw_text(self, "BLACK CABIN", Vector2(size.x * 0.5, horizon - 10), 40, Color(UI.NEON, 0.6))
-	# items, far to near
-	var vis: Array = []
-	for it in items:
-		var d := float(it["at"]) - dist
-		if not it["done"] and d > -HIT_ZONE and d < VIEW:
-			vis.append(it)
-	vis.sort_custom(func(a, b): return float(a["at"]) > float(b["at"]))
-	for it in vis:
+	if not _sprites():
+		_draw_flat()
+		return
+	_ensure_glow()
+	var f := fx()
+	draw_rect(Rect2(Vector2.ZERO, size), UI.BG_DEEP)
+	_draw_backdrop()
+	_draw_road()
+	# shophouses either side, far to near, then the door, the street life and the runner
+	for s in _shops():
+		_spr(self, "shopfront", s["frame"], s["pos"], s["sc"], Color(0.85, 0.85, 0.9))
+	var left := RUN_SECONDS * SPEED - dist + DOOR_AHEAD
+	if left < VIEW + 1.0:
+		var sc := art_scale() * _k(left) * 1.2
+		_spr(self, "door_front", 1 if state == State.DOOR or state == State.DONE else 0, _pt(left, 0.0), Vector2(sc, sc))
+	for it in _visible():
 		_draw_item(it, float(it["at"]) - dist)
 	_draw_runner()
-	UI.draw_text(self, S.t("mg.soi_dash.clock", {"clock": clock_text(clock)}), Vector2(size.x * 0.5, 50), 40, UI.GOLD if clock > 5.0 else UI.NEON)
+	_draw_puffs()
+	var cc := UI.GOLD if clock > 5.0 else UI.NEON
+	UI.draw_text(self, S.t("mg.soi_dash.clock", {"clock": clock_text(clock)}), clock_px(), 40, f.flash_color("clock", cc))
 	if state == State.INTRO:
 		UI.draw_text(self, S.t("mg.soi_dash.hint"), Vector2(size.x * 0.5, size.y - 60), 40, UI.SMOKE)
 
 
+## The far soi (blurred render): covers the play area, its vanishing point on the horizon, creeping closer as the
+## runner nears the door (slow parallax against the road).
+func _draw_backdrop() -> void:
+	var tex := _t("backdrop.png")
+	if tex == null:
+		return
+	var ts := Vector2(tex.get_size())
+	var zoom := 1.0 + 0.12 * clampf(dist / (RUN_SECONDS * SPEED), 0.0, 1.0)
+	var sc := maxf(size.x / ts.x, size.y / ts.y) * zoom
+	var dsz := ts * sc
+	var vp := Vector2(0.5, 0.36)                     # the soi's far end in the render
+	var horizon := size.y * 0.16
+	var pos := Vector2(size.x * 0.5, horizon) - vp * dsz
+	pos.y = minf(pos.y, 0.0)
+	pos.x = clampf(pos.x, size.x - dsz.x, 0.0)
+	draw_texture_rect(tex, Rect2(pos, dsz), false, Color(0.75, 0.72, 0.78))
+
+
+func _draw_road() -> void:
+	var tex := _t("road_tile.png")
+	var n := 26
+	var d_near := -0.3
+	for i in n:
+		# strips spaced so each is about as tall on screen as the next
+		var a := d_near + (VIEW - d_near) * pow(float(i) / n, 1.6)
+		var b := d_near + (VIEW - d_near) * pow(float(i + 1) / n, 1.6)
+		var pts := PackedVector2Array([_pt(a, -3.0), _pt(a, 3.0), _pt(b, 3.0), _pt(b, -3.0)])
+		var shade := Color(0.8, 0.78, 0.85).lerp(Color(0.35, 0.3, 0.4), clampf(a / VIEW, 0.0, 1.0))
+		if tex != null:
+			var va := (a + dist) * 1.5
+			var vb := (b + dist) * 1.5
+			var uvs := PackedVector2Array([Vector2(0, -va), Vector2(3, -va), Vector2(3, -vb), Vector2(0, -vb)])
+			draw_polygon(pts, PackedColorArray([shade]), uvs, tex)
+		else:
+			draw_colored_polygon(pts, Color("24141A"))
+		# kerb stones: black and white blocks scrolling with the street
+		var white := int(floor((a + dist) * 3.0)) % 2 == 0
+		var kc := Color(0.82, 0.8, 0.78) if white else Color(0.1, 0.09, 0.1)
+		kc = kc.lerp(Color(0.2, 0.15, 0.2), clampf(a / VIEW, 0.0, 1.0) * 0.6)
+		var w := maxf(2.0, 14.0 * _k(a) * art_scale())
+		for side in [-1.0, 1.0]:
+			draw_line(_pt(a, side * 3.0), _pt(b, side * 3.0), kc, w)
+	# lane dashes, scrolling
+	var dash := _t("lane_dash.png")
+	var period := 0.7
+	for j in 8:
+		var dd := j * period - fposmod(dist, period)
+		if dd < -0.3 or dd > VIEW:
+			continue
+		for l in [-1.0, 1.0]:
+			var p0 := _pt(dd, l)
+			var p1 := _pt(dd + 0.3, l)
+			var w := maxf(2.0, 10.0 * _k(dd) * art_scale())
+			var col := Color(1, 1, 1, 0.75 * (1.0 - clampf(dd / VIEW, 0.0, 1.0) * 0.6))
+			if dash != null:
+				draw_texture_rect(dash, Rect2(p1.x - w * 0.5, p1.y, w, p0.y - p1.y), false, col)
+			else:
+				draw_line(p0, p1, col, w)
+
+
+## Shopfront placements, far to near: {frame, pos, sc (x mirrored on the right)}.
+func _shops() -> Array:
+	var out: Array = []
+	var period := 0.8
+	var count := 9
+	for j in count:
+		var d := j * period - fposmod(dist, period) - 0.4
+		var idx := int(floor((dist + 0.4) / period)) + j  # stable id per shop as it scrolls
+		var k := art_scale() * _k(d) * 1.25
+		for side in [-1, 1]:
+			out.append({"frame": posmod(idx * 2 + (1 if side > 0 else 0), 3), "pos": _pt(d, side * 3.55),
+				"sc": Vector2(k * -side, k), "d": d})
+	out.sort_custom(func(a, b): return a["d"] > b["d"])
+	return out
+
+
+func _visible() -> Array:
+	var vis: Array = []
+	for it in items:
+		var d := float(it["at"]) - dist
+		var dd := drawn_dist(it, d, relaxed)
+		if not it["done"] and d > -HIT_ZONE and dd < VIEW:
+			vis.append(it)
+	vis.sort_custom(func(a, b): return drawn_dist(a, float(a["at"]) - dist, relaxed) > drawn_dist(b, float(b["at"]) - dist, relaxed))
+	return vis
+
+
 func _draw_item(it: Dictionary, d: float) -> void:
-	var p := _pt(d, float(it["lane"]) * 2.0)
-	var s := (p.y - size.y * 0.16) / (size.y * 0.7)
+	var dd := drawn_dist(it, d, relaxed)
+	var lp := mover_lane(it, d, relaxed)
+	var p := _pt(dd, lp * 2.0)
+	var k := art_scale() * _k(dd)
+	var fade := clampf((VIEW - dd) / 0.6, 0.0, 1.0)             # far things fade in out of the dark
+	var col := Color(1, 1, 1, fade)
 	match int(it["kind"]):
 		Kind.NOTE:
-			draw_circle(p + Vector2(-8, -40) * s, 16 * s, UI.GOLD)
-			draw_line(p + Vector2(6, -40) * s, p + Vector2(6, -110) * s, UI.GOLD, maxf(2.0, 7 * s))
+			var bob := sin(_anim_t * 6.0 + float(it["at"]) * 3.0) * 8.0 * k
+			_spr(self, "note", 0, p - Vector2(0, 90.0 * k + bob), Vector2(k, k), col)
 		Kind.BIKE:
-			draw_rect(Rect2(p + Vector2(-50, -120) * s, Vector2(100, 90) * s), UI.CYAN)
-			draw_circle(p + Vector2(-34, -20) * s, 18 * s, UI.BG_DEEP)
-			draw_circle(p + Vector2(34, -20) * s, 18 * s, UI.BG_DEEP)
+			_spr(self, "motorbike", 0, p, Vector2(k, k), col)
 		Kind.CART:
-			draw_rect(Rect2(p + Vector2(-70, -150) * s, Vector2(140, 120) * s), UI.AMBER)
-			draw_rect(Rect2(p + Vector2(-80, -170) * s, Vector2(160, 24) * s), UI.RED_HI)
+			_spr(self, "food_cart", 0, p, Vector2(k, k), col)
+			# steam off the noodle pot
+			for s in 3:
+				var ph := fposmod(_anim_t * 0.8 + s * 0.33, 1.0)
+				var sp := p + Vector2((-30.0 + s * 18.0 + sin(ph * 6.0 + s) * 8.0) * k, (-200.0 - ph * 90.0) * k)
+				draw_circle(sp, (10.0 + ph * 16.0) * k, Color(1, 1, 1, 0.18 * (1.0 - ph) * fade))
+		Kind.TUK:
+			var bob := absf(sin(_anim_t * 18.0)) * 4.0 * k
+			_spr(self, "tuk_tuk_front", 0, p - Vector2(0, bob), Vector2(k, k), col)
 		Kind.DOG:
-			draw_rect(Rect2(p + Vector2(-50, -40) * s, Vector2(100, 34) * s), Color("C4A07A"))
-			draw_rect(Rect2(p + Vector2(40, -54) * s, Vector2(28, 28) * s), Color("C4A07A"))
+			_spr(self, "soi_dog", 1 if d < DOG_WAKE else 0, p, Vector2(k, k), col)
+		Kind.STRAY:
+			var moving := absf(mover_lane(it, d + 0.05, relaxed) - lp) > 0.001
+			var dir := signf(float(it["lane"]) - float(it["from"]))
+			var fr := int(_anim_t * 8.0) % 2 if moving else 1
+			_spr(self, "soi_dog_trot", fr, p, Vector2(k * (dir if dir != 0.0 else 1.0), k), col)
+		Kind.LIZARD:
+			var dir := signf(float(it["lane"]) - float(it["from"]))
+			var fr := 1 if fposmod(_anim_t, 1.1) < 0.25 else 0          # tongue flick
+			var wig := sin(_anim_t * 9.0) * 0.04
+			var lk := k * 0.85
+			draw_set_transform(p, wig, Vector2(lk * dir, lk))
+			var m := sprite_meta("monitor_lizard")
+			var tex := _t("monitor_lizard.png")
+			if tex != null and not m.is_empty():
+				var a := Vector2(m["anchor_px"][0], m["anchor_px"][1])
+				draw_texture_rect_region(tex, Rect2(-a, Vector2(m["frame_w"], m["frame_h"])),
+					Rect2(fr * float(m["frame_w"]), 0, m["frame_w"], m["frame_h"]), col)
+			draw_set_transform(Vector2.ZERO)
 		Kind.KERB:
-			draw_rect(Rect2(p + Vector2(-80, -26) * s, Vector2(160, 26) * s), UI.ASH)
+			_spr(self, "kerb", 0, p, Vector2(k, k), col)
 
 
 func _draw_runner() -> void:
+	var p := runner_px()
+	var sc := art_scale()
+	var prog := 1.0 - hop_t / HOP_SECONDS if airborne() else 0.0
+	var lift := sin(clampf(prog, 0.0, 1.0) * PI) * hop_lift_px()
+	# shadow stays on the road and shrinks with the hop
+	var sh := 1.0 - 0.4 * (lift / maxf(1.0, hop_lift_px()))
+	draw_set_transform(p + Vector2(0, 4), 0.0, Vector2(1.0, 0.28))
+	draw_circle(Vector2.ZERO, 58.0 * sc * sh, Color(0, 0, 0, 0.45))
+	draw_set_transform(Vector2.ZERO)
+	# lane dash streak
+	if _dash_t > 0.0:
+		var a := _dash_t / DASH_SECONDS
+		var x0 := _pt(0.0, _dash_from * 2.0).x
+		for i in 3:
+			var y := p.y - lift - (50.0 + i * 50.0) * sc
+			draw_line(Vector2(x0, y), Vector2(p.x, y), Color(UI.CYAN, 0.55 * a), maxf(2.0, (8.0 - i * 2.0) * sc))
 	if bump_t > 0.0 and int(bump_t * 10.0) % 2 == 0:
 		return
-	var p := _pt(0.0, lane_anim * 2.0)
+	var fr := int(dist * 8.0) % 4 if state == State.RUNNING or state == State.DOOR else 0
+	if airborne():
+		fr = 4 if prog < 0.35 else 5
+	var sq := fx().squash_scale("runner")
+	var col := Color(1, 0.55, 0.55) if bump_t > 0.0 else Color.WHITE
+	_spr(self, "runner", fr, p - Vector2(0, lift), Vector2(sc * sq.x, sc * sq.y), col)
+
+
+func _draw_puffs() -> void:
+	for pf in _puffs:
+		var u: float = pf["t"] / PUFF_SECONDS
+		var sc := art_scale() * float(pf["size"])
+		for side in [-1.0, 1.0]:
+			for i in 2:
+				var c := Vector2(pf["pos"]) + Vector2(side * (30.0 + u * 70.0 + i * 20.0), -8.0 - u * 20.0 - i * 6.0) * sc
+				draw_circle(c, (14.0 + u * 14.0 - i * 4.0) * sc, Color(0.75, 0.68, 0.62, 0.45 * (1.0 - u)))
+
+
+func _draw_glow() -> void:
+	if size.x <= 0.0 or not _sprites():
+		return
+	for s in _shops():
+		var flick := 0.55 + 0.15 * sin(_anim_t * 3.0 + float(s["frame"]) * 2.0)
+		_spr(_glow, "shopfront", s["frame"], s["pos"], s["sc"], Color(1, 1, 1, flick), true)
+	var left := RUN_SECONDS * SPEED - dist + DOOR_AHEAD
+	if left < VIEW + 1.0:
+		var sc := art_scale() * _k(left) * 1.2
+		var open := state == State.DOOR or state == State.DONE
+		var a := 0.7 + (0.3 * minf(1.0, door_t * 4.0) if open else 0.15 * sin(_anim_t * 4.0))
+		_spr(_glow, "door_front", 1 if open else 0, _pt(left, 0.0), Vector2(sc, sc), Color(1, 1, 1, a), true)
+	for it in _visible():
+		var d := float(it["at"]) - dist
+		var dd := drawn_dist(it, d, relaxed)
+		var p := _pt(dd, mover_lane(it, d, relaxed) * 2.0)
+		var k := art_scale() * _k(dd)
+		match int(it["kind"]):
+			Kind.NOTE:
+				var bob := sin(_anim_t * 6.0 + float(it["at"]) * 3.0) * 8.0 * k
+				_spr(_glow, "note", 0, p - Vector2(0, 90.0 * k + bob), Vector2(k, k), Color(1, 1, 1, 0.8), true)
+			Kind.TUK:
+				_spr(_glow, "tuk_tuk_front", 0, p, Vector2(k, k), Color(1, 1, 1, 0.9), true)
+				Fx.draw_glow(_glow, p + Vector2(10.0, -60.0) * k, 90.0 * k, Color(1.0, 0.85, 0.5, 0.35))
+
+
+## No textures (a stripped build): the 0.3.1 flat shapes.
+func _draw_flat() -> void:
+	var horizon := size.y * 0.16
+	draw_rect(Rect2(0, 0, size.x, size.y), Color("140A0C"))
+	var road := PackedVector2Array([_pt(VIEW, -3.0), _pt(VIEW, 3.0), _pt(-0.2, 3.0), _pt(-0.2, -3.0)])
+	draw_colored_polygon(road, Color("24141A"))
+	for l in [-0.5, 0.5]:
+		draw_line(_pt(VIEW, l * 2.0), _pt(-0.2, l * 2.0), UI.LINE, 4.0)
+	UI.draw_text(self, "BLACK CABIN", Vector2(size.x * 0.5, horizon - 10), 40, Color(UI.NEON, 0.6))
+	for it in _visible():
+		var d := float(it["at"]) - dist
+		var p := _pt(drawn_dist(it, d, relaxed), mover_lane(it, d, relaxed) * 2.0)
+		var s := (p.y - horizon) / (size.y * 0.7)
+		var c := UI.ASH
+		match int(it["kind"]):
+			Kind.NOTE: c = UI.GOLD
+			Kind.BIKE: c = UI.CYAN
+			Kind.CART: c = UI.AMBER
+			Kind.TUK: c = UI.RED_HI
+			Kind.DOG, Kind.STRAY: c = Color("C4A07A")
+			Kind.LIZARD: c = Color("4E5638")
+		var h := 120.0 if not hoppable(int(it["kind"])) else 34.0
+		draw_rect(Rect2(p + Vector2(-50, -h) * s, Vector2(100, h) * s), c)
+	var p := runner_px()
 	var lift := sin(clampf(hop_t / HOP_SECONDS, 0.0, 1.0) * PI) * 110.0
-	var stride := sin(dist * 18.0) * 10.0 if state == State.RUNNING and not airborne() else 0.0
-	var base := p - Vector2(0, lift)
-	draw_colored_polygon(PackedVector2Array([p + Vector2(-50, 4), p + Vector2(50, 4), p + Vector2(40, 16), p + Vector2(-40, 16)]), Color(0, 0, 0, 0.35))
-	draw_rect(Rect2(base + Vector2(-22, -60 + stride), Vector2(18, 60)), Color("222230"))
-	draw_rect(Rect2(base + Vector2(4, -60 - stride), Vector2(18, 60)), Color("222230"))
-	draw_rect(Rect2(base + Vector2(-30, -150), Vector2(60, 92)), UI.RED)
-	draw_rect(Rect2(base + Vector2(-24, -200), Vector2(48, 48)), Color("6A402A"))
+	if not (bump_t > 0.0 and int(bump_t * 10.0) % 2 == 0):
+		draw_rect(Rect2(p + Vector2(-30, -200 - lift), Vector2(60, 200)), UI.RED)
+	UI.draw_text(self, S.t("mg.soi_dash.clock", {"clock": clock_text(clock)}), clock_px(), 40, UI.GOLD if clock > 5.0 else UI.NEON)

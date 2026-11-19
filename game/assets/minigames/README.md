@@ -42,7 +42,7 @@ Daniele's OK on hub card `minigame-sprites-review`).
 |---|---|---|---|---|
 | Neon Moth | 11 | 1.82 MB | **1.82 MB** | 4 MB |
 | Coaster Flip | 14 | 3.61 MB | **3.07 MB** (one regular) | 4 MB |
-| Soi Dash | 16 | 3.56 MB | **3.56 MB** | 4 MB |
+| Soi Dash | 19 | 3.94 MB | **3.94 MB** | 4 MB |
 | Shake & Serve | 8 | 2.51 MB | **2.51 MB** | 4 MB |
 | Pour Perfect | 5 | 2.86 MB | **2.86 MB** | 4 MB |
 | Front Row Rhythm | 8 | 2.25 MB | **2.25 MB** | 4 MB |
@@ -92,8 +92,10 @@ Loaded: **3.07 MB**. Contact sheet: `docs/art/screens/minigame-sprites/coaster_f
 | `runner.png` | 6: 0 run0, 1 run1, 2 run2, 3 run3, 4 hop_tuck, 5 hop_reach | 150 × 206 | [86.5, 202.9] |  | seen from behind; frames 0-3 run (advance by distance), 4-5 hop (tuck on the way up, reach at the top). Default avatar: the player's own avatar needs a runtime render (builder's call) |
 | `motorbike.png` | 1 | 170 × 152 | [89.0, 131.6] |  | parked scooter across the lane; anchor = ground centre |
 | `tuk_tuk.png` | 1 | 228 × 214 | [120.5, 184.5] |  | parked tuk-tuk, blocks a lane; anchor = ground centre |
+| `tuk_tuk_front.png` | 1 | 174 × 226 | [90.2, 184.2] | yes | the same tuk-tuk driving at the runner (Q6): nose and headlight toward the camera; glow = headlight and fringe lights; anchor = ground centre |
 | `food_cart.png` | 1 | 198 × 238 | [107.0, 213.3] |  | noodle cart with umbrella, blocks a lane; anchor = ground centre |
 | `soi_dog.png` | 2: 0 asleep, 1 ear_up | 186 × 90 | [81.6, 65.6] |  | sleeping soi dog across the lane, hop it; anchor = ground centre |
+| `soi_dog_trot.png` | 2: 0 stride, 1 gather | 174 × 146 | [76.1, 128.1] |  | stray soi dog trotting across the soi (Q6), head toward +x (screen right); mirror to trot left; alternate the frames at ~8 fps while it moves; anchor = ground centre |
 | `monitor_lizard.png` | 2: 0 still, 1 tongue | 298 × 78 | [173.5, 47.2] |  | water monitor crossing the soi, hop it; anchor = ground centre |
 | `kerb.png` | 1 | 170 × 64 | [86.3, 44.1] |  | black and white kerb block, hop it; anchor = ground centre |
 | `note.png` | 1 | 102 × 134 | [42.0, 92.3] | yes | music note to collect; anchor = centre of the note head |
@@ -103,7 +105,7 @@ Loaded: **3.07 MB**. Contact sheet: `docs/art/screens/minigame-sprites/coaster_f
 | `door_front.png` | 2: 0 closed, 1 open | 278 × 302 | [136.5, 276.0] | yes | Black Cabin at the end of the soi; open when the runner arrives; anchor = ground centre |
 | `backdrop.png` | 1 | 270 × 480 | [0, 0] |  | night soi far layer (blurred); draw behind the road, scroll slowly |
 
-Loaded: **3.56 MB**. Contact sheet: `docs/art/screens/minigame-sprites/soi_dash.png`.
+Loaded: **3.94 MB**. Contact sheet: `docs/art/screens/minigame-sprites/soi_dash.png`.
 
 ## Shake & Serve (`game/scripts/minigames/shake_serve.gd`) — `game/assets/minigames/shake_serve/`
 

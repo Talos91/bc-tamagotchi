@@ -272,7 +272,28 @@ Daniele's OK on hub card `minigame-sprites-review`).
 """
 
 
+def _report_from_disk(game):
+    """A game not in this run (`--game` subset): its section comes from the sprites.json already on disk, so a
+    partial run rewrites only its own games and the README keeps every other game (Q6, 2026-11-19)."""
+    path = os.path.join(OUT, game, "sprites.json")
+    if not os.path.exists(path):
+        return None
+    with open(path, encoding="utf-8") as fh:
+        meta = json.load(fh)
+    files = []
+    for name, e in meta["sprites"].items():
+        files.append((e["file"], e["bytes"], name))
+        if e.get("glow_file"):
+            files.append((e["glow_file"], e["glow_bytes"], name))
+    return dict(meta=meta, files=files, total=meta["texture_bytes_all_files"], loaded=meta["texture_bytes_loaded"])
+
+
 def write_readme(report):
+    for g in GAMES:
+        if g not in report:
+            d = _report_from_disk(g)
+            if d:
+                report[g] = d
     lines = [README_HEAD]
     lines.append("## Texture memory per game\n")
     lines.append("| Game | Files | All files | Loaded with the game open | Budget |")
