@@ -333,7 +333,7 @@ func _build_ribbon(text: String) -> Control:
 
 
 ## Lines under the score: how far over your best, and tonight's regular to beat (result.extra.rival =
-## {regular, points} or {name, points}). Each line: {id, text, color}. Ghost and board lines come later (Q4+).
+## {regular, points} or {name, points}), and the board place (extra.board = {rank, count}, mg_rivals). Each line: {id, text, color}.
 static func competition_lines(result: Dictionary, o: Dictionary) -> Array:
 	var out: Array = []
 	var points := int(result.get("points", 0))
@@ -353,6 +353,12 @@ static func competition_lines(result: Dictionary, o: Dictionary) -> Array:
 			out.append({"id": "rival", "text": S.t("mg.result.rival_level", vars), "color": UI.CREAM})
 		else:
 			out.append({"id": "rival", "text": S.t("mg.result.rival_short", vars), "color": UI.SMOKE})
+	# Q4 hook (mg_rivals.gd): this run's place on tonight's board, result.extra.board = {rank, count}
+	var board: Variant = result.get("extra", {}).get("board")
+	if board is Dictionary and int(board.get("rank", 0)) > 0:
+		var top := int(board["rank"]) == 1
+		out.append({"id": "board", "text": S.t("mg.result.board", {"rank": int(board["rank"]), "count": int(board.get("count", 0))}),
+			"color": UI.GOLD if top else UI.SMOKE})
 	return out
 
 

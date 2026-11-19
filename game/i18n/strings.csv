@@ -232,3 +232,9 @@ mg.result.rival_beat,You beat {regular} ({score}),ชนะ{regular}แล้ว
 mg.result.rival_level,Level with {regular} ({score}),เสมอกับ{regular} ({score}),Result card competition line: same score as tonight's regular; TH machine draft,34
 mg.result.rival_short,{regular} {score} · {gap} short,{regular} {score} · ขาดอีก {gap},Result card competition line: tonight's regular not beaten. {gap} = points short; TH machine draft,34
 mg.settings.reduce_motion,Reduce motion,ลดการเคลื่อนไหว,Settings switch: turns off minigame screen shake (Needs.ext.ui.reduce_motion); not on a menu yet; TH machine draft,24
+mg.rivals.you,You,คุณ,Minigame board row for the player (mg_rivals); TH machine draft,10
+mg.rivals.to_beat,to beat,คู่แข่ง,Minigame HUD label over tonight's regular to beat (mg_rivals); TH machine draft,12
+mg.rivals.you_now,you {score},คุณ {score},Minigame HUD: the player's points so far under the regular to beat. {score} = 0-100; TH machine draft,14
+mg.rivals.passed,Past {regular}!,แซง{regular}แล้ว!,Minigame pop when the player's live points pass tonight's regular. {regular} = display name; TH machine draft,22
+mg.rivals.ghost,The faint moth is your best tonight,ผีเสื้อจางๆ คือรอบที่ดีที่สุดของคุณคืนนี้,Neon Moth intro line when a ghost run flies beside the player (mg_rivals); TH machine draft,40
+mg.result.board,#{rank} of {count} tonight,อันดับ {rank} จาก {count} คืนนี้,Result card competition line: this run's place on tonight's board (the regulars who played + you). TH machine draft,26
