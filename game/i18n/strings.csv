@@ -203,7 +203,7 @@ mg.soi_dash.combo,NOTES,โน้ต,Soi Dash combo word for notes in a row with
 mg.soi_dash.bump,−{secs} s,−{secs} วิ,Pop over the clock when a bump costs time. {secs} seconds lost; TH machine draft,12
 mg.shake_serve.title,Shake & Serve,Shake & Serve,Minigame name (stays English),18
 mg.shake_serve.subtitle,Nam's orders by mood,ออเดอร์ตามอารมณ์ของนัม,Subtitle under the name in the lab menu,34
-mg.shake_serve.how_to,"Read the recipe, tap its bottles in order, shake on Nam's nods. Each order levels up: 2, 3, then 4 bottles. House mixes for now.",จำสูตร แตะขวดตามลำดับ แล้วเขย่าตามที่นัมพยักหน้า ทุกออเดอร์ยากขึ้น: 2, 3 แล้ว 4 ขวด ใช้สูตรของร้านไปก่อน,Pause sheet help text,150
+mg.shake_serve.how_to,"Read the recipe, tap its bottles in order, shake on Nam's nods. Each order levels up: 2, 3, then 4 bottles. House mixes for now.","จำสูตร แตะขวดตามลำดับ แล้วเขย่าตามที่นัมพยักหน้า ทุกออเดอร์ยากขึ้น: 2, 3 แล้ว 4 ขวด ใช้สูตรของร้านไปก่อน",Pause sheet help text,150
 mg.shake_serve.tier_1,Served,เสิร์ฟแล้ว,Result card tier word,18
 mg.shake_serve.tier_2,Behind the bar,หลังบาร์ได้,Result card tier word,18
 mg.shake_serve.tier_3,Nam's pick,นัมเลือกเลย,Result card tier word,18

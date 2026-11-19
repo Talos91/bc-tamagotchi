@@ -90,6 +90,8 @@ const NAM_POS := Vector2(118, 268)           ## neck
 const SPR_NAM := 1.55
 const BUBBLE := Rect2(214, 132, 486, 150)
 const CHIP_Y := 340.0
+const CHIP_W := 150.0
+const CHIP_GAP := 12.0
 const SHELF_Y := [628.0, 862.0]              ## shelf boards (bottle bottoms)
 const SHELF_X0 := 85.0
 const SHELF_DX := 110.0
@@ -401,7 +403,7 @@ func _juice_pour(id: String) -> void:
 	var f := fx()
 	f.squash("bottle_" + id)
 	f.flash("bottle_" + id)
-	f.pop("%d/%d" % [step, bottles_needed()], _xf() * (from + Vector2(0, -170)), UI.GOLD, 40)
+	f.pop(_label_of(id), _xf() * chip_rect(step - 1).get_center() + Vector2(0, -40), UI.GOLD, 36)  # the real bottle
 	f.burst("spark", _xf() * (SHAKER_POS + Vector2(0, -190)), 8)
 	haptic("tick")
 
@@ -527,6 +529,13 @@ func shelf_at(p: Vector2) -> String:
 		if slot_rect(i).has_point(q):
 			return str(shelf_order[i])
 	return ""
+
+
+## Recipe chip k of the current order, in field px.
+func chip_rect(k: int) -> Rect2:
+	var n := maxi(1, bottles_needed())
+	var x0 := FIELD.x * 0.5 - (n * CHIP_W + (n - 1) * CHIP_GAP) * 0.5
+	return Rect2(x0 + k * (CHIP_W + CHIP_GAP), CHIP_Y, CHIP_W, 84)
 
 
 func ring_pos(i: int) -> Vector2:
@@ -684,12 +693,12 @@ func _draw_chips() -> void:
 	var n := bottles_needed()
 	if r.is_empty() or n == 0 or state == State.INTRO:
 		return
-	var w := 150.0
-	var gap := 12.0
-	var x0 := FIELD.x * 0.5 - (n * w + (n - 1) * gap) * 0.5
+	var w := CHIP_W
+	var gap := CHIP_GAP
+	var x0 := chip_rect(0).position.x
 	for k in n:
 		var id := str(r[1 + k])
-		var rect := Rect2(x0 + k * (w + gap), CHIP_Y, w, 84)
+		var rect := chip_rect(k)
 		var shown := state == State.MEMO or (state == State.PICK and k < step) or state == State.SHAKE or state == State.SERVE
 		draw_rect(rect, Color(UI.AMBER, 0.9) if shown else Color(UI.BG_DEEP, 0.85))
 		draw_rect(rect, UI.AMBER, false, 3.0)
@@ -697,7 +706,8 @@ func _draw_chips() -> void:
 		if shown:
 			if _art.has("bottles"):
 				_blit("bottles", shelf().find(id), rect.position + Vector2(34, 80), 0.45)
-			UI.draw_text(self, _short_label(id), rect.position + Vector2(w * 0.6, 54), 22, UI.BG_DEEP)
+			var bname := _label_of(id)
+			UI.draw_text(self, bname, rect.position + Vector2(w * 0.6, 54), _fit(bname, 22, w - 64.0), UI.BG_DEEP)
 		else:
 			UI.draw_text(self, "?", rect.get_center() + Vector2(0, 12), 34, UI.ASH)
 	if state == State.MEMO:
@@ -834,7 +844,7 @@ func _draw_rings() -> void:
 ## The largest font size up to `size_px` that fits `text` in `width` field px.
 func _fit(text: String, size_px: int, width: float) -> int:
 	var w := _font().get_string_size(text, HORIZONTAL_ALIGNMENT_LEFT, -1, size_px).x
-	return size_px if w <= width else maxi(18, int(floor(size_px * width / w)))
+	return size_px if w <= width else maxi(14, int(floor(size_px * width / w)))
 
 
 func _font() -> Font:
