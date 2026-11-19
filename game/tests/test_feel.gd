@@ -722,7 +722,7 @@ func sight_blockers() -> Array:
 	var out := []
 	for e in [p.global_position + Vector3(0, 0.8, 0), p.global_position + Vector3(0, 1.25, 0)]:
 		for g in geoms:
-			if not is_instance_valid(g) or not g.is_visible_in_tree() or (g.layers & cam.cull_mask) == 0:
+			if not is_instance_valid(g) or not g.is_visible_in_tree() or (g.layers & cam.cull_mask) == 0 or g.cast_shadow == GeometryInstance3D.SHADOW_CASTING_SETTING_SHADOWS_ONLY:   # shadow-only: never drawn (venue_batch.gd proxies)
 				continue
 			var box := g.get_aabb()
 			if box.size.y < 0.05 or (box.size.x < 0.02 and box.size.z < 0.02):
