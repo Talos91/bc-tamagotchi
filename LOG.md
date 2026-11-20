@@ -327,3 +327,4 @@ Append-only. One dated line per event, newest last. Never edit earlier lines.
 - 2026-11-20 — Shared-checkout .git/index corrupt ("index uses 19? extension", Drive) right after my rebase; backed up to TEMP and rebuilt with git read-tree HEAD; working tree untouched.
 - 2026-11-20 — 🔍 verify-overflow DONE: 8d51b2b on main (32/32, web build OK, QR/layout diff empty); deploy run 44748728133 green, blackcabin.app = bc-9e53268b. Import crashes earlier were concurrency. Report committed by orchestrator (index was corrupt); verifier archived.
 - 2026-11-20 — Daniele: "no handover you ar eat only 16% context" (app reads 16 % of the 1M window; ~30 % vs 500k). Orchestrator local_14422c6c stays on past the four landings.
+- 2026-11-20 — 🛠️ perf-iphone-1120 self-handover at 41 % (d5cf451, code 48492a9 on wk/perf-iphone, not rebased); successor card task_a78935f0 in its session for Daniele; lands last, after "main has everything".
