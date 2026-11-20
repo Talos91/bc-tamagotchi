@@ -14,6 +14,7 @@
 
 ## TREE (method 3b)
 - Predecessor tree local_96f4e96d: done/archived. This stint local_5352afaa: 7 workers/verifiers archived (hk-cards, deploy-pipeline, verify-deploy, venue-entrance ×2, verify-venue, tonight-lineup, verify-lineup); open: the five above. Recap: vault raw/agent-notes/2026-11-20-black-cabin-orchestrator-stint-session-local-5352afaa-2026-1.md. Handoff handoffs/ORCHESTRATOR-HANDOVER-2026-11-20b.md.
+- Orchestrator now local_14422c6c (from 20:45). The five open sessions (verify-overflow, overflow-seats, play-telemetry, creator-fix 2, perf-iphone) were DETACHED at handover = top level: close each myself (role note, report, archive) when done; archiving local_5352afaa does not take them along (Master 11-20).
 - **Orchestrator: Opus 5.5 medium; orchestrators never Sonnet (Daniele 11-20). Fable workers only for an architecture plan or a bug Opus failed twice; Daniele's OK each time, logged.**
 - Hard walls: never push past unverified code; Verifier always its own session; code workers in own worktree C:/Users/itisf/bc-wt/<job>; ≤ 3 workers (4th only by Daniele's word); ctx measured vs 500k (40 % = 200k, any compaction = past 40 %).
 - Godot: ALWAYS C:/Users/itisf/godot-local/Godot_v4.6.1-stable_win64_console.exe (Drive exe crashes; skill default is Drive → pass --godot). Concurrent imports crash on strings_venue.csv → verifiers wait for quiet Godot + own TEMP. Kill by PID only.
