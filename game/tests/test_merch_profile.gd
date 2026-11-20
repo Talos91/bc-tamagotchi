@@ -51,6 +51,7 @@ func _init() -> void:
 	_version()
 	await _server()
 	await _booth()
+	await _booth_in_game()
 	await _lost_save()
 	await _session()
 	await _restore()
@@ -61,7 +62,7 @@ func _init() -> void:
 	quit(0 if fails.is_empty() else 1)
 
 
-func _character(name := "Ploy") -> void:
+func _character(name := "Juno") -> void:
 	needs.new_game()
 	var rec := Avatar.default_record()
 	rec["hair"] = Avatar.data()["hairs"][1]
@@ -111,7 +112,7 @@ func _version() -> void:
 	print("version")
 	# A save written by the live 0.4.0 build: save v1, avatar record v1 (no `top`), no merch, no ext.merch.
 	var old := {"version": 1, "saved_at_unix": 1795600000.0, "last_seen_unix": 1795600000.0,
-		"profile": {"player_id": "11111111-2222-4333-8444-555555555555", "display_name": "Ploy",
+		"profile": {"player_id": "11111111-2222-4333-8444-555555555555", "display_name": "Juno",
 			"avatar": {"v": 1, "body": "petite", "head": "round", "face": Avatar.data()["face_order"][0],
 				"skin": Avatar.data()["skins"][2], "hair": Avatar.data()["hairs"][2],
 				"hair_colour": Avatar.data()["hair_colours"][1], "look": Avatar.data()["look_order"][0],
@@ -128,7 +129,7 @@ func _version() -> void:
 	needs.from_dict(Save.read(path))
 	check(needs.has_avatar(), "0.4.0 save: the character is there after the version bump")
 	check(not needs.is_new_character(), "0.4.0 save: no creator prompt (not a new character)")
-	check(str(needs.profile["display_name"]) == "Ploy", "0.4.0 save: the name survives")
+	check(str(needs.profile["display_name"]) == "Juno", "0.4.0 save: the name survives")
 	var a: Dictionary = needs.avatar()
 	check(a["body"] == "petite" and a["head"] == "round" and a["hair"] == old["profile"]["avatar"]["hair"],
 		"0.4.0 save: body, head and hair survive")
@@ -149,7 +150,7 @@ func _version() -> void:
 	newer["future_system"] = {"x": 1}
 	needs.new_game()
 	needs.from_dict(newer)
-	check(needs.has_avatar() and str(needs.profile["display_name"]) == "Ploy", "a newer build's save keeps the character")
+	check(needs.has_avatar() and str(needs.profile["display_name"]) == "Juno", "a newer build's save keeps the character")
 	check(needs.to_dict().has("future_system"), "unknown keys from a newer build are written back")
 	ProjectSettings.set_setting("application/config/version", was_version)
 	needs.delete_save()
@@ -167,7 +168,7 @@ func _fresh_server() -> void:
 func _server() -> void:
 	print("server")
 	_fresh_server()
-	_character("Ploy")
+	_character("Juno")
 	prof.state()["owned"] = {}
 	prof.state()["account"] = ""
 	prof.state()["pushed"] = ""
@@ -175,7 +176,7 @@ func _server() -> void:
 	check(r.get("ok", false), "sync ok")
 	var uid: String = presence.player_id()
 	check(server.profiles.has(uid), "the server has the profile")
-	check(server.profiles[uid]["display_name"] == "Ploy", "server: name")
+	check(server.profiles[uid]["display_name"] == "Juno", "server: name")
 	check(server.profiles[uid]["avatar"].get("hair", "") == needs.avatar()["hair"], "server: avatar record")
 	check(prof.code().length() == 10, "a 10-character player code (%s)" % prof.code())
 	check(str(needs.profile["player_id"]) == uid, "Needs.profile.player_id is the account")
@@ -252,6 +253,51 @@ func _booth() -> void:
 		"server avatar carries the worn merch")
 
 
+## The real photo booth: the creator opens with a "Merch" button; the wardrobe it opens lists the owned pieces,
+## and wearing one reaches the creator's record (Done keeps it) and its preview figure.
+func _booth_in_game() -> void:
+	print("booth in game")
+	needs.profile["avatar"] = Merch.wear(needs.avatar(), "", "head")
+	var main: Node = load("res://scenes/main.tscn").instantiate()
+	main.intro = false
+	root.add_child(main)
+	for i in 10:
+		await process_frame
+	if is_instance_valid(main.welcome):
+		main.welcome.ok_button.pressed.emit()
+	main.open_sheet(main.zones.by_id("booth"))
+	await process_frame
+	var c: Control = main.creator
+	var b: Button = c.find_child("BoothMerch", true, false) if is_instance_valid(c) else null
+	check(b != null, "the photo booth creator has a Merch button")
+	if b != null:
+		b.pressed.emit()
+		await process_frame
+	var w: Control = main.merch_shop
+	check(is_instance_valid(w) and w.mode == "wardrobe", "Merch opens My Merch over the creator")
+	if is_instance_valid(w):
+		check(w._grid.get_node_or_null("Item_horse_mask") != null, "My Merch lists the horse mask")
+		w._select("horse_mask")
+		await w._on_action()
+		check(Merch.worn(c.record).get("head", "") == "horse_mask", "the creator's record now wears the mask")
+		await process_frame
+		var fig: Node3D = c.get("_figure")
+		check(fig != null and fig.find_children("Merch_head", "BoneAttachment3D", true, false).size() == 1,
+			"the creator's preview shows the mask")
+		w.close()
+		await process_frame
+	check(not is_instance_valid(main.merch_shop) and is_instance_valid(main.creator), "closing My Merch returns to the creator")
+	c._next.pressed.emit()
+	await process_frame
+	await process_frame
+	check(not is_instance_valid(main.creator) and Merch.worn(needs.avatar()).get("head", "") == "horse_mask",
+		"Done keeps the mask")
+	var pl_has: bool = main.player.find_children("Merch_head", "BoneAttachment3D", true, false).size() == 1
+	check(pl_has, "the player in the venue wears it")
+	main.queue_free()
+	await process_frame
+
+
 # ------------------------------------------------------------------ lost save, lost session, restore
 
 func _lost_save() -> void:
@@ -261,7 +307,7 @@ func _lost_save() -> void:
 	check(not needs.has_avatar() and prof.owned().is_empty(), "(local save gone)")
 	await prof.sync()
 	check(presence.player_id() == uid, "same account")
-	check(needs.has_avatar() and str(needs.profile["display_name"]) == "Ploy", "the character came back from the server")
+	check(needs.has_avatar() and str(needs.profile["display_name"]) == "Juno", "the character came back from the server")
 	check(prof.owns("horse_mask") and prof.owns("bc_logo_tee"), "the pieces came back")
 	check(Merch.worn(needs.avatar()).get("head", "") == "horse_mask", "still wearing the mask")
 
@@ -275,7 +321,7 @@ func _session() -> void:
 	await prof.sync()
 	var uid: String = presence.player_id()
 	check(uid != old_uid, "a new anonymous account")
-	check(server.profiles[uid]["display_name"] == "Ploy", "the new account has the character")
+	check(server.profiles[uid]["display_name"] == "Juno", "the new account has the character")
 	check(server.inventory.get(uid, {}).has("horse_mask"), "the pieces moved to the new account")
 	check(not server.inventory.has(old_uid), "the old account holds nothing")
 	check(prof.code() == code, "the player code stays the same")
@@ -299,7 +345,7 @@ func _restore() -> void:
 	check(not r.get("ok", true) and r["reason"] == "bad_code", "a wrong code is refused")
 	r = await prof.restore(code.substr(0, 4).to_lower() + "-" + code.substr(4, 3) + " " + code.substr(7))
 	check(r.get("ok", false), "the code (typed in lower case with dashes) works")
-	check(str(needs.profile["display_name"]) == "Ploy", "restored: the character")
+	check(str(needs.profile["display_name"]) == "Juno", "restored: the character")
 	check(prof.owns("horse_mask") and prof.owns("bc_logo_tee"), "restored: the pieces")
 	check(not server.inventory.has(src), "restored: the pieces left the old phone's account")
 	for i in 12:

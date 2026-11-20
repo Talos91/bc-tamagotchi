@@ -101,7 +101,7 @@ func _run() -> void:
 	var prof: Node = root.get_node("PlayerProfile")
 	needs.new_game()
 	var r := Avatar.default_record()
-	needs.set_avatar(r, "Ploy", "")
+	needs.set_avatar(r, "Juno", "")
 	for id in ["horse_mask", "bc_cap", "star_shades", "bc_logo_tee", "angel_wings"]:
 		await prof.claim(id)
 	prof.state()["code"] = "BC7KQ2M9XA"

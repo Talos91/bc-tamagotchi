@@ -152,7 +152,7 @@ func _build_preset(ps: PackedScene, avatar := {}) -> void:
 ## The creator's preview (owner list 2026-11-20 item 1, "superunresponsive"): the body's parts library is built once
 ## and kept whole; each change only shows the record's parts and recolours them. A body change builds the new one.
 func show_avatar(rec: Dictionary) -> void:
-	var res := Avatar.resolve(rec)
+	var res := Merch.adjust(Avatar.resolve(rec), rec)   # merch hides / hat hair (merch.gd)
 	if _model == null or look.get("library", "") != res["library"]:
 		set_look({"avatar": rec, "library": res["library"], "keep_all": true})
 	look["avatar"] = rec
@@ -170,6 +170,7 @@ func show_avatar(rec: Dictionary) -> void:
 			mi.set_surface_override_material(sfc, _slot_mat(base, str(colours.get(slot, ""))) if slot != "" else null)
 	for p in _props:
 		p.visible = p.visible and String(p.name) in ids
+	Merch.dress(_model, rec)   # merch pieces again after the show / hide pass (merch.gd)
 
 
 ## The library material `base` in colour `hex` ("" = as it is), one per pair for the session (show_avatar).
