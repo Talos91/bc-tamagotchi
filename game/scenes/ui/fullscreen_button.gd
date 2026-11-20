@@ -31,6 +31,8 @@ const JS_GO := """(function () {
 })()"""
 
 var _state := {}
+## Captures only (tests/capture_fullscreen.gd): show the button off the web, as a phone browser would.
+static var force_show := false
 
 
 func _ready() -> void:
@@ -58,6 +60,9 @@ static func browser_state() -> Dictionary:
 ## Shown on the web while the page is neither full screen nor the installed app.
 func refresh() -> void:
 	_state = browser_state()
+	if force_show:
+		visible = true
+		return
 	visible = not _state.is_empty() and not _state.get("standalone", false) and not _state.get("fs", false)
 
 
