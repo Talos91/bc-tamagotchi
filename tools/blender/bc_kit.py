@@ -133,6 +133,24 @@ PALETTE = {
     "BackglassBlue": ("#2A58C8", 0.30, 0.0, 1.8),  # pinball backglass
     "PaperWhite":   ("#E6E2DA", 0.70, 0.0, 0),     # notices on doors, menus
     "PrintGrey":    ("#6A6668", 0.70, 0.0, 0),     # monochrome photo mid tone
+    # entrance round (Daniele 2026-11-20, docs/venue/photos/2026-11-20-entrance-round/)
+    "LampWhite":    ("#FFF1D6", 0.30, 0.0, 1.6),   # the eagle table's fluted glass lamp, warm white (12, 13)
+    "ShadeRed":     ("#FF3422", 0.70, 0.0, 2.6),   # the corridor's red pleated floor lamp (01, 15)
+    "ShadeRedFold": ("#C8180E", 0.70, 0.0, 1.6),
+    "FeatherDark":  ("#3A2A20", 0.90, 0.0, 0),     # the falcon (12-14): dark back, pale speckled breast
+    "FeatherMid":   ("#6A5038", 0.90, 0.0, 0),
+    "FeatherPale":  ("#A88E6E", 0.90, 0.0, 0),
+    "BeakYellow":   ("#D8B040", 0.50, 0.0, 0),
+    "Driftwood":    ("#8A5E3A", 0.80, 0.0, 0),
+    "DriftwoodDark": ("#5A3A24", 0.80, 0.0, 0),
+    "TableRustic":  ("#7A4428", 0.50, 0.0, 0),     # the entrance table's worn plank top (12)
+    "ExtRed":       ("#B0141A", 0.40, 0.0, 0),     # fire extinguisher
+    "FoilSilver":   ("#B8B6BC", 0.25, 0.6, 0),     # crinkled foil tiles of the poster booth (02, 15)
+    "FoilShade":    ("#7C7A82", 0.30, 0.6, 0),
+    "PosterRed":    ("#E0261C", 0.60, 0.0, 1.2),   # the red disc on the Black Cabin posters
+    "ClothStripe":  ("#B89878", 0.90, 0.0, 0),     # the booth table's striped cloth
+    "SteelDoor":    ("#3E3436", 0.45, 0.4, 0),     # the Sticker door's dark steel leaf (06)
+    "KioskScreen":  ("#5AC8F0", 0.30, 0.0, 1.6),   # the charging kiosk's screen (09, 10)
 }
 SEAM_VALUE = 0.55              # brightness of the seam line relative to the voxel face (sRGB texel value)
 BLOCK2 = {"ColumnWhite"}       # white tile: jitter and seams on a 2x2 grid, not per voxel (bible section 5)
@@ -1982,18 +2000,31 @@ def emergency_door(v):
         v.set(x, -1, DOOR_H + 3, "ColumnWhite")
 
 
-@kit4("sticker_door", "circulation", "L", note="stands in a wall opening; room side -y; achievements become decals later")
+@kit4("sticker_door", "circulation", "L", note="stands in a wall opening; front -y = the corridor side (stickers, PDPA notice); achievements become decals later")
 def sticker_door(v):
-    """The achievements door between the entrance corridor and the old toilet corridor: plain dark leaf, steel
-    handle, a few sticker patches. The surface stays clean for the decals that come later."""
+    """The Sticker door into the lounge (06, Daniele 2026-11-20): a dark steel leaf, a long black pull bar, the
+    black PDPA notice at the top and a cloud of bar and brand stickers around the middle, all on the front (-y, the
+    corridor side, as the venue hangs it); the lounge side (+y) keeps a plain steel handle."""
     W = 18
     door_frame(v, W)
-    door_leaf(v, 1, W, "CabinDark")
-    v.box(3, 0, 20, 3, 0, 22, "SteelDark")
-    v.box(3, 0, 20, 4, 0, 20, "SteelDark")
-    for x, z, w, h, c in ((7, 30, 2, 2, "ColumnWhite"), (12, 24, 3, 2, "DrumRed"), (15, 33, 2, 3, "StageBlue"),
-                          (9, 14, 2, 2, "CymbalGold"), (14, 10, 3, 2, "LabelCream")):
-        v.box(x, 0, z, x + w - 1, 0, z + h - 1, c)
+    door_leaf(v, 1, W, "SteelDoor")
+    v.box(3, -1, 9, 3, -1, 26, "BeamBlack")                           # pull bar on two stand-offs
+    v.set(3, 0, 9, "BeamBlack")
+    v.set(3, 0, 26, "BeamBlack")
+    v.box(3, 2, 18, 3, 2, 19, "SteelDark")                            # lounge-side handle
+    v.box(8, 0, 32, 13, 0, 39, "BeamBlack")                           # PDPA notice
+    v.box(9, -1, 37, 12, -1, 37, "PaperWhite")
+    v.box(9, -1, 34, 12, -1, 34, "PrintGrey")
+    v.box(9, -1, 33, 11, -1, 33, "PrintGrey")
+    r = rng("sticker_door")
+    cols = ("ColumnWhite", "DrumRed", "PaperWhite", "LabelCream", "CymbalGold", "VelvetRed", "PrintGrey", "StageBlue")
+    for _ in range(52):                                               # the sticker cloud, densest mid-door
+        x = int(r.gauss(10.0, 3.4))
+        z = int(r.gauss(25.0, 3.6))
+        if not (4 <= x <= W - 1 and 16 <= z <= 31):
+            continue
+        w, h = r.choice(((1, 1), (2, 1), (1, 2), (2, 2), (3, 1)))
+        v.box(x, 0, z, min(x + w - 1, W - 1), 0, z + h - 1, r.choice(cols))
 
 
 @kit4("staff_door", "circulation", "L", note="stands in a wall opening; room side -y")
@@ -2248,6 +2279,192 @@ def potted_plant(v):
         m = ("PlantGreen", "PlantMid", "PlantDark")[i % 3]
         v.line((x, y, 8), (x + lean[0], y + lean[1], top), m)
         v.set(round(x + lean[0]), round(y + lean[1]), top + 1, "OliveLeaf")
+
+
+# ---------------------------------------------------------------- entrance round (Daniele 2026-11-20)
+# Photos docs/venue/photos/2026-11-20-entrance-round/: the dark entrance room with the falcon on a wooden table, the
+# marble corridor with the red floor lamp, the poster booth, the Sticker door, the lounge's charging kiosk.
+
+@kit4("entrance_table", "circulation", "M")
+def entrance_table(v):
+    """The entrance room's table (12-14): a worn plank top 0.9 x 0.6 m at 0.95 m on a black steel X frame at
+    each end, a stretcher between them."""
+    W, D, H = 18, 12, 19
+    r = rng("entrance_table")
+    for x in range(W):
+        for y in range(D):
+            v.set(x, y, H - 1, "TableRustic" if (y // 3 + r.randrange(5)) % 4 else "WoodMid")
+    v.box(0, 0, H - 2, W - 1, 0, H - 2, "WoodDark")                  # front edge, the dark worn lip
+    for x in (2, W - 3):
+        v.line((x, 1, 0), (x, D - 2, H - 3), "BeamBlack")
+        v.line((x, D - 2, 0), (x, 1, H - 3), "BeamBlack", keep=True)
+    v.box(2, D // 2, 8, W - 3, D // 2, 8, "BeamBlack")
+
+
+@kit4("eagle_greeter", "circulation", "S", note="the entrance falcon that greets the player (bubble anchor over its head)")
+def eagle_greeter(v):
+    """The stuffed falcon on its driftwood (12-14), the entrance greeter: an upright bird about 0.5 m tall, a full
+    rounded body with a pale streaked breast in front, dark folded wings wrapping its back and sides, a tail down
+    behind, a round head with a dark cap, gold eyes and a hooked yellow beak, yellow feet gripping a gnarled piece of
+    driftwood. Faces -y (the room); the top of its head is at about 0.75 m above its pivot."""
+    r = rng("eagle_greeter")
+    for x in range(14):                                              # driftwood, gnarled and uneven
+        for y in range(1, 9):
+            if (x in (0, 13) and y in (1, 8)) or r.random() < 0.05:
+                continue
+            h = 1 + (1 if (x * 7 + y * 3) % 5 < 2 else 0) + (1 if 3 <= x <= 10 and 2 <= y <= 7 else 0)
+            for z in range(h):
+                v.set(x, y, z, "Driftwood" if r.random() < 0.7 else "DriftwoodDark")
+    cx, cy = 7.0, 4.5
+
+    def ellipsoid(c, rad, pick):
+        for x in range(math.floor(c[0] - rad[0]), math.ceil(c[0] + rad[0]) + 1):
+            for y in range(math.floor(c[1] - rad[1]), math.ceil(c[1] + rad[1]) + 1):
+                for z in range(math.floor(c[2] - rad[2]), math.ceil(c[2] + rad[2]) + 1):
+                    d = sum(((q + 0.5 - c[i]) / rad[i]) ** 2 for i, q in enumerate((x, y, z)))
+                    if d <= 1.0:
+                        v.set(x, y, z, pick(x, y, z))
+
+    def body(x, y, z):
+        if y < cy - 0.5 and abs(x + 0.5 - cx) < 2.2:                  # breast: pale with dark drop streaks
+            return "FeatherMid" if (x * 3 + z * 2) % 5 == 0 else "FeatherPale"
+        return "FeatherDark" if (x + y + z) % 3 else "FeatherMid"
+    ellipsoid((cx, cy, 8.5), (3.2, 2.8, 5.0), body)                   # body, upright
+    ellipsoid((cx, cy - 0.3, 14.2), (2.4, 2.3, 2.2), lambda x, y, z: "FeatherDark" if z >= 15 or y >= 5 else "FeatherPale")
+    for z in range(5, 13):                                           # wings folded over the back and sides
+        for x in (math.floor(cx - 3.4), math.ceil(cx + 2.4)):
+            for y in range(4, 8):
+                v.set(x, y, z, "FeatherDark" if (y + z) % 2 else "FeatherMid")
+    v.box(6, 7, 2, 7, 8, 6, "FeatherDark")                           # tail down behind
+    v.box(6, 1, 13, 7, 1, 14, "BeakYellow")                          # beak, hooked down
+    v.box(6, 0, 13, 7, 0, 13, "HornDark")
+    for ex in (5, 8):                                                # gold eyes with a dark pupil
+        v.set(ex, 2, 15, "CymbalGold")
+    v.set(5, 1, 15, "BeamBlack")
+    v.set(8, 1, 15, "BeamBlack")
+    v.box(5, 3, 3, 5, 4, 3, "BeakYellow")                            # feet on the wood
+    v.box(8, 3, 3, 8, 4, 3, "BeakYellow")
+
+
+@kit4("brass_lamp", "tables", "XS")
+def brass_lamp(v):
+    """Cordless table lamp on the entrance table (12, 13): brass dome foot, a thin brass stem and a fluted glass
+    shade that glows warm white, 0.4 m tall."""
+    v.cyl(2, 2, 0, 0, 5, "CymbalGold")
+    v.box(2, 2, 1, 2, 2, 4, "CymbalGold")
+    for z, d in ((5, 5), (6, 4), (7, 3)):
+        v.cyl(2, 2, z, z, d, E("LampWhite"))
+    v.box(2, 2, 8, 2, 2, 8, "CymbalGold")
+
+
+@kit4("pdpa_sign", "circulation", "XS", mount="wall", mount_height_m=1.7)
+def pdpa_sign(v):
+    """The PDPA notice (06, 14): a black acrylic sign 0.4 x 0.6 m with a white rule frame, PDPA NOTICE in white
+    and grey text lines, the Black Cabin mark at the bottom. Back at +y against the wall."""
+    W, H = 8, 12
+    v.box(0, 1, 0, W - 1, 1, H - 1, "BeamBlack")
+    v.box(1, 0, 1, W - 2, 0, 1, "PaperWhite")                         # rule frame
+    v.box(1, 0, H - 2, W - 2, 0, H - 2, "PaperWhite")
+    v.box(1, 0, 1, 1, 0, H - 2, "PaperWhite")
+    v.box(W - 2, 0, 1, W - 2, 0, H - 2, "PaperWhite")
+    v.box(2, -1, H - 4, W - 3, -1, H - 4, "PaperWhite")               # PDPA NOTICE
+    for z in (5, 6):
+        v.box(2, -1, z, W - 3, -1, z, "PrintGrey")                    # text
+    v.set(3, -1, 3, "PaperWhite")                                    # mark
+    v.set(4, -1, 3, "PaperWhite")
+
+
+@kit4("fire_extinguisher", "circulation", "XS")
+def fire_extinguisher(v):
+    """Red fire extinguisher on the floor by the wall (14): 0.6 m, black head and hose."""
+    v.cyl(2, 2, 0, 9, 4, "ExtRed")
+    v.box(1, 1, 10, 3, 3, 10, "BeamBlack")
+    v.box(2, 2, 11, 2, 2, 11, "BeamBlack")
+    v.box(2, 0, 10, 2, 0, 11, "SteelDark")
+    v.line((4, 2, 10), (4, 2, 4), "BeamBlack")
+
+
+@kit4("red_floor_lamp", "circulation", "S")
+def red_floor_lamp(v):
+    """The corridor's floor lamp (01, 15): round brass foot, a thin brass pole and a pleated drum shade lit red,
+    1.6 m tall. The shade's pleats alternate two reds."""
+    v.cyl(3, 3, 0, 0, 7, "CymbalGold")
+    v.box(2, 2, 1, 4, 4, 1, "CymbalGold")
+    v.box(3, 3, 2, 3, 3, 24, "CymbalGold")
+    for z in range(24, 32):
+        d = 8 if z < 27 else (7 if z < 30 else 6)
+        for u, w in v.disc_cells(3, 3, d):
+            v.set(u, w, z, E("ShadeRed") if (u + w) % 2 else E("ShadeRedFold"))
+
+
+def poster(v, foil):
+    """One booth tile, 0.45 x 0.6 m, back at +y: a Black Cabin poster (black, the red disc logo, the wordmark
+    in white) or a crinkled silver foil sheet."""
+    W, H = 9, 12
+    r = rng("poster_foil" if foil else "poster_bc")
+    for x in range(W):
+        for z in range(H):
+            if foil:
+                v.set(x, 0, z, "FoilSilver" if r.random() < 0.6 else "FoilShade")
+            else:
+                v.set(x, 0, z, "BeamBlack")
+    if not foil:
+        for u, w in v.disc_cells(4, 5, 5):
+            v.set(u, -1, w, E("PosterRed"))
+        v.set(4, -1, 5, "BeamBlack")
+        v.box(2, -1, 9, 6, -1, 9, "PaperWhite")                      # wordmark
+        v.box(3, -1, 2, 5, -1, 2, "PaperWhite")
+
+
+@kit4("poster_bc", "circulation", "S", mount="wall", mount_height_m=0.4)
+def poster_bc(v):
+    poster(v, False)
+
+
+@kit4("poster_foil", "circulation", "S", mount="wall", mount_height_m=0.4, variant_of="poster_bc")
+def poster_foil(v):
+    poster(v, True)
+
+
+@kit4("booth_table", "circulation", "S")
+def booth_table(v):
+    """The poster booth's small high table (02, 15): 0.55 x 0.4 m top at 1.0 m under a striped woven cloth that
+    hangs 0.25 m on every side, black hairpin legs below it."""
+    W, D, H = 11, 8, 20
+
+    def stripe(i):
+        return "ClothStripe" if i % 3 else "DrumRed"
+    for x in range(W):
+        for y in range(D):
+            v.set(x, y, H - 1, stripe(x))
+    for z in range(H - 6, H - 1):                                    # the drape
+        for x in range(W):
+            v.set(x, 0, z, stripe(x))
+            v.set(x, D - 1, z, stripe(x))
+        for y in range(1, D - 1):
+            v.set(0, y, z, stripe(y))
+            v.set(W - 1, y, z, stripe(y))
+    for cx, cy in ((2, 2), (W - 3, 2), (2, D - 3), (W - 3, D - 3)):
+        v.line((cx, cy, H - 7), (cx, cy, 0), "BeamBlack")
+
+
+@kit4("charging_kiosk", "lounge", "M", note="lounge power-bank kiosk (photos 09, 10)")
+def charging_kiosk(v):
+    """The lounge's power-bank kiosk (09, 10): a tall black stand, a portrait screen showing the rental app (pale
+    blue with a phone and a card), eight lit battery slots in two rows below it, the Black Cabin mark on the
+    plinth. 0.6 m wide, 1.8 m tall. Faces -y."""
+    W, D, H = 12, 6, 36
+    v.box(0, 0, 0, W - 1, D - 1, H - 1, "StoolBlack")
+    v.box(0, 0, 0, W - 1, D, 2, "BeamBlack")                          # plinth, a little deeper
+    v.box(1, -1, 17, W - 2, -1, H - 2, E("KioskScreen"))              # screen
+    v.box(5, -2, 21, 7, -2, 27, "BeamBlack")                          # the phone on it
+    v.box(2, -2, 30, 9, -2, 31, "PaperWhite")                         # headline
+    v.box(2, -2, 19, 4, -2, 20, E("ScreenYellow"))                    # card
+    for z0 in (10, 5):                                                # eight battery slots
+        for i in range(4):
+            x = 1 + i * 3 if i < 2 else 2 + i * 3 - 1
+            v.box(x, -1, z0, x + 1, -1, z0 + 3, E("StageBlue"))
+    v.box(4, -1, 3, 7, -1, 3, "PaperWhite")                           # mark
 
 
 # ------------------------------------------------------------------ review

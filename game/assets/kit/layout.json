@@ -34,38 +34,6 @@
    "zone": "Lobby"
   },
   {
-   "name": "RegularPictureW0",
-   "object": "wall_picture_framed",
-   "position": [
-    0.06,
-    1.4,
-    10.0
-   ],
-   "rotation_y": 90.0,
-   "scale": [
-    1.0,
-    1.0,
-    1.0
-   ],
-   "zone": "Lobby"
-  },
-  {
-   "name": "RegularPictureW1",
-   "object": "wall_picture_framed_b",
-   "position": [
-    0.06,
-    1.4,
-    12.2
-   ],
-   "rotation_y": 90.0,
-   "scale": [
-    1.0,
-    1.0,
-    1.0
-   ],
-   "zone": "Lobby"
-  },
-  {
    "name": "Portrait0",
    "object": "portrait_frame",
    "position": [
@@ -11776,6 +11744,582 @@
     1.0
    ],
    "zone": "Outside"
+  },
+  {
+   "name": "EagleTable",
+   "object": "entrance_table",
+   "position": [
+    1.1,
+    0.0,
+    5.42
+   ],
+   "rotation_y": 0.0,
+   "scale": [
+    1.0,
+    1.0,
+    1.0
+   ],
+   "zone": "Lobby"
+  },
+  {
+   "name": "EagleGreeter",
+   "object": "eagle_greeter",
+   "position": [
+    0.98,
+    0.95,
+    5.42
+   ],
+   "rotation_y": 0.0,
+   "scale": [
+    1.0,
+    1.0,
+    1.0
+   ],
+   "zone": "Lobby"
+  },
+  {
+   "name": "EagleLamp",
+   "object": "brass_lamp",
+   "position": [
+    1.45,
+    0.95,
+    5.55
+   ],
+   "rotation_y": 0.0,
+   "scale": [
+    1.0,
+    1.0,
+    1.0
+   ],
+   "zone": "Lobby"
+  },
+  {
+   "name": "PdpaSignLobby",
+   "object": "pdpa_sign",
+   "position": [
+    1.1,
+    1.75,
+    5.07
+   ],
+   "rotation_y": 0.0,
+   "scale": [
+    1.0,
+    1.0,
+    1.0
+   ],
+   "zone": "Lobby"
+  },
+  {
+   "name": "FireExtinguisher",
+   "object": "fire_extinguisher",
+   "position": [
+    1.9,
+    0.0,
+    5.3
+   ],
+   "rotation_y": 0.0,
+   "scale": [
+    1.0,
+    1.0,
+    1.0
+   ],
+   "zone": "Lobby"
+  },
+  {
+   "name": "RedFloorLamp",
+   "object": "red_floor_lamp",
+   "position": [
+    0.32,
+    0.0,
+    9.0
+   ],
+   "rotation_y": 0.0,
+   "scale": [
+    1.0,
+    1.0,
+    1.0
+   ],
+   "zone": "Lobby"
+  },
+  {
+   "name": "BoothW0_0",
+   "object": "poster_bc",
+   "position": [
+    0.03,
+    0.3,
+    13.48
+   ],
+   "rotation_y": 90.0,
+   "scale": [
+    1.0,
+    1.0,
+    1.0
+   ],
+   "zone": "Lobby"
+  },
+  {
+   "name": "BoothS0_0",
+   "object": "poster_foil",
+   "position": [
+    0.28,
+    0.3,
+    14.87
+   ],
+   "rotation_y": -180.0,
+   "scale": [
+    1.0,
+    1.0,
+    1.0
+   ],
+   "zone": "Lobby"
+  },
+  {
+   "name": "BoothW0_1",
+   "object": "poster_foil",
+   "position": [
+    0.03,
+    0.9,
+    13.48
+   ],
+   "rotation_y": 90.0,
+   "scale": [
+    1.0,
+    1.0,
+    1.0
+   ],
+   "zone": "Lobby"
+  },
+  {
+   "name": "BoothS0_1",
+   "object": "poster_bc",
+   "position": [
+    0.28,
+    0.9,
+    14.87
+   ],
+   "rotation_y": -180.0,
+   "scale": [
+    1.0,
+    1.0,
+    1.0
+   ],
+   "zone": "Lobby"
+  },
+  {
+   "name": "BoothW0_2",
+   "object": "poster_bc",
+   "position": [
+    0.03,
+    1.5,
+    13.48
+   ],
+   "rotation_y": 90.0,
+   "scale": [
+    1.0,
+    1.0,
+    1.0
+   ],
+   "zone": "Lobby"
+  },
+  {
+   "name": "BoothS0_2",
+   "object": "poster_foil",
+   "position": [
+    0.28,
+    1.5,
+    14.87
+   ],
+   "rotation_y": -180.0,
+   "scale": [
+    1.0,
+    1.0,
+    1.0
+   ],
+   "zone": "Lobby"
+  },
+  {
+   "name": "BoothW0_3",
+   "object": "poster_foil",
+   "position": [
+    0.03,
+    2.1,
+    13.48
+   ],
+   "rotation_y": 90.0,
+   "scale": [
+    1.0,
+    1.0,
+    1.0
+   ],
+   "zone": "Lobby"
+  },
+  {
+   "name": "BoothS0_3",
+   "object": "poster_bc",
+   "position": [
+    0.28,
+    2.1,
+    14.87
+   ],
+   "rotation_y": -180.0,
+   "scale": [
+    1.0,
+    1.0,
+    1.0
+   ],
+   "zone": "Lobby"
+  },
+  {
+   "name": "BoothW1_0",
+   "object": "poster_foil",
+   "position": [
+    0.03,
+    0.3,
+    13.93
+   ],
+   "rotation_y": 90.0,
+   "scale": [
+    1.0,
+    1.0,
+    1.0
+   ],
+   "zone": "Lobby"
+  },
+  {
+   "name": "BoothS1_0",
+   "object": "poster_bc",
+   "position": [
+    0.73,
+    0.3,
+    14.87
+   ],
+   "rotation_y": -180.0,
+   "scale": [
+    1.0,
+    1.0,
+    1.0
+   ],
+   "zone": "Lobby"
+  },
+  {
+   "name": "BoothW1_1",
+   "object": "poster_bc",
+   "position": [
+    0.03,
+    0.9,
+    13.93
+   ],
+   "rotation_y": 90.0,
+   "scale": [
+    1.0,
+    1.0,
+    1.0
+   ],
+   "zone": "Lobby"
+  },
+  {
+   "name": "BoothS1_1",
+   "object": "poster_foil",
+   "position": [
+    0.73,
+    0.9,
+    14.87
+   ],
+   "rotation_y": -180.0,
+   "scale": [
+    1.0,
+    1.0,
+    1.0
+   ],
+   "zone": "Lobby"
+  },
+  {
+   "name": "BoothW1_2",
+   "object": "poster_foil",
+   "position": [
+    0.03,
+    1.5,
+    13.93
+   ],
+   "rotation_y": 90.0,
+   "scale": [
+    1.0,
+    1.0,
+    1.0
+   ],
+   "zone": "Lobby"
+  },
+  {
+   "name": "BoothS1_2",
+   "object": "poster_bc",
+   "position": [
+    0.73,
+    1.5,
+    14.87
+   ],
+   "rotation_y": -180.0,
+   "scale": [
+    1.0,
+    1.0,
+    1.0
+   ],
+   "zone": "Lobby"
+  },
+  {
+   "name": "BoothW1_3",
+   "object": "poster_bc",
+   "position": [
+    0.03,
+    2.1,
+    13.93
+   ],
+   "rotation_y": 90.0,
+   "scale": [
+    1.0,
+    1.0,
+    1.0
+   ],
+   "zone": "Lobby"
+  },
+  {
+   "name": "BoothS1_3",
+   "object": "poster_foil",
+   "position": [
+    0.73,
+    2.1,
+    14.87
+   ],
+   "rotation_y": -180.0,
+   "scale": [
+    1.0,
+    1.0,
+    1.0
+   ],
+   "zone": "Lobby"
+  },
+  {
+   "name": "BoothW2_0",
+   "object": "poster_bc",
+   "position": [
+    0.03,
+    0.3,
+    14.38
+   ],
+   "rotation_y": 90.0,
+   "scale": [
+    1.0,
+    1.0,
+    1.0
+   ],
+   "zone": "Lobby"
+  },
+  {
+   "name": "BoothS2_0",
+   "object": "poster_foil",
+   "position": [
+    1.18,
+    0.3,
+    14.87
+   ],
+   "rotation_y": -180.0,
+   "scale": [
+    1.0,
+    1.0,
+    1.0
+   ],
+   "zone": "Lobby"
+  },
+  {
+   "name": "BoothW2_1",
+   "object": "poster_foil",
+   "position": [
+    0.03,
+    0.9,
+    14.38
+   ],
+   "rotation_y": 90.0,
+   "scale": [
+    1.0,
+    1.0,
+    1.0
+   ],
+   "zone": "Lobby"
+  },
+  {
+   "name": "BoothS2_1",
+   "object": "poster_bc",
+   "position": [
+    1.18,
+    0.9,
+    14.87
+   ],
+   "rotation_y": -180.0,
+   "scale": [
+    1.0,
+    1.0,
+    1.0
+   ],
+   "zone": "Lobby"
+  },
+  {
+   "name": "BoothW2_2",
+   "object": "poster_bc",
+   "position": [
+    0.03,
+    1.5,
+    14.38
+   ],
+   "rotation_y": 90.0,
+   "scale": [
+    1.0,
+    1.0,
+    1.0
+   ],
+   "zone": "Lobby"
+  },
+  {
+   "name": "BoothS2_2",
+   "object": "poster_foil",
+   "position": [
+    1.18,
+    1.5,
+    14.87
+   ],
+   "rotation_y": -180.0,
+   "scale": [
+    1.0,
+    1.0,
+    1.0
+   ],
+   "zone": "Lobby"
+  },
+  {
+   "name": "BoothW2_3",
+   "object": "poster_foil",
+   "position": [
+    0.03,
+    2.1,
+    14.38
+   ],
+   "rotation_y": 90.0,
+   "scale": [
+    1.0,
+    1.0,
+    1.0
+   ],
+   "zone": "Lobby"
+  },
+  {
+   "name": "BoothS2_3",
+   "object": "poster_bc",
+   "position": [
+    1.18,
+    2.1,
+    14.87
+   ],
+   "rotation_y": -180.0,
+   "scale": [
+    1.0,
+    1.0,
+    1.0
+   ],
+   "zone": "Lobby"
+  },
+  {
+   "name": "BoothTable",
+   "object": "booth_table",
+   "position": [
+    0.36,
+    0.0,
+    14.15
+   ],
+   "rotation_y": 90.0,
+   "scale": [
+    1.0,
+    1.0,
+    1.0
+   ],
+   "zone": "Lobby"
+  },
+  {
+   "name": "BoothLamp",
+   "object": "table_lamp_lit",
+   "position": [
+    0.32,
+    1.0,
+    13.98
+   ],
+   "rotation_y": 0.0,
+   "scale": [
+    1.0,
+    1.0,
+    1.0
+   ],
+   "zone": "Lobby"
+  },
+  {
+   "name": "ExitSignBooth",
+   "object": "exit_sign",
+   "position": [
+    0.06,
+    2.85,
+    14.15
+   ],
+   "rotation_y": 90.0,
+   "scale": [
+    1.0,
+    1.0,
+    1.0
+   ],
+   "zone": "Lobby"
+  },
+  {
+   "name": "ChargingKiosk",
+   "object": "charging_kiosk",
+   "position": [
+    7.65,
+    0.0,
+    0.35
+   ],
+   "rotation_y": 0.0,
+   "scale": [
+    1.0,
+    1.0,
+    1.0
+   ],
+   "zone": "Lounge"
+  },
+  {
+   "name": "EagleRoomDoorLeaf",
+   "object": "staff_door",
+   "position": [
+    1.075,
+    0.0,
+    8.5
+   ],
+   "rotation_y": 0.0,
+   "scale": [
+    1.2,
+    1.0,
+    1.0
+   ],
+   "zone": "Lobby"
+  },
+  {
+   "name": "ExitSignEagleRoom",
+   "object": "exit_sign",
+   "position": [
+    1.075,
+    2.35,
+    8.66
+   ],
+   "rotation_y": 0.0,
+   "scale": [
+    1.0,
+    1.0,
+    1.0
+   ],
+   "zone": "Lobby"
   }
  ],
  "room_height_m": 4.0,

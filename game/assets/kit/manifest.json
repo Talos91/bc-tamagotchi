@@ -2286,29 +2286,32 @@
    "path": "res://assets/kit/circulation/sticker_door.glb",
    "footprint_m": [
     1.0,
-    0.15
+    0.2
    ],
    "height_m": 2.15,
    "size_vox": [
     20,
-    3,
+    4,
     43
    ],
    "emissive": false,
    "materials": [
     "BeamBlack",
-    "CabinDark",
     "ColumnWhite",
     "CymbalGold",
     "DrumRed",
     "LabelCream",
+    "PaperWhite",
+    "PrintGrey",
     "StageBlue",
-    "SteelDark"
+    "SteelDark",
+    "SteelDoor",
+    "VelvetRed"
    ],
-   "voxels": 1098,
-   "tris": 132,
-   "tris_unmerged": 4596,
-   "note": "stands in a wall opening; room side -y; achievements become decals later"
+   "voxels": 1238,
+   "tris": 448,
+   "tris_unmerged": 4976,
+   "note": "stands in a wall opening; front -y = the corridor side (stickers, PDPA notice); achievements become decals later"
   },
   {
    "name": "staff_door",
@@ -2732,6 +2735,283 @@
    "voxels": 419,
    "tris": 338,
    "tris_unmerged": 1330
+  },
+  {
+   "name": "entrance_table",
+   "zone": "circulation",
+   "size_class": "M",
+   "anchor": "floor",
+   "path": "res://assets/kit/circulation/entrance_table.glb",
+   "footprint_m": [
+    0.9,
+    0.6
+   ],
+   "height_m": 0.95,
+   "size_vox": [
+    18,
+    12,
+    19
+   ],
+   "emissive": false,
+   "materials": [
+    "BeamBlack",
+    "TableRustic",
+    "WoodDark",
+    "WoodMid"
+   ],
+   "voxels": 346,
+   "tris": 768,
+   "tris_unmerged": 1920
+  },
+  {
+   "name": "eagle_greeter",
+   "zone": "circulation",
+   "size_class": "S",
+   "anchor": "floor",
+   "path": "res://assets/kit/circulation/eagle_greeter.glb",
+   "footprint_m": [
+    0.7,
+    0.45
+   ],
+   "height_m": 0.8,
+   "size_vox": [
+    14,
+    9,
+    16
+   ],
+   "emissive": false,
+   "materials": [
+    "BeakYellow",
+    "BeamBlack",
+    "CymbalGold",
+    "Driftwood",
+    "DriftwoodDark",
+    "FeatherDark",
+    "FeatherMid",
+    "FeatherPale",
+    "HornDark"
+   ],
+   "voxels": 519,
+   "tris": 1292,
+   "tris_unmerged": 1664,
+   "note": "the entrance falcon that greets the player (bubble anchor over its head)"
+  },
+  {
+   "name": "brass_lamp",
+   "zone": "tables",
+   "size_class": "XS",
+   "anchor": "floor",
+   "path": "res://assets/kit/tables/brass_lamp.glb",
+   "footprint_m": [
+    0.3,
+    0.3
+   ],
+   "height_m": 0.45,
+   "size_vox": [
+    6,
+    6,
+    9
+   ],
+   "emissive": true,
+   "materials": [
+    "CymbalGold",
+    "LampWhite_emissive"
+   ],
+   "voxels": 85,
+   "tris": 150,
+   "tris_unmerged": 340
+  },
+  {
+   "name": "pdpa_sign",
+   "zone": "circulation",
+   "size_class": "XS",
+   "anchor": "floor",
+   "path": "res://assets/kit/circulation/pdpa_sign.glb",
+   "footprint_m": [
+    0.4,
+    0.15
+   ],
+   "height_m": 0.6,
+   "size_vox": [
+    8,
+    3,
+    12
+   ],
+   "emissive": false,
+   "materials": [
+    "BeamBlack",
+    "PaperWhite",
+    "PrintGrey"
+   ],
+   "voxels": 138,
+   "tris": 78,
+   "tris_unmerged": 672,
+   "mount": "wall",
+   "mount_height_m": 1.7
+  },
+  {
+   "name": "fire_extinguisher",
+   "zone": "circulation",
+   "size_class": "XS",
+   "anchor": "floor",
+   "path": "res://assets/kit/circulation/fire_extinguisher.glb",
+   "footprint_m": [
+    0.25,
+    0.2
+   ],
+   "height_m": 0.6,
+   "size_vox": [
+    5,
+    4,
+    12
+   ],
+   "emissive": false,
+   "materials": [
+    "BeamBlack",
+    "ExtRed",
+    "SteelDark"
+   ],
+   "voxels": 179,
+   "tris": 66,
+   "tris_unmerged": 428
+  },
+  {
+   "name": "red_floor_lamp",
+   "zone": "circulation",
+   "size_class": "S",
+   "anchor": "floor",
+   "path": "res://assets/kit/circulation/red_floor_lamp.glb",
+   "footprint_m": [
+    0.4,
+    0.4
+   ],
+   "height_m": 1.6,
+   "size_vox": [
+    8,
+    8,
+    32
+   ],
+   "emissive": true,
+   "materials": [
+    "CymbalGold",
+    "ShadeRedFold_emissive",
+    "ShadeRed_emissive"
+   ],
+   "voxels": 427,
+   "tris": 414,
+   "tris_unmerged": 1036
+  },
+  {
+   "name": "poster_bc",
+   "zone": "circulation",
+   "size_class": "S",
+   "anchor": "floor",
+   "path": "res://assets/kit/circulation/poster_bc.glb",
+   "footprint_m": [
+    0.45,
+    0.1
+   ],
+   "height_m": 0.6,
+   "size_vox": [
+    9,
+    2,
+    12
+   ],
+   "emissive": true,
+   "materials": [
+    "BeamBlack",
+    "PaperWhite",
+    "PosterRed_emissive"
+   ],
+   "voxels": 138,
+   "tris": 98,
+   "tris_unmerged": 570,
+   "mount": "wall",
+   "mount_height_m": 0.4
+  },
+  {
+   "name": "poster_foil",
+   "zone": "circulation",
+   "size_class": "S",
+   "anchor": "floor",
+   "path": "res://assets/kit/circulation/poster_foil.glb",
+   "footprint_m": [
+    0.45,
+    0.05
+   ],
+   "height_m": 0.6,
+   "size_vox": [
+    9,
+    1,
+    12
+   ],
+   "emissive": false,
+   "materials": [
+    "FoilShade",
+    "FoilSilver"
+   ],
+   "voxels": 108,
+   "tris": 228,
+   "tris_unmerged": 498,
+   "mount": "wall",
+   "mount_height_m": 0.4,
+   "variant_of": "poster_bc"
+  },
+  {
+   "name": "booth_table",
+   "zone": "circulation",
+   "size_class": "S",
+   "anchor": "floor",
+   "path": "res://assets/kit/circulation/booth_table.glb",
+   "footprint_m": [
+    0.55,
+    0.4
+   ],
+   "height_m": 1.0,
+   "size_vox": [
+    11,
+    8,
+    20
+   ],
+   "emissive": false,
+   "materials": [
+    "BeamBlack",
+    "ClothStripe",
+    "DrumRed"
+   ],
+   "voxels": 314,
+   "tris": 212,
+   "tris_unmerged": 1564
+  },
+  {
+   "name": "charging_kiosk",
+   "zone": "lounge",
+   "size_class": "M",
+   "anchor": "floor",
+   "path": "res://assets/kit/lounge/charging_kiosk.glb",
+   "footprint_m": [
+    0.6,
+    0.45
+   ],
+   "height_m": 1.8,
+   "size_vox": [
+    12,
+    9,
+    36
+   ],
+   "emissive": true,
+   "materials": [
+    "BeamBlack",
+    "KioskScreen_emissive",
+    "PaperWhite",
+    "ScreenYellow_emissive",
+    "StageBlue_emissive",
+    "StoolBlack"
+   ],
+   "voxels": 2919,
+   "tris": 196,
+   "tris_unmerged": 3196,
+   "note": "lounge power-bank kiosk (photos 09, 10)"
   }
  ]
 }

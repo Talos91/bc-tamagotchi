@@ -179,3 +179,6 @@ venue.annoy.phone_face,Phone face,จมอยู่กับมือถือ,
 venue.annoy.rusty,Rusty,มือสนิม,HUD annoyance chip beside the Nightlife ring; TH machine draft,14
 venue.annoy.out_of_loop,Out of the loop,ตกข่าว,HUD annoyance chip for the event calendar habit (off until the calendar exists); TH machine draft,20
 venue.prompt.booth,Tap for the photo booth: change your look,แตะเพื่อเข้าตู้ถ่ายรูป เปลี่ยนลุคของคุณ,Zone prompt pill at the photo booth (opens the character creator); TH machine draft,44
+venue.eagle.name,The Eagle,อินทรี,"Speaker name on the entrance falcon's chat bubble (Daniele calls it the eagle); TH machine draft",16
+venue.eagle.welcome,"Welcome to Black Cabin, {name}.","ยินดีต้อนรับสู่ Black Cabin นะ {name}","The entrance falcon's greeting bubble when the player walks in (Daniele 2026-11-20); {name} = display name; TH machine draft",60
+venue.eagle.welcome_anon,Welcome to Black Cabin.,ยินดีต้อนรับสู่ Black Cabin,"The entrance falcon's greeting when the player has no display name; TH machine draft",60

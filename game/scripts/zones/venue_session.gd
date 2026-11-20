@@ -16,6 +16,7 @@ signal minigame_requested(game_id: String, config: Dictionary)
 signal visit_begun(info: Dictionary)
 signal visit_finished(summary: Dictionary)  ## Needs' summary + start_meters, end_meters, tipsy
 signal welcome_back(reason: String)
+signal door_greeting(line: String)  ## the entrance falcon greets the player (main.gd shows its bubble); was a card
 signal state_changed  ## tipsiness, sitting or band state the HUD shows
 signal menu_requested(tab: String)  ## main.gd opens the real menu list (scripts/menu/menu_list.gd) on this tab
 signal wasted(line: int)  ## past Rules.WASTED_AFTER drinks; the rules are applied already, main.gd plays the shot
@@ -133,15 +134,20 @@ func _on_visit_ended(summary: Dictionary) -> void:
 	visit_finished.emit(s)
 
 
-## Who greets you first (GDD §7.1, Q11): the personality's regular, if they are in the room tonight (Nam always is,
-## Tt hosts the Long Table every night; Tong and Jules are not placed yet, so their players get no line yet).
+## The entrance message (Daniele 2026-11-20): the falcon on the entrance table greets the player in a chat bubble
+## (door_greeting; main.gd shows scenes/ui/eagle_bubble.gd over the bird), no longer a popup card. It welcomes them
+## by name and passes on who greets them first (GDD §7.1, Q11): the personality's regular, if they are in the room
+## tonight (Nam always is, Tt hosts the Long Table every night; Tong and Jules are not placed yet, so their players get
+## the welcome alone).
 func _greet() -> void:
 	greeted = ""
+	var nm := str(needs.profile.get("display_name", "")).strip_edges()
+	var line := T.t("venue.eagle.welcome", {"name": nm}) if nm != "" else T.t("venue.eagle.welcome_anon")
 	var who := Avatar.greeter(needs.personality)
-	if who == "" or not (who == BARTENDER or Cast.hosts().values().has(who)):
-		return
-	greeted = who
-	action_done.emit({"line": UIS.t("ui.avatar.greet", {"name": Cast.name_of(who)}), "gains": {}, "ok": true})
+	if who != "" and (who == BARTENDER or Cast.hosts().values().has(who)):
+		greeted = who
+		line += " " + UIS.t("ui.avatar.greet", {"name": Cast.name_of(who)})
+	door_greeting.emit(line)
 
 
 ## Debug (F4): as if the player stayed away a week, then walks back in. Welcome Back fires.

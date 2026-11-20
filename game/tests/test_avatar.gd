@@ -342,18 +342,38 @@ func _booth_and_greeter() -> void:
 		check(not is_instance_valid(main.creator) and needs.avatar()["look"] == "smart", "Done saves the new look")
 		check(main.player.figure.find_child("top_shirt", true, false) != null, "the player now wears the shirt")
 	print("greeter")
+	# The entrance message is the falcon's chat bubble now (Daniele 2026-11-20), never a popup card
 	var lines := []
-	main.session.action_done.connect(func(card): lines.append(str(card.get("line", ""))))
+	var cards := []
+	main.session.door_greeting.connect(func(line): lines.append(str(line)))
+	main.session.action_done.connect(func(card): cards.append(card))
 	needs.set_personality("easy_sipper")
 	main.session._greet()
-	check(main.session.greeted == "nam" and lines.size() == 1 and "Nam" in lines[0], "Easy Sipper: Nam waves first (%s)" % [lines])
+	check(main.session.greeted == "nam" and lines.size() == 1 and "Nam" in lines[0] and "Black Cabin" in lines[0], "Easy Sipper: the eagle welcomes, Nam waves first (%s)" % [lines])
+	check(cards.is_empty(), "no popup card for the entrance message")
+	var bird := main.get_tree().get_first_node_in_group("entrance_greeter") as Node3D
+	check(bird != null and bird.global_position.distance_to(Vector3(0.98, 0.95, 5.42)) < 0.05, "the eagle stands on the entrance table")
+	main.greet_at_door()
+	await process_frame
+	var bub: Control = main.eagle_bubble
+	check(is_instance_valid(bub) and "Black Cabin" in bub.text_label.text, "greet_at_door shows the eagle's bubble")
+	check(is_instance_valid(bub) and bub.mouse_filter == Control.MOUSE_FILTER_IGNORE and main.player.input_enabled, "the bubble never blocks walking")
+	if is_instance_valid(bub):
+		var cam := main.get_viewport().get_camera_3d()
+		var tip := cam.unproject_position(bird.global_position + Vector3(0, 0.9, 0))
+		var r := Rect2(bub.panel.position, bub.panel.size)
+		var near := r.grow(80.0).has_point(tip) or (absf(r.get_center().x - tip.x) < r.size.x and r.end.y <= tip.y + 2.0)
+		check(not bub.panel.visible or near, "the bubble sits over or beside the eagle's head (%s, tip %s)" % [r, tip])
+		var pr: Rect2 = main.hud.prompt.pill.get_global_rect()
+		check(not main.hud.prompt.pill.is_visible_in_tree() or not pr.intersects(r), "the bubble keeps clear of the prompt pill (%s vs %s)" % [r, pr])
+		bub.dismiss()
 	needs.set_personality("social_butterfly")
 	main.session._greet()
 	check(main.session.greeted == "tt", "Social Butterfly: Tt (hosts the Long Table)")
 	needs.set_personality("music_nerd")
 	lines.clear()
 	main.session._greet()
-	check(main.session.greeted == "" and lines.is_empty(), "Music Nerd: Tong not in the room yet, no line")
+	check(main.session.greeted == "" and lines.size() == 1 and not "waves" in lines[0], "Music Nerd: Tong not in the room yet, the welcome alone")
 	needs.set_personality("")
 	main.session._greet()
 	check(main.session.greeted == "", "no personality, no greeter")

@@ -131,6 +131,16 @@ const NORTH_TOP := Color("8c8a8a")         # main room north wall (opposite the 
 const NORTH_BOTTOM := Color("100c0c")      # ... blackish bottom ...
 const NORTH_NEON := Color("ff1a12")        # ... and a red neon line between them, 8 cm, at NORTH_SPLIT
 const NORTH_SPLIT := 1.9
+# Entrance round (Daniele 2026-11-20: "make sure walls color and floor of entrance and corridor are same as in the
+# reality also lounge"; photos docs/venue/photos/2026-11-20-entrance-round/). Entrance and corridor (01-05, 13-15):
+# pale worn plaster, grey-white, with a darker damp band along the bottom. Lounge (07-10): pale walls over a dark wood
+# wainscot with the red LED strip along its top. Same two-tone shader as the main room's north wall.
+const PLASTER_TOP := Color("9c998f")
+const PLASTER_DAMP := Color("6a6258")
+const PLASTER_SPLIT := 0.9
+const LOUNGE_TOP := Color("a89a8c")
+const LOUNGE_WAINSCOT := Color("2e1c14")
+const LOUNGE_SPLIT := 0.9
 const CANDLE := Color("ffa050")            # table and counter lamps: warm candle pools in the red room (photos 07, 11)
 const HOUSE_RED := Color("ff2a18")         # house lights (lobby, corridor, staff room, light box, disco glint), amber PAR
 const VELVET_SHADOW := Color("3e0408")
@@ -358,21 +368,27 @@ void fragment() {
 }
 """
 func _north_wall_mat() -> ShaderMaterial:
-	if mats.has("north_wall"):
-		return mats["north_wall"]
+	return _two_tone_mat("north_wall", NORTH_TOP, NORTH_BOTTOM, NORTH_NEON, NORTH_SPLIT, 3.0)
+
+## A wall in two colours split at `split` m with a thin line between them (glowing `line_energy`; 0 = no glow), with
+## the walls' voxel grain: the main room's north wall, the entrance's plaster and the lounge's wainscot.
+func _two_tone_mat(key: String, top: Color, bottom: Color, line: Color, split: float, line_energy: float) -> ShaderMaterial:
+	if mats.has(key):
+		return mats[key]
 	var sh := Shader.new()
 	sh.code = NORTH_SHADER
 	var m := ShaderMaterial.new()
-	m.resource_name = "north_wall"
+	m.resource_name = key
 	m.shader = sh
-	m.set_shader_parameter("top_col", NORTH_TOP)
-	m.set_shader_parameter("bottom_col", NORTH_BOTTOM)
-	m.set_shader_parameter("neon", NORTH_NEON)
-	m.set_shader_parameter("split_y", NORTH_SPLIT)
+	m.set_shader_parameter("top_col", top)
+	m.set_shader_parameter("bottom_col", bottom)
+	m.set_shader_parameter("neon", line)
+	m.set_shader_parameter("split_y", split)
+	m.set_shader_parameter("neon_energy", line_energy)
 	m.set_shader_parameter("grain", _voxel_tex("wall_grain", WALL_GRAIN, WALL_STEP, WALL_REPEAT, 9151))
 	m.set_shader_parameter("grain_scale", 1.0 / WALL_REPEAT)
 	m.set_shader_parameter("grain_norm", 1.0 / WALL_GRAIN.srgb_to_linear().r)
-	mats["north_wall"] = m
+	mats[key] = m
 	return m
 
 ## Running-bond voxel blocks, 0.2 m, world-triplanar: the floor, and the dark brick of the upper walls.
@@ -778,7 +794,7 @@ func _environment() -> void:
 ## Entrance lobby (spawn) and the corridor along the south of the lounge: concrete, dim, the street door west.
 func _lobby_and_corridor() -> void:
 	var g := _group("Lobby")
-	var wall := _wall_mat("lobby_wall", Color("0e0b0c"), 0.9)
+	var wall := _two_tone_mat("lobby_plaster", PLASTER_TOP, PLASTER_DAMP, PLASTER_DAMP, PLASTER_SPLIT, 0.0)   # photos 01-05, 13-15
 	_floor(g, LOBBY, _concrete_mat())
 	_floor(g, CORRIDOR, _concrete_mat(), 0.0, "CorridorFloor")
 	_ceiling(g, Rect2(LOBBY.position.x, LOBBY.position.y, CORRIDOR.end.x - LOBBY.position.x, LOBBY.size.y))
@@ -801,17 +817,22 @@ func _lobby_and_corridor() -> void:
 	_collider(g, "StreetKerbS", Vector3(-1.0, 1.2, sz + 1.65), Vector3(1.8, 2.4, 0.1))
 	_box(g, "StreetFacade", Vector3(-6.0, 0, sz - 4.0), Vector3(0.5, 6.0, 8.0), _mat("building", Color("0c0d12"), 0.95), false)
 	_box(g, "StreetWindow", Vector3(-5.52, 2.2, sz - 0.6), Vector3(0.04, 1.0, 1.2), _mat("lit_window", Color("ffd9a0"), 0.6, 1.2), false)
-	# Lobby and corridor are one L corridor (Daniele, corrections on plan v4): no door between them. Two framed
-	# pictures on the lobby wall; the corridor's south wall holds the top patrons' portraits (_portraits).
-	for i in 2:
-		_cut(_ph(g, "wall_picture_framed" if i == 0 else "wall_picture_framed_b", Vector3(0.06, 1.4, 10.0 + i * 2.2), 90.0, "RegularPictureW%d" % i, false), Vector3.LEFT)
+	# Lobby and corridor are one L corridor (Daniele, corrections on plan v4): no door between them. The corridor's
+	# south wall holds the top patrons' portraits (_portraits). Entrance round (Daniele 2026-11-20, photos
+	# docs/venue/photos/2026-11-20-entrance-round/): the lobby's north end is the dark entrance room with the falcon
+	# greeter on its table (_entrance_room), then a marble stretch with the red floor lamp, the poster booth where the
+	# corridor ends at the lobby's west wall (_poster_booth) and the REAL mural on the corridor's lounge side
+	# (_corridor_mural). The two framed pictures that hung on the lobby's west wall are gone: the photos show it bare.
+	_entrance_room(g)
+	_marble_stretch(g)
+	_poster_booth(g)
+	_corridor_mural(g)
 	_portraits(g)
-	# None on the corridor's lounge side: that wall hides on the sight line and its pictures would float
-	# Sticker door between the corridor and the lounge: swings open for whoever comes through, stickers on the
-	# corridor side (front +z)
+	# Sticker door between the corridor and the lounge: swings open for whoever comes through, stickers and the PDPA
+	# notice on the corridor side (front +z)
 	_swing_door(g, "StickerDoor", "sticker_door", Vector3((STICKER_DOOR.x + STICKER_DOOR.y) * 0.5, 0, LOUNGE.end.y + 0.1), 0.0, Vector3.BACK)
-	_omni(g, "LobbyLight", HOUSE_RED, 1.0, 5.0, Vector3(1.1, 3.2, 8.0))
 	_omni(g, "CorridorLight", CANDLE, 2.05, 6.0, Vector3(9.0, 3.3, 14.1))
+	_omni(g, "StickerDoorLight", HOUSE_RED, 0.8, 3.0, Vector3(13.6, 2.6, 14.4))   # the red wash on the door (photo 06)
 	for x in [PORTRAIT_X0 + PORTRAIT_STEP * 0.5, PORTRAIT_X0 + PORTRAIT_STEP * 5.5]:   # between portraits, above them
 		_cut(_kit(g, "wall_lamp", Vector3(x, 2.6, CORRIDOR.end.y - 0.05), 0.0, "CorridorLamp%d" % int(x)), Vector3.BACK)
 	_kit(g, "track_light", Vector3(13.0, ROOM_H, 14.1), 0.0, "CorridorTrack")
@@ -826,7 +847,7 @@ func _lobby_and_corridor() -> void:
 
 func _lounge() -> void:
 	var g := _group("Lounge")
-	var wall := _wall_mat("lounge_wall", WALL_BLACK, 0.9)
+	var wall := _two_tone_mat("lounge_wainscot", LOUNGE_TOP, LOUNGE_WAINSCOT, NEON_RED, LOUNGE_SPLIT, 3.0)   # photos 07-10
 	_floor(g, LOUNGE)
 	_floor(g, STUB, _concrete_mat(), 0.0, "StubFloor")
 	_ceiling(g, Rect2(LOUNGE.position.x, LOUNGE.position.y, STUB.end.x - LOUNGE.position.x, LOUNGE.size.y))
@@ -886,6 +907,7 @@ func _lounge() -> void:
 		_collider(g, "Column%dCollider" % i, p + Vector3(0, ROOM_H * 0.5, 0), Vector3(0.4, ROOM_H, 0.4))
 	_merch_shop(g)
 	_photo_booth(g)
+	_charging_kiosk(g)
 	# The high counter and its two stools (R02) moved from the top right to the south wall, east of the game machine
 	_box(g, "HighCounter", Vector3(LEDGE_X.x, 0, LOUNGE.end.y - 0.5), Vector3(LEDGE_X.y - LEDGE_X.x, 0.95, 0.5), _mat("wood_mid", WOOD_MID, 0.4))
 	for i in 2:
@@ -1195,6 +1217,122 @@ func _corridor_end(g: Node) -> void:
 	for n in e.get_children():
 		if n is Node3D:
 			_cut(n, Vector3.RIGHT)
+
+# --- entrance round (Daniele 2026-11-20, docs/venue/photos/2026-11-20-entrance-round/) ---------------------------
+
+const EAGLE_TABLE := Vector3(1.1, 0.0, 5.42)          # lobby north wall, facing the street door's way in (photo 14)
+const EAGLE_AT := Vector3(0.98, 0.95, 5.42)            # the falcon on the table, its lamp east of it (photos 12, 13)
+const EAGLE_WALL_Z := 8.4                              # the entrance room's south wall with its door (photo 01)
+const EAGLE_DOOR := Vector2(0.475, 1.675)              # its door, x range, centred as in photo 01 (DOOR_W, the walk-through width)
+const MARBLE := Rect2(0.0, 8.6, 2.15, 4.2)            # the marble stretch south of the entrance room (photos 01, 15)
+const RED_LAMP := Vector3(0.32, 0.0, 9.0)             # the red floor lamp against the west wall (photos 01, 15)
+const MURAL_TEX := "res://assets/venue/corridor_mural.png"   # tools/venue_mural.py
+const MURAL_SIZE := Vector2(6.0, 1.875)
+const MURAL_AT := Vector3(9.55, 1.32, 0.0)            # centre x, y; on the lounge wall's corridor face, ends by the door
+const KIOSK_AT := Vector3(7.65, 0.0, 0.35)            # the lounge's charging kiosk, north wall (photos 09, 10)
+
+## The entrance room (photos 12-14): the lobby's north end stays dark; the stuffed falcon on its driftwood stands on a
+## worn wooden table against the north wall with a cordless brass lamp beside it, the PDPA notice on the wall above
+## and a fire extinguisher in the corner. The falcon greets the player with a speech bubble when they come in
+## (scenes/ui/eagle_bubble.gd, main.gd greet_at_door); it is in group "entrance_greeter" so the bubble can find it.
+## The lamp is the room's only light: warm white, short range.
+func _entrance_room(g: Node) -> void:
+	var r := _group("EntranceRoom", g)
+	# Its south wall and door (photo 01, Daniele 2026-11-20 "the view from the corner towards the eagle entrance"): a
+	# dark door under a lit exit box leads on to the marble stretch. The wall is cut only when it stands between the
+	# camera (south, looking north) and the player, so from the marble side it stands as in the photo.
+	var wall := _two_tone_mat("lobby_plaster", PLASTER_TOP, PLASTER_DAMP, PLASTER_DAMP, PLASTER_SPLIT, 0.0)
+	var before := r.get_child_count()
+	_wall_x(r, "EagleRoomWall", EAGLE_WALL_Z, LOBBY.position.x, LOBBY.end.x, wall, Vector3.BACK, [EAGLE_DOOR], 2.15)
+	for i in range(before, r.get_child_count()):
+		r.get_child(i).set_meta("cut_sight_only", true)
+	var dc := Vector3((EAGLE_DOOR.x + EAGLE_DOOR.y) * 0.5, 0, EAGLE_WALL_Z + 0.1)
+	_swing_door(r, "EagleRoomDoor", "staff_door", dc, 0.0, Vector3.BACK, EAGLE_DOOR.y - EAGLE_DOOR.x)
+	_cut(_kit(r, "exit_sign", Vector3(dc.x, 2.35, EAGLE_WALL_Z + 0.26), 0.0, "ExitSignEagleRoom"), Vector3.ZERO).set_meta("cut_sight_only", true)
+	_kit_solid(r, "entrance_table", EAGLE_TABLE, 0.0, "EagleTable")
+	var eagle := _kit(r, "eagle_greeter", EAGLE_AT, 0.0, "EagleGreeter")
+	if eagle:
+		eagle.add_to_group("entrance_greeter", true)
+	_kit(r, "brass_lamp", Vector3(1.45, 0.95, 5.55), 0.0, "EagleLamp")
+	_omni(r, "EagleLampLight", Color("ffe8c4"), 1.3, 3.2, Vector3(1.42, 1.35, 5.75))
+	_cut(_kit(r, "pdpa_sign", Vector3(1.1, 1.75, LOBBY.position.y + 0.02), 0.0, "PdpaSignLobby"), Vector3.FORWARD)
+	_kit_solid(r, "fire_extinguisher", Vector3(1.9, 0, 5.3), 0.0, "FireExtinguisher")
+
+## The marble stretch (photos 01, 15): white marble tiles with a few dark ones down the middle of the lobby, the red
+## pleated floor lamp against the west wall and its red light (the house red that lit the lobby before).
+func _marble_stretch(g: Node) -> void:
+	_floor(g, MARBLE, _marble_mat(), 0.005, "MarbleFloor")
+	_kit_solid(g, "red_floor_lamp", RED_LAMP, 0.0, "RedFloorLamp")
+	_omni(g, "RedFloorLampLight", HOUSE_RED, 1.0, 4.5, RED_LAMP + Vector3(0.35, 1.45, 0.2))
+
+## Marble tiles 0.5 m square (photos 01, 15): pale grey-white with soft veins, a few dark grey tiles, thin grout;
+## a 2 m seamless image, world-triplanar like the cement, a little glossier.
+func _marble_mat() -> StandardMaterial3D:
+	if mats.has("marble"):
+		return mats["marble"]
+	var px := 80
+	var img := Image.create(px, px, false, Image.FORMAT_RGB8)
+	var noise := FastNoiseLite.new()
+	noise.seed = 1120
+	noise.frequency = 0.08
+	var dark := [Vector2i(1, 2), Vector2i(2, 0), Vector2i(3, 3)]
+	for y in px:
+		for x in px:
+			var t := Vector2i(x / 20, y / 20)
+			var v := 0.5 + noise.get_noise_2d(x * 1.6 + y, y * 0.6) * 0.09
+			if dark.has(t):
+				v = 0.2 + noise.get_noise_2d(x, y) * 0.04
+			if x % 20 == 0 or y % 20 == 0:
+				v *= 0.7
+			img.set_pixel(x, y, Color(v, v * 0.97, v * 0.95))
+	img.generate_mipmaps()
+	var m := _voxel_surface("Marble", ImageTexture.create_from_image(img), 2.0)
+	m.roughness = 0.35
+	mats["marble"] = m
+	return m
+
+## The poster booth (photos 02, 05, 15): where the corridor ends at the lobby's west wall, Black Cabin posters
+## alternating with crinkled silver foil cover the west wall and the south wall's corner, a small high table with a
+## striped cloth and a lamp stands against them, an exit sign above. Seen down the corridor from the Sticker door.
+func _poster_booth(g: Node) -> void:
+	var b := _group("PosterBooth", g)
+	for col in 3:
+		for row in 4:
+			var kname := "poster_bc" if (col + row) % 2 == 0 else "poster_foil"
+			_cut(_kit(b, kname, Vector3(0.03, 0.3 + row * 0.6, 13.48 + col * 0.45), 90.0, "BoothW%d_%d" % [col, row]), Vector3.LEFT)
+			var k2 := "poster_bc" if (col + row) % 2 == 1 else "poster_foil"
+			_cut(_kit(b, k2, Vector3(0.28 + col * 0.45, 0.3 + row * 0.6, CORRIDOR.end.y - 0.03), 180.0, "BoothS%d_%d" % [col, row]), Vector3.BACK)
+	_kit_solid(b, "booth_table", Vector3(0.36, 0, 14.15), 90.0, "BoothTable")
+	_kit(b, "table_lamp_lit", Vector3(0.32, 1.0, 13.98), 0.0, "BoothLamp")
+	_cut(_kit(b, "exit_sign", Vector3(0.06, 2.85, 14.15), 90.0, "ExitSignBooth"), Vector3.LEFT)
+	_omni(b, "BoothLight", NEON_RED, 0.9, 2.6, Vector3(0.9, 1.7, 14.1))
+
+## The REAL mural (photos 03-05): the artist's spray-painted lettering and painter on a patch of pale plaster on the
+## lounge wall's corridor face, from the corridor's middle to the Sticker door (texture by tools/venue_mural.py). It
+## goes with that wall: hidden in the lounge's views when the wall is cut, standing in the corridor's.
+func _corridor_mural(g: Node) -> void:
+	var m := StandardMaterial3D.new()
+	m.resource_name = "corridor_mural"
+	m.albedo_texture = load(MURAL_TEX)
+	m.transparency = BaseMaterial3D.TRANSPARENCY_ALPHA_SCISSOR
+	m.alpha_scissor_threshold = 0.5
+	m.roughness = 0.95
+	m.texture_filter = BaseMaterial3D.TEXTURE_FILTER_LINEAR_WITH_MIPMAPS_ANISOTROPIC
+	var q := QuadMesh.new()
+	q.size = MURAL_SIZE
+	var mi := MeshInstance3D.new()
+	mi.name = "CorridorMural"
+	mi.mesh = q
+	mi.material_override = m
+	mi.cast_shadow = GeometryInstance3D.SHADOW_CASTING_SETTING_OFF
+	mi.position = Vector3(MURAL_AT.x, MURAL_AT.y, LOUNGE.end.y + 0.205)
+	_own(mi, g)
+	_cut(mi, Vector3.BACK)
+	mi.set_meta("cut_rooms", ["lounge", "alcove", "merch", "memory", "patrons"])   # the lounge wall's rooms
+
+## The lounge's power-bank kiosk (photos 09, 10) on the north wall between the memory corner and the photo booth.
+func _charging_kiosk(g: Node) -> void:
+	_kit_solid(g, "charging_kiosk", KIOSK_AT, 0.0, "ChargingKiosk")
 
 ## A neon texture (black = nothing) on a quad facing +z turned by `yaw` degrees, drawn additively and HDR-bright so
 ## the environment's glow blooms it (as scenes/street/street_front.gd draws the street sign).

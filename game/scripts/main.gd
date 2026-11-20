@@ -20,6 +20,7 @@ const FrameScene = preload("res://scenes/ui/minigame_frame.tscn")
 const SheetScene = preload("res://scenes/ui/zone_sheet.tscn")
 const WalkOutScene = preload("res://scenes/ui/walk_out.tscn")
 const WelcomeScene = preload("res://scenes/ui/welcome_back.tscn")
+const EagleBubble = preload("res://scenes/ui/eagle_bubble.gd")
 const StartScreen = preload("res://scripts/start_screen.gd")
 const ExitShot = preload("res://scripts/exit_shot.gd")
 const MenuList = preload("res://scripts/menu/menu_list.gd")
@@ -51,6 +52,8 @@ var tonight: Control        ## the Tonight sheet (HUD button; docs/design/09-ton
 var frame: Control
 var walk_out: Control
 var welcome: Control
+var eagle_bubble: Control    ## the entrance falcon's greeting (scenes/ui/eagle_bubble.gd)
+var _door_line := ""        ## a greeting waiting for the venue to be in view (start screen, Welcome Back)
 const ARRIVE_SLACK := 0.5   ## metres a finished walk may end outside its target zone and still open the sheet
 var pending_zone := ""      ## zone id the player is walking to after a tap; its sheet opens on arrival
 var _spawn: Transform3D
@@ -92,6 +95,7 @@ func _ready() -> void:
 	session.menu_requested.connect(open_menu)
 	session.visit_finished.connect(_on_visit_finished)
 	session.welcome_back.connect(_on_welcome_back)
+	session.door_greeting.connect(func(line): _door_line = line)
 	session.wasted.connect(_on_wasted)
 	drunk = DrunkOverlay.new()
 	drunk.name = "DrunkOverlay"
@@ -145,6 +149,8 @@ func _process(_delta: float) -> void:
 			pending_zone = ""
 			if not z.is_empty() and not _blocked() and VenueZones.gap(z, player.global_position) <= ARRIVE_SLACK + float(z.get("slack", 0.0)):
 				open_sheet(z)
+	if _door_line != "" and not _blocked():
+		_show_door_greeting(_door_line)
 	if not _capture.is_empty():
 		_capture_tick()
 	if _web:
@@ -403,6 +409,29 @@ func _on_minigame_closed(_result: Dictionary) -> void:
 
 
 # --- Visit ---------------------------------------------------------------------------------------
+
+## The entrance message (Daniele 2026-11-20): the falcon on the entrance table says the session's door greeting in a
+## chat bubble over its head, once the venue is in view (after the start screen and a Welcome Back). Never blocks.
+func _show_door_greeting(line: String) -> void:
+	_door_line = ""
+	var bird := get_tree().get_first_node_in_group("entrance_greeter") as Node3D
+	if bird == null:
+		return
+	if is_instance_valid(eagle_bubble):
+		eagle_bubble.queue_free()
+	eagle_bubble = EagleBubble.new()
+	eagle_bubble.name = "EagleBubble"
+	eagle_bubble.avoid = hud.prompt.pill   # the prompt's pill (the prompt itself is full screen)
+	$UI.add_child(eagle_bubble)
+	eagle_bubble.open(bird, line)
+
+
+## The falcon greets now (captures and tests; a visit's start does it through door_greeting).
+func greet_at_door() -> void:
+	session._greet()
+	if _door_line != "":
+		_show_door_greeting(_door_line)
+
 
 func _on_welcome_back(_reason: String) -> void:
 	if is_instance_valid(welcome):
