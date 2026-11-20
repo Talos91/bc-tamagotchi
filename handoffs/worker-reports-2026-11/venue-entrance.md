@@ -1,15 +1,15 @@
 # 🏗️ venue-entrance: report (2026-11-20, map-builder; first worker + successor)
 
 ## Evidence
-- Branch `wk/venue-entrance`, rebased on origin/main fead2a4: dca1047 (round 1, first worker) + 5868467 (rounds
-  2-3, Daniele's corrections). Not pushed (the Verifier pushes).
-- Suites on the rebased tip, headless, one empty APPDATA each: 31/31 pass on 5868467 (test_lineup included; test_minigames 2365 checks, test_menu 3670). Logs `C:/Users/itisf/bc-wt/ve2-suites/finA`,
-  `finB` (summary.txt + one log per suite).
+- Branch `wk/venue-entrance`, rebased on origin/main 6034962: e93e3c3 (round 1, first worker), aef5777 (rounds 2-3),
+  36b0f84 (round 4: booth, mural, plain walls); this report on top (docs only). Not pushed (the Verifier pushes).
+- Suites on the rebased tip, headless, one empty APPDATA each: 31/31 pass on 36b0f84 (test_lineup included; test_minigames 2365 checks, test_menu 3670). Logs `C:/Users/itisf/bc-wt/ve2-suites/fin2A`,
+  `fin2B` (summary.txt + one log per suite).
 - Captures (hidden desktop, portrait 1080x1920 + landscape 1920x1080): `docs/art/screens/venue-entrance/after/`, 17
   views each (new: eagle-door, sticker-door-lounge, memory-corner, lounge-ne, merch-centre).
 - Blender: `blender/BlackCabin.blend` regenerated (kit 777, boxes 465, lights 41); review
   `blender/BlackCabin-entrance-review.blend` (not committed, 10 cameras) reopened on Daniele's screen 2026-11-20 ~18:40.
-- Hub card `venue-entrance-review` (order 410) at version 3: round-3 text, 10 pictures (photo | game pairs, darker game
+- Hub card `venue-entrance-review` (order 410) at version 4: round-4 text, 10 pictures (photo | game pairs, darker game
   set, Blender set), files list. DECISIONS row 2026-11-20 extended twice (rounds 2 and 3, his words).
 
 ## What changed (rounds 2-3, Daniele's corrections)
