@@ -8,9 +8,24 @@ presence-client worker (venue avatars, live badge, verb sheet). Change it only b
 
 - Autoload name **`Presence`**, script `res://scripts/presence/presence.gd` (registered in `project.godot` by the
   backend branch). Helpers live beside it (`presence_api.gd` HTTP, `presence_config.gd` URL/key, `presence_mock.gd`).
-- **`Presence.ON`** (const, `PRESENCE_ON`): `true` in this branch's web build only when `presence_config.gd` has a URL;
-  when false every call answers at once with `{ok:false, reason:"off"}` and no request is made. Single-player never
-  waits on it (08 §8).
+- **`Presence.ON`** (const, `PRESENCE_ON`): `true` when `presence_config.gd` has a URL (a project is configured). It
+  says the network *may* be used; whether this run uses it is the on-switch below. When the autoload is not active
+  (`is_active()` false: no transport) every call answers at once with `{ok:false, reason:"off"}` and no request is
+  made. Single-player never waits on it (08 §8).
+
+### 1.1 The on-switch (2026-11-20, fix-presence-int)
+
+- **Web build (players' phones): on by default.** `_ready` calls `go_live()` when `ON` and the build is a web export,
+  so every player of the release has presence (the live bar, check-in from a table QR `?t=<code>`, inbox, verbs).
+  Turned off by `?presence=off` in the address (also `?presence=fake`, which hands over to the client's Fake
+  presences). Consent is still per player: nothing is shown to others until `mode()` is chosen (P1, §3.1).
+- **Everything else is inert: headless tests, the editor, desktop playtests.** No transport, no request, `is_active()`
+  false, `PresenceClient.active()` false. A run opts in with `-- --live` or `-- --presence-live` (real network), or a
+  test calls `Presence.use_mock(true)` (in-memory server) or `Presence.go_live()`. `-- --presence-off` forces off.
+  `use_mock(false)` falls back to the same rule.
+- **Freed owners:** every reply reaches its asker through `PresenceClient.fire()`, which drops it when the callback's
+  object was freed (a venue reloaded, a card closed); the autoload answers `offline` to calls pending when it leaves
+  the tree and stops polling. Tests: `Presence.mock_delay_s` makes the mock answer later, like the network.
 - **Mock mode for tests and the offline client:** `Presence.use_mock(true)` (or `Presence.mock` set before the first
   call) swaps the network for an in-memory server (`presence_mock.gd`) that implements every rule below (one per
   night, tablemates within 45 min, verb limits, hide). `Presence.mock_fake_presences(n)` adds `n` generated
@@ -165,5 +180,6 @@ Venue entry never waits more than 4 s; a check-in is never queued; verbs are que
 
 | Date | Change |
 |---|---|
+| 2026-11-20 | v1.2 (fix-presence-int): §1.1 on-switch: web build on, everything else inert unless `--live` / mock; `go_live()`, `live_wanted()`, `mock_delay_s`; replies to freed askers dropped. |
 | 2026-11-19 | v1.1: check-in host is `blackcabin.app` (Daniele's domain); perf telemetry §3.7 (`bc_perf_report`). |
 | 2026-11-19 | v1. URL is `/?t=<code>` (orchestrator brief) instead of 08 §3.1's `/c/<code>`: no Vercel rewrite needed. |

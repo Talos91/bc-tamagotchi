@@ -286,8 +286,12 @@ func _place_presences(seats: Array[Node3D]) -> int:
 		else:
 			_on_tonight(list, ok))
 	box["ready"] = false
+	var taps := PresenceTaps.new()
+	taps.venue = self
+	tree_exiting.connect(taps.queue_free)
+	get_tree().root.add_child.call_deferred(taps)
 	if not box["got"]:
-		return 0
+		return 0   # the real source answers later: they walk in through the door (_on_tonight)
 	var n := 0
 	for p: Dictionary in box["list"]:
 		if presences.size() >= PresenceClient.PRESENCE_CAP:
@@ -298,10 +302,6 @@ func _place_presences(seats: Array[Node3D]) -> int:
 		seats.erase(seat)
 		_spawn_presence(p, seat, false)
 		n += 1
-	var taps := PresenceTaps.new()
-	taps.venue = self
-	tree_exiting.connect(taps.queue_free)
-	get_tree().root.add_child.call_deferred(taps)
 	return n
 
 ## Fetch tonight's list again (every PRESENCE_POLL_S while the venue is on screen; tests call it).
@@ -361,10 +361,14 @@ func react(id: String, text: String) -> void:
 		var pose: String = f.look.get("anims", {}).get("sit", "sit_drink")
 		f.look["anims"]["sit"] = "sit_applaud"
 		f.play("sit", true)
-		get_tree().create_timer(1.6).timeout.connect(func():
-			if is_instance_valid(f) and f.state == "sit":
-				f.look["anims"]["sit"] = pose
-				f.play("sit", true))
+		get_tree().create_timer(1.6).timeout.connect(_end_react.bind(weakref(f), pose))
+
+## The applaud is over: back to the seated pose (the figure may have left, or the venue gone: then nothing).
+func _end_react(ref: WeakRef, pose: String) -> void:
+	var f: PatronFigure = ref.get_ref()
+	if f != null and f.state == "sit":
+		f.look["anims"]["sit"] = pose
+		f.play("sit", true)
 
 func _walking(f: PatronFigure) -> bool:
 	for a in _arrivals:

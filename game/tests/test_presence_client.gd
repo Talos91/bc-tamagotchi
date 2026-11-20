@@ -15,6 +15,10 @@ extends SceneTree
 ##   checkin  opened from a table code: the consent card first (nothing preselected, Check in off until a choice),
 ##            the check-in (table, tablemates, needs.check_in ran), Into the bar walks in; then the viewer sees the
 ##            real tables and the "tonight"-only people; offline: an error and Not now, nothing checked in
+##   real     the real `Presence` autoload: inert by default (no transport, no request); then in mock mode (08b §1,
+##            answering a frame later like the network) the client picks it, the venue fills with its fake presences
+##            through the door, a verb and the inbox go through it; a reply that lands after its venue / asker was
+##            freed is dropped (no SCRIPT ERROR)
 ##   godot --headless --path . --script res://tests/test_presence_client.gd
 
 const PresenceClient = preload("res://scripts/presence_ui/presence_client.gd")
@@ -298,10 +302,90 @@ func _init() -> void:
 	await _free(main)
 	PresenceClient.reset()
 
+	await _real()
+
 	print("TEST PRESENCE CLIENT ", "PASS" if fails.is_empty() else "FAIL (%d)" % fails.size())
 	for f in fails:
 		print("  - ", f)
 	quit(0 if fails.is_empty() else 1)
+
+
+## The client against the real autoload (scripts/presence/presence.gd) in mock mode, as merged in 0.4.0.
+func _real() -> void:
+	print("real")
+	var pres: Node = root.get_node_or_null("Presence")
+	check(pres != null, "the Presence autoload is registered")
+	if pres == null:
+		return
+	PresenceClient.reset()
+	check(not pres.is_active() and pres.transport == null, "real autoload inert by default in a headless run (no network)")
+	check(not PresenceClient.active(), "so the client stays off")
+	pres.reset_local("user://test_presence_client_real.json")
+	var mock: RefCounted = pres.use_mock(true)
+	mock.ignore_hours = true
+	mock.now_override = 1795186800.0      # Fri 2026-11-20 22:00 Bangkok
+	pres.mock_delay_s = 0.05
+	var ids: Array = pres.mock_fake_presences(12)
+	PresenceClient.reset()
+	check(PresenceClient.active() and not PresenceClient.is_fake(), "client picks the real autoload in mock mode")
+	var main := await _main(false)
+	var pat: Node = main.get_node("Venue/Patrons")
+	var t0 := Time.get_ticks_msec()
+	while pat.presences.size() < 12 and Time.get_ticks_msec() - t0 < 3000:
+		await process_frame
+	check(pat.presences.size() == 12, "its 12 presences reach the venue (%d)" % pat.presences.size())
+	var all_known := true
+	for id in pat.presences:
+		if not ids.has(id):
+			all_known = false
+	check(all_known, "they are the mock's players")
+	await _frames(2)
+	var taps_up := false
+	for c in root.get_children():
+		if c.get_script() == preload("res://scripts/presence_ui/presence_taps.gd") and not c.is_queued_for_deletion():
+			taps_up = true
+	check(taps_up, "the tap catcher is up although the list came later")
+	var box := {"r": {}}
+	PresenceClient.send_verb(needs, ids[0], "wave", {}, func(r: Dictionary): box["r"] = r)
+	t0 = Time.get_ticks_msec()
+	while box["r"].is_empty() and Time.get_ticks_msec() - t0 < 2000:
+		await process_frame
+	check(box["r"].get("ok", false), "a wave goes through the autoload (%s)" % box["r"])
+	# Freed owner: a poll is in flight when the venue goes (the 0.4.0 SCRIPT ERROR at presence_client.gd fetch_tonight)
+	var dropped0: int = PresenceClient.dropped
+	pres._tonight_at = -1.0e9            # no cached answer: the reply really comes later
+	pat.poll_presence()
+	main.queue_free()
+	await _frames(1)
+	pres._tonight_at = -1.0e9
+	var asker := _asker()
+	var got := {"n": 0}
+	asker.ask(got)
+	asker.free()
+	await create_timer(0.3).timeout
+	check(got["n"] == 0 and PresenceClient.dropped == dropped0 + 2, "replies after their asker was freed (venue poll, a node) are dropped (%d)" % (PresenceClient.dropped - dropped0))
+	PresenceClient.fire(Callable(), [])   # an empty callback is ignored (no error line)
+	pres.mock_delay_s = 0.0
+	pres.use_mock(false)
+	check(not pres.is_active(), "mock off: inert again")
+	PresenceClient.reset()
+
+
+## A throwaway node whose fetch callback is bound to itself (so it is invalid once the node is freed).
+func _asker() -> Node:
+	var gs := GDScript.new()
+	gs.source_code = """extends Node
+const PC = preload("res://scripts/presence_ui/presence_client.gd")
+func ask(got: Dictionary) -> void:
+	PC.fetch_tonight(null, func(_l: Array, _ok: bool): _hit(got))
+func _hit(got: Dictionary) -> void:
+	got["n"] += 1
+"""
+	gs.reload()
+	var n := Node.new()
+	n.set_script(gs)
+	root.add_child(n)
+	return n
 
 
 func _main(with_intro: bool) -> Node:

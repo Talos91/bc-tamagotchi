@@ -2,6 +2,10 @@ extends Node
 ## Presence (autoload): the network layer for real check-ins in everyone's bar (docs/design/08-presence.md, the
 ## contract docs/design/08b-presence-api.md). Calls are async and always answer a Dictionary with `ok`; nothing
 ## blocks single-player play: with ON false (no project configured) every call answers {ok:false, reason:"off"}.
+## On-switch (08b §1.1): the network is used only by the web build (players' phones), or when a run asks for it
+## (`-- --live` / `-- --presence-live`, or go_live()). Headless tests, the editor and desktop playtests stay inert
+## (no transport, no request) unless a test opts in with use_mock() or go_live(). `?presence=off` (or `=fake`) in the
+## web address keeps the web build off too.
 ## Transport: presence_api.gd (Supabase) or presence_mock.gd (in memory; tests and the offline client).
 ## Local state (account tokens, presence mode, push flag, queued verbs) lives in user://presence.json, never in
 ## save.json; the account id is mirrored into Needs.profile.player_id (reserved there for this).
@@ -15,7 +19,7 @@ const Config = preload("res://scripts/presence/presence_config.gd")
 const Api = preload("res://scripts/presence/presence_api.gd")
 const Mock = preload("res://scripts/presence/presence_mock.gd")
 
-const ON := Config.URL != ""          ## PRESENCE_ON
+const ON := Config.URL != ""          ## PRESENCE_ON: a project is configured (the network may be used at all)
 const POLL_S := 120.0
 const TIMEOUT_S := 4.0
 const LONG_TIMEOUT_S := 8.0
@@ -34,6 +38,7 @@ var apply_to_needs := true            ## false in tests that run two clients in 
 var identity := {}                    ## tests: {"name", "avatar"} sent instead of Needs' profile
 var transport: RefCounted = null      ## Api or Mock
 var mock: RefCounted = null           ## the Mock when mock mode is on
+var mock_delay_s := 0.0               ## tests: answer mock calls this much later, like the network (async path)
 var status := "off"
 
 var _state := {"user_id": "", "access_token": "", "refresh_token": "", "expires_at": 0.0, "mode": "",
@@ -45,20 +50,57 @@ var _code_read := false
 var _poll: Timer
 var _inbox_count := 0
 var _auth_busy := false
+var _closing := false                 ## out of the tree: pending calls answer "offline", nothing resumes on a freed node
 
 
 func _ready() -> void:
 	for i in range(1, 25):
 		PHRASES.append("p%02d" % i)
 	_load()
-	if ON and transport == null:
-		transport = Api.new(self, Config.URL, Config.ANON_KEY)
+	if transport == null and live_wanted():
+		go_live()
 	_poll = Timer.new()
 	_poll.wait_time = POLL_S
 	_poll.timeout.connect(_on_poll)
 	add_child(_poll)
 	if transport != null:
 		_set_status("online")
+
+
+func _enter_tree() -> void:
+	_closing = false
+
+
+func _exit_tree() -> void:
+	_closing = true
+	if _poll != null:
+		_poll.stop()
+
+
+## Should this run use the real network by itself (08b §1.1)? Web build: yes unless `?presence=off|fake`.
+## Anything else (headless tests, editor, desktop): only with `-- --live` or `-- --presence-live`.
+static func live_wanted() -> bool:
+	if not ON:
+		return false
+	var args := OS.get_cmdline_user_args()
+	if "--presence-off" in args:
+		return false
+	if "--live" in args or "--presence-live" in args:
+		return true
+	if OS.has_feature("web"):
+		var v = JavaScriptBridge.eval("new URLSearchParams(location.search).get('presence') || ''", true)
+		return not str(v if v != null else "") in ["off", "fake"]
+	return false
+
+
+## Switch the real network on (the web build does it in _ready; tests with --live call it). false when ON is false.
+func go_live() -> bool:
+	if not ON:
+		return false
+	mock = null
+	transport = Api.new(self, Config.URL, Config.ANON_KEY)
+	_set_status("online")
+	return true
 
 
 ## Mock mode: an in-memory server (shared when `shared` is given, e.g. two clients in one test).
@@ -69,8 +111,11 @@ func use_mock(on := true, shared: RefCounted = null) -> RefCounted:
 		_set_status("online")
 	else:
 		mock = null
-		transport = Api.new(self, Config.URL, Config.ANON_KEY) if ON else null
-		_set_status("online" if transport != null else "off")
+		transport = null
+		if live_wanted():
+			go_live()
+		else:
+			_set_status("off")
 	return mock
 
 
@@ -323,6 +368,8 @@ func push_enable() -> Dictionary:
 	var waited := 0.0
 	var res: Dictionary = {}
 	while waited < 90.0:
+		if _closing or not is_inside_tree():
+			return {"ok": false, "reason": "offline", "detail": "closed"}
 		await get_tree().create_timer(0.25).timeout
 		waited += 0.25
 		var s = JavaScriptBridge.eval("window.bcPushResult?JSON.stringify(window.bcPushResult):''", true)
@@ -361,6 +408,8 @@ func mock_push_subscribe() -> Dictionary:
 
 func _ensure_auth() -> Dictionary:
 	while _auth_busy:
+		if _closing or not is_inside_tree():
+			return {"ok": false, "reason": "offline", "detail": "closed"}
 		await get_tree().process_frame
 	if str(_state["access_token"]) != "" and float(_state["expires_at"]) > _now() + 60.0:
 		return {"ok": true}
@@ -393,10 +442,16 @@ func _edge(fn: String, body: Dictionary, timeout: float) -> Dictionary:
 
 
 func _call(f: Callable) -> Dictionary:
+	if transport == null or _closing:
+		return {"ok": false, "reason": "off" if transport == null else "offline"}
 	var a := await _ensure_auth()
 	if not a.get("ok", false):
 		_set_status("offline" if a.get("reason", "") == "offline" else status)
 		return a
+	if mock != null and mock_delay_s > 0.0:
+		await get_tree().create_timer(mock_delay_s).timeout
+		if _closing:
+			return {"ok": false, "reason": "offline", "detail": "closed"}
 	var r: Dictionary = await f.call(str(_state["access_token"]))
 	if r.get("reason", "") == "auth":       # expired or revoked token: one fresh sign-in, then retry once
 		_state["expires_at"] = 0.0

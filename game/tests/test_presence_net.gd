@@ -43,6 +43,8 @@ func client(mode := "everyone", name := "") -> Node:
 	p.reset_local()
 	if mock != null:
 		p.use_mock(true, mock)
+	else:
+		p.go_live()           # live run only (08b §1.1: nothing goes on the network unless asked)
 	if mode != "":
 		await p.set_mode(mode)
 	if name != "":

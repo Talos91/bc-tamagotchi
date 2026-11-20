@@ -27,6 +27,7 @@ static var _code := ""                    ## table code waiting to check in (fak
 static var _code_read := false
 static var cache: Array = []              ## tonight's list, last good fetch, sorted and capped
 static var online := true                 ## false after a failed fetch (the "offline" dot, §8)
+static var dropped := 0                   ## replies dropped because their asker was freed (fire)
 
 
 ## Wraps the `Presence` autoload (08b): its calls are `await`ed and answered through the callback.
@@ -177,7 +178,7 @@ static func fetch_tonight(needs: Node, cb: Callable) -> void:
 				if not p.get("me", false):
 					list.append(p)
 			cache = sort_by_priority(list, needs)
-		cb.call(cache if ok else [], ok))
+		fire(cb, [cache if ok else [], ok]))
 
 
 ## Tablemates, then friends, then players this phone interacted with, then the most recent arrivals (§2.2).
@@ -228,7 +229,7 @@ static func send_verb(needs: Node, to: String, kind: String, payload: Dictionary
 			st["sent"][to + "|" + kind] = int(st["sent"].get(to + "|" + kind, 0)) + 1
 			_state(needs)["interacted"][to] = true
 			_mark_dirty(needs)
-		cb.call(r))
+		fire(cb, [r]))
 
 
 ## Unread received verbs. cb.call(events).
@@ -236,7 +237,7 @@ static func fetch_inbox(cb: Callable) -> void:
 	if not active():
 		cb.call([])
 		return
-	_source.inbox(func(r: Dictionary): cb.call(r.get("events", []) if r.get("ok", false) else []))
+	_source.inbox(func(r: Dictionary): fire(cb, [r.get("events", []) if r.get("ok", false) else []]))
 
 
 ## Items read: marked on the source; waves, cheers and phrases give Friends +2 each (the "social_verb" row, capped
@@ -302,7 +303,21 @@ static func check_in(needs: Node, code: String, cb: Callable) -> void:
 			if _kind == "fake" and r.get("first_of_night", false) and needs != null:
 				r["needs"] = needs.check_in()
 			clear_code()
-		cb.call(r))
+		fire(cb, [r]))
+
+
+## Answer a caller, unless the caller is gone: replies can arrive after the scene that asked was freed (a venue
+## reloaded, a card closed, a test that moved on). A lambda or method bound to a freed object is dropped silently.
+static func fire(cb: Callable, args: Array) -> void:
+	var o := cb.get_object() if cb.is_valid() else null
+	var gone := not cb.is_valid() or (o == null and cb.get_object_id() != 0) or (o != null and not is_instance_valid(o))
+	if not gone and o is Node and (o as Node).is_queued_for_deletion() and not (o as Node).is_inside_tree():
+		gone = true
+	if gone:
+		if not cb.is_null():
+			dropped += 1
+		return
+	cb.callv(args)
 
 
 # --- Local state (needs.ext["presence"]) -----------------------------------------------------------
