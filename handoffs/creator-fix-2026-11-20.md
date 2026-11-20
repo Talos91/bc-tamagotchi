@@ -36,6 +36,34 @@ you can see trough both ways".
   (legacy test passes). resolve() picks `hair_<id>_hat` when a hat is worn. test_avatar PASS.
 - The creator still shows the OLD Outfit tab (look chips + top colour); `_pick("look")` was patched to reset the pieces.
 
+## Item 6 (added by the orchestrator 2026-11-20, Daniele: "also can't scroll the tonight session")
+The Tonight panel (lineup cards / monthly calendar, from 2ce7624) does not scroll on his phone. Suspects: the
+ScrollContainer gets no touch drag (cards with mouse_filter STOP swallow it; ScrollContainer only drag-scrolls from
+emulated mouse when its children PASS/IGNORE), or a touch-anywhere / joystick / presence_taps layer eats the drag.
+Fix it, add a check with real touch drags (InputEventScreenTouch + ScreenDrag through Input, mapped through
+`root.get_final_transform()`), before/after captures on the same hub card, same exit ritual. Not investigated yet.
+
+Orchestrator follow-up: Daniele, "on my phone i cannot scroll". Treat item 6 as touch scrolling broken in EVERY
+scrollable panel on a real phone (Tonight, calendar, menus, lists). Look for one global cause: the
+`pointing/emulate_mouse_from_touch` / `emulate_touch_from_mouse` settings, a full-screen input layer (the touch-anywhere
+stick, `touch_joystick.gd`, presence_taps) consuming InputEventScreenDrag, the ScrollContainer `scroll_deadzone`, or the
+web canvas's CSS `touch-action`. Fix it once, globally; test with simulated ScreenDrag events in a suite.
+
+## Items 7-10 (orchestrator, Daniele 2026-11-20). DO ITEM 7 FIRST: it is the worst bug live
+7. "after playing a match of clap game my character became invisible when i went back to the bar", then "the
+   character becoming invisible happens with all games". The bug is in the shared minigame open/close path (venue
+   pause/resume Q2 `test_venue_pause`, the mg frame, the camera/cutaway restore, player visibility), not in one game.
+   Add a check: the player is visible after each of the 8 minigames returns.
+8. "there's 2 arcade machines, keep only the big one". Remove the smaller arcade machine through `build_venue.gd`
+   (the lounge has `ArcadeCabinet`/`Pinball` and `GameCabinet`, plus the `ArcadeOnStand` near the Sticker door: check
+   which ones he means from a capture). layout.json may lose that one entry only. Add a DECISIONS.md row quoting him.
+9. "the screen for share a memory is facing the wall instead of the player". Turn the memory-corner screen
+   (`_memory_corner` in build_venue.gd) so it faces the room.
+10. "entrance door doesn't fit the full door frame and has the top open". Make the street door fill its frame (the
+   door height and frame fit in build_venue.gd; the kit piece in `tools/blender/bc_kit.py` only if needed).
+Regenerate the venue once for 8-10. Every item gets before/after captures on card `creator-fix-1120-review`; same
+exit ritual. Suggested order: 7, 6, 8-10 (one venue regeneration), then items 1 and 3 (creator UI).
+
 ## Next steps (successor)
 1. **Before captures of the creator (items 1, 3) and the check-in card (item 4)** from the OLD code: `git worktree add
    C:/Users/itisf/bc-wt/creator-fix-before 649a06a` (import it), run the existing `capture_char_creator_fix.gd` and a
@@ -74,3 +102,11 @@ you can see trough both ways".
   (alcove block only), `venue.tscn`. The overflow-seats worker works in presence + venue_patrons: expect a rebase merge
   there; perf-iphone in perf/graphics + HUD.
 - QR FREEZE: never touch docs/venue/qr/ or table codes.
+
+## ORCHESTRATOR ADDENDUM (2026-11-20): items 6–10, sent by message, NOT in the notes above. Do them too.
+- **Item 7 — PRIORITY 1, worst live bug.** Daniele: "after playing a match of clap game my character became invisible when i went back to the bar" + "the character becoming invisible happens with all games". The cause is in the shared minigame open/close path (venue pause/resume Q2, mg frame, camera/cut restore). Fix it, plus a check over all 8 games that the player is visible after returning.
+- **Item 6.** "on my phone i cannot scroll" (Tonight panel and every scrollable panel): look for one global cause (touch-anywhere layer eating ScreenDrag, emulate_mouse_from_touch, ScrollContainer deadzone, canvas CSS touch-action). Fix it once, with a check using simulated ScreenDrag.
+- **Item 8.** "there's 2 arcade machines, keep only the big one". Remove the small one via the venue generator; only that one layout.json entry may go; DECISIONS row.
+- **Item 9.** "the screen for share a memory is facing the wall instead of the player". Turn it to face the room.
+- **Item 10.** "entrance door doesn't fit the full door frame and has the top open". Fix the door height/frame fit.
+Before/after captures for each go on card creator-fix-1120-review. QR freeze: don't touch docs/venue/qr/.
