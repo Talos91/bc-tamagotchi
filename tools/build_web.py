@@ -3,6 +3,7 @@ files, write web/vercel.json. From a clean state (no web/, no game/.godot):
     python tools/build_web.py            # build into web/
     python tools/build_web.py --out <dir>   # build into <dir> instead of web/ (use a folder outside Google Drive)
     python tools/build_web.py --deploy   # build, then `vercel deploy --prod` (project bc-tamagotchi; needs `npx vercel login` once)
+Automatic deploys run the same build on GitHub Actions (.github/workflows/web-deploy.yml, docs/tech/04-deploy.md).
 Needs the Godot 4.6.1 web templates in %APPDATA%/Godot/export_templates/4.6.1.stable (see docs/tech/03-web-build.md).
 Heavy files (wasm, pck, js) are renamed to bc-<hash8>.* so they can be cached for a year; index.html, the service
 worker and the manifest are served no-cache, so a new deploy is picked up on the next load."""

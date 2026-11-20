@@ -26,7 +26,7 @@ Web, single-threaded (`variant/thread_support=false`: no SharedArrayBuffer, no C
 Godot 4.6.1 web templates live in `%APPDATA%\Godot\export_templates\4.6.1.stable\` (`web_nothreads_*`, `web_dlink_nothreads_*`, `version.txt`). On 2026-11-02 they were copied from `H:/My Drive/PROJECTS/Ooze Syndicate/Tools/Godot/Web/`; only Web is installed (no desktop/mobile templates). To redo on another machine: Godot > Editor > Manage Export Templates, or the `Godot_v4.6.1-stable_export_templates.tpz` from the godot GitHub release (1.25 GB).
 
 ## Deploy
-Needs a Vercel login on this machine: `npx vercel login` once (Daniele's account), then `--deploy`. `vercel deploy --temporary` (no login) was tried 2026-11-02 and the anonymous `*.tmp.now` URL answers 403 to everything, so it is not a route.
+**Automatic since 2026-11-20:** a push to main that touches the game deploys itself (GitHub Actions); see `docs/tech/04-deploy.md`. By hand (fallback): needs a Vercel login on this machine: `npx vercel login` once (Daniele's account), then `--deploy`. `vercel deploy --temporary` (no login) was tried 2026-11-02 and the anonymous `*.tmp.now` URL answers 403 to everything, so it is not a route.
 
 ## Size
 pck 15.7 MB, wasm 37.7 MB, js 0.3 MB; Vercel serves them brotli-compressed.
