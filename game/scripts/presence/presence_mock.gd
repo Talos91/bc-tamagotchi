@@ -39,6 +39,7 @@ var events: Array = []        ## {id, from, to, kind, payload, night, at, read}
 var blocks := {}              ## "blocker|blocked" -> true
 var reports: Array = []
 var subs := {}                ## uid -> [endpoint]
+var extensions := {}          ## fn -> Callable(uid, args) -> Dictionary, for rpc functions of later systems
 var push_log: Array = []      ## {to, from, night, status}
 var perf_reports: Array = []
 var play_events: Array = []   ## bc_play_events rows: {player_id, at, kind, game, player_name, build, device, data}
@@ -154,6 +155,8 @@ func rpc(fn: String, args: Dictionary, token: String, _timeout: float) -> Dictio
 					"data": e.get("data", {}) if e.get("data") is Dictionary else {}})
 				n += 1
 			return {"ok": true, "stored": n}
+	if extensions.has(fn):   # functions added by later systems (merch: scripts/merch/merch_server_mock.gd)
+		return extensions[fn].call(uid, args)
 	return {"ok": false, "reason": "server", "detail": "no function " + fn}
 
 

@@ -20,6 +20,7 @@ extends Node3D
 
 const PRESET_DIR := "res://assets/chars/presets/"
 const Avatar = preload("res://scripts/avatar.gd")
+const Merch = preload("res://scripts/merch/merch.gd")
 const Chars = preload("res://assets/chars/bc_chars.gd")
 const SeamShare = preload("res://scripts/seam_share.gd")
 const VenueBatch = preload("res://scripts/venue_batch.gd")
@@ -83,7 +84,7 @@ func set_look(d: Dictionary) -> void:
 		if ps:
 			_build_preset(ps)
 	elif d.has("avatar"):
-		var res := Avatar.resolve(d["avatar"])
+		var res := Merch.adjust(Avatar.resolve(d["avatar"]), d["avatar"])   # merch hides / hat hair (merch.gd)
 		if ResourceLoader.exists(res["library"]):
 			var lib := load(res["library"]) as PackedScene
 			if lib:
@@ -119,6 +120,7 @@ func _build_preset(ps: PackedScene, avatar := {}) -> void:
 		VenueBatch.merge_figure(_model, DRINKS + ["bottle"])   # crowd: 15 skinned surfaces -> 1-2 (venue_batch.gd)
 	if not avatar.is_empty():
 		_apply_avatar(avatar)   # before it enters the tree: nothing freed is ever seen by node_added listeners
+		Merch.dress(_model, look.get("avatar", {}))   # merch pieces on the head and spine bones (merch.gd)
 	_model.name = "Model"
 	_model.scale = Vector3.ONE * FIG_SCALE
 	add_child(_model)

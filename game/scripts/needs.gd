@@ -365,11 +365,14 @@ func retire() -> bool:
 func complete_deletion() -> void:
 	var keep_id := str(profile.get("player_id", ""))
 	var ui: Variant = ext.get("ui")
+	var merch: Variant = ext.get("merch")   # owned merch and the player code belong to the account (merch shop)
 	var retire_at := last_retire_at
 	new_game()
 	profile["player_id"] = keep_id
 	if ui != null:
 		ext["ui"] = ui
+	if merch != null:
+		ext["merch"] = merch
 	last_retire_at = retire_at
 	_dirty = true
 	if autosave:

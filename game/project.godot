@@ -15,6 +15,7 @@ PerfTelemetry="*res://scripts/perf_telemetry.gd"
 Presence="*res://scripts/presence/presence.gd"
 PlayTelemetry="*res://scripts/play_telemetry.gd"
 TouchScroll="*res://scripts/ui/touch_scroll.gd"
+PlayerProfile="*res://scripts/merch/player_profile.gd"
 
 [display]
 
@@ -34,7 +35,7 @@ pointing/emulate_touch_from_mouse=true
 
 [internationalization]
 
-locale/translations=PackedStringArray("res://i18n/strings.en.translation", "res://i18n/strings.th.translation", "res://i18n/strings_venue.en.translation", "res://i18n/strings_venue.th.translation", "res://i18n/strings_ui.en.translation", "res://i18n/strings_ui.th.translation", "res://i18n/strings_nightlife.en.translation", "res://i18n/strings_nightlife.th.translation", "res://i18n/strings_menu.en.translation", "res://i18n/strings_menu.th.translation", "res://i18n/strings_tonight.en.translation", "res://i18n/strings_tonight.th.translation")
+locale/translations=PackedStringArray("res://i18n/strings.en.translation", "res://i18n/strings.th.translation", "res://i18n/strings_venue.en.translation", "res://i18n/strings_venue.th.translation", "res://i18n/strings_ui.en.translation", "res://i18n/strings_ui.th.translation", "res://i18n/strings_nightlife.en.translation", "res://i18n/strings_nightlife.th.translation", "res://i18n/strings_menu.en.translation", "res://i18n/strings_menu.th.translation", "res://i18n/strings_tonight.en.translation", "res://i18n/strings_tonight.th.translation", "res://i18n/strings_merch.en.translation", "res://i18n/strings_merch.th.translation")
 
 [navigation]
 

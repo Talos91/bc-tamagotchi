@@ -6,7 +6,7 @@ extends SceneTree
 ## Also walks game/scripts and game/scenes for literal .t("key") / tr("key") calls and checks each key.
 ##   godot --headless --path . --script res://tests/test_string_keys.gd
 
-const TABLES := ["strings", "strings_venue", "strings_ui", "strings_nightlife", "strings_menu", "strings_tonight"]
+const TABLES := ["strings", "strings_venue", "strings_ui", "strings_nightlife", "strings_menu", "strings_tonight", "strings_merch"]
 const KEY_RE := r'\b(?:\w+\.)?(?:t|tr)\(\s*"([a-z][a-z0-9_]*(?:\.[a-z0-9_]+)+)"'
 
 

@@ -32,6 +32,7 @@ const DrunkOverlay = preload("res://scripts/ui/drunk_overlay.gd")
 const FarewellCard = preload("res://scripts/ui/farewell_card.gd")
 const DebugPanel = preload("res://scripts/ui/debug_panel.gd")
 const Creator = preload("res://scripts/ui/character_creator.gd")
+const MerchShop = preload("res://scripts/merch/merch_shop.gd")
 const SeamShare = preload("res://scripts/seam_share.gd")
 const PhoneGraphics = preload("res://scripts/phone_graphics.gd")
 
@@ -66,6 +67,7 @@ var wasted_shot: Node       ## the WASTED shot and screen while they run
 var drunk: CanvasLayer      ## the drunk overlay
 var farewell: Control       ## the farewell card (ghost window over, or Retire)
 var creator: Control        ## the character creator, opened at the photo booth (07-character-creator.md §5.3)
+var merch_shop: Control     ## the merch shop (merch stand) or merch wardrobe (photo booth), scripts/merch/merch_shop.gd
 var venue_covered := false  ## the 3D venue is paused behind a minigame frame (_cover_venue)
 var _wasted_line := -1      ## WASTED during a minigame: the shot waits for the frame to close
 var _web := OS.has_feature("web")   ## web build: _mark_scene names the screen for the page's banner
@@ -199,7 +201,7 @@ func show_farewell() -> void:
 
 
 func _blocked() -> bool:
-	return is_instance_valid(farewell) or is_instance_valid(creator) or is_instance_valid(start_screen) or is_instance_valid(exit_shot) or is_instance_valid(wasted_shot) or is_instance_valid(sheet) or is_instance_valid(menu_list) or is_instance_valid(frame) or is_instance_valid(walk_out) or is_instance_valid(welcome) or is_instance_valid(tonight)
+	return is_instance_valid(farewell) or is_instance_valid(creator) or is_instance_valid(merch_shop) or is_instance_valid(start_screen) or is_instance_valid(exit_shot) or is_instance_valid(wasted_shot) or is_instance_valid(sheet) or is_instance_valid(menu_list) or is_instance_valid(frame) or is_instance_valid(walk_out) or is_instance_valid(welcome) or is_instance_valid(tonight)
 
 
 func _sync_block() -> void:
@@ -301,6 +303,9 @@ func open_sheet(z: Dictionary) -> void:
 	if z.get("kind", "") == "booth":
 		open_creator()
 		return
+	if z.get("kind", "") == "merch":   # the merch stand: the merch shop (Daniele 2026-11-20)
+		open_merch("shop")
+		return
 	sheet_zone = z
 	sheet = SheetScene.instantiate()
 	overlay.add_child(sheet)
@@ -380,7 +385,42 @@ func open_creator() -> void:
 		player.set_avatar(needs.avatar())
 		close_creator())
 	creator.cancelled.connect(close_creator)
+	_booth_merch_button()
 	_sync_block()
+
+
+## Merch (scripts/merch/): the shop at the merch stand, or the wardrobe of owned pieces over the creator at the booth.
+func open_merch(m: String) -> void:
+	if is_instance_valid(merch_shop):
+		return
+	merch_shop = MerchShop.new()
+	merch_shop.name = "MerchShop"
+	overlay.add_child(merch_shop)
+	merch_shop.open(m)
+	merch_shop.worn_changed.connect(func(rec: Dictionary):
+		player.set_avatar(needs.avatar())
+		if is_instance_valid(creator):   # the creator keeps its own copy of the record: hand it the new merch
+			creator.record["merch"] = rec.get("merch", {})
+			if creator.has_method("_refresh_figure"):
+				creator._refresh_figure()
+			elif creator.get("_figure") != null:
+				creator._figure.set_look({"avatar": creator.record}))
+	merch_shop.closed.connect(func():
+		merch_shop = null
+		_sync_block.call_deferred())
+	_sync_block()
+
+
+## The photo booth's way into the merch wardrobe: a button over the creator's top-left corner.
+func _booth_merch_button() -> void:
+	var b := MerchShop.UI.button(MerchShop.MS.t("ui.merch.booth"), "secondary")
+	b.name = "BoothMerch"
+	b.add_theme_font_size_override("font_size", int(MerchShop.UI.dp(12)))
+	b.set_anchors_preset(Control.PRESET_TOP_LEFT)
+	b.position = Vector2(MerchShop.UI.dp(14), MerchShop.UI.dp(74))
+	b.custom_minimum_size = Vector2(MerchShop.UI.dp(84), MerchShop.UI.dp(40))
+	b.pressed.connect(func(): open_merch("wardrobe"))
+	creator.add_child(b)
 
 
 func close_creator() -> void:

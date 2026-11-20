@@ -1,0 +1,27 @@
+key,en,th,context,max
+ui.merch.title,Black Cabin Merch,สินค้า Black Cabin,Merch shop title (lounge merch stand),24
+ui.merch.wardrobe,My Merch,ของฉัน,Merch wardrobe title (photo booth),24
+ui.merch.cat.head,Hats & Masks,หมวกและหน้ากาก,Merch category tab,16
+ui.merch.cat.eyes,Eyewear,แว่นตา,Merch category tab,16
+ui.merch.cat.top,Tees,เสื้อยืด,Merch category tab,16
+ui.merch.cat.acc,Extras,ของแต่งตัว,Merch category tab,16
+ui.merch.free,Free tonight,ฟรีคืนนี้,Price tag while every piece is a free pick,16
+ui.merch.pick,Pick it (free),รับเลย (ฟรี),Button: take the piece for free,22
+ui.merch.owned,Yours,ของคุณ,Tag on a piece the player owns,10
+ui.merch.wear,Wear it,ใส่เลย,Button: put the owned piece on,16
+ui.merch.take_off,Take it off,ถอดออก,Button: take the worn piece off,16
+ui.merch.wearing,Wearing,กำลังใส่,Tag on a piece being worn,10
+ui.merch.picked,"Yours now. It's in the photo booth too.",เป็นของคุณแล้ว มีในตู้ถ่ายรูปด้วย,Toast after a free pick,60
+ui.merch.empty,"Nothing yet: pick pieces at the merch stand in the lounge.",ยังไม่มี เลือกได้ที่ร้านขายของในเลานจ์,Wardrobe with no merch,70
+ui.merch.code,Your player code,รหัสผู้เล่นของคุณ,Label over the player code,24
+ui.merch.code_hint,"Keep it: on a new phone it brings your character and merch back.",เก็บไว้ ใช้บนโทรศัพท์เครื่องใหม่เพื่อเอาตัวละครและของกลับมา,Explains the player code,80
+ui.merch.code_none,"Connect once to get your code.",เชื่อมต่อหนึ่งครั้งเพื่อรับรหัส,No code yet (offline),50
+ui.merch.restore,Have a code?,มีรหัสไหม,Button: restore with a player code,18
+ui.merch.restore_title,Bring your character back,เอาตัวละครกลับมา,Restore dialog title,30
+ui.merch.restore_go,Restore,กู้คืน,Restore dialog button,12
+ui.merch.restore_warn,"This replaces the character on this phone.",ตัวละครในเครื่องนี้จะถูกแทนที่,Warning in the restore dialog,50
+ui.merch.restore_ok,Welcome back!,ยินดีต้อนรับกลับ,Restore worked,24
+ui.merch.restore_bad,"That code didn't work.",รหัสนี้ใช้ไม่ได้,Restore: wrong code,40
+ui.merch.restore_wait,"Too many tries. Wait an hour.",ลองมากเกินไป รอหนึ่งชั่วโมง,Restore: rate limited,40
+ui.merch.restore_off,"No connection right now.",ตอนนี้ไม่มีการเชื่อมต่อ,Restore: offline,40
+ui.merch.booth,Merch,ของสะสม,Photo booth button opening the merch wardrobe,12
