@@ -1,9 +1,11 @@
 # Worker report: 🌐 overflow-seats, 2026-11-20
 
 ## Evidence
-- Commit: see LOG.md / the final message (branch `wk/overflow-seats`, rebased on origin/main, not pushed).
-- Suites: all 33 headless suites (32 existing + new `test_overflow_seats`) run with empty APPDATA in the worktree:
-  result in the final message. `test_overflow_seats`: 61 checks, 0 FAILS.
+- Commit: code a12b3c1 + LOG commit on top (branch `wk/overflow-seats`, rebased on origin/main 082979b, not pushed;
+  no game/ change between 4e9dbc8 and 082979b, so the run below holds).
+- Suites: 32/32 headless with an empty APPDATA each: the 31 existing all exit 0; new `test_overflow_seats` 52 checks,
+  0 FAILS (it failed once in the full run on its own timing: 40 frames < the 0.35 s chair shrink; now waits 0.8 s,
+  passed twice after the fix).
 - Hub card `overflow-seats-review` (order 411, 10 pictures, files list). Captures `docs/art/screens/overflow-seats/`
   (450x800 portrait, hidden desktop via CreateDesktop, foreground probe: no Godot window on Daniele's desktop).
 - Design `docs/design/08-presence.md` §6.2.1; DECISIONS row 2026-11-20 quoting Daniele; LOG line.
