@@ -14,3 +14,15 @@ Test switches (server only, SQL editor): `update bc_settings set ignore_hours = 
 push caps in the same row (`push_max_per_night`, `push_per_sender`, `push_from_hour`, `push_until_hour`).
 Reprint one code: `python docs/venue/qr/make_qr.py --rotate Tiny3` (key from codes.json), then run `seed/venue_tables.sql`. All new tokens: `--new-all` (QR remake 2026-11-20: 39 codes, Buffer + Main room + bar stools, no Lounge).
 Moderation: `reports` table (status open/kept/dismissed/banned), `profiles.banned`, `profiles.name_hidden`.
+
+## Player profiles + merch (merch-shop, 2026-11-20; NOT applied yet, needs Daniele's OK: hub card merch-server-apply)
+Apply in this order (connector `apply_migration` with the file's name and body, or paste each into the SQL editor):
+1. `migrations/20261120000002_player_profile_merch.sql` — profile columns (personality, character_created_at,
+   avatar_at, build, restore_code, restored_from), `merch_items`, `inventory`, `restore_attempts`,
+   `bc_settings.shop_free`, RLS (own rows only), functions `bc_profile_save`, `bc_profile_get`, `bc_claim_item`,
+   `bc_profile_restore`. Additive only; nothing existing changes.
+2. `seed/merch_items.sql` — the 40 catalogue rows (regenerate with `python tools/merch_catalog.py`; prices stay NULL).
+Check (SQL editor): `select count(*) from merch_items;` = 40; then in the game, the merch shop shows a player code.
+Until it is applied the client gets "Could not find the function" once per launch and stays local
+(`PlayerProfile.server_ok = false`). Free picks end with `update bc_settings set shop_free = false`.
+Who owns what: `select item_id, count(*) from inventory group by 1 order by 2 desc;`.
