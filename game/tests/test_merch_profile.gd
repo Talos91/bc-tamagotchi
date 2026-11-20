@@ -17,6 +17,7 @@ extends SceneTree
 ##   godot --headless --path . --script res://tests/test_merch_profile.gd
 
 const Merch = preload("res://scripts/merch/merch.gd")
+const PresenceMock = preload("res://scripts/presence/presence_mock.gd")
 const ServerMock = preload("res://scripts/merch/merch_server_mock.gd")
 const MerchShop = preload("res://scripts/merch/merch_shop.gd")
 const Avatar = preload("res://scripts/avatar.gd")
@@ -333,6 +334,17 @@ func _restore() -> void:
 	print("restore")
 	var code: String = prof.code()
 	var src: String = presence.player_id()
+	# hotfix 4 (Daniele 11-21 "My friend send some i got none"): tonight sits on the old account
+	mock.ignore_hours = true
+	await presence.set_mode("everyone")
+	var ci: Dictionary = await presence.checkin(PresenceMock.code_for("WestTable0"))
+	check(ci.get("ok", false), "the old account checks in at WestTable0")
+	var fr: Dictionary = mock.signup()
+	mock.rpc("bc_set_profile", {"p_display_name": "Jack", "p_avatar": {}, "p_mode": "everyone"}, fr["access_token"], 1.0)
+	mock.rpc("bc_check_in", {"p_code": PresenceMock.code_for("WestTable0"), "p_display_name": "Jack", "p_avatar": {},
+		"p_mode": "everyone"}, fr["access_token"], 1.0)
+	var sent: Dictionary = mock.edge("verb", {"to": src, "kind": "wave", "payload": {}}, fr["access_token"], 1.0)
+	check(sent.get("ok", false), "a friend waves at the old account (%s)" % sent)
 	# another phone: fresh install, its own account and a different new character
 	presence.reset_local("user://test_merch_presence3.json")
 	presence.use_mock(true, mock)
@@ -348,6 +360,14 @@ func _restore() -> void:
 	check(str(needs.profile["display_name"]) == "Juno", "restored: the character")
 	check(prof.owns("horse_mask") and prof.owns("bc_logo_tee"), "restored: the pieces")
 	check(not server.inventory.has(src), "restored: the pieces left the old phone's account")
+	var tn: Dictionary = await presence.tonight(true)
+	check(tn.get("me_checked_in", false) and tn.get("my_table", "") == "WestTable0",
+		"restored: tonight's check-in came along (%s)" % tn.get("my_table", ""))
+	var box: Dictionary = await presence.inbox()
+	check(box.get("events", []).size() == 1 and box["events"][0]["from"]["display_name"] == "Jack",
+		"restored: the friend's wave is in the new account's inbox")
+	var rows: Array = tn.get("presences", [])
+	check(rows.filter(func(x): return x["player_id"] == src).is_empty(), "the old account is not in tonight's list")
 	for i in 12:
 		r = await prof.restore("WRONG%d" % i)
 	check(not r.get("ok", true) and r["reason"] == "rate_limited", "11+ tries in an hour are rate limited")

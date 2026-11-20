@@ -181,6 +181,8 @@ func _sync(force: bool) -> Dictionary:
 		var back := await _rpc("bc_profile_restore", {"p_code": code()})
 		if back.get("ok", false):
 			_apply_server(back, false)
+			if presence.has_method("after_restore"):
+				presence.after_restore()   # tonight's check-in and unread verbs came along (20261121000003)
 	var p := _payload()
 	var sig := JSON.stringify(p) + "|" + account
 	var unsynced := []
@@ -240,4 +242,6 @@ func restore(p_code: String) -> Dictionary:
 	state()["pushed"] = JSON.stringify(_payload()) + "|" + str(presence.player_id())
 	_mark()
 	changed.emit()
+	if presence.has_method("after_restore"):
+		presence.after_restore()
 	return {"ok": true}

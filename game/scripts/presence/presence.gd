@@ -11,6 +11,7 @@ extends Node
 ## save.json; the account id is mirrored into Needs.profile.player_id (reserved there for this).
 
 signal checked_in(answer: Dictionary)
+signal account_restored               ## a player code brought an old account's check-in and verbs here (refetch)
 signal tonight_changed(presences: Array, added: Array, removed: Array)
 signal inbox_changed(count: int)
 signal status_changed(status: String)
@@ -31,6 +32,7 @@ const MODES := ["everyone", "here", "nobody"]
 const REPORT_REASONS := ["name", "harassment", "other"]
 const CODE_RE := "^[A-Za-z0-9]{10}$"
 const STORE := "user://presence.json"
+const SHARED_KEY := "bc_session"      ## web: the session mirrored in localStorage (written at once, shared by tabs)
 
 var PHRASES: Array = []               ## "p01".."p24"
 
@@ -457,13 +459,19 @@ func _ensure_auth() -> Dictionary:
 		if _closing or not is_inside_tree():
 			return {"ok": false, "reason": "offline", "detail": "closed"}
 		await get_tree().process_frame
+	_adopt_shared()   # another tab (or this page before a lost file write) may hold a newer session
 	if str(_state["access_token"]) != "" and float(_state["expires_at"]) > _now() + 60.0:
 		return {"ok": true}
 	_auth_busy = true
 	var r: Dictionary
 	if str(_state["refresh_token"]) != "":
 		r = await transport.refresh(str(_state["refresh_token"]))
+		if not r.get("ok", false) and r.get("reason", "") != "offline" and _adopt_shared():
+			r = await transport.refresh(str(_state["refresh_token"]))   # a rotated token from another tab
 		if not r.get("ok", false) and r.get("reason", "") != "offline":
+			# The account is lost (hotfix 4): a new one starts. The player code (merch shop) brings the old one's
+			# character, tonight's check-in and unread verbs back (bc_profile_restore, 20261121000003).
+			_state["lost_user_id"] = str(_state["user_id"])
 			r = await transport.signup()
 	else:
 		r = await transport.signup()
@@ -554,19 +562,71 @@ func _needs() -> Node:
 
 
 func _load() -> void:
-	if not FileAccess.file_exists(store_path):
-		return
-	var d = JSON.parse_string(FileAccess.get_file_as_string(store_path))
-	if d is Dictionary:
-		for k in _state:
-			if d.has(k):
-				_state[k] = d[k]
+	if FileAccess.file_exists(store_path):
+		var d = JSON.parse_string(FileAccess.get_file_as_string(store_path))
+		if d is Dictionary:
+			for k in _state:
+				if d.has(k):
+					_state[k] = d[k]
+	if _adopt_shared():
+		_save()
 
 
 func _save() -> void:
 	var f := FileAccess.open(store_path, FileAccess.WRITE)
 	if f != null:
 		f.store_string(JSON.stringify(_state))
+	_shared_write()
+
+
+# The account session on the web (hotfix 4, Daniele 2026-11-21 "My friend send some i got none": his phone was on a
+# new anonymous account while tonight's check-in and his friends' verbs sat on the old one). user://presence.json lives
+# in IndexedDB, which Godot copies in at start and writes back asynchronously, once per tab; localStorage is written at
+# once and every tab reads the same one. The session is kept in both and the newer one wins, so a write that did not
+# reach IndexedDB before the page closed, or a second tab (each QR scan can open one) that rotated the refresh token,
+# no longer ends in a new sign-up.
+func _web_store() -> bool:
+	return OS.has_feature("web") and mock == null and store_path == STORE
+
+
+func _shared_read() -> Dictionary:
+	if not _web_store():
+		return {}
+	var s = JavaScriptBridge.eval("(function(){try{return localStorage.getItem('%s')||''}catch(e){return ''}})()" % SHARED_KEY, true)
+	if s == null or str(s) == "":
+		return {}
+	var d = JSON.parse_string(str(s))
+	return d if d is Dictionary else {}
+
+
+func _shared_write() -> void:
+	if not _web_store():
+		return
+	var v := JSON.stringify({"user_id": _state["user_id"], "access_token": _state["access_token"],
+		"refresh_token": _state["refresh_token"], "expires_at": _state["expires_at"]})
+	JavaScriptBridge.eval("(function(v){try{localStorage.setItem('%s',v)}catch(e){}})(%s)" % [SHARED_KEY, JSON.stringify(v)], true)
+
+
+## Take the shared session when it is newer than this tab's (or this tab has none). true when something changed.
+func _adopt_shared() -> bool:
+	var d := _shared_read()
+	var rt := str(d.get("refresh_token", ""))
+	if rt == "" or rt == str(_state["refresh_token"]):
+		return false
+	if str(_state["refresh_token"]) != "" and float(d.get("expires_at", 0.0)) <= float(_state["expires_at"]):
+		return false
+	_state.merge({"user_id": str(d.get("user_id", "")), "access_token": str(d.get("access_token", "")),
+		"refresh_token": rt, "expires_at": float(d.get("expires_at", 0.0))}, true)
+	return true
+
+
+## A player code moved an old account's profile, tonight's check-in and unread verbs to this one: fetch them again.
+func after_restore() -> void:
+	_tonight_at = -1.0e9
+	_inbox_count = -1
+	if is_active():
+		await tonight(true)
+	account_restored.emit()
 
 
 ## Test hook: start from an empty local state (no account, no mode) at `path`.

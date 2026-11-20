@@ -141,4 +141,25 @@ func _fn_restore(uid: String, a: Dictionary) -> Dictionary:
 		if not inventory[uid].has(id):
 			inventory[uid][id] = inventory[src][id]
 	inventory.erase(src)
+	_move_tonight(src, uid)
 	return _json(uid)
+
+
+## 20261121000003: tonight's check-in (when the new account has none) and the unread verbs follow the code.
+func _move_tonight(src: String, uid: String) -> void:
+	if mock == null or not "checkins" in mock:
+		return
+	var n: int = mock.night_of(mock.now())
+	var ks := "%s|%d" % [src, n]
+	var ku := "%s|%d" % [uid, n]
+	if mock.checkins.has(ks):
+		if not mock.checkins.has(ku):
+			var c: Dictionary = mock.checkins[ks]
+			c["player_id"] = uid
+			mock.checkins[ku] = c
+			mock.checkins.erase(ks)
+		else:
+			mock.checkins[ks]["left"] = true
+	for e in mock.events:
+		if e.get("to") == src and not e.get("read", false):
+			e["to"] = uid

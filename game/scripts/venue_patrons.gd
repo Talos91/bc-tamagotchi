@@ -301,6 +301,8 @@ func _place_presences(seats: Array[Node3D]) -> int:
 	var pn := get_node_or_null("/root/Presence")
 	if pn != null and pn.has_signal("checked_in") and not pn.checked_in.is_connected(_on_checked_in):
 		pn.checked_in.connect(_on_checked_in)
+	if pn != null and pn.has_signal("account_restored") and not pn.account_restored.is_connected(_on_restored):
+		pn.account_restored.connect(_on_restored)
 	poll_inbox.call_deferred()
 	var taps := PresenceTaps.new()
 	taps.venue = self
@@ -329,6 +331,12 @@ func poll_presence() -> void:
 func _on_checked_in(_r: Dictionary) -> void:
 	if is_inside_tree():
 		poll_presence()
+
+## A player code brought an old account back (hotfix 4): the check-in and the verbs that waited on it show now.
+func _on_restored() -> void:
+	if is_inside_tree():
+		poll_presence()
+		poll_inbox()
 
 ## Verbs received (hotfix 3, Daniele 2026-11-20 "interaction do nothing you should receive a clear message in game from
 ## whoever did"): until now only the start screen's Inbox button showed them. Every INBOX_POLL_S in the venue the
