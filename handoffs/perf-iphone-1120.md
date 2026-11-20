@@ -41,7 +41,13 @@ worker: 2026-11-20-ui-black-cabin-152930 (capture replies_to). Self-handover at 
 - Hub: `perf-iphone-1120-review` was already ANSWERED "ok" by Daniele 13:53 (version 2), so the battery-saver question
   went on a NEW card `perf-iphone-1120-saver` (order 412, version 1; options on (rec) / venue-only 30 / off) with the
   two full-screen pictures and the install/update notes. Orchestrator copies answers to DECISIONS.
-- Now: waiting for "main has everything" from local_14422c6c (step 4).
+- Now: waiting for "main has everything" from local_14422c6c (step 4). Queue before us: merch-shop, minigame-ramp (0.4.2),
+  presence hotfix (0.4.3). No Godot until that message (it also means Godot is free). Daniele (via orchestrator): push
+  everything live tonight, no questions back.
+- Orchestrator 11-20: after rebase (keep every autoload line in project.godot; trial merge: DECISIONS.md + strings_ui.csv
+  conflict, both additive), suites with empty APPDATA, re-measure, then a SEPARATE final commit bumping
+  `game/project.godot` version to **0.4.4** (orchestrator's order; overrides the profile's "never bump"). Send the SHA;
+  Verifier verify-queue-1120 pushes.
 
 ## Next steps (successor)
 1. Read `pi-suites/summary.txt`; every line must end PASS with rc=0 (32 suites incl. test_battery_saver). Fix any failure.
