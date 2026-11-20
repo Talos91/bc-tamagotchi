@@ -739,7 +739,7 @@ func test_pinball() -> void:
 		g.advance(1.0 / 60.0)
 		if g.pos.x < -5.0 or g.pos.x > 605.0 or g.pos.y < -5.0:
 			out_of_bounds = true
-	check(res.size() == 1, "the round ends on the third drained ball, %.0f s" % g.play_time)
+	check(res.size() == 1, "the round ends on the third drained ball, %.0f s (state %d, balls %d, pos %s, vel %s)" % [g.play_time, g.ball_state, g.balls_left, str(g.pos), str(g.vel)])
 	check(not out_of_bounds, "ball stayed inside for a whole game")
 	if res.size() == 1:
 		print("  bot: %d points (record %d), level %d, %d words, %.0f s" % [g.points, g.record_points(), g.ramp_level, g.words, g.play_time])

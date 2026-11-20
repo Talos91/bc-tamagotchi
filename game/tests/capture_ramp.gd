@@ -45,7 +45,7 @@ func _game(id: String, config := {}) -> Array:
 	bg.color = UI.BG_DEEP
 	bg.size = Vector2(PORTRAIT)
 	vp.add_child(bg)
-	var g: Control = load("res://scenes/minigames/%s/%s.tscn" % [id, id]).instantiate()
+	var g: Control = load("res://scripts/minigames/%s.gd" % id).new()
 	g.position = Vector2(0, 110)
 	g.size = Vector2(PORTRAIT) - Vector2(0, 110)
 	var c := {"seed": SEED}
@@ -54,9 +54,9 @@ func _game(id: String, config := {}) -> Array:
 	if "rivals_store" in g:
 		g.rivals_store = store
 	vp.add_child(g)
-	var cap := UI.label("", 34, UI.CREAM, HORIZONTAL_ALIGNMENT_CENTER)
-	cap.position = Vector2(0, 30)
-	cap.size = Vector2(PORTRAIT.x, 60)
+	var cap := UI.label("", 12, UI.CREAM, HORIZONTAL_ALIGNMENT_CENTER)
+	cap.position = Vector2(0, 6)
+	cap.size = Vector2(PORTRAIT.x, 100)
 	vp.add_child(cap)
 	g.start()
 	g.set_process(false)
@@ -74,7 +74,7 @@ func _step(g: Control, n := 1) -> void:
 
 func _shot(v: Array, name: String, title: String) -> void:
 	var g: Control = v[1]
-	(v[2] as Label).text = "%s  ·  %s" % [title, g.last_status]
+	(v[2] as Label).text = "%s\nlevel %d · %d points" % [title, g.ramp_level, g.record_points()]
 	for i in 3:
 		await process_frame
 	await RenderingServer.frame_post_draw
@@ -186,8 +186,10 @@ func _rhythm() -> void:
 	while not g.done and g.ramp_level < 15 and guard < 40000:
 		guard += 1
 		for n in g.notes:
-			if int(n["state"]) == 0 and absf(g.clock - float(n["time"])) <= 0.01:
+			if int(n["state"]) == 0 and g.clock - float(n["time"]) >= -STEP * 0.5 and g.clock - float(n["time"]) < STEP * 0.5:
 				g.tap(int(n["lane"]))
+		g.missed = 0   # a clean picture at the cap: the capture bot is not the subject
+		g.lives_left = 3
 		_step(g)
 	_step(g, 40)
 	await _shot(v, "7-front-row-rhythm-cap", "Front Row Rhythm")

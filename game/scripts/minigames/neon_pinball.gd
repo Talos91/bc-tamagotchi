@@ -30,6 +30,9 @@ const BALL_SAVE_SECONDS := 10.0     ## level 1 ball save
 const RAMP_SAVE_STEP := 1.0         ## why: -1 s a level, the table gets less forgiving
 const BALL_SAVE_MIN := 4.0          ## why: 4 s still covers a straight drain off the launch
 const LANE_AUTO_LAUNCH := 8.0       ## why: without the time cap an idle player must still reach the loss rule
+const STALL_SECONDS := 3.0          ## why: a ball resting at a flipper pivot with no flipper held would never drain
+const STALL_SPEED := 40.0           ## px/s: slower than this counts as resting
+const STALL_KICK := Vector2(0.0, 160.0)  ## a small push toward the drain (x set toward the centre gap)
 const LAUNCH_SPEED_MIN := 1750.0
 const LAUNCH_SPEED_MAX := 2300.0
 const LANE_X := 570.0
@@ -88,6 +91,7 @@ var word_done := false  # BLACK CABIN spelled at least once this round
 var words := 0  # times BLACK CABIN was spelled this round
 var _level_t := 0.0  # play seconds towards the next time level
 var _lane_t := 0.0  # seconds the ball has waited in the lane
+var _stall_t := 0.0  # seconds a live ball has rested with no flipper held
 var _save_used := false  # the ball save works once per ball
 var toast := ""
 var _toast_t := 0.0
@@ -299,6 +303,13 @@ func advance(dt: float) -> void:
 		_lane_t += dt
 		if _lane_t >= LANE_AUTO_LAUNCH:
 			launch(0.85)
+	if ball_state == Ball.LIVE and vel.length() < STALL_SPEED and not flip_held[0] and not flip_held[1]:
+		_stall_t += dt
+		if _stall_t >= STALL_SECONDS:
+			_stall_t = 0.0
+			vel = STALL_KICK + Vector2(signf(270.0 - pos.x) * 120.0, 0.0)   # rolls off toward the centre gap
+	else:
+		_stall_t = 0.0
 	_toast_t = maxf(0.0, _toast_t - dt)
 	tilt = maxf(0.0, tilt - TILT_DECAY * dt)
 	tilt_lock = maxf(0.0, tilt_lock - dt)

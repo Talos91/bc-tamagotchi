@@ -450,7 +450,7 @@ func _miss(n: Dictionary) -> void:
 	f.pop(S.t("mg.front_row_rhythm.missed"), _lane_pos(int(n["lane"])) + Vector2(0, -150.0 * _sc()), UI.SMOKE, 44)
 	if lives_left > 0:
 		var word := S.t("mg.ramp.last") if lives_left == 1 else S.t("mg.ramp.strike", {"lives": lives_left})
-		f.pop(word, Vector2(size.x * 0.5, size.y * 0.42), UI.NEON, 52)
+		f.pop(word, Vector2(size.x * 0.5, size.y * 0.42 + (missed - 1) * 70.0 * _sc()), UI.NEON, 52)   # a chord passed by = two strikes in one frame: stacked, not on top of each other
 	haptic("fail")
 	_update_status()
 	if lives_left <= 0:
