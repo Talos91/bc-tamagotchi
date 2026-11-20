@@ -9,7 +9,33 @@ like bald spots, also too little variety expecially in clothing, the who can rea
 and the only way is to click skip, the unused corridor (the blocked one) in the lounge has the end wall invisible and
 you can see trough both ways".
 
-## State now (tip eb1b8c0)
+## STATE NOW (successor, 2026-11-20 evening): ALL ITEMS 1-10 FIXED, plus Daniele's cabinet move
+Successor session (Opus 5.5, ui, load id 2026-11-20-ui-black-cabin-807c4f). Branch rebased on origin/main 9502c68.
+Hub card `creator-fix-1120-review` (8 before/after sheets, files list). Report `handoffs/worker-reports-2026-11/creator-fix.md`.
+- **Item 7** (invisible player after any minigame): `main._cover_venue` disabled the Venue, which takes its colliders
+  out of physics, while the player kept running gravity: it fell ~20 m per game. Now the player pauses with the venue.
+  Suite `test_mg_return` (all 8 games, real leave path; before: y -20 -> -722 m, after: 0.000 m).
+- **Item 6** (no touch scrolling): Godot 4.6 drag-scrolls only from emulated mouse that reaches the ScrollContainer, and
+  all our rows/cards/buttons are MOUSE_FILTER_STOP. New autoload `TouchScroll` (`scripts/ui/touch_scroll.gd`) scrolls
+  the topmost ScrollContainer under a finger from ScreenDrag, flings, keeps a drag from pressing what it started on.
+  Suite `test_touch_scroll` (Tonight, calendar, menu, creator; 12 fails without the autoload).
+- **Items 8-10** (build_venue.gd): ArcadeOnStand removed (layout.json: that entry only; DECISIONS row); memory CRT
+  120 -> 60 deg (layout.json still says 120: flagged in the report); street door lintel at the kit's 2.15 m.
+  test_lounge checks all three.
+- **Daniele, direct, mid-session** ("since you are at it remove the table here and put the game cabinet there", picture of
+  the high counter under the wall records): HighCounter + CounterStool0/1 + seats removed, GameCabinet x 10.3 -> 11.55,
+  records raised to 2.0 m, counter camera spot folded into the cabinet's. layout.json own lines; DECISIONS row;
+  test_lounge/test_feel/smoke_doors_sit/smoke_tap updated. No QR code pointed at HighCounter.
+- **Items 1, 3**: creator restyles in place, rebuilds a tab only when its rows change; preview keeps the body's parts
+  library (`PatronFigure.show_avatar`, cached materials); hair thumbnails cached, one offscreen viewport. Per-piece
+  Outfit tab (Top, Top colour, Pattern colour, Bottom + colour, Shoes, Hat, Glasses), 38 strings (TH drafts).
+  `tools/creator_taps.gd` medians (call / until drawn, desktop): hair 322/368 -> 2.5/16.5 ms, outfit 50/56 -> 8.4/16.4,
+  body 19/22 -> 2.3/16.5. test_avatar +22 checks.
+- **Item 4** captures done (`docs/art/screens/creator-fix/checkin/`): before, Check in drops back to the consent card.
+- Gotcha: a suite run that overlaps windowed captures can fail test_lounge on walk timeouts (CPU load); rerun alone.
+- Not verified: real phone (touch scroll and creator speed on a phone browser), web build.
+
+## Earlier state (first session, tip eb1b8c0)
 - **Item 4 FIXED (4ec4666).** Cause: `PresenceClient.set_mode` wrote only `needs.profile` while `mode()` read the real
   autoload, so the live check-in went out with no mode → server `need_mode` → consent card again; only "Not now" got
   past. Fix in `presence_client.gd` (set_mode hands it to the autoload, mode() falls back to the profile),
@@ -64,7 +90,7 @@ web canvas's CSS `touch-action`. Fix it once, globally; test with simulated Scre
 Regenerate the venue once for 8-10. Every item gets before/after captures on card `creator-fix-1120-review`; same
 exit ritual. Suggested order: 7, 6, 8-10 (one venue regeneration), then items 1 and 3 (creator UI).
 
-## Next steps (successor)
+## Next steps the first session left (all done by the successor, see STATE NOW)
 1. **Before captures of the creator (items 1, 3) and the check-in card (item 4)** from the OLD code: `git worktree add
    C:/Users/itisf/bc-wt/creator-fix-before 649a06a` (import it), run the existing `capture_char_creator_fix.gd` and a
    check-in-card shot there (portrait 540x960 + landscape 960x540, hidden desktop). Remove that worktree after.
