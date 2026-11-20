@@ -46,7 +46,7 @@ worker: 2026-11-20-ui-black-cabin-152930 (capture replies_to). Self-handover at 
   everything live tonight, no questions back.
 - Orchestrator 11-20: after rebase (keep every autoload line in project.godot; trial merge: DECISIONS.md + strings_ui.csv
   conflict, both additive), suites with empty APPDATA, re-measure, then a SEPARATE final commit bumping
-  `game/project.godot` version to **0.4.4** (orchestrator's order; overrides the profile's "never bump"). Send the SHA;
+  `game/project.godot` version to **0.4.5** (orchestrator 11-21: 0.4.3 presence fixes, 0.4.4 still-here prompt land first; overrides the profile's "never bump"). Send the SHA;
   Verifier verify-queue-1120 pushes.
 
 ## Next steps (successor)
