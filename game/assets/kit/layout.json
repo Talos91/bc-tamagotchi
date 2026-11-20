@@ -1255,9 +1255,57 @@
    "position": [
     11.6,
     0.0,
-    6.6
+    7.4
    ],
    "rotation_y": 0.0,
+   "scale": [
+    1.0,
+    1.0,
+    1.0
+   ],
+   "zone": "Lounge"
+  },
+  {
+   "name": "MerchStandN",
+   "object": "merch_stand",
+   "position": [
+    11.6,
+    0.0,
+    5.8
+   ],
+   "rotation_y": -180.0,
+   "scale": [
+    1.0,
+    1.0,
+    1.0
+   ],
+   "zone": "Lounge"
+  },
+  {
+   "name": "MerchStandE",
+   "object": "merch_stand",
+   "position": [
+    12.75,
+    0.0,
+    6.6
+   ],
+   "rotation_y": 90.0,
+   "scale": [
+    1.0,
+    1.0,
+    1.0
+   ],
+   "zone": "Lounge"
+  },
+  {
+   "name": "MerchStandW",
+   "object": "merch_stand",
+   "position": [
+    10.45,
+    0.0,
+    6.6
+   ],
+   "rotation_y": -90.0,
    "scale": [
     1.0,
     1.0,

@@ -23,6 +23,9 @@
   entrance ("the red tent"); Blender review: near walls back, two-tone wall colours, floors grey (they were white),
   kit lineup and labels hidden (his "random stuff in the corridor" and "bench under the table" were the KIT lineup),
   exposure -1.
+- Round 4: merch booth on four sides (MerchStandN/E/W added, inside blocked for the navmesh); the REAL mural at wall
+  height (10.6 x 3.3 m); plain plaster faces on the corridor's north wall and the lobby's east wall (the lounge's
+  wainscot showed through); bc_review draws textured quads (12: the mural, the neon signs). Card at version 4.
 - layout.json: own lines only (owner-authorised 2026-11-20), merged from an export copy; others' drift left alone
   (Mic0, PedalboardGtr, CurtainBack*, Backdrop*, ElectricPiano, PatronsBoardMonth, Bay4, ReindeerHead, Band_*).
 - Tests touched for the new layout: test_lounge (merch in the middle + walkable all round, round tables gone), test_feel

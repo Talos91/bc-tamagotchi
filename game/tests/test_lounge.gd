@@ -85,10 +85,13 @@ func _init() -> void:
 	check(stand != null and stand.global_position.x > 9.5 and stand.global_position.x < 13.5 and stand.global_position.z > 4.5 and stand.global_position.z < 8.5,
 		"merch counter in the middle of the lounge (Daniele 2026-11-20) (%s)" % (stand.global_position if stand else "missing"))
 	var around := 0
-	if stand != null:   # walkable all round: the navmesh reaches a point 1.1 m off each side
+	var booth: Node3D = venue.find_child("MerchBooth", true, false)
+	check(booth != null and ["MerchStand", "MerchStandN", "MerchStandE", "MerchStandW"].all(func(c): return booth.find_child(c, false, false) != null),
+		"the merch stand is a booth with four counters (Daniele 2026-11-20)")
+	if booth != null:   # walkable all round: the navmesh reaches a point 0.6 m off each side of the booth
 		var nav_map: RID = venue.get_world_3d().navigation_map
-		for off in [Vector3(1.6, 0, 0), Vector3(-1.6, 0, 0), Vector3(0, 0, 1.1), Vector3(0, 0, -1.1)]:
-			var want: Vector3 = stand.global_position + off
+		for off in [Vector3(2.1, 0, 0), Vector3(-2.1, 0, 0), Vector3(0, 0, 1.75), Vector3(0, 0, -1.75)]:
+			var want: Vector3 = booth.global_position + off
 			var got := NavigationServer3D.map_get_closest_point(nav_map, want)
 			if Vector2(got.x - want.x, got.z - want.z).length() < 0.15:
 				around += 1

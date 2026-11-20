@@ -214,6 +214,49 @@ def two_tone_material(name, r):
     return m
 
 
+def quad_object(n, res, sub, ext):
+    """A textured QuadMesh (the REAL mural on the corridor wall, the neon signs) -> a plane with its image; skipped when
+    its texture is not a file (the portraits' pictures are generated). Godot's quad faces +Z (Blender -Y)."""
+    mrid = re.search(r'SubResource\("([^"]+)"\)', n.get("material_override", ""))
+    r = sub.get(mrid.group(1), {}) if mrid else {}
+    tid = re.search(r'ExtResource\("([^"]+)"\)', r.get("albedo_texture", ""))
+    if not tid or tid.group(1) not in ext:
+        return None
+    path = os.path.join(K.REPO, "game", ext[tid.group(1)].replace("res://", "").replace("/", os.sep))
+    if not os.path.exists(path):
+        return None
+    w, h = (_floats(res.get("size", "Vector2(1, 1)")) + [1.0, 1.0])[:2]
+    me = bpy.data.meshes.new("venue_quad_" + n["_name"])
+    me.from_pydata([(-w / 2, 0, -h / 2), (w / 2, 0, -h / 2), (w / 2, 0, h / 2), (-w / 2, 0, h / 2)], [], [(0, 1, 2, 3)])
+    uv = me.uv_layers.new()
+    for li, co in enumerate([(0, 0), (1, 0), (1, 1), (0, 1)]):
+        uv.data[li].uv = co
+    me.update()
+    m = bpy.data.materials.new("venue_" + r.get("resource_name", n["_name"]).strip('"'))
+    m.use_nodes = True
+    nt = m.node_tree
+    bsdf = next(x for x in nt.nodes if x.type == "BSDF_PRINCIPLED")
+    img = nt.nodes.new("ShaderNodeTexImage")
+    img.image = bpy.data.images.load(path, check_existing=True)
+    if r.get("blend_mode") == "1":                                   # additive neon: black is nothing, colour glows
+        nt.links.new(img.outputs["Color"], bsdf.inputs["Emission Color"])
+        bsdf.inputs["Emission Strength"].default_value = 3.0
+        bsdf.inputs["Base Color"].default_value = (0, 0, 0, 1)
+        nt.links.new(img.outputs["Color"], bsdf.inputs["Alpha"])
+    else:
+        nt.links.new(img.outputs["Color"], bsdf.inputs["Base Color"])
+        nt.links.new(img.outputs["Alpha"], bsdf.inputs["Alpha"])
+        bsdf.inputs["Roughness"].default_value = 0.95
+    try:
+        m.surface_render_method = "DITHERED"
+    except AttributeError:
+        pass
+    me.materials.append(m)
+    ob = bpy.data.objects.new("venue." + n["_path"].replace("/", "."), me)
+    ob.matrix_world = n["_world"]
+    return ob
+
+
 def box_mesh(name, size):
     sx, sy, sz = size[0] / 2, size[2] / 2, size[1] / 2                # Godot (x, y, z) size -> Blender (x, z, y)
     v = [(x, y, z) for x in (-sx, sx) for y in (-sy, sy) for z in (-sz, sz)]
@@ -377,6 +420,12 @@ def venue_from_tscn(objects, coll, cut, sub_collections, instances=True):
         elif n["_type"] == "MeshInstance3D" and "mesh" in n:
             rid = re.search(r'SubResource\("([^"]+)"\)', n["mesh"])
             res = sub.get(rid.group(1)) if rid else None
+            if res and res["_type"] == "QuadMesh":
+                ob = quad_object(n, res, sub, ext)
+                if ob is not None:
+                    (cut if '"ceiling"' in n["_groups"] else coll).objects.link(ob)
+                    counts["quad"] = counts.get("quad", 0) + 1
+                continue
             if not res or res["_type"] != "BoxMesh":
                 continue
             size = tuple(_floats(res.get("size", "Vector3(1, 1, 1)")))

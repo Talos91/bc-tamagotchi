@@ -945,8 +945,22 @@ func _lounge() -> void:
 func _merch_shop(g: Node) -> void:
 	_kit(g, "collectibles_shelf", Vector3(11.5, 0, 0.22), 0.0, "CollectiblesShelf")
 	_collider(g, "ShelfCollider", Vector3(11.5, 1.1, 0.22), Vector3(2.0, 2.2, 0.4))
-	_ph(g, "merch_stand", MERCH, 0.0, "MerchStand")
+	_merch_booth(g)
 	_ph(g, "potted_plant", Vector3(12.8, 0, 0.35), 0.0, "MerchPlant")
+
+## The merch booth (Daniele 2026-11-20: "merch booth sits awkwardly should be a booth so 4 sides"): four lit counters
+## facing out round a closed square in the middle of the lounge (each lettered MERCH); players walk all round it. MerchStand (the south counter) carries the zone; the inside is blocked so the navmesh stays outside.
+func _merch_booth(g: Node) -> void:
+	var b := Node3D.new()
+	b.name = "MerchBooth"
+	b.position = MERCH
+	_own(b, g)
+	# south (the zone's), north, east, west: 1.6 m counters, the side ones turned so the four close the square
+	_ph(b, "merch_stand", Vector3(0, 0, 0.8), 0.0, "MerchStand")
+	_ph(b, "merch_stand", Vector3(0, 0, -0.8), 180.0, "MerchStandN")
+	_ph(b, "merch_stand", Vector3(1.15, 0, 0), 90.0, "MerchStandE")
+	_ph(b, "merch_stand", Vector3(-1.15, 0, 0), -90.0, "MerchStandW")
+	_collider(b, "BoothInside", Vector3(0, 1.0, 0), Vector3(1.6, 2.0, 0.9))
 
 ## The curtained corner, top right of the lounge (photo 08, where the merch stand was): rust-red curtains hang along
 ## the north and east walls, the big lit BLACK CABIN frame leans on them, a wooden table with four chairs and a lamp
@@ -1280,8 +1294,8 @@ const EAGLE_DOOR := Vector2(0.55, 1.75)                # its door, x range: besi
 const MARBLE := Rect2(0.0, 8.6, 2.15, 4.2)            # the marble stretch south of the entrance room (photos 01, 15)
 const RED_LAMP := Vector3(0.32, 0.0, 9.0)             # the red floor lamp against the west wall (photos 01, 15)
 const MURAL_TEX := "res://assets/venue/corridor_mural.png"   # tools/venue_mural.py
-const MURAL_SIZE := Vector2(6.0, 1.875)
-const MURAL_AT := Vector3(9.55, 1.32, 0.0)            # centre x, y; on the lounge wall's corridor face, ends by the door
+const MURAL_SIZE := Vector2(10.56, 3.3)               # the wall's height, as in photos 03-05 (Daniele 2026-11-20: "make murales big as the entire wall height")
+const MURAL_AT := Vector3(7.72, 1.72, 0.0)            # centre x, y; on the lounge wall's corridor face, from the L to the Sticker door
 const KIOSK_AT := Vector3(7.65, 0.0, 0.35)            # the lounge's charging kiosk, north wall (photos 09, 10)
 
 ## The entrance room (photos 12-14, Daniele's corrections 2026-11-20): you come in by the street door (west wall) and
@@ -1378,10 +1392,23 @@ func _corridor_mural(g: Node) -> void:
 	mi.mesh = q
 	mi.material_override = m
 	mi.cast_shadow = GeometryInstance3D.SHADOW_CASTING_SETTING_OFF
-	mi.position = Vector3(MURAL_AT.x, MURAL_AT.y, LOUNGE.end.y + 0.205)
+	mi.position = Vector3(MURAL_AT.x, MURAL_AT.y, LOUNGE.end.y + 0.21)
 	_own(mi, g)
 	_cut(mi, Vector3.BACK)
 	mi.set_meta("cut_rooms", ["lounge", "alcove", "merch", "memory", "patrons"])   # the lounge wall's rooms
+	# That wall is the lounge's (dark wainscot and red strip on both faces); on the corridor side it is one pale plaster
+	# colour top to bottom (Daniele 2026-11-20: "in real black cabin corridor left wall has no black, is all same color")
+	var plaster := _wall_mat("corridor_plaster", PLASTER_TOP)
+	for r in [Vector2(LOBBY.end.x, STICKER_DOOR.x), Vector2(STICKER_DOOR.y, CORRIDOR.end.x)]:
+		var f := _box(g, "CorridorNorthFace%d" % int(r.x), Vector3(r.x, 0, LOUNGE.end.y + 0.2), Vector3(r.y - r.x, ROOM_H, 0.004), plaster, false)
+		f.cast_shadow = GeometryInstance3D.SHADOW_CASTING_SETTING_OFF
+		_cut(f, Vector3.BACK)
+		f.set_meta("cut_rooms", ["lounge", "alcove", "merch", "memory", "patrons"])
+	# The same on the lobby's east wall (the lounge's west wall seen from the entrance room and the marble stretch)
+	var e := _box(g, "LobbyEastFace", Vector3(LOBBY.end.x - 0.004, 0, LOBBY.position.y), Vector3(0.004, ROOM_H, CORRIDOR.position.y - LOBBY.position.y), plaster, false)
+	e.cast_shadow = GeometryInstance3D.SHADOW_CASTING_SETTING_OFF
+	_cut(e, Vector3.LEFT)
+	e.set_meta("cut_rooms", ["lounge", "alcove", "merch", "memory", "patrons"])
 
 ## The lounge's power-bank kiosk (photos 09, 10) on the north wall between the memory corner and the photo booth.
 func _charging_kiosk(g: Node) -> void:
