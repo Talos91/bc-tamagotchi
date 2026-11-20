@@ -39,3 +39,10 @@
 ## Profile note
 The social-features profile fit. Missing: the brief's "Supabase migrations need the owner's connector OK" step could
 name the hub card pattern (one card per live apply).
+
+## Suites
+37/37 exit 0, headless, empty APPDATA, own TEMP, on the tree of this branch (game/ identical to the reported tip):
+the 36 of PROJECT.md Tests (incl. test_mg_return, test_touch_scroll, test_qr_codes) + new **test_merch_profile**
+(85 checks: catalogue, version bump, server, booth, booth in game, lost save, lost session, restore, offline, reset).
+For PROJECT.md Tests: `test_merch_profile` (2026-11-20: consistent players across versions, player code restore,
+merch inventory claim → photo booth wardrobe).
