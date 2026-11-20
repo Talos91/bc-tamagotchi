@@ -63,21 +63,19 @@ func _init() -> void:
 	var cab: Node3D = venue.find_child("GameCabinet", true, false)
 	var crt: Node3D = venue.find_child("CRT", true, false)
 	var stair_foot := Vector3(8.05, 0.0, 12.25)   # build_venue STAIR_LOWER: the first flight's bottom step, at its east end
-	check(cab != null and absf(cab.global_position.x - 10.3) < 0.05 and absf(cab.global_position.z - 12.65) < 0.05, "game machine back by the stair foot (%s)" % (cab.global_position if cab else "missing"))
+	check(cab != null and absf(cab.global_position.x - 11.55) < 0.05 and absf(cab.global_position.z - 12.65) < 0.05, "game machine where the high counter stood (Daniele 2026-11-20) (%s)" % (cab.global_position if cab else "missing"))
+	check(["HighCounter", "CounterStool0", "CounterStool1"].all(func(n): return venue.find_child(n, true, false) == null), "the high counter and its stools are gone (Daniele 2026-11-20)")
 	var cab_fwd: Vector3 = cab.global_transform.basis.z if cab else Vector3.ZERO
-	check(cab != null and absf(cab_fwd.z + 1.0) < 0.05 and absf(cab.global_position.z - stair_foot.z) < 0.8 and cab.global_position.x - stair_foot.x > 1.0 and cab.global_position.x - stair_foot.x < 3.0,
-		"the stair's bottom step faces the machine, which faces the room")
+	check(cab != null and absf(cab_fwd.z + 1.0) < 0.05 and absf(cab.global_position.z - stair_foot.z) < 0.8 and cab.global_position.x - stair_foot.x > 1.0 and cab.global_position.x < 13.05 - 0.4,
+		"the machine faces the room on the south wall, east of the stair foot, short of the Sticker door")
 	check(cab != null and crt != null and cab.global_position.distance_to(crt.global_position) > 8.0, "the memory corner keeps only itself on the north wall: the machine is not there")
 	var overlap := ""
 	if cab != null:
 		var mrect := Rect2(cab.global_position.x - 0.4, cab.global_position.z - 0.5, 0.8, 1.0)
-		for n in ["HighCounter", "CounterStool0", "CounterStool1", "StairPlant", "ArcadeOnStand"]:
+		for n in ["StairPlant", "ArcadeOnStand", "ArcadeMirror"]:
 			var o: Node3D = venue.find_child(n, true, false)
 			if o != null and mrect.grow(0.25).has_point(Vector2(o.global_position.x, o.global_position.z)):
 				overlap += n + " "
-		for n in ["HighCounter", "CounterStool0", "CounterStool1"]:
-			var o: Node3D = venue.find_child(n, true, false)
-			check(o != null and absf(o.global_position.z - 13.05) < 1.6 and o.global_position.x > cab.global_position.x + 0.6 and o.global_position.x < 13.0, "%s stands east of the machine, short of the Sticker door (%s)" % [n, o.global_position if o else "missing"])
 	check(overlap == "", "nothing stands on or against the game machine (%s)" % overlap)
 	# Owner list 2026-11-20: 8 one arcade machine only (the big one), 9 the memory corner's screen faces the room,
 	# 10 the street door fills its opening (no strip of night over it)
@@ -106,7 +104,7 @@ func _init() -> void:
 		check(false, "street door leaf and its lintel exist")
 	built.free()
 	var cz: Dictionary = main.zones.first_of("cabinet")
-	check(not cz.is_empty() and Vector2(cz["approach"].x - 10.3, cz["approach"].z - 12.65).length() < 1.6, "the machine's zone sits at its new place")
+	check(not cz.is_empty() and Vector2(cz["approach"].x - 11.55, cz["approach"].z - 12.65).length() < 1.6, "the machine's zone sits at its new place")
 	var stand: Node3D = venue.find_child("MerchStand", true, false)
 	check(stand != null and stand.global_position.x > 9.5 and stand.global_position.x < 13.5 and stand.global_position.z > 4.5 and stand.global_position.z < 8.5,
 		"merch counter in the middle of the lounge (Daniele 2026-11-20) (%s)" % (stand.global_position if stand else "missing"))

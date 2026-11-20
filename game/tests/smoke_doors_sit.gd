@@ -131,7 +131,7 @@ func _init() -> void:
 	check(p.seated, "still on the stool after the minute")
 	await stand_with_stick()
 	# Every seat in the club is sittable (Daniele 2026-11-02): one of each new kind of seat zone
-	for id in ["table:Tiny2", "table:TinyE0", "table:LongTable", "table:HighCounter", "table:RectTableW", "table:RectTableE", "table:Smoke1"]:
+	for id in ["table:Tiny2", "table:TinyE0", "table:LongTable", "table:RectTableW", "table:RectTableE", "table:Smoke1"]:
 		var tz: Dictionary = main.zones.by_id(id)
 		check(not tz.is_empty(), "zone %s built" % id)
 		if tz.is_empty():

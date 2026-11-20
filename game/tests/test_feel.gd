@@ -387,7 +387,7 @@ func camera_areas() -> void:
 	# 30: every main lounge item: its spot view when the walk starts (a tap on it), settled nearer on arrival, and
 	# eased back out to the lounge's own view after walking away
 	for it in [["booth", Vector3(9.2, 0, 1.5)], ["couch", Vector3(5.3, 0, 5.0)], ["pinball", Vector3(3.9, 0, 7.2)],
-			["cabinet", Vector3(10.3, 0, 11.6)], ["counter", Vector3(12.3, 0, 11.3)]]:
+			["cabinet", Vector3(11.55, 0, 11.6)]]:
 		teleport(Vector3(8.0, 0.1, 6.0))
 		await frames(10)
 		p.walk_to(it[1])

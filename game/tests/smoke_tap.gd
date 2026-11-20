@@ -34,7 +34,7 @@ func _init() -> void:
 		main.welcome.ok_button.pressed.emit()
 	await process_frame
 	var tapped_sheets := 0
-	var tap_goals := ["table:Table2", "table:Table0", "table:Table4", "table:Tiny4", "table:HighCounter", "tall:BufferTall1"]
+	var tap_goals := ["table:Table2", "table:Table0", "table:Table4", "table:Tiny4", "tall:BufferTall1"]
 	for id in tap_goals:
 		var z: Dictionary = main.zones.by_id(id)
 		main.close_sheet()

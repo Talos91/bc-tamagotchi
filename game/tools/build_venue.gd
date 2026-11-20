@@ -67,8 +67,7 @@ const STAIR_UPPER := Rect2(2.35, 7.75, 1.6, 3.6)      # second flight, foot at i
 const STAIR_H1 := 1.6                                 # landing height
 const STAIR_TOP := 4.0                                # the floor above
 const STAIR_STOP_Z := 10.05                           # rope across the second flight: as high as the player climbs
-const CABINET_X := 10.3                               # game machine, ~1.9 m east of the bottom step (back by the stair foot, Daniele 2026-11-02)
-const LEDGE_X := Vector2(11.0, 12.1)                 # high counter on the south wall between the game machine and the Sticker door mirror (shortened 2026-11-20, photo 07)
+const CABINET_X := 11.55                              # game machine where the high counter stood (Daniele 2026-11-20: "remove the table here and put the game cabinet there")
 const MERCH := Vector3(11.6, 0, 6.6)                  # merch counter in the middle of the lounge, walkable all round (Daniele 2026-11-20)
 const PORTRAIT_X0 := 3.0                              # corridor south wall: ten top-patron portraits 1.2 m apart (B7)
 const PORTRAIT_STEP := 1.2
@@ -911,8 +910,9 @@ func _lounge() -> void:
 	else:
 		_kit_solid(g, "arcade_cabinet", Vector3(LOUNGE.position.x + 0.45, 0, 7.2), 90.0, "ArcadeCabinet")
 	_omni(g, "PinballGlow", SCREEN_CYAN, 0.6, 2.4, Vector3(LOUNGE.position.x + 1.2, 1.4, 7.2))
-	# Black Cabin game machine by the stairs, facing the bottom step (flappy-bird style; zone stub "cabinet"). The
-	# lounge revamp moved it to the memory corner; Daniele put it back by the stair foot (2026-11-02).
+	# Black Cabin game machine on the south wall, facing the room (flappy-bird style; zone stub "cabinet"). The
+	# lounge revamp moved it to the memory corner; Daniele put it back by the stair foot (2026-11-02), then in the
+	# high counter's place, the counter and its two stools removed (2026-11-20).
 	_ph(g, "game_cabinet_bc", Vector3(CABINET_X, 0, LOUNGE.end.y - 0.4), 180.0, "GameCabinet")
 	# Two white columns where the map shows them
 	for i in 2:
@@ -922,12 +922,6 @@ func _lounge() -> void:
 	_merch_shop(g)
 	_photo_booth(g)
 	_charging_kiosk(g)
-	# The high counter and its two stools (R02) moved from the top right to the south wall, east of the game machine
-	_box(g, "HighCounter", Vector3(LEDGE_X.x, 0, LOUNGE.end.y - 0.5), Vector3(LEDGE_X.y - LEDGE_X.x, 0.95, 0.5), _mat("wood_mid", WOOD_MID, 0.4))
-	for i in 2:
-		var sp := Vector3(LEDGE_X.x + 0.2 + i * 0.8, 0, LOUNGE.end.y - 1.05)
-		_kit_solid(g, "bar_stool", sp, 0.0, "CounterStool%d" % i)
-		_seat("Lounge", "Lounge_Stool%d" % i, sp, 0.0, BAR_SEAT_H, "sit", "HighCounter")
 	_cut(_kit(g, "wall_lamp", Vector3(10.2, 1.7, 0.1), 0.0, "RedDiscLamp"), Vector3.FORWARD)
 	_cut(_kit(g, "ac_unit", Vector3(7.0, 3.3, 0.15), 0.0, "ACUnit"), Vector3.FORWARD)
 	_cut(_kit(g, "painting_a", Vector3(8.2, 1.4, 0.05), 0.0, "LoungePainting"), Vector3.FORWARD)
@@ -1044,8 +1038,8 @@ func _lounge_dressing(g: Node) -> void:
 		var x := 7.0 - i * 1.7
 		var y := (STAIR_LOWER.end.x - x) / STAIR_LOWER.size.x * STAIR_H1 + 1.3
 		_cut(_ph(g, "wall_picture_framed_b", Vector3(x, y, LOUNGE.end.y - 0.06), 180.0, "GigPoster%d" % i, false), Vector3.BACK)
-	for i in 3:
-		_cut(_ph(g, "vinyl_record_wall", Vector3(LEDGE_X.x + 0.2 + i * 0.4, 1.3, LOUNGE.end.y - 0.06), 180.0, "LoungeVinyl%d" % i, false), Vector3.BACK)
+	for i in 3:   # over the game machine (1.8 m), as they were over the high counter
+		_cut(_ph(g, "vinyl_record_wall", Vector3(CABINET_X - 0.35 + i * 0.4, 2.0, LOUNGE.end.y - 0.06), 180.0, "LoungeVinyl%d" % i, false), Vector3.BACK)
 	_ph(g, "potted_plant", Vector3(STAIR_UPPER.end.x + 0.45, 0, STAIR_LOWER.position.y - 0.4), 0.0, "StairPlant")
 
 ## "Top patrons" board (Daniele 2026-11-02, BACKLOG B10) on the face of the plinth under the second flight, facing the
@@ -2114,8 +2108,7 @@ func _camera_zones() -> void:
 		{"name": "booth", "spot": true, "item": true, "area": "lounge", "rect": Rect2(8.0, 0.0, 2.6, 2.8), "clamp": Rect2(9.0, 1.2, 0.4, 0.5), "yaw": 0.0, "pitch": -34.0, "dist": 3.6, "look_y": 1.2},
 		{"name": "couch", "spot": true, "item": true, "area": "lounge", "rect": Rect2(LOUNGE.position.x, 3.0, 5.6 - LOUNGE.position.x, 3.6), "clamp": Rect2(4.2, 4.0, 0.6, 2.0), "yaw": 90.0, "pitch": -36.0, "dist": 3.6, "look_y": 1.0},
 		{"name": "pinball", "spot": true, "item": true, "area": "lounge", "rect": Rect2(LOUNGE.position.x, 6.6, 5.6 - LOUNGE.position.x, STAIR_UPPER.position.y - 6.6), "clamp": Rect2(3.9, 7.0, 0.6, 0.4), "yaw": 90.0, "pitch": -34.0, "dist": 3.6, "look_y": 1.1},
-		{"name": "cabinet", "spot": true, "item": true, "area": "lounge", "rect": Rect2(9.2, 10.4, 1.8, LOUNGE.end.y - 10.4), "clamp": Rect2(10.1, 11.4, 0.4, 0.4), "yaw": 180.0, "pitch": -34.0, "dist": 3.6, "look_y": 1.1},
-		{"name": "counter", "spot": true, "item": true, "area": "lounge", "rect": Rect2(11.0, 10.4, 1.9, LOUNGE.end.y - 10.4), "clamp": Rect2(11.8, 11.3, 0.4, 0.4), "yaw": 180.0, "pitch": -34.0, "dist": 3.6, "look_y": 1.1},
+		{"name": "cabinet", "spot": true, "item": true, "area": "lounge", "rect": Rect2(9.2, 10.4, 3.7, LOUNGE.end.y - 10.4), "clamp": Rect2(CABINET_X - 0.2, 11.4, 0.4, 0.4), "yaw": 180.0, "pitch": -34.0, "dist": 3.6, "look_y": 1.1},
 		# Owner item 31 (Daniele 2026-11-10: "when you reach the entrance to the lounge the lounge camera should allow
 		# you to see that wall and the door clearly so you can enter, once entered the camera passes through the wall and
 		# gets on the other side so you can see the corner next to the game machine and the door where you just

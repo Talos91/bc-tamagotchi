@@ -1061,7 +1061,7 @@
    "name": "GameCabinet",
    "object": "game_cabinet_bc",
    "position": [
-    10.3,
+    11.55,
     0.0,
     12.65
    ],
@@ -1330,38 +1330,6 @@
    "zone": "Lounge"
   },
   {
-   "name": "CounterStool0",
-   "object": "bar_stool",
-   "position": [
-    11.2,
-    0.0,
-    12.0
-   ],
-   "rotation_y": 0.0,
-   "scale": [
-    1.0,
-    1.0,
-    1.0
-   ],
-   "zone": "Lounge"
-  },
-  {
-   "name": "CounterStool1",
-   "object": "bar_stool",
-   "position": [
-    12.0,
-    0.0,
-    12.0
-   ],
-   "rotation_y": 0.0,
-   "scale": [
-    1.0,
-    1.0,
-    1.0
-   ],
-   "zone": "Lounge"
-  },
-  {
    "name": "RedDiscLamp",
    "object": "wall_lamp",
    "position": [
@@ -1462,7 +1430,7 @@
    "object": "vinyl_record_wall",
    "position": [
     11.2,
-    1.3,
+    2.0,
     12.99
    ],
    "rotation_y": -180.0,
@@ -1478,7 +1446,7 @@
    "object": "vinyl_record_wall",
    "position": [
     11.6,
-    1.3,
+    2.0,
     12.99
    ],
    "rotation_y": -180.0,
@@ -1494,7 +1462,7 @@
    "object": "vinyl_record_wall",
    "position": [
     12.0,
-    1.3,
+    2.0,
     12.99
    ],
    "rotation_y": -180.0,
@@ -12605,34 +12573,6 @@
    "seat_h": 0.45,
    "spot": "Memory_Chair1",
    "table": "memory",
-   "zone": "Lounge"
-  },
-  {
-   "pose": "sit",
-   "position": [
-    11.2,
-    0.0,
-    12.0
-   ],
-   "preset_slot": "PATRON",
-   "rotation_y": 0.0,
-   "seat_h": 0.8,
-   "spot": "Lounge_Stool0",
-   "table": "HighCounter",
-   "zone": "Lounge"
-  },
-  {
-   "pose": "sit",
-   "position": [
-    12.0,
-    0.0,
-    12.0
-   ],
-   "preset_slot": "PATRON",
-   "rotation_y": 0.0,
-   "seat_h": 0.8,
-   "spot": "Lounge_Stool1",
-   "table": "HighCounter",
    "zone": "Lounge"
   },
   {
