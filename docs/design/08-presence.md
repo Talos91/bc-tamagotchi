@@ -187,9 +187,31 @@ Big waves them in (03-cast §1.2), so the room visibly fills. A presence that tu
 
 | Viewer | Seat |
 |---|---|
-| Checked in tonight | The presence's **real table** (`table_id` = the in-game table of the same name): a free chair there, else the nearest free chair in the zone. Tablemates sit next to each other. |
+| Checked in tonight | The presence's **real table** (`table_id` = the in-game table of the same name): a free chair there (an anonymous patron on one gets up for them), else an **overflow seat** at that table (§6.2.1), else the nearest free chair in the zone. Tablemates sit next to each other. |
 | Not checked in tonight | A free chair in a zone weighted by the real table's zone (so the Candle Floor still fills when the real one does), never the exact table (★ P3) |
 | Anyone | Never a regular's reserved seat, never the player's own seat. Unlike an anonymous patron, a presence is never made to get up for the player (`vacate()` skips group `presence`) |
+
+### 6.2.1 Overflow seats (Daniele 2026-11-20)
+
+"we will be more than 4 people at a table so we need to factor how that look i suggest factoring optional seating
+appearing only when you pass the 4 people". When a table's real check-ins pass its seats, extra seats appear around it
+at runtime (`scripts/presence_ui/overflow_seats.gd`; never in layout.json or venue.tscn) and go when people leave:
+
+| Table | Extra seats | Then |
+|---|---|---|
+| Round four-chair tables (Table0–4, WestTable0/1, EastTable) | 4 cafe chairs on the diagonals, a little wider than its own (cap 8) | up to 4 standing with a drink, then the zone |
+| Long tables (RectTableW/E, LongTable) | chairs at the ends, as many as fit (cap 8) | standing, then the zone |
+| Tall tables (BufferTall0–3, OpeningTall0/1) | tall stools on the free sides, 1–2 (walls, the window and the lane limit them) | standing, then the zone |
+| Bar | 9 more bar stools on the stool row, between and just past the 9 (cap 18) | up to 6 standing behind the stools, then the zone |
+
+Each extra seat clears the room's colliders (walls, furniture, other chairs), every seat spot, every other table's tap
+zone (its seats' reach + `venue_zones.gd` SEAT_MARGIN), the door and wander spots, and stays on the navmesh floor. A
+chair pops in when its person is placed and shrinks away when they leave; when someone on one of the table's own chairs
+leaves, the last extra-seat (or standing) person moves onto it, so extra chairs only stand while the table is over.
+The player never takes an extra chair (it is not in group `seat`). A viewer not checked in never sees real tables
+(P3), so never extra chairs. Before this (found 2026-11-20): the 5th and later people at a table went to random free
+chairs in the zone, and late arrivals did so even before the 4th (anonymous patrons kept the table's chairs); no
+overlap, no error, but the group was scattered (9 at Table3 → 2 there; 12 at the Bar → 2 on stools).
 
 ### 6.3 Idle behaviour
 

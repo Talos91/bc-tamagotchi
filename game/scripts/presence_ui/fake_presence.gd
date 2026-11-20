@@ -18,6 +18,7 @@ extends RefCounted
 const Avatar = preload("res://scripts/avatar.gd")
 
 const NAMES := ["Mai", "Ploy", "Ton", "Fah", "Beam", "Nok", "Arthit", "Kanya", "June", "Pim", "Golf", "Mew"]
+const PresenceMock = preload("res://scripts/presence/presence_mock.gd")   ## every code's table and zone (arrive())
 ## In-game tables (layout.json ids) and their zones (08 §7.7)
 const TABLES := {"Table0": "Tables", "Table1": "Tables", "Table2": "Tables", "Table3": "Tables", "Table4": "Tables",
 	"WestTable0": "Tables", "WestTable1": "Tables", "LongTable": "Lounge", "BufferTall0": "Buffer",
@@ -155,7 +156,7 @@ func arrive(name: String, table_id: String, rng_seed := 7) -> Dictionary:
 	var rng := RandomNumberGenerator.new()
 	rng.seed = rng_seed
 	var p := {"player_id": "fake-%02d" % _next, "display_name": name, "avatar": Avatar.random_record(rng),
-		"table_id": table_id, "zone": TABLES.get(table_id, "Tables"), "at": Time.get_unix_time_from_system(),
+		"table_id": table_id, "zone": TABLES.get(table_id, PresenceMock.TABLES.get(table_id, "Tables")), "at": Time.get_unix_time_from_system(),
 		"visibility": "everyone", "regular": false, "first_time": true, "tablemate": false, "friend": false, "me": false,
 		"nights_together": 0}
 	_next += 1

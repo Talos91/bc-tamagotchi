@@ -45,6 +45,7 @@ const Avatar = preload("res://scripts/avatar.gd")
 const PresenceClient = preload("res://scripts/presence_ui/presence_client.gd")
 const Badge = preload("res://scripts/presence_ui/presence_badge.gd")
 const PresenceTaps = preload("res://scripts/presence_ui/presence_taps.gd")
+const OverflowSeats = preload("res://scripts/presence_ui/overflow_seats.gd")
 ## Where an owner stands at each of her spots: offset from the table's centre (past the corner between two chairs, clear
 ## of their backs) and the yaw she faces, turned west toward whoever arrives from the lounge side. WestTable0 is 1.8 m
 ## from the main room's west wall, so she takes its south-east corner there; at the buffer's tall table (stools east and
@@ -83,6 +84,7 @@ var _rng := RandomNumberGenerator.new()
 var presences := {}                 ## player_id -> PatronFigure (group "presence")
 var _all_seats: Array[Node3D] = []  ## every chair left after the hosts
 var _arrivals: Array[Dictionary] = []   ## late check-ins walking in: {fig, path, idx, seat}
+var _overflow: OverflowSeats        ## extra chairs when a table's check-ins pass its seats (Daniele 2026-11-20)
 var _door_point := Vector3.INF      ## where late check-ins come in (Wander_Lobby, inside the street door)
 var _poll_t := 0.0
 var _polling := false
@@ -337,7 +339,10 @@ func remove_presence(id: String) -> void:
 	var seat: Node3D = f.get_meta("seat", null)
 	if seat != null:
 		taken.erase(seat)
-		seat.add_to_group("seat")
+		if seat.has_meta("overflow"):
+			_overflow.release(seat)
+		else:
+			seat.add_to_group("seat")
 	for a in _arrivals:
 		if a.fig == f:
 			_arrivals.erase(a)
@@ -347,6 +352,8 @@ func remove_presence(id: String) -> void:
 	var tw := f.create_tween()
 	tw.tween_property(f, "scale", Vector3(0.01, 0.01, 0.01), 0.45).set_trans(Tween.TRANS_BACK).set_ease(Tween.EASE_IN)
 	tw.tween_callback(f.queue_free)
+	if seat != null:
+		_settle(str(seat.get_meta("table", "")))
 
 func presence_figure(id: String) -> PatronFigure:
 	return presences.get(id)
@@ -357,7 +364,7 @@ func react(id: String, text: String) -> void:
 	if f == null:
 		return
 	Badge.bubble(f, text)
-	if f.state == "sit" and not _walking(f):
+	if f.state == "sit" and not _walking(f) and not f.get_meta("seat").get_meta("stand", false):
 		var pose: String = f.look.get("anims", {}).get("sit", "sit_drink")
 		f.look["anims"]["sit"] = "sit_applaud"
 		f.play("sit", true)
@@ -430,6 +437,10 @@ func _pick_seat(p: Dictionary, avail: Array[Node3D]) -> Node3D:
 			in_zone.append(s)
 	if not at_table.is_empty():
 		return at_table[0]
+	if here:
+		var extra := _table_overflow(table)
+		if extra != null:
+			return extra
 	if not in_zone.is_empty():
 		return in_zone[_rng.randi() % in_zone.size()]
 	var rest: Array[Node3D] = []
@@ -438,11 +449,72 @@ func _pick_seat(p: Dictionary, avail: Array[Node3D]) -> Node3D:
 			rest.append(s)
 	return null if rest.is_empty() else rest[_rng.randi() % rest.size()]
 
+# --- Overflow seating (Daniele 2026-11-20; scripts/presence_ui/overflow_seats.gd) -----------------------
+## A presence whose real table is full: an anonymous patron on one of its chairs gets up first (real people before the
+## anonymous fill); then an extra chair appears around the table (up to OverflowSeats.SEAT_CAP, the Bar more along
+## the counter), then a standing spot by it; null past those, and _pick_seat falls back to the zone as before.
+func _table_overflow(table: String) -> Node3D:
+	for s in taken:
+		var f: PatronFigure = taken[s]
+		if str(s.get_meta("table", "")) == table and s.is_in_group("seat") and not f.is_in_group("presence"):
+			vacate(s)
+			return s
+	if _overflow == null:
+		_overflow = OverflowSeats.new(get_parent() as Node3D, self, $Spots)
+	return _overflow.claim(table)
+
+func _overflow_pose(seat: Node3D) -> String:
+	return "stand_drink" if seat.get_meta("stand", false) else _seat_pose(seat)
+
+## Someone left `table`: the person on its worst spot (standing, then the last extra chair) moves to the best free
+## one (its own chairs first), so extra chairs only stay while the table is over its seats.
+func _settle(table: String) -> void:
+	if table == "" or _overflow == null:
+		return
+	var worst: PatronFigure = null
+	var wr := 0
+	for id in presences:
+		var f: PatronFigure = presences[id]
+		var s: Node3D = f.get_meta("seat")
+		if str(s.get_meta("table", "")) == table and not _walking(f) and OverflowSeats.rank(s) > wr:
+			worst = f
+			wr = OverflowSeats.rank(s)
+	if worst == null:
+		return
+	var better: Node3D = null
+	for s in _free_seats():
+		if str(s.get_meta("table", "")) == table:
+			better = s
+			break
+	if better == null:
+		better = _overflow.claim(table)
+		if better == null:
+			return
+		if OverflowSeats.rank(better) >= wr:
+			_overflow.release(better)
+			return
+	var old: Node3D = worst.get_meta("seat")
+	taken.erase(old)
+	_overflow.release(old)
+	worst.set_meta("seat", better)
+	taken[better] = worst
+	better.remove_from_group("seat")
+	worst.look["anims"]["sit"] = _overflow_pose(better)
+	worst.state = ""
+	_seat_presence(worst, better)
+
+## Live extra chairs and standing spots at `table` (tests, captures).
+func overflow_at(table: String) -> Array[Node3D]:
+	var out: Array[Node3D] = []
+	if _overflow != null:
+		out = _overflow.live(table)
+	return out
+
 func _spawn_presence(p: Dictionary, seat: Node3D, walk_in: bool) -> PatronFigure:
 	var id := str(p.get("player_id", ""))
 	var f: PatronFigure = FIGURE.instantiate()
 	f.name = "Presence_" + id.validate_node_name().replace("@", "_")
-	f.look = {"avatar": Avatar.normalize(p.get("avatar", {})), "anims": {"sit": _seat_pose(seat)}}
+	f.look = {"avatar": Avatar.normalize(p.get("avatar", {})), "anims": {"sit": _overflow_pose(seat)}}
 	add_child(f)
 	figures.append(f)
 	f.add_to_group("presence")
