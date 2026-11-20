@@ -304,6 +304,13 @@ func perf_report(version: String, device: Dictionary, numbers: Dictionary) -> Di
 	return await _rpc("bc_perf_report", {"p_version": version, "p_device": device, "p_numbers": numbers}, LONG_TIMEOUT_S)
 
 
+## Gameplay telemetry (play_telemetry.gd, Daniele 11-20): a batch of at most 50 events into public.play_events.
+func play_events(events: Array) -> Dictionary:
+	if not is_active():
+		return {"ok": false, "reason": "off"}
+	return await _rpc("bc_play_events", {"p_events": events}, LONG_TIMEOUT_S)
+
+
 # ------------------------------------------------------------------ polling (venue on screen)
 
 func start_polling() -> void:

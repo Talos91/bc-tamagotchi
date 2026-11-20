@@ -129,6 +129,9 @@ func _start_game() -> void:
 	_best_text = S.t("mg.frame.best", {"score": best}) if best > 0 else S.t("mg.frame.no_best")
 	_game_status = ""
 	_refresh_status()
+	var tel := get_node_or_null("/root/PlayTelemetry") if is_inside_tree() else null
+	if tel != null:
+		tel.watch(game, best if n != null else -1)   # gameplay telemetry (play_telemetry.gd): start, end, reason
 	game.start()
 
 
@@ -200,4 +203,5 @@ func _leave() -> void:
 	_pause_layer.visible = false
 	if is_instance_valid(game):
 		game.set_paused(false)
+		game.set_meta("end_reason", "quit")
 		game.abandon()

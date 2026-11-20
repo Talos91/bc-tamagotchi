@@ -37,6 +37,7 @@ var reports: Array = []
 var subs := {}                ## uid -> [endpoint]
 var push_log: Array = []      ## {to, from, night, status}
 var perf_reports: Array = []
+var play_events: Array = []   ## bc_play_events rows: {player_id, at, kind, game, player_name, build, device, data}
 var pushes_sent: Array = []   ## {to, title, body} — what a phone would have shown
 var _seq := 0
 var _uid_seq := 0
@@ -133,6 +134,22 @@ func rpc(fn: String, args: Dictionary, token: String, _timeout: float) -> Dictio
 			perf_reports.append({"player_id": uid, "at": now(), "version": str(args.get("p_version", "")).left(40),
 				"device": args.get("p_device", {}), "numbers": args.get("p_numbers", {})})
 			return {"ok": true, "id": perf_reports.size()}
+		"bc_play_events":
+			var evs = args.get("p_events", [])
+			if not evs is Array or evs.size() > 50:
+				return {"ok": false, "reason": "server", "detail": "events must be an array of at most 50"}
+			if play_events.filter(func(r): return r["player_id"] == uid and r["at"] > now() - 86400.0).size() >= 3000:
+				return {"ok": false, "reason": "limit"}
+			var n := 0
+			for e in evs:
+				if not e is Dictionary or not str(e.get("kind", "")) in ["mg_start", "mg_end", "venue_session"]:
+					continue
+				play_events.append({"player_id": uid, "at": now(), "kind": e["kind"], "game": str(e.get("game", "")).left(40),
+					"player_name": str(e.get("player_name", "")).left(40), "build": str(e.get("build", "")).left(40),
+					"device": str(e.get("device", "")).left(60), "client_at": e.get("client_at"),
+					"data": e.get("data", {}) if e.get("data") is Dictionary else {}})
+				n += 1
+			return {"ok": true, "stored": n}
 	return {"ok": false, "reason": "server", "detail": "no function " + fn}
 
 

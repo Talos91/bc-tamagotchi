@@ -137,3 +137,4 @@ ui.presence.checkin.err.closed,"Black Cabin is closed now. Check-ins work Tue–
 ui.presence.checkin.err.bad_code,This code doesn't work. Ask the staff for help.,โค้ดนี้ใช้ไม่ได้ ขอความช่วยเหลือจากพนักงาน,Check-in failed: unknown or retired code,60
 ui.presence.checkin.err.other,Check-in didn't work. Try again in a minute.,เช็กอินไม่สำเร็จ ลองใหม่อีกครั้งในอีกสักครู่,Check-in failed: anything else,60
 ui.presence.checkin.skip,Not now,ไว้ทีหลัง,Check-in card: walk in without checking in,14
+ui.start.telemetry,Perf and game results are sent with your name,ข้อมูลประสิทธิภาพและผลเกมจะถูกส่งพร้อมชื่อของคุณ,"Start screen footer, bottom left: the one-line telemetry notice (perf reports + gameplay results go to the Black Cabin server, Daniele 11-19/11-20). TH is a machine draft",48
