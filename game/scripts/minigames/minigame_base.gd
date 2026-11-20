@@ -6,18 +6,29 @@ extends Control
 ## implement advance(dt) and call finish(score) with a score in 0..1; abandon() finishes with
 ## current_score() (the pause menu's Leave). A round below `miss_below` is a MISS (06-stakes §7.2): tier MISS, no gain.
 ## All time advances through advance(dt) so tests can drive a game without a real clock.
+##
+## Endless ramp (docs/design/15-minigame-ramp.md; Daniele 2026-11-20 "no need to end them at black cabin sign but make
+## them become increasingly harder and faster (but humanly possible not impossible)"): every game runs until its loss
+## rule (STRIKES strikes: the game's own singes_left / drops_left / balls_left / lives_left) and climbs `ramp_level` up to its cap. The record is uncapped: a game overrides
+## record_points() (about 100 = a perfect old round) and finishes with score_of(points); the need gain reads only the
+## first RECORD_FULL points, so a long run is a record, not a way to farm the meters. lose() ends a round on its loss
+## rule with end_reason "lost" (play telemetry reads end_reason, extra.level, speed, misses).
 
 signal finished(result: Dictionary)
 signal status_changed(text: String)
 
 const Rules = preload("res://scripts/rules.gd")
 const Fx = preload("res://scripts/minigames/mg_fx.gd")
+const S_LEVEL = preload("res://scripts/minigames/strings.gd")
 
 ## Haptics (11-minigame-quality §2.2, §2.4): light tick on success, double on failure, strong on perfect.
 const HAPTIC_TICK_MS := 15
 const HAPTIC_FAIL_MS := 25
 const HAPTIC_FAIL_GAP := 0.09  # seconds between the two pulses of a failure
 const HAPTIC_STRONG_MS := 45
+
+const STRIKES := 3                  ## every endless game ends on its third strike
+const RECORD_FULL := 100.0          ## record points that read as a full round for the need gain (score 1.0)
 
 const TIER_MISS := -1
 const TIER_GREAT := 0.6
@@ -33,6 +44,9 @@ var relaxed := false  # accessibility "relaxed timing": +50% hit windows
 var miss_below := Rules.MINIGAME_MISS_BELOW  # the frame raises it to RUSTY_MISS_BELOW for the first round while Rusty
 var fumble := 0.0  # seconds the game stays frozen at the start (Rusty: RUSTY_FUMBLE_SECONDS)
 
+var ramp_level := 1                ## the ramp's level (1 = the start); games send it as extra.level (play telemetry)
+var end_reason := ""                ## "lost" on the loss rule; the frame's Leave sets meta "quit" (wins over this)
+
 var running := false
 var paused := false
 var done := false
@@ -42,6 +56,8 @@ var _fx: Fx
 
 
 func start() -> void:
+	ramp_level = 1
+	end_reason = ""
 	running = true
 	paused = false
 	done = false
@@ -73,6 +89,39 @@ func abandon() -> void:
 	finish(current_score())
 
 
+## The uncapped record of this round so far (best, board, rivals). Default: the 0..1 score as 0..100.
+func record_points() -> int:
+	return points_for(current_score())
+
+
+## The need-gain score (0..1) of `points` record points: the first RECORD_FULL count.
+static func score_of(points: float) -> float:
+	return clampf(points / RECORD_FULL, 0.0, 1.0)
+
+
+## The round ends on its loss rule (third strike).
+func lose() -> void:
+	if done:
+		return
+	end_reason = "lost"
+	finish(current_score())
+
+
+## Raises the ramp to level n (the game's own numbers follow `ramp_level`): a LEVEL pop and a strong tick.
+func level_up(n: int) -> void:
+	if n <= ramp_level:
+		return
+	ramp_level = n
+	_on_level(n)
+	fx().pop(S_LEVEL.t("mg.ramp.level", {"n": n}), Vector2(size.x * 0.5, size.y * 0.24), Color("FFDD78"), 52)
+	haptic("strong")
+
+
+## A game hook for its own level-up beat.
+func _on_level(_n: int) -> void:
+	pass
+
+
 func finish(score: float) -> void:
 	if done:
 		return
@@ -81,7 +130,7 @@ func finish(score: float) -> void:
 	var s := clampf(score, 0.0, 1.0)
 	finished.emit({
 		"game_id": game_id, "action_id": action_id, "need_id": need_id, "key": action_key,
-		"title_key": title_key, "score": s, "points": points_for(s), "tier": tier_for(s, miss_below), "miss": s < miss_below,
+		"title_key": title_key, "score": s, "points": maxi(points_for(s), record_points()), "tier": tier_for(s, miss_below), "miss": s < miss_below,
 		"extra": _result_extra(),
 	})
 

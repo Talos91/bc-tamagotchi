@@ -1,17 +1,24 @@
 extends "res://scripts/minigames/minigame_base.gd"
 ## Soi Dash (docs/design/10-minigame-next.md concept C; DECISIONS 2026-11-15 "build them all"). On the lounge game
-## cabinet: late for the 20:00 show, run down a neon soi to the Black Cabin door. Three lanes: swipe left / right to
-## change lane round parked motorbikes, food carts and tuk-tuks driving at you; swipe up to hop a kerb, a sleeping or
-## trotting soi dog, or a monitor lizard crossing the soi; run through the music notes. A bump never ends the run: it
-## costs 2 s of the clock. The street is the same for everyone each night (per timing mode).
-## Score = 0.6 x notes / notes in the street + 0.4 x seconds to spare at the door / 10; arriving after 20:00 caps
-## it at 0.5. config.seed: the street (default: the Bangkok date). Feeds action "soi_dash".
+## cabinet: run down an endless neon soi. Three lanes: swipe left / right to change lane round parked motorbikes, food
+## carts and tuk-tuks driving at you; swipe up to hop a kerb, a sleeping or trotting soi dog, or a monitor lizard
+## crossing the soi; run through the music notes. The street is the same for everyone each night (per timing mode).
+##
+## Endless ramp (docs/design/15-minigame-ramp.md; Daniele 2026-11-20 "no need to end them at black cabin sign but make
+## them become increasingly harder and faster (but humanly possible not impossible)"): no clock and no door. The street
+## is generated ahead in chunks (seeded per night and timing mode) and what lies behind is dropped. Speed 1.0 street/s
+## + 0.01 a second of running, capped at 1.6 (60 s); rows close from 1.9 to 1.2 apart (relaxed +0.4) between street
+## units 10 and 39 as before; tuk-tuks from unit 10, dogs 15, lizards 20, two-lane rows more often from unit 27. A
+## bump costs one of 3 lives (the 0.8 s blink after it means one obstacle costs one strike); the third bump loses.
+## Points = 2 a street unit + 1 a note (the old 40-unit street ~ 110), uncapped; the need gain reads the first 100.
+## Level = 1 + seconds of running / 10, capped at 7 (60 s). config.seed: the street (default: the Bangkok date).
+## Feeds action "soi_dash". Why the cap is playable: a hop (0.6 s) covers 0.96 units at 1.6, less than the closest
+## row gap (1.2 - 0.15 jitter = 1.05), and VIEW 4 units ahead is 2.5 s of preview.
 ##
 ## Q6 (docs/design/11-minigame-quality.md, 2026-11-19): drawn from the look B voxel sprites in
 ## res://assets/minigames/soi_dash/ (flat shapes stay as the fallback when a texture is missing); street life with its
 ## own moves (§ Daniele 2026-11-18: monitor lizards, stray dogs, food carts, tuk-tuks); every §2.3 beat through mg_fx;
-## the §3 ramp (row gap 1.9 -> 1.2, two-lane rows and tuk-tuks after 10 s, dogs after 15 s, lizards after 20 s;
-## relaxed: gap +0.4, movers settle 0.5 s earlier, tuk-tuks rush less). Fair rule for movers: a stray or a lizard
+## relaxed: gap +0.4, movers settle 0.5 s earlier, tuk-tuks rush less. Fair rule for movers: a stray or a lizard
 ## is in its final lane SETTLE units before the runner reaches it; a tuk-tuk only looks faster (it is drawn further
 ## out and rushes in) and reaches the runner at the same street point as a parked one would.
 
@@ -21,33 +28,39 @@ const Rivals = preload("res://scripts/minigames/mg_rivals.gd")
 
 const ART := "res://assets/minigames/soi_dash/"
 
-const RUN_SECONDS := 40.0            ## the street at full speed
-const CLOCK_SECONDS := 50.0          ## the clock to 20:00 when the run starts (19:59:10 on the display)
-const SPARE_FULL := 10.0             ## seconds to spare that score the full time part
-const BUMP_COST := 2.0
-const SPEED := 1.0                   ## street units per second (the street is RUN_SECONDS long)
+const RUN_SECONDS := 40.0            ## the old fixed street (units at SPEED): the row-gap ramp still ends near it
+const SPEED := 1.0                   ## street units per second at the start
 const VIEW := 4.0                    ## street units visible ahead
 const HIT_ZONE := 0.12               ## an item at distance within this of the runner touches them
 const HOP_SECONDS := 0.6
 const LANE_SECONDS := 0.12           ## lane change animation
-const BUMP_SECONDS := 0.8            ## blink after a bump (no second bump)
+const BUMP_SECONDS := 0.8            ## blink after a bump (no second bump: one obstacle costs one strike)
 const INTRO_SECONDS := 1.2
 const SWIPE_PX := 50.0
 const FIRST_AT := 2.5                ## first obstacle this far into the street
 const BKK_OFFSET := 7 * 3600
-const GHOST_STEP := 0.25             ## ghost: the runner's lane every this many street units
+const GHOST_STEP := 0.25             ## ghost: the runner's lane every this many street units ...
+const GHOST_MAX := 2400              ## ... at most this many samples (600 units, ~6.5 min): the save stays small
+const AHEAD := 12.0                  ## the street is generated this far past the runner (tuk-tuks show 1.6x out)
+const BEHIND := 1.0                  ## items this far behind the runner are dropped
 
-# --- The ramp (§3): the first 10 s are a warm-up, the middle teaches, the last third tests
-const STEP_START := 1.9              ## gap between obstacle rows at the start ...
-const STEP_END := 1.2                ## ... and at the door
+# --- The ramp (15-minigame-ramp) ----------------------------------------------------------------------------------
+const SPEED_PER_SECOND := 0.01       ## why: +0.01 street/s a second of running ...
+const SPEED_CAP := 1.6               ## ... up to 1.6 at 60 s: a row every 0.75 s, VIEW = 2.5 s of preview
+const LEVEL_SECONDS := 10.0          ## why: a level every 10 s of running ...
+const LEVEL_CAP := 7                 ## ... level 7 at 60 s, where the speed stops rising
+const POINTS_PER_UNIT := 2.0         ## why: the old 40-unit street + its ~30 notes ~ 110 = a perfect old run
+const STEP_START := 1.9              ## gap between obstacle rows (street units) at the start ...
+const STEP_END := 1.2                ## ... from street unit STEP_FULL_AT on (a hop at the cap covers 0.96)
+const STEP_FULL_AT := 39.0           ## where the gap reaches STEP_END (the old street's last row)
 const STEP_JITTER := 0.15
 const RAMP_FROM := 10.0              ## the gap starts shrinking here
 const PAIR_FROM := 10.0              ## two-lane rows from here
-const TIGHT_FROM := 27.0             ## the last third: two-lane rows come more often
+const TIGHT_FROM := 27.0             ## two-lane rows come more often from here
 const TUK_FROM := 10.0
 const DOG_FROM := 15.0
 const LIZARD_FROM := 20.0
-const RELAXED_STEP := 0.4            ## relaxed: every gap this much longer
+const RELAXED_STEP := 0.4            ## relaxed: every gap this much longer, at every speed
 
 # --- Street life moves
 const SETTLE := 0.9                  ## a stray or a lizard is in its final lane this far ahead of the runner
@@ -61,11 +74,10 @@ const DOG_WAKE := 1.2                ## a sleeping dog's ear goes up when the ru
 # --- Beats
 const DASH_SECONDS := 0.18           ## lane dash streak
 const PUFF_SECONDS := 0.35           ## hop dust
-const DOOR_AHEAD := 0.5              ## the door stands this far past the end of the run
-const DOOR_SECONDS := 0.8            ## doors swing, neon flares, then the result
+const BACKDROP_CREEP := 60.0         ## street units for one slow creep of the far soi toward the runner (and back)
 const ART_LANE_PX := 240.0           ## sprite px that fill one lane at the runner (frames are drawn for a 780 px play)
 
-enum State { INTRO, RUNNING, DOOR, DONE }
+enum State { INTRO, RUNNING, DONE }
 enum Kind { BIKE, CART, DOG, KERB, NOTE, TUK, STRAY, LIZARD }
 
 var state := State.INTRO
@@ -73,15 +85,13 @@ var lane := 0                        ## -1 left, 0 middle, 1 right
 var lane_anim := 0.0                 ## drawn lane position, eases toward lane
 var hop_t := 0.0                     ## > 0 while in the air
 var dist := 0.0                      ## street covered
-var clock := CLOCK_SECONDS           ## seconds to 20:00
-var items: Array[Dictionary] = []    ## {at, lane, from, kind, done}
-var notes_total := 0
+var run_t := 0.0                     ## seconds of running (the speed and the level read it)
+var items: Array[Dictionary] = []    ## {at, lane, from, kind, done}: generated ahead, dropped behind, in street order
 var notes := 0
-var bumps := 0
+var bumps := 0                       ## strikes used (a bump in the blink after another costs nothing)
+var lives_left := STRIKES
 var bump_t := 0.0
-var arrived := false
 var seed_used := 0
-var door_t := 0.0
 var best_combo := 0
 var _state_t := 0.0
 var _anim_t := 0.0
@@ -92,6 +102,10 @@ var _dash_t := 0.0
 var _puffs: Array = []               ## {pos, t, size}
 var _tex := {}
 var _glow: Control
+var _rng := RandomNumberGenerator.new()  ## the street generator (seeded with seed_used)
+var _gen_at := FIRST_AT              ## the next row's place in the normal street (decides what it is)
+var _gen_pos := FIRST_AT             ## where it stands (relaxed: every gap longer)
+var _shown_points := -1
 ## §4.1 competition: tonight's regular to beat, your best run tonight as a ghost runner, the board line.
 var rival: Dictionary = {}           ## {regular, name, points}
 var rival_passed := false
@@ -122,19 +136,23 @@ func _on_start() -> void:
 	lane_anim = 0.0
 	hop_t = 0.0
 	dist = 0.0
-	clock = CLOCK_SECONDS
+	run_t = 0.0
 	notes = 0
 	bumps = 0
+	lives_left = STRIKES
 	bump_t = 0.0
-	arrived = false
-	door_t = 0.0
 	best_combo = 0
 	_state_t = 0.0
 	_anim_t = 0.0
 	_dash_t = 0.0
+	_shown_points = -1
 	_puffs.clear()
 	seed_used = int(config.get("seed", night_seed()))
-	items = street(seed_used, relaxed)
+	items.clear()
+	_rng.seed = seed_used
+	_gen_at = FIRST_AT
+	_gen_pos = FIRST_AT
+	_ensure_ahead()
 	_record = {}
 	var t := Rivals.tonight(game_id, rivals_store)
 	rival = t["rival"]
@@ -143,10 +161,6 @@ func _on_start() -> void:
 	# the ghost only runs the same street: same seed and same timing mode
 	ghost = g if int(g.get("seed", -1)) == seed_used and bool(g.get("relaxed", false)) == relaxed and g.get("lanes") is Array else {}
 	ghost_lanes.clear()
-	notes_total = 0
-	for it in items:
-		if it["kind"] == Kind.NOTE:
-			notes_total += 1
 	_update_status()
 	queue_redraw()
 
@@ -163,61 +177,85 @@ static func hoppable(kind: int) -> bool:
 	return kind == Kind.DOG or kind == Kind.KERB or kind == Kind.STRAY or kind == Kind.LIZARD
 
 
-## Gap to the next row at street point `at` (§3 ramp, before jitter).
+## Running speed (street units a second) after `secs` seconds of running: 1.0 + 0.01 a second, capped at 1.6.
+static func speed_at(secs: float) -> float:
+	return minf(SPEED + SPEED_PER_SECOND * maxf(secs, 0.0), SPEED_CAP)
+
+
+## The ramp level after `secs` seconds of running: 1 + one every 10 s, capped at LEVEL_CAP.
+static func level_at(secs: float) -> int:
+	return mini(LEVEL_CAP, 1 + int(floor(maxf(secs, 0.0) / LEVEL_SECONDS)))
+
+
+## Record points for `d` street units and `got` notes (uncapped).
+static func points_of(d: float, got: int) -> int:
+	return roundi(POINTS_PER_UNIT * maxf(d, 0.0)) + got
+
+
+## Gap to the next row at street point `at` (§3 ramp, before jitter): 1.9 until unit 10, 1.2 from unit 39.
 static func row_step(at: float, relaxed_on := false) -> float:
-	var t := clampf((at - RAMP_FROM) / (RUN_SECONDS * SPEED - 1.0 - RAMP_FROM), 0.0, 1.0)
+	var t := clampf((at - RAMP_FROM) / (STEP_FULL_AT - RAMP_FROM), 0.0, 1.0)
 	return lerpf(STEP_START, STEP_END, t) + (RELAXED_STEP if relaxed_on else 0.0)
 
 
-## The night's street: rows of obstacles (never all three lanes blocked; a hoppable one blocks one lane) with notes
-## in the free lanes between them. Warm-up rows are parked bikes, carts and kerbs; the street life joins on the ramp.
-## Relaxed: the same rows in the same order, each gap RELAXED_STEP longer (the street ends sooner, so fewer rows).
-static func street(seed_value: int, relaxed_on := false) -> Array[Dictionary]:
+## The night's street up to `length` units: rows of obstacles (never all three lanes blocked; a hoppable one blocks
+## one lane) with notes in the free lanes between them. Warm-up rows are parked bikes, carts and kerbs; the street
+## life joins on the ramp. Relaxed: the same rows in the same order, each gap RELAXED_STEP longer. The game generates
+## the same rows chunk by chunk as it runs.
+static func street(seed_value: int, relaxed_on := false, length := RUN_SECONDS * SPEED - 1.0) -> Array[Dictionary]:
 	var rng := RandomNumberGenerator.new()
 	rng.seed = seed_value
 	var out: Array[Dictionary] = []
 	var at := FIRST_AT                   # the row's place in the normal street: decides what it is
 	var pos := FIRST_AT                  # where it stands (relaxed: every gap longer, same rows in the same order)
-	while pos < RUN_SECONDS * SPEED - 1.0:
-		var roll := rng.randi_range(0, 9)
-		var l := rng.randi_range(-1, 1)
-		var pair_below := 2 if at >= TIGHT_FROM else (1 if at >= PAIR_FROM else -1)
-		if roll <= 5:
-			var kind := Kind.BIKE if rng.randf() < 0.6 else Kind.CART
-			if at >= TUK_FROM and rng.randf() < 0.35:
-				kind = Kind.TUK
-			out.append(_item(pos, l, l, kind))
-			if roll <= pair_below:  # two blocked lanes: the third stays open
-				var l2 := l + (1 if l < 1 else -1)
-				out.append(_item(pos, l2, l2, Kind.BIKE if rng.randf() < 0.6 else Kind.CART))
-		else:
-			var r := rng.randf()
-			var kind := Kind.KERB
-			var from := l
-			if at >= LIZARD_FROM and r < 0.3:
-				kind = Kind.LIZARD
-				from = l + (2 if rng.randf() < 0.5 else -2)       # crawls in two lanes from one side
-			elif at >= DOG_FROM and r < 0.7:
-				if rng.randf() < 0.5:
-					kind = Kind.DOG
-				else:
-					kind = Kind.STRAY
-					from = l + (1 if rng.randf() < 0.5 else -1)   # trots one lane over
-			out.append(_item(pos, l, from, kind))
-		# notes on the way to the next row, in a lane that row leaves open
-		var nl := rng.randi_range(-1, 1)
-		for k in 2:
-			var na := pos + 0.45 + k * 0.3
-			var blocked := false
-			for it in out:
-				if absf(float(it["at"]) - na) < 0.2 and int(it["lane"]) == nl:
-					blocked = true
-			if not blocked:
-				out.append(_item(na, nl, nl, Kind.NOTE))
-		var step := row_step(at) + rng.randf_range(-STEP_JITTER, STEP_JITTER)
+	while pos < length:
+		var step := _gen_row(rng, at, pos, out)
 		at += step
 		pos += step + (RELAXED_STEP if relaxed_on else 0.0)
 	return out
+
+
+## One row at `pos` (its kind from the normal-street point `at`) and the notes after it, appended to `out`. Returns
+## the gap to the next row (normal street). The draws happen in a fixed order: a seed always gives the same street.
+static func _gen_row(rng: RandomNumberGenerator, at: float, pos: float, out: Array[Dictionary]) -> float:
+	var row: Array[Dictionary] = []
+	var roll := rng.randi_range(0, 9)
+	var l := rng.randi_range(-1, 1)
+	var pair_below := 2 if at >= TIGHT_FROM else (1 if at >= PAIR_FROM else -1)
+	if roll <= 5:
+		var kind := Kind.BIKE if rng.randf() < 0.6 else Kind.CART
+		if at >= TUK_FROM and rng.randf() < 0.35:
+			kind = Kind.TUK
+		row.append(_item(pos, l, l, kind))
+		if roll <= pair_below:  # two blocked lanes: the third stays open
+			var l2 := l + (1 if l < 1 else -1)
+			row.append(_item(pos, l2, l2, Kind.BIKE if rng.randf() < 0.6 else Kind.CART))
+	else:
+		var r := rng.randf()
+		var kind := Kind.KERB
+		var from := l
+		if at >= LIZARD_FROM and r < 0.3:
+			kind = Kind.LIZARD
+			from = l + (2 if rng.randf() < 0.5 else -2)       # crawls in two lanes from one side
+		elif at >= DOG_FROM and r < 0.7:
+			if rng.randf() < 0.5:
+				kind = Kind.DOG
+			else:
+				kind = Kind.STRAY
+				from = l + (1 if rng.randf() < 0.5 else -1)   # trots one lane over
+		row.append(_item(pos, l, from, kind))
+	# notes on the way to the next row, in a lane that row leaves open (rows are >= 1.05 apart: only this row matters)
+	var nl := rng.randi_range(-1, 1)
+	for k in 2:
+		var na := pos + 0.45 + k * 0.3
+		var blocked := false
+		for it in row:
+			if absf(float(it["at"]) - na) < 0.2 and int(it["lane"]) == nl:
+				blocked = true
+		if not blocked:
+			row.append(_item(na, nl, nl, Kind.NOTE))
+	out.append_array(row)
+	return row_step(at) + rng.randf_range(-STEP_JITTER, STEP_JITTER)
 
 
 static func _item(at: float, l: int, from: int, kind: int) -> Dictionary:
@@ -244,16 +282,35 @@ static func drawn_dist(it: Dictionary, d: float, relaxed_on := false) -> float:
 	return d
 
 
-static func score_for(got: int, total: int, spare: float) -> float:
-	var n := float(got) / total if total > 0 else 0.0
-	var s := 0.6 * n + 0.4 * clampf(spare / SPARE_FULL, 0.0, 1.0)
-	if spare < 0.0:
-		s = minf(s, 0.5)
-	return clampf(s, 0.0, 1.0)
+## Generates the street AHEAD units past the runner, a row at a time (the same rows street() gives).
+func _ensure_ahead() -> void:
+	while _gen_pos < dist + AHEAD:
+		var step := _gen_row(_rng, _gen_at, _gen_pos, items)
+		_gen_at += step
+		_gen_pos += step + (RELAXED_STEP if relaxed else 0.0)
+
+
+## Drops what lies more than BEHIND units behind the runner (items are in street order).
+func _drop_behind() -> void:
+	while not items.is_empty() and float(items[0]["at"]) < dist - BEHIND:
+		items.pop_front()
+
+
+func record_points() -> int:
+	return points_of(dist, notes)
+
+
+func current_score() -> float:
+	return score_of(record_points())
 
 
 func live_points() -> int:
-	return points_for(current_score())
+	return record_points()
+
+
+## Running speed now.
+func speed() -> float:
+	return speed_at(run_t)
 
 
 ## The run that just ended, as tonight's ghost (only kept if it is your best tonight): the lane at every step.
@@ -278,15 +335,6 @@ func _check_rival() -> void:
 	fx().pop(S.t("mg.rivals.passed", {"regular": str(rival.get("name", ""))}), Vector2(size.x * 0.5, size.y * 0.3), UI.NEON, 44)
 
 
-func spare() -> float:
-	return clock - maxf(0.0, (RUN_SECONDS * SPEED - dist) / SPEED)
-
-
-func current_score() -> float:
-	# Leaving early: the notes so far count, the time part only at the door
-	return score_for(notes, notes_total, clock) if arrived else score_for(notes, notes_total, 0.0)
-
-
 func airborne() -> bool:
 	return hop_t > 0.0
 
@@ -304,7 +352,7 @@ func next_obstacle(in_lane: int) -> Dictionary:
 # --- Play ------------------------------------------------------------------------------------------
 
 func move(dir: int) -> void:
-	if state == State.DONE or state == State.DOOR or not running or paused:
+	if state == State.DONE or not running or paused:
 		return
 	_begin()
 	var to := clampi(lane + dir, -1, 1)
@@ -315,7 +363,7 @@ func move(dir: int) -> void:
 
 
 func hop() -> void:
-	if state == State.DONE or state == State.DOOR or not running or paused:
+	if state == State.DONE or not running or paused:
 		return
 	_begin()
 	if hop_t <= 0.0:
@@ -340,11 +388,6 @@ func advance(dt: float) -> void:
 				_begin()
 		State.RUNNING:
 			_run(dt)
-		State.DOOR:
-			door_t += dt
-			if door_t >= DOOR_SECONDS:
-				state = State.DONE
-				finish(score_for(notes, notes_total, clock))
 	lane_anim = move_toward(lane_anim, float(lane), dt / LANE_SECONDS)
 	_dash_t = maxf(0.0, _dash_t - dt)
 	for p in _puffs:
@@ -356,10 +399,13 @@ func advance(dt: float) -> void:
 
 
 func _run(dt: float) -> void:
-	dist += SPEED * dt
-	clock -= dt
-	while float(ghost_lanes.size()) * GHOST_STEP <= dist:
+	run_t += dt
+	dist += speed_at(run_t) * dt
+	level_up(level_at(run_t))
+	while ghost_lanes.size() < GHOST_MAX and float(ghost_lanes.size()) * GHOST_STEP <= dist:
 		ghost_lanes.append(lane)
+	_ensure_ahead()
+	_drop_behind()
 	var was_air := airborne()
 	hop_t = maxf(0.0, hop_t - dt)
 	if was_air and not airborne():
@@ -372,25 +418,25 @@ func _run(dt: float) -> void:
 		if d < -HIT_ZONE:
 			it["done"] = true
 			continue
-		if absf(d) > HIT_ZONE or int(it["lane"]) != lane:
+		if d > HIT_ZONE:
+			break                        # items are in street order: nothing further is in reach
+		if int(it["lane"]) != lane:
 			continue
 		match int(it["kind"]):
 			Kind.NOTE:
 				it["done"] = true
 				notes += 1
 				_note_beat(it)
-				_check_rival()
-				_update_status()
 			Kind.DOG, Kind.KERB, Kind.STRAY, Kind.LIZARD:
 				if not airborne():
 					_bump(it)
 			_:
 				_bump(it)
-	if dist >= RUN_SECONDS * SPEED:
-		arrived = true
-		state = State.DOOR
-		door_t = 0.0
-		_door_beat()
+		if state == State.DONE:
+			return
+	if record_points() != _shown_points:
+		_check_rival()
+		_update_status()
 
 
 func _bump(it: Dictionary) -> void:
@@ -398,16 +444,21 @@ func _bump(it: Dictionary) -> void:
 	if bump_t > 0.0:
 		return
 	bumps += 1
-	clock -= BUMP_COST
+	lives_left -= 1
 	bump_t = BUMP_SECONDS
 	var f := fx()
 	f.combo_break()
-	f.shake(Fx.TRAUMA_BUMP)
+	f.shake(Fx.TRAUMA_LOSS if lives_left <= 0 else Fx.TRAUMA_BUMP)
 	f.fail_edge()
-	f.flash("clock")
-	f.pop(S.t("mg.soi_dash.bump", {"secs": int(BUMP_COST)}), clock_px() + Vector2(0, 100), UI.NEON)
+	f.flash("status")
 	haptic("fail")
 	_update_status()
+	if lives_left <= 0:
+		state = State.DONE
+		lose()
+		return
+	var msg := S.t("mg.ramp.last") if lives_left == 1 else S.t("mg.ramp.strike", {"lives": lives_left})
+	f.pop(msg, status_px() + Vector2(0, 100), UI.NEON)
 
 
 func _note_beat(it: Dictionary) -> void:
@@ -420,35 +471,30 @@ func _note_beat(it: Dictionary) -> void:
 	haptic("tick")
 
 
-func _door_beat() -> void:
-	var f := fx()
-	var p := _pt(DOOR_AHEAD, 0.0)
-	var sc := art_scale() * _k(DOOR_AHEAD)
-	var sign_p := p - Vector2(0, 240.0 * sc)
-	f.flare(sign_p, 260.0 * sc, UI.NEON)
-	f.burst("confetti", sign_p)
-	haptic("strong")
-
-
 func _puff(pos: Vector2, size_k: float) -> void:
 	_puffs.append({"pos": pos, "t": 0.0, "size": size_k})
 
 
 func _result_extra() -> Dictionary:
 	if _record.is_empty():
-		_record = Rivals.record(game_id, points_for(score_for(notes, notes_total, clock)), ghost_data(), rivals_store)
-	return {"notes": notes, "notes_total": notes_total, "bumps": bumps, "spare": clock, "arrived": arrived, "seed": seed_used,
-		"best_combo": best_combo, "relaxed": relaxed, "rival": rival, "board": _record["board_line"]}
+		_record = Rivals.record(game_id, record_points(), ghost_data(), rivals_store)
+	return {"notes": notes, "bumps": bumps, "misses": bumps, "level": ramp_level, "speed": speed(), "dist": dist,
+		"seed": seed_used, "best_combo": best_combo, "relaxed": relaxed, "rival": rival, "board": _record["board_line"]}
+
+
+## The level, the points and the lives left (the frame's status line, and the readout at the top of the street).
+func status_text() -> String:
+	return S.t("mg.ramp.status", {"level": ramp_level, "points": record_points(), "lives": maxi(0, lives_left)})
 
 
 func _update_status() -> void:
-	set_status(S.t("mg.soi_dash.status", {"notes": notes, "clock": clock_text(clock)}))
+	_shown_points = record_points()
+	set_status(status_text())
 
 
-## "19:59:10"-style time of night for a clock with `secs` left to 20:00 (late shows past 20:00).
-static func clock_text(secs: float) -> String:
-	var t := 20 * 3600 - int(ceil(secs))
-	return "%02d:%02d:%02d" % [t / 3600, (t / 60) % 60, t % 60]
+## A level up: the status line shows it at once.
+func _on_level(_n: int) -> void:
+	_update_status()
 
 
 func _gui_input(event: InputEvent) -> void:
@@ -500,7 +546,8 @@ func runner_px() -> Vector2:
 	return _pt(0.0, lane_anim * 2.0)
 
 
-func clock_px() -> Vector2:
+## The status readout at the top of the street (level, points, lives); strike pops start under it.
+func status_px() -> Vector2:
 	return Vector2(size.x * 0.5, 50.0)
 
 
@@ -587,20 +634,16 @@ func _draw() -> void:
 	draw_rect(Rect2(Vector2.ZERO, size), UI.BG_DEEP)
 	_draw_backdrop()
 	_draw_road()
-	# shophouses either side, far to near, then the door, the street life and the runner
+	# shophouses either side, far to near, then the street life and the runner (endless: no door)
 	for s in _shops():
 		_spr(self, "shopfront", s["frame"], s["pos"], s["sc"], Color(0.85, 0.85, 0.9))
-	var left := RUN_SECONDS * SPEED - dist + DOOR_AHEAD
-	if left < VIEW + 1.0:
-		var sc := art_scale() * _k(left) * 1.2
-		_spr(self, "door_front", 1 if state == State.DOOR or state == State.DONE else 0, _pt(left, 0.0), Vector2(sc, sc))
 	for it in _visible():
 		_draw_item(it, float(it["at"]) - dist)
 	_draw_ghost()
 	_draw_runner()
 	_draw_puffs()
-	var cc := UI.GOLD if clock > 5.0 else UI.NEON
-	UI.draw_text(self, S.t("mg.soi_dash.clock", {"clock": clock_text(clock)}), clock_px(), 40, f.flash_color("clock", cc))
+	var cc := UI.GOLD if lives_left > 1 else UI.NEON
+	UI.draw_text(self, status_text(), status_px(), 40, f.flash_color("status", cc))
 	_draw_rivals()
 	if state == State.INTRO:
 		UI.draw_text(self, S.t("mg.soi_dash.hint"), Vector2(size.x * 0.5, size.y - 60), 40, UI.SMOKE)
@@ -608,14 +651,14 @@ func _draw() -> void:
 			UI.draw_text(self, S.t("mg.soi_dash.ghost"), Vector2(size.x * 0.5, size.y - 108), 26, Color(0.75, 0.9, 1.0, 0.8))
 
 
-## The far soi (blurred render): covers the play area, its vanishing point on the horizon, creeping closer as the
-## runner nears the door (slow parallax against the road).
+## The far soi (blurred render): covers the play area, its vanishing point on the horizon, creeping slowly closer and
+## back again as the runner goes on (slow parallax against the road; BACKDROP_CREEP units a sweep).
 func _draw_backdrop() -> void:
 	var tex := _t("backdrop.png")
 	if tex == null:
 		return
 	var ts := Vector2(tex.get_size())
-	var zoom := 1.0 + 0.12 * clampf(dist / (RUN_SECONDS * SPEED), 0.0, 1.0)
+	var zoom := 1.0 + 0.12 * pingpong(dist / BACKDROP_CREEP, 1.0)
 	var sc := maxf(size.x / ts.x, size.y / ts.y) * zoom
 	var dsz := ts * sc
 	var vp := Vector2(0.5, 0.36)                     # the soi's far end in the render
@@ -761,7 +804,7 @@ func _draw_runner() -> void:
 			draw_line(Vector2(x0, y), Vector2(p.x, y), Color(UI.CYAN, 0.55 * a), maxf(2.0, (8.0 - i * 2.0) * sc))
 	if bump_t > 0.0 and int(bump_t * 10.0) % 2 == 0:
 		return
-	var fr := int(dist * 8.0) % 4 if state == State.RUNNING or state == State.DOOR else 0
+	var fr := int(dist * 8.0) % 4 if state == State.RUNNING else 0
 	if airborne():
 		fr = 4 if prog < 0.35 else 5
 	var sq := fx().squash_scale("runner")
@@ -809,12 +852,6 @@ func _draw_glow() -> void:
 	for s in _shops():
 		var flick := 0.55 + 0.15 * sin(_anim_t * 3.0 + float(s["frame"]) * 2.0)
 		_spr(_glow, "shopfront", s["frame"], s["pos"], s["sc"], Color(1, 1, 1, flick), true)
-	var left := RUN_SECONDS * SPEED - dist + DOOR_AHEAD
-	if left < VIEW + 1.0:
-		var sc := art_scale() * _k(left) * 1.2
-		var open := state == State.DOOR or state == State.DONE
-		var a := 0.7 + (0.3 * minf(1.0, door_t * 4.0) if open else 0.15 * sin(_anim_t * 4.0))
-		_spr(_glow, "door_front", 1 if open else 0, _pt(left, 0.0), Vector2(sc, sc), Color(1, 1, 1, a), true)
 	for it in _visible():
 		var d := float(it["at"]) - dist
 		var dd := drawn_dist(it, d, relaxed)
@@ -858,7 +895,7 @@ func _draw_flat() -> void:
 		draw_rect(Rect2(p + Vector2(-30, -200 - lift), Vector2(60, 200)), UI.RED)
 	_draw_ghost()
 	_draw_rivals()
-	UI.draw_text(self, S.t("mg.soi_dash.clock", {"clock": clock_text(clock)}), clock_px(), 40, UI.GOLD if clock > 5.0 else UI.NEON)
+	UI.draw_text(self, status_text(), status_px(), 40, UI.GOLD if lives_left > 1 else UI.NEON)
 
 
 func _text_right(text: String, pos: Vector2, size_px: int, col: Color) -> void:

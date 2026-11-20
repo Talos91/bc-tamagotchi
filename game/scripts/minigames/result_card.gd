@@ -19,7 +19,7 @@ const Rules = preload("res://scripts/rules.gd")
 const Cast = preload("res://scripts/cast.gd")
 const Fx = preload("res://scripts/minigames/mg_fx.gd")
 
-const BEST_KEY := "minigame_best"  # Needs.ext[BEST_KEY][game_id] = best points (0..100)
+const BEST_KEY := "minigame_best"  # Needs.ext[BEST_KEY][game_id] = best record points (uncapped since the endless ramp, 15-minigame-ramp)
 const HEARTS_KEY := "hearts"  # Needs.ext[HEARTS_KEY][regular_id] = 0..MAX_HEARTS (DECISIONS: hearts 0-3), regulars only
 const MAX_HEARTS := 3
 const LEAN_ACTION := "candle_talk_lean"  # Rules.ACTIONS key for the extra.lean bonus

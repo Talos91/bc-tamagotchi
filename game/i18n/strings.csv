@@ -3,7 +3,7 @@ need.music.name,Music,ดนตรี,Meter name on the result card (display.s),
 need.friends.name,Friends,เพื่อน,Meter name on the result card (display.s),10
 need.drinks.name,Drinks,เครื่องดื่ม,Meter name on the result card (display.s),10
 need.nightlife.name,Nightlife,ราตรี,Meter name on the result card (display.s),10
-mg.frame.best,best {score},ดีที่สุด {score},Minigame frame status line. {score} = best points 0-100,24
+mg.frame.best,best {score},ดีที่สุด {score},Minigame frame status line. {score} = best record points (uncapped since the endless ramp),24
 mg.frame.no_best,first time,ครั้งแรก,Minigame frame status line when there is no best score yet,24
 mg.pause.title,Paused,พักก่อน,Pause sheet heading,16
 mg.pause.resume,Resume,เล่นต่อ,Pause sheet primary button,18
@@ -12,14 +12,14 @@ mg.pause.leave,Leave,ออก,Pause sheet ghost button,14
 mg.pause.leave_note,You still keep a little something,ยังได้รางวัลเล็กน้อยอยู่ดี,Caption under Leave in the pause sheet,50
 mg.result.again,Again,อีกรอบ,Result card secondary button,14
 mg.result.done,Done,เสร็จ,Result card primary button,18
-mg.result.best,best {score},ดีที่สุด {score},Result card. {score} = best points 0-100,24
+mg.result.best,best {score},ดีที่สุด {score},Result card. {score} = best record points (uncapped since the endless ramp),24
 mg.result.new_best,new best!,สถิติใหม่!,Result card tag when the score beats the previous best,24
 mg.result.plenty,That's plenty for tonight,คืนนี้พอแล้วนะ,Result card caption when another round would add nothing (diminishing returns),40
 mg.result.nothing_daily,Already caught up today,วันนี้คุยกันแล้วนะ,Result card caption for a once-a-day action already used,40
 mg.result.tab,The bar is full. The rest goes on your Tab,เต็มแล้ว ส่วนที่เหลือเข้าบิลของคุณ,Result card note when part of the gain overflowed to Tab,50
 mg.result.hearts,Hearts with {regular}: {count} of {max},หัวใจกับ{regular}: {count} จาก {max},Result card under Candle Talk. {regular} = regular's display name; {count} 0-3; {max} = 3,40
 cast.mali.name,Prae,แพร,"Display name of Prae, an owner (id mali; renamed by Daniele 2026-11-01; owner, not a regular, 2026-11-02; silent until she gives her own lines) (cast table 6.2)",16
-cast.tt.name,Ty,ไท,"Display name of regular #4 (id tt); Daniele 2026-11-02: the name is Ty. TH is a machine-draft transliteration: staff check needed (cast table 6.2)",16
+cast.tt.name,Ty,ไท,Display name of regular #4 (id tt); Daniele 2026-11-02: the name is Ty. TH is a machine-draft transliteration: staff check needed (cast table 6.2),16
 cast.tong.name,Tong,ต้อง,Display name of the regular Tong (cast table 6.2),16
 cast.ploy.name,Ploy,พลอย,Display name of the regular Ploy (cast table 6.2),16
 cast.jules.name,Jules,จูลส์,Display name of the regular Jules (cast table 6.2),16
@@ -29,7 +29,7 @@ cast.bow.name,Bow,โบว์,Display name of the regular Bow (cast table 6.2),
 cast.hiro.name,Hiro,ฮิโระ,Display name of the regular Hiro (cast table 6.2),16
 mg.pour_perfect.title,Pour Perfect,Pour Perfect,Minigame name (stays English in both languages per strings guidelines 5),18
 mg.pour_perfect.subtitle,Fill each layer to its line,รินให้พอดีทุกชั้น,Subtitle under the name in the lab menu,34
-mg.pour_perfect.how_to,Hold to pour. Let go on the line. Three layers. Overflow only foams.,กดค้างเพื่อริน ปล่อยเมื่อถึงเส้น มีสามชั้น ล้นก็แค่ฟอง,Pause sheet help text,150
+mg.pour_perfect.how_to,"Hold to pour, let go on the line. Glass after glass, the tap runs faster. Three spoiled layers and you are done.",กดค้างเพื่อริน ปล่อยตรงเส้น แก้วต่อแก้ว ก๊อกไหลเร็วขึ้น เสียสามชั้นก็จบ,Pause sheet help text,150
 mg.pour_perfect.tier_1,Nice pour,รินสวย,Result card tier word (lowest tier; never a fail word),18
 mg.pour_perfect.tier_2,Great pour,รินเก่งมาก,Result card tier word,18
 mg.pour_perfect.tier_3,Perfect pour,รินเป๊ะ,Result card tier word,18
@@ -40,7 +40,7 @@ mg.pour_perfect.hint_pour,Let go on the line,ปล่อยเมื่อถ�
 mg.pour_perfect.spill,Foam over,ฟองล้น,Pop when the glass overflows (foam only; the reward stays),14
 mg.front_row_rhythm.title,Front Row Rhythm,Front Row Rhythm,Minigame name (stays English),18
 mg.front_row_rhythm.subtitle,Clap with the band,ปรบมือตามวง,Subtitle under the name in the lab menu,34
-mg.front_row_rhythm.how_to,Tap the left or right half of the screen as each clap reaches the line.,แตะซ้ายหรือขวาของจอเมื่อจังหวะมาถึงเส้น,Pause sheet help text,150
+mg.front_row_rhythm.how_to,Tap the left or right half as each clap reaches the line; both at once when two arrive together. It speeds up. Three missed claps and you are out.,แตะซ้ายหรือขวาเมื่อจังหวะถึงเส้น มาพร้อมกันแตะทั้งสองข้าง เร็วขึ้นเรื่อยๆ พลาดสามครั้งก็จบ,Pause sheet help text,150
 mg.front_row_rhythm.tier_1,Nice clapping,ปรบมือดี,Result card tier word,18
 mg.front_row_rhythm.tier_2,In the pocket,เข้าจังหวะ,Result card tier word,18
 mg.front_row_rhythm.tier_3,Perfect time,จังหวะเป๊ะ,Result card tier word,18
@@ -54,7 +54,7 @@ mg.front_row_rhythm.song_3,Rainy Soi,ซอยฝนตก,Placeholder song titl
 mg.front_row_rhythm.song_4,Last Call Boogie,บูกี้คอลสุดท้าย,Placeholder song title 4,22
 mg.candle_talk.title,Candle Talk,Candle Talk,Minigame name (stays English),18
 mg.candle_talk.subtitle,Chat with a regular,คุยกับขาประจำ,Subtitle under the name in the lab menu,34
-mg.candle_talk.how_to,A regular says something. Tap the topic card that fits best. The candle brightens with each good match.,ขาประจำพูดอะไรบางอย่าง แตะการ์ดหัวข้อที่เหมาะที่สุด เทียนจะสว่างขึ้นทุกครั้งที่ตอบถูกใจ,Pause sheet help text,150
+mg.candle_talk.how_to,A regular says something. Tap the card that fits best before time runs out. A wrong card or no answer: the candle gutters. Three and it is out.,ขาประจำพูดอะไรบางอย่าง แตะการ์ดที่เข้ากันที่สุดก่อนหมดเวลา การ์ดผิดหรือไม่ตอบเทียนจะวูบ สามครั้งเทียนดับ,Pause sheet help text,150
 mg.candle_talk.tier_1,Pleasant chat,คุยกันสบาย ๆ,Result card tier word,18
 mg.candle_talk.tier_2,Warm chat,คุยกันอบอุ่น,Result card tier word,18
 mg.candle_talk.tier_3,Candle lit,เทียนสว่างเต็มดวง,Result card tier word,18
@@ -131,7 +131,7 @@ npc.hiro.talk.5,I keep notes on every drink. Page forty-two is all Black Cabin.,
 npc.hiro.talk.6,"My boss thinks I'm at a networking event. Technically, I am networking.",หัวหน้าคิดว่าผมไปงานสร้างคอนเนกชัน ก็จริงนะ ผมกำลังสร้างอยู่,Hiro's Candle Talk line 6; cast bible 3.5. TH is a draft: needs a native Thai writer (cast bible 6.1),90
 mg.neon_pinball.title,Neon Pinball,Neon Pinball,Minigame name (stays English),18
 mg.neon_pinball.subtitle,The lounge arcade cabinet,ตู้เกมในเลานจ์,Subtitle under the name in the lab menu,34
-mg.neon_pinball.how_to,Hold the left or right half for that flipper. Swipe up on the right to launch. Swipe sideways to nudge. Light every letter of BLACK CABIN.,กดค้างซ้ายหรือขวาเพื่อตีฟลิปเปอร์ ปัดขึ้นทางขวาเพื่อยิงลูก ปัดข้างเพื่อเขย่าโต๊ะ จุดตัวอักษร BLACK CABIN ให้ครบ,Pause sheet help text. BLACK CABIN is brand-fixed,150
+mg.neon_pinball.how_to,"Hold the left or right half for that flipper. Swipe up on the right to launch, sideways to nudge. Spell BLACK CABIN to level up. Three balls.",กดค้างซ้ายหรือขวาเพื่อตีพลิปเปอร์ ปัดขึ้นด้านขวาเพื่อยิง ปัดข้างเพื่อเขย่า สะกด BLACK CABIN เพื่อเลเวลอัป มีสามลูก,Pause sheet help text. BLACK CABIN is brand-fixed,150
 mg.neon_pinball.tier_1,Good game,เล่นดี,Result card tier word,18
 mg.neon_pinball.tier_2,High roller,คะแนนสูง,Result card tier word,18
 mg.neon_pinball.tier_3,Neon legend,ตำนานนีออน,Result card tier word,18
@@ -154,7 +154,7 @@ mg.result.miss_line.1,"Nothing earned. Go again, or come back later.",ไม่�
 mg.result.miss_line.2,The room saw nothing. Shake it off.,ไม่มีใครเห็นหรอก สะบัดๆ ไปเลย,"Result card line under MISS, variant 2; TH machine draft",50
 mg.coaster_flip.title,Coaster Flip,Coaster Flip,Minigame name (stays English),18
 mg.coaster_flip.subtitle,The tall-table bar trick,มุกโต๊ะสูงสายบาร์,Subtitle under the name in the lab menu,34
-mg.coaster_flip.how_to,Swipe up to flip the stack. Tap the moment it reaches the ring and the ring glows: a catch adds a coaster. Three drops and you are done.,ปัดขึ้นเพื่อโยนกองที่รองแก้ว แตะตอนกองถึงวงแหวนและวงแหวนเรืองแสง รับได้จะเพิ่มอีกแผ่น ทำหล่นสามครั้งจบเกม,Pause sheet help text (Q5 rewrite; TH machine draft),150
+mg.coaster_flip.how_to,Swipe up to flip the stack. Tap when it reaches the ring and the ring glows: a catch adds a coaster and it spins faster. Three drops and you are done.,ปัดขึ้นเพื่อโยนกอง แตะตอนถึงห่วงและห่วงเรืองแสง รับได้เพิ่มที่รองแก้วและหมุนเร็วขึ้น ทำหล่นสามครั้งก็จบ,Pause sheet help text (Q5 rewrite; TH machine draft),150
 mg.coaster_flip.tier_1,Steady hand,มือนิ่ง,Result card tier word,18
 mg.coaster_flip.tier_2,Table legend,ตำนานโต๊ะสูง,Result card tier word,18
 mg.coaster_flip.tier_3,Coaster king,ราชาที่รองแก้ว,Result card tier word,18
@@ -180,7 +180,7 @@ mg.coaster_flip.late_hint,Tap as it reaches the ring,แตะตอนกอง
 mg.coaster_flip.ghost,The faint stack is your best tonight,กองจางๆ คือสถิติดีสุดของคุณคืนนี้,Intro line when tonight's best shows as a ghost stack (mg_rivals; TH machine draft),40
 mg.neon_moth.title,Neon Moth,Neon Moth,Minigame name (stays English),18
 mg.neon_moth.subtitle,The Black Cabin game machine,ตู้เกม Black Cabin,Subtitle under the name in the lab menu,34
-mg.neon_moth.how_to,"Tap to flutter, let go to sink. Slip between the bulb strings and the speakers to reach the BLACK CABIN sign. Three bumps and the moth goes home.",แตะเพื่อกระพือปีก ปล่อยเพื่อร่อนลง ลอดระหว่างสายหลอดไฟกับลำโพงให้ถึงป้าย BLACK CABIN ชนสามครั้งผีเสื้อกลับบ้าน,Pause sheet help text. BLACK CABIN is brand-fixed,150
+mg.neon_moth.how_to,"Tap to flutter, let go to sink. Slip between the bulb strings and the speakers as far as you can; it gets faster. Three bumps and the moth goes home.",แตะเพื่อกระพือปีก ปล่อยเพื่อร่อนลง ลอดระหว่างสายหลอดไฟกับลำโพงให้ไกลที่สุด ยิ่งไปยิ่งเร็ว ชนสามครั้งผีเสื้อกลับบ้าน,Pause sheet help text. BLACK CABIN is brand-fixed,150
 mg.neon_moth.tier_1,Night flyer,นักบินกลางคืน,Result card tier word,18
 mg.neon_moth.tier_2,Drawn to the light,ถูกแสงดึงดูด,Result card tier word,18
 mg.neon_moth.tier_3,Neon reached,ถึงนีออนแล้ว,Result card tier word,18
@@ -190,7 +190,7 @@ mg.neon_moth.row,Play Neon Moth,เล่น Neon Moth,Game cabinet sheet row ti
 mg.neon_moth.row_sub,One flight · {best},บินหนึ่งรอบ · {best},Game cabinet row sub-line. {best} the player's best,34
 mg.soi_dash.title,Soi Dash,Soi Dash,Minigame name (stays English),18
 mg.soi_dash.subtitle,Late for the 20:00 show,สายแล้ว โชว์สองทุ่ม,Subtitle under the name in the lab menu,34
-mg.soi_dash.how_to,"Swipe left or right round bikes, carts and tuk-tuks; swipe up to hop kerbs, dogs and lizards. Grab the notes. A bump costs 2 s. Door by 20:00.",ปัดซ้ายขวาหลบมอเตอร์ไซค์ รถเข็น และตุ๊กตุ๊ก ปัดขึ้นเพื่อกระโดดข้ามขอบทาง หมา และตัวเงินตัวทอง เก็บโน้ต ชนเสียสองวินาที ไปให้ถึงประตูก่อนสองทุ่ม,Pause sheet help text,150
+mg.soi_dash.how_to,"Swipe left or right round bikes, carts and tuk-tuks; swipe up to hop kerbs, dogs and lizards. Grab the notes. It speeds up. Three bumps: out.",ปัดซ้ายขวาหลบมอเตอร์ไซค์ รถเข็น และตุ๊กตุ๊ก ปัดขึ้นกระโดดข้ามขอบทาง หมา และตัวเงินตัวทอง เก็บโน้ต ซอยเร็วขึ้นเรื่อยๆ ชนสามครั้งก็จบ,Pause sheet help text,150
 mg.soi_dash.tier_1,Just made it,ทันพอดี,Result card tier word,18
 mg.soi_dash.tier_2,Front row,ได้แถวหน้า,Result card tier word,18
 mg.soi_dash.tier_3,Soi legend,ตำนานซอย,Result card tier word,18
@@ -203,7 +203,7 @@ mg.soi_dash.combo,NOTES,โน้ต,Soi Dash combo word for notes in a row with
 mg.soi_dash.bump,−{secs} s,−{secs} วิ,Pop over the clock when a bump costs time. {secs} seconds lost; TH machine draft,12
 mg.shake_serve.title,Shake & Serve,Shake & Serve,Minigame name (stays English),18
 mg.shake_serve.subtitle,Nam's orders by mood,ออเดอร์ตามอารมณ์ของนัม,Subtitle under the name in the lab menu,34
-mg.shake_serve.how_to,"Read the recipe, tap its bottles in order, shake on Nam's nods. Each order levels up: 2, 3, then 4 bottles. House mixes for now.","จำสูตร แตะขวดตามลำดับ แล้วเขย่าตามที่นัมพยักหน้า ทุกออเดอร์ยากขึ้น: 2, 3 แล้ว 4 ขวด ใช้สูตรของร้านไปก่อน",Pause sheet help text,150
+mg.shake_serve.how_to,"Read the recipe, tap its bottles in order, shake on Nam's nods. Orders keep coming, faster. Three drinks sent back and you are done.",จำสูตร แตะขวดตามลำดับ แล้วเขย่าตามที่นัมพยักหน้า ออเดอร์มาเรื่อยๆ เร็วขึ้น ถูกส่งคืนสามแก้วก็จบ,Pause sheet help text,150
 mg.shake_serve.tier_1,Served,เสิร์ฟแล้ว,Result card tier word,18
 mg.shake_serve.tier_2,Behind the bar,หลังบาร์ได้,Result card tier word,18
 mg.shake_serve.tier_3,Nam's pick,นัมเลือกเลย,Result card tier word,18
@@ -214,7 +214,7 @@ mg.shake_serve.hint_pick,Tap the bottles in order,แตะขวดตามล
 mg.shake_serve.hint_shake,Shake on Nam's nod,เขย่าตามที่นัมพยักหน้า,Hint during the shake,40
 mg.shake_serve.served,Served!,เสิร์ฟ!,Hint after an order is served,40
 mg.shake_serve.row,Shake & Serve,Shake & Serve,Bar sheet row title (opens the minigame),26
-mg.shake_serve.row_sub,Three orders · {best},สามออเดอร์ · {best},Bar row sub-line. {best} the player's best,34
+mg.shake_serve.row_sub,Orders till 3 back · {best},ออเดอร์ไม่หยุด · {best},Bar row sub-line. {best} the player's best,34
 mg.shake_serve.order.sour,"Something sour, something bright.",อะไรเปรี้ยว ๆ สดชื่น ๆ,Nam's order by mood (house sour),60
 mg.shake_serve.order.tonic,"Long, cold, a bit bitter.",ยาว ๆ เย็น ๆ ขมนิดหน่อย,Nam's order by mood (gin and tonic),60
 mg.shake_serve.order.mule,Something with a kick.,อะไรที่ซ่าแรง ๆ,Nam's order by mood (vodka mule),60
@@ -243,10 +243,10 @@ mg.shake_serve.order.tequila_soda,"Tequila, fizz, no fuss.",เตกีลา�
 mg.shake_serve.order.whisky_sour,"Sour, sweet, and a dash of bitter.",เปรี้ยว หวาน ขมนิด ๆ,"Nam's order by mood (level 3: whisky, lime, sugar, bitters)",60
 mg.shake_serve.order.collins,"Tall and bright, with bubbles.",แก้วสูง สดใส มีฟอง,"Nam's order by mood (level 3: gin, lime, sugar, soda)",60
 mg.shake_serve.order.rum_fizz,"Island fizz, sweet and sharp.",ซ่าแบบเกาะ หวานแหลม,"Nam's order by mood (level 3: rum, lime, sugar, soda)",60
-mg.shake_serve.order.tequila_fizz,"Party in a coupe.",ปาร์ตี้ในแก้วคูเป้,"Nam's order by mood (level 3: tequila, lime, sugar, soda)",60
-mg.shake_serve.order.gin_mule,"A gin with a ginger kick.",จินกับขิงซ่า ๆ,"Nam's order by mood (level 3: gin, lime, sugar, ginger beer)",60
+mg.shake_serve.order.tequila_fizz,Party in a coupe.,ปาร์ตี้ในแก้วคูเป้,"Nam's order by mood (level 3: tequila, lime, sugar, soda)",60
+mg.shake_serve.order.gin_mule,A gin with a ginger kick.,จินกับขิงซ่า ๆ,"Nam's order by mood (level 3: gin, lime, sugar, ginger beer)",60
 mg.shake_serve.order.stormy,"Dark and stormy, like the soi tonight.",มืดและพายุ เหมือนซอยคืนนี้,"Nam's order by mood (level 3: rum, lime, ginger beer, bitters)",60
-mg.shake_serve.level,Level {n} · {name},เลเวล {n} · {name},"HUD level readout. {n} 1-3; {name} the level name",30
+mg.shake_serve.level,Level {n} · {name},เลเวล {n} · {name},HUD level readout. {n} 1-9 (endless ramp); {name} the level name,30
 mg.shake_serve.level.easy,Easy pour,รินง่าย,Level 1 name (2 bottles),18
 mg.shake_serve.level.house,House mix,สูตรบ้าน,Level 2 name (3 bottles),18
 mg.shake_serve.level.special,Nam's special,สูตรพิเศษของนัม,"Level 3 name (4 bottles, shelf restocked)",18
@@ -264,9 +264,18 @@ mg.result.rival_short,{regular} {score} · {gap} short,{regular} {score} · ข�
 mg.settings.reduce_motion,Reduce motion,ลดการเคลื่อนไหว,Settings switch: turns off minigame screen shake (Needs.ext.ui.reduce_motion); not on a menu yet; TH machine draft,24
 mg.rivals.you,You,คุณ,Minigame board row for the player (mg_rivals); TH machine draft,10
 mg.rivals.to_beat,to beat,คู่แข่ง,Minigame HUD label over tonight's regular to beat (mg_rivals); TH machine draft,12
-mg.rivals.you_now,you {score},คุณ {score},Minigame HUD: the player's points so far under the regular to beat. {score} = 0-100; TH machine draft,14
+mg.rivals.you_now,you {score},คุณ {score},Minigame HUD: the player's points so far under the regular to beat. {score} = record points so far (uncapped); TH machine draft,14
 mg.rivals.passed,Past {regular}!,แซง{regular}แล้ว!,Minigame pop when the player's live points pass tonight's regular. {regular} = display name; TH machine draft,22
 mg.rivals.ghost,The faint moth is your best tonight,ผีเสื้อจางๆ คือรอบที่ดีที่สุดของคุณคืนนี้,Neon Moth intro line when a ghost run flies beside the player (mg_rivals); TH machine draft,40
 mg.result.board,#{rank} of {count} tonight,ที่ {rank} จาก {count} คืนนี้,Result card competition line: this run's place on tonight's board (the regulars who played + you). TH machine draft,26
 mg.pour_perfect.ghost,Faint lines: your best pour tonight,เส้นจางๆ คือแก้วที่ดีที่สุดของคุณคืนนี้,Intro line when tonight's best pour shows as ghost lines on the glass (mg_rivals; TH machine draft),40
 mg.soi_dash.ghost,Faint runner: your best run tonight,เงาจางๆ คือรอบที่ดีที่สุดของคุณคืนนี้,Intro line when tonight's best run shows as a ghost runner (mg_rivals; TH machine draft),40
+mg.ramp.level,LEVEL {n},เลเวล {n},Minigame pop when the endless ramp goes up a level (15-minigame-ramp). TH machine draft,12
+mg.ramp.status,level {level} · {points} · {lives} left,เลเวล {level} · {points} · เหลือ {lives},Frame status line in every endless minigame. {level} ramp level; {points} record points so far; {lives} strikes left (of 3). TH machine draft,40
+mg.ramp.strike,{lives} left,เหลือ {lives},Minigame pop on a strike (a miss that costs one of 3). {lives} = strikes left. TH machine draft,14
+mg.ramp.last,last one!,ครั้งสุดท้าย!,Minigame pop on the strike that leaves one. TH machine draft,14
+mg.shake_serve.sent_back,Sent back,ถูกส่งคืน,Shake & Serve pop when an order scores under half and Nam sends it back (a strike). TH machine draft,16
+mg.pour_perfect.spoiled,Spoiled,เสีย,"Pour Perfect pop when a layer is too far off its line, spills or times out (a strike). TH machine draft",16
+mg.pour_perfect.glass,glass {n},แก้วที่ {n},Pour Perfect pop when a new glass arrives. {n} glass number. TH machine draft,16
+mg.candle_talk.timeout,Too slow…,ช้าไป…,Candle Talk line when the reply timer runs out (the candle gutters). TH machine draft,20
+mg.front_row_rhythm.missed,Missed,พลาด,Front Row Rhythm pop when a clap passes the line unhit (a strike). TH machine draft,12

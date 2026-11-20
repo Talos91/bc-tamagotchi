@@ -1,19 +1,25 @@
 extends "res://scripts/minigames/minigame_base.gd"
 ## Shake & Serve (GDD §9 #2; docs/design/10-minigame-next.md concept B; quality pass Q7, docs/design/11-minigame-quality.md
-## §1.2, §2.3, §3, §4.1). At the bar: Nam takes three orders by mood. The recipe shows, then you pick its bottles off the
+## §1.2, §2.3, §3, §4.1). At the bar: Nam takes order after order by mood. The recipe shows, then you pick its bottles off the
 ## backlit shelf in order (each one flies to the shaker and pours), and shake on Nam's nods; the drink slides down the
 ## bar. The spirits are real bottles from the Black Cabin menu (Pour Perfect's featured drinks); the mixes are classic
 ## house mixes, labelled as such, until the bar's own cocktail page arrives (a pending fact).
 ##
-## Difficulty rises through the run, one level per order (Daniele 2026-11-18: "difficulty levels (more ingredients)"):
+## Difficulty rises one level per order (Daniele 2026-11-18: "difficulty levels (more ingredients)"):
 ##   1 Easy pour      2 bottles (spirit + mixer), 4 nods 0.60 s apart
 ##   2 House mix      3 bottles, 4 nods 0.55 s apart
 ##   3 Nam's special  4 bottles, the shelf is restocked in a new order, 6 nods 0.50 s apart
-## Relaxed timing keeps the levels and widens the beat window (0.22 -> 0.33 s) and the recipe look (+1 s).
+## Endless ramp (docs/design/15-minigame-ramp.md; Daniele 2026-11-20 "increasingly harder and faster (but humanly
+## possible not impossible)"): the orders keep coming. From order 4 every order is a 4-bottle special (picked per night,
+## round and order), the shelf is restocked every order, and step by step to order 9 (the cap, level 9): the recipe
+## look 2.0 -> 1.5 s, pick time 12 -> 7 s, nods 6 -> 8, nod gap 0.50 -> 0.38 s. Level = the order number (cap 9).
+## Relaxed timing keeps its slack at every level: the beat window 0.22 -> 0.33 s and the recipe look +1 s.
 ##
-## Per order: recipe 0.6 (-0.2 per wrong bottle) + shake 0.4 x beat accuracy; round score = mean of the 3 orders
-## (unchanged). Feeds the existing action "pour_perfect" (Drinks +20-30); a great round or better also earns
-## "shake_serve_friends" (Friends +5) through result extra.bonus_action. Shares the bar's 3 tries with Pour Perfect.
+## Per order: recipe 0.6 (-0.2 per wrong bottle) + shake 0.4 x beat accuracy (order_score). An order under 0.5 is sent
+## back by Nam (a strike); the third sent back ends the round (lose()). Points = sum of round(33 x order score)
+## (uncapped record; 3 perfect orders = 99); the need gain reads score = min(1, points / 100). Feeds the existing action
+## "pour_perfect" (Drinks +20-30); a great score or better also earns "shake_serve_friends" (Friends +5) through result
+## extra.bonus_action. Shares the bar's 3 tries with Pour Perfect.
 ## Competition (§4.1) through mg_rivals.gd: tonight's regular to beat in the HUD, the board place on the result.
 ## Art: look B sprites in game/assets/minigames/shake_serve/ (flat drawing only as a fallback when art is missing).
 
@@ -25,7 +31,6 @@ const Rivals = preload("res://scripts/minigames/mg_rivals.gd")
 const ART_DIR := "res://assets/minigames/shake_serve/"
 const FIELD := Vector2(720, 1280)
 
-const ORDERS := 3
 const MEMO_SECONDS := 2.0
 const MEMO_RELAXED_EXTRA := 1.0
 const PICK_SECONDS := 12.0           ## per order; time out = the missing bottles count as wrong
@@ -42,7 +47,18 @@ const SHAKE_PART := 0.4
 const POUR_SECONDS := 0.45           ## a picked bottle flies to the shaker and pours
 const NOD_SHOW := 0.14               ## Nam's head is down this long around each nod
 const BONUS_ACTION := "shake_serve_friends"
-## The three levels, one per order (index = order).
+## Endless ramp (15-minigame-ramp; Daniele 2026-11-20), from order 4 (index 3) in RAMP_STEPS even steps to the cap.
+## why: 1.5 s still reads 4 chips; 7 s picks 4 bottles; 0.38 s nods = 158 a minute, slower than a fast clap.
+const RAMP_STEPS := 6                ## orders 4..9; order 9 is the cap
+const RAMP_MEMO_END := 1.5
+const RAMP_PICK_END := 7.0
+const RAMP_BEATS_END := 8
+const RAMP_GAP_END := 0.38
+const LEVEL_CAP := 9                 ## level = the order number, up to order 9
+## why: an order under half (a wrong bottle and a sloppy shake, or a timeout) is a drink Nam would not serve.
+const SEND_BACK_BELOW := 0.5
+const POINTS_PER_ORDER := 33.0       ## 3 perfect orders = 99 = a perfect old round
+## The three opening levels, one per order (index = order); from order 4 on, level 3 with the ramp's numbers.
 const LEVELS := [
 	{"key": "easy", "bottles": 2, "beats": 4, "gap": 0.60, "restock": false},
 	{"key": "house", "bottles": 3, "beats": 4, "gap": 0.55, "restock": false},
@@ -53,7 +69,7 @@ const SPIRITS := ["gin", "vodka", "rum", "tequila", "whisky"]
 const MIXERS := ["lime", "sugar", "soda", "tonic", "ginger", "bitters", "cola"]
 ## Shelf spirit -> BarMenu pour family id, where they differ.
 const FAMILY_IDS := {"tequila": "tequila_mezcal"}
-## Classic house mixes per level: [mood line key, spirit family, mixers...] (2, 3 and 4 bottles).
+## Classic house mixes per level: [mood line key, spirit family, mixers...] (2, 3 and 4 bottles; orders 4+ use level 3's).
 const LEVEL_RECIPES := [
 	[
 		["gin_tonic", "gin", "tonic"],
@@ -107,13 +123,14 @@ const RING_Y := 1242.0
 enum State { INTRO, MEMO, PICK, SHAKE, SERVE, DONE }
 
 var state := State.INTRO
-var orders: Array = []               ## recipe rows for this round (one per level)
-var order := 0
+var order := 0                       ## index of the current order (0 = the first); the level is order + 1, capped
 var step := 0                        ## bottles picked right in this order
 var wrongs := 0
 var taps: Array[float] = []          ## shake tap times (since the shake began)
 var order_scores: Array[float] = []
-var shelf_order: Array = []          ## shelf ids in slot order (level 3 restocks it)
+var lives_left := STRIKES            ## orders Nam may still send back before the round is lost
+var sent_back := 0
+var shelf_order: Array = []          ## shelf ids in slot order (restocked from level 3, every order)
 var flash := ""                      ## shelf id flashing (wrong pick)
 var flash_t := 0.0
 var rival: Dictionary = {}           ## tonight's regular to beat {regular, name, points}
@@ -126,6 +143,9 @@ var rattle_t := 0.0                  ## the shelf rattles after a wrong bottle
 var shake_anim := 0.0                ## > 0 while the shaker swings after a tap
 var level_banner_t := 0.0
 var _record: Dictionary = {}
+var _recipe: Array = []              ## the current order's recipe row (generated per order, never a whole list)
+var _night := 0
+var _round_n := 0
 var _state_t := 0.0
 var _anim_t := 0.0
 var _art: Dictionary = {}            ## sprite name -> {tex, fw, fh, frames, anchor}
@@ -150,6 +170,8 @@ func _on_start() -> void:
 	wrongs = 0
 	taps.clear()
 	order_scores.clear()
+	lives_left = STRIKES
+	sent_back = 0
 	pours.clear()
 	_state_t = 0.0
 	_anim_t = 0.0
@@ -158,8 +180,9 @@ func _on_start() -> void:
 	shake_anim = 0.0
 	level_banner_t = 0.0
 	_record = {}
-	var night := int(config.get("night", BarMenu.night_of(Time.get_unix_time_from_system())))
-	orders = pick_orders(night, int(config.get("n", 0)))
+	_night = int(config.get("night", BarMenu.night_of(Time.get_unix_time_from_system())))
+	_round_n = int(config.get("n", 0))
+	_recipe = order_at(_night, _round_n, 0)
 	shelf_order = shelf()
 	var t := Rivals.tonight(game_id, rivals_store)
 	rival = t["rival"]
@@ -175,9 +198,44 @@ func _on_start() -> void:
 ## other mixes).
 static func pick_orders(night: int, n := 0) -> Array:
 	var out: Array = []
-	for k in ORDERS:
-		var list: Array = LEVEL_RECIPES[k]
-		out.append(list[posmod(night * 3 + n + k * 7, list.size())])
+	for k in LEVELS.size():
+		out.append(order_at(night, n, k))
+	return out
+
+
+## The recipe of order i (0-based) for a night and the n-th round: orders 1-3 one per level (as before), then level 3's
+## mixes in a seeded order per block of six, never the same mix twice in a row.
+static func order_at(night: int, n: int, i: int) -> Array:
+	if i < LEVELS.size():
+		var list: Array = LEVEL_RECIPES[i]
+		return list[posmod(night * 3 + n + i * 7, list.size())]
+	var top: Array = LEVEL_RECIPES[LEVELS.size() - 1]
+	var b := (i - LEVELS.size()) / top.size()
+	var p := _shuffled_mixes(night, n, b, top.size())
+	var prev: int
+	if b > 0:
+		prev = _shuffled_mixes(night, n, b - 1, top.size())[top.size() - 1]
+	else:
+		prev = posmod(night * 3 + n + (LEVELS.size() - 1) * 7, top.size())
+	if p[0] == prev:
+		var tmp := p[0]
+		p[0] = p[1]
+		p[1] = tmp
+	return top[p[(i - LEVELS.size()) % top.size()]]
+
+
+## Indexes 0..size-1 in a seeded order (block b of the endless orders of a night and round).
+static func _shuffled_mixes(night: int, n: int, b: int, size_n: int) -> Array[int]:
+	var out: Array[int] = []
+	for k in size_n:
+		out.append(k)
+	var rng := RandomNumberGenerator.new()
+	rng.seed = hash("shake_serve_orders_%d_%d_%d" % [night, n, b])
+	for k in range(size_n - 1, 0, -1):
+		var j := rng.randi_range(0, k)
+		var tmp := out[k]
+		out[k] = out[j]
+		out[j] = tmp
 	return out
 
 
@@ -197,11 +255,15 @@ static func shelf() -> Array:
 	return out
 
 
-## Level 3's restocked shelf: the same twelve bottles in a new order, seeded by the night (same for everyone).
-static func restocked(night: int) -> Array:
+## The restocked shelf of order order_i (level 3 = index 2, then every order): the same twelve bottles in a new order, seeded
+## by the night and the order (same for everyone).
+static func restocked(night: int, order_i := 2) -> Array:
 	var ids := shelf()
 	var rng := RandomNumberGenerator.new()
-	rng.seed = hash("shake_serve_restock_%d" % night)
+	if order_i <= LEVELS.size() - 1:
+		rng.seed = hash("shake_serve_restock_%d" % night)
+	else:
+		rng.seed = hash("shake_serve_restock_%d_%d" % [night, order_i])
 	for i in range(ids.size() - 1, 0, -1):
 		var j := rng.randi_range(0, i)
 		var tmp = ids[i]
@@ -216,8 +278,51 @@ static func level(i: int) -> Dictionary:
 	return LEVELS[clampi(i, 0, LEVELS.size() - 1)]
 
 
+## Steps into the endless ramp of order i: 0 for orders 1-3, then 1..RAMP_STEPS (capped at order 9).
+static func ramp_step(i: int) -> int:
+	return clampi(i - (LEVELS.size() - 1), 0, RAMP_STEPS)
+
+
+static func _ramp_t(i: int) -> float:
+	return float(ramp_step(i)) / float(RAMP_STEPS)
+
+
+## Nods of order i: the opening levels, then 6 -> 8.
 static func beats_of(i: int) -> int:
-	return int(level(i)["beats"])
+	if i < LEVELS.size():
+		return int(level(i)["beats"])
+	return roundi(lerpf(float(level(i)["beats"]), float(RAMP_BEATS_END), _ramp_t(i)))
+
+
+## Seconds between the nods of order i: the opening levels, then 0.50 -> 0.38.
+static func gap_of(i: int) -> float:
+	if i < LEVELS.size():
+		return float(level(i)["gap"])
+	return lerpf(float(level(i)["gap"]), RAMP_GAP_END, _ramp_t(i))
+
+
+## The recipe look of order i before relaxed timing: 2.0 s, then 2.0 -> 1.5 from order 4.
+static func memo_at(i: int) -> float:
+	return lerpf(MEMO_SECONDS, RAMP_MEMO_END, _ramp_t(i))
+
+
+## Pick time of order i: 12 s, then 12 -> 7 from order 4.
+static func pick_at(i: int) -> float:
+	return lerpf(PICK_SECONDS, RAMP_PICK_END, _ramp_t(i))
+
+
+static func bottles_of(i: int) -> int:
+	return int(level(i)["bottles"])
+
+
+## Order i restocks the shelf (level 3, and every order after it).
+static func restocks(i: int) -> bool:
+	return i >= LEVELS.size() - 1
+
+
+## The ramp level of order i: the order number, capped at LEVEL_CAP.
+static func level_of_order(i: int) -> int:
+	return mini(i + 1, LEVEL_CAP)
 
 
 ## The real bottle Nam pours for a spirit family (Pour Perfect's featured drink of that family), or "".
@@ -242,23 +347,37 @@ static func order_score(wrong: int, beat_accs: Array) -> float:
 	return clampf(maxf(0.0, RECIPE_PART - WRONG_COST * wrong) + SHAKE_PART * acc, 0.0, 1.0)
 
 
-static func round_score(scores: Array) -> float:
-	var s := 0.0
+## Nam sends an order back below SEND_BACK_BELOW (a strike).
+static func sent_back_for(score: float) -> bool:
+	return score < SEND_BACK_BELOW
+
+
+static func order_points(score: float) -> int:
+	return roundi(POINTS_PER_ORDER * clampf(score, 0.0, 1.0))
+
+
+## Record points of a list of order scores (uncapped).
+static func points_of(scores: Array) -> int:
+	var p := 0
 	for v in scores:
-		s += float(v)
-	return s / ORDERS
+		p += order_points(float(v))
+	return p
+
+
+func record_points() -> int:
+	return points_of(order_scores)
 
 
 func current_score() -> float:
-	return round_score(order_scores)
+	return score_of(record_points())
 
 
 func live_points() -> int:
-	return points_for(current_score())
+	return record_points()
 
 
 func recipe() -> Array:
-	return orders[order] if order < orders.size() else []
+	return _recipe
 
 
 func bottles_needed() -> int:
@@ -272,7 +391,7 @@ func wanted() -> String:
 
 ## Seconds of nod i after the shake began, at level lv (default: the current order's level).
 func nod_time(i: int, lv := -1) -> float:
-	return BEAT_LEAD + i * float(level(order if lv < 0 else lv)["gap"])
+	return BEAT_LEAD + i * gap_of(order if lv < 0 else lv)
 
 
 func beat_window() -> float:
@@ -280,7 +399,7 @@ func beat_window() -> float:
 
 
 func memo_seconds() -> float:
-	return MEMO_SECONDS + (MEMO_RELAXED_EXTRA if relaxed else 0.0)
+	return memo_at(order) + (MEMO_RELAXED_EXTRA if relaxed else 0.0)
 
 
 # --- Play ------------------------------------------------------------------------------------------
@@ -355,24 +474,29 @@ func advance(dt: float) -> void:
 				state = State.PICK
 				_state_t = 0.0
 		State.PICK:
-			if _state_t >= PICK_SECONDS:
+			if _state_t >= pick_at(order):
 				wrongs += bottles_needed() - step  # the missing bottles count as wrong
 				_begin_shake()
 		State.SHAKE:
 			var last := nod_time(beats_of(order) - 1)
 			if _state_t >= last + BEAT_WINDOW_RELAXED + 0.1 or taps.size() >= beats_of(order) and _state_t > last:
-				order_scores.append(order_score(wrongs, _score_shake()))
+				var sc := order_score(wrongs, _score_shake())
+				order_scores.append(sc)
 				state = State.SERVE
 				_state_t = 0.0
+				if sent_back_for(sc):
+					sent_back += 1
+					lives_left = maxi(0, STRIKES - sent_back)
 				_juice_serve()
+				_update_status()
 		State.SERVE:
 			if _state_t >= SERVE_SECONDS:
-				order += 1
-				if order >= ORDERS:
+				if lives_left <= 0:
 					state = State.DONE
 					queue_redraw()
-					finish(current_score())
+					lose()
 					return
+				order += 1
 				_next_memo()
 	queue_redraw()
 
@@ -384,10 +508,11 @@ func _next_memo() -> void:
 	wrongs = 0
 	taps.clear()
 	pours.clear()
-	var lv := level(order)
-	if bool(lv["restock"]):
-		shelf_order = restocked(int(config.get("night", BarMenu.night_of(Time.get_unix_time_from_system()))))
+	_recipe = order_at(_night, _round_n, order)
+	if restocks(order):
+		shelf_order = restocked(_night, order)
 	if order > 0:
+		level_up(level_of_order(order))
 		_juice_level()
 	_update_status()
 
@@ -441,33 +566,43 @@ func _juice_shake(i: int) -> void:
 		f.pop(S.t("mg.shake_serve.off_beat"), top + Vector2(110, 0), UI.SMOKE, 32)
 
 
-## Serve: the glass slides down the bar, ice clinks, Nam reacts, the order's points pop.
+## Serve: the glass slides down the bar, ice clinks, Nam reacts, the order's points pop. Under half: Nam frowns and
+## sends it back (a strike: the red edge, a double buzz, the lives left).
 func _juice_serve() -> void:
 	var sc: float = order_scores[order_scores.size() - 1]
 	nam_face = 2 if sc >= TIER_GREAT else 3
 	nam_face_t = SERVE_SECONDS
 	var f := fx()
 	var at := _xf() * Vector2(SERVE_TO, BAR_Y - 80)
-	f.pop("+%d" % points_for(sc), at + Vector2(0, -60), UI.GOLD if sc >= TIER_GREAT else UI.CREAM, 52)
+	f.pop("+%d" % order_points(sc), at + Vector2(0, -60), UI.GOLD if sc >= TIER_GREAT else UI.CREAM, 52)
 	f.burst("spark", at, 6)
-	if sc >= TIER_PERFECT:
+	if sent_back_for(sc):
+		f.pop(S.t("mg.shake_serve.sent_back"), _xf() * Vector2(FIELD.x * 0.5, 470.0), UI.NEON, 48)
+		if lives_left > 0:
+			var strike := S.t("mg.ramp.last") if lives_left == 1 else S.t("mg.ramp.strike", {"lives": lives_left})
+			f.pop(strike, _xf() * Vector2(FIELD.x * 0.5, 540.0), UI.AMBER, 40)
+		f.shake(Fx.TRAUMA_LOSS if lives_left <= 0 else Fx.TRAUMA_BUMP)
+		f.fail_edge()
+		f.combo_break()
+		haptic("fail")
+	elif sc >= TIER_PERFECT:
 		f.burst("confetti", at, 16)
 		f.hit_stop()
 		haptic("strong")
 	else:
 		haptic("tick")
 	# §4.1: passing tonight's regular in play
-	if not rival_passed and not rival.is_empty() and live_points() > int(rival.get("points", 0)):
+	if not rival_passed and not rival.is_empty() and record_points() > int(rival.get("points", 0)):
 		rival_passed = true
 		f.pop(S.t("mg.rivals.passed", {"regular": str(rival.get("name", ""))}), _xf() * Vector2(FIELD.x * 0.5, 420.0), UI.NEON, 44)
 
 
-## A new level: banner, a gold flare, and on level 3 the restocked shelf.
+## A new order: banner, a gold flare, and from level 3 the restocked shelf.
 func _juice_level() -> void:
 	level_banner_t = 1.4
 	var f := fx()
 	f.flare(_xf() * Vector2(FIELD.x * 0.5, 80.0), 220.0, UI.AMBER)
-	if bool(level(order)["restock"]):
+	if restocks(order):
 		f.pop(S.t("mg.shake_serve.restock"), _xf() * Vector2(FIELD.x * 0.5, 712.0), UI.NEON, 40)
 		f.burst("spark", _xf() * Vector2(FIELD.x * 0.5, SHELF_Y[0]), 12)
 	haptic("tick")
@@ -476,16 +611,16 @@ func _juice_level() -> void:
 
 func _result_extra() -> Dictionary:
 	if _record.is_empty():
-		_record = Rivals.record(game_id, live_points(), {}, rivals_store)
-	var extra := {"orders": order_scores.duplicate(), "level": mini(order, ORDERS - 1) + 1, "rival": rival,
-		"board": _record["board_line"]}
+		_record = Rivals.record(game_id, record_points(), {}, rivals_store)
+	var extra := {"orders": order_scores.duplicate(), "level": ramp_level, "speed": snappedf(gap_of(order), 0.01),
+		"misses": sent_back, "sent_back": sent_back, "rival": rival, "board": _record["board_line"]}
 	if current_score() >= TIER_GREAT:
 		extra["bonus_action"] = BONUS_ACTION
 	return extra
 
 
 func _update_status() -> void:
-	set_status(S.t("mg.shake_serve.status", {"n": mini(order + 1, ORDERS), "total": ORDERS}))
+	set_status(S.t("mg.ramp.status", {"level": ramp_level, "points": record_points(), "lives": lives_left}))
 
 
 func _gui_input(event: InputEvent) -> void:
@@ -651,19 +786,19 @@ func _draw_backdrop() -> void:
 
 
 func _draw_hud() -> void:
-	# level badge: three pips and the level's name; the banner grows when a level starts
-	var lv := mini(order, ORDERS - 1)
-	for k in ORDERS:
+	# lives: one pip per order Nam may still send back; then the level and its name (the banner grows on a new order)
+	var lv := mini(order, LEVELS.size() - 1)
+	for k in STRIKES:
 		var c := Vector2(36 + k * 34, 46)
-		draw_circle(c, 11.0, UI.GOLD if k <= lv else UI.LINE)
+		draw_circle(c, 11.0, UI.GOLD if k < lives_left else UI.LINE)
 	var grow := 1.0 + 0.5 * clampf(level_banner_t - 0.9, 0.0, 0.5) / 0.5
-	var lname := S.t("mg.shake_serve.level", {"n": lv + 1, "name": S.t("mg.shake_serve.level." + str(level(lv)["key"]))})
+	var lname := S.t("mg.shake_serve.level", {"n": ramp_level, "name": S.t("mg.shake_serve.level." + str(level(lv)["key"]))})
 	_text_left(lname, Vector2(20, 96), int(28 * grow), UI.GOLD if level_banner_t > 0.0 else UI.CREAM)
 	if not rival.is_empty():
 		var col := UI.GOLD if rival_passed else UI.CREAM
 		_text_right(S.t("mg.rivals.to_beat"), Vector2(FIELD.x - 20.0, 34.0), 20, UI.SMOKE)
 		_text_right("%s %d" % [str(rival.get("name", "")), int(rival.get("points", 0))], Vector2(FIELD.x - 20.0, 66.0), 30, col)
-		_text_right(S.t("mg.rivals.you_now", {"score": live_points()}), Vector2(FIELD.x - 20.0, 96.0), 24, UI.GOLD if rival_passed else UI.SMOKE)
+		_text_right(S.t("mg.rivals.you_now", {"score": record_points()}), Vector2(FIELD.x - 20.0, 96.0), 24, UI.GOLD if rival_passed else UI.SMOKE)
 
 
 func _draw_nam() -> void:

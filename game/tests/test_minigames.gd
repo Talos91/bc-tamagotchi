@@ -182,62 +182,110 @@ func test_beatmaps() -> void:
 # --- Pour ----------------------------------------------------------------------------------------
 
 func test_pour_thresholds() -> void:
-	print("[pour] layer thresholds and overfill penalty")
+	print("[pour] layer thresholds, the spoil band and the glass-by-glass ramp")
 	check(Pour.layer_score(0.30, 0.30) == 1.0, "exact = 1.0")
 	check(Pour.layer_score(0.31, 0.30) == 1.0, "within 0.02 = 1.0")
 	check(Pour.layer_score(0.40, 0.30) < 1.0 and Pour.layer_score(0.40, 0.30) > 0.0, "0.10 off is partial")
 	check(is_equal_approx(Pour.layer_score(0.49, 0.30), 0.0) or Pour.layer_score(0.50, 0.30) == 0.0, "0.20 off = 0")
 	check(is_equal_approx(Pour.layer_score(0.2, 0.3), Pour.layer_score(0.4, 0.3)), "under and over score the same")
-	check(Pour.overfill_penalty(0.0) == 0.0, "no spill, no penalty")
-	check(is_equal_approx(Pour.overfill_penalty(0.05), 0.1), "0.05 spill = 0.1 penalty")
-	check(Pour.overfill_penalty(5.0) == Pour.OVERFILL_MAX_PENALTY, "penalty capped")
-	check(Pour.total_score(Pour.TARGETS, 0.0) == 1.0, "perfect layers = 1.0")
-	check(Pour.total_score([1.0, 1.0, 1.0], 0.3) < 0.5, "pouring everything to the rim scores low")
-	check(Pour.total_score([], 0.0) == 0.0, "no layers = 0 (still earns the minimum reward upstream)")
 	check(Pour.TARGETS[0] < Pour.TARGETS[1] and Pour.TARGETS[1] < Pour.TARGETS[2] and Pour.TARGETS[2] < 1.0, "targets ascend below the rim")
+	# Endless ramp (docs/design/15-minigame-ramp.md): layer points, the spoil band, the per-glass numbers and lines.
+	check(Pour.layer_points(1.0) == 33 and Pour.layer_points(0.0) == 0 and Pour.layer_points(0.5) == 17, "a layer = round(33 x its score)")
+	check(Pour.is_spoiled(0.41, 0.30) and Pour.is_spoiled(0.19, 0.30), "more than 0.10 off the line spoils the layer")
+	check(not Pour.is_spoiled(0.39, 0.30) and not Pour.is_spoiled(0.21, 0.30), "within 0.10 is a scored layer")
+	check(not Pour.is_spoiled(0.44, 0.30, true) and Pour.is_spoiled(0.46, 0.30, true), "relaxed: the spoil band x1.5")
+	check(Pour.idle_seconds() == 8.0 and Pour.idle_seconds(true) > 8.0, "8 s idle spoils (relaxed waits longer)")
+	check(is_equal_approx(Pour.rate_at(1), 0.075) and is_equal_approx(Pour.wobble_at(1), 0.35), "glass 1 pours as before")
+	var rises := true
+	for gl in range(2, Pour.GLASS_CAP + 1):
+		rises = rises and Pour.rate_at(gl) > Pour.rate_at(gl - 1) and Pour.wobble_at(gl) > Pour.wobble_at(gl - 1)
+	check(rises, "pour rate and wobble rise every glass up to glass %d" % Pour.GLASS_CAP)
+	check(is_equal_approx(Pour.rate_at(Pour.GLASS_CAP), 0.15) and is_equal_approx(Pour.wobble_at(Pour.GLASS_CAP), 0.55), "cap: 0.15 glass/s, wobble 55 %")
+	check(Pour.rate_at(25) == Pour.rate_at(Pour.GLASS_CAP) and Pour.wobble_at(25) == Pour.wobble_at(Pour.GLASS_CAP), "the numbers stop at the cap")
+	check(Pour.glass_targets(20000, 1) == Pour.TARGETS, "glass 1 keeps today's lines")
+	var lines_ok := true
+	var differs := false
+	for sd in [20000, 20001, 7]:
+		for gl in range(2, 31):
+			var tg: Array[float] = Pour.glass_targets(sd, gl)
+			lines_ok = lines_ok and tg.size() == 3 and tg == Pour.glass_targets(sd, gl)
+			lines_ok = lines_ok and tg[0] >= Pour.LINE_MIN - 1e-6 and tg[2] <= Pour.LINE_MAX + 1e-6
+			lines_ok = lines_ok and tg[1] - tg[0] >= Pour.LINE_GAP - 1e-6 and tg[2] - tg[1] >= Pour.LINE_GAP - 1e-6
+			differs = differs or tg != Pour.glass_targets(sd, 2)
+	check(lines_ok, "later glasses: 3 seeded lines, ordered, >= 0.18 apart within 0.2..0.9, same seed same lines")
+	check(differs, "later glasses get new lines")
 
 
 func test_pour_play() -> void:
-	print("[pour] scripted play: precise pourer and overpourer")
+	print("[pour] scripted play: precise pourer glass after glass, overpourer, spoiled layers, idle player")
 	var g: Control = spawn(Pour)
+	g.config = {"seed": 20000}
 	var results := []
 	g.finished.connect(func(r): results.append(r))
 	g.start()
-	_advance(g, 1.6)
-	for i in Pour.TARGETS.size():
-		g.press()
-		var guard := 0
-		while g.level < Pour.TARGETS[i] and guard < 5000:
-			g.advance(1.0 / 240.0)
-			guard += 1
-		g.release()
-		_advance(g, 1.0)
+	check(g.ramp_level == 1 and g.glass == 1 and g.lives_left == Base.STRIKES, "starts on glass 1, level 1, 3 lives")
+	pour_glass(g)
+	check(not g.done and results.is_empty(), "a full glass no longer ends the round")
+	check(g.record_points() >= 95, "a precise glass 1 = %d points (about the old 100)" % g.record_points())
+	var glasses := 1
+	while glasses < 12 and pour_glass(g):
+		glasses += 1
+	check(glasses == 12 and not g.done and g.glass >= 12, "the precise pourer keeps pouring past the old end (%d glasses)" % glasses)
+	check(g.ramp_level == Pour.GLASS_CAP, "the level reaches the cap (%d)" % g.ramp_level)
+	check(g.record_points() > 100 and g.lives_left == Base.STRIKES, "points uncapped (%d), no strike" % g.record_points())
+	# then the pourer walks off: the idle layers spoil, the round ends on exactly the third
+	var lives_seen := []
+	var early_end := false
+	var guard := 0
+	while not g.done and guard < 60 * 60:
+		var before: int = g.lives_left
+		g.advance(1.0 / 60.0)
+		guard += 1
+		if g.lives_left != before:
+			lives_seen.append(g.lives_left)
+		early_end = early_end or (g.done and g.lives_left > 0)
+	check(lives_seen == [2, 1, 0] and not early_end, "idle layers: a strike each, the end on the third (%s)" % str(lives_seen))
 	check(results.size() == 1, "finished once")
-	check(results[0]["score"] >= 0.95, "precise pour scores %.2f" % results[0]["score"])
-	check(results[0]["action_id"] == "pour_perfect" and results[0]["need_id"] == "drinks", "result names action and need")
+	if results.size() == 1:
+		var ex: Dictionary = results[0]["extra"]
+		check(g.end_reason == "lost", "end_reason lost")
+		check(int(ex.get("level", 0)) == Pour.GLASS_CAP and int(ex.get("misses", -1)) == 3, "result extra: level %s, misses %s" % [ex.get("level"), ex.get("misses")])
+		check(is_equal_approx(float(ex.get("speed", 0.0)), Pour.rate_at(g.glass)), "result extra: speed = the pour rate")
+		check(int(results[0]["points"]) == g.record_points(), "result points = the record (%d)" % results[0]["points"])
+		check(is_equal_approx(results[0]["score"], minf(1.0, g.record_points() / 100.0)), "score = min(1, points/100)")
+		check(results[0]["action_id"] == "pour_perfect" and results[0]["need_id"] == "drinks", "result names action and need")
 	g.queue_free()
 
 	var g2: Control = spawn(Pour)
 	var res2 := []
 	g2.finished.connect(func(r): res2.append(r))
 	g2.start()
-	_advance(g2, 1.6)
-	for i in 3:
-		g2.press()
-		_advance(g2, 14.0)  # never let go until time runs out
-		g2.release()
-		_advance(g2, 1.0)
-	check(res2.size() == 1, "overpourer still finishes")
-	check(res2[0]["score"] < 0.4, "overpouring scores low (%.2f)" % res2[0]["score"])
-	check(g2.spill > 0.0, "spill recorded")
+	pour_glass(g2, 2.0)  # never lets go before the rim
+	check(res2.size() == 1 and g2.end_reason == "lost", "overpourer: three spills, three strikes, lost")
+	check(res2.size() == 1 and res2[0]["score"] < 0.4, "overpouring scores low")
+	check(g2.spill > 0.0 and g2.layers_done == 3, "spill recorded, three layers spoiled")
 	g2.queue_free()
+
+	var g5: Control = spawn(Pour)
+	g5.start()
+	pour_layer(g5, 0.15)
+	check(g5.lives_left == 2 and g5.record_points() == 0 and g5.layer_scores.size() == 1 and g5.layer_scores[0] == 0.0, "0.15 off the line spoils the layer: a strike, 0 points")
+	check(is_equal_approx(g5.locked[0], Pour.TARGETS[0]), "a spoiled layer is evened to its line")
+	pour_layer(g5, 0.08)
+	var sc5: float = g5.layer_scores[1] if g5.layer_scores.size() > 1 else -1.0
+	check(g5.lives_left == 2 and sc5 > 0.4 and sc5 < 0.9, "0.08 off is a scored layer (%.2f)" % sc5)
+	check(g5.record_points() == Pour.layer_points(sc5), "points = round(33 x layer score) (%d)" % g5.record_points())
+	g5.queue_free()
 
 	var g3: Control = spawn(Pour)
 	var res3 := []
 	g3.finished.connect(func(r): res3.append(r))
 	g3.start()
-	_advance(g3, 40.0)  # never touches the screen
-	check(res3.size() == 1 and res3[0]["score"] >= 0.0, "idle player gets a result, not a stuck screen")
+	_advance(g3, 26.0)  # never touches the screen: 1.5 s intro, then 8 s + 0.8 s settle per spoiled layer
+	check(not g3.done and g3.lives_left == 1, "idle: two strikes by 26 s (%d left)" % g3.lives_left)
+	_advance(g3, 4.0)
+	check(res3.size() == 1 and g3.end_reason == "lost", "idle player loses on the third spoiled layer, not a stuck screen")
+	check(res3.size() == 1 and int(res3[0]["extra"].get("level", 0)) == 1 and int(res3[0]["extra"].get("misses", 0)) == 3, "idle: result extra level 1, misses 3")
 	g3.queue_free()
 
 	var g4: Control = spawn(Pour)
@@ -259,37 +307,156 @@ func _advance(g: Control, secs: float, step := 1.0 / 60.0) -> void:
 # --- Rhythm --------------------------------------------------------------------------------------
 
 func test_rhythm_play() -> void:
-	print("[rhythm] scripted players on a full song")
+	print("[rhythm] endless set: tempo ramp, stages, chords and double taps, 3 missed claps")
+	# The ramp numbers (docs/design/15-minigame-ramp.md): 96 BPM +4 every 8 bars to 152; lead 1.7 -> 1.2; level 1..15.
+	check(Rhythm.bpm_at(0) == 96.0 and Rhythm.bpm_at(1) == 100.0 and Rhythm.bpm_at(14) == 152.0, "tempo 96, +4 a step, 152 at step 14")
+	check(Rhythm.bpm_at(15) == 152.0 and Rhythm.bpm_at(60) == 152.0, "tempo stops at the 152 BPM cap")
+	check(is_equal_approx(Rhythm.lead_at(0), 1.7) and is_equal_approx(Rhythm.lead_at(14), 1.2) and is_equal_approx(Rhythm.lead_at(40), 1.2), "notes fall 1.7 s -> 1.2 s at the cap")
+	check(Rhythm.level_at(0) == 1 and Rhythm.level_at(14) == 15 and Rhythm.level_at(50) == 15 and Rhythm.LEVEL_CAP == 15, "level 1 + tempo steps, cap 15")
+	var rising := true
+	for k in 14:
+		if not (Rhythm.bpm_at(k + 1) > Rhythm.bpm_at(k) and Rhythm.lead_at(k + 1) < Rhythm.lead_at(k) and Rhythm.level_at(k + 1) == Rhythm.level_at(k) + 1):
+			rising = false
+	check(rising, "every step up to the cap: faster tempo, shorter lead, next level")
+	# The clock through changing tempo: beat -> time by accumulated segments, and back.
+	check(is_equal_approx(Rhythm.beat_time(32.0), 20.0) and is_equal_approx(Rhythm.beat_time(64.0), 39.2), "8 bars at 96 = 20 s, the next 8 at 100 = 19.2 s")
+	check(is_equal_approx(Rhythm.beat_time(-4.0), -2.5), "the count-in runs at 96 BPM")
+	check(absf(Rhythm.time_to_beat(Rhythm.beat_time(77.5)) - 77.5) < 1e-6 and absf(Rhythm.time_to_beat(Rhythm.beat_time(1000.25)) - 1000.25) < 1e-6, "time_to_beat inverts beat_time (past the cap too)")
+	check(Rhythm.step_at_time(19.9) == 0 and Rhythm.step_at_time(20.1) == 1 and Rhythm.step_at_time(-1.0) == 0, "the tempo steps at bar 9")
+	# The stages by bar, in the generated chunks (seeded, deterministic).
+	var c0: Array[Dictionary] = Rhythm.chunk_notes(0, 7)
+	var c1: Array[Dictionary] = Rhythm.chunk_notes(1, 7)
+	var c2: Array[Dictionary] = Rhythm.chunk_notes(2, 7)
+	var c3: Array[Dictionary] = Rhythm.chunk_notes(3, 7)
+	check(c0.size() == 32, "bars 1-8: one quarter note a beat (%d)" % c0.size())
+	var one_at_a_time := true
+	for i in range(1, c0.size()):
+		if float(c0[i]["beat"]) == float(c0[i - 1]["beat"]) or fmod(float(c0[i]["beat"]), 1.0) != 0.0:
+			one_at_a_time = false
+	check(one_at_a_time, "bars 1-8: quarters, one lane at a time")
+	var has_chord := func(arr: Array[Dictionary]) -> bool:
+		for i in range(1, arr.size()):
+			if float(arr[i]["beat"]) == float(arr[i - 1]["beat"]) and int(arr[i]["lane"]) != int(arr[i - 1]["lane"]):
+				return true
+		return false
+	var has_double := func(arr: Array[Dictionary]) -> bool:
+		for i in range(1, arr.size()):
+			if float(arr[i]["beat"]) - float(arr[i - 1]["beat"]) == 0.5 and int(arr[i]["lane"]) == int(arr[i - 1]["lane"]):
+				return true
+		return false
+	var has_run := func(arr: Array[Dictionary]) -> bool:
+		for i in range(3, arr.size()):
+			var ok := true
+			for j in 3:
+				var a: Dictionary = arr[i - 3 + j]
+				var b: Dictionary = arr[i - 2 + j]
+				if float(b["beat"]) - float(a["beat"]) != 0.5 or int(b["lane"]) == int(a["lane"]):
+					ok = false
+			if ok:
+				return true
+		return false
+	check(not has_chord.call(c0) and has_chord.call(c1) and not has_double.call(c1), "bar 9: chords (two lanes at once) start, no double taps yet")
+	check(has_double.call(c2) and not has_run.call(c2), "bar 17: double taps (same lane, half a beat apart) start, no runs yet")
+	check(has_run.call(c3), "bar 25: eighth-note runs swapping lanes")
+	check(str(Rhythm.chunk_notes(5, 7)) == str(Rhythm.chunk_notes(5, 7)) and str(Rhythm.chunk_notes(5, 7)) != str(Rhythm.chunk_notes(5, 8)), "chunks are seeded: same night same set, another night another")
+	var playable := true
+	var sorted := true
+	for k in 20:
+		var ch: Array[Dictionary] = Rhythm.chunk_notes(k, 3)
+		var last_beat := [-9.0, -9.0]
+		for i in ch.size():
+			var lane: int = ch[i]["lane"]
+			if float(ch[i]["beat"]) - float(last_beat[lane]) < 0.5 - 1e-6:
+				playable = false
+			last_beat[lane] = float(ch[i]["beat"])
+			if i > 0 and float(ch[i]["time"]) < float(ch[i - 1]["time"]):
+				sorted = false
+	check(playable, "same-lane claps never closer than half a beat (0.2 s at 152 BPM)")
+	check(sorted, "every chunk is sorted by time")
+	# Expected claps a beat from the cell weights (single 1, chord 2, double 2, run 4 over 2 beats): rises to the cap.
+	var density := func(k: int) -> float:
+		var w: PackedFloat32Array = Rhythm.cell_weights(k)
+		var tot: float = w[0] + w[1] + w[2] + w[3]
+		return (w[0] + 2.0 * w[1] + 2.0 * w[2] + 4.0 * w[3]) / (tot + w[3])
+	var denser := true
+	for k in range(Rhythm.STAGE_RUNS, 14):
+		if not (density.call(k + 1) > density.call(k)):
+			denser = false
+	check(denser and is_equal_approx(density.call(14), density.call(30)) and density.call(0) == 1.0, "density rises every step to the cap, then holds")
+	check(Rhythm.chunk_notes(14, 3).size() > c0.size(), "the cap chunk holds more claps than bars 1-8")
+
+	# Two notes at once in different lanes, and two close notes in one lane (the nearest unjudged note).
+	var g4: Control = spawn(Rhythm)
+	g4.config = {"seed": 7}
+	g4.start()
+	g4.clock = 10.0
+	g4.notes = [{"time": 10.0, "lane": 0, "beat": 16.0, "state": 0}, {"time": 10.0, "lane": 1, "beat": 16.0, "state": 0},
+		{"time": 10.3, "lane": 0, "beat": 16.5, "state": 0}, {"time": 10.5, "lane": 0, "beat": 16.8, "state": 0}]
+	g4.tap(0)
+	g4.tap(1)
+	check(g4.notes[0]["state"] == 1 and g4.notes[1]["state"] == 1, "a chord: one tap a lane judges both notes")
+	g4.clock = 10.3
+	g4.tap(0)
+	check(g4.notes[2]["state"] == 1 and g4.notes[3]["state"] == 0, "a double tap: the first tap takes the nearer note")
+	g4.clock = 10.46
+	g4.tap(0)
+	check(g4.notes[3]["state"] == 1 and g4.perfect == 4, "a double tap: the second tap takes the next one")
+	g4.queue_free()
+
 	for mode in ["perfect", "sloppy", "idle"]:
 		var g: Control = spawn(Rhythm)
-		g.config = {"song": 1}
+		g.config = {"seed": 7}
 		var res := []
 		g.finished.connect(func(r): res.append(r))
 		g.start()
+		check(g.last_status == S.t("mg.ramp.status", {"level": 1, "points": 0, "lives": 3}), "%s: status shows level, points, lives" % mode)
+		# The bot plays until a moment, then stops (idle): perfect past the cap, sloppy 50 s, idle from the start.
+		var play_until: float = Rhythm.beat_time(32.0 * 14.0) + 4.0 if mode == "perfect" else (50.0 if mode == "sloppy" else -99.0)
+		var off: float = 0.0 if mode == "perfect" else 0.11
+		var at_stop := {}
+		var max_notes := 0
+		var done_before_third := false
 		var guard := 0
 		while not g.done and guard < 20000:
 			g.advance(1.0 / 60.0)
 			guard += 1
-			if mode == "idle":
+			max_notes = maxi(max_notes, g.notes.size())
+			if g.missed == 2 and g.done:
+				done_before_third = true
+			if g.clock >= play_until:
+				if at_stop.is_empty():
+					at_stop = {"missed": g.missed, "level": g.ramp_level, "perfect": g.perfect, "good": g.good}
 				continue
 			for n in g.notes:
-				if n["state"] != 0:
-					continue
-				var off: float = 0.0 if mode == "perfect" else 0.11
-				if absf(g.clock - (n["time"] + off)) < 1.0 / 120.0:
-					g.tap(n["lane"])
-		check(res.size() == 1, "%s: song ends with a result" % mode)
-		var sc: float = res[0]["score"]
-		print("  %s: score %.2f, perfect %d good %d missed %d" % [mode, sc, g.perfect, g.good, g.missed])
+				if float(n["time"]) > g.clock + 0.2:
+					break
+				if n["state"] == 0 and absf(g.clock - (float(n["time"]) + off)) <= 1.0 / 120.0:
+					g.tap(int(n["lane"]))
+		check(res.size() == 1 and g.done, "%s: the round ends with a result (guard %d)" % [mode, guard])
+		if res.is_empty():
+			g.queue_free()
+			continue
+		var r: Dictionary = res[0]
+		var sc: float = r["score"]
+		var ex: Dictionary = r["extra"]
+		print("  %s: level %d, %d BPM, points %d, perfect %d good %d missed %d, %.0f s" % [mode, g.ramp_level, ex["speed"], g.record_points(), g.perfect, g.good, g.missed, g.clock])
+		check(g.missed == 3 and not done_before_third and g.end_reason == "lost", "%s: lost on exactly the 3rd missed clap" % mode)
+		check(ex["level"] == g.ramp_level and ex["misses"] == 3 and ex["lives_left"] == 0, "%s: result extra carries level and misses" % mode)
+		check(absf(sc - minf(1.0, g.record_points() / 100.0)) < 1e-6 and r["points"] == g.record_points(), "%s: score = min(1, points/100), points = the record" % mode)
+		check(max_notes < 260, "%s: the chart stays chunked (max %d notes held)" % [mode, max_notes])
 		if mode == "perfect":
-			check(sc >= 0.95, "perfect player scores >= 0.95")
+			check(at_stop.get("missed", -1) == 0, "perfect player misses nothing up to the cap (chords and double taps included)")
+			check(at_stop.get("level", 0) == 15 and g.ramp_level == 15 and ex["speed"] == 152, "perfect player reaches level 15 at 152 BPM")
+			check(g.record_points() > 100 and g.perfect > 300 and g.record_points() == 2 * g.perfect, "perfect player: 2 a clap, far past an old song (%d)" % g.record_points())
+			check(sc == 1.0, "perfect player scores 1.0")
 			check_rhythm_gain(sc, 18.0)
 		elif mode == "sloppy":
-			check(sc > 0.45 and sc < 0.75, "110 ms-late player lands in the good band")
+			check(at_stop.get("missed", -1) == 0 and at_stop.get("perfect", -1) == 0 and int(at_stop.get("good", 0)) > 60, "110 ms-late player: every clap good, none missed (%s)" % [at_stop])
+			check(g.record_points() == g.good, "good claps are worth 1")
 			check_rhythm_gain(sc, lerpf(12.0, 18.0, sc))
 		else:
-			check(sc == 0.0 and g.missed == g.notes.size(), "idle player misses everything and loses nothing else")
-		check(res[0]["action_id"] == "front_row_rhythm" and res[0]["need_id"] == "music", "%s: action and need" % mode)
+			check(sc == 0.0 and g.record_points() == 0 and ex["level"] == 1 and g.clock < 4.0, "idle player: out after 3 claps, level 1, 0 points")
+		check(r["action_id"] == "front_row_rhythm" and r["need_id"] == "music", "%s: action and need" % mode)
 		g.queue_free()
 
 
@@ -326,39 +493,105 @@ func test_candle_logic() -> void:
 	check(Candle.pick_line(d["lines"], 2, 1.0, [1, 2])["id"] == 4, "branch: candle at 1 -> food line 4")
 	check(Candle.pick_line(d["lines"], 3, 1.0, [1, 2, 4])["id"] == 5, "turn 4 = line 5")
 	check(Candle.score_from(5.0, 5) == 1.0 and Candle.score_from(2.5, 5) == 0.5, "score = light / turns")
+	# Endless (docs/design/15-minigame-ramp.md): the reply timer, the level, the points, the lines coming round again.
+	check(Candle.reply_time(1) == 0.0 and Candle.reply_time(5) == 0.0, "turns 1-5: no reply timer")
+	check(Candle.reply_time(6) == 8.0 and Candle.reply_time(7) == 7.5 and Candle.reply_time(14) == 4.0, "timer 8 s at turn 6, -0.5 s a turn, 4 s at turn 14")
+	check(Candle.reply_time(15) == 4.0 and Candle.reply_time(60) == 4.0, "the timer stops at the 4 s cap")
+	check(Candle.level_at_turn(1) == 1 and Candle.level_at_turn(5) == 1 and Candle.level_at_turn(6) == 2 and Candle.level_at_turn(14) == 10 and Candle.level_at_turn(40) == 10, "level 1 for turns 1-5, +1 a turn, 10 at turn 14")
+	var ramp_ok := true
+	for tn in range(6, 14):
+		if not (Candle.reply_time(tn + 1) < Candle.reply_time(tn) and Candle.level_at_turn(tn + 1) == Candle.level_at_turn(tn) + 1):
+			ramp_ok = false
+	check(ramp_ok, "every turn up to 14: less time, next level")
+	check(Candle.points_of([1.0, 0.5, 0.0, 1.0]) == 50 and Candle.points_of([]) == 0, "points: 20 a best card, 10 a near one, 0 off")
+	check(Candle.first_light([1.0, 1.0, 1.0, 1.0, 1.0, 0.0, 0.0, 0.0], 5) == 5.0 and Candle.first_light([0.5, 1.0], 5) == 1.5, "the score reads the first five turns only")
+	var lines: Array = d["lines"]
+	check(int(Candle.next_round_line(lines, [1, 2, 3, 5, 6], 6, 0)["id"]) == 4, "turn 6: the one line not said yet")
+	var never_prev := true
+	for roll in 12:
+		if int(Candle.next_round_line(lines, [], 4, roll)["id"]) == 4:
+			never_prev = false
+	check(never_prev, "a new round never opens with the line just said")
 
 
 func test_candle_play() -> void:
-	print("[candle] full conversations")
-	for mode in ["best", "off"]:
+	print("[candle] endless talks: best, near and off players, the reply timer, 3 gutters")
+	# best: the best card for 20 turns, then no answer (3 timeouts). half: the near card for 5 turns, then no answer.
+	# off: an off card every turn (out on turn 3).
+	for mode in ["best", "half", "off"]:
 		var g: Control = spawn(Candle)
 		g.config = {"regular": "tt", "seed": 7}
 		var res := []
 		g.finished.connect(func(r): res.append(r))
 		g.start()
+		check(g.last_status == S.t("mg.ramp.status", {"level": 1, "points": 0, "lives": 3}), "%s: status shows level, points, lives" % mode)
+		var answer_turns := 20 if mode == "best" else (5 if mode == "half" else 99)
 		var turns_seen := 0
+		var seen_turn := -1
+		var repeats := 0
+		var prev_id := -1
+		var timers := {}
+		var gutters_at_5 := -1
+		var done_before_third := false
 		var guard := 0
 		while not g.done and guard < 2000:
 			guard += 1
-			if g.phase == Candle.Phase.ASK:
+			if g.done == false and g.gutters < 3 and g.phase == Candle.Phase.CLOSE:
+				done_before_third = true
+			if g.phase == Candle.Phase.ASK and g.turn != seen_turn:
+				seen_turn = g.turn
 				turns_seen += 1
+				var id := int(g.line["id"])
+				if id == prev_id:
+					repeats += 1
+				prev_id = id
+				timers[g.turn + 1] = g.reply_total
+				if g.turn == 5:
+					gutters_at_5 = g.gutters
+			if g.phase == Candle.Phase.ASK and g.history.size() < answer_turns:
 				if mode == "best":
 					g.choose(g.line["best"])
+				elif mode == "half":
+					g.choose(g.line["ok"][0])
 				else:
 					for c in g.line["cards"]:
 						if Candle.card_light(g.line, c) == 0.0:
 							g.choose(c)
 							break
 			g.advance(0.5)
-		check(res.size() == 1, "%s: conversation ends with a result" % mode)
-		check(turns_seen == 5, "%s: five turns" % mode)
-		check(res[0]["action_id"] == "candle_talk" and res[0]["need_id"] == "friends", "%s: action and need" % mode)
-		check(res[0]["key"] == "tt", "%s: daily_once key is the regular's id" % mode)
+		check(res.size() == 1 and g.done, "%s: the talk ends with a result (guard %d)" % [mode, guard])
+		if res.is_empty():
+			g.queue_free()
+			continue
+		var r: Dictionary = res[0]
+		var ex: Dictionary = r["extra"]
+		print("  %s: %d turns, level %d, points %d, score %.2f, gutters %d" % [mode, g.history.size(), g.ramp_level, g.record_points(), r["score"], g.gutters])
+		check(r["action_id"] == "candle_talk" and r["need_id"] == "friends", "%s: action and need" % mode)
+		check(r["key"] == "tt", "%s: daily_once key is the regular's id" % mode)
+		check(g.gutters == 3 and not done_before_third and g.end_reason == "lost", "%s: the candle goes out on exactly the 3rd gutter" % mode)
+		check(ex["level"] == g.ramp_level and ex["misses"] == 3 and ex["lives_left"] == 0, "%s: result extra carries level and misses" % mode)
+		check(repeats == 0, "%s: never the same line twice in a row" % mode)
+		check(absf(float(r["score"]) - minf(1.0, Candle.points_of(g.history.slice(0, 5)) / 100.0)) < 1e-6, "%s: score = the first five turns' points / 100" % mode)
+		check(r["points"] == maxi(g.record_points(), roundi(float(r["score"]) * 100.0)), "%s: points = the uncapped record" % mode)
 		if mode == "best":
-			check(res[0]["score"] == 1.0 and res[0]["tier"] == 2, "best cards light the candle fully")
-			check(res[0]["extra"]["lean"] == true and 3 in g.used_lines, "best path takes the story branch and earns the lean bonus")
+			check(turns_seen == 23 and g.history.size() == 23, "best: 20 answered turns + 3 timeouts (%d)" % turns_seen)
+			check(timers.get(5, -1.0) == 0.0 and timers.get(6, -1.0) == 8.0 and timers.get(10, -1.0) == 6.0 and timers.get(14, -1.0) == 4.0 and timers.get(23, -1.0) == 4.0, "best: reply timer 8 s at turn 6 down to 4 s from turn 14 (%s)" % [timers])
+			check(g.ramp_level == 10, "best: level 10 at the cap")
+			check(g.record_points() == 400, "best: 20 best cards = 400 points, far past an old talk")
+			check(r["score"] == 1.0 and r["tier"] == 2 and ex["lean"] == true and 3 in g.used_lines, "best: the first five light the candle fully, story branch, lean bonus")
+			var each_line_back := true
+			for l in g.data["lines"]:
+				if g.used_lines.count(int(l["id"])) < 3:
+					each_line_back = false
+			check(each_line_back, "best: every line comes round again (%s)" % [g.used_lines])
+		elif mode == "half":
+			check(gutters_at_5 == 0, "half: a near card never gutters")
+			check(g.history.size() == 8 and g.history.slice(5) == [0.0, 0.0, 0.0], "half: then three timeouts put the candle out")
+			check(is_equal_approx(r["score"], 0.5) and g.record_points() == 50 and ex["lean"] == false, "half: score 0.5, 50 points, no lean")
 		else:
-			check(res[0]["score"] == 0.0 and 4 in g.used_lines and not (3 in g.used_lines), "off path takes the food branch, scores 0 (still the minimum reward)")
+			check(turns_seen == 3 and g.history == [0.0, 0.0, 0.0], "off: three off cards, out on turn 3")
+			check(r["score"] == 0.0 and g.record_points() == 0 and 4 in g.used_lines and not (3 in g.used_lines), "off path takes the food branch, scores 0 (still the minimum reward)")
+			check(ex["level"] == 1, "off: still level 1")
 		g.queue_free()
 
 
@@ -385,14 +618,19 @@ func test_chat_cast() -> void:
 		var g: Control = fr.game
 		check(g.running and g.phase == Candle.Phase.ASK and str(g.data.get("regular", "")) == id, "%s: the talk starts with their own lines" % id)
 		check(g._name_label.text != "" and not g._name_label.text.begins_with("cast."), "%s: a real name over the bubble (%s)" % [id, g._name_label.text])
+		# Endless since 2026-11-20: the best card for the five scored turns, then no answer until 3 timeouts put the
+		# candle out (turns 6-8).
 		var guard := 0
+		var asked := -1
 		while not g.done and guard < 400:
 			guard += 1
-			if g.phase == Candle.Phase.ASK:
+			if g.phase == Candle.Phase.ASK and g.turn != asked:
+				asked = g.turn
 				check(g._cards_box.get_children().filter(func(c): return not c.is_queued_for_deletion()).size() == 3, "%s: three topic cards to tap (turn %d)" % [id, g.turn + 1])
-				g.choose(g.line["best"])
+				if g.turn < 5:
+					g.choose(g.line["best"])
 			g.advance(0.5)
-		check(g.done and g.turn == 5, "%s: five turns, then it finishes" % id)
+		check(g.done and g.history.size() == 8 and g.end_reason == "lost", "%s: five turns, then three timeouts end it" % id)
 		check(is_instance_valid(fr._card) and closed.is_empty(), "%s: the result card is up, the frame still open" % id)
 		fr._card.done.emit()
 		check(closed.size() == 1 and closed[0]["extra"]["regular"] == id, "%s: DONE closes the frame (control goes back)" % id)
@@ -478,10 +716,9 @@ func test_pinball() -> void:
 			out_of_bounds = true
 	check(exited, "launched ball leaves the lane and reaches the playfield")
 	check(not out_of_bounds, "ball never escapes the cabinet")
-	# Bot: keep both flippers up when the ball is low, relaunch when waiting.
-	var t := 0.0
+	# Bot: keep both flippers up when the ball is low, relaunch when waiting (up to 4 minutes: no clock ends it now).
 	var guard := 0
-	while not g.done and guard < 60000:
+	while not g.done and guard < 60 * 240:
 		guard += 1
 		if g.ball_state == Pinball.Ball.LANE:
 			g.launch(randf_range(0.6, 1.0))
@@ -491,13 +728,91 @@ func test_pinball() -> void:
 		g.advance(1.0 / 60.0)
 		if g.pos.x < -5.0 or g.pos.x > 605.0 or g.pos.y < -5.0:
 			out_of_bounds = true
-	check(res.size() == 1, "bot game finishes (3 balls or 3 min cap), %d frames" % guard)
+	check(g.done == (g.balls_left == 0), "only the last drained ball ends the round (%.0f s, %d balls left)" % [g.play_time, g.balls_left])
+	check(g.points > 0, "bot scored something")
+	# Then the player walks away: the ball launches itself after LANE_AUTO_LAUNCH and drains; the save is once a ball.
+	g.set_flipper(0, false)
+	g.set_flipper(1, false)
+	guard = 0
+	while not g.done and guard < 60 * 600:
+		guard += 1
+		g.advance(1.0 / 60.0)
+		if g.pos.x < -5.0 or g.pos.x > 605.0 or g.pos.y < -5.0:
+			out_of_bounds = true
+	check(res.size() == 1, "the round ends on the third drained ball, %.0f s" % g.play_time)
 	check(not out_of_bounds, "ball stayed inside for a whole game")
 	if res.size() == 1:
-		print("  bot: %d points, score %.2f, %d letters, balls left %d, %.0f s" % [g.points, res[0]["score"], g.lit.count(true), g.balls_left, g.play_time])
+		print("  bot: %d points (record %d), level %d, %d words, %.0f s" % [g.points, g.record_points(), g.ramp_level, g.words, g.play_time])
+		var ex: Dictionary = res[0]["extra"]
 		check(res[0]["action_id"] == "pinball" and res[0]["need_id"] == "nightlife", "action and need")
-		check(g.points > 0, "bot scored something")
+		check(g.end_reason == "lost" and g.balls_left == 0, "end_reason lost with no balls left")
+		check(int(ex.get("level", 0)) == g.ramp_level and int(ex.get("misses", -1)) == 3, "result extra: level %s, misses %s" % [ex.get("level"), ex.get("misses")])
+		check(is_equal_approx(float(ex.get("speed", 0.0)), Pinball.gravity_at(g.ramp_level)), "result extra: speed = gravity")
+		check(is_equal_approx(res[0]["score"], minf(1.0, g.record_points() / 100.0)), "score = min(1, points/100)")
 	g.queue_free()
+	# Ramp numbers: rise a step a level, stop at the cap (docs/design/15-minigame-ramp.md).
+	check(Pinball.record_of(3000) == 100 and Pinball.record_of(9000) == 300 and Pinball.record_of(29) == 0, "record = pinball points / 30, uncapped")
+	var rises := true
+	for lv in range(2, Pinball.LEVEL_CAP + 1):
+		rises = rises and Pinball.gravity_at(lv) > Pinball.gravity_at(lv - 1) and Pinball.ball_save_at(lv) < Pinball.ball_save_at(lv - 1)
+		rises = rises and Pinball.word_bonus_at(lv) > Pinball.word_bonus_at(lv - 1)
+	check(rises, "gravity, ball save and word bonus step every level up to %d" % Pinball.LEVEL_CAP)
+	check(Pinball.LEVEL_CAP == 7 and Pinball.gravity_at(1) == 1500.0 and Pinball.gravity_at(7) == 2100.0, "gravity 1500 -> 2100 at level 7")
+	check(Pinball.ball_save_at(1) == 10.0 and Pinball.ball_save_at(7) == 4.0, "ball save 10 s -> 4 s at level 7")
+	check(Pinball.ball_save_at(1, true) == 15.0 and Pinball.ball_save_at(7, true) == 9.0, "relaxed keeps +5 s at every level")
+	check(Pinball.word_bonus_at(1) == 1500 and Pinball.word_bonus_at(7) == 10500, "word bonus 1500 x level")
+	check(Pinball.gravity_at(12) == 2100.0 and Pinball.ball_save_at(12) == 4.0 and Pinball.word_bonus_at(12) == 10500, "the numbers stop at the cap")
+	# Time levels: +1 every 60 s of play, capped; no clock ends the round (the old cap was 180 s).
+	var g4: Control = spawn(Pinball)
+	g4.start()
+	g4.ball_state = Pinball.Ball.GONE  # test only: no ball on the table, the clock still runs
+	for i in 100:
+		g4.advance(2.0)
+	check(not g4.done and g4.ramp_level == 4, "200 s: level 4, still running past the old 3 minute cap (level %d)" % g4.ramp_level)
+	for i in 150:
+		g4.advance(2.0)
+	check(g4.ramp_level == Pinball.LEVEL_CAP and not g4.done, "500 s: level capped at %d (%d)" % [Pinball.LEVEL_CAP, g4.ramp_level])
+	g4.queue_free()
+	# Scripted perfect player: spells BLACK CABIN 7 times; each word pays 1500 x level, darkens the letters, levels up.
+	var g5: Control = spawn(Pinball)
+	var res5 := []
+	g5.finished.connect(func(r): res5.append(r))
+	g5.start()
+	var words_ok := true
+	for w in 7:
+		var lv_before: int = g5.ramp_level
+		var pts_before: int = g5.points
+		for i in 9:
+			g5.lit[i] = true
+		g5.ball_state = Pinball.Ball.LIVE
+		g5.pos = g5.letter_pos[9]
+		g5.vel = Vector2.ZERO
+		g5.advance(Pinball.SUBSTEP)
+		words_ok = words_ok and g5.words == w + 1 and g5.lit.count(true) == 0
+		words_ok = words_ok and g5.points - pts_before == Pinball.LETTER_POINTS + Pinball.word_bonus_at(lv_before)
+		words_ok = words_ok and g5.ramp_level == mini(lv_before + 1, Pinball.LEVEL_CAP)
+	check(words_ok, "each word: bonus x level, letters dark again, level +1 (level %d, %d points)" % [g5.ramp_level, g5.points])
+	check(g5.ramp_level == Pinball.LEVEL_CAP and g5.record_points() > 100, "7 words: level cap, record %d > 100" % g5.record_points())
+	for k in 3:
+		check(not g5.done, "not over before the third drain (%d)" % k)
+		g5.ball_state = Pinball.Ball.LIVE
+		g5.pos = Vector2(270, 1100)
+		g5.vel = Vector2.ZERO
+		g5.ball_time = 20.0
+		g5.advance(Pinball.SUBSTEP)
+	check(g5.done and res5.size() == 1 and g5.end_reason == "lost", "the third drained ball loses")
+	if res5.size() == 1:
+		check(int(res5[0]["points"]) == g5.record_points() and res5[0]["score"] == 1.0, "result points = the record (%d), score 1.0" % res5[0]["points"])
+		check(int(res5[0]["extra"].get("level", 0)) == Pinball.LEVEL_CAP and int(res5[0]["extra"].get("words", 0)) == 7, "result extra: level and words")
+	g5.queue_free()
+	# A ball left in the lane launches itself.
+	var g6: Control = spawn(Pinball)
+	g6.start()
+	_advance(g6, Pinball.LANE_AUTO_LAUNCH - 0.2)
+	check(g6.ball_state == Pinball.Ball.LANE, "the ball waits in the lane for a while")
+	_advance(g6, 0.4)
+	check(g6.ball_state == Pinball.Ball.LIVE, "then launches itself (%d)" % g6.ball_state)
+	g6.queue_free()
 	# Tilt: nudging too often locks the flippers.
 	var g2: Control = spawn(Pinball)
 	g2.start()
@@ -519,11 +834,24 @@ func test_pinball() -> void:
 	g3.ball_time = 3.0
 	g3.advance(1.0 / 60.0)
 	check(g3.balls_left == Pinball.BALLS and g3.ball_state == Pinball.Ball.LANE, "ball save returns the ball for free")
+	check(g3.ball_save_seconds() == 10.0, "level 1 ball save 10 s")
+	g3.pos = Vector2(270, 1100)
+	g3.ball_time = 3.0
+	g3.ball_state = Pinball.Ball.LIVE
+	g3.advance(1.0 / 60.0)
+	check(g3.balls_left == Pinball.BALLS - 1, "the save works once a ball: a second quick drain costs it")
+	g3.pos = Vector2(270, 1100)
+	g3.ball_time = 3.0
+	g3.ball_state = Pinball.Ball.LIVE
+	g3.advance(1.0 / 60.0)
+	check(g3.balls_left == Pinball.BALLS - 1, "the next ball gets its own save")
 	g3.pos = Vector2(270, 1100)
 	g3.ball_time = 20.0
 	g3.ball_state = Pinball.Ball.LIVE
 	g3.advance(1.0 / 60.0)
-	check(g3.balls_left == Pinball.BALLS - 1, "later drain costs a ball")
+	check(g3.balls_left == Pinball.BALLS - 2 and not g3.done, "later drain costs a ball")
+	g3.relaxed = true
+	check(g3.ball_save_seconds() == 15.0, "relaxed: ball save 15 s at level 1")
 	g3.queue_free()
 
 
@@ -662,7 +990,7 @@ func test_q9_sprites_fx_rivals() -> void:
 	var rs := RivalStore.new()
 	var g: Control = spawn(Rhythm)
 	g.rivals_store = rs
-	g.config = {"song": 1}
+	g.config = {"seed": 1}
 	g.start()
 	check(g.has_art(), "rhythm: all sprites load (import first)")
 	check(not g.rival.is_empty(), "rhythm: tonight's regular to beat is set")
@@ -678,11 +1006,12 @@ func test_q9_sprites_fx_rivals() -> void:
 	check(g.fx().combo >= 1, "rhythm: combo counts")
 	g.advance(2.0)  # a missed note
 	check(g.missed >= 1 and g.fx().combo == 0 and g.fx().trauma == 0.0, "rhythm: a miss breaks the combo, never shakes")
+	check(g.lives_left == Base.STRIKES - g.missed, "rhythm: a missed clap costs a life")
 	g.queue_free()
 	var res := []
 	var g2: Control = spawn(Rhythm)
 	g2.rivals_store = rs
-	g2.config = {"song": 1}
+	g2.config = {"seed": 1}
 	g2.finished.connect(func(r): res.append(r))
 	g2.start()
 	for i in 20000:
@@ -729,16 +1058,16 @@ func test_pinball_pour_rivals() -> void:
 	pb.start()
 	check(not pb.rival.is_empty() and str(pb.rival.get("name", "")) != "" and pb.rival.has("points"), "pinball: a regular to beat in play")
 	check(not pb.rival_passed, "pinball: not past the regular at 0 points")
-	pb.points = 4000
+	pb.points = 6000
 	pb.launch(0.9)
 	pb.advance(1.0 / 60.0)
-	check(pb.live_points() == 100 and pb.rival_passed, "pinball: points above the regular flag the pass")
+	check(pb.live_points() >= 200 and pb.live_points() == pb.record_points() and pb.rival_passed, "pinball: points above the regular flag the pass")
 	pb.finish(pb.current_score())
 	var ex: Dictionary = res[0].get("extra", {}) if res.size() == 1 else {}
 	check(ex.get("rival") is Dictionary and ex["rival"].has("points"), "pinball: result carries the rival")
 	check(ex.get("board") is Dictionary and int(ex["board"].get("rank", 0)) >= 1 and int(ex["board"].get("count", 0)) >= 2, "pinball: result carries the board place")
-	check(res.size() == 1 and int(res[0].get("points", -1)) == 100, "pinball: payout points unchanged")
-	check(int(Rivals.tonight("neon_pinball", store)["best"]) == 100, "pinball: tonight's best saved")
+	check(res.size() == 1 and int(res[0].get("points", -1)) == pb.record_points() and res[0]["score"] == 1.0, "pinball: result points = the uncapped record (%d), score 1.0" % pb.record_points())
+	check(int(Rivals.tonight("neon_pinball", store)["best"]) == pb.record_points(), "pinball: tonight's best saved (record points)")
 	check(Rivals.tonight("neon_pinball", store)["ghost"].is_empty(), "pinball: no ghost kept (a physics run is not replayable)")
 	pb.queue_free()
 	# --- pour
@@ -770,19 +1099,15 @@ func test_pinball_pour_rivals() -> void:
 	c.rivals_store = store
 	root.add_child(c)
 	c.start()
-	_advance(c, 1.6)
-	for i in 3:
-		c.press()
-		_advance(c, 14.0)
-		c.release()
-		_advance(c, 1.0)
+	pour_glass(c, 2.0)  # holds every layer over the rim: three spills, three strikes
 	check(c.done, "pour: the sloppy pour finished")
 	check(int(Rivals.tonight("pour_perfect", store)["best"]) == best, "pour: a worse pour keeps tonight's best")
 	check(Rivals.tonight("pour_perfect", store)["ghost"].get("levels", []) == lv, "pour: a worse pour keeps the ghost")
 	c.queue_free()
 
 
-## A precise pour on pour_perfect with `store` as tonight's record (or only the started game); results land in meta.
+## A precise glass 1 on pour_perfect with `store` as tonight's record (or only the started game), then the pourer
+## walks off and the idle layers spoil until the round is lost; results land in meta.
 func pour_run(store: Object, play: bool) -> Control:
 	var g: Control = Pour.new()
 	g.size = SIZE
@@ -794,13 +1119,34 @@ func pour_run(store: Object, play: bool) -> Control:
 	g.start()
 	if not play:
 		return g
-	_advance(g, 1.6)
-	for i in Pour.TARGETS.size():
-		g.press()
-		var guard := 0
-		while g.level < Pour.TARGETS[i] and guard < 5000:
-			g.advance(1.0 / 240.0)
-			guard += 1
-		g.release()
-		_advance(g, 1.0)
+	pour_glass(g)
+	_advance(g, 40.0)  # three idle layers on glass 2: lost
 	return g
+
+
+## Pours the next layer of `g`: waits for READY, holds until the fill reaches the layer's line + `over` (or the pour
+## ends by a spill), releases. Returns false once the round has ended.
+func pour_layer(g: Control, over := 0.0) -> bool:
+	var guard := 0
+	while g.state != Pour.State.READY and not g.done and guard < 600:
+		g.advance(1.0 / 60.0)
+		guard += 1
+	if g.done:
+		return false
+	g.press()
+	var line: float = g.targets[g.layer]
+	guard = 0
+	while g.state == Pour.State.POURING and g.level < line + over and guard < 40000:
+		g.advance(1.0 / 240.0)
+		guard += 1
+	g.release()
+	return not g.done
+
+
+## Pours the three layers of the glass in front (each released on its line + `over`). Returns false once the round
+## has ended.
+func pour_glass(g: Control, over := 0.0) -> bool:
+	for i in 3:
+		if not pour_layer(g, over):
+			return false
+	return not g.done

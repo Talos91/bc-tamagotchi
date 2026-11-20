@@ -1,17 +1,24 @@
 extends "res://scripts/minigames/minigame_base.gd"
 ## Neon Moth (docs/design/10-minigame-next.md concept D; owner item 35, DECISIONS 2026-11-15). On the lounge game
-## cabinet: a moth flies the length of the lounge to the BLACK CABIN neon. One tap = one flutter (an upward kick),
-## gravity does the rest. Slip through the gaps between the hanging bulb strings and the speaker stacks: GATES gates in
-## a fixed flight, then the sign. A bump singes a wing (1.2 s blink, back to mid-lane); 3 singes end the flight.
-## Original to Black Cabin: a moth, bulbs and amps, the venue palette; nothing taken from any existing game.
-## Score = 0.8 x gates passed / GATES + 0.2 for reaching the sign. config.seed: the gap layout (default: the Bangkok
-## date, so everyone flies the same lounge each night). Feeds action "neon_moth" (Nightlife 10-20, unchanged).
+## cabinet: a moth flies down an endless lounge. One tap = one flutter (an upward kick), gravity does the rest. Slip
+## through the gaps between the hanging bulb strings and the speaker stacks. A bump singes a wing (1.2 s blink, back
+## to mid-lane); the third singe ends the flight (lose()). Original to Black Cabin: a moth, bulbs and amps, the venue
+## palette; nothing taken from any existing game. config.seed: the gap layout (default: the Bangkok date, so everyone
+## flies the same lounge each night). Feeds action "neon_moth" (Nightlife 10-20, unchanged).
+##
+## Endless ramp (docs/design/15-minigame-ramp.md; Daniele 2026-11-20 "no need to end them at black cabin sign but make
+## them become increasingly harder and faster (but humanly possible not impossible)"): no sign, no end but the third
+## singe. Every gate i is a little harder up to gate RAMP_CAP_GATE (30): scroll 200 + 4 i px/s (cap 320), gates
+## 390 - 4 i apart (cap 260), gap 340 - 3 i (cap 230), a gap centre moves at most 200 + 4 i from one gate to the next
+## (cap 280), bobbing gates from gate 7 with a chance 0.45 -> 0.70 at gate 30. Relaxed: every gap +60, scroll at most
+## 280. Points 5 a clean gate (20 gates = 100, the old perfect flight); the record is uncapped, the need gain reads the
+## first 100. Level = 1 + gates cleared / 5, capped at 7 (gate 30). The course is generated ahead in chunks from the
+## night's seed (course(seed, n) gives the same first n gates).
 ##
 ## Quality pass Q4 (docs/design/11-minigame-quality.md; DECISIONS 2026-11-18 "needs to be faster and more complex",
 ## several gates on screen): voxel sprites from game/assets/minigames/neon_moth/ (look B), every §2.3 beat through the
-## juice kit mg_fx, a §3 ramp (faster scroll, closer gates, tighter and taller-stepping gaps, bobbing gaps from gate
-## MOVE_FROM on, the last TIGHT_LAST gates tight) and §4.1 competition through mg_rivals (tonight's regular to beat
-## shown in play, your best run tonight as a ghost moth, the board line on the result card).
+## juice kit mg_fx and §4.1 competition through mg_rivals (tonight's regular to beat shown in play, your best run
+## tonight as a ghost moth, the board line on the result card).
 
 const UI = preload("res://scripts/minigames/mg_ui.gd")
 const S = preload("res://scripts/minigames/strings.gd")
@@ -24,49 +31,62 @@ const FIELD := Vector2(600, 1000)
 const MOTH_X := 170.0
 const MOTH_R := 20.0
 const GRAVITY := 1800.0
-const FLAP_SPEED := 620.0
+const FLAP_SPEED := 620.0             ## one flap lifts ~107 px (620² / 2 / 1800)
 const MAX_FALL := 900.0
-const GATES := 20
 const START_X := 640.0               ## first gate's left edge at the start
 const GATE_W := 90.0
 const GAP_MIN_Y := 280.0             ## gap centre range
 const GAP_MAX_Y := 720.0
-const SINGES := 3
+const SINGES := 3                    ## = STRIKES: 3 singes end the flight (15-minigame-ramp: every loss rule is 3 strikes)
 const BLINK_SECONDS := 1.2
 const INTRO_SECONDS := 1.2
-const SIGN_BONUS := 0.2
-const SIGN_AFTER := 340.0            ## from the last gate's left edge to the sign
 const BKK_OFFSET := 7 * 3600
 
-# §3 ramp (normal): first gates a warm-up, the middle teaches, the last third tests. Starting values, tuned by the bot.
-const SPEED_START := 200.0           ## lounge scroll, field px per second, at the first gate ...
-const SPEED_END := 250.0             ## ... and at the sign
-const SPEED_RELAXED_CAP := 225.0
-const SPACING_START := 390.0         ## gate to gate (left edges): 2-3 gates on screen
-const SPACING_END := 290.0
+# --- Points and level (15-minigame-ramp) ---------------------------------------------------------------------------
+const POINTS_PER_GATE := 5           ## why: 20 clean gates (the old perfect flight) = 100 record points
+const GATES := 20                    ## the old flight's gates = RECORD_FULL points (older callers use it as a bound)
+const LEVEL_GATES := 5               ## why: a level every 5 gates cleared, so the cap level lands on the ramp's cap
+const LEVEL_CAP := 7                 ## why: level 7 = gate 30, where every ramp number stops
+const RAMP_CAP_GATE := 30            ## the gate where speed and bobbing stop rising
+
+# --- The ramp, per gate i (15-minigame-ramp table). Why the cap is playable: one flap lifts ~107 px; at the cap a
+# gate comes every 0.8 s (260 px at 320 px/s) and the gap moves at most 280 px = 3 flaps in 0.8 s; the 230 px gap is
+# 5.7 moths tall.
+const SPEED_START := 200.0           ## lounge scroll, field px per second, at gate 0 ...
+const SPEED_STEP := 4.0              ## ... + 4 a gate ...
+const SPEED_CAP := 320.0             ## ... up to 320 (gate 30)
+const SPEED_RELAXED_CAP := 280.0     ## why: relaxed keeps its slack at the top, 40 px/s slower than the cap
+const SPACING_START := 390.0         ## gate to gate (left edges): 2-3 gates on screen ...
+const SPACING_STEP := 4.0            ## ... 4 px closer a gate ...
+const SPACING_MIN := 260.0           ## ... down to 260 (gate 33): a gate every 0.8 s at the cap speed
 const GAP_START := 340.0             ## gap height at gate 0 ...
-const GAP_END := 262.0               ## ... at the last gate before the tight run
-const GAP_TIGHT := 250.0             ## the last TIGHT_LAST gates
-const TIGHT_LAST := 3
-const GAP_RELAXED_PLUS := 60.0       ## accessibility "relaxed timing": every gap this much taller
+const GAP_STEP := 3.0                ## ... 3 px smaller a gate ...
+const GAP_MIN := 230.0               ## ... down to 230 (gate 37): 5.7 moths tall
+const GAP_RELAXED_PLUS := 60.0       ## accessibility "relaxed timing": every gap this much taller, at every level
 const STEP_START := 200.0            ## most a gap centre moves from one gate to the next ...
-const STEP_END := 320.0
-const MOVE_FROM := 7                 ## gates from here on may bob up and down
-const MOVE_CHANCE := 0.45
+const STEP_RISE := 4.0               ## ... + 4 a gate ...
+const STEP_CAP := 280.0              ## ... up to 280 (gate 20): 3 flaps in 0.8 s
+const MOVE_FROM := 7                 ## gates from here on may bob up and down ...
+const MOVE_CHANCE_START := 0.45      ## ... with this chance at gate MOVE_FROM ...
+const MOVE_CHANCE_CAP := 0.70        ## ... rising to this at gate RAMP_CAP_GATE
 const MOVE_AMP := 45.0
 const MOVE_PERIOD := 2.4
 const COMBO_EVERY := 3               ## clean gates in a row that make a combo beat
-const GHOST_STEP := 24.0             ## ghost: the moth's height every this many px of flight
+const GHOST_STEP := 24.0             ## ghost: the moth's height every this many px of flight ...
+const GHOST_MAX := 4000              ## ... at most this many samples (96 000 px, ~5 min at the cap): the save stays small
+const CHUNK := 20                    ## gates generated at a time
+const AHEAD_PX := 2400.0             ## keep gates generated this far right of the field's left edge (wide landscape)
+const BEHIND_PX := -1200.0           ## gates whose right edge is left of this are out of every view: skipped
+const BACKDROP_PAN := 8000.0         ## px of flight for one sweep of the backdrop pan (it swings back and forth)
 
-# Kept for older callers (tests, the lab): the ramp's ends.
+# Kept for older callers (tests, captures, the lab): the ramp's start and cap.
 const GAP := GAP_START
-const GAP_MAX_STEP := STEP_END
+const GAP_MAX_STEP := STEP_CAP
 
 # Sprite scales (field px per sprite px): the batten and the cabinets are GATE_W wide.
 const SPR_GATE := GATE_W / 124.0
 const SPR_CAB := GATE_W / 112.0
 const SPR_MOTH := 0.8
-const SPR_SIGN := 0.7
 const SPR_WING := 1.2
 
 enum State { INTRO, FLYING, DONE }
@@ -75,15 +95,15 @@ var state := State.INTRO
 var y := FIELD.y * 0.5
 var vy := 0.0
 var scroll := 0.0
-var gap_y: Array[float] = []         ## gap centres at rest
+var gap_y: Array[float] = []         ## gap centres at rest (generated ahead, chunk by chunk)
 var gate_off: Array[float] = []      ## gate left edges along the flight (gate_x = START_X + gate_off - scroll)
 var move_phase: Array[float] = []    ## < 0: still gate; else the bob's phase
 var passed: Array[bool] = []
 var hit: Array[bool] = []
-var gates_passed := 0
+var gates_passed := 0                ## clean gates (5 points each)
+var gates_cleared := 0               ## gates behind the moth, clean or singed (the level reads these)
 var clean_run := 0
 var singes_left := SINGES
-var reached_sign := false
 var blink := 0.0
 var flap_t := 9.0
 var fly_t := 0.0
@@ -96,9 +116,12 @@ var rivals_store: Object = null      ## tests: where mg_rivals keeps tonight's r
 var _record: Dictionary = {}
 var _state_t := 0.0
 var _anim_t := 0.0
-var _sign_flare := 0.0
 var _art: Dictionary = {}            ## sprite name -> {tex, glow, fw, fh, frames, anchor}
 var _glow_layer: Control
+var _rng := RandomNumberGenerator.new()  ## the course generator (seeded with seed_used)
+var _gen_prev := FIELD.y * 0.5       ## the last generated gap centre
+var _gen_at := 0.0                   ## the next gate's offset along the flight
+var _base := 0                       ## first gate still in any view (earlier ones are skipped)
 
 
 func _init() -> void:
@@ -120,25 +143,25 @@ func _on_start() -> void:
 	vy = 0.0
 	scroll = 0.0
 	gates_passed = 0
+	gates_cleared = 0
 	clean_run = 0
 	singes_left = SINGES
-	reached_sign = false
 	blink = 0.0
 	flap_t = 9.0
 	fly_t = 0.0
 	_state_t = 0.0
-	_sign_flare = 0.0
 	_record = {}
 	seed_used = int(config.get("seed", night_seed()))
-	var c := course(seed_used)
-	gap_y = c["centre"]
-	gate_off = c["x"]
-	move_phase = c["phase"]
+	gap_y.clear()
+	gate_off.clear()
+	move_phase.clear()
 	passed.clear()
 	hit.clear()
-	for i in GATES:
-		passed.append(false)
-		hit.append(false)
+	_rng.seed = seed_used
+	_gen_prev = FIELD.y * 0.5
+	_gen_at = 0.0
+	_base = 0
+	_ensure_ahead()
 	var t := Rivals.tonight(game_id, rivals_store)
 	rival = t["rival"]
 	rival_passed = false
@@ -159,19 +182,62 @@ static func night_seed(unix := -1.0) -> int:
 	return int(floor((t + BKK_OFFSET) / 86400.0))
 
 
-## How far into the flight gate i sits, 0 (first) .. 1 (last).
-static func ramp(i: int) -> float:
-	return clampf(float(i) / float(GATES - 1), 0.0, 1.0)
+## Scroll speed at gate i (px/s): 200 + 4 i, capped at 320; relaxed at most 280.
+static func speed_at(i: int, is_relaxed := false) -> float:
+	var v := minf(SPEED_START + SPEED_STEP * float(maxi(i, 0)), SPEED_CAP)
+	return minf(v, SPEED_RELAXED_CAP) if is_relaxed else v
 
 
-## Gap height of gate i (normal); relaxed adds GAP_RELAXED_PLUS.
+## Distance from gate i's left edge to gate i+1's: 390 - 4 i, down to 260.
+static func spacing_at(i: int) -> float:
+	return maxf(SPACING_MIN, SPACING_START - SPACING_STEP * float(maxi(i, 0)))
+
+
+## Gap height of gate i (normal): 340 - 3 i, down to 230; relaxed adds GAP_RELAXED_PLUS.
 static func gap_at(i: int, is_relaxed := false) -> float:
-	var g := GAP_TIGHT if i >= GATES - TIGHT_LAST else lerpf(GAP_START, GAP_END, clampf(float(i) / float(GATES - TIGHT_LAST - 1), 0.0, 1.0))
+	var g := maxf(GAP_MIN, GAP_START - GAP_STEP * float(maxi(i, 0)))
 	return g + (GAP_RELAXED_PLUS if is_relaxed else 0.0)
 
 
-## The whole flight for a seed: gap centres, gate positions, which gates bob. Same seed, same lounge.
-static func course(seed_value: int) -> Dictionary:
+## Most a gap centre (at rest) moves from gate i-1 to gate i: 200 + 4 i, capped at 280.
+static func step_at(i: int) -> float:
+	return minf(STEP_START + STEP_RISE * float(maxi(i, 0)), STEP_CAP)
+
+
+## Chance that gate i bobs: none before MOVE_FROM, then 0.45 rising to 0.70 at gate RAMP_CAP_GATE.
+static func move_chance_at(i: int) -> float:
+	if i < MOVE_FROM:
+		return 0.0
+	var k := clampf(float(i - MOVE_FROM) / float(RAMP_CAP_GATE - MOVE_FROM), 0.0, 1.0)
+	return lerpf(MOVE_CHANCE_START, MOVE_CHANCE_CAP, k)
+
+
+## The ramp level after `cleared` gates: 1 + cleared / 5, capped at LEVEL_CAP.
+static func level_for(cleared: int) -> int:
+	return mini(LEVEL_CAP, 1 + maxi(cleared, 0) / LEVEL_GATES)
+
+
+## Record points for `gates` clean gates (uncapped).
+static func points_at(gates: int) -> int:
+	return POINTS_PER_GATE * maxi(gates, 0)
+
+
+## One gate of the flight from the generator: its gap centre at rest (x) and bob phase (y, < 0 = still). The draws
+## happen in a fixed order, so a seed always gives the same lounge however it is chunked.
+static func _gen_gate(rng: RandomNumberGenerator, i: int, prev: float) -> Vector2:
+	var moving := i >= MOVE_FROM and rng.randf() < move_chance_at(i)
+	var amp := MOVE_AMP if moving else 0.0
+	var step := step_at(i) - amp
+	var lo := maxf(GAP_MIN_Y + amp, prev - step)
+	var hi := minf(GAP_MAX_Y - amp, prev + step)
+	var c := clampf(rng.randf_range(GAP_MIN_Y, GAP_MAX_Y), lo, hi)
+	var ph := rng.randf_range(0.0, TAU) if moving else -1.0
+	return Vector2(c, ph)
+
+
+## The first `count` gates for a seed: gap centres, gate positions, which gates bob. Same seed, same lounge; the
+## game generates the same gates chunk by chunk as it flies.
+static func course(seed_value: int, count := GATES) -> Dictionary:
 	var rng := RandomNumberGenerator.new()
 	rng.seed = seed_value
 	var centre: Array[float] = []
@@ -179,33 +245,51 @@ static func course(seed_value: int) -> Dictionary:
 	var phase: Array[float] = []
 	var prev := FIELD.y * 0.5
 	var at := 0.0
-	for i in GATES:
-		var k := ramp(i)
-		var moving := i >= MOVE_FROM and rng.randf() < MOVE_CHANCE
-		var amp := MOVE_AMP if moving else 0.0
-		var step := lerpf(STEP_START, STEP_END, k) - amp
-		var lo := maxf(GAP_MIN_Y + amp, prev - step)
-		var hi := minf(GAP_MAX_Y - amp, prev + step)
-		var c := clampf(rng.randf_range(GAP_MIN_Y, GAP_MAX_Y), lo, hi)
-		centre.append(c)
-		phase.append(rng.randf_range(0.0, TAU) if moving else -1.0)
+	for i in count:
+		var g := _gen_gate(rng, i, prev)
+		centre.append(g.x)
+		phase.append(g.y)
 		x.append(at)
-		at += lerpf(SPACING_START, SPACING_END, k)
-		prev = c
+		at += spacing_at(i)
+		prev = g.x
 	return {"centre": centre, "x": x, "phase": phase}
 
 
-## Gap centres at rest (older callers and tests).
-static func layout(seed_value: int) -> Array[float]:
-	return course(seed_value)["centre"]
+## Gap centres at rest of the first `count` gates (older callers and tests).
+static func layout(seed_value: int, count := GATES) -> Array[float]:
+	return course(seed_value, count)["centre"]
 
 
-static func score_for(gates: int, sign: bool) -> float:
-	return clampf((1.0 - SIGN_BONUS) * float(gates) / GATES + (SIGN_BONUS if sign else 0.0), 0.0, 1.0)
+## Appends `n` gates to this flight (the same gates course(seed_used) gives).
+func _grow(n: int) -> void:
+	for _k in n:
+		var i := gap_y.size()
+		var g := _gen_gate(_rng, i, _gen_prev)
+		gap_y.append(g.x)
+		move_phase.append(g.y)
+		gate_off.append(_gen_at)
+		passed.append(false)
+		hit.append(false)
+		_gen_at += spacing_at(i)
+		_gen_prev = g.x
+
+
+## Keeps the course generated AHEAD_PX past the field's left edge, a chunk at a time.
+func _ensure_ahead() -> void:
+	while gap_y.is_empty() or gate_x(gap_y.size() - 1) < AHEAD_PX:
+		_grow(CHUNK)
 
 
 func current_score() -> float:
-	return score_for(gates_passed, reached_sign)
+	return score_of(record_points())
+
+
+func record_points() -> int:
+	return points_at(gates_passed)
+
+
+func live_points() -> int:
+	return record_points()
 
 
 ## Gap height of gate i for this flight (relaxed included).
@@ -215,7 +299,7 @@ func gap_size(i := 0) -> float:
 
 ## Where gate i's gap centre is right now (bobbing gates move with the flight clock).
 func gap_center(i: int) -> float:
-	if i >= GATES:
+	if i < 0 or i >= gap_y.size():
 		return FIELD.y * 0.5
 	if move_phase[i] < 0.0:
 		return gap_y[i]
@@ -223,17 +307,12 @@ func gap_center(i: int) -> float:
 
 
 func is_moving(i: int) -> bool:
-	return i < GATES and move_phase[i] >= 0.0
+	return i >= 0 and i < move_phase.size() and move_phase[i] >= 0.0
 
 
-## Scroll speed now: SPEED_START -> SPEED_END along the flight; relaxed is capped.
+## Scroll speed now: the speed of the next gate's place on the ramp (relaxed capped).
 func speed() -> float:
-	var v := lerpf(SPEED_START, SPEED_END, clampf(scroll / maxf(1.0, course_length()), 0.0, 1.0))
-	return minf(v, SPEED_RELAXED_CAP) if relaxed else v
-
-
-func course_length() -> float:
-	return START_X + gate_off[GATES - 1] + SIGN_AFTER - MOTH_X
+	return speed_at(next_gate(), relaxed)
 
 
 ## Left edge of gate i on screen (field x) right now.
@@ -241,30 +320,24 @@ func gate_x(i: int) -> float:
 	return START_X + gate_off[i] - scroll
 
 
-func sign_x() -> float:
-	return START_X + gate_off[GATES - 1] + SIGN_AFTER - scroll
-
-
-## The first gate the moth has not cleared yet (GATES when all are behind it).
+## The first gate the moth has not cleared yet.
 func next_gate() -> int:
-	for i in GATES:
+	for i in range(_base, gap_y.size()):
 		if gate_x(i) + GATE_W >= MOTH_X - MOTH_R:
 			return i
-	return GATES
+	return gap_y.size()
 
 
 ## Gates on screen right now (the "several on screen" check).
 func gates_on_screen() -> int:
 	var n := 0
-	for i in GATES:
+	for i in range(_base, gap_y.size()):
 		var gx := gate_x(i)
-		if gx < FIELD.x and gx + GATE_W > 0.0:
+		if gx >= FIELD.x:
+			break
+		if gx + GATE_W > 0.0:
 			n += 1
 	return n
-
-
-func live_points() -> int:
-	return points_for(current_score())
 
 
 # --- Play ------------------------------------------------------------------------------------------
@@ -287,7 +360,6 @@ func advance(dt: float) -> void:
 	_state_t += dt
 	flap_t += dt
 	_anim_t += dt
-	_sign_flare = maxf(0.0, _sign_flare - dt)
 	match state:
 		State.INTRO:
 			y = FIELD.y * 0.5 + sin(_state_t * 4.0) * 12.0  # hovering, waiting for the first tap
@@ -307,9 +379,12 @@ func _fly(dt: float) -> void:
 	vy = minf(vy + GRAVITY * dt, MAX_FALL)
 	y += vy * dt
 	blink = maxf(0.0, blink - dt)
-	while float(ghost_ys.size()) * GHOST_STEP <= scroll:
+	while ghost_ys.size() < GHOST_MAX and float(ghost_ys.size()) * GHOST_STEP <= scroll:
 		ghost_ys.append(roundi(y))
-	for i in GATES:
+	_ensure_ahead()
+	while _base < gap_y.size() - 1 and passed[_base] and gate_x(_base) + GATE_W < BEHIND_PX:
+		_base += 1
+	for i in range(_base, gap_y.size()):
 		var gx := gate_x(i)
 		if gx > MOTH_X + MOTH_R + 4.0:
 			break  # gates are in order: nothing further can be passed or touched yet
@@ -317,11 +392,13 @@ func _fly(dt: float) -> void:
 		var c := gap_center(i)
 		if not passed[i] and gx + GATE_W < MOTH_X - MOTH_R:
 			passed[i] = true
+			gates_cleared += 1
 			if not hit[i]:
 				gates_passed += 1
-				_update_status()
 				_juice_gate(i)
-		if blink <= 0.0 and not hit[i] and MOTH_X + MOTH_R > gx and MOTH_X - MOTH_R < gx + GATE_W:
+			level_up(level_for(gates_cleared))
+			_update_status()
+		if blink <= 0.0 and not hit[i] and not passed[i] and MOTH_X + MOTH_R > gx and MOTH_X - MOTH_R < gx + GATE_W:
 			if y - MOTH_R < c - g * 0.5 or y + MOTH_R > c + g * 0.5:
 				hit[i] = true
 				_singe()
@@ -332,17 +409,13 @@ func _fly(dt: float) -> void:
 		if state == State.DONE:
 			return
 	y = clampf(y, MOTH_R, FIELD.y - MOTH_R)
-	if sign_x() <= MOTH_X + MOTH_R:
-		reached_sign = true
-		_juice_sign()
-		_end()
 
 
 func _singe() -> void:
 	singes_left -= 1
 	clean_run = 0
 	haptic("fail")
-	# §2.3 singe: shake, ember burst, red edge, the wing icon breaks
+	# §2.3 singe: shake, ember burst, red edge, the wing icon breaks; the strike pop says what is left
 	var f := fx()
 	f.shake(Fx.TRAUMA_LOSS if singes_left <= 0 else Fx.TRAUMA_BUMP)
 	f.fail_edge()
@@ -356,16 +429,18 @@ func _singe() -> void:
 	if singes_left <= 0:
 		_end()
 		return
+	var msg := S.t("mg.ramp.last") if singes_left == 1 else S.t("mg.ramp.strike", {"lives": singes_left})
+	f.pop(msg, _xf() * Vector2(FIELD.x * 0.5, 240.0), UI.NEON, 44)
 	blink = BLINK_SECONDS
 	y = FIELD.y * 0.5
 	vy = 0.0
 
 
-## §2.3 gate passed: "+1", a gold flash in the gap, sparks, a tick; every COMBO_EVERY clean gates a combo beat.
+## §2.3 gate passed: "+5", a gold flash in the gap, sparks, a tick; every COMBO_EVERY clean gates a combo beat.
 func _juice_gate(i: int) -> void:
 	var f := fx()
 	var at := _xf() * Vector2(gate_x(i) + GATE_W * 0.5, gap_center(i))
-	f.pop("+1", at + Vector2(0, -20))
+	f.pop("+%d" % POINTS_PER_GATE, at + Vector2(0, -20))
 	f.flare(at, 90.0)
 	f.flash("gate%d" % i)
 	f.burst("spark", at, 8)
@@ -383,21 +458,11 @@ func _juice_gate(i: int) -> void:
 		f.pop(S.t("mg.rivals.passed", {"regular": str(rival.get("name", ""))}), _xf() * Vector2(FIELD.x * 0.5, 190.0), UI.NEON, 44)
 
 
-## §2.3 sign reached: the neon flares, confetti.
-func _juice_sign() -> void:
-	var f := fx()
-	var c := _xf() * sign_center()
-	_sign_flare = 1.0
-	f.flare(c, 320.0, UI.NEON)
-	f.burst("confetti", c)
-	f.burst("confetti", _xf() * Vector2(MOTH_X, y))
-	haptic("strong")
-
-
+## The third singe: the flight is lost (end_reason "lost").
 func _end() -> void:
 	state = State.DONE
 	queue_redraw()
-	finish(current_score())
+	lose()
 
 
 ## The run that just ended, as tonight's ghost (only kept if it is your best tonight).
@@ -407,12 +472,13 @@ func ghost_data() -> Dictionary:
 
 func _result_extra() -> Dictionary:
 	if _record.is_empty():
-		_record = Rivals.record(game_id, live_points(), ghost_data(), rivals_store)
-	return {"gates": gates_passed, "sign": reached_sign, "seed": seed_used, "rival": rival, "board": _record["board_line"]}
+		_record = Rivals.record(game_id, record_points(), ghost_data(), rivals_store)
+	return {"gates": gates_passed, "seed": seed_used, "level": ramp_level, "speed": speed(), "misses": SINGES - maxi(0, singes_left),
+		"rival": rival, "board": _record["board_line"]}
 
 
 func _update_status() -> void:
-	set_status(S.t("mg.neon_moth.status", {"gates": gates_passed, "total": GATES, "wings": singes_left}))
+	set_status(S.t("mg.ramp.status", {"level": ramp_level, "points": record_points(), "lives": maxi(0, singes_left)}))
 
 
 func _gui_input(event: InputEvent) -> void:
@@ -460,7 +526,7 @@ func _load_art() -> void:
 
 ## Sprites the game draws with (the tests check them; the flat drawing is only a fallback when art is missing).
 func has_art() -> bool:
-	for n in ["moth", "moth_singe", "wing_icon", "bulb_drop", "cord", "batten", "speaker_cab", "neon_sign", "backdrop"]:
+	for n in ["moth", "moth_singe", "wing_icon", "bulb_drop", "cord", "batten", "speaker_cab", "backdrop"]:
 		if not _art.has(n):
 			return false
 	return true
@@ -507,10 +573,6 @@ func wing_icon_pos(k: int) -> Vector2:
 	return Vector2(40 + k * 50, 44)
 
 
-func sign_center() -> Vector2:
-	return Vector2(sign_x() + 150.0, FIELD.y * 0.5)
-
-
 ## Field x range on screen: the whole play area, so landscape shows the room past the 600-wide field.
 func _view_x() -> Vector2:
 	var xf := _xf()
@@ -520,8 +582,9 @@ func _view_x() -> Vector2:
 	return Vector2(-xf.origin.x / k, (size.x - xf.origin.x) / k)
 
 
+## Where the backdrop pan is, 0..1: it swings slowly back and forth over BACKDROP_PAN px of flight (endless lounge).
 func _flight_progress() -> float:
-	return clampf(scroll / maxf(1.0, course_length()), 0.0, 1.0)
+	return pingpong(scroll / BACKDROP_PAN, 1.0)
 
 
 func _draw() -> void:
@@ -541,20 +604,13 @@ func _draw() -> void:
 	var xf := _xf()
 	var vx := _view_x()
 	draw_set_transform_matrix(xf)
-	for i in GATES:
+	for i in range(_base, gap_y.size()):
 		var gx := gate_x(i)
-		if gx > vx.y + 20.0 or gx + GATE_W < vx.x - 20.0:
+		if gx > vx.y + 20.0:
+			break  # gates are in order
+		if gx + GATE_W < vx.x - 20.0:
 			continue
 		_draw_gate(i, gx)
-	# the BLACK CABIN neon at the end of the room
-	if sign_x() < vx.y + 40.0:
-		if _art.has("neon_sign"):
-			var sc := sign_center()
-			_blit(self, "neon_sign", 0, Vector2(sc.x, sc.y + 95.0), SPR_SIGN)
-		else:
-			var sx := sign_x()
-			draw_rect(Rect2(sx, 380, 260, 120), UI.NEON, false, 6.0)
-			UI.draw_text(self, "BLACK CABIN", Vector2(sx + 130, 450), 40, UI.NEON)
 	_draw_ghost()
 	_draw_moth(Vector2(MOTH_X, y))
 	_draw_hud()
@@ -594,28 +650,24 @@ func _draw_gate(i: int, gx: float) -> void:
 		k += 1
 
 
-## Additive halos on their own layer (Fx.glow_material): lit bulbs and the neon sign.
+## Additive halos on their own layer (Fx.glow_material): the lit bulbs.
 func _draw_glows() -> void:
 	if not has_art() or gap_y.is_empty():
 		return
 	_glow_layer.draw_set_transform_matrix(_xf())
 	var pulse := 0.75 + 0.25 * sin(_anim_t * 3.0)
 	var vx := _view_x()
-	for i in GATES:
+	for i in range(_base, gap_y.size()):
 		var gx := gate_x(i)
-		if hit[i] or gx > vx.y + 20.0 or gx + GATE_W < vx.x - 20.0:
+		if gx > vx.y + 20.0:
+			break
+		if hit[i] or gx + GATE_W < vx.x - 20.0:
 			continue
 		var top := gap_center(i) - gap_size(i) * 0.5
 		var drop: Dictionary = _art["bulb_drop"]
 		var drop_top: float = top - (drop["fh"] - drop["anchor"].y) * SPR_GATE
 		for dx in [-21.0, 21.0]:
 			_blit(_glow_layer, "bulb_drop", 0, Vector2(gx + GATE_W * 0.5 + dx, drop_top), SPR_GATE, Color(1, 1, 1, 0.8 * pulse), true)
-	if sign_x() < vx.y + 40.0:
-		var sc := sign_center()
-		var a := clampf(0.7 + 0.2 * sin(_anim_t * 5.0) + _sign_flare, 0.0, 1.6)
-		_blit(_glow_layer, "neon_sign", 0, Vector2(sc.x, sc.y + 95.0), SPR_SIGN, Color(1, 1, 1, minf(1.0, a)), true)
-		if a > 1.0:
-			_blit(_glow_layer, "neon_sign", 0, Vector2(sc.x, sc.y + 95.0), SPR_SIGN, Color(1, 1, 1, a - 1.0), true)
 	_glow_layer.draw_set_transform_matrix(Transform2D.IDENTITY)
 
 

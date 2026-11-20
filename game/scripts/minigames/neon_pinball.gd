@@ -2,8 +2,14 @@ extends "res://scripts/minigames/minigame_base.gd"
 ## Neon Pinball (GDD section 9 #10; DECISIONS: runs on the lounge arcade cabinet's screen). A simplified
 ## pinball with its own small physics. Controls: hold the left / right half of the screen for that
 ## flipper, swipe up on the right third to launch (a tap also launches), swipe sideways to nudge the ball
-## (tilt: nudge too often and the flippers go dead for a moment). 3 balls, 10 s ball save, 3 minute cap.
-## Light all ten letters of BLACK CABIN for a bonus. Feeds action "pinball" (Nightlife +10-20).
+## (tilt: nudge too often and the flippers go dead for a moment). Light all ten letters of BLACK CABIN for a bonus.
+## Feeds action "pinball" (Nightlife +10-20).
+## Endless ramp (docs/design/15-minigame-ramp.md; Daniele 2026-11-20): no time cap. 3 balls; the last ball drained =
+## lose(). The level rises by 1 each time BLACK CABIN is spelled (the letters then go dark to be spelled again) and
+## every 60 s of play, up to LEVEL_CAP: gravity +100 a step (cap 2100), ball save -1 s a step (cap 4 s; relaxed +5 s),
+## word bonus 1500 x level. The ball save works once per ball, and a ball left in the lane launches itself after
+## LANE_AUTO_LAUNCH s, so an idle player still loses. Record points = pinball points / 30 (3000 = 100), uncapped; the
+## cabinet screen keeps the raw pinball points.
 
 const UI = preload("res://scripts/minigames/mg_ui.gd")
 const S = preload("res://scripts/minigames/strings.gd")
@@ -12,20 +18,27 @@ const Rivals = preload("res://scripts/minigames/mg_rivals.gd")
 # Field coordinates: 600 x 1000, y down. Playfield x 0..540, launch lane x 540..600.
 const FIELD := Vector2(600, 1000)
 const BALL_R := 13.0
-const GRAVITY := 1500.0
+const GRAVITY := 1500.0             ## level 1 gravity (today's table)
+const RAMP_GRAVITY_STEP := 100.0    ## why: +100 a level = a steeper table, still slower than a real one at the cap
+const GRAVITY_CAP := 2100.0         ## why: +40 % at the top level; the flippers swing in 0.05 s, so still playable
+const LEVEL_CAP := 7                ## why: today's numbers + 6 steps (gravity 2100, ball save 4 s)
+const RAMP_LEVEL_SECONDS := 60.0    ## why: a long ball also climbs, not only spelling the word
 const MAX_SPEED := 2300.0
 const SUBSTEP := 1.0 / 480.0
 const BALLS := 3
-const BALL_SAVE_SECONDS := 10.0
-const TIME_CAP := 180.0
+const BALL_SAVE_SECONDS := 10.0     ## level 1 ball save
+const RAMP_SAVE_STEP := 1.0         ## why: -1 s a level, the table gets less forgiving
+const BALL_SAVE_MIN := 4.0          ## why: 4 s still covers a straight drain off the launch
+const LANE_AUTO_LAUNCH := 8.0       ## why: without the time cap an idle player must still reach the loss rule
 const LAUNCH_SPEED_MIN := 1750.0
 const LAUNCH_SPEED_MAX := 2300.0
 const LANE_X := 570.0
 const LANE_REST_Y := 940.0
-const FULL_POINTS := 3000.0  # points that map to score 1.0
+const FULL_POINTS := 3000.0  # pinball points that map to score 1.0 (= 100 record points)
+const RECORD_DIVISOR := 30.0  ## why: record points = pinball points / 30, so 3000 = 100 as before; uncapped
 const BUMPER_POINTS := 100
 const LETTER_POINTS := 250
-const WORD_BONUS := 1500
+const WORD_BONUS := 1500  # x the level the word is spelled at
 const LETTERS := "BLACKCABIN"
 const NUDGE_SPEED := 260.0
 const NUDGE_TILT := 0.4
@@ -50,8 +63,8 @@ const LETTER_ANCHOR := Vector2(44.0, 49.0)
 const TRAIL_LEN := 9
 const TRAIL_MIN_SPEED := 500.0
 const BUMPER_HIT_STOP := 0.04
-## Relaxed timing (11-minigame-quality section 3): ball save 15 s, tilt limit +1.
-const RELAXED_BALL_SAVE := 15.0
+## Relaxed timing (11-minigame-quality section 3): ball save +5 s at every level, tilt limit +1.
+const RELAXED_SAVE_EXTRA := 5.0
 const RELAXED_TILT_EXTRA := 1.0
 
 enum Ball { LANE, LIVE, GONE }
@@ -71,7 +84,11 @@ var tilt_lock := 0.0
 var flip_held := [false, false]
 var flip_angle := [FLIPPER_REST, FLIPPER_REST]
 var bumper_flash: Array[float] = [0.0, 0.0, 0.0]
-var word_done := false
+var word_done := false  # BLACK CABIN spelled at least once this round
+var words := 0  # times BLACK CABIN was spelled this round
+var _level_t := 0.0  # play seconds towards the next time level
+var _lane_t := 0.0  # seconds the ball has waited in the lane
+var _save_used := false  # the ball save works once per ball
 var toast := ""
 var _toast_t := 0.0
 var _press_pos := Vector2.ZERO
@@ -146,12 +163,45 @@ static func score_from(pts: int) -> float:
 	return clampf(float(pts) / FULL_POINTS, 0.0, 1.0)
 
 
+## Record points (best, board, rivals): pinball points / 30, uncapped.
+static func record_of(pts: int) -> int:
+	return floori(float(pts) / RECORD_DIVISOR)
+
+
+func record_points() -> int:
+	return record_of(points)
+
+
 func current_score() -> float:
-	return score_from(points)
+	return score_of(record_points())
 
 
 func live_points() -> int:
-	return points_for(current_score())
+	return record_points()
+
+
+# --- Ramp (static: the tests pin these) ---------------------------------------------------------------
+
+static func gravity_at(lv: int) -> float:
+	return minf(GRAVITY + RAMP_GRAVITY_STEP * float(clampi(lv, 1, LEVEL_CAP) - 1), GRAVITY_CAP)
+
+
+static func ball_save_at(lv: int, relaxed_on := false) -> float:
+	var s := maxf(BALL_SAVE_MIN, BALL_SAVE_SECONDS - RAMP_SAVE_STEP * float(clampi(lv, 1, LEVEL_CAP) - 1))
+	return s + (RELAXED_SAVE_EXTRA if relaxed_on else 0.0)
+
+
+static func word_bonus_at(lv: int) -> int:
+	return WORD_BONUS * clampi(lv, 1, LEVEL_CAP)
+
+
+func _raise_level() -> void:
+	if ramp_level < LEVEL_CAP:
+		level_up(ramp_level + 1)
+
+
+func _on_level(_n: int) -> void:
+	_update_status()
 
 
 ## §4.1: passing tonight's regular in play.
@@ -170,6 +220,10 @@ func _on_start() -> void:
 	tilt = 0.0
 	tilt_lock = 0.0
 	word_done = false
+	words = 0
+	_level_t = 0.0
+	_lane_t = 0.0
+	_save_used = false
 	for i in lit.size():
 		lit[i] = false
 	flip_angle = [FLIPPER_REST, FLIPPER_REST]
@@ -186,12 +240,13 @@ func _serve() -> void:
 	pos = Vector2(LANE_X, LANE_REST_Y)
 	vel = Vector2.ZERO
 	ball_time = 0.0
+	_lane_t = 0.0
 	_trail.clear()
 
 
 ## Relaxed timing widens the ball save and the tilt limit; it never changes the payout.
 func ball_save_seconds() -> float:
-	return RELAXED_BALL_SAVE if relaxed else BALL_SAVE_SECONDS
+	return ball_save_at(ramp_level, relaxed)
 
 
 func tilt_limit() -> float:
@@ -236,6 +291,14 @@ func _say(text: String) -> void:
 
 func advance(dt: float) -> void:
 	play_time += dt
+	_level_t += dt
+	while _level_t >= RAMP_LEVEL_SECONDS:
+		_level_t -= RAMP_LEVEL_SECONDS
+		_raise_level()
+	if ball_state == Ball.LANE:
+		_lane_t += dt
+		if _lane_t >= LANE_AUTO_LAUNCH:
+			launch(0.85)
 	_toast_t = maxf(0.0, _toast_t - dt)
 	tilt = maxf(0.0, tilt - TILT_DECAY * dt)
 	tilt_lock = maxf(0.0, tilt_lock - dt)
@@ -248,9 +311,6 @@ func advance(dt: float) -> void:
 		if done:
 			return
 	_check_rival()
-	if play_time >= TIME_CAP:
-		finish(score_from(points))
-		return
 	if ball_state == Ball.LIVE and vel.length() > TRAIL_MIN_SPEED:
 		_trail.append(pos)
 		if _trail.size() > TRAIL_LEN:
@@ -277,7 +337,7 @@ func _step(h: float) -> void:
 	if ball_state != Ball.LIVE:
 		return
 	ball_time += h
-	vel.y += GRAVITY * h
+	vel.y += gravity_at(ramp_level) * h
 	if vel.length() > MAX_SPEED:
 		vel = vel.normalized() * MAX_SPEED
 	pos += vel * h
@@ -306,14 +366,25 @@ func _step(h: float) -> void:
 			lit[i] = true
 			points += LETTER_POINTS
 			_letter_beat(i)
-			if not word_done and not lit.has(false):
-				word_done = true
-				points += WORD_BONUS
-				_say(S.t("mg.neon_pinball.word"))
-				_word_beat()
+			if not lit.has(false):
+				_word_complete()
 			_update_status()
 	if pos.y > FIELD.y + 40.0 and pos.x < 540.0:
 		_drain()
+	elif pos.x > 540.0 and pos.y > LANE_REST_Y - 30.0 and vel.length() < 60.0:
+		_serve()  # a weak launch or a ball falling back into the lane: back to the plunger, no ball lost
+
+
+## BLACK CABIN spelled: the bonus at this level, the letters go dark to be spelled again, the level rises.
+func _word_complete() -> void:
+	word_done = true
+	words += 1
+	points += word_bonus_at(ramp_level)
+	for j in lit.size():
+		lit[j] = false
+	_say(S.t("mg.neon_pinball.word"))
+	_word_beat()
+	_raise_level()
 
 
 func _collide_segment(a: Vector2, b: Vector2, thick: float, seg_vel: Vector2, e: float, _unused: float) -> void:
@@ -373,7 +444,8 @@ func _drain() -> void:
 	_layout()
 	var f := fx()
 	var at := _f(Vector2(clampf(pos.x, 40.0, 500.0), FIELD.y - 40.0))
-	if ball_time <= ball_save_seconds():
+	if ball_time <= ball_save_seconds() and not _save_used:
+		_save_used = true
 		_say(S.t("mg.neon_pinball.ball_saved"))
 		f.pop(S.t("mg.neon_pinball.ball_saved"), at, UI.CREAM, 52)
 		_serve()
@@ -385,20 +457,24 @@ func _drain() -> void:
 	balls_left -= 1
 	if balls_left <= 0:
 		ball_state = Ball.GONE
-		finish(score_from(points))
+		_update_status()
+		lose()
 		return
+	f.pop(S.t("mg.ramp.last") if balls_left == 1 else S.t("mg.ramp.strike", {"lives": balls_left}), at + Vector2(0, -70.0 * _scale), UI.AMBER, 52)
+	_save_used = false
 	_serve()
 	_update_status()
 
 
 func _update_status() -> void:
-	set_status(S.t("mg.neon_pinball.status", {"ball": BALLS - balls_left + 1, "balls": BALLS, "points": points}))
+	set_status(S.t("mg.ramp.status", {"level": ramp_level, "points": record_points(), "lives": balls_left}))
 
 
 func _result_extra() -> Dictionary:
 	if _record.is_empty():
-		_record = Rivals.record(game_id, live_points(), {}, rivals_store)
-	return {"points": points, "letters": lit.count(true), "word": word_done, "rival": rival, "board": _record["board_line"]}
+		_record = Rivals.record(game_id, record_points(), {}, rivals_store)
+	return {"points": points, "letters": lit.count(true), "word": word_done, "words": words, "level": ramp_level,
+		"speed": gravity_at(ramp_level), "misses": BALLS - balls_left, "rival": rival, "board": _record["board_line"]}
 
 
 # --- Input -----------------------------------------------------------------------------------------

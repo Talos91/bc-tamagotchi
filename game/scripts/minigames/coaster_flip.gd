@@ -2,9 +2,16 @@ extends "res://scripts/minigames/minigame_base.gd"
 ## Coaster Flip (docs/design/10-minigame-next.md concept A; DECISIONS 2026-11-15 "build them all"). At a tall table:
 ## a stack of Black Cabin coasters on the table edge. Swipe up to flick the stack into the air; it tumbles up into the
 ## catch ring, and at the top of the arc, in the ring, it spins flat and the ring glows: tap then to catch. A catch adds
-## a coaster (the next flip spins faster, the flat moment gets shorter). A missed catch drops the stack: 3 drops, 45 s,
-## or 10 caught in a run ends it.
-## Score = min(best run, 10) / 10 x (0.85 + 0.15 x mean catch quality): best run 2 or less is a miss.
+## a coaster. A missed catch drops the stack.
+##
+## Endless ramp (docs/design/15-minigame-ramp.md; Daniele 2026-11-20 "increasingly harder and faster (but humanly possible
+## not impossible)"): no clock and no full-run end; the round ends only on the third drop (lose()) or Leave. The
+## difficulty follows the TOTAL catches this round (`catches`), not the current stack: a drop costs one of 3 drops and
+## restarts the stack (`run`) but keeps the level. Per catch: spin +0.12 turns/s and flat need +0.02, both capped at
+## catch 10 (2.4 turns/s, 0.95: today's hardest timing, the catch window stays the catch-10 window plus the 50 ms tap
+## grace); after catch 10 the flight shortens 1.3 s -> 0.9 s by catch 25; from catch DRIFT_FROM the ring drifts, its
+## range growing to 1.5x by catch 25. Level = 1 + catches / 5, capped at 6 (catch 25). Points = 10 a catch (uncapped
+## record; the need gain reads the first 100); the ghost is the best stack reached.
 ## config.regular: the table's regular (cast id), watching from across the table. Feeds action "coaster_flip".
 ##
 ## Quality pass Q5 (docs/design/11-minigame-quality.md; DECISIONS 2026-11-18 Coaster Flip "very unclear, needs
@@ -22,9 +29,7 @@ const Rivals = preload("res://scripts/minigames/mg_rivals.gd")
 
 const ART_DIR := "res://assets/minigames/coaster_flip/"
 
-const DROPS := 3
-const TIME_LIMIT := 45.0
-const FULL_RUN := 10                 ## a run of this many catches scores 1.0 (with clean catches) and ends the round
+const DROPS := 3                     ## = STRIKES: the third drop ends the round
 const FLIGHT_SECONDS := 1.3          ## one flip, up and down, with the ring at rest
 ## Catchable while the stack is in the ring: within this fraction of the flight either side of the top of the arc.
 ## 0.3.1 (item 37): the catch used to count anywhere from 15 % to 92 % of the flight, the coasters spun flat from the
@@ -33,18 +38,33 @@ const FLIGHT_SECONDS := 1.3          ## one flip, up and down, with the ring at 
 ## the arc. Threshold and spin speed are unchanged.
 const RING_HALF := 0.15
 const TAP_LATENCY := 0.05            ## a tap also counts if the coasters were flat this long before (input lag on web)
-const SPIN_BASE := 1.2               ## turns per second at run 0
+const SPIN_BASE := 1.2               ## turns per second at catch 0
 const SPIN_PER_CATCH := 0.12
-const FLAT_BASE := 0.75              ## |cos(spin)| needed to count as flat at run 0
+const FLAT_BASE := 0.75              ## |cos(spin)| needed to count as flat at catch 0
 const FLAT_PER_CATCH := 0.02
 const FLAT_MAX := 0.95
+## Endless ramp (15-minigame-ramp; Daniele 2026-11-20). All by TOTAL catches this round.
+## why: catch 10 was the old round's hardest timing (2.4 turns/s, flat 0.95); past it only the tempo rises.
+const RAMP_SPIN_CAP_AT := 10         ## spin (and so the catch window) stops rising at this catch
+## why: after catch 10 the flips come quicker, 1.3 s -> 0.9 s by catch 25 (the ring's height still scales it).
+const RAMP_FLIGHT_FROM := 10
+const RAMP_FLIGHT_CAP_AT := 25
+const RAMP_FLIGHT_MIN := 0.9         ## a flight with the ring at rest, from catch RAMP_FLIGHT_CAP_AT
+## why: the drift range widens to 1.5x by catch 25 (a wider spread of ring heights = flight times to read).
+const RAMP_DRIFT_CAP_AT := 25
+const RAMP_DRIFT_MAX := 1.5
+## why: a level every 5 catches, the top level at catch 25 where every number above has stopped.
+const RAMP_LEVEL_EVERY := 5
+const LEVEL_CAP := 6
+const POINTS_PER_CATCH := 10         ## 10 catches = 100 = a perfect old round
+const STACK_DRAW_MAX := 30           ## coasters drawn in a stack at most (a long run would leave the screen)
 const RELAXED_EASE := 0.15           ## accessibility: the flat threshold drops by this much
 const INTRO_SECONDS := 1.0
 const RESULT_SECONDS := 0.6
 const LAND_SECONDS := 0.2            ## a caught stack goes back down onto the table (the clack)
 const SWIPE_PX := 60.0               ## upward drag that counts as a flick
 
-# §3 ramp, added in Q5: from this many catches in a run the ring drifts to a new spot before each flip. A higher ring
+# §3 ramp, added in Q5: from this many catches this round the ring drifts to a new spot before each flip. A higher ring
 # is a longer flight (the top of the arc comes later), a lower one shorter; the closing ring shows when.
 const DRIFT_FROM := 6
 const DRIFT_X := 90.0                ## field px either side
@@ -78,13 +98,11 @@ var state := State.INTRO
 var run := 0                 ## catches in the current run (the stack on the table is run + 1 coasters)
 var best_run := 0
 var drops_left := DROPS
-var qualities: Array[float] = []   ## quality of each catch in the best run so far
-var _run_q: Array[float] = []
 var elapsed := 0.0
 var flight_t := 0.0
 var flight_dur := FLIGHT_SECONDS   ## this flight's length (the ring's height sets it)
 var flights := 0                   ## flips so far this round
-var catches := 0                   ## catches so far this round (coach: the catch hint shows until the first)
+var catches := 0                   ## catches so far this round: the ramp, the points (coach: the hint until the first)
 var regular := ""                  ## the table's regular (config.regular): hearts on the result card, as before
 var beat := false                  ## passed tonight's regular to beat
 var drop_reason := ""              ## "early" | "late": why the last drop happened (shown, and the tests read it)
@@ -126,8 +144,6 @@ func _on_start() -> void:
 	run = 0
 	best_run = 0
 	drops_left = DROPS
-	qualities.clear()
-	_run_q.clear()
 	elapsed = 0.0
 	flight_t = 0.0
 	flight_dur = FLIGHT_SECONDS
@@ -157,8 +173,9 @@ func _on_start() -> void:
 
 # --- Rules (static where the tests pin them) -------------------------------------------------------
 
+## Turns per second after `caught` catches this round (capped at catch RAMP_SPIN_CAP_AT).
 static func spin_rate(caught: int) -> float:
-	return SPIN_BASE + SPIN_PER_CATCH * caught
+	return SPIN_BASE + SPIN_PER_CATCH * mini(caught, RAMP_SPIN_CAP_AT)
 
 
 static func flat_needed(caught: int, relaxed_timing := false) -> float:
@@ -184,27 +201,44 @@ static func catch_window(caught: int, t: float, dur := FLIGHT_SECONDS) -> bool:
 
 
 ## A flight's length for a ring `rise` field px above the stack: a higher ring is a longer flight (free fall).
-static func flight_for(rise: float) -> float:
+## After `caught` catches the flight shortens by this factor (1 up to catch RAMP_FLIGHT_FROM, 0.9/1.3 from the cap).
+static func flight_scale(caught: int) -> float:
+	var k := clampf(float(caught - RAMP_FLIGHT_FROM) / float(RAMP_FLIGHT_CAP_AT - RAMP_FLIGHT_FROM), 0.0, 1.0)
+	return lerpf(1.0, RAMP_FLIGHT_MIN / FLIGHT_SECONDS, k)
+
+
+static func flight_for(rise: float, caught := 0) -> float:
 	var rest := TABLE_Y - RING_REST.y
-	return FLIGHT_SECONDS * sqrt(maxf(0.25, rise / rest))
+	return FLIGHT_SECONDS * sqrt(maxf(0.25, rise / rest)) * flight_scale(caught)
 
 
-static func score_for(best: int, quals: Array) -> float:
-	if best <= 0:
+## How wide the ring drifts after `caught` catches: 0 before DRIFT_FROM, then 1 -> RAMP_DRIFT_MAX by RAMP_DRIFT_CAP_AT.
+static func drift_scale(caught: int) -> float:
+	if caught < DRIFT_FROM:
 		return 0.0
-	var q := 0.0
-	for v in quals:
-		q += float(v)
-	q = q / quals.size() if quals.size() > 0 else 0.0
-	return clampf(float(mini(best, FULL_RUN)) / FULL_RUN * (0.85 + 0.15 * q), 0.0, 1.0)
+	var k := clampf(float(caught - DRIFT_FROM) / float(RAMP_DRIFT_CAP_AT - DRIFT_FROM), 0.0, 1.0)
+	return lerpf(1.0, RAMP_DRIFT_MAX, k)
+
+
+## The ramp level after `caught` catches: 1 + one every RAMP_LEVEL_EVERY, capped at LEVEL_CAP.
+static func level_at(caught: int) -> int:
+	return mini(LEVEL_CAP, 1 + caught / RAMP_LEVEL_EVERY)
+
+
+static func points_of(caught: int) -> int:
+	return POINTS_PER_CATCH * caught
+
+
+func record_points() -> int:
+	return points_of(catches)
 
 
 func current_score() -> float:
-	return score_for(best_run, qualities)
+	return score_of(record_points())
 
 
 func live_points() -> int:
-	return points_for(current_score())
+	return record_points()
 
 
 ## When this flight reaches the top of its arc, in the ring.
@@ -214,16 +248,16 @@ func apex_time() -> float:
 
 ## Flatness now, 0 when the stack is not in the air (the tests and the ring use it).
 func alignment() -> float:
-	return flatness(run, flight_t, flight_dur) if state == State.FLIGHT else 0.0
+	return flatness(catches, flight_t, flight_dur) if state == State.FLIGHT else 0.0
 
 
 func catchable() -> bool:
-	return state == State.FLIGHT and catch_window(run, flight_t, flight_dur)
+	return state == State.FLIGHT and catch_window(catches, flight_t, flight_dur)
 
 
 ## The ring is lit: the stack is in it and flat enough to catch. Once per flight (item 37).
 func ring_lit() -> bool:
-	return catchable() and alignment() >= flat_needed(run, relaxed)
+	return catchable() and alignment() >= flat_needed(catches, relaxed)
 
 
 ## The catch ring's centre for the next (or current) flight.
@@ -239,7 +273,7 @@ func flick() -> void:
 	state = State.FLIGHT
 	_state_t = 0.0
 	flight_t = 0.0
-	flight_dur = flight_for(TABLE_Y - ring_center().y)
+	flight_dur = flight_for(TABLE_Y - ring_center().y, catches)
 	flights += 1
 	drop_reason = ""
 	_was_lit = false
@@ -255,25 +289,23 @@ func tap() -> void:
 		return
 	var a := alignment()
 	var late := flight_t - TAP_LATENCY
-	if catch_window(run, late, flight_dur):
-		a = maxf(a, flatness(run, late, flight_dur))
-	if catchable() and a >= flat_needed(run, relaxed):
+	if catch_window(catches, late, flight_dur):
+		a = maxf(a, flatness(catches, late, flight_dur))
+	if catchable() and a >= flat_needed(catches, relaxed):
 		_catch(a)
 	else:
 		_drop("early" if flight_t < apex_time() else "late")
 
 
-func _catch(a: float) -> void:
+func _catch(_a: float) -> void:
 	_catch_pos = stack_pos()
 	run += 1
 	catches += 1
-	_run_q.append(a)
-	if run > best_run or (run == best_run and _mean(_run_q) > _mean(qualities)):
-		best_run = run
-		qualities = _run_q.duplicate()
+	best_run = maxi(best_run, run)
 	state = State.CAUGHT
 	_state_t = 0.0
 	_landed = false
+	level_up(level_at(catches))
 	_update_status()
 	# §2.3 catch: hit-stop, "+1", sparks in the ring; the stack grows with a clack when it lands (advance)
 	var f := fx()
@@ -290,14 +322,14 @@ func _catch(a: float) -> void:
 	else:
 		haptic("tick")
 	# §4.1 + §2.3: passing tonight's regular; their head reacts and the line pops
-	if not beat and not rival.is_empty() and live_points() > int(rival.get("points", 0)):
+	if not beat and not rival.is_empty() and record_points() > int(rival.get("points", 0)):
 		beat = true
 		_cheer = CHEER_SECONDS
 		f.squash("rival")
 		f.pop(S.t("mg.rivals.passed", {"regular": str(rival.get("name", ""))}), _xf() * Vector2(FIELD.x * 0.5, 200.0), UI.NEON, 44)
 	elif regular != "":
 		_cheer = maxf(_cheer, 0.6)  # the table's regular cheers every catch
-	# the ring drifts from catch DRIFT_FROM on (§3)
+	# the ring drifts from catch DRIFT_FROM on (§3), wider as the round goes on
 	_pick_ring()
 
 
@@ -305,8 +337,7 @@ func _drop(reason := "late") -> void:
 	var from := stack_pos()
 	var n := run + 1
 	drops_left -= 1
-	run = 0
-	_run_q.clear()
+	run = 0  # the stack starts again; the difficulty (catches) stays
 	state = State.DROPPED
 	_state_t = 0.0
 	drop_reason = reason
@@ -322,25 +353,20 @@ func _drop(reason := "late") -> void:
 	f.combo_break()
 	f.burst("ember", _xf() * from, 8)
 	f.pop(S.t("mg.coaster_flip.early" if reason == "early" else "mg.coaster_flip.late"), _xf() * Vector2(FIELD.x * 0.5, ring_now.y + 130.0), UI.NEON, 46)
+	if drops_left > 0:
+		var strike := S.t("mg.ramp.last") if drops_left == 1 else S.t("mg.ramp.strike", {"lives": drops_left})
+		f.pop(strike, _xf() * Vector2(FIELD.x * 0.5, TABLE_Y - 120.0), UI.AMBER, 40)
 	f.squash("drop%d" % maxi(0, drops_left))
 	haptic("fail")
 
 
-## The next flight's ring: at rest, or drifting once the run is long enough.
+## The next flight's ring: at rest, or drifting once the round has DRIFT_FROM catches (a drop keeps the drift).
 func _pick_ring() -> void:
-	if run >= DRIFT_FROM:
-		ring_off = Vector2(_rng.randf_range(-DRIFT_X, DRIFT_X), _rng.randf_range(-DRIFT_UP, DRIFT_DOWN))
+	var k := drift_scale(catches)
+	if k > 0.0:
+		ring_off = Vector2(_rng.randf_range(-DRIFT_X, DRIFT_X), _rng.randf_range(-DRIFT_UP, DRIFT_DOWN)) * k
 	else:
 		ring_off = Vector2.ZERO
-
-
-static func _mean(a: Array) -> float:
-	if a.is_empty():
-		return 0.0
-	var s := 0.0
-	for v in a:
-		s += float(v)
-	return s / a.size()
 
 
 func advance(dt: float) -> void:
@@ -379,14 +405,11 @@ func advance(dt: float) -> void:
 				f.squash("stack")
 				f.burst("spark", _xf() * Vector2(STACK_X, TABLE_Y - COASTER_LIFT), 4)
 			if _state_t >= RESULT_SECONDS:
-				if drops_left <= 0 or run >= FULL_RUN:
+				if drops_left <= 0:
 					_end()
 					return
 				state = State.READY
 				_state_t = 0.0
-	if state != State.DONE and state != State.FLIGHT and elapsed >= TIME_LIMIT:
-		_end()
-		return
 	queue_redraw()
 	if _glow_layer != null:
 		_glow_layer.queue_redraw()
@@ -400,10 +423,11 @@ func _step_scatter(dt: float) -> void:
 	_scatter = _scatter.filter(func(s: Dictionary) -> bool: return s["p"].y < FIELD.y + 120.0)
 
 
+## The third drop: the round is lost (the only end besides Leave).
 func _end() -> void:
 	state = State.DONE
 	queue_redraw()
-	finish(current_score())
+	lose()
 
 
 ## The run that just ended, as tonight's ghost (only kept if it is your best tonight): the stack you reached.
@@ -413,12 +437,14 @@ func ghost_data() -> Dictionary:
 
 func _result_extra() -> Dictionary:
 	if _record.is_empty():
-		_record = Rivals.record(game_id, live_points(), ghost_data(), rivals_store)
-	return {"best_run": best_run, "beat": beat, "regular": regular, "rival": rival, "board": _record["board_line"]}
+		_record = Rivals.record(game_id, record_points(), ghost_data(), rivals_store)
+	return {"best_run": best_run, "catches": catches, "beat": beat, "regular": regular, "rival": rival,
+		"board": _record["board_line"], "level": ramp_level, "speed": snappedf(spin_rate(catches), 0.01),
+		"misses": DROPS - drops_left}
 
 
 func _update_status() -> void:
-	set_status(S.t("mg.coaster_flip.status", {"stack": run + 1, "best": best_run}))
+	set_status(S.t("mg.ramp.status", {"level": ramp_level, "points": record_points(), "lives": drops_left}))
 
 
 func _gui_input(event: InputEvent) -> void:
@@ -543,7 +569,7 @@ func stack_pos() -> Vector2:
 	match state:
 		State.FLIGHT:
 			var h := sin(clampf(flight_t / flight_dur, 0.0, 1.0) * PI)  # 0 at the table, 1 at the top of the arc
-			return base.lerp(ring_now + Vector2(0, run * STACK_STEP * 0.5), h)
+			return base.lerp(ring_now + Vector2(0, mini(run, STACK_DRAW_MAX) * STACK_STEP * 0.5), h)
 		State.CAUGHT:
 			var k := clampf(_state_t / LAND_SECONDS, 0.0, 1.0)
 			return _catch_pos.lerp(base, k * k)
@@ -621,7 +647,7 @@ func _draw_ghost() -> void:
 		return
 	var n := int(ghost.get("stack", 0)) + 1
 	var col := Color(0.75, 0.9, 1.0, 0.3)
-	for i in n:
+	for i in mini(n, STACK_DRAW_MAX):
 		_coaster(Vector2(GHOST_X, TABLE_Y - COASTER_LIFT - i * STACK_STEP), 0, col)
 	UI.draw_text(self, str(n - 1), Vector2(GHOST_X, TABLE_Y - COASTER_LIFT - n * STACK_STEP - 36.0), 30, Color(0.75, 0.9, 1.0, 0.7))
 
@@ -647,18 +673,18 @@ func _draw_stack() -> void:
 	if state == State.DROPPED or state == State.DONE and drops_left <= 0:
 		return
 	var p := stack_pos()
-	var n := run + 1
+	var n := mini(run + 1, STACK_DRAW_MAX)
 	var sq := _fx.squash_scale("stack") if _fx_ok() else Vector2.ONE
 	if state == State.FLIGHT:
-		var turns := spin_rate(run) * (flight_t - apex_time())
+		var turns := spin_rate(catches) * (flight_t - apex_time())
 		var fr := spin_frame(turns)
 		# §2.3 whoosh: motion trail frames on the way up
 		if flight_t < apex_time() * 0.7:
 			for j in [2, 1]:
 				var tb := maxf(0.0, flight_t - j * 0.035)
 				var hb := sin(clampf(tb / flight_dur, 0.0, 1.0) * PI)
-				var pb := Vector2(STACK_X, TABLE_Y - COASTER_LIFT).lerp(ring_now + Vector2(0, run * STACK_STEP * 0.5), hb)
-				_draw_pile(pb, n, spin_frame(spin_rate(run) * (tb - apex_time())), Color(1, 1, 1, 0.22 / j), Vector2.ONE)
+				var pb := Vector2(STACK_X, TABLE_Y - COASTER_LIFT).lerp(ring_now + Vector2(0, mini(run, STACK_DRAW_MAX) * STACK_STEP * 0.5), hb)
+				_draw_pile(pb, n, spin_frame(spin_rate(catches) * (tb - apex_time())), Color(1, 1, 1, 0.22 / j), Vector2.ONE)
 		_draw_pile(p, n, fr, Color.WHITE, Vector2.ONE)
 		return
 	_draw_pile(p, n, 0, Color.WHITE, sq)
@@ -700,10 +726,8 @@ func _draw_hud() -> void:
 		else:
 			draw_circle(p, 16.0, UI.CREAM if i < drops_left else UI.LINE)
 	UI.draw_text(self, S.t("mg.coaster_flip.drops"), Vector2(96, 92), 20, UI.SMOKE)
-	# the clock: a thin bar that empties over the round
-	var left := clampf(1.0 - elapsed / TIME_LIMIT, 0.0, 1.0)
-	draw_rect(Rect2(20, 8, FIELD.x - 40, 6), Color(0, 0, 0, 0.45))
-	draw_rect(Rect2(20, 8, (FIELD.x - 40) * left, 6), UI.AMBER if left < 0.25 else Color(UI.CREAM, 0.8))
+	# the level (no clock: the round runs until the third drop)
+	UI.draw_text(self, S.t("mg.ramp.level", {"n": ramp_level}), Vector2(FIELD.x * 0.5, 40.0), 26, UI.GOLD)
 	# tonight's regular to beat, and you (as Neon Moth)
 	if not rival.is_empty():
 		var col := UI.GOLD if beat else UI.CREAM
@@ -715,7 +739,7 @@ func _draw_hud() -> void:
 			hx = FIELD.x - 96.0
 		_text_right(S.t("mg.rivals.to_beat"), Vector2(hx, 38.0), 20, UI.SMOKE)
 		_text_right("%s %d" % [str(rival.get("name", "")), int(rival.get("points", 0))], Vector2(hx, 68.0), 28, col)
-		_text_right(S.t("mg.rivals.you_now", {"score": live_points()}), Vector2(hx, 96.0), 22, UI.GOLD if beat else UI.SMOKE)
+		_text_right(S.t("mg.rivals.you_now", {"score": record_points()}), Vector2(hx, 96.0), 22, UI.GOLD if beat else UI.SMOKE)
 
 
 ## The coach: what to do now, in one line, plus the animated swipe before the first flips.

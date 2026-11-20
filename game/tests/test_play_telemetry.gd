@@ -107,11 +107,12 @@ func _run() -> void:
 
 	# 5. other end reasons from the games' own state
 	var moth = load("res://scenes/minigames/neon_moth/neon_moth.tscn").instantiate()
-	moth.reached_sign = true
-	check(TelScript.end_reason(moth, {"sign": true}) == "sign_end", "moth at the sign = sign_end")
-	moth.reached_sign = false
+	check(TelScript.end_reason(moth, {"sign": true}) == "sign_end", "an old row with sign = sign_end")
 	moth.singes_left = 0
 	check(TelScript.end_reason(moth, {"sign": false}) == "lost", "moth out of wings = lost")
+	moth.singes_left = 3
+	moth.end_reason = "lost"   # the endless ramp (15-minigame-ramp): lose() sets it on the third strike
+	check(TelScript.end_reason(moth, {}) == "lost", "the game's own end_reason = lost")
 	moth.set_meta("end_reason", "timer")
 	check(TelScript.end_reason(moth, {}) == "timer", "an explicit end_reason wins (ramp job hook)")
 	moth.free()

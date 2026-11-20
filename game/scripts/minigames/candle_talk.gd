@@ -1,8 +1,15 @@
 extends "res://scripts/minigames/minigame_base.gd"
-## Candle Talk (GDD section 9 #5, Candle Floor, Friends +10-20, hearts). Five turns: the regular says a
-## line, you play one of three topic cards. The best card lights the candle fully, a near card half, a
-## miss not at all. Branching: line 3 (a story beat) only comes up if the candle is already at 2+;
-## otherwise the talk turns to food. Score = candle light / turns. Hearts (0-3) are stored by the result card,
+## Candle Talk (GDD section 9 #5, Candle Floor, Friends +10-20, hearts). The regular says a line, you play one of
+## three topic cards. The best card lights the candle fully, a near card half, an off card not at all. Branching: line 3
+## (a story beat) only comes up in the first five turns if the candle is already at 2+; otherwise the talk turns to food.
+## Endless (docs/design/15-minigame-ramp.md; Daniele 2026-11-20 "make them become increasingly harder"): past turn 5
+## the talk goes on; when the regular's lines are used up they come round again (a new round, never the line just
+## said; the card order is reshuffled every turn; the story gate no longer applies). From turn 6 a reply timer: 8 s,
+## -0.5 s a turn, 4 s from turn 14 (a shrinking bar under the bubble and the seconds on the hint line). A timeout or an
+## off card gutters the candle (a strike; a near card does not); the 3rd gutter puts it out: the closing line, then
+## lose(). Points (the uncapped record): 20 a best card, 10 a near one. Score (need gain, hearts, lean) = the first five
+## turns' light / 5, exactly as before (history[0..4]). Level = 1 for turns 1-5, then +1 a turn, 10 at turn 14.
+## Hearts (0-3) are stored by the result card,
 ## for regulars only (cast.gd): a talk with an owner refills Friends and keeps no hearts (Prae, id mali, has no lines
 ## yet, so no talk is offered at her spot).
 ## Content: scenes/minigames/candle_talk/<regular>.json; strings in i18n/strings.csv (npc.<id>.talk.N). Reactions and
@@ -17,8 +24,7 @@ const Rivals = preload("res://scripts/minigames/mg_rivals.gd")
 
 ## Look B sprites (game/assets/minigames/README.md; only this regular's sprite is loaded), the section 2.3 beats through
 ## mg_fx (the card flies to the candle, the flame flares and the regular smiles on the best card, the flame gutters on a
-## miss, NO shake) and section 4.1 competition through mg_rivals (job Q9). Section 3: no ramp, it is a chat, not a skill
-## test. Payouts unchanged.
+## miss, NO shake) and section 4.1 competition through mg_rivals (job Q9). Payouts unchanged.
 const ART_DIR := "res://assets/minigames/candle_talk/"
 const ART_NEEDED := ["candle", "flame", "card", "backdrop"]
 const FLY_SECONDS := 0.4
@@ -33,14 +39,32 @@ const FALLBACK := "tt"
 const REACT_SECONDS := 1.8
 const FULL := 1.0
 const HALF := 0.5
+const CLOSE_SECONDS := 2.2
+
+## The endless ramp (docs/design/15-minigame-ramp.md, Daniele 2026-11-20).
+const TIMER_FROM_TURN := 6      ## why: turns 1-5 stay the calm talk they were (they feed hearts and the lean)
+const REPLY_START := 8.0        ## why: 8 s to answer at turn 6, plenty for a line and 3 cards
+const REPLY_STEP := 0.5         ## why: half a second less each turn
+const REPLY_CAP := 4.0          ## why: 4 s (turn 14) still reads a one-line question and 3 short cards
+const LEVEL_CAP := 10           ## why: level 1 for turns 1-5, +1 a turn, 10 at turn 14 (the timer's cap)
+const POINTS_BEST := 20         ## why: five best cards = 100 = a perfect old talk
+const POINTS_HALF := 10
 
 enum Phase { ASK, REACT, CLOSE }
 
 var regular := "tt"
 var data: Dictionary = {}
 var turn := 0  # 0-based
-var turns := 5
-var candle := 0.0  # light gained so far (max = turns)
+var turns := 5  # the scored turns (the first five feed the score, hearts and the lean)
+var candle := 0.0  # light gained so far, every turn (the score reads history[0..turns-1])
+var round_used: Array = []  # line ids said in the current round (endless: the lines come round again)
+var gutters := 0  # strikes: off cards and timeouts
+var lives_left := STRIKES
+var reply_total := 0.0  # this turn's reply time (0 = no timer)
+var reply_left := 0.0
+var _out := false  # the third gutter put the candle out (the closing line, then lose())
+var _hint_sec := -1
+var _bubble_panel: PanelContainer
 var phase := Phase.ASK
 var line: Dictionary = {}
 var card_order: Array = []
@@ -117,12 +141,61 @@ static func _by_id(lines: Array, id: int) -> Dictionary:
 	return {}
 
 
+## Past the first turns (endless): a line not said yet in this round and not the line just said. The caller starts a
+## new round (clears round_used) when every line was said. `roll` picks among the candidates (the game's seeded rng).
+static func next_round_line(lines: Array, used_in_round: Array, prev_id: int, roll: int) -> Dictionary:
+	var pool: Array = lines.filter(func(l): return not (int(l["id"]) in used_in_round) and int(l["id"]) != prev_id)
+	if pool.is_empty():
+		pool = lines.filter(func(l): return int(l["id"]) != prev_id)
+	if pool.is_empty():
+		pool = lines
+	if pool.is_empty():
+		return {}
+	return pool[posmod(roll, pool.size())]
+
+
+## Seconds to answer on turn `turn_number` (1-based): none before turn 6, 8 s at 6, -0.5 s a turn, 4 s from turn 14.
+static func reply_time(turn_number: int) -> float:
+	if turn_number < TIMER_FROM_TURN:
+		return 0.0
+	return maxf(REPLY_START - REPLY_STEP * float(turn_number - TIMER_FROM_TURN), REPLY_CAP)
+
+
+## The ramp level on turn `turn_number` (1-based): 1 for turns 1-5, +1 a turn, LEVEL_CAP at turn 14.
+static func level_at_turn(turn_number: int) -> int:
+	return clampi(turn_number - (TIMER_FROM_TURN - 2), 1, LEVEL_CAP)
+
+
+## Record points of a talk's history (uncapped): 20 a best card, 10 a near one.
+static func points_of(hist: Array) -> int:
+	var p := 0
+	for h in hist:
+		if float(h) == FULL:
+			p += POINTS_BEST
+		elif float(h) == HALF:
+			p += POINTS_HALF
+	return p
+
+
 static func score_from(candle_total: float, turn_count: int) -> float:
 	return clampf(candle_total / float(maxi(1, turn_count)), 0.0, 1.0)
 
 
+## Light of the first `turn_count` turns (the scored talk).
+static func first_light(hist: Array, turn_count: int) -> float:
+	var s := 0.0
+	for i in mini(turn_count, hist.size()):
+		s += float(hist[i])
+	return s
+
+
+## The score for the need gain, hearts and the lean: the first five turns' light / 5, as before the ramp.
 func current_score() -> float:
-	return score_from(candle, turns)
+	return score_from(first_light(history, turns), turns)
+
+
+func record_points() -> int:
+	return points_of(history)
 
 
 func _ready() -> void:
@@ -136,6 +209,7 @@ func _build_ui() -> void:
 	_bubble = UI.wrap(UI.label("", 17, UI.CREAM, HORIZONTAL_ALIGNMENT_CENTER))
 	_bubble.add_theme_font_size_override("font_size", int(UI.dp(18)))
 	var bubble_panel := PanelContainer.new()
+	_bubble_panel = bubble_panel
 	bubble_panel.name = "Bubble"
 	bubble_panel.set_anchors_preset(Control.PRESET_TOP_WIDE)
 	bubble_panel.offset_left = UI.dp(24)
@@ -181,7 +255,14 @@ func _on_start() -> void:
 	turn = 0
 	candle = 0.0
 	used_lines.clear()
+	round_used.clear()
 	history.clear()
+	gutters = 0
+	lives_left = STRIKES
+	reply_total = 0.0
+	reply_left = 0.0
+	_out = false
+	_hint_sec = -1
 	_name_label.text = Cast.name_of(regular)
 	_hint.text = S.t("mg.candle_talk.hint")
 	var t := Rivals.tonight(game_id, rivals_store)
@@ -201,12 +282,23 @@ func _on_start() -> void:
 
 
 func _next_turn() -> void:
-	if turn >= turns:
-		_close()
-		return
 	phase = Phase.ASK
-	line = pick_line(data["lines"], turn, candle, used_lines)
+	var lines: Array = data["lines"]
+	if turn < turns:
+		line = pick_line(lines, turn, candle, used_lines)
+	else:
+		# Endless: the lines come round again. Every line said in this round -> a new round.
+		var all_said := true
+		for l in lines:
+			if not (int(l["id"]) in round_used):
+				all_said = false
+				break
+		if all_said:
+			round_used.clear()
+		var prev_id: int = int(used_lines[-1]) if not used_lines.is_empty() else -1
+		line = next_round_line(lines, round_used, prev_id, _rng.randi())
 	used_lines.append(int(line["id"]))
+	round_used.append(int(line["id"]))
 	card_order = line["cards"].duplicate()
 	for i in range(card_order.size() - 1, 0, -1):
 		var j := _rng.randi_range(0, i)
@@ -214,10 +306,31 @@ func _next_turn() -> void:
 		card_order[i] = card_order[j]
 		card_order[j] = t
 	_bubble.text = S.t(line["key"])
-	_hint.text = S.t("mg.candle_talk.hint")
-	set_status(S.t("mg.candle_talk.status", {"regular": Cast.name_of(regular), "turn": turn + 1, "total": turns}))
+	reply_total = reply_time(turn + 1)
+	reply_left = reply_total
+	_hint_sec = -1
+	_update_hint()
+	level_up(level_at_turn(turn + 1))
+	_update_status()
 	_fill_cards(true)
 	queue_redraw()
+
+
+func _update_status() -> void:
+	set_status(S.t("mg.ramp.status", {"level": ramp_level, "points": record_points(), "lives": lives_left}))
+
+
+## The hint line, with the seconds left once the reply timer runs (rewritten only when the whole second changes).
+func _update_hint() -> void:
+	if phase != Phase.ASK:
+		return
+	if reply_total <= 0.0:
+		_hint.text = S.t("mg.candle_talk.hint")
+		return
+	var sec := int(ceil(maxf(reply_left, 0.0)))
+	if sec != _hint_sec:
+		_hint_sec = sec
+		_hint.text = "%s · %d" % [S.t("mg.candle_talk.hint"), sec]
 
 
 func _fill_cards(enabled: bool) -> void:
@@ -273,13 +386,45 @@ func choose(card: String) -> void:
 	phase = Phase.REACT
 	_phase_t = 0.0
 	_fill_cards(false)
+	_hint.text = ""
+	if light == 0.0:
+		_gutter()  # the flame gutters on landing (_land); the strike counts now
+	else:
+		_update_status()
 	queue_redraw()
+
+
+## The reply timer ran out: no light this turn and the candle gutters.
+func _timeout() -> void:
+	history.append(0.0)
+	_bubble.text = S.t("mg.candle_talk.timeout")
+	phase = Phase.REACT
+	_phase_t = 0.0
+	_fill_cards(false)
+	_hint.text = ""
+	_gutter_t = GUTTER_SECONDS
+	fx().burst("ember", _flame_pos(), 5)
+	_gutter()
+	queue_redraw()
+
+
+## A strike (an off card or a timeout); the third puts the candle out after this reaction.
+func _gutter() -> void:
+	gutters += 1
+	lives_left = maxi(0, STRIKES - gutters)
+	if lives_left > 0:
+		var word := S.t("mg.ramp.last") if lives_left == 1 else S.t("mg.ramp.strike", {"lives": lives_left})
+		fx().pop(word, Vector2(size.x * 0.5, _flame_pos().y - 200.0 * _sc()), UI.NEON, 48)
+	else:
+		_out = true
+	haptic("fail")
+	_update_status()
 
 
 func _close() -> void:
 	phase = Phase.CLOSE
 	_phase_t = 0.0
-	var tier := tier_for(score_from(candle, turns))
+	var tier := tier_for(current_score())
 	_bubble.text = _voice("close.tier_%d" % (tier + 1))
 	_fill_cards(false)
 	_hint.text = ""
@@ -296,11 +441,19 @@ func advance(dt: float) -> void:
 	_step_fly(dt)
 	if _glow_layer != null:
 		_glow_layer.queue_redraw()
-	if phase == Phase.REACT and _phase_t >= REACT_SECONDS:
-		turn += 1
-		_next_turn()
-	elif phase == Phase.CLOSE and _phase_t >= 2.2:
-		finish(score_from(candle, turns))
+	if phase == Phase.ASK and reply_total > 0.0:
+		reply_left -= dt
+		_update_hint()
+		if reply_left <= 0.0:
+			_timeout()
+	elif phase == Phase.REACT and _phase_t >= REACT_SECONDS:
+		if _out:
+			_close()  # the candle is out: the closing line, then the round is lost
+		else:
+			turn += 1
+			_next_turn()
+	elif phase == Phase.CLOSE and _phase_t >= CLOSE_SECONDS:
+		lose()
 	queue_redraw()
 
 
@@ -310,18 +463,24 @@ func _gui_input(event: InputEvent) -> void:
 		if phase == Phase.REACT:
 			_phase_t = REACT_SECONDS
 		elif phase == Phase.CLOSE:
-			_phase_t = 2.2
+			_phase_t = CLOSE_SECONDS
 
 
 func _result_extra() -> Dictionary:
 	if _record.is_empty():
-		_record = Rivals.record(game_id, live_points(), {}, rivals_store)
-	return {"regular": regular, "lean": score_from(candle, turns) >= TIER_PERFECT, "history": history,
-		"rival": rival, "board": _record["board_line"]}
+		_record = Rivals.record(game_id, record_points(), {}, rivals_store)
+	return {"regular": regular, "lean": current_score() >= TIER_PERFECT, "history": history,
+		"level": ramp_level, "speed": reply_total, "misses": gutters, "lives_left": lives_left,
+		"points": record_points(), "turns": history.size(), "rival": rival, "board": _record["board_line"]}
 
 
 func live_points() -> int:
-	return points_for(current_score())
+	return record_points()
+
+
+## The candle is out (the third gutter): no flame in the closing.
+func _flame_out() -> bool:
+	return _out and phase == Phase.CLOSE
 
 
 # --- Art -------------------------------------------------------------------------------------------
@@ -420,7 +579,7 @@ func _flame_look() -> Dictionary:
 
 
 func _draw_glows() -> void:
-	if not has_art() or size.x <= 0.0:
+	if not has_art() or size.x <= 0.0 or _flame_out():
 		return
 	_glow_layer.size = size
 	var look := _flame_look()
@@ -508,6 +667,21 @@ func _draw_hud() -> void:
 		_text_center(S.t("mg.rivals.to_beat"), Vector2(px, base_y + 40.0), 22, UI.SMOKE)
 		_text_center("%s %d" % [str(rival.get("name", "")), int(rival.get("points", 0))], Vector2(px, base_y + 76.0), 32, col2)
 		_text_center(S.t("mg.rivals.you_now", {"score": live_points()}), Vector2(px, base_y + 110.0), 26, UI.GOLD if rival_passed else UI.SMOKE)
+	_draw_reply_bar()
+
+
+## The reply timer (turn 6 on): a bar under the bubble that shrinks to the centre, gold turning neon in the last 30 %.
+func _draw_reply_bar() -> void:
+	if phase != Phase.ASK or reply_total <= 0.0 or _bubble_panel == null:
+		return
+	var k := clampf(reply_left / reply_total, 0.0, 1.0)
+	var y := _bubble_panel.position.y + _bubble_panel.size.y + UI.dp(10)
+	var full_w := size.x - UI.dp(48)
+	var h := UI.dp(6)
+	draw_rect(Rect2(UI.dp(24), y, full_w, h), Color(UI.LINE, 0.8))
+	var w := full_w * k
+	var col := UI.GOLD if k > 0.3 else UI.NEON
+	draw_rect(Rect2(size.x * 0.5 - w * 0.5, y, w, h), col)
 
 
 func _draw_art() -> void:
@@ -526,12 +700,13 @@ func _draw_art() -> void:
 	var reg := "regular_" + regular
 	if _art.has(reg):
 		var sq := _fx.squash_scale("regular") if _fx_ok() else Vector2.ONE
-		_blit(self, reg, 1 if (_smile_t > 0.0 or (phase == Phase.CLOSE and score_from(candle, turns) >= TIER_GREAT)) else 0,
+		_blit(self, reg, 1 if (_smile_t > 0.0 or (phase == Phase.CLOSE and current_score() >= TIER_GREAT)) else 0,
 			_regular_pos(), scv * sq)
 	_blit(self, "candle", 0, Vector2(size.x * 0.5, base_y), scv)
 	var look := _flame_look()
 	var tint := _fx.flash_color("candle", Color.WHITE) if _fx_ok() else Color.WHITE
-	_blit(self, "flame", look["frame"], _flame_pos(), scv * float(look["scale"]), tint)
+	if not _flame_out():
+		_blit(self, "flame", look["frame"], _flame_pos(), scv * float(look["scale"]), tint)
 	# Cards in flight: the sprite shrinks and arcs to the flame, the label travels with it.
 	var fp := _flame_pos()
 	for c in _fly:
@@ -556,7 +731,9 @@ func _draw_flat() -> void:
 	draw_rect(Rect2(base.x - 40, base.y - 150, 80, 150), UI.CREAM)
 	draw_rect(Rect2(base.x - 40, base.y - 150, 80, 14), Color(UI.GOLD, 0.7))
 	draw_line(base + Vector2(0, -150), base + Vector2(0, -172), UI.BG_BASE, 5.0)
-	var flame_h := 30.0 + 110.0 * lit
+	if _flame_out():
+		lit = 0.0
+	var flame_h := 0.0 if _flame_out() else 30.0 + 110.0 * lit
 	var flame := PackedVector2Array([
 		base + Vector2(0, -172 - flame_h), base + Vector2(-26 - 14 * lit, -172 - flame_h * 0.35),
 		base + Vector2(0, -166), base + Vector2(26 + 14 * lit, -172 - flame_h * 0.35)])

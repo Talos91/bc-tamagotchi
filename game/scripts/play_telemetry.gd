@@ -144,7 +144,7 @@ static func misses_of(game: Object, extra: Dictionary) -> int:
 	var m = game.get("misses")
 	if m is int or m is float:
 		return int(m)
-	for k in ["missed", "bumps"]:
+	for k in ["misses", "missed", "bumps"]:   # "misses": strikes used, from the endless ramp (15-minigame-ramp)
 		if extra.has(k):
 			return int(extra[k])
 	return 0

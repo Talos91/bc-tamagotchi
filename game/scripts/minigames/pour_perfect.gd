@@ -1,27 +1,44 @@
 extends "res://scripts/minigames/minigame_base.gd"
 ## Pour Perfect (GDD section 9 #1, Bar, Drinks +20-30). Hold to pour; release to lock the layer on its
-## target line. Three layers, one glass. Overfilling only foams: it costs a little score, never the reward.
-## Controls: press and hold anywhere, release. Feeds action "pour_perfect".
+## target line. Three layers a glass. Controls: press and hold anywhere, release. Feeds action "pour_perfect".
+## Endless ramp (docs/design/15-minigame-ramp.md; Daniele 2026-11-20): glass after glass, no time limit. Glass 1 has
+## today's lines (TARGETS); from glass 2 the three lines are seeded per night + glass (ordered, at least LINE_GAP apart
+## within LINE_MIN..LINE_MAX). The tap runs faster each glass (POUR_RATE + RAMP_RATE_STEP a glass, POUR_RATE_CAP at
+## glass 10) and the flow wobbles more (35 -> 55 %). A layer is spoiled when it locks more than SPOIL_ERR off its line,
+## spills over the rim, or waits IDLE_SPOIL_SECONDS without a pour: a strike; Nam evens the glass to the line so the
+## next layer is fair; the third strike ends the round (lose()). After the third layer the glass is served and a fresh
+## glass comes. Points = sum of round(33 x layer score) over every layer (a perfect glass 1 = 99, about the old 100),
+## uncapped. Level = the glass number, capped at GLASS_CAP. Relaxed timing widens the perfect band, the spoil band and
+## the idle wait x1.5 and slows the flow -20 % at every glass. Tonight's best pour shows as ghost ticks on glass 1 only.
 ## config.drink: a real menu item id (scripts/menu/bar_menu.gd); its name shows above the glass and its pour style
 ## colours the layers. Without one (the minigame lab) the glass is the plain amber/gold/cream pour.
+## config.seed: the night the later glasses' lines are seeded from (default: tonight, mg_rivals.night()).
 
 const UI = preload("res://scripts/minigames/mg_ui.gd")
 const S = preload("res://scripts/minigames/strings.gd")
 const BarMenu = preload("res://scripts/menu/bar_menu.gd")
 const Rivals = preload("res://scripts/minigames/mg_rivals.gd")
 
-## Cumulative fill (0 = empty, 1 = rim) each layer must reach.
+## Glass 1's lines: cumulative fill (0 = empty, 1 = rim) each layer must reach. Later glasses: glass_targets().
 const TARGETS: Array[float] = [0.30, 0.58, 0.82]
 const LAYER_COLORS: Array[Color] = [UI.AMBER, UI.GOLD, UI.CREAM]
-const POUR_RATE := 0.075  # glass heights per second, before the flow wobble
-const FLOW_WOBBLE := 0.35  # +-35% flow, sine, so releasing on time takes feel not arithmetic
+const POUR_RATE := 0.075  # glass heights per second on glass 1, before the flow wobble
+const RAMP_RATE_STEP := 0.008  ## why: each glass pours a little faster (+0.008 a glass after the first)
+const POUR_RATE_CAP := 0.15  ## why: at 0.15 the +-0.10 band lasts 0.85 s and the perfect band 0.17 s: still humanly playable
+const FLOW_WOBBLE := 0.35  # +-35% flow on glass 1, sine, so releasing on time takes feel not arithmetic
+const FLOW_WOBBLE_CAP := 0.55  ## why: the wobble grows to +-55 % by glass 10, never more
+const GLASS_CAP := 10  ## why: the level is the glass number; the pour rate and the wobble stop rising at glass 10
+const LINE_MIN := 0.2  ## why: a later glass never asks for a sliver at the bottom
+const LINE_MAX := 0.9  ## why: nor a line so close to the rim that a wobble spills it
+const LINE_GAP := 0.18  ## why: lines at least 0.18 apart, so every layer is a real pour
 const PERFECT_ERR := 0.02  # within this of the line scores 1.0
 const MISS_ERR := 0.20  # this far or more scores 0.0 for the layer
-const OVERFILL_PER_UNIT := 2.0  # score lost per glass-height of foam
-const OVERFILL_MAX_PENALTY := 0.3
+const SPOIL_ERR := 0.10  ## why: more than 0.10 off the line spoils the layer (a strike); scored layers still feel lenient
+const IDLE_SPOIL_SECONDS := 8.0  ## why: 8 s in READY without pouring spoils the layer, so an idle round reaches its loss
+const LAYER_POINTS := 33.0  # record points of a perfect layer (a perfect glass = 99)
 const INTRO_SECONDS := 1.5
+const NEXT_GLASS_SECONDS := 1.0  # the served glass leaves, a fresh one slides in
 const SETTLE_SECONDS := 0.8
-const TIME_LIMIT := 30.0  # seconds after the glass arrives
 
 ## Look B sprites (game/assets/minigames/README.md, Pour Perfect). Loaded lazily; without them the flat draw stays.
 const ASSET_DIR := "res://assets/minigames/pour_perfect/"
@@ -35,7 +52,7 @@ const STREAM_W := 32.0
 const FOAM_FRAME := Vector2(172, 66)
 const FOAM_ANCHOR := Vector2(82.0, 60.7)
 const FOAM_RISE_SECONDS := 0.7  # the head grows while the tap runs
-## Relaxed timing (11-minigame-quality section 3): the perfect band x1.5, the flow -20 %.
+## Relaxed timing (11-minigame-quality section 3): the perfect band, the spoil band and the idle wait x1.5, the flow -20 %.
 const RELAXED_BAND := 1.5
 const RELAXED_FLOW := 0.8
 const SPILL_BURST_GAP := 0.12
@@ -43,11 +60,20 @@ const SPILL_BURST_GAP := 0.12
 enum State { INTRO, READY, POURING, SETTLE, DONE }
 
 var state := State.INTRO
-var layer := 0
-var level := 0.0  # current fill 0..1 (clamped at the rim)
-var spill := 0.0  # glass heights poured past the rim
-var locked: Array[float] = []
-var elapsed := 0.0  # time since the glass arrived
+var layer := 0  # the layer being poured on this glass (0..2)
+var level := 0.0  # current fill 0..1 (clamped at the rim); the ramp's level is the base's ramp_level
+var spill := 0.0  # glass heights poured past the rim on the last pour
+var locked: Array[float] = []  # this glass: where each layer was locked (a spoiled layer: its line)
+var layer_scores: Array[float] = []  # this glass: each layer's score (a spoiled layer: 0)
+var glass := 1  # the glass being poured (uncapped)
+var targets: Array[float] = []  # this glass's three lines
+var lives_left := STRIKES
+var layers_done := 0  # layers locked this round, spoiled ones included
+var seed_used := 0  # the night the later glasses' lines come from
+var elapsed := 0.0  # time since the first glass arrived (pour, wait and settle)
+var _points := 0
+var _ready_t := 0.0  # seconds in READY on this layer without pouring
+var _glass1_levels: Array[float] = []  # glass 1's locked levels once it is served (the ghost of this pour)
 var _pour_t := 0.0
 var _state_t := 0.0
 var _pressed := false
@@ -56,10 +82,10 @@ var layer_colors: Array[Color] = LAYER_COLORS
 var _tex := {}
 var _foam := 0.0  # 0..1: how high the foam head has risen on the layer being poured
 var _spill_t := 0.0
-## §4.1 competition: tonight's regular to beat, your best pour tonight as ghost ticks on the glass, the board line.
+## §4.1 competition: tonight's regular to beat, your best pour tonight as ghost ticks on glass 1, the board line.
 var rival: Dictionary = {}           ## {regular, name, points}
 var rival_passed := false
-var ghost: Dictionary = {}           ## your best pour tonight {levels: [fill per layer]}, or {}
+var ghost: Dictionary = {}           ## your best pour tonight {levels: [glass 1 fill per layer]}, or {}
 var rivals_store: Object = null      ## tests: where mg_rivals keeps tonight's record (default Needs, else memory)
 var _record: Dictionary = {}
 
@@ -82,13 +108,22 @@ func _on_start() -> void:
 	level = 0.0
 	spill = 0.0
 	locked.clear()
+	layer_scores.clear()
+	glass = 1
+	lives_left = STRIKES
+	layers_done = 0
 	elapsed = 0.0
+	_points = 0
+	_ready_t = 0.0
+	_glass1_levels.clear()
 	_pour_t = 0.0
 	_state_t = 0.0
 	_pressed = false
 	_foam = 0.0
 	_spill_t = 0.0
 	_record = {}
+	seed_used = int(config.get("seed", Rivals.night()))
+	targets = glass_targets(seed_used, 1)
 	var t := Rivals.tonight(game_id, rivals_store)
 	rival = t["rival"]
 	rival_passed = false
@@ -101,7 +136,7 @@ func _on_start() -> void:
 	queue_redraw()
 
 
-# --- Scoring (static: the tests pin these) ---------------------------------------------------------
+# --- Scoring and ramp (static: the tests pin these) --------------------------------------------------
 
 static func perfect_band(relaxed_on := false) -> float:
 	return PERFECT_ERR * (RELAXED_BAND if relaxed_on else 1.0)
@@ -113,37 +148,78 @@ static func layer_score(lvl: float, target: float, relaxed_on := false) -> float
 	return clampf(1.0 - maxf(0.0, err - band) / (MISS_ERR - band), 0.0, 1.0)
 
 
-static func overfill_penalty(spill_amount: float) -> float:
-	return minf(OVERFILL_MAX_PENALTY, maxf(0.0, spill_amount) * OVERFILL_PER_UNIT)
+## How far off its line a layer may lock before it is spoiled (a strike).
+static func spoil_err(relaxed_on := false) -> float:
+	return SPOIL_ERR * (RELAXED_BAND if relaxed_on else 1.0)
 
 
-static func total_score(levels: Array, spill_amount: float, relaxed_on := false) -> float:
-	var sum := 0.0
-	for i in TARGETS.size():
-		sum += layer_score(float(levels[i]) if i < levels.size() else 0.0, TARGETS[i], relaxed_on)
-	return clampf(sum / TARGETS.size() - overfill_penalty(spill_amount), 0.0, 1.0)
+static func is_spoiled(lvl: float, target: float, relaxed_on := false) -> bool:
+	return absf(lvl - target) > spoil_err(relaxed_on)
 
 
-static func flow_rate(pour_time: float, relaxed_on := false) -> float:
-	return POUR_RATE * (RELAXED_FLOW if relaxed_on else 1.0) * (1.0 + FLOW_WOBBLE * sin(pour_time * 2.3))
+## Seconds in READY without pouring before the layer spoils.
+static func idle_seconds(relaxed_on := false) -> float:
+	return IDLE_SPOIL_SECONDS * (RELAXED_BAND if relaxed_on else 1.0)
+
+
+## Record points of one layer: round(33 x its score).
+static func layer_points(score: float) -> int:
+	return roundi(LAYER_POINTS * clampf(score, 0.0, 1.0))
+
+
+## The three lines of glass `g` on night `seed_value`: glass 1 = TARGETS; later glasses seeded, ordered, at least
+## LINE_GAP apart within LINE_MIN..LINE_MAX.
+static func glass_targets(seed_value: int, g: int) -> Array[float]:
+	var out: Array[float] = []
+	if g <= 1:
+		out.assign(TARGETS)
+		return out
+	var rng := RandomNumberGenerator.new()
+	rng.seed = seed_value * 1009 + g
+	var slack := LINE_MAX - LINE_MIN - 2.0 * LINE_GAP
+	var u: Array[float] = []
+	for k in 3:
+		u.append(snappedf(rng.randf() * slack, 0.01))
+	u.sort()
+	for k in 3:
+		out.append(LINE_MIN + LINE_GAP * float(k) + u[k])
+	return out
+
+
+## Glass heights a second on glass `g` before the wobble: +RAMP_RATE_STEP a glass, POUR_RATE_CAP from GLASS_CAP.
+static func rate_at(g: int) -> float:
+	if g >= GLASS_CAP:
+		return POUR_RATE_CAP
+	return minf(POUR_RATE + RAMP_RATE_STEP * float(maxi(g, 1) - 1), POUR_RATE_CAP)
+
+
+## The flow wobble on glass `g`: FLOW_WOBBLE on glass 1 up to FLOW_WOBBLE_CAP at GLASS_CAP.
+static func wobble_at(g: int) -> float:
+	return lerpf(FLOW_WOBBLE, FLOW_WOBBLE_CAP, float(clampi(g, 1, GLASS_CAP) - 1) / float(GLASS_CAP - 1))
+
+
+static func flow_rate(pour_time: float, relaxed_on := false, g := 1) -> float:
+	return rate_at(g) * (RELAXED_FLOW if relaxed_on else 1.0) * (1.0 + wobble_at(g) * sin(pour_time * 2.3))
+
+
+func record_points() -> int:
+	return _points
 
 
 func current_score() -> float:
-	var lv := locked.duplicate()
-	if state == State.POURING or state == State.READY:
-		lv.append(level)
-	return total_score(lv, spill, relaxed)
+	return score_of(record_points())
 
 
 func live_points() -> int:
-	return points_for(current_score())
+	return record_points()
 
 
-## The pour that just ended, as tonight's ghost (kept only if it is your best tonight): where each layer was locked.
+## Tonight's ghost (kept only if this run is your best tonight): where each layer of glass 1 was locked.
 func ghost_data() -> Dictionary:
+	var src: Array[float] = _glass1_levels if glass > 1 else locked
 	var lv: Array = []
 	for i in TARGETS.size():
-		lv.append(snappedf(float(locked[i]) if i < locked.size() else 0.0, 0.001))
+		lv.append(snappedf(src[i] if i < src.size() else 0.0, 0.001))
 	return {"levels": lv}
 
 
@@ -155,6 +231,7 @@ func press() -> void:
 		_pressed = true
 		_pour_t = 0.0
 		_foam = 0.0
+		spill = 0.0
 		haptic("tick")
 		var geo := _geo()
 		fx().squash("tap")
@@ -168,12 +245,62 @@ func release() -> void:
 
 
 func _lock_layer() -> void:
+	var t := targets[layer]
+	if is_spoiled(level, t, relaxed):
+		_spoil_layer()
+		return
+	var sc := layer_score(level, t, relaxed)
 	locked.append(level)
+	layer_scores.append(sc)
+	_points += layer_points(sc)
+	layers_done += 1
 	state = State.SETTLE
 	_state_t = 0.0
 	_lock_beat(layer, level)
 	_check_rival()
 	_update_status()
+
+
+## A spoiled layer (too far off its line, a spill over the rim, or too long without pouring) is a strike. Nam evens the
+## glass to the line so the next layer is fair; the third strike ends the round.
+func _spoil_layer() -> void:
+	var t := targets[layer]
+	level = t
+	locked.append(t)
+	layer_scores.append(0.0)
+	layers_done += 1
+	lives_left -= 1
+	state = State.SETTLE
+	_state_t = 0.0
+	_spoil_beat(layer)
+	_update_status()
+	if lives_left <= 0:
+		state = State.DONE
+		lose()
+
+
+## The glass is served; a fresh empty one slides in with new lines and a faster tap.
+func _next_glass() -> void:
+	if glass == 1:
+		_glass1_levels.assign(locked)
+	glass += 1
+	layer = 0
+	level = 0.0
+	spill = 0.0
+	locked.clear()
+	layer_scores.clear()
+	targets = glass_targets(seed_used, glass)
+	state = State.INTRO
+	_state_t = 0.0
+	_ready_t = 0.0
+	level_up(mini(glass, GLASS_CAP))
+	fx().pop(S.t("mg.pour_perfect.glass", {"n": glass}), Vector2(size.x * 0.5, size.y * 0.34), UI.GOLD, 48)
+	haptic("tick")
+	_update_status()
+
+
+func _intro_seconds() -> float:
+	return INTRO_SECONDS if glass <= 1 else NEXT_GLASS_SECONDS
 
 
 ## §4.1: passing tonight's regular as the layers lock in.
@@ -188,10 +315,10 @@ func _check_rival() -> void:
 ## answers with its layer score and a short tick. Never a shake: a pour is calm.
 func _lock_beat(i: int, lvl: float) -> void:
 	var geo := _geo()
-	var ty: float = geo["y_bottom"] - TARGETS[i] * geo["inner_h"]
+	var ty: float = geo["y_bottom"] - targets[i] * geo["inner_h"]
 	var at := Vector2(geo["cx"], ty - 24.0)
 	var f := fx()
-	var err := absf(lvl - TARGETS[i])
+	var err := absf(lvl - targets[i])
 	if err <= perfect_band(relaxed):
 		f.flash("line%d" % i)
 		f.pop(S.t("mg.fx.perfect"), at, UI.GOLD, 76)
@@ -201,10 +328,25 @@ func _lock_beat(i: int, lvl: float) -> void:
 		f.hit_stop()
 		haptic("strong")
 	else:
-		var sc := layer_score(lvl, TARGETS[i], relaxed)
+		var sc := layer_score(lvl, targets[i], relaxed)
 		f.combo_break()
 		f.pop("%d" % roundi(sc * 100.0), at, UI.CREAM if sc >= 0.5 else UI.SMOKE, 56)
 		haptic("tick")
+
+
+## Spoiled beat (a strike): SPOILED on the line, the lives left under it, the red edge and a double tick. No shake.
+func _spoil_beat(i: int) -> void:
+	var geo := _geo()
+	var ty: float = geo["y_bottom"] - targets[i] * geo["inner_h"]
+	var cx: float = geo["cx"]
+	var f := fx()
+	f.fail_edge()
+	f.combo_break()
+	f.pop(S.t("mg.pour_perfect.spoiled"), Vector2(cx, ty - 24.0), UI.CREAM, 60)
+	if lives_left > 0:
+		var word := S.t("mg.ramp.last") if lives_left == 1 else S.t("mg.ramp.strike", {"lives": lives_left})
+		f.pop(word, Vector2(cx, ty + 50.0), UI.AMBER, 44)
+	haptic("fail")
 
 
 func advance(dt: float) -> void:
@@ -212,35 +354,36 @@ func advance(dt: float) -> void:
 	_foam = move_toward(_foam, 1.0 if state == State.POURING else 0.0, dt / FOAM_RISE_SECONDS)
 	match state:
 		State.INTRO:
-			if _state_t >= INTRO_SECONDS:
+			if _state_t >= _intro_seconds():
 				state = State.READY
 				_state_t = 0.0
+				_ready_t = 0.0
 		State.READY:
 			elapsed += dt
+			_ready_t += dt
+			if _ready_t >= idle_seconds(relaxed):
+				# Nobody poured: the layer spoils so the round always reaches its loss rule.
+				_spoil_layer()
 		State.POURING:
 			elapsed += dt
 			_pour_t += dt
-			var add := flow_rate(_pour_t, relaxed) * dt
-			level += add
+			level += flow_rate(_pour_t, relaxed, glass) * dt
 			if level > 1.0:
 				spill += level - 1.0
 				level = 1.0
-			if elapsed >= TIME_LIMIT:
-				release()
+				_spill_beat(true, dt)
+				_spoil_layer()
 		State.SETTLE:
 			elapsed += dt
 			if _state_t >= SETTLE_SECONDS:
 				layer += 1
-				if layer >= TARGETS.size() or elapsed >= TIME_LIMIT:
-					state = State.DONE
-					finish(total_score(locked, spill, relaxed))
+				if layer >= targets.size():
+					_next_glass()
 				else:
 					state = State.READY
 					_state_t = 0.0
+					_ready_t = 0.0
 					_update_status()
-	if state == State.READY and elapsed >= TIME_LIMIT:
-		# Time ran out waiting: lock what is in the glass so nobody is stuck.
-		_lock_layer()
 	queue_redraw()
 
 
@@ -262,12 +405,13 @@ func _spill_beat(first: bool, dt: float) -> void:
 
 func _result_extra() -> Dictionary:
 	if _record.is_empty():
-		_record = Rivals.record(game_id, live_points(), ghost_data(), rivals_store)
-	return {"rival": rival, "board": _record["board_line"]}
+		_record = Rivals.record(game_id, record_points(), ghost_data(), rivals_store)
+	return {"rival": rival, "board": _record["board_line"], "level": ramp_level, "speed": rate_at(glass),
+		"misses": STRIKES - lives_left, "glass": glass, "layers": layers_done}
 
 
 func _update_status() -> void:
-	set_status(S.t("mg.pour_perfect.status", {"n": mini(layer + 1, TARGETS.size()), "total": TARGETS.size()}))
+	set_status(S.t("mg.ramp.status", {"level": ramp_level, "points": record_points(), "lives": lives_left}))
 
 
 func _gui_input(event: InputEvent) -> void:
@@ -295,7 +439,7 @@ func _glass_rect() -> Rect2:
 	var gw := minf(size.x * 0.42, 430.0)
 	var sprite := _sprites()
 	var gh := minf(size.y * (0.55 if sprite else 0.62), 760.0)
-	var slide := 1.0 if state != State.INTRO else ease(clampf(_state_t / INTRO_SECONDS, 0.0, 1.0), 0.4)
+	var slide := 1.0 if state != State.INTRO else ease(clampf(_state_t / _intro_seconds(), 0.0, 1.0), 0.4)
 	var x := size.x * 0.5 - gw * 0.5 + (1.0 - slide) * size.x * 0.6
 	return Rect2(x, size.y * (0.28 if sprite else 0.16), gw, gh)
 
@@ -419,8 +563,8 @@ func _draw() -> void:
 			var rx := g.position.x + g.size.x * k / 6.0
 			draw_line(Vector2(rx, g.position.y + 12), Vector2(rx, g.end.y - 12), Color(UI.CREAM, 0.12), 2.0)
 	# Target lines for every layer; the active one is bright, with the perfect band as a faint strip.
-	for i in TARGETS.size():
-		var ty := y_bottom - TARGETS[i] * inner_h
+	for i in targets.size():
+		var ty := y_bottom - targets[i] * inner_h
 		var active := i == layer and state != State.DONE
 		var col := UI.GOLD if active else Color(UI.SMOKE, 0.5)
 		col = f.flash_color("line%d" % i, col)
@@ -431,10 +575,10 @@ func _draw() -> void:
 		if f.flash_amount("line%d" % i) > 0.0:
 			lw = 8.0
 		draw_line(Vector2(g.position.x - 30, ty), Vector2(g.end.x + 30, ty), col, lw)
-		if i < locked.size():
-			UI.draw_text(self, str(roundi(layer_score(locked[i], TARGETS[i], relaxed) * 100.0)), Vector2(g.end.x + 90, ty + 12), 36, UI.CREAM)
-		if not ghost.is_empty():
-			# your best pour tonight: a faint cyan tick where that layer was locked
+		if i < layer_scores.size():
+			UI.draw_text(self, str(roundi(layer_scores[i] * 100.0)), Vector2(g.end.x + 90, ty + 12), 36, UI.CREAM)
+		if not ghost.is_empty() and glass == 1:
+			# your best pour tonight: a faint cyan tick where that layer of glass 1 was locked
 			var gy := y_bottom - float(ghost["levels"][i]) * inner_h
 			draw_line(Vector2(g.position.x - 14, gy), Vector2(g.end.x + 14, gy), Color(0.75, 0.9, 1.0, 0.55), 3.0)
 	# The drink being poured.
@@ -446,7 +590,7 @@ func _draw() -> void:
 		_text_right(S.t("mg.rivals.to_beat"), Vector2(size.x - 20.0, 40.0), 20, UI.SMOKE)
 		_text_right("%s %d" % [str(rival.get("name", "")), int(rival.get("points", 0))], Vector2(size.x - 20.0, 72.0), 28, rc)
 		_text_right(S.t("mg.rivals.you_now", {"score": live_points()}), Vector2(size.x - 20.0, 100.0), 22, UI.GOLD if rival_passed else UI.SMOKE)
-	if not ghost.is_empty() and (state == State.INTRO or (state == State.READY and layer == 0)):
+	if not ghost.is_empty() and glass == 1 and (state == State.INTRO or (state == State.READY and layer == 0)):
 		UI.draw_text(self, S.t("mg.pour_perfect.ghost"), Vector2(size.x * 0.5, size.y - 200), 28, Color(0.75, 0.9, 1.0, 0.8))
 	# Hint.
 	var hint := ""

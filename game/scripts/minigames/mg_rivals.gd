@@ -25,7 +25,7 @@ extends RefCounted
 ##       Tonight's rows, best first: {id, name, points, you}. player_points < 0 leaves you out. The lounge "Top
 ##       patrons" board (job Q10) reads the same rows.
 ##   lineup(game_id, night) -> Array[String]: the LINEUP regulars who play that game that night (seeded).
-##   regular_points(game_id, regular, night) -> int: one regular's seeded score, 0..100.
+##   regular_points(game_id, regular, night) -> int: one regular's seeded score, 5..100 x SCALE.
 ##   to_beat(game_id, best, night) -> Dictionary: as `rival` above.
 ##   set_skill(game_id, table): optional per-game skill table (regular -> mean score 0..1) when the house mix differs.
 ##
@@ -44,6 +44,9 @@ const PLAYERS_A_NIGHT := 4          ## regulars on a game's board each night
 const SKILL := {"hiro": 0.86, "jules": 0.8, "tt": 0.72, "bow": 0.66, "ploy": 0.62, "dougie": 0.55, "tong": 0.48, "lung_nop": 0.34}
 const SPREAD := 0.09                ## night-to-night spread (normal sigma) around a regular's mean
 const DEFAULT_SKILL := 0.6
+## Endless ramp (docs/design/15-minigame-ramp.md, card minigame-ramp-rivals, awaiting Daniele): the games have no
+## ceiling now, so tonight's regulars score on SCALE x the old 0-100 to keep the board a contest.
+const SCALE := 1.5
 
 static var _skills := {}            ## game_id -> {regular: mean}, set_skill()
 static var _mem := {}               ## the store without Needs: {EXT_KEY: {...}} like Needs.ext
@@ -73,12 +76,12 @@ static func _rng(parts: String) -> RandomNumberGenerator:
 	return rng
 
 
-## One regular's score tonight in this game, 0..100: their mean plus a seeded spread.
+## One regular's score tonight in this game, 5..100 x SCALE: their mean plus a seeded spread.
 static func regular_points(game_id: String, regular: String, n := -1) -> int:
 	if n < 0:
 		n = night()
 	var rng := _rng("%s|%s|%d" % [game_id, regular, n])
-	return clampi(roundi(rng.randfn(_skill(game_id, regular), SPREAD) * 100.0), 5, 100)
+	return clampi(roundi(rng.randfn(_skill(game_id, regular), SPREAD) * 100.0 * SCALE), 5, roundi(100.0 * SCALE))
 
 
 ## Who plays this game tonight: PLAYERS_A_NIGHT of the LINEUP, seeded per game and night.
