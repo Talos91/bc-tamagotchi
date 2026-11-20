@@ -12,5 +12,5 @@ are in `game/scripts/presence/presence_config.gd`. Contract: `docs/design/08b-pr
 
 Test switches (server only, SQL editor): `update bc_settings set ignore_hours = true` (check-ins outside 19–02),
 push caps in the same row (`push_max_per_night`, `push_per_sender`, `push_from_hour`, `push_until_hour`).
-Reprint one table's code: `python docs/venue/qr/make_qr.py --rotate Table3`, then run `seed/venue_tables.sql`.
+Reprint one code: `python docs/venue/qr/make_qr.py --rotate Tiny3` (key from codes.json), then run `seed/venue_tables.sql`. All new tokens: `--new-all` (QR remake 2026-11-20: 39 codes, Buffer + Main room + bar stools, no Lounge).
 Moderation: `reports` table (status open/kept/dismissed/banned), `profiles.banned`, `profiles.name_hidden`.
