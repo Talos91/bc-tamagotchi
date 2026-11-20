@@ -48,6 +48,16 @@ var _name_edit: LineEdit
 var _name_err: Label
 var _step: Label
 var _landscape := false
+var _sig := ""                   ## which rows the open tab shows (_layout_sig): a tap rebuilds the tab only when it changes
+## Hair-card thumbnails (owner item 1): rendered once per look by one offscreen viewport, one per frame, cached for the
+## session. Key: _thumb_key(record with that hair).
+static var _thumbs := {}
+var _thumb_vp: SubViewport
+var _thumb_fig: Node3D
+var _thumb_cam: Camera3D
+var _thumb_queue: Array = []     ## [key, record] still to render
+var _thumb_busy := false
+const THUMB_PX := 128
 ## Phone browsers: the web export has no on-screen keyboard bridge (export preset html/experimental_virtual_keyboard
 ## is off), so a LineEdit never gets a keyboard there and a new character could never type a name (owner item 26).
 ## On a phone (finger as the main pointer) a tap on the name field opens the browser's own prompt instead. Not
@@ -216,7 +226,7 @@ func _preview_box() -> Control:
 	_figure = FigureScene.instantiate()
 	_figure.rotation.y = _turn
 	_preview.add_child(_figure)
-	_figure.set_look({"avatar": record})
+	_figure.show_avatar(record)
 	var cam := Camera3D.new()
 	cam.fov = 30.0
 	_preview.add_child(cam)
@@ -315,6 +325,7 @@ func _show_tab() -> void:
 		b.add_theme_stylebox_override("normal", UI.box(UI.BG_PLUM if on else UI.BG_RAISED, 10, UI.RED_HI if on else UI.LINE, 2.0))
 		b.add_theme_color_override("font_color", UI.CREAM if on else (UI.GOLD if i < reached else UI.ASH))
 	_step.text = UIS.t("ui.avatar.step", {"n": tab + 1})
+	_sig = _layout_sig()
 	match TABS[tab]:
 		"body":
 			_row(UIS.t("ui.avatar.row.build"))
@@ -330,12 +341,26 @@ func _show_tab() -> void:
 			_hair_cards()
 			_row(UIS.t("ui.avatar.row.hair_colour"))
 			_swatches("hair_colour", Avatar.data()["hair_colours"])
-		"outfit":
-			_row(UIS.t("ui.avatar.row.look"))
-			_chips("look", Avatar.data()["look_order"], "ui.avatar.look.", 3)
+		"outfit":   # one row per piece (owner item 3: "too little variety expecially in clothing")
+			var d := Avatar.data()
+			_row(UIS.t("ui.avatar.row.top"))
+			_chips("top", d["tops"], "ui.avatar.top.", 3)
 			_row(UIS.t("ui.avatar.row.top_colour"))
-			var look: Dictionary = Avatar.data()["looks"].get(record["look"], {})
-			_swatches("top_colour", look.get("top_colours", []))
+			_swatches("top_colour", d["top_colours"])
+			if record["top"] in d["printed_tops"]:
+				_row(UIS.t("ui.avatar.row.print"))
+				_swatches("print_colour", d["print_colours"])
+			if record["top"] != "dress":
+				_row(UIS.t("ui.avatar.row.bottom"))
+				_chips("bottom", d["bottoms"], "ui.avatar.bottom.", 3)
+				_row(UIS.t("ui.avatar.row.bottom_colour"))
+				_swatches("bottom_colour", d["bottom_colours"])
+			_row(UIS.t("ui.avatar.row.shoes"))
+			_chips("shoes", d["shoes"], "ui.avatar.shoes.", 3)
+			_row(UIS.t("ui.avatar.row.hat"))
+			_chips("hat", [""] + d["hats"], "ui.avatar.hat.", 3)
+			_row(UIS.t("ui.avatar.row.glasses"))
+			_chips("glasses", [""] + d["glasses"], "ui.avatar.glasses.", 3)
 		"you":
 			_row(UIS.t("ui.avatar.row.name"))         # the name first: it is the one thing Done can refuse
 			_name_row()
@@ -367,17 +392,32 @@ func _choice(text: String, on: bool) -> Button:
 	b.size_flags_horizontal = Control.SIZE_EXPAND_FILL
 	b.custom_minimum_size.y = UI.dp(44)
 	b.add_theme_font_size_override("font_size", int(UI.dp(14)))
-	b.add_theme_stylebox_override("normal", UI.box(UI.BG_PLUM if on else UI.BG_RAISED, 12, UI.RED_HI if on else UI.LINE, 3.0 if on else 1.0))
-	b.add_theme_stylebox_override("hover", b.get_theme_stylebox("normal"))
-	b.add_theme_color_override("font_color", UI.CREAM if on else UI.SMOKE)
+	_style_choice(b, on)
 	return b
+
+
+func _style_choice(b: Control, on: bool) -> void:
+	var st := UI.box(UI.BG_PLUM if on else UI.BG_RAISED, 12, UI.RED_HI if on else UI.LINE, 3.0 if on else 1.0)
+	for nm in ["normal", "hover", "pressed"]:
+		b.add_theme_stylebox_override(nm, st)
+	b.add_theme_color_override("font_color", UI.CREAM if on else UI.SMOKE)
+	b.add_theme_color_override("font_hover_color", UI.CREAM if on else UI.SMOKE)
+
+
+## Is `value` the record's current choice for `key`? Hat and glasses live in record.worn ("" = none).
+func _selected(key: String, value: Variant) -> bool:
+	if key in ["hat", "glasses"]:
+		return str(record.get("worn", {}).get(key, "")) == str(value)
+	return record.get(key) == value
 
 
 func _chips(key: String, ids: Array, prefix: String, cols: int) -> void:
 	var g := _grid(cols)
 	for id in ids:
-		var b := _choice(UIS.t(prefix + str(id)), record.get(key) == id)
-		b.name = "%s_%s" % [key, id]
+		var label := UIS.t("ui.avatar.none") if str(id) == "" else UIS.t(prefix + str(id))
+		var b := _choice(label, _selected(key, id))
+		b.name = "%s_%s" % [key, id if str(id) != "" else "none"]
+		b.set_meta("pick", [key, id, "chip"])
 		b.pressed.connect(_pick.bind(key, id))
 		g.add_child(b)
 
@@ -388,59 +428,138 @@ func _swatches(key: String, names: Array) -> void:
 	flow.add_theme_constant_override("v_separation", int(UI.dp(10)))
 	_content.add_child(flow)
 	for sw in names:
-		var on: bool = record.get(key) == sw
 		var b := Button.new()
 		b.name = "%s_%s" % [key, sw]
 		b.focus_mode = Control.FOCUS_NONE
 		b.tooltip_text = str(sw)
 		b.custom_minimum_size = Vector2(UI.dp(40), UI.dp(40))
-		var st := UI.box(Color(Avatar.hex(sw)), 20, UI.RED_HI if on else UI.LINE, 4.0 if on else 1.0)
-		for s in ["normal", "hover", "pressed"]:
-			b.add_theme_stylebox_override(s, st)
+		b.set_meta("pick", [key, sw, "swatch"])
+		_style_swatch(b, sw, _selected(key, sw))
 		b.pressed.connect(_pick.bind(key, sw))
 		flow.add_child(b)
 
 
-## Hair styles as small renders of the current character with that style (rendered once, the same library).
+func _style_swatch(b: Button, sw: String, on: bool) -> void:
+	var st := UI.box(Color(Avatar.hex(sw)), 20, UI.RED_HI if on else UI.LINE, 4.0 if on else 1.0)
+	for nm in ["normal", "hover", "pressed"]:
+		b.add_theme_stylebox_override(nm, st)
+
+
+## Hair styles as small renders of the current character with that style. A card is a Button (it picks on release, so
+## a drag over it scrolls instead, scripts/ui/touch_scroll.gd) holding a cached thumbnail: each look is rendered once,
+## by one offscreen viewport, one card per frame (_thumb_next); before, every tap built eight viewports, each with the
+## whole parts library (owner item 1).
 func _hair_cards() -> void:
 	var g := _grid(4)
 	for id in Avatar.data()["hairs"]:
-		var on: bool = record.get("hair") == id
-		var card := PanelContainer.new()
+		var on := _selected("hair", id)
+		var card := Button.new()
 		card.name = "hair_" + str(id)
+		card.focus_mode = Control.FOCUS_NONE
 		card.size_flags_horizontal = Control.SIZE_EXPAND_FILL
-		card.add_theme_stylebox_override("panel", UI.box(UI.BG_PLUM if on else UI.BG_RAISED, 12, UI.RED_HI if on else UI.LINE, 3.0 if on else 1.0))
-		card.mouse_filter = Control.MOUSE_FILTER_STOP
-		card.gui_input.connect(func(e: InputEvent):
-			if (e is InputEventMouseButton and e.pressed and e.button_index == MOUSE_BUTTON_LEFT) or (e is InputEventScreenTouch and e.pressed):
-				_pick("hair", id))
+		card.custom_minimum_size = Vector2(0, UI.dp(84))
+		card.set_meta("pick", ["hair", id, "hair"])
+		_style_choice(card, on)
+		card.pressed.connect(_pick.bind("hair", id))
 		g.add_child(card)
 		var v := VBoxContainer.new()
 		v.mouse_filter = Control.MOUSE_FILTER_IGNORE
+		v.set_anchors_and_offsets_preset(Control.PRESET_FULL_RECT, Control.PRESET_MODE_MINSIZE, int(UI.dp(4)))
+		v.add_theme_constant_override("separation", 0)
 		card.add_child(v)
-		var box := SubViewportContainer.new()
-		box.stretch = true
-		box.custom_minimum_size = Vector2(UI.dp(60), UI.dp(60))
-		box.mouse_filter = Control.MOUSE_FILTER_IGNORE
-		v.add_child(box)
-		var vp := SubViewport.new()
-		vp.own_world_3d = true
-		vp.render_target_update_mode = SubViewport.UPDATE_ONCE
-		box.add_child(vp)
-		_stage(vp, false)
+		var pic := TextureRect.new()
+		pic.name = "Thumb"
+		pic.mouse_filter = Control.MOUSE_FILTER_IGNORE
+		pic.expand_mode = TextureRect.EXPAND_IGNORE_SIZE
+		pic.stretch_mode = TextureRect.STRETCH_KEEP_ASPECT_CENTERED
+		pic.custom_minimum_size = Vector2(UI.dp(56), UI.dp(56))
+		pic.size_flags_vertical = Control.SIZE_EXPAND_FILL
+		v.add_child(pic)
+		var l := UI.label(UIS.t("ui.avatar.hair." + str(id)), 12, UI.CREAM if on else UI.SMOKE, HORIZONTAL_ALIGNMENT_CENTER)
+		l.name = "Name"
+		l.mouse_filter = Control.MOUSE_FILTER_IGNORE
+		v.add_child(l)
+	_fill_thumbs()
+
+
+## The thumbnail key: what the head shot shows.
+static func _thumb_key(r: Dictionary) -> String:
+	return "%s|%s|%s|%s|%s|%s|%s" % [r["body"], r["head"], r["skin"], r["face"], r["hair_colour"], r["hair"], r.get("worn", {}).get("hat", "")]
+
+
+## Put cached thumbnails on the hair cards and queue the missing ones (the current hair first).
+func _fill_thumbs() -> void:
+	if not is_instance_valid(_content):
+		return
+	_thumb_queue.clear()
+	for id in Avatar.data()["hairs"]:
+		var card := _content.find_child("hair_" + str(id), true, false)
+		if card == null:
+			continue
 		var r := record.duplicate(true)
 		r["hair"] = id
-		var f: Node3D = FigureScene.instantiate()
-		f.rotation.y = 0.3
-		vp.add_child(f)
-		f.set_look({"avatar": r})
-		var cam := Camera3D.new()
-		cam.fov = 26.0
-		vp.add_child(cam)
-		var head_y := 1.0 if record["body"] != "tall" else 1.1
-		cam.look_at_from_position(Vector3(0, head_y + 0.1, 1.5), Vector3(0, head_y - 0.02, 0))
-		var l := UI.label(UIS.t("ui.avatar.hair." + str(id)), 12, UI.CREAM if on else UI.SMOKE, HORIZONTAL_ALIGNMENT_CENTER)
-		v.add_child(l)
+		var key := _thumb_key(r)
+		var pic := card.find_child("Thumb", true, false) as TextureRect
+		if _thumbs.has(key):
+			pic.texture = _thumbs[key]
+		else:
+			pic.texture = null
+			if id == record["hair"]:
+				_thumb_queue.push_front([key, r])
+			else:
+				_thumb_queue.append([key, r])
+	if not _thumb_busy and not _thumb_queue.is_empty():
+		_thumb_next()
+
+
+## Render the queued thumbnails in the one offscreen viewport, one per frame.
+func _thumb_next() -> void:
+	_thumb_busy = true
+	if not is_instance_valid(_thumb_vp):
+		_thumb_vp = SubViewport.new()
+		_thumb_vp.name = "ThumbViewport"
+		_thumb_vp.own_world_3d = true
+		_thumb_vp.size = Vector2i(THUMB_PX, THUMB_PX)
+		_thumb_vp.render_target_update_mode = SubViewport.UPDATE_DISABLED
+		add_child(_thumb_vp)
+		_stage(_thumb_vp, false)
+		_thumb_fig = FigureScene.instantiate()
+		_thumb_fig.rotation.y = 0.3
+		_thumb_vp.add_child(_thumb_fig)
+		_thumb_cam = Camera3D.new()
+		_thumb_cam.fov = 26.0
+		_thumb_vp.add_child(_thumb_cam)
+	while not _thumb_queue.is_empty() and is_inside_tree():
+		var job: Array = _thumb_queue.pop_front()
+		if _thumbs.has(job[0]):
+			continue
+		var r: Dictionary = job[1]
+		_thumb_fig.show_avatar(r)
+		var head_y := 1.0 if r["body"] != "tall" else 1.1
+		_thumb_cam.look_at_from_position(Vector3(0, head_y + 0.1, 1.5), Vector3(0, head_y - 0.02, 0))
+		_thumb_vp.render_target_update_mode = SubViewport.UPDATE_ONCE
+		await RenderingServer.frame_post_draw
+		if not is_inside_tree() or not is_instance_valid(_thumb_vp):
+			break
+		var img := _thumb_vp.get_texture().get_image()
+		if img == null or img.is_empty():
+			_thumb_queue.clear()   # no renderer (headless): the cards keep their names only
+			break
+		_thumbs[job[0]] = ImageTexture.create_from_image(img)
+		_fill_one(job[0])
+	_thumb_busy = false
+
+
+func _fill_one(key: String) -> void:
+	if not is_instance_valid(_content):
+		return
+	for id in Avatar.data()["hairs"]:
+		var r := record.duplicate(true)
+		r["hair"] = id
+		if _thumb_key(r) == key:
+			var card := _content.find_child("hair_" + str(id), true, false)
+			if card != null:
+				(card.find_child("Thumb", true, false) as TextureRect).texture = _thumbs[key]
 
 
 func _vibes() -> void:
@@ -525,30 +644,82 @@ func _browser_prompt(current: String) -> Variant:
 
 # --- Choices -------------------------------------------------------------------------------------
 
+## A tap: change the record, show it on the figure, restyle the choices in place. The tab is rebuilt only when its rows
+## change (a printed top adds the pattern row, the dress hides the bottom rows); before, every tap rebuilt the tab and
+## the whole figure, and on the Hair tab eight more figures (owner item 1).
 func _pick(key: String, value: Variant) -> void:
-	record[key] = value
-	if key == "look":
+	if key in ["hat", "glasses"]:
+		var worn: Dictionary = record.get("worn", {}).duplicate()
+		if str(value) == "":
+			worn.erase(key)
+		else:
+			worn[key] = value
+		record["worn"] = worn
+	elif key == "look":                          # a starter look (tests, old saves): its pieces
 		var lk: Dictionary = Avatar.data()["looks"][value]
 		var tc: Array = lk["top_colours"]
 		if not tc.has(record.get("top_colour")):
 			record["top_colour"] = tc[0]
+		record["look"] = value
 		record.erase("top")                        # v2 record: the look's pieces (Avatar.normalize migrates)
-		record = Avatar.normalize(record)
+	else:
+		record[key] = value
+		if key == "top":
+			record["look"] = Avatar.look_for(str(value))   # what a client from before v2 draws
+			if value == "dress":
+				record["bottom"] = "dress"
+			elif record.get("bottom") == "dress":
+				record["bottom"] = "skirt"
+	record = Avatar.normalize(record)
 	_refresh_figure()
-	_show_tab()
+	if _layout_sig() != _sig:
+		_show_tab()
+	else:
+		_restyle()
+
+
+## The rows the open tab shows: a change here needs a rebuild, anything else a restyle.
+func _layout_sig() -> String:
+	if TABS[tab] == "outfit":
+		return "outfit|%s|%s" % [record["top"] in Avatar.data()["printed_tops"], record["top"] == "dress"]
+	return TABS[tab]
+
+
+## Selected / not on every choice of the open tab, in place; the hair cards' pictures follow the look.
+func _restyle() -> void:
+	if not is_instance_valid(_content):
+		return
+	for b in _content.find_children("*", "Button", true, false):
+		if not b.has_meta("pick"):
+			continue
+		var m: Array = b.get_meta("pick")
+		var on := _selected(m[0], m[1])
+		match m[2]:
+			"swatch":
+				_style_swatch(b, m[1], on)
+			"hair":
+				_style_choice(b, on)
+				var l := b.find_child("Name", true, false) as Label
+				if l != null:
+					l.add_theme_color_override("font_color", UI.CREAM if on else UI.SMOKE)
+			_:
+				_style_choice(b, on)
+	if TABS[tab] == "hair":
+		_fill_thumbs()
 
 
 func _refresh_figure() -> void:
 	if is_instance_valid(_figure):
-		_figure.set_look({"avatar": record})
+		_figure.show_avatar(record)
 
 
 func _on_surprise() -> void:
-	var r := Avatar.random_record()
-	r["worn"] = record.get("worn", {})
-	record = r
+	record = Avatar.random_record()   # hats and glasses too, sometimes (Avatar.random_record)
 	_refresh_figure()
-	_show_tab()
+	if _layout_sig() != _sig:
+		_show_tab()
+	else:
+		_restyle()
 
 
 func _on_preview_input(e: InputEvent) -> void:

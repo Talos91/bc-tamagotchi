@@ -14,6 +14,8 @@ extends Node3D
 ## below the real seat. Loops start at a random phase so a crowd never moves in step.
 ##   {"avatar": record}                -> the player's own character (scripts/avatar.gd): the parts library of the
 ##                                        record's body, only its parts kept (the rest freed), recoloured per slot
+## `show_avatar(record)`                -> the same for the character creator's preview, built once per body: every
+##                                        part kept, only shown / hidden and recoloured per tap (owner item 1)
 ## To swap placeholders for the final characters, replace this scene; the venue only calls set_look() and play().
 
 const PRESET_DIR := "res://assets/chars/presets/"
@@ -145,8 +147,48 @@ func _build_preset(ps: PackedScene, avatar := {}) -> void:
 
 ## Parts library -> one character: keep the record's parts, free every other mesh (a lean node: nothing hidden
 ## stays in the tree), then recolour per material slot.
+## The creator's preview (owner list 2026-11-20 item 1, "superunresponsive"): the body's parts library is built once
+## and kept whole; each change only shows the record's parts and recolours them. A body change builds the new one.
+func show_avatar(rec: Dictionary) -> void:
+	var res := Avatar.resolve(rec)
+	if _model == null or look.get("library", "") != res["library"]:
+		set_look({"avatar": rec, "library": res["library"], "keep_all": true})
+	look["avatar"] = rec
+	if not look.get("keep_all", false):
+		return   # no library: the placeholder boxes
+	var ids: Array = res["ids"]
+	var colours: Dictionary = res["colours"]
+	for mi: MeshInstance3D in _model.find_children("*", "MeshInstance3D", true, false):
+		mi.visible = String(mi.name) in ids
+		if not mi.visible:
+			continue
+		for sfc in mi.mesh.get_surface_count():   # as Chars.recolour, on the shown parts only, materials cached
+			var base := mi.mesh.surface_get_material(sfc) as StandardMaterial3D
+			var slot := base.resource_name.get_slice("__", 0) if base != null and base.resource_name.contains("__") else ""
+			mi.set_surface_override_material(sfc, _slot_mat(base, str(colours.get(slot, ""))) if slot != "" else null)
+	for p in _props:
+		p.visible = p.visible and String(p.name) in ids
+
+
+## The library material `base` in colour `hex` ("" = as it is), one per pair for the session (show_avatar).
+static var _slot_mats := {}
+static func _slot_mat(base: StandardMaterial3D, hex: String) -> Material:
+	if hex == "":
+		return null
+	var key := "%d|%s" % [base.get_instance_id(), hex]
+	if not _slot_mats.has(key):
+		var lin := Color(hex).srgb_to_linear()
+		var dup := base.duplicate() as StandardMaterial3D
+		dup.resource_name = base.resource_name.get_slice("__", 0) + "__custom"
+		dup.albedo_color = Color(minf(lin.r * Chars.JMAX, 1.0), minf(lin.g * Chars.JMAX, 1.0), minf(lin.b * Chars.JMAX, 1.0)).linear_to_srgb()
+		_slot_mats[key] = dup
+	return _slot_mats[key]
+
+
 func _apply_avatar(res: Dictionary) -> void:
 	var keep: Array = res["ids"]
+	if look.get("keep_all", false):
+		return   # show_avatar shows and colours the parts
 	for mi: MeshInstance3D in _model.find_children("*", "MeshInstance3D", true, false):
 		if not (String(mi.name) in keep):
 			mi.get_parent().remove_child(mi)

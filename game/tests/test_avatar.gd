@@ -46,6 +46,7 @@ func _init() -> void:
 	_names()
 	_hair_cover()
 	await _figure()
+	await _outfit()
 	await _start_new()
 	await _start_old()
 	await _booth_and_greeter()
@@ -266,6 +267,77 @@ func _figure() -> void:
 				top_ok = true
 	check(skin_ok and top_ok, "skin (Skin7) and top (Teal) recoloured")
 	f.queue_free()
+	await process_frame
+
+
+## Owner list 2026-11-20 items 1 and 3: the per-piece Outfit tab, and taps that restyle instead of rebuilding.
+func _outfit() -> void:
+	print("outfit (items 1, 3)")
+	var d := Avatar.data()
+	# v1 records (a look and a top colour) draw their look's pieces and colours in v2
+	for look in d["look_order"]:
+		var lk: Dictionary = d["looks"][look]
+		var res := Avatar.resolve({"look": look, "top_colour": lk["top_colours"][1]})
+		check(res["ids"].has("top_" + lk["top"]) and res["ids"].has("bottom_" + lk["bottom"]) and res["ids"].has("shoes_" + lk["shoes"])
+			and res["colours"]["top"] == Avatar.hex(lk["top_colours"][1]), "v1 look %s draws its own pieces and top colour in v2" % look)
+	# Surprise me: hats and glasses sometimes, never always
+	var rng := RandomNumberGenerator.new()
+	rng.seed = 7
+	var hats := 0
+	var glasses := 0
+	for i in 200:
+		var r := Avatar.random_record(rng)
+		hats += 1 if r["worn"].has("hat") else 0
+		glasses += 1 if r["worn"].has("glasses") else 0
+	check(hats > 20 and hats < 120 and glasses > 15 and glasses < 120, "Surprise me puts on a hat sometimes (%d/200) and glasses sometimes (%d/200)" % [hats, glasses])
+	# a hat swaps the hair for the one cut at the brim
+	var rec := Avatar.default_record()
+	rec["worn"] = {"hat": "hat_cap"}
+	var ids: Array = Avatar.resolve(rec)["ids"]
+	check(ids.has("hair_%s_hat" % rec["hair"]) and not ids.has("hair_" + rec["hair"]) and ids.has("hat_cap"), "a hat swaps the hair id (%s)" % [ids])
+
+	# The creator's Outfit tab, one row per piece
+	var c: Control = Creator.new()
+	root.add_child(c)
+	c.open("edit", Avatar.default_record(), "Ty", "night_owl")
+	await process_frame
+	c._go_tab(2)
+	await process_frame
+	await process_frame
+	var tops: Array = d["tops"].filter(func(t): return c._content.find_child("top_" + t, true, false) != null)
+	check(tops.size() == d["tops"].size(), "every top on the Outfit tab (%d of %d)" % [tops.size(), d["tops"].size()])
+	for row in ["shoes_boots", "hat_none", "hat_hat_fedora", "glasses_none", "glasses_glasses_round", "bottom_skirt_long", "bottom_colour_Olive"]:
+		check(c._content.find_child(row, true, false) != null, "Outfit tab has %s" % row)
+	check(c._content.find_child("print_colour_Mint", true, false) == null, "no pattern row for a plain tee")
+	var fig_model: Node = c._figure._model
+	var swatch: Node = c._content.find_child("top_colour_Coral", true, false)
+	c.choose("top_colour", "Coral")
+	await process_frame
+	check(is_instance_valid(swatch) and not swatch.is_queued_for_deletion() and c._figure._model == fig_model, "a colour tap restyles in place: the tab and the figure are not rebuilt (item 1)")
+	check(c.record["top_colour"] == "Coral" and swatch.get_theme_stylebox("normal").border_width_top >= 3, "the tapped swatch shows as chosen")
+	c.choose("top", "shirt_aloha")
+	await process_frame
+	check(c.record["look"] == "smart" and c._content.find_child("print_colour_Mint", true, false) != null, "a printed top adds the pattern row; record.look follows the top")
+	c.choose("top", "dress")
+	await process_frame
+	check(c.record["bottom"] == "dress" and c._content.find_child("bottom_jeans", true, false) == null and c.record["look"] == "dress", "the dress hides the bottom rows")
+	c.choose("top", "tee")
+	await process_frame
+	check(c.record["bottom"] == "skirt" and c._content.find_child("bottom_jeans", true, false) != null, "leaving the dress puts on a skirt")
+	c.choose("hat", "hat_beanie")
+	await process_frame
+	var hair_hat := c._figure.find_child("hair_%s_hat" % c.record["hair"], true, false) as MeshInstance3D
+	var beanie := c._figure.find_child("hat_beanie", true, false) as MeshInstance3D
+	check(c.record["worn"].get("hat") == "hat_beanie" and beanie != null and beanie.visible and hair_hat != null and hair_hat.visible, "a hat chip puts it on, the hair cut at the brim")
+	c.choose("hat", "")
+	c.choose("glasses", "glasses_tinted")
+	await process_frame
+	check(not c.record["worn"].has("hat") and c.record["worn"].get("glasses") == "glasses_tinted" and not beanie.visible, "None takes the hat off; glasses go on")
+	var body_model: Node = c._figure._model
+	c.choose("body", "tall")
+	await process_frame
+	check(c._figure._model != body_model and c._figure.look.get("library", "").ends_with("parts_tall.glb"), "a body change loads that body's library")
+	c.queue_free()
 	await process_frame
 
 

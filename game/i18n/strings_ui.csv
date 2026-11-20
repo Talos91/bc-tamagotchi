@@ -16,6 +16,44 @@ ui.avatar.row.hair_colour,Colour,สีผม,Creator row,16
 ui.avatar.row.look,Look,ลุค,Creator row,16
 ui.avatar.row.top_colour,Top colour,สีเสื้อ,Creator row,16
 ui.avatar.row.vibe,Your vibe,สไตล์ของคุณ,Creator row (personality),20
+ui.avatar.row.top,Top,เสื้อ,Creator row (outfit),16
+ui.avatar.row.print,Pattern colour,สีลาย,Creator row (printed tops),16
+ui.avatar.row.bottom,Bottom,กางเกง/กระโปรง,Creator row (outfit),16
+ui.avatar.row.bottom_colour,Bottom colour,สีท่อนล่าง,Creator row (outfit),16
+ui.avatar.row.shoes,Shoes,รองเท้า,Creator row (outfit),16
+ui.avatar.row.hat,Hat,หมวก,Creator row (outfit),16
+ui.avatar.row.glasses,Glasses,แว่นตา,Creator row (outfit),16
+ui.avatar.none,None,ไม่ใส่,Creator chip: no hat / no glasses,10
+ui.avatar.top.tee,Tee,เสื้อยืด,Top,12
+ui.avatar.top.tee_stripe,Striped tee,ยืดลายทาง,Top,12
+ui.avatar.top.tank,Tank,แขนกุด,Top,12
+ui.avatar.top.blouse,Blouse,เบลาส์,Top,12
+ui.avatar.top.shirt,Shirt,เชิ้ต,Top,12
+ui.avatar.top.shirt_check,Check shirt,เชิ้ตลายสก็อต,Top,12
+ui.avatar.top.shirt_aloha,Aloha shirt,เชิ้ตฮาวาย,Top,12
+ui.avatar.top.knit,Knit,เสื้อไหมพรม,Top,12
+ui.avatar.top.hoodie,Hoodie,ฮู้ด,Top,12
+ui.avatar.top.bomber,Bomber,บอมเบอร์,Top,12
+ui.avatar.top.denim_jacket,Denim jacket,แจ็กเก็ตยีนส์,Top,12
+ui.avatar.top.leather,Leather,แจ็กเก็ตหนัง,Top,12
+ui.avatar.top.blazer,Blazer,เบลเซอร์,Top,12
+ui.avatar.top.dress,Dress,เดรส,Top,12
+ui.avatar.bottom.jeans,Jeans,ยีนส์,Bottom,12
+ui.avatar.bottom.jeans_ripped,Ripped jeans,ยีนส์ขาด,Bottom,12
+ui.avatar.bottom.trousers,Trousers,กางเกงขายาว,Bottom,12
+ui.avatar.bottom.shorts,Shorts,ขาสั้น,Bottom,12
+ui.avatar.bottom.skirt,Skirt,กระโปรง,Bottom,12
+ui.avatar.bottom.skirt_long,Long skirt,กระโปรงยาว,Bottom,12
+ui.avatar.shoes.sneakers,Sneakers,ผ้าใบ,Shoes,12
+ui.avatar.shoes.boots,Boots,บูท,Shoes,12
+ui.avatar.shoes.loafers,Loafers,โลฟเฟอร์,Shoes,12
+ui.avatar.hat.hat_cap,Cap,แก๊ป,Hat,12
+ui.avatar.hat.hat_beanie,Beanie,บีนนี่,Hat,12
+ui.avatar.hat.hat_bucket,Bucket,บักเก็ต,Hat,12
+ui.avatar.hat.hat_flat_cap,Flat cap,หมวกแก๊ปแบน,Hat,12
+ui.avatar.hat.hat_fedora,Fedora,เฟดอร่า,Hat,12
+ui.avatar.glasses.glasses_round,Round,แว่นกลม,Glasses,12
+ui.avatar.glasses.glasses_tinted,Tinted,แว่นสี,Glasses,12
 ui.avatar.row.name,Your name,ชื่อของคุณ,Creator row,20
 ui.avatar.body.petite,Petite,เล็ก,Body type,10
 ui.avatar.body.regular,Regular,กลาง,Body type,10
