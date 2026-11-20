@@ -5,7 +5,8 @@ extends SceneTree
 ##             memory corner alone top left, the Top patrons board under the second flight of the stairs, ten
 ##             portraits on the entrance corridor's south wall, the stair where Daniele confirmed it, nothing
 ##             overlapping the machine
-##   sheets    merch (six in-game coin items with their coin prices, "coming soon"), Top patrons (ten names, rank
+##   sheets    merch rows (six in-game coin items with their coin prices, "coming soon"; the stand itself opens the merch
+##             shop since 2026-11-20), Top patrons (ten names, rank
 ##             order, this month's check-ins), every portrait (its patron's name, the picture, a message written by
 ##             that patron); each opens as a real sheet
 ##   taps      a screen tap on the merch counter, on the board and on a portrait walks there and opens its sheet;
@@ -153,7 +154,16 @@ func _init() -> void:
 	check(merch_ok, "every merch item shows its coin price and 'coming soon', not for sale yet")
 	var greet: String = s.header_for(mz)[1]
 	check(s.header_for(mz)[0] == T.t("venue.sheet.merch.head") and greet.contains("character") and greet.contains("coins") and not greet.to_lower().contains("price to be confirmed"), "merch sheet: cosmetic merch for the character, bought with coins (%s)" % greet)
-	await open_and_check(mz, func(sh): return sh.buttons.size() == 6, "merch sheet opens with its six rows")
+	# The stand opens the merch shop now (Daniele 2026-11-20, scripts/merch/merch_shop.gd); the coin rows above stay
+	# in venue_session.gd for the coin shop later.
+	main.close_sheet()
+	main.open_sheet(mz)
+	await process_frame
+	check(is_instance_valid(main.merch_shop) and main.merch_shop.mode == "shop" and main.merch_shop._grid.get_child_count() == 10,
+		"the merch stand opens the merch shop (ten hats and masks)")
+	if is_instance_valid(main.merch_shop):
+		main.merch_shop.close()
+	await process_frame
 	var pz: Dictionary = main.zones.by_id("patrons")
 	var prows := s.rows_for(pz)
 	var names_ok := prows.size() == 10
@@ -413,10 +423,12 @@ func tap_object(id: String, start: Vector3, target: Vector3) -> void:
 	var tapped := vis and p.tap_at(cam.unproject_position(target))
 	for i in 2400:
 		await physics_frame
-		if is_instance_valid(main.sheet) or (not p.walking_to and main.pending_zone == ""):
+		if is_instance_valid(main.sheet) or is_instance_valid(main.merch_shop) or (not p.walking_to and main.pending_zone == ""):
 			break
 	await process_frame
-	var up: bool = is_instance_valid(main.sheet) and main.sheet_zone.get("id", "") == id
+	var up: bool = (is_instance_valid(main.sheet) and main.sheet_zone.get("id", "") == id) or (id == "merch" and is_instance_valid(main.merch_shop))
+	if is_instance_valid(main.merch_shop):
+		main.merch_shop.close()
 	check(vis and tapped and up, "tap on %s from %s: on screen %s, sheet %s (%s)" % [id, start, vis, up, main.sheet_zone.get("id", "none") if is_instance_valid(main.sheet) else "none"])
 	main.close_sheet()
 	await process_frame
