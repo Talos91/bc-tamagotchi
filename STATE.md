@@ -10,9 +10,11 @@
 - No other workers running. Next jobs after the release: 🧹 Housekeeping (cards listed below, archive answered hub cards, chase list), telemetry client hook (auto report per visit → `Presence.perf_report()`), real-phone checks from Daniele's friend, song job (item 34), Nov/Dec posters → events JSON.
 
 ## TREE (method 3b)
-- Old tree: local_ca1e0f15's workers all done and archived; local_ca1e0f15 itself left for Daniele to archive.
-- This stint: 27 workers/verifiers started and archived (list in the stint recap); only verify-040 runs.
+- Predecessor tree: local_96f4e96d (orchestrator 11-18 to 11-20): its 27 workers/verifiers all done and archived; local_96f4e96d itself still active, Daniele archives it once idle (its one handover answer is in). local_ca1e0f15 is already archived.
+- This stint (local_5352afaa, detached, top level): no workers yet.
 - Stint recap: vault `raw/agent-notes/2026-11-20-black-cabin-orchestrator-stint-session-local-96f4e96d-2026-1.md`. Handoff `handoffs/ORCHESTRATOR-HANDOVER-2026-11-20.md`.
+- **Sonnet-trial numbers (Master 11-20; the recap reports them):** weekly usage 43 % at start (5-hour 23 %); ctx 11 % at start; workers started/closed 0/0; corrections needed from Daniele/Master: 1 (TREE wording, fixed). Code and release workers stay Opus; close calls go to Daniele or the Master.
+- **Telemetry brief rule (Master 11-20):** perf fields + player name only, nothing device-identifying beyond need; one-line in-game notice that a perf report is sent; say where stored (Supabase table) and who can read it; if undecided, one hub question first.
 - **Successor: Sonnet 5.5, effort medium, passed explicitly (Sonnet trial, Daniele 11-18 via Master); its recap notes cost and what went wrong.**
 - Hard walls: never push past unverified code; Verifier always a separate session; code workers in own worktree `C:/Users/itisf/bc-wt/<job>` on wk/<job>, assembled by cherry-pick onto local main, one Verifier per batch; no windowed Godot on Daniele's desktop; ≤ 3 workers; measure context with get_usage, never estimate; peer-started turns cannot start sessions (cards).
 
