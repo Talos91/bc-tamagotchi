@@ -50,6 +50,7 @@ var _code_read := false
 var _poll: Timer
 var _inbox_count := 0
 var _auth_busy := false
+var my_table := ""                    ## the viewer's table tonight (check-in answer, then bc_tonight my_table); "" = not in
 var _closing := false                 ## out of the tree: pending calls answer "offline", nothing resumes on a freed node
 
 
@@ -200,6 +201,7 @@ func checkin(code: String) -> Dictionary:
 		return r
 	if code == _pending_code:
 		_pending_code = ""
+	my_table = str(r.get("table_id", ""))
 	if r.get("first_of_night", false) and needs != null:
 		r["needs"] = needs.check_in()
 	_tonight_at = -1.0e9
@@ -216,6 +218,7 @@ func tonight(force := false) -> Dictionary:
 	if not r.get("ok", false):
 		var cached: Array = _tonight.get("presences", [])
 		return {"ok": false, "reason": r.get("reason", "server"), "presences": cached}
+	my_table = str(r.get("my_table", "")) if r.get("me_checked_in", false) else ""
 	var old := _ids(_tonight.get("presences", []))
 	var new_ids := _ids(r.get("presences", []))
 	_tonight = r
@@ -226,6 +229,17 @@ func tonight(force := false) -> Dictionary:
 		tonight_changed.emit(r.get("presences", []), added, removed)
 	await _flush_queue()
 	return r
+
+
+## Leave (Daniele 2026-11-20 "when you press leave should auto check out"): the server stops showing this player
+## tonight at once; everyone else's next poll fades them out. A re-scan the same night checks in again. Only Leave
+## and the end of the night end a check-in (Daniele 2026-11-21): a locked phone or a closed tab does not.
+func check_out() -> Dictionary:
+	if not is_active() or player_id() == "":
+		return {"ok": true, "skipped": true}
+	my_table = ""
+	_tonight_at = -1.0e9
+	return await _rpc("bc_check_out", {}, LONG_TIMEOUT_S)
 
 
 func send_verb(to: String, kind: String, payload := {}) -> Dictionary:

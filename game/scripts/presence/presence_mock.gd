@@ -119,6 +119,7 @@ func rpc(fn: String, args: Dictionary, token: String, _timeout: float) -> Dictio
 		"bc_check_in": return _check_in(uid, str(args.get("p_code", "")), str(args.get("p_display_name", "")),
 				args.get("p_avatar", {}), str(args.get("p_mode", "")))
 		"bc_tonight": return _tonight(uid)
+		"bc_check_out": return _check_out(uid)
 		"bc_send_verb": return _send_verb(uid, str(args.get("p_to", "")), str(args.get("p_kind", "")), args.get("p_payload", {}))
 		"bc_inbox": return _inbox(uid)
 		"bc_mark_read": return _mark_read(uid, args.get("p_ids", []))
@@ -283,7 +284,7 @@ func _check_in(uid: String, code: String, name: String, avatar, mode: String) ->
 	else:
 		moved = checkins[k]["table_id"] != vt["table_id"]
 		checkins[k].merge({"table_id": vt["table_id"], "at": t, "display_name": p["display_name"],
-			"avatar": p["avatar"], "visibility": mode}, true)
+			"avatar": p["avatar"], "visibility": mode, "left": false}, true)
 	if mode != "nobody":
 		for ck in checkins:
 			var c: Dictionary = checkins[ck]
@@ -302,12 +303,20 @@ func _check_in(uid: String, code: String, name: String, avatar, mode: String) ->
 		"first_of_night": first, "moved": moved, "tablemates": mates}
 
 
+## Leave (hotfix 3): the row stays (tonight's count, a re-scan is not a first scan) but nobody is shown it.
+func _check_out(uid: String) -> Dictionary:
+	var k := "%s|%d" % [uid, night_of(now())]
+	if checkins.has(k):
+		checkins[k]["left"] = true
+	return {"ok": true, "was_in": checkins.has(k)}
+
+
 func _presences(viewer: String, n: int) -> Array:
-	var here := checkins.has("%s|%d" % [viewer, n])
+	var here: bool = checkins.has("%s|%d" % [viewer, n]) and not checkins["%s|%d" % [viewer, n]].get("left", false)
 	var rows := []
 	for ck in checkins:
 		var c: Dictionary = checkins[ck]
-		if c["night"] != n:
+		if c["night"] != n or c.get("left", false):
 			continue
 		var pid: String = c["player_id"]
 		var me := pid == viewer

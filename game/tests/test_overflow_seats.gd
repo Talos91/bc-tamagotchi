@@ -206,6 +206,26 @@ func _init() -> void:
 		if String(c.name).begins_with("Overflow_"):
 			any_overflow += 1
 	check(pat.presences.size() == 9 and any_overflow == 0, "viewer not checked in: 9 seated by zone, no extra chair (%d)" % any_overflow)
+	# hotfix 3 (Daniele 11-20 "we not all at the same table"): the venue was up before the check-in answered; the
+	# next list carries the table and everyone already seated moves to it
+	needs.checkin_nights.append(needs.night_key(needs.clock))
+	pat.poll_presence()
+	await _settle_walks(pat)
+	var moved := _at(pat, "Table3")
+	check(moved["base"] == 4 and moved["seat"] == 4 and moved["stand"] == 1,
+		"after the check-in the 9 already seated move to Table3: 4 + 4 + 1 standing (%s)" % str(moved))
+	check(_overlaps(pat) == 0, "nobody overlapping after the move")
+	print("inbox")
+	var who: String = pat.presences.keys()[0]
+	pat._on_inbox([{"id": 901, "kind": "wave", "payload": {}, "from": {"player_id": who, "display_name": "Jack"}}])
+	var banner: Node = pat.get_node_or_null("PresenceBanner")
+	var btext := ""
+	if banner != null:
+		btext = (banner.find_child("Text", true, false) as Label).text
+	check(btext.contains("Jack"), "a received wave shows a banner naming the sender (%s)" % btext)
+	pat._on_inbox([{"id": 901, "kind": "wave", "payload": {}, "from": {"player_id": who, "display_name": "Jack"}}])
+	check(pat.get_children().filter(func(c): return String(c.name).begins_with("PresenceBanner")).size() == 1,
+		"the same verb is announced once")
 	await _free(main)
 
 	PresenceClient.reset()

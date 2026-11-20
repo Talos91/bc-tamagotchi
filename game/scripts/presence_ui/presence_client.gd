@@ -45,6 +45,10 @@ class RealSource extends RefCounted:
 		cb.call(await node.send_verb(to, kind, payload))
 	func inbox(cb: Callable) -> void:
 		cb.call(await node.inbox())
+	func my_table() -> String:
+		return str(node.my_table)
+	func check_out(cb: Callable) -> void:
+		cb.call(await node.check_out())
 	func mark_read(ids: Array) -> void:
 		node.mark_read(ids)
 	func hide(id: String) -> void:
@@ -237,6 +241,22 @@ static func send_verb(needs: Node, to: String, kind: String, payload: Dictionary
 			_state(needs)["interacted"][to] = true
 			_mark_dirty(needs)
 		fire(cb, [r]))
+
+
+## The viewer's real table tonight ("" when not checked in): the player sits there when the venue opens (hotfix 3).
+static func my_table() -> String:
+	if not active():
+		return ""
+	return _source.my_table()
+
+
+## Leave pressed: check out on the server now (Daniele 2026-11-20). cb.call({ok}) — optional.
+static func check_out(cb := Callable()) -> void:
+	if not active():
+		return
+	_source.check_out(func(r: Dictionary):
+		if cb.is_valid():
+			fire(cb, [r]))
 
 
 ## Unread received verbs. cb.call(events).

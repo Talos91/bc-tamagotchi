@@ -46,6 +46,9 @@ const PresenceClient = preload("res://scripts/presence_ui/presence_client.gd")
 const Badge = preload("res://scripts/presence_ui/presence_badge.gd")
 const PresenceTaps = preload("res://scripts/presence_ui/presence_taps.gd")
 const OverflowSeats = preload("res://scripts/presence_ui/overflow_seats.gd")
+const PresenceInbox = preload("res://scripts/presence_ui/presence_inbox.gd")
+const UI = preload("res://scripts/minigames/mg_ui.gd")
+const INBOX_POLL_S := 20.0      ## received verbs show within this (hotfix 3); the list itself keeps PRESENCE_POLL_S
 ## Where an owner stands at each of her spots: offset from the table's centre (past the corner between two chairs, clear
 ## of their backs) and the yaw she faces, turned west toward whoever arrives from the lounge side. WestTable0 is 1.8 m
 ## from the main room's west wall, so she takes its south-east corner there; at the buffer's tall table (stools east and
@@ -88,6 +91,8 @@ var _overflow: OverflowSeats        ## extra chairs when a table's check-ins pas
 var _door_point := Vector3.INF      ## where late check-ins come in (Wander_Lobby, inside the street door)
 var _poll_t := 0.0
 var _polling := false
+var _inbox_t := 0.0
+static var _shown_events := {}  ## event id -> true: each received verb is announced once per run
 
 func _ready() -> void:
 	add_to_group("venue_patrons")
@@ -262,6 +267,9 @@ func _process(delta: float) -> void:
 		_poll_t += delta
 		if _poll_t >= PresenceClient.PRESENCE_POLL_S:
 			poll_presence()
+		_inbox_t += delta
+		if _inbox_t >= INBOX_POLL_S:
+			poll_inbox()
 
 # --- Presence (docs/design/08-presence.md §6; owner item 40) ---------------------------------------
 ## Real people checked in tonight (scripts/presence_ui/presence_client.gd: the backend, or "Fake presences"), seated
@@ -288,6 +296,10 @@ func _place_presences(seats: Array[Node3D]) -> int:
 		else:
 			_on_tonight(list, ok))
 	box["ready"] = false
+	var pn := get_node_or_null("/root/Presence")
+	if pn != null and pn.has_signal("checked_in") and not pn.checked_in.is_connected(_on_checked_in):
+		pn.checked_in.connect(_on_checked_in)
+	poll_inbox.call_deferred()
 	var taps := PresenceTaps.new()
 	taps.venue = self
 	tree_exiting.connect(taps.queue_free)
@@ -311,6 +323,65 @@ func poll_presence() -> void:
 	_poll_t = 0.0
 	PresenceClient.fetch_tonight(_needs(), _on_tonight)
 
+## A check-in answered while the venue is up: fetch the list now, so the rows carry their tables (hotfix 3).
+func _on_checked_in(_r: Dictionary) -> void:
+	if is_inside_tree():
+		poll_presence()
+
+## Verbs received (hotfix 3, Daniele 2026-11-20 "interaction do nothing you should receive a clear message in game from
+## whoever did"): until now only the start screen's Inbox button showed them. Every INBOX_POLL_S in the venue the
+## unread list is fetched and each new one is announced: a banner "<name> waved at you" and, if the sender sits in the
+## room, a bubble over them. They stay unread for the Inbox (Friends points when read there).
+func poll_inbox() -> void:
+	_inbox_t = 0.0
+	if not PresenceClient.active():
+		return
+	PresenceClient.fetch_inbox(_on_inbox)
+
+func _on_inbox(items: Array) -> void:
+	if not is_inside_tree():
+		return
+	var lines: Array[String] = []
+	for it in items:
+		if not it is Dictionary:
+			continue
+		var eid := str(it.get("id", ""))
+		if eid == "" or _shown_events.has(eid):
+			continue
+		_shown_events[eid] = true
+		var line := PresenceInbox.line_for(it)
+		lines.append(line)
+		var from: Variant = it.get("from", {})
+		if from is Dictionary and presences.has(str(from.get("player_id", ""))):
+			Badge.bubble(presences[str(from["player_id"])], line)
+	if not lines.is_empty():
+		show_banner("
+".join(lines.slice(maxi(0, lines.size() - 3))))
+
+## A short banner at the top of the screen (received verbs).
+func show_banner(text: String) -> Control:
+	var layer := CanvasLayer.new()
+	layer.name = "PresenceBanner"
+	layer.layer = 50
+	add_child(layer)
+	var box := PanelContainer.new()
+	box.add_theme_stylebox_override("panel", UI.box(UI.BG_PLUM, 16, UI.GOLD, 2.0))
+	box.set_anchors_and_offsets_preset(Control.PRESET_CENTER_TOP)
+	box.position.y = UI.dp(70)
+	box.mouse_filter = Control.MOUSE_FILTER_IGNORE
+	var l := UI.wrap(UI.label(text, 16, UI.CREAM, HORIZONTAL_ALIGNMENT_CENTER))
+	l.name = "Text"
+	l.custom_minimum_size.x = UI.dp(280)
+	box.add_child(l)
+	layer.add_child(box)
+	box.reset_size.call_deferred()
+	(func(): box.position.x = (box.get_viewport_rect().size.x - box.size.x) * 0.5).call_deferred()
+	var tw := box.create_tween()
+	tw.tween_interval(5.0)
+	tw.tween_property(box, "modulate:a", 0.0, 0.6)
+	tw.tween_callback(layer.queue_free)
+	return box
+
 func _on_tonight(list: Array, ok: bool) -> void:
 	if not ok or not is_inside_tree():
 		return   # offline: keep who is shown (§8)
@@ -322,7 +393,10 @@ func _on_tonight(list: Array, ok: bool) -> void:
 			remove_presence(id)
 	for p: Dictionary in list:
 		var id := str(p.get("player_id", ""))
-		if presences.has(id) or presences.size() >= PresenceClient.PRESENCE_CAP:
+		if presences.has(id):
+			_update_presence(presences[id], p)
+			continue
+		if presences.size() >= PresenceClient.PRESENCE_CAP:
 			continue
 		var seat := _pick_seat(p, _free_seats())
 		if seat == null:
@@ -354,6 +428,41 @@ func remove_presence(id: String) -> void:
 	tw.tween_callback(f.queue_free)
 	if seat != null:
 		_settle(str(seat.get_meta("table", "")))
+
+## A presence already seated, with tonight's row again (hotfix 3, Daniele 2026-11-20 "we not all at the same table"):
+## the venue opens before the QR check-in answers, so the first list came while the viewer was not checked in yet and
+## carried no table (08b: table_id is "" then) and everyone sat at a random table of the zone. When the row's table
+## changes (now known, or a re-scan at another table) the figure moves to it; the old chair is freed.
+func _update_presence(f: PatronFigure, p: Dictionary) -> void:
+	var old_p: Dictionary = f.get_meta("presence", {})
+	f.set_meta("presence", p)
+	var table := str(p.get("table_id", ""))
+	var old: Node3D = f.get_meta("seat", null)
+	if table == "" or table == str(old_p.get("table_id", "")) or _walking(f):
+		return
+	if old != null and str(old.get_meta("table", "")) == table:
+		return
+	var seat := _pick_seat(p, _free_seats())
+	if seat == null:
+		seat = _bump_patron(p)
+	if seat == null or str(seat.get_meta("table", "")) != table:
+		if seat != null and seat.has_meta("overflow"):
+			_overflow.release(seat)
+		return
+	if old != null:
+		taken.erase(old)
+		if old.has_meta("overflow"):
+			_overflow.release(old)
+		else:
+			old.add_to_group("seat")
+	f.set_meta("seat", seat)
+	taken[seat] = f
+	seat.remove_from_group("seat")
+	f.look["anims"]["sit"] = _overflow_pose(seat)
+	f.state = ""
+	_seat_presence(f, seat)
+	if old != null:
+		_settle(str(old.get_meta("table", "")))
 
 func presence_figure(id: String) -> PatronFigure:
 	return presences.get(id)

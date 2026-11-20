@@ -73,6 +73,7 @@ func _offline() -> void:
 	await _push_budget()
 	await _offline_queue()
 	await _report_and_delete()
+	await _check_out()
 	await _autoload_hook()
 	await _perf()
 
@@ -345,6 +346,38 @@ func _report_and_delete() -> void:
 	check(mock.rows_of(id) > 0, "C has rows before delete")
 	var d: Dictionary = await c.delete_me()
 	check(d.get("ok") and mock.rows_of(id) == 0 and c.player_id() == "", "delete_me: no rows left, local id cleared")
+
+
+## Hotfix 3 (Daniele 11-20/21): Leave checks out at once; nothing else does; a re-scan checks in again.
+func _check_out() -> void:
+	mock.now_override = bkk(2026, 11, 27, 22)
+	var x: Node = await client("everyone", "Lek")
+	var y: Node = await client("everyone", "Om")
+	var z: Node = await client("everyone", "Late")   # never scans: still sees everyone
+	await x.checkin(Mock.code_for("WestTable0"))
+	await y.checkin(Mock.code_for("WestTable0"))
+	check(x.my_table == "WestTable0", "my_table set by the check-in answer")
+	var rows: Array = (await z.tonight(true))["presences"]
+	check(not find(rows, x.player_id()).is_empty() and not find(rows, y.player_id()).is_empty(),
+		"a player who did not scan sees both check-ins")
+	mock.now_override += 3 * 3600.0   # hours later, phones locked: no expiry
+	rows = (await z.tonight(true))["presences"]
+	check(not find(rows, x.player_id()).is_empty(), "no expiry: still shown hours later the same night")
+	var r: Dictionary = await x.check_out()
+	check(r.get("ok") and r.get("was_in"), "Leave: check_out ok (%s)" % r)
+	check(x.my_table == "", "my_table cleared on Leave")
+	rows = (await y.tonight(true))["presences"]
+	check(find(rows, x.player_id()).is_empty(), "the others' next poll drops the player who left")
+	check(find(rows, y.player_id())["table_id"] == "WestTable0", "the one who stayed keeps the table")
+	var tx: Dictionary = await x.tonight(true)
+	check(not tx.get("presences", []).is_empty() and find(tx["presences"], y.player_id())["table_id"] == "",
+		"after Leave the player is no longer 'here' (tables hidden)")
+	r = await x.checkin(Mock.code_for("WestTable0"))
+	check(r.get("ok") and not r.get("first_of_night"), "re-scan the same night: in again, not a first scan")
+	rows = (await y.tonight(true))["presences"]
+	check(not find(rows, x.player_id()).is_empty(), "after the re-scan the others see them again")
+	for n in [x, y, z]:
+		n.queue_free()
 
 
 func s_tonight(p: Node) -> Dictionary:

@@ -33,6 +33,7 @@ const Patrons = preload("res://scripts/zones/patrons.gd")
 const Avatar = preload("res://scripts/avatar.gd")
 const UIS = preload("res://scripts/ui/ui_strings.gd")
 const TonightEvents = preload("res://scripts/tonight_events.gd")
+const PresenceClient = preload("res://scripts/presence_ui/presence_client.gd")
 ## Merch shop (lounge, BACKLOG B11; Daniele 2026-11-02: in-game cosmetic merch for the character, paid in coins). Coins and
 ## wardrobe items do not exist yet, so every row shows its price and "coming soon". Item names are placeholders; the
 ## prices are the wardrobe tiers of docs/design/04-coins.md 3.2 (small 30, mid 60, performer tee 80, statement 120).
@@ -107,6 +108,7 @@ func arrive() -> void:
 ## Leaving through the street door or the HUD's Leave button.
 func leave() -> void:
 	cancel_sit()
+	PresenceClient.check_out()   # hotfix 3: Leave checks out on the server; the others' next poll drops this player
 	needs.end_visit("left")
 
 
@@ -120,6 +122,25 @@ func _on_visit_started(info: Dictionary) -> void:
 	_apply_mood()
 	visit_begun.emit(info)
 	_greet()
+	_sit_at_my_table.call_deferred()
+
+
+## Checked in at a real table tonight (hotfix 3, Daniele 2026-11-20 "we not all at the same table"): the player walks
+## to that table and sits, so friends who scanned the same code sit together on every phone.
+func _sit_at_my_table() -> void:
+	var t := PresenceClient.my_table()
+	if t == "" or player == null or zones == null:
+		return
+	var zone := zones.by_id("bar") if t == "Bar" else zones.by_id("table:" + t)
+	if zone.is_empty():
+		zone = zones.by_id("tall:" + t)
+	if zone.is_empty():
+		return
+	if do_row(zone, "stool" if t == "Bar" else "sit"):
+		return
+	var seat := find_seat(zone)
+	if not seat.is_empty() and seat["node"] != player.seat.get("node"):
+		player.sit_at(seat)
 
 
 func _on_visit_ended(summary: Dictionary) -> void:

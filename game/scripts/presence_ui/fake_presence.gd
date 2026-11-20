@@ -103,6 +103,7 @@ func checkin(code: String, mode: String, cb: Callable) -> void:
 		return
 	var table: String = codes.get(code, TABLES.keys()[absi(hash(code)) % TABLES.size()])
 	var first := checkins.is_empty()
+	checked_out = false
 	checkins.append({"code": code, "mode": mode, "table_id": table})
 	var mates: Array = []
 	for p in people:
@@ -110,6 +111,18 @@ func checkin(code: String, mode: String, cb: Callable) -> void:
 			mates.append(p.duplicate(true))
 	cb.call({"ok": true, "table_id": table, "label": table.capitalize(), "first_of_night": first, "moved": false,
 		"tablemates": mates})
+
+
+## The viewer's table tonight ("" when not checked in or checked out).
+func my_table() -> String:
+	return str(checkins.back()["table_id"]) if not checkins.is_empty() and not checked_out else ""
+
+
+var checked_out := false        ## Leave pressed (hotfix 3)
+
+func check_out(cb: Callable) -> void:
+	checked_out = true
+	cb.call({"ok": true})
 
 
 func send_verb(to: String, kind: String, payload: Dictionary, cb: Callable) -> void:
