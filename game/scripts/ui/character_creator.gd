@@ -528,9 +528,12 @@ func _browser_prompt(current: String) -> Variant:
 func _pick(key: String, value: Variant) -> void:
 	record[key] = value
 	if key == "look":
-		var tc: Array = Avatar.data()["looks"][value]["top_colours"]
+		var lk: Dictionary = Avatar.data()["looks"][value]
+		var tc: Array = lk["top_colours"]
 		if not tc.has(record.get("top_colour")):
 			record["top_colour"] = tc[0]
+		record.erase("top")                        # v2 record: the look's pieces (Avatar.normalize migrates)
+		record = Avatar.normalize(record)
 	_refresh_figure()
 	_show_tab()
 

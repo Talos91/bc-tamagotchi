@@ -307,7 +307,12 @@
    "LeatherBlack": "#241E26",
    "LeatherSheen": "#4A4250",
    "Silver": "#B4B0B8",
-   "JeansBlue": "#4C6EA6"
+   "JeansBlue": "#4C6EA6",
+   "Fuchsia": "#B8285E",
+   "Lilac": "#8C78B8",
+   "Cobalt": "#2C4C9C",
+   "Coral": "#D8664E",
+   "Mint": "#7CB49A"
   },
   "face": {
    "Ink": "#120808",
@@ -359,6 +364,28 @@
    "worried",
    "thick"
   ],
+  "hair_under_hat": [
+   "shaggy_hat",
+   "wavy_hat",
+   "afro_hat",
+   "curly_hat",
+   "long_hat",
+   "bob_hat",
+   "crop_hat",
+   "buzz_hat",
+   "bun_hat",
+   "quiff_hat",
+   "ponytail_hat",
+   "side_part_hat",
+   "swept_hat",
+   "spiky_hat",
+   "sideburns_hat",
+   "chignon_hat",
+   "two_block_hat",
+   "long_straight_hat",
+   "pigtails_hat",
+   "double_bun_hat"
+  ],
   "mouths": [
    "smile",
    "small",
@@ -381,14 +408,20 @@
    "dress",
    "knit",
    "leather",
-   "denim_jacket"
+   "denim_jacket",
+   "tee_stripe",
+   "shirt_check",
+   "shirt_aloha",
+   "tank"
   ],
   "bottoms": [
    "jeans",
    "trousers",
    "shorts",
    "skirt",
-   "dress"
+   "dress",
+   "skirt_long",
+   "jeans_ripped"
   ],
   "shoes": [
    "sneakers",
@@ -422,6 +455,13 @@
     "colours": [
      "StoolBlack",
      "Charcoal"
+    ]
+   },
+   "hat_cap": {
+    "slot": "hat",
+    "colours": [
+     "Charcoal",
+     "Cream"
     ]
    },
    "glasses_round": {
@@ -727,7 +767,7 @@
      "materials": [
       "hair__HairDarkBrown"
      ],
-     "tris": 502
+     "tris": 344
     },
     {
      "id": "hair_long",
@@ -771,7 +811,7 @@
      "materials": [
       "hair__HairDarkBrown"
      ],
-     "tris": 12
+     "tris": 56
     },
     {
      "id": "hair_bun",
@@ -904,6 +944,226 @@
       "hair__HairDarkBrown"
      ],
      "tris": 232
+    },
+    {
+     "id": "hair_shaggy_hat",
+     "slot": "hair",
+     "bones": [
+      "head"
+     ],
+     "materials": [
+      "hair__HairDarkBrown"
+     ],
+     "tris": 182
+    },
+    {
+     "id": "hair_wavy_hat",
+     "slot": "hair",
+     "bones": [
+      "head"
+     ],
+     "materials": [
+      "hair__HairDarkBrown"
+     ],
+     "tris": 296
+    },
+    {
+     "id": "hair_afro_hat",
+     "slot": "hair",
+     "bones": [
+      "head"
+     ],
+     "materials": [
+      "hair__HairDarkBrown"
+     ],
+     "tris": 486
+    },
+    {
+     "id": "hair_curly_hat",
+     "slot": "hair",
+     "bones": [
+      "head"
+     ],
+     "materials": [
+      "hair__HairDarkBrown"
+     ],
+     "tris": 262
+    },
+    {
+     "id": "hair_long_hat",
+     "slot": "hair",
+     "bones": [
+      "head"
+     ],
+     "materials": [
+      "hair__HairDarkBrown"
+     ],
+     "tris": 188
+    },
+    {
+     "id": "hair_bob_hat",
+     "slot": "hair",
+     "bones": [
+      "head"
+     ],
+     "materials": [
+      "hair__HairDarkBrown"
+     ],
+     "tris": 178
+    },
+    {
+     "id": "hair_crop_hat",
+     "slot": "hair",
+     "bones": [
+      "head"
+     ],
+     "materials": [
+      "hair__HairDarkBrown"
+     ],
+     "tris": 136
+    },
+    {
+     "id": "hair_buzz_hat",
+     "slot": "hair",
+     "bones": [
+      "head"
+     ],
+     "materials": [
+      "hair__HairDarkBrown"
+     ],
+     "tris": 56
+    },
+    {
+     "id": "hair_bun_hat",
+     "slot": "hair",
+     "bones": [
+      "head"
+     ],
+     "materials": [
+      "hair__HairDarkBrown"
+     ],
+     "tris": 164
+    },
+    {
+     "id": "hair_quiff_hat",
+     "slot": "hair",
+     "bones": [
+      "head"
+     ],
+     "materials": [
+      "hair__HairDarkBrown"
+     ],
+     "tris": 102
+    },
+    {
+     "id": "hair_ponytail_hat",
+     "slot": "hair",
+     "bones": [
+      "head"
+     ],
+     "materials": [
+      "hair__HairDarkBrown"
+     ],
+     "tris": 182
+    },
+    {
+     "id": "hair_side_part_hat",
+     "slot": "hair",
+     "bones": [
+      "head"
+     ],
+     "materials": [
+      "hair__HairDarkBrown"
+     ],
+     "tris": 140
+    },
+    {
+     "id": "hair_swept_hat",
+     "slot": "hair",
+     "bones": [
+      "head"
+     ],
+     "materials": [
+      "hair__HairDarkBrown"
+     ],
+     "tris": 66
+    },
+    {
+     "id": "hair_spiky_hat",
+     "slot": "hair",
+     "bones": [
+      "head"
+     ],
+     "materials": [
+      "hair__HairDarkBrown"
+     ],
+     "tris": 154
+    },
+    {
+     "id": "hair_sideburns_hat",
+     "slot": "hair",
+     "bones": [
+      "head"
+     ],
+     "materials": [
+      "hair__HairDarkBrown"
+     ],
+     "tris": 148
+    },
+    {
+     "id": "hair_chignon_hat",
+     "slot": "hair",
+     "bones": [
+      "head"
+     ],
+     "materials": [
+      "hair__HairDarkBrown"
+     ],
+     "tris": 208
+    },
+    {
+     "id": "hair_two_block_hat",
+     "slot": "hair",
+     "bones": [
+      "head"
+     ],
+     "materials": [
+      "hair__HairDarkBrown"
+     ],
+     "tris": 108
+    },
+    {
+     "id": "hair_long_straight_hat",
+     "slot": "hair",
+     "bones": [
+      "head"
+     ],
+     "materials": [
+      "hair__HairDarkBrown"
+     ],
+     "tris": 222
+    },
+    {
+     "id": "hair_pigtails_hat",
+     "slot": "hair",
+     "bones": [
+      "head"
+     ],
+     "materials": [
+      "hair__HairDarkBrown"
+     ],
+     "tris": 176
+    },
+    {
+     "id": "hair_double_bun_hat",
+     "slot": "hair",
+     "bones": [
+      "head"
+     ],
+     "materials": [
+      "hair__HairDarkBrown"
+     ],
+     "tris": 56
     },
     {
      "id": "eyes_dot",
@@ -1334,6 +1594,77 @@
      "tris": 200
     },
     {
+     "id": "top_tee_stripe",
+     "slot": "top",
+     "bones": [
+      "arm_L",
+      "arm_R",
+      "forearm_L",
+      "forearm_R",
+      "spine"
+     ],
+     "materials": [
+      "skin__Skin3",
+      "top__Stone",
+      "top_print__Cream"
+     ],
+     "tris": 174
+    },
+    {
+     "id": "top_shirt_check",
+     "slot": "top",
+     "bones": [
+      "arm_L",
+      "arm_R",
+      "forearm_L",
+      "forearm_R",
+      "spine"
+     ],
+     "materials": [
+      "skin__Skin3",
+      "top__Stone",
+      "top_accent__Cream",
+      "top_print__Cream",
+      "top_trim__Cream"
+     ],
+     "tris": 356
+    },
+    {
+     "id": "top_shirt_aloha",
+     "slot": "top",
+     "bones": [
+      "arm_L",
+      "arm_R",
+      "forearm_L",
+      "forearm_R",
+      "spine"
+     ],
+     "materials": [
+      "skin__Skin3",
+      "top__Stone",
+      "top_accent__Cream",
+      "top_print__Cream",
+      "top_trim__Cream"
+     ],
+     "tris": 538
+    },
+    {
+     "id": "top_tank",
+     "slot": "top",
+     "bones": [
+      "arm_L",
+      "arm_R",
+      "forearm_L",
+      "forearm_R",
+      "spine"
+     ],
+     "materials": [
+      "skin__Skin3",
+      "top__Stone"
+     ],
+     "tris": 96
+    },
+    {
      "id": "bottom_jeans",
      "slot": "bottom",
      "bones": [
@@ -1414,6 +1745,39 @@
       "skin__Skin3"
      ],
      "tris": 104
+    },
+    {
+     "id": "bottom_skirt_long",
+     "slot": "bottom",
+     "bones": [
+      "hips",
+      "leg_L",
+      "leg_R",
+      "shin_L",
+      "shin_R"
+     ],
+     "materials": [
+      "bottom__Denim",
+      "skin__Skin3"
+     ],
+     "tris": 150
+    },
+    {
+     "id": "bottom_jeans_ripped",
+     "slot": "bottom",
+     "bones": [
+      "hips",
+      "leg_L",
+      "leg_R",
+      "shin_L",
+      "shin_R"
+     ],
+     "materials": [
+      "bottom__Denim",
+      "bottom_trim__Leather",
+      "skin__Skin3"
+     ],
+     "tris": 100
     },
     {
      "id": "shoes_sneakers",
@@ -1513,6 +1877,18 @@
       "hat_fedora__StoolBlack"
      ],
      "tris": 76
+    },
+    {
+     "id": "hat_cap",
+     "slot": "hat",
+     "bones": [
+      "head"
+     ],
+     "materials": [
+      "hat_cap_2__Cream",
+      "hat_cap__Charcoal"
+     ],
+     "tris": 58
     },
     {
      "id": "glasses_round",
@@ -1977,7 +2353,7 @@
      "materials": [
       "hair__HairDarkBrown"
      ],
-     "tris": 524
+     "tris": 358
     },
     {
      "id": "hair_long",
@@ -2021,7 +2397,7 @@
      "materials": [
       "hair__HairDarkBrown"
      ],
-     "tris": 12
+     "tris": 56
     },
     {
      "id": "hair_bun",
@@ -2154,6 +2530,226 @@
       "hair__HairDarkBrown"
      ],
      "tris": 232
+    },
+    {
+     "id": "hair_shaggy_hat",
+     "slot": "hair",
+     "bones": [
+      "head"
+     ],
+     "materials": [
+      "hair__HairDarkBrown"
+     ],
+     "tris": 162
+    },
+    {
+     "id": "hair_wavy_hat",
+     "slot": "hair",
+     "bones": [
+      "head"
+     ],
+     "materials": [
+      "hair__HairDarkBrown"
+     ],
+     "tris": 250
+    },
+    {
+     "id": "hair_afro_hat",
+     "slot": "hair",
+     "bones": [
+      "head"
+     ],
+     "materials": [
+      "hair__HairDarkBrown"
+     ],
+     "tris": 470
+    },
+    {
+     "id": "hair_curly_hat",
+     "slot": "hair",
+     "bones": [
+      "head"
+     ],
+     "materials": [
+      "hair__HairDarkBrown"
+     ],
+     "tris": 254
+    },
+    {
+     "id": "hair_long_hat",
+     "slot": "hair",
+     "bones": [
+      "head"
+     ],
+     "materials": [
+      "hair__HairDarkBrown"
+     ],
+     "tris": 220
+    },
+    {
+     "id": "hair_bob_hat",
+     "slot": "hair",
+     "bones": [
+      "head"
+     ],
+     "materials": [
+      "hair__HairDarkBrown"
+     ],
+     "tris": 184
+    },
+    {
+     "id": "hair_crop_hat",
+     "slot": "hair",
+     "bones": [
+      "head"
+     ],
+     "materials": [
+      "hair__HairDarkBrown"
+     ],
+     "tris": 134
+    },
+    {
+     "id": "hair_buzz_hat",
+     "slot": "hair",
+     "bones": [
+      "head"
+     ],
+     "materials": [
+      "hair__HairDarkBrown"
+     ],
+     "tris": 56
+    },
+    {
+     "id": "hair_bun_hat",
+     "slot": "hair",
+     "bones": [
+      "head"
+     ],
+     "materials": [
+      "hair__HairDarkBrown"
+     ],
+     "tris": 138
+    },
+    {
+     "id": "hair_quiff_hat",
+     "slot": "hair",
+     "bones": [
+      "head"
+     ],
+     "materials": [
+      "hair__HairDarkBrown"
+     ],
+     "tris": 88
+    },
+    {
+     "id": "hair_ponytail_hat",
+     "slot": "hair",
+     "bones": [
+      "head"
+     ],
+     "materials": [
+      "hair__HairDarkBrown"
+     ],
+     "tris": 174
+    },
+    {
+     "id": "hair_side_part_hat",
+     "slot": "hair",
+     "bones": [
+      "head"
+     ],
+     "materials": [
+      "hair__HairDarkBrown"
+     ],
+     "tris": 120
+    },
+    {
+     "id": "hair_swept_hat",
+     "slot": "hair",
+     "bones": [
+      "head"
+     ],
+     "materials": [
+      "hair__HairDarkBrown"
+     ],
+     "tris": 82
+    },
+    {
+     "id": "hair_spiky_hat",
+     "slot": "hair",
+     "bones": [
+      "head"
+     ],
+     "materials": [
+      "hair__HairDarkBrown"
+     ],
+     "tris": 144
+    },
+    {
+     "id": "hair_sideburns_hat",
+     "slot": "hair",
+     "bones": [
+      "head"
+     ],
+     "materials": [
+      "hair__HairDarkBrown"
+     ],
+     "tris": 154
+    },
+    {
+     "id": "hair_chignon_hat",
+     "slot": "hair",
+     "bones": [
+      "head"
+     ],
+     "materials": [
+      "hair__HairDarkBrown"
+     ],
+     "tris": 190
+    },
+    {
+     "id": "hair_two_block_hat",
+     "slot": "hair",
+     "bones": [
+      "head"
+     ],
+     "materials": [
+      "hair__HairDarkBrown"
+     ],
+     "tris": 108
+    },
+    {
+     "id": "hair_long_straight_hat",
+     "slot": "hair",
+     "bones": [
+      "head"
+     ],
+     "materials": [
+      "hair__HairDarkBrown"
+     ],
+     "tris": 226
+    },
+    {
+     "id": "hair_pigtails_hat",
+     "slot": "hair",
+     "bones": [
+      "head"
+     ],
+     "materials": [
+      "hair__HairDarkBrown"
+     ],
+     "tris": 176
+    },
+    {
+     "id": "hair_double_bun_hat",
+     "slot": "hair",
+     "bones": [
+      "head"
+     ],
+     "materials": [
+      "hair__HairDarkBrown"
+     ],
+     "tris": 56
     },
     {
      "id": "eyes_dot",
@@ -2584,6 +3180,77 @@
      "tris": 212
     },
     {
+     "id": "top_tee_stripe",
+     "slot": "top",
+     "bones": [
+      "arm_L",
+      "arm_R",
+      "forearm_L",
+      "forearm_R",
+      "spine"
+     ],
+     "materials": [
+      "skin__Skin3",
+      "top__Stone",
+      "top_print__Cream"
+     ],
+     "tris": 182
+    },
+    {
+     "id": "top_shirt_check",
+     "slot": "top",
+     "bones": [
+      "arm_L",
+      "arm_R",
+      "forearm_L",
+      "forearm_R",
+      "spine"
+     ],
+     "materials": [
+      "skin__Skin3",
+      "top__Stone",
+      "top_accent__Cream",
+      "top_print__Cream",
+      "top_trim__Cream"
+     ],
+     "tris": 430
+    },
+    {
+     "id": "top_shirt_aloha",
+     "slot": "top",
+     "bones": [
+      "arm_L",
+      "arm_R",
+      "forearm_L",
+      "forearm_R",
+      "spine"
+     ],
+     "materials": [
+      "skin__Skin3",
+      "top__Stone",
+      "top_accent__Cream",
+      "top_print__Cream",
+      "top_trim__Cream"
+     ],
+     "tris": 578
+    },
+    {
+     "id": "top_tank",
+     "slot": "top",
+     "bones": [
+      "arm_L",
+      "arm_R",
+      "forearm_L",
+      "forearm_R",
+      "spine"
+     ],
+     "materials": [
+      "skin__Skin3",
+      "top__Stone"
+     ],
+     "tris": 96
+    },
+    {
      "id": "bottom_jeans",
      "slot": "bottom",
      "bones": [
@@ -2664,6 +3331,39 @@
       "skin__Skin3"
      ],
      "tris": 104
+    },
+    {
+     "id": "bottom_skirt_long",
+     "slot": "bottom",
+     "bones": [
+      "hips",
+      "leg_L",
+      "leg_R",
+      "shin_L",
+      "shin_R"
+     ],
+     "materials": [
+      "bottom__Denim",
+      "skin__Skin3"
+     ],
+     "tris": 150
+    },
+    {
+     "id": "bottom_jeans_ripped",
+     "slot": "bottom",
+     "bones": [
+      "hips",
+      "leg_L",
+      "leg_R",
+      "shin_L",
+      "shin_R"
+     ],
+     "materials": [
+      "bottom__Denim",
+      "bottom_trim__Leather",
+      "skin__Skin3"
+     ],
+     "tris": 100
     },
     {
      "id": "shoes_sneakers",
@@ -2763,6 +3463,18 @@
       "hat_fedora__StoolBlack"
      ],
      "tris": 76
+    },
+    {
+     "id": "hat_cap",
+     "slot": "hat",
+     "bones": [
+      "head"
+     ],
+     "materials": [
+      "hat_cap_2__Cream",
+      "hat_cap__Charcoal"
+     ],
+     "tris": 58
     },
     {
      "id": "glasses_round",
@@ -3227,7 +3939,7 @@
      "materials": [
       "hair__HairDarkBrown"
      ],
-     "tris": 522
+     "tris": 350
     },
     {
      "id": "hair_long",
@@ -3271,7 +3983,7 @@
      "materials": [
       "hair__HairDarkBrown"
      ],
-     "tris": 12
+     "tris": 56
     },
     {
      "id": "hair_bun",
@@ -3404,6 +4116,226 @@
       "hair__HairDarkBrown"
      ],
      "tris": 232
+    },
+    {
+     "id": "hair_shaggy_hat",
+     "slot": "hair",
+     "bones": [
+      "head"
+     ],
+     "materials": [
+      "hair__HairDarkBrown"
+     ],
+     "tris": 168
+    },
+    {
+     "id": "hair_wavy_hat",
+     "slot": "hair",
+     "bones": [
+      "head"
+     ],
+     "materials": [
+      "hair__HairDarkBrown"
+     ],
+     "tris": 260
+    },
+    {
+     "id": "hair_afro_hat",
+     "slot": "hair",
+     "bones": [
+      "head"
+     ],
+     "materials": [
+      "hair__HairDarkBrown"
+     ],
+     "tris": 480
+    },
+    {
+     "id": "hair_curly_hat",
+     "slot": "hair",
+     "bones": [
+      "head"
+     ],
+     "materials": [
+      "hair__HairDarkBrown"
+     ],
+     "tris": 280
+    },
+    {
+     "id": "hair_long_hat",
+     "slot": "hair",
+     "bones": [
+      "head"
+     ],
+     "materials": [
+      "hair__HairDarkBrown"
+     ],
+     "tris": 182
+    },
+    {
+     "id": "hair_bob_hat",
+     "slot": "hair",
+     "bones": [
+      "head"
+     ],
+     "materials": [
+      "hair__HairDarkBrown"
+     ],
+     "tris": 162
+    },
+    {
+     "id": "hair_crop_hat",
+     "slot": "hair",
+     "bones": [
+      "head"
+     ],
+     "materials": [
+      "hair__HairDarkBrown"
+     ],
+     "tris": 146
+    },
+    {
+     "id": "hair_buzz_hat",
+     "slot": "hair",
+     "bones": [
+      "head"
+     ],
+     "materials": [
+      "hair__HairDarkBrown"
+     ],
+     "tris": 56
+    },
+    {
+     "id": "hair_bun_hat",
+     "slot": "hair",
+     "bones": [
+      "head"
+     ],
+     "materials": [
+      "hair__HairDarkBrown"
+     ],
+     "tris": 102
+    },
+    {
+     "id": "hair_quiff_hat",
+     "slot": "hair",
+     "bones": [
+      "head"
+     ],
+     "materials": [
+      "hair__HairDarkBrown"
+     ],
+     "tris": 94
+    },
+    {
+     "id": "hair_ponytail_hat",
+     "slot": "hair",
+     "bones": [
+      "head"
+     ],
+     "materials": [
+      "hair__HairDarkBrown"
+     ],
+     "tris": 172
+    },
+    {
+     "id": "hair_side_part_hat",
+     "slot": "hair",
+     "bones": [
+      "head"
+     ],
+     "materials": [
+      "hair__HairDarkBrown"
+     ],
+     "tris": 140
+    },
+    {
+     "id": "hair_swept_hat",
+     "slot": "hair",
+     "bones": [
+      "head"
+     ],
+     "materials": [
+      "hair__HairDarkBrown"
+     ],
+     "tris": 88
+    },
+    {
+     "id": "hair_spiky_hat",
+     "slot": "hair",
+     "bones": [
+      "head"
+     ],
+     "materials": [
+      "hair__HairDarkBrown"
+     ],
+     "tris": 138
+    },
+    {
+     "id": "hair_sideburns_hat",
+     "slot": "hair",
+     "bones": [
+      "head"
+     ],
+     "materials": [
+      "hair__HairDarkBrown"
+     ],
+     "tris": 148
+    },
+    {
+     "id": "hair_chignon_hat",
+     "slot": "hair",
+     "bones": [
+      "head"
+     ],
+     "materials": [
+      "hair__HairDarkBrown"
+     ],
+     "tris": 182
+    },
+    {
+     "id": "hair_two_block_hat",
+     "slot": "hair",
+     "bones": [
+      "head"
+     ],
+     "materials": [
+      "hair__HairDarkBrown"
+     ],
+     "tris": 108
+    },
+    {
+     "id": "hair_long_straight_hat",
+     "slot": "hair",
+     "bones": [
+      "head"
+     ],
+     "materials": [
+      "hair__HairDarkBrown"
+     ],
+     "tris": 208
+    },
+    {
+     "id": "hair_pigtails_hat",
+     "slot": "hair",
+     "bones": [
+      "head"
+     ],
+     "materials": [
+      "hair__HairDarkBrown"
+     ],
+     "tris": 176
+    },
+    {
+     "id": "hair_double_bun_hat",
+     "slot": "hair",
+     "bones": [
+      "head"
+     ],
+     "materials": [
+      "hair__HairDarkBrown"
+     ],
+     "tris": 56
     },
     {
      "id": "eyes_dot",
@@ -3834,6 +4766,77 @@
      "tris": 214
     },
     {
+     "id": "top_tee_stripe",
+     "slot": "top",
+     "bones": [
+      "arm_L",
+      "arm_R",
+      "forearm_L",
+      "forearm_R",
+      "spine"
+     ],
+     "materials": [
+      "skin__Skin3",
+      "top__Stone",
+      "top_print__Cream"
+     ],
+     "tris": 206
+    },
+    {
+     "id": "top_shirt_check",
+     "slot": "top",
+     "bones": [
+      "arm_L",
+      "arm_R",
+      "forearm_L",
+      "forearm_R",
+      "spine"
+     ],
+     "materials": [
+      "skin__Skin3",
+      "top__Stone",
+      "top_accent__Cream",
+      "top_print__Cream",
+      "top_trim__Cream"
+     ],
+     "tris": 498
+    },
+    {
+     "id": "top_shirt_aloha",
+     "slot": "top",
+     "bones": [
+      "arm_L",
+      "arm_R",
+      "forearm_L",
+      "forearm_R",
+      "spine"
+     ],
+     "materials": [
+      "skin__Skin3",
+      "top__Stone",
+      "top_accent__Cream",
+      "top_print__Cream",
+      "top_trim__Cream"
+     ],
+     "tris": 664
+    },
+    {
+     "id": "top_tank",
+     "slot": "top",
+     "bones": [
+      "arm_L",
+      "arm_R",
+      "forearm_L",
+      "forearm_R",
+      "spine"
+     ],
+     "materials": [
+      "skin__Skin3",
+      "top__Stone"
+     ],
+     "tris": 100
+    },
+    {
      "id": "bottom_jeans",
      "slot": "bottom",
      "bones": [
@@ -3914,6 +4917,39 @@
       "skin__Skin3"
      ],
      "tris": 104
+    },
+    {
+     "id": "bottom_skirt_long",
+     "slot": "bottom",
+     "bones": [
+      "hips",
+      "leg_L",
+      "leg_R",
+      "shin_L",
+      "shin_R"
+     ],
+     "materials": [
+      "bottom__Denim",
+      "skin__Skin3"
+     ],
+     "tris": 150
+    },
+    {
+     "id": "bottom_jeans_ripped",
+     "slot": "bottom",
+     "bones": [
+      "hips",
+      "leg_L",
+      "leg_R",
+      "shin_L",
+      "shin_R"
+     ],
+     "materials": [
+      "bottom__Denim",
+      "bottom_trim__Leather",
+      "skin__Skin3"
+     ],
+     "tris": 100
     },
     {
      "id": "shoes_sneakers",
@@ -4013,6 +5049,18 @@
       "hat_fedora__StoolBlack"
      ],
      "tris": 76
+    },
+    {
+     "id": "hat_cap",
+     "slot": "hat",
+     "bones": [
+      "head"
+     ],
+     "materials": [
+      "hat_cap_2__Cream",
+      "hat_cap__Charcoal"
+     ],
+     "tris": 58
     },
     {
      "id": "glasses_round",
@@ -4477,7 +5525,7 @@
      "materials": [
       "hair__HairDarkBrown"
      ],
-     "tris": 530
+     "tris": 334
     },
     {
      "id": "hair_long",
@@ -4521,7 +5569,7 @@
      "materials": [
       "hair__HairDarkBrown"
      ],
-     "tris": 12
+     "tris": 56
     },
     {
      "id": "hair_bun",
@@ -4654,6 +5702,226 @@
       "hair__HairDarkBrown"
      ],
      "tris": 232
+    },
+    {
+     "id": "hair_shaggy_hat",
+     "slot": "hair",
+     "bones": [
+      "head"
+     ],
+     "materials": [
+      "hair__HairDarkBrown"
+     ],
+     "tris": 160
+    },
+    {
+     "id": "hair_wavy_hat",
+     "slot": "hair",
+     "bones": [
+      "head"
+     ],
+     "materials": [
+      "hair__HairDarkBrown"
+     ],
+     "tris": 262
+    },
+    {
+     "id": "hair_afro_hat",
+     "slot": "hair",
+     "bones": [
+      "head"
+     ],
+     "materials": [
+      "hair__HairDarkBrown"
+     ],
+     "tris": 446
+    },
+    {
+     "id": "hair_curly_hat",
+     "slot": "hair",
+     "bones": [
+      "head"
+     ],
+     "materials": [
+      "hair__HairDarkBrown"
+     ],
+     "tris": 264
+    },
+    {
+     "id": "hair_long_hat",
+     "slot": "hair",
+     "bones": [
+      "head"
+     ],
+     "materials": [
+      "hair__HairDarkBrown"
+     ],
+     "tris": 164
+    },
+    {
+     "id": "hair_bob_hat",
+     "slot": "hair",
+     "bones": [
+      "head"
+     ],
+     "materials": [
+      "hair__HairDarkBrown"
+     ],
+     "tris": 168
+    },
+    {
+     "id": "hair_crop_hat",
+     "slot": "hair",
+     "bones": [
+      "head"
+     ],
+     "materials": [
+      "hair__HairDarkBrown"
+     ],
+     "tris": 176
+    },
+    {
+     "id": "hair_buzz_hat",
+     "slot": "hair",
+     "bones": [
+      "head"
+     ],
+     "materials": [
+      "hair__HairDarkBrown"
+     ],
+     "tris": 56
+    },
+    {
+     "id": "hair_bun_hat",
+     "slot": "hair",
+     "bones": [
+      "head"
+     ],
+     "materials": [
+      "hair__HairDarkBrown"
+     ],
+     "tris": 124
+    },
+    {
+     "id": "hair_quiff_hat",
+     "slot": "hair",
+     "bones": [
+      "head"
+     ],
+     "materials": [
+      "hair__HairDarkBrown"
+     ],
+     "tris": 126
+    },
+    {
+     "id": "hair_ponytail_hat",
+     "slot": "hair",
+     "bones": [
+      "head"
+     ],
+     "materials": [
+      "hair__HairDarkBrown"
+     ],
+     "tris": 156
+    },
+    {
+     "id": "hair_side_part_hat",
+     "slot": "hair",
+     "bones": [
+      "head"
+     ],
+     "materials": [
+      "hair__HairDarkBrown"
+     ],
+     "tris": 176
+    },
+    {
+     "id": "hair_swept_hat",
+     "slot": "hair",
+     "bones": [
+      "head"
+     ],
+     "materials": [
+      "hair__HairDarkBrown"
+     ],
+     "tris": 76
+    },
+    {
+     "id": "hair_spiky_hat",
+     "slot": "hair",
+     "bones": [
+      "head"
+     ],
+     "materials": [
+      "hair__HairDarkBrown"
+     ],
+     "tris": 120
+    },
+    {
+     "id": "hair_sideburns_hat",
+     "slot": "hair",
+     "bones": [
+      "head"
+     ],
+     "materials": [
+      "hair__HairDarkBrown"
+     ],
+     "tris": 138
+    },
+    {
+     "id": "hair_chignon_hat",
+     "slot": "hair",
+     "bones": [
+      "head"
+     ],
+     "materials": [
+      "hair__HairDarkBrown"
+     ],
+     "tris": 170
+    },
+    {
+     "id": "hair_two_block_hat",
+     "slot": "hair",
+     "bones": [
+      "head"
+     ],
+     "materials": [
+      "hair__HairDarkBrown"
+     ],
+     "tris": 108
+    },
+    {
+     "id": "hair_long_straight_hat",
+     "slot": "hair",
+     "bones": [
+      "head"
+     ],
+     "materials": [
+      "hair__HairDarkBrown"
+     ],
+     "tris": 208
+    },
+    {
+     "id": "hair_pigtails_hat",
+     "slot": "hair",
+     "bones": [
+      "head"
+     ],
+     "materials": [
+      "hair__HairDarkBrown"
+     ],
+     "tris": 176
+    },
+    {
+     "id": "hair_double_bun_hat",
+     "slot": "hair",
+     "bones": [
+      "head"
+     ],
+     "materials": [
+      "hair__HairDarkBrown"
+     ],
+     "tris": 56
     },
     {
      "id": "eyes_dot",
@@ -5084,6 +6352,77 @@
      "tris": 212
     },
     {
+     "id": "top_tee_stripe",
+     "slot": "top",
+     "bones": [
+      "arm_L",
+      "arm_R",
+      "forearm_L",
+      "forearm_R",
+      "spine"
+     ],
+     "materials": [
+      "skin__Skin3",
+      "top__Stone",
+      "top_print__Cream"
+     ],
+     "tris": 206
+    },
+    {
+     "id": "top_shirt_check",
+     "slot": "top",
+     "bones": [
+      "arm_L",
+      "arm_R",
+      "forearm_L",
+      "forearm_R",
+      "spine"
+     ],
+     "materials": [
+      "skin__Skin3",
+      "top__Stone",
+      "top_accent__Cream",
+      "top_print__Cream",
+      "top_trim__Cream"
+     ],
+     "tris": 450
+    },
+    {
+     "id": "top_shirt_aloha",
+     "slot": "top",
+     "bones": [
+      "arm_L",
+      "arm_R",
+      "forearm_L",
+      "forearm_R",
+      "spine"
+     ],
+     "materials": [
+      "skin__Skin3",
+      "top__Stone",
+      "top_accent__Cream",
+      "top_print__Cream",
+      "top_trim__Cream"
+     ],
+     "tris": 620
+    },
+    {
+     "id": "top_tank",
+     "slot": "top",
+     "bones": [
+      "arm_L",
+      "arm_R",
+      "forearm_L",
+      "forearm_R",
+      "spine"
+     ],
+     "materials": [
+      "skin__Skin3",
+      "top__Stone"
+     ],
+     "tris": 96
+    },
+    {
      "id": "bottom_jeans",
      "slot": "bottom",
      "bones": [
@@ -5164,6 +6503,39 @@
       "skin__Skin3"
      ],
      "tris": 104
+    },
+    {
+     "id": "bottom_skirt_long",
+     "slot": "bottom",
+     "bones": [
+      "hips",
+      "leg_L",
+      "leg_R",
+      "shin_L",
+      "shin_R"
+     ],
+     "materials": [
+      "bottom__Denim",
+      "skin__Skin3"
+     ],
+     "tris": 150
+    },
+    {
+     "id": "bottom_jeans_ripped",
+     "slot": "bottom",
+     "bones": [
+      "hips",
+      "leg_L",
+      "leg_R",
+      "shin_L",
+      "shin_R"
+     ],
+     "materials": [
+      "bottom__Denim",
+      "bottom_trim__Leather",
+      "skin__Skin3"
+     ],
+     "tris": 100
     },
     {
      "id": "shoes_sneakers",
@@ -5263,6 +6635,18 @@
       "hat_fedora__StoolBlack"
      ],
      "tris": 76
+    },
+    {
+     "id": "hat_cap",
+     "slot": "hat",
+     "bones": [
+      "head"
+     ],
+     "materials": [
+      "hat_cap_2__Cream",
+      "hat_cap__Charcoal"
+     ],
+     "tris": 58
     },
     {
      "id": "glasses_round",
@@ -6913,7 +8297,7 @@
    "height_m": 1.55,
    "height_vox": 31,
    "head_top_vox": 30,
-   "tris": 506,
+   "tris": 566,
    "animations": [
     "idle",
     "walk",
@@ -6937,7 +8321,7 @@
     "walk_tray",
     "pour"
    ],
-   "bytes": 236400
+   "bytes": 243192
   },
   {
    "name": "golf",
@@ -8590,7 +9974,7 @@
    "height_m": 1.45,
    "height_vox": 29,
    "head_top_vox": 27,
-   "tris": 1046,
+   "tris": 896,
    "animations": [
     "idle",
     "walk",
@@ -8611,7 +9995,7 @@
     "walk_merry",
     "idle_sad"
    ],
-   "bytes": 271564
+   "bytes": 255028
   },
   {
    "name": "patron_10",
@@ -9198,7 +10582,7 @@
    "height_m": 1.55,
    "height_vox": 31,
    "head_top_vox": 30,
-   "tris": 486,
+   "tris": 546,
    "animations": [
     "idle",
     "walk",
@@ -9219,7 +10603,7 @@
     "walk_merry",
     "idle_sad"
    ],
-   "bytes": 211636
+   "bytes": 218228
   },
   {
    "name": "patron_16",
@@ -9298,7 +10682,7 @@
    "height_m": 1.55,
    "height_vox": 31,
    "head_top_vox": 29,
-   "tris": 938,
+   "tris": 774,
    "animations": [
     "idle",
     "walk",
@@ -9319,7 +10703,7 @@
     "walk_merry",
     "idle_sad"
    ],
-   "bytes": 262244
+   "bytes": 244128
   },
   {
    "name": "patron_17",

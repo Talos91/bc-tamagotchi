@@ -17,6 +17,9 @@ extends SceneTree
 ##             Done with a refused or empty name stays and says why above the button, the name field first on screen;
 ##             Done with a good name leaves
 ##   item 27   at least three of the eight hairs read as long or tied-up hair from the front; one look is a dress
+##   hair cover (owner list 2026-11-20, item 2: "hairs often clips the head and looks like bald spots") every offered
+##             hair on every head shape and body covers the scalp: rays at the top, the back (above the nape) and the
+##             upper sides of the head meet hair before skin, read from the parts libraries' own meshes
 ##   godot --headless --path . --script res://tests/test_avatar.gd
 
 const Avatar = preload("res://scripts/avatar.gd")
@@ -41,6 +44,7 @@ func _init() -> void:
 	_legacy()
 	_save()
 	_names()
+	_hair_cover()
 	await _figure()
 	await _start_new()
 	await _start_old()
@@ -115,8 +119,60 @@ func _data() -> void:
 	var in_options := true
 	for i in 40:
 		var r := Avatar.random_record(rng)
-		in_options = in_options and d["bodies"].has(r["body"]) and d["hairs"].has(r["hair"]) and d["looks"][r["look"]]["top_colours"].has(r["top_colour"])
+		in_options = in_options and d["bodies"].has(r["body"]) and d["hairs"].has(r["hair"]) and d["tops"].has(r["top"]) and d["top_colours"].has(r["top_colour"]) 			and (r["bottom"] == "dress" or d["bottoms"].has(r["bottom"])) and d["shoes"].has(r["shoes"]) and Avatar.normalize(r) == r
 	check(in_options, "Surprise me rolls only offered options")
+
+
+## Scalp cover, from the meshes (voxel 0.05 m, front +z, top +y). The head is the 8 x 7 x 7 box of bc_chars.py; the
+## scalp is its top (every column), its back from the third row up (back(Z + 2) in build_hair) and its sides' three top
+## rows behind the temples. A ray from outside at each cell centre must hit a hair mesh before the head mesh, or miss
+## the head (a round head's missing corners).
+func _hair_cover() -> void:
+	print("hair cover (item 2)")
+	const V := 0.05
+	var d := Avatar.data()
+	var bad: Array[String] = []
+	var n := 0
+	for body in d["bodies"]:
+		var lib: Node = (load(Avatar.library_path(body)) as PackedScene).instantiate()
+		var tm := {}
+		var aabb := {}
+		for mi: MeshInstance3D in lib.find_children("*", "MeshInstance3D", true, false):
+			var nm := String(mi.name)
+			if nm.begins_with("head_") or nm.begins_with("hair_"):
+				tm[nm] = mi.mesh.generate_triangle_mesh()
+				aabb[nm] = mi.mesh.get_aabb()
+		lib.free()
+		var head_box: AABB = aabb["head_square"]
+		var z0 := head_box.position.y               # bottom row of the head (Z)
+		var top := z0 + 7 * V
+		var rays: Array = []                        # [from, dir, where]
+		for i in 8:
+			var x := -0.2 + (i + 0.5) * V
+			for j in 7:
+				var z := 0.2 - (j + 1.5) * V    # head cells y -3..3 -> z 0.15 .. -0.2 (the nose row in front excluded)
+				rays.append([Vector3(x, top + 1.0, z), Vector3.DOWN, "top"])
+			for k in range(2, 7):
+				rays.append([Vector3(x, z0 + (k + 0.5) * V, -1.0), Vector3.BACK, "back"])
+		for k in range(4, 7):
+			for j in range(2, 7):
+				var z := 0.2 - (j + 1.5) * V
+				rays.append([Vector3(-1.0, z0 + (k + 0.5) * V, z), Vector3.RIGHT, "side"])
+				rays.append([Vector3(1.0, z0 + (k + 0.5) * V, z), Vector3.LEFT, "side"])
+		for head in d["heads"]:
+			for hair in d["hairs"]:
+				n += 1
+				var bare := {}
+				for r in rays:
+					var hh: Dictionary = (tm["head_" + head] as TriangleMesh).intersect_ray(r[0], r[1])
+					if hh.is_empty():
+						continue
+					var hr: Dictionary = (tm["hair_" + hair] as TriangleMesh).intersect_ray(r[0], r[1])
+					if hr.is_empty() or (r[0] as Vector3).distance_to(hr["position"]) > (r[0] as Vector3).distance_to(hh["position"]) - 0.001:
+						bare[r[2]] = int(bare.get(r[2], 0)) + 1
+				if not bare.is_empty():
+					bad.append("%s/%s/%s %s" % [body, head, hair, bare])
+	check(n == d["bodies"].size() * d["heads"].size() * d["hairs"].size() and bad.is_empty(), "every offered hair covers the scalp on every head and body (%d combinations; bare: %s)" % [n, ", ".join(bad.slice(0, 12)) if not bad.is_empty() else "none"])
 
 
 func _legacy() -> void:

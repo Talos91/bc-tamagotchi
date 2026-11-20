@@ -81,6 +81,8 @@ WARDROBE_ADDED = {
     "Olive": "#66703A", "Moss": "#4C5A30", "Mustard": "#C99430", "Rust": "#A04A26",
     "Jacket": "#3A3444", "ShirtWhite": "#ECE6E0", "DressRed": "#B0141C", "Leather": "#5A3020",
     "LeatherBlack": "#241E26", "LeatherSheen": "#4A4250", "Silver": "#B4B0B8", "JeansBlue": "#4C6EA6",
+    # creator wardrobe, owner list 2026-11-20 item 3 ("too little variety expecially in clothing"): night-out colours
+    "Fuchsia": "#B8285E", "Lilac": "#8C78B8", "Cobalt": "#2C4C9C", "Coral": "#D8664E", "Mint": "#7CB49A",
 }
 GLOSS = {"LeatherBlack": (0.32, 0.0), "LeatherSheen": (0.25, 0.0), "Silver": (0.25, 0.6),
          "HairSilver": (0.38, 0.3)}   # swatch: (roughness, metallic); leather catches the light, Tt's silver hair a little
@@ -383,7 +385,10 @@ def build_hair(style, D, C):
             if y < HY0 and z < T - 1:
                 return False                                         # keep the face clear
             d = ((x + 0.5) / 6.0) ** 2 + ((y + 0.5) / 5.8) ** 2 + ((z + 0.5 - cz) / 4.6) ** 2
-            return d <= 1.0 and (d < 0.8 or zlib.crc32(("cu%d,%d,%d" % (x, y, z)).encode()) % 4 > 0)
+            # the layer touching the scalp is never tufted away (owner list 2026-11-20 item 2: the random tufts left
+            # bald spots on the crown and the back); the ragged edge stays on the outer layers
+            touching = HX0 - 1 <= x <= HX1 + 1 and HY0 - 1 <= y <= HY1 + 1 and Z + 2 <= z <= T + 1
+            return touching or (d <= 1.0 and (d < 0.8 or zlib.crc32(("cu%d,%d,%d" % (x, y, z)).encode()) % 4 > 0))
         b((HX0 - 2, HX1 + 2), (HY0 - 2, HY1 + 2), (T - 5, T + 4), keep)
     elif style == "long":
         cap(); sides(Z - 4); back(Z - 4); fringe(T - 1)
@@ -393,7 +398,10 @@ def build_hair(style, D, C):
         cap(); sides(T - 3); back(Z + 2); fringe(T - 1)
         lumpy(HX0, HX1, HY0, HY1, T + 2, "crop", 0.45)
     elif style == "buzz":
-        cap(0)
+        # a close shell over the crown, the back and the sides above the ears, a straight hairline (owner list
+        # 2026-11-20 item 2: the old flat plate floated over round heads and left the back and sides bare)
+        cap(); sides(T - 3, HY0 + 1); back(Z + 2)
+        b((HX0, HX1), (HY0 - 1, HY0 - 1), (T, T))
     elif style == "bob":
         cap(); sides(Z + 1); back(Z + 1); fringe(T - 2)
         b((HX0 - 2, HX0 - 2), (HY0, HY1 + 1), (Z + 1, Z + 2))       # flared ends
@@ -520,8 +528,12 @@ TOPS = {   # style: sleeve length
     "tee": "short", "shirt": "full", "shirt_rolled": "rolled", "shirt_tie": "full", "jacket": "full",
     "hoodie": "full", "cardigan": "full", "bomber": "full", "staff_shirt": "short", "blouse": "short",
     "blazer": "full", "dress": "none", "knit": "full", "leather": "full", "denim_jacket": "full",
+    # creator wardrobe (owner list 2026-11-20 item 3): patterned and sleeveless tops built on a base style, the
+    # pattern in its own slot `top_print` so the game recolours it apart from the top
+    "tee_stripe": "short", "shirt_check": "full", "shirt_aloha": "short", "tank": "none",
 }
-BOTTOMS = ("jeans", "trousers", "shorts", "skirt", "dress")
+TOP_BASE = {"tee_stripe": "tee", "shirt_check": "shirt", "shirt_aloha": "shirt", "tank": "dress"}
+BOTTOMS = ("jeans", "trousers", "shorts", "skirt", "dress", "skirt_long", "jeans_ripped")
 SHOES = ("sneakers", "boots", "loafers")
 
 
@@ -532,6 +544,7 @@ def arm_rows(D):
 
 def build_top(style, D, C):
     p = Part("top_" + style, "top")
+    pid, style = style, TOP_BASE.get(style, style)
     mm, tt, aa, sk = ("top", C["top"]), ("top_trim", C["top_trim"]), ("top_accent", C["top_accent"]), ("skin", C["skin"])
     zb, zt = D["leg"] + 2, D["h"] - 1
     x0, x1, y0, y1 = D["x0"], D["x1"], D["y0"], D["y1"]
@@ -660,6 +673,16 @@ def build_top(style, D, C):
         for x in range(-2, 2):
             front(x, zt, sk); front(x, zt - 1, sk)
         p.box((x0, x1), (y0, y1), (zt, zt), sk, "spine", keep=lambda x, y, z: x not in (x0 + 1, x1 - 1))
+    pr = ("top_print", C.get("top_print", "Cream"))
+    for (x, y, z), (m, bone) in list(p.cells.items()):
+        if m != mm:
+            continue
+        if pid == "tee_stripe" and z % 2 == 0:                      # Breton stripes, sleeves too
+            p.set(x, y, z, pr, bone)
+        elif pid == "shirt_check" and (x % 2 == 0 or z % 2 == 0):   # flannel check
+            p.set(x, y, z, pr, bone)
+        elif pid == "shirt_aloha" and zlib.crc32(("aloha%d,%d,%d" % (x, y, z)).encode()) % 4 == 0:
+            p.set(x, y, z, pr, bone)                                # flowers
     return p
 
 
@@ -672,8 +695,8 @@ def build_bottom(style, D, C):
         p.box((D["x0"], D["x1"]), (D["y0"], D["y1"]), (leg + 1, leg + 1), tt, "hips")   # belt
         p.set(-1, D["y0"] - 1, leg + 1, ("bottom_trim", "CymbalGold"), "hips")           # buckle in relief
         p.set(0, D["y0"] - 1, leg + 1, ("bottom_trim", "CymbalGold"), "hips")
-    skirt = style in ("skirt", "dress")
-    hem = knee + (2 if style == "skirt" else 0)
+    skirt = style in ("skirt", "dress", "skirt_long")
+    hem = knee + 2 if style == "skirt" else (3 if style == "skirt_long" else knee)
     for s in ARMS:
         legx = D["leg_" + s]
         xr = (-1, legx[1]) if skirt and s == "L" else legx           # skirts fill the gap between the legs
@@ -686,11 +709,13 @@ def build_bottom(style, D, C):
                 m = mm
             elif style == "shorts" and z < knee + 2:
                 m = sk
-            elif style == "jeans" and z == 2:
+            elif style in ("jeans", "jeans_ripped") and z == 2:
                 m = tt                                              # rolled cuff
             else:
                 m = mm
             p.box(xr, LEG_Y, (z, z), m, bone)
+            if style == "jeans_ripped" and z in (knee, knee + 1):
+                p.box((xr[0] + 1, xr[1]), (LEG_Y[0], LEG_Y[0]), (z, z), sk, bone)   # torn knees
         if skirt:                                                   # flared hem, one voxel out
             outer = xr[1] + 1 if s == "L" else xr[0] - 1
             p.box((outer, outer), (LEG_Y[0] - 1, LEG_Y[1] + 1), (hem, hem + 1), mm, "leg_" + s)
@@ -732,6 +757,7 @@ ACC = {
     "hat_flat_cap":   ("hat", "Stone", "Charcoal"),
     "hat_beanie":     ("hat", "Rust", "Cream"),
     "hat_fedora":     ("hat", "StoolBlack", "Charcoal"),
+    "hat_cap":        ("hat", "Charcoal", "Cream"),
     "glasses_round":  ("glasses", "CymbalGold", "Lens"),
     "glasses_tinted": ("glasses", "CymbalGold", "Lens"),
     "glasses_up":     ("glasses", "StoolBlack", "Lens"),
@@ -791,6 +817,12 @@ def build_acc(aid, D, C):
         bx((HX0 - 1, HX1 + 1), (HY0 - 1, HY1 + 1), (T + 3, T + 4),
            keep=lambda x, y, z: not (z == T + 4 and (x in (HX0 - 1, HX1 + 1) or y in (HY0 - 1, HY1 + 1))))
         bx((-1, 0), (-1, 0), (T + 5, T + 5), b2)                                 # pom
+    elif aid == "hat_cap":
+        # baseball cap, peak forward (creator wardrobe, owner list 2026-11-20 item 3)
+        bx((HX0 - 1, HX1 + 1), (HY0 - 1, HY1 + 1), (T + 2, T + 3))
+        bx((HX0, HX1), (HY0, HY1), (T + 4, T + 4))
+        bx((-1, 0), (-1, 0), (T + 5, T + 5), b2)                                 # button
+        bx((HX0, HX1), (HY0 - 4, HY0 - 2), (T + 2, T + 2), b2)                   # peak
     elif aid == "hat_fedora":
         # 05/06: the bassist's and the bar patron's fedora. Wide brim, band, pinched crown
         bx((HX0 - 2, HX1 + 2), (HY0 - 2, HY1 + 2), (T + 2, T + 2),
@@ -1149,10 +1181,24 @@ def assemble(spec):
     return [p for p in parts if not p.empty()]
 
 
+HAT_BRIM = 2      # every hat starts at T + 2 (build_acc)
+
+
+def hair_under_hat(hair, D):
+    """`hair_<style>_hat`: the hair cut at the hat brim, as assemble() does for presets, so a creator character can
+    wear a hat over any hair with nothing poking through the crown (owner list 2026-11-20 items 2 and 3)."""
+    p = Part(hair.pid + "_hat", "hair")
+    for c, v in hair.cells.items():
+        if c[2] < D["T"] + HAT_BRIM:
+            p.cells[c] = v
+    return p
+
+
 def library_parts(body):
     """Every part for one body type, in default colours: the runtime creator's source."""
     D, C = dims(body), dict(DEFAULT_COLOURS)
     parts = [build_head(s, D, C) for s in HEADS] + [build_hair(s, D, C) for s in HAIRS]
+    parts += [hair_under_hat(build_hair(s, D, C), D) for s in HAIRS]
     parts += [build_eyes(v, D, C) for v in EYES] + [build_brows(v, D, C) for v in BROWS if BROWS[v]]
     parts += [build_mouth(v, D, C) for v in MOUTHS] + [build_blush(D, C)]
     parts += [build_top(s, D, C) for s in TOPS] + [build_bottom(s, D, C) for s in BOTTOMS]
@@ -1872,6 +1918,7 @@ def write_manifest(presets, libs):
         "swatches": {"skin": SKIN, "hair": HAIR,
                      "wardrobe": {**{k: K.PALETTE[k][0] for k in WARDROBE_BIBLE}, **WARDROBE_ADDED}, "face": FACE},
         "parts": {"heads": list(HEADS), "hair": list(HAIRS), "eyes": list(EYES), "brows": [b for b in BROWS if BROWS[b]],
+                  "hair_under_hat": [h + "_hat" for h in HAIRS],
                   "mouths": list(MOUTHS), "tops": list(TOPS), "bottoms": list(BOTTOMS), "shoes": list(SHOES),
                   "accessories": {a: {"slot": v[0], "colours": [v[1], v[2]]} for a, v in ACC.items()}},
         "libraries": libs,

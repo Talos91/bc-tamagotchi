@@ -1,8 +1,13 @@
 extends RefCounted
 ## The player's avatar record (docs/design/07-character-creator.md §4; answers DECISIONS 2026-11-09).
 ## Lives in save.json under profile.avatar; personality stays in needs.personality, the name in profile.display_name.
-##   {"v": 1, "body", "head", "face", "skin", "hair", "hair_colour", "look", "top_colour", "worn": {slot: item},
-##    "created_at", "edited_at"}
+##   {"v": 2, "body", "head", "face", "skin", "hair", "hair_colour", "look", "top", "top_colour", "print_colour",
+##    "bottom", "bottom_colour", "shoes", "worn": {slot: item}, "created_at", "edited_at"}
+## v2 (owner list 2026-11-20 item 3, wardrobe): top, bottom and shoes are picked apart, with a bottom colour, a pattern
+## colour for patterned tops, a hat and glasses (worn). `look` stays in every record: it carries the trims of the
+## starter look the pieces came from, and clients from before v2 (live builds, other players' phones) still draw that
+## look with top_colour. A v1 record (no `top`) migrates in normalize(): top, bottom, shoes and the bottom colour come
+## from its look, so it draws exactly as before.
 ## Values are ids and swatch names, never hexes. Options offered by the creator come from res://data/avatar.json;
 ## any part id the kit has is accepted in a record (the legacy look uses parts the creator does not offer), and an
 ## unknown id falls back per slot to the default, so a removed part never breaks a save.
@@ -11,7 +16,7 @@ extends RefCounted
 
 const DATA_PATH := "res://data/avatar.json"
 const MANIFEST := "res://assets/chars/manifest.json"
-const V := 1
+const V := 2
 const LIBRARY := "res://assets/chars/parts/parts_%s.glb"
 
 static var _data: Dictionary = {}
@@ -65,14 +70,30 @@ static func random_record(rng: RandomNumberGenerator = null) -> Dictionary:
 		rng.randomize()
 	var d := data()
 	var pick := func(a: Array) -> Variant: return a[rng.randi() % a.size()]
-	var look: String = pick.call(d["look_order"])
+	var top: String = pick.call(d["tops"])
 	var r := {
 		"v": V, "worn": {},
 		"body": pick.call(d["bodies"]), "head": pick.call(d["heads"]), "face": pick.call(d["face_order"]),
 		"skin": pick.call(d["skins"]), "hair": pick.call(d["hairs"]), "hair_colour": pick.call(d["hair_colours"]),
-		"look": look, "top_colour": pick.call(d["looks"][look]["top_colours"]),
+		"top": top, "top_colour": pick.call(d["top_colours"]), "print_colour": pick.call(d["print_colours"]),
+		"bottom": "dress" if top == "dress" else pick.call(d["bottoms"]), "bottom_colour": pick.call(d["bottom_colours"]),
+		"shoes": pick.call(d["shoes"]),
 	}
+	if rng.randf() < 0.3:
+		r["worn"]["hat"] = pick.call(d["hats"])
+	if rng.randf() < 0.25:
+		r["worn"]["glasses"] = pick.call(d["glasses"])
+	r["look"] = look_for(r["top"])
 	return r
+
+
+## The starter look nearest a top: what a client from before v2 draws for this record.
+static func look_for(top: String) -> String:
+	if top == "dress":
+		return "dress"
+	if top in ["shirt", "shirt_check", "shirt_aloha", "blazer", "blouse"]:
+		return "smart"
+	return "easy"
 
 
 ## Every field present and valid; unknown values fall back to the default's.
@@ -97,10 +118,29 @@ static func normalize(rec: Variant) -> Dictionary:
 	var look: Dictionary = d["looks"][r["look"]]
 	if not _hex.has(str(r.get("top_colour", ""))):
 		r["top_colour"] = look["top_colours"][0]
+	# v1 -> v2: the pieces of its look (a record with no top is v1, or from a client before v2)
+	if not r.has("top"):
+		r["top"] = look["top"]
+		r["bottom"] = look["bottom"]
+		r["shoes"] = look["shoes"]
+		r["bottom_colour"] = r["top_colour"] if look.get("bottom_follows_top", false) else str(look["colours"].get("bottom", "Denim"))
+	if not _kit["tops"].has(str(r.get("top", ""))):
+		r["top"] = look["top"]
+	if not _kit["bottoms"].has(str(r.get("bottom", ""))):
+		r["bottom"] = look["bottom"]
+	if not _kit["shoes"].has(str(r.get("shoes", ""))):
+		r["shoes"] = look["shoes"]
+	if r["top"] == "dress":
+		r["bottom"] = "dress"
+	elif r["bottom"] == "dress":
+		r["bottom"] = "skirt"
+	for k in ["bottom_colour", "print_colour"]:
+		if not _hex.has(str(r.get(k, ""))):
+			r[k] = base[k]
 	var worn: Dictionary = r.get("worn", {}) if r.get("worn") is Dictionary else {}
 	var clean := {}
 	for slot in worn:
-		if d["worn_items"].has(worn[slot]):
+		if d["worn_items"].has(worn[slot]) and str(d["worn_items"][worn[slot]]["slot"]) == slot:
 			clean[slot] = worn[slot]
 	r["worn"] = clean
 	r["v"] = V
@@ -113,15 +153,22 @@ static func resolve(rec: Variant) -> Dictionary:
 	var r := normalize(rec)
 	var face: Dictionary = d["faces"][r["face"]]
 	var look: Dictionary = d["looks"][r["look"]]
-	var ids := ["head_" + r["head"], "hair_" + r["hair"], "eyes_" + face["eyes"], "mouth_" + face["mouth"],
-		"top_" + look["top"], "bottom_" + look["bottom"], "shoes_" + look["shoes"], "hands"]
+	var hat_on: bool = r["worn"].has("hat")           # the hair cut at the brim (bc_chars.py hair_under_hat)
+	var ids := ["head_" + r["head"], "hair_" + r["hair"] + ("_hat" if hat_on else ""), "eyes_" + face["eyes"],
+		"mouth_" + face["mouth"], "top_" + r["top"], "bottom_" + r["bottom"], "shoes_" + r["shoes"], "hands"]
 	if str(face.get("brows", "none")) != "none":
 		ids.append("brows_" + face["brows"])
-	var colours := {"skin": hex(r["skin"]), "hair": hex(r["hair_colour"]), "top": hex(r["top_colour"])}
-	for slot in look["colours"]:
+	var colours := {"skin": hex(r["skin"]), "hair": hex(r["hair_colour"]), "top": hex(r["top_colour"]),
+		"top_print": hex(r["print_colour"])}
+	for slot in look["colours"]:                       # the look's trims ...
 		colours[slot] = hex(look["colours"][slot])
-	if look.get("bottom_follows_top", false):          # the dress: one colour top to hem
-		colours["bottom"] = colours["top"]
+	if r["top"] != look["top"]:                         # ... or the piece's own when worn outside its look
+		for slot in d["top_info"].get(r["top"], {}):
+			colours[slot] = hex(d["top_info"][r["top"]][slot])
+	if r["shoes"] != look["shoes"]:
+		for slot in d["shoe_info"].get(r["shoes"], {}):
+			colours[slot] = hex(d["shoe_info"][r["shoes"]][slot])
+	colours["bottom"] = colours["top"] if r["top"] == "dress" else hex(r["bottom_colour"])   # the dress: one colour to the hem
 	for slot in r["worn"]:
 		var item: String = r["worn"][slot]
 		ids.append(item)
