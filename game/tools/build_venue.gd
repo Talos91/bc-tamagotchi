@@ -866,6 +866,20 @@ func _lounge() -> void:
 	_velvet_rope(g, "Alcove", Vector3(rope_x, 0, STUB.position.y + 0.15), Vector3(rope_x, 0, STUB.end.y - 0.15))
 	_collider(g, "AlcoveStop", Vector3(rope_x, ROOM_H * 0.5, STUB.get_center().y), Vector3(0.1, ROOM_H, STUB.size.y))
 	_cut(_kit(g, "wall_lamp", Vector3(17.7, 1.9, STUB.position.y + 0.05), 0.0, "StubLamp"), Vector3.FORWARD)
+	# Its own end wall (owner list 2026-11-20, item 5: "the end wall invisible and you can see trough both ways"). The
+	# alcove used to end at the main room's west wall, which sinks whenever it faces the camera (the main room's floor
+	# view, the lounge's east view at the curtains), so the alcove looked straight through into the main room and the
+	# main room through the alcove into the lounge. Two thin faces just inside it, the lounge's two-tone on the alcove
+	# side and the main room's black on the other. In the lounge's views (the curtains view looks east straight down
+	# the alcove) it is cut only when it hides the player; in the main room's views, whose camera stands west of the
+	# main room's west wall, it also sinks when it stands wholly nearer the camera than the player, as that wall does.
+	# Visual only: the AlcoveStop blocker still ends the walk.
+	var end_x := MAIN_X0 - 0.2
+	for f in [["StubEnd", end_x - 0.2, wall], ["StubEndBack", end_x - 0.1, _wall_mat("main_wall", WALL_BLACK, 0.85)]]:
+		var e := _box(g, f[0], Vector3(f[1], 0, STUB.position.y), Vector3(0.1, ROOM_H, STUB.size.y), f[2], false)
+		e.cast_shadow = GeometryInstance3D.SHADOW_CASTING_SETTING_OFF
+		_cut(e, Vector3.ZERO).set_meta("cut_sight_only", true)
+		e.set_meta("cut_rooms", ["floor", "toilets", "bar", "stage", "smoking"])
 	# West wall (R02 kept, moved south for the memory corner, Daniele 2026-11-02): plant wall framing the neon over
 	# the banquette, the long table (shortened to 3 m) in front
 	for c in 3:

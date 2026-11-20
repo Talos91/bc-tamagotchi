@@ -365,10 +365,67 @@ func _real() -> void:
 	await create_timer(0.3).timeout
 	check(got["n"] == 0 and PresenceClient.dropped == dropped0 + 2, "replies after their asker was freed (venue poll, a node) are dropped (%d)" % (PresenceClient.dropped - dropped0))
 	PresenceClient.fire(Callable(), [])   # an empty callback is ignored (no error line)
+	await _real_checkin(pres, mock)
 	pres.mock_delay_s = 0.0
 	pres.use_mock(false)
 	check(not pres.is_active(), "mock off: inert again")
 	PresenceClient.reset()
+
+
+## Owner list 2026-11-20, item 4 ("the who can reach out tonight selector doesn't work and the only way is to click
+## skip"): with the real autoload the chosen mode only reached the local profile, the check-in went out without one,
+## the server answered need_mode and the card asked again. Real touches on the card, against the autoload in mock mode.
+func _real_checkin(pres: Node, mock: RefCounted) -> void:
+	print("real checkin (item 4)")
+	pres.reset_local("user://test_presence_client_real2.json")
+	pres.use_mock(true, mock)
+	PresenceClient.reset()
+	needs.profile.erase("presence_mode")
+	check(PresenceClient.mode(needs) == "", "no mode yet")
+	pres.set_pending_code(mock.code_for("Table2"))
+	var main := await _main(true)
+	var ss: Node = main.start_screen
+	await _frames(3)
+	var flow: Control = ss._modal.find_child("CheckInFlow", true, false) if is_instance_valid(ss._modal) else null
+	check(flow != null and flow.find_child("Mode_here", true, false) != null, "the consent card is up")
+	if flow == null:
+		await _free(main)
+		return
+	await _touch(flow.find_child("Mode_here", true, false))
+	var go: Button = flow.find_child("CheckIn", true, false)
+	check(flow.mode == "here" and flow.mode_buttons["here"].button_pressed and not go.disabled, "a tap picks 'Only people here tonight' and turns Check in on")
+	await _touch(go)
+	var t0 := Time.get_ticks_msec()
+	while is_instance_valid(flow) and flow.result.is_empty() and Time.get_ticks_msec() - t0 < 3000:
+		await process_frame
+	check(is_instance_valid(flow) and flow.result.get("ok", false), "checked in, not asked again (%s)" % (flow.result if is_instance_valid(flow) else "card gone"))
+	check(is_instance_valid(flow) and flow.find_child("Mode_here", true, false) == null and flow.find_child("Enter", true, false) != null, "the result card, not the consent card again")
+	check(pres.mode() == "here" and str(needs.profile.get("presence_mode", "")) == "here", "the choice is saved in the autoload and the profile")
+	var vis := ""
+	for k in mock.checkins:
+		if mock.checkins[k].get("player_id", "") == pres.player_id():
+			vis = str(mock.checkins[k].get("visibility", ""))
+	check(vis == "here", "the server's check-in row carries it as its visibility (%s)" % vis)
+	if is_instance_valid(flow) and flow.find_child("Enter", true, false) != null:
+		await _touch(flow.find_child("Enter", true, false))
+	await _frames(3)
+	check(ss.phase != StartScreen.Phase.TITLE, "Into the bar walks in")
+	await _free(main)
+
+
+## A finger tap on a control's centre: ScreenTouch through Input (touch -> mouse emulation, as on the phone), at the
+## window position of that point (the root window stretches its canvas, so canvas and window coordinates differ).
+func _touch(ctrl: Control) -> void:
+	var at: Vector2 = root.get_final_transform() * (ctrl.get_global_transform_with_canvas() * (ctrl.size * 0.5))
+	for down in [true, false]:
+		var t := InputEventScreenTouch.new()
+		t.index = 0
+		t.pressed = down
+		t.position = at
+		Input.parse_input_event(t)
+		Input.flush_buffered_events()
+		await process_frame
+	await process_frame
 
 
 ## A throwaway node whose fetch callback is bound to itself (so it is invalid once the node is freed).

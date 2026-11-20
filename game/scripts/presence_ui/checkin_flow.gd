@@ -21,6 +21,7 @@ var result := {}
 var col: VBoxContainer
 var go: Button
 var mode_buttons := {}
+var _chosen := false     ## a mode was picked on this card: a need_mode answer now is an error, never the card again
 
 
 func open(n: Node, table_code: String) -> void:
@@ -80,8 +81,9 @@ func _consent() -> void:
 	go.name = "CheckIn"
 	go.disabled = true
 	go.pressed.connect(func():
+		_chosen = true
 		PresenceClient.set_mode(needs, mode)
-		run())
+		run.call_deferred())   # not inside the button's own press: run() frees it
 	col.add_child(go)
 	_skip_button()
 
@@ -132,7 +134,7 @@ func _on_result(r: Dictionary) -> void:
 		col.add_child(enter)
 		return
 	var err := str(r.get("reason", "other"))
-	if err == "need_mode":   # the mode was lost (another device, a reset): ask again
+	if err == "need_mode" and not _chosen:   # the mode was lost (another device, a reset): ask again, once
 		_consent()
 		return
 	if not err in ["offline", "closed", "bad_code"]:

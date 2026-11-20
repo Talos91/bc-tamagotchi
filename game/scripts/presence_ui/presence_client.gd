@@ -142,16 +142,23 @@ static func _web_param(key: String) -> String:
 # --- Mode (P1) -------------------------------------------------------------------------------------
 
 static func mode(needs: Node) -> String:
+	var local := str(needs.profile.get("presence_mode", "")) if needs != null else ""
 	if _kind == "real":
-		return _source.node.mode()
-	return str(needs.profile.get("presence_mode", "")) if needs != null else ""
+		var m: String = _source.node.mode()
+		return m if m != "" else local
+	return local
 
 
-## Saved locally at once; the real source syncs it with the check-in (RealSource.checkin).
+## Saved locally at once and handed to the real source too. Until 2026-11-20 only the local profile took it, while
+## mode() read the real source: the check-in then went out with no mode, the server answered need_mode and the card
+## asked again, so with live presence the choice never stuck and only "Not now" got past it (owner list 2026-11-20
+## item 4, "the who can reach out tonight selector doesn't work and the only way is to click skip").
 static func set_mode(needs: Node, m: String) -> void:
 	if needs != null:
 		needs.profile["presence_mode"] = m
 		_mark_dirty(needs)
+	if _kind == "real" and m in ["everyone", "here", "nobody"] and _source.node.mode() != m:
+		_source.node.set_mode(m)   # sets the node's state at once (the server sync runs on after)
 
 
 # --- Calls -------------------------------------------------------------------------------------------
