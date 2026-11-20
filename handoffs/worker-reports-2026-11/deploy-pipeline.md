@@ -23,3 +23,8 @@ Automation. 4. Actions > Web deploy > Run workflow. 5. Decide: redirect vercel.a
 ## Profile feedback
 - No `tech`/`release`-web role exists; `webapp` fit loosely (no CRM here). PROJECT.md has no `### Webapp` entry.
 - Connector: Vercel CLI login on the PC did everything; the Vercel connector was enabled but not needed.
+## Update 2026-11-20 ~17:10 +7: blackcabin.app live
+- Daniele bought it (Vercel, 16:29). DNS resolved in ~60 s (64.29.17.65 / 216.198.79.65). No certificate after 30 min
+  (TLS handshake failed, HTTP 200): `vercel certs issue blackcabin.app www.blackcabin.app` fixed it in 14 s.
+- curl: https://blackcabin.app/?t=Uqmj4YnQVc 200 (bc-4d7feca5 = vercel.app build), pck/wasm/js/worklets 206
+  immutable, push-sw.js + index no-cache, SW imports push-sw.js, www 307 -> apex. Real-phone QR scan still Daniele's.

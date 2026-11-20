@@ -33,23 +33,21 @@ touches the game builds the web export on GitHub and puts it on Vercel.
    > Protection Bypass for Automation > Add (no name needed) > Save. Nothing else to copy: the workflow reads it.
 4. **First run:** after the Verifier pushes this, GitHub > Actions > Web deploy > Run workflow. Green = live.
 
-## blackcabin.app (diagnosis 2026-11-20)
-- **The domain was never bought.** Vercel lists it under talos-projects00 attached to project bc-tamagotchi, but as
-  *Registrar: Third Party*, no expiry, no renewal price (`vercel domains inspect blackcabin.app`): it was *added*,
-  not purchased. The .app registry has no record of it (Google Registry RDAP 404; its own nameserver answers
-  NXDOMAIN), and `vercel domains check blackcabin.app` says **available, $9.99 first year, $15 renewal**.
-- **Fix = buy it (Daniele, money):** https://vercel.com/talos-projects00/~/domains > Buy > `blackcabin.app` >
-  confirm $9.99. Or in PowerShell: `npx.cmd vercel domains buy blackcabin.app` (asks to confirm the price).
-  If Vercel refuses because the name is already in the team, first remove it at bc-tamagotchi > Settings >
-  Domains > blackcabin.app > Remove, then buy, then Add it back to bc-tamagotchi. Bought through Vercel, the
-  nameservers and DNS are Vercel's: nothing to type. Resolves in minutes (.app is HTTPS-only; Vercel issues the cert).
-- **Check:** `nslookup blackcabin.app 8.8.8.8` gives an address; `curl -I https://blackcabin.app` answers 200.
-- **Canonical URL:** once it resolves, make blackcabin.app the project's primary domain (Settings > Domains). The
-  QR codes (`docs/venue/qr/`) already point at it. **Not redirected yet:** the game save and the presence login
-  live in the browser per site, so a redirect from bc-tamagotchi.vercel.app would start every current player
-  over on blackcabin.app. Both URLs serve the same build until Daniele decides (hub question).
+## blackcabin.app
+- **Live since 2026-11-20 ~17:10 +7.** Diagnosis that morning: the domain had only been *added* to Vercel (Registrar
+  Third Party, registry NXDOMAIN), never bought. Daniele bought it in Vercel at 16:29 (Registrar Vercel, expires
+  2027-11-20, $15/yr renewal, nameservers ns1/ns2.vercel-dns.com). DNS answered within ~1 minute.
+- **Gotcha:** 30+ minutes later HTTPS still failed (TLS handshake, no certificate) while plain HTTP answered 200;
+  every .app name is HTTPS-only in browsers, so the site was unreachable. `vercel domains verify blackcabin.app` said
+  configured correctly; `npx.cmd vercel certs issue blackcabin.app www.blackcabin.app` issued the certificate in 14 s.
+- Checked by curl: `https://blackcabin.app/?t=Uqmj4YnQVc` 200, same build as bc-tamagotchi.vercel.app, hashed files
+  Range 206 + immutable, index and push-sw.js no-cache, service worker imports push-sw.js; www.blackcabin.app 307 to
+  the apex. The workflow's production step smoke-tests blackcabin.app on every deploy from now on.
+- **Canonical URL:** blackcabin.app (the QR codes in `docs/venue/qr/` point at it). **bc-tamagotchi.vercel.app is
+  not redirected:** the game save and the presence login live in the browser per site, so a redirect would start
+  every current player over. Both serve the same build until Daniele decides (hub question).
 
-## QR test (once blackcabin.app resolves; before: replace the host by bc-tamagotchi.vercel.app)
+## QR test
 The server takes check-ins only while the bar is open (Tue-Sun 19:00-02:00 Bangkok, `bc_is_open`), unless
 `ignore_hours` is on (Supabase SQL editor: `update public.bc_settings set ignore_hours = true;`, `false` after).
 1. Phone camera on `docs/venue/qr/png/Bar.png` (or the sheet `qr-sheet.pdf`): it opens `blackcabin.app/?t=Uqmj4YnQVc`.
