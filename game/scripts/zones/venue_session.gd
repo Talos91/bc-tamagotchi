@@ -31,6 +31,7 @@ const N = preload("res://scripts/zones/nightlife_strings.gd")
 const Patrons = preload("res://scripts/zones/patrons.gd")
 const Avatar = preload("res://scripts/avatar.gd")
 const UIS = preload("res://scripts/ui/ui_strings.gd")
+const TonightEvents = preload("res://scripts/tonight_events.gd")
 ## Merch shop (lounge, BACKLOG B11; Daniele 2026-11-02: in-game cosmetic merch for the character, paid in coins). Coins and
 ## wardrobe items do not exist yet, so every row shows its price and "coming soon". Item names are placeholders; the
 ## prices are the wardrobe tiers of docs/design/04-coins.md 3.2 (small 30, mid 60, performer tee 80, statement 120).
@@ -275,7 +276,7 @@ func header_for(zone: Dictionary) -> Array[String]:
 			return [T.t("venue.sheet.bar.head", {"who": _name(BARTENDER)}),
 				T.t("venue.sheet.bar.greet_merry" if tipsy.state() == Tipsiness.MERRY else "venue.sheet.bar.greet")]
 		"stage":
-			return [T.t("venue.sheet.stage.head"), band_text()]
+			return [T.t("venue.sheet.stage.head"), TonightEvents.stage_line(TonightEvents.stage_now())]   # Daniele 2026-11-20
 		"table":
 			if reg != "":
 				return [T.t("venue.sheet.table.head_regular", {"regular": _name(reg)}), T.t("venue.sheet.table.greet_regular", {"regular": _name(reg)})]
@@ -316,6 +317,7 @@ func prompt_for(zone: Dictionary) -> String:
 	return T.t("venue.prompt." + str(zone["kind"]))
 
 
+## Dormant since 2026-11-20 (the HUD and the stage sheet show the real lineup instead); kept for the house band.
 func band_text() -> String:
 	if band.playing:
 		return T.t("venue.band.live", {"n": band.song + 1})

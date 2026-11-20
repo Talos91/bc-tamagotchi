@@ -48,3 +48,26 @@ tonight.month_long.9,September,กันยายน,Month name,10
 tonight.month_long.10,October,ตุลาคม,Month name,10
 tonight.month_long.11,November,พฤศจิกายน,Month name,10
 tonight.month_long.12,December,ธันวาคม,Month name,10
+tonight.tab.tonight,Tonight,คืนนี้,"Tonight sheet tab: tonight's event, who's playing, coming up (tonight-lineup, 2026-11-20)",12
+tonight.tab.calendar,Calendar,ปฏิทิน,Tonight sheet tab: the month's special events on a grid,12
+tonight.playing,Who's playing tonight,คืนนี้ใครเล่น,"Section title above the act cards from the bar's weekly lineup poster",28
+tonight.now_on_stage,Now on stage,กำลังเล่นอยู่,"Tag on the act whose set is on now (Bangkok clock)",16
+tonight.act.span,{start}–{end},{start}–{end},"Act set time from the poster: 21:15–23:15",14
+tonight.act.till_late,{start} – late,{start} – ดึก,"Act set time when the poster says TILL LATE",16
+tonight.role.opening,Opening set,เซ็ตเปิด,"Special night program, poster says OPENING BY",16
+tonight.role.cover,Cover set,เซ็ตคัฟเวอร์,"Special night program, poster says COVER BY",16
+tonight.role.closing,Closing set,เซ็ตปิด,"Special night program, poster says CLOSING BY",16
+tonight.lineup.none,No live acts listed for tonight on this week's poster.,โปสเตอร์สัปดาห์นี้ไม่มีวงเล่นคืนนี้,"Lineup section when the week's file has no acts for tonight",60
+tonight.lineup.missing,This week's lineup isn't in the game yet.,ไลน์อัพสัปดาห์นี้ยังไม่มีในเกม,"Tonight tab when res://data/events/lineup-<monday>.json is missing; never invent acts",50
+tonight.cal.special,Special event,อีเวนต์พิเศษ,Calendar legend: gold day = a special event from the month poster,16
+tonight.cal.lineup,Lineup in,มีไลน์อัพ,Calendar legend: red LED bar = the weekly lineup is in the game for that day,14
+tonight.cal.pick,Tap a day to see who plays.,แตะวันที่เพื่อดูว่าใครเล่น,Calendar day panel before a day is tapped,40
+tonight.cal.closed,Closed on Mondays.,ปิดทุกวันจันทร์,"Calendar day panel, a Monday with nothing on the posters",30
+tonight.cal.nothing,No special event or live act listed for this day.,วันนี้ไม่มีอีเวนต์พิเศษหรือวงที่ประกาศไว้,"Calendar day panel, the week's lineup is in but lists nothing that day",60
+tonight.cal.no_lineup,This day's lineup isn't in the game yet.,ไลน์อัพของวันนี้ยังไม่มีในเกม,"Calendar day panel, no lineup file for that week; never invent acts",50
+tonight.stage.on,On stage: {name},บนเวที: {name},"HUD live chip and stage sheet: the act playing now from the weekly lineup (Daniele 2026-11-20, replaces LIVE · song n of 4)",34
+tonight.stage.next,Next: {name} at {time},ถัดไป: {name} เวลา {time},"HUD live chip between sets or before doors: the next act tonight",40
+tonight.stage.next_day,Next: {name} · {day} {time},ถัดไป: {name} · {day} {time},"HUD live chip on a closed night or after the last set: the next act on a later evening; {day} = short weekday",40
+tonight.stage.doors,Doors {day} 19:00,เปิด{day} 19:00,"HUD live chip when the bar is closed and no lineup is in for the coming week",24
+tonight.stage.unknown,Live music from 19:00,ดนตรีสดตั้งแต่ 19:00,"HUD live chip when no lineup is in the game for tonight or the coming week",28
+tonight.stage.left,{time} · {min} min left,{time} · เหลือ {min} นาที,"Second line under the act on stage: set time and minutes left",30

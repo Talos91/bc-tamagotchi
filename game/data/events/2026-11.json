@@ -1,0 +1,20 @@
+{
+  "source": "docs/venue/events/2026-11-week-16-22/0-november-calendar.jpg (Black Cabin \"November upcoming events\" poster, supplied by Daniele 2026-11-20, @blackcabinbar)",
+  "month": "2026-11",
+  "notes": [
+    "Mon 9 is on the poster although the game's opening hours say Tue–Sun (open question bar-open-mondays).",
+    "The Cabin Jam lineup is spelled MONTHERFUNKY on this calendar and MOTHERFUNKY on the Sunday weekly poster; kept as printed here.",
+    "Cabin's Visitor Kiki: 19.00 showtime here, 19.30–21.00 on the Sunday weekly poster."
+  ],
+  "events": [
+    {"date": "2026-11-09", "day": "Mon", "title": "Bartender Guest Shift Vol.22", "subtitle": "Max Knöll from Dead Poets", "time": "20:00", "time_kind": "onwards"},
+    {"date": "2026-11-10", "day": "Tue", "title": "Silly Fools Night", "time": "21:15", "time_kind": "showtime"},
+    {"date": "2026-11-15", "day": "Sun", "title": "Stevie Wonder Night", "time": "22:45", "time_kind": "showtime"},
+    {"date": "2026-11-18", "day": "Wed", "title": "Bartender Guest Shift Vol.23", "subtitle": "Sarang Lee from Bar Bon Funk", "time": "20:00", "time_kind": "onwards"},
+    {"date": "2026-11-19", "day": "Thu", "title": "John Mayer Night", "time": "22:45", "time_kind": "showtime"},
+    {"date": "2026-11-22", "day": "Sun", "title": "Cabin's Visitor: Kiki", "time": "19:00", "time_kind": "showtime"},
+    {"date": "2026-11-22", "day": "Sun", "title": "The Cabin Jam", "lineup": ["Montherfunky", "Jayson Creer", "JayJay", "Tarr"], "time": "23:45", "time_kind": "onwards"},
+    {"date": "2026-11-25", "day": "Wed", "title": "WIM Concert", "time": "22:45", "time_kind": "showtime"},
+    {"date": "2026-11-26", "day": "Thu", "title": "Radiohead Night", "time": "21:15", "time_kind": "showtime"}
+  ]
+}

@@ -83,7 +83,8 @@ func _evenings() -> void:
 func _data() -> void:
 	TE.reset_cache()
 	check(TE.has_month("2026-10"), "2026-10 is bundled (res://data/events/2026-10.json)")
-	check(not TE.has_month("2026-11"), "2026-11 has no data yet (poster missing): not invented")
+	check(TE.has_month("2026-11"), "2026-11 is bundled (November poster, 2026-11-20)")
+	check(not TE.has_month("2027-01"), "2027-01 has no data yet: not invented")
 	var oct: Array = TE.month_events("2026-10")
 	check(oct.size() == 9, "October has the 9 poster events (got %d)" % oct.size())
 	var sorted := true
@@ -103,18 +104,23 @@ func _data() -> void:
 	var monday := TE.tonight(TE.bkk_unix(2026, 10, 19, 21, 0))
 	check(monday["state"] == "closed" and monday["events"].is_empty(), "Monday: closed, no event shown")
 	var nov := TE.tonight(TE.bkk_unix(2026, 11, 15, 20, 0))
-	check(not nov["known"] and nov["events"].is_empty() and nov["state"] == "open", "15 Nov: month without data, nothing invented")
+	check(nov["known"] and nov["events"].size() == 1 and nov["events"][0]["title"] == "Stevie Wonder Night", "15 Nov: Stevie Wonder Night")
+	var jan := TE.tonight(TE.bkk_unix(2027, 1, 12, 20, 0))
+	check(not jan["known"] and jan["events"].is_empty() and jan["state"] == "open", "12 Jan 2027: month without data, nothing invented")
 
 	var up := TE.upcoming(TE.bkk_unix(2026, 10, 21, 20, 0))
 	var dates: Array = up["events"].map(func(e): return e["date"])
-	check(dates == ["2026-10-25", "2026-10-29", "2026-10-31"], "upcoming after 21 Oct: %s" % [dates])
-	check(up["missing"] == ["2026-11"], "upcoming names November as missing: %s" % [up["missing"]])
+	check(dates == ["2026-10-25", "2026-10-29", "2026-10-31", "2026-11-09", "2026-11-10", "2026-11-15"], "upcoming after 21 Oct runs into November: %s" % [dates])
+	check(up["missing"].is_empty(), "upcoming: October and November both known: %s" % [up["missing"]])
 	var up_late := TE.upcoming(TE.bkk_unix(2026, 10, 22, 1, 0))
-	check(up_late["events"].size() == 3 and up_late["events"][0]["date"] == "2026-10-25", "upcoming after midnight excludes tonight's event only")
+	check(up_late["events"].size() == 6 and up_late["events"][0]["date"] == "2026-10-25", "upcoming after midnight excludes tonight's event only")
 	var up_start := TE.upcoming(TE.bkk_unix(2026, 10, 1, 12, 0))
 	check(up_start["events"].size() == TE.UPCOMING_MAX, "upcoming capped at %d" % TE.UPCOMING_MAX)
 	var up_nov := TE.upcoming(TE.bkk_unix(2026, 11, 15, 20, 0))
-	check(up_nov["events"].is_empty() and up_nov["missing"] == ["2026-11", "2026-12"], "upcoming in November: both months missing")
+	var nd: Array = up_nov["events"].map(func(e): return e["date"])
+	check(nd == ["2026-11-18", "2026-11-19", "2026-11-22", "2026-11-22", "2026-11-25", "2026-11-26"] and up_nov["missing"] == ["2026-12"], "upcoming after 15 Nov: %s, missing %s" % [nd, up_nov["missing"]])
+	var up_dec := TE.upcoming(TE.bkk_unix(2026, 12, 15, 20, 0))
+	check(up_dec["events"].is_empty() and up_dec["missing"] == ["2026-12", "2027-01"], "upcoming in December: both months missing")
 	check(TE._next_month("2026-12") == "2027-01", "next month rolls the year")
 
 
@@ -179,9 +185,9 @@ func _sheet() -> void:
 			for i in 3:
 				await process_frame
 			var tag := "sheet %s %s" % [loc, size]
-			check(s.rows.size() == 3, tag + ": 3 Coming up rows (got %d)" % s.rows.size())
+			check(s.rows.size() == 6, tag + ": 6 Coming up rows (got %d)" % s.rows.size())
 			check(s.tonight_card.find_child("EventTitle", true, false) != null, tag + ": tonight card shows the event")
-			check(s.find_child("Missing_2026-11", true, false) != null, tag + ": November named as not in yet")
+			check(s.find_child("Missing_2026-11", true, false) == null, tag + ": November is in, not named as missing")
 			var panel: Control = s.find_child("TonightSheet", true, false)
 			var vp := root.get_visible_rect()   # canvas_items/expand stretch: landscape is wider than 1920
 			check(panel != null and vp.grow(1.0).encloses(panel.get_global_rect()), tag + ": sheet inside the screen %s" % [panel.get_global_rect() if panel else null])
@@ -190,7 +196,7 @@ func _sheet() -> void:
 			await process_frame
 	TranslationServer.set_locale("en")
 	root.size = Vector2i(1080, 1920)
-	for case in [[[2026, 10, 19, 21, 0], "closed"], [[2026, 11, 15, 20, 0], "no data"], [[2026, 10, 23, 20, 0], "regular"]]:
+	for case in [[[2026, 10, 19, 21, 0], "closed"], [[2027, 1, 12, 20, 0], "no data"], [[2026, 10, 23, 20, 0], "regular"]]:
 		var h: Array = case[0]
 		var s := Sheet.new()
 		root.add_child(s)
@@ -235,7 +241,7 @@ func _hud() -> void:
 	await process_frame
 	check(is_instance_valid(main.tonight), "the button opens the Tonight sheet")
 	check(not main.player.input_enabled, "the sheet blocks walking while open")
-	check(main.tonight.rows.size() == 3, "pinned 21 Oct: three upcoming rows in the game's sheet")
+	check(main.tonight.rows.size() == 6, "pinned 21 Oct: six upcoming rows in the game's sheet")
 	main.tonight.close()
 	for i in 2:
 		await process_frame

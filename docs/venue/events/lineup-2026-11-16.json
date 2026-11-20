@@ -1,0 +1,66 @@
+{
+  "source": "docs/venue/events/2026-11-week-16-22/1-week-cover.jpg to 8-sunday.jpg (Black Cabin \"This week on stage, 16-22 Nov music lineup, Monday - Sunday\", supplied by Daniele 2026-11-20, @blackcabinbar)",
+  "week": "2026-11-16",
+  "notes": [
+    "Text transcribed from the all-caps posters into sentence case; names as printed (the casing of JayJay is ours).",
+    "Monday is on the poster although the game's opening hours say Tue–Sun (open question bar-open-mondays).",
+    "Thursday is John Mayer Night (poster 5): opening, cover and closing sets with start times only, no photos, genres or descriptions.",
+    "Friday's Run Baby Run reads 23.15PM - 00.45 on the poster.",
+    "A few letters of the Aey Kuljira, Far x Jayson Creer, Sam Sermsartr and Motherfunky descriptions sit under the Instagram icons in the screenshots; read from the visible letters."
+  ],
+  "days": [
+    {"date": "2026-11-16", "day": "Mon", "poster": "2026-11-week-16-22/2-monday.jpg", "acts": [
+      {"slug": "dear", "name": "Dear", "genre": "Acoustic Pop", "start": "19:30", "end": "21:00", "photo": "dear.jpg",
+       "description": "With a deep, unmistakable voice, Dear brings acoustic pop and timeless classics together in a warm, intimate set filled with character."},
+      {"slug": "tape", "name": "Tape", "genre": "R&B Soul Pop", "start": "21:15", "end": "23:15", "photo": "tape.jpg",
+       "description": "With her deep, soulful voice, Tape brings emotional songs to life, drawing you in with every note and every lyric."},
+      {"slug": "khamas-x-jayjay", "name": "Khamas x JayJay", "genre": "R&B Soul Pop", "start": "23:45", "till_late": true, "photo": "khamas-x-jayjay.jpg",
+       "description": "Khamas brings smooth, deep R&B and soul, while JayJay's unmistakable voice leaves a lasting impression from the very first note. Together, they deliver a blend of warmth, emotion, and effortless groove."}
+    ]},
+    {"date": "2026-11-17", "day": "Tue", "poster": "2026-11-week-16-22/3-tuesday.jpg", "acts": [
+      {"slug": "earn", "name": "Earn", "genre": "Acoustic Pop", "start": "19:30", "end": "21:00", "photo": "earn.jpg",
+       "description": "Familiar pop songs, reimagined into acoustic soul and R&B renditions. Her bright yet effortlessly cool voice fills the room, creating a warm, romantic atmosphere and pulling everyone into the groove."},
+      {"slug": "the-chocolate-cosmos", "name": "The Chocolate Cosmos", "genre": "80s Rock", "start": "21:15", "end": "23:15", "photo": "the-chocolate-cosmos.jpg",
+       "description": "The band may consist of only three pieces, but they deliver a massive sound, heavy drums, deep basslines, chaotic riffs, and an old-soul voice best described as the Chocolate Cosmos. With over a decade in the scene, they've left their mark on countless stages across Bangkok's rock circuit."},
+      {"slug": "aey-kuljira", "name": "Aey Kuljira", "genre": "Oldies 2000s", "start": "23:45", "till_late": true, "photo": "aey-kuljira.jpg",
+       "description": "Bringing hits from the '90s and 2000s, Aey Kuljira delivers a nostalgic performance with the voice of a classic oldies singer while still bringing vibrant energy to the stage."}
+    ]},
+    {"date": "2026-11-18", "day": "Wed", "poster": "2026-11-week-16-22/4-wednesday.jpg", "acts": [
+      {"slug": "aomsin", "name": "Aomsin", "genre": "Acoustic Indie", "start": "19:30", "end": "21:00", "photo": "aomsin.jpg",
+       "description": "From the front of an indie rock stage to a more intimate acoustic setting, Aomsin brings the same emotion and presence in a quieter form. Warm, reflective, and stripped down to what matters most."},
+      {"slug": "mut-matthew", "name": "Mut Matthew", "genre": "R&B Soul Pop", "start": "21:15", "end": "23:15", "photo": "mut-matthew.jpg",
+       "description": "Smooth and soulful, led by Mutt's dreamlike voice that can turn even the hardest day into pure harmony."},
+      {"slug": "far-x-jayson-creer", "name": "Far x Jayson Creer", "genre": "R&B Soul Pop", "start": "23:45", "till_late": true, "photo": "far-x-jayson-creer.jpg",
+       "description": "Looking for a vocal showdown? Far and Jayson will make you feel like you're in a live house in New York, delivering hit after hit from the '90s to today."}
+    ]},
+    {"date": "2026-11-19", "day": "Thu", "title": "John Mayer Night", "poster": "2026-11-week-16-22/5-thu19-john-mayer-night.jpg", "acts": [
+      {"slug": "kirk", "name": "Kirk", "role": "opening", "start": "21:15"},
+      {"slug": "jayson-creer-x-earth", "name": "Jayson Creer x Earth", "role": "cover", "start": "22:45"},
+      {"slug": "jayson-creer-x-angie", "name": "Jayson Creer x Angie", "role": "closing", "start": "00:30"}
+    ]},
+    {"date": "2026-11-20", "day": "Fri", "poster": "2026-11-week-16-22/6-friday.jpg", "acts": [
+      {"slug": "aomsin-and-the-boys", "name": "Aomsin and the Boys", "genre": "Alternative Indie Rock", "start": "21:00", "end": "22:45", "photo": "aomsin-and-the-boys.jpg",
+       "description": "Rhythmic and heartfelt, this band brings soothing indie-folk vibes. With Aomsin's smooth, tender voice, you'll feel both lifted in joy and drawn deep into your soul."},
+      {"slug": "run-baby-run", "name": "Run Baby Run", "genre": "Alternative Rock", "start": "23:15", "end": "00:45", "photo": "run-baby-run.jpg",
+       "description": "This raw, high-voltage four-piece brings slick rock 'n' roll grooves and enough firepower to launch you straight out of your seat."},
+      {"slug": "sam-sermsartr", "name": "Sam Sermsartr", "genre": "Alternative Rock", "start": "01:00", "till_late": true, "photo": "sam-sermsartr.jpg",
+       "description": "Blending the raw energy of the nu-metal golden era with today's pop smash hits, reimagined as explosive rock anthems. Sam, a former The Voice contender, teams up with his powerhouse band to deliver high-octane chaos to the stage."}
+    ]},
+    {"date": "2026-11-21", "day": "Sat", "poster": "2026-11-week-16-22/7-saturday.jpg", "acts": [
+      {"slug": "stoned-dog", "name": "Stoned Dog", "genre": "Blues Groove", "start": "20:45", "end": "22:15", "photo": "stoned-dog.jpg",
+       "description": "A tight, funky trio serving vintage flavors with bold original twists. Lock in your seat early; this is how you kick off a proper night."},
+      {"slug": "medium-rare", "name": "Medium Rare", "genre": "Alternative Indie Rock", "start": "22:45", "end": "00:30", "photo": "medium-rare.jpg",
+       "description": "Blending British and American indie influences with the singer's rich, melodic voice, get ready for an emotional yet electrifying session to amplify your night."},
+      {"slug": "kill-the-night", "name": "Kill the Night", "genre": "Alternative Rock", "start": "01:00", "till_late": true, "photo": "kill-the-night.jpg",
+       "description": "Chaotic and emotional, that's exactly what you can expect from Kill the Night. This collective of musicians delivers explosive performances that will have you jumping out of your seat every single time."}
+    ]},
+    {"date": "2026-11-22", "day": "Sun", "title": "Cabin's Visitor & The Cabin Jam", "poster": "2026-11-week-16-22/8-sunday.jpg", "acts": [
+      {"slug": "kiki", "name": "Kiki", "genre": "Indie Pop", "start": "19:30", "end": "21:00", "photo": "kiki.jpg",
+       "description": "Mixture of groovy basslines, colorful synthesizers, with alternative rock roots and French electro pop influences."},
+      {"slug": "shukar-tan", "name": "Shukar Tan", "genre": "R&B Soul Pop", "start": "21:15", "end": "23:15", "photo": "shukar-tan.jpg",
+       "description": "A deep, powerful voice that commands attention. Shukar Tan draws you in with soulful depth, raw emotion, and a presence that captivates from the very first note."},
+      {"slug": "motherfunky", "name": "Motherfunky ft. Jayson Creer x JayJay x Nene x Tarr", "genre": "R&B Soul Pop", "start": "23:45", "till_late": true, "photo": "motherfunky.jpg",
+       "description": "A rotating cast of familiar faces and unexpected pairings, the Cabin Jam brings together some of the city's finest musicians for a night of spontaneity and collaboration. No two sessions are ever the same, making each performance a one-of-a-kind experience."}
+    ]}
+  ]
+}

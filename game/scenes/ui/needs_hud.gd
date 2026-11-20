@@ -27,6 +27,7 @@ const Orientation = preload("res://scripts/ui/orientation.gd")
 const OrientationToggle = preload("res://scenes/ui/orientation_toggle.gd")
 const VersionInfo = preload("res://scripts/version_info.gd")
 const TonightEvents = preload("res://scripts/tonight_events.gd")
+const StageChip = preload("res://scripts/ui/stage_chip.gd")
 
 ## Area buttons, top to bottom: camera area, label key, the zone walked to in that area (a zone id, or the first zone
 ## of that kind whose approach is in the area; main.walk_to_area), the need it refills ("" none). The floor's is the
@@ -44,7 +45,7 @@ var rings := {}
 var prompt: Control
 var card: Control
 var _title: Label
-var _caption: Label
+var _caption: StageChip   ## "Live": who is on the real stage now (scripts/ui/stage_chip.gd)
 var _status: Label
 var _x2: Label
 var _tipsy: Label
@@ -156,9 +157,7 @@ func _build() -> void:
 		Orientation.toggle(needs)
 		orientation_toggle.refresh())
 	title_row.add_child(orientation_toggle)
-	_caption = BCSkin.chip("")
-	_caption.name = "Live"
-	_caption.size_flags_horizontal = Control.SIZE_SHRINK_BEGIN
+	_caption = StageChip.new()
 	_top.add_child(_caption)
 	_status = UI.label("", 14, UI.GOLD)
 	_top.add_child(_status)
@@ -316,11 +315,7 @@ func _refresh_status() -> void:
 					sb.set_border_width_all(int(UI.dp(1.8)))
 					sb.shadow_color = Color(UI.need_color(a[3]), 0.35)
 					sb.shadow_size = int(UI.dp(5))
-	var live: bool = session.band.playing
-	_caption.text = ("●  " if live else "") + session.band_text()
-	var cb: StyleBoxFlat = _caption.get_theme_stylebox("normal")
-	cb.bg_color = Color(BCSkin.VELVET, 0.9) if live else Color(BCSkin.WOOD_DEEP, 0.75)
-	_caption.add_theme_color_override("font_color", UI.CREAM if live else UI.SMOKE)
+	_caption.refresh()   # the real stage now (Daniele 2026-11-20), not the house band's song count
 	if needs.welcome_active():
 		_x2.text = T.t("venue.hud.welcome", {"m": ceili((needs.welcome_until - needs.clock) / 60.0)})
 		_x2.visible = true

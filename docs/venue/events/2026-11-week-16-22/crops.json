@@ -1,0 +1,221 @@
+{
+ "posters_dir": "docs/venue/events/2026-11-week-16-22",
+ "crops": [
+  {
+   "slug": "dear",
+   "poster": "2-monday.jpg",
+   "box": [
+    53,
+    198,
+    507,
+    541
+   ],
+   "focus_x": 0.5,
+   "fit": "cover"
+  },
+  {
+   "slug": "tape",
+   "poster": "2-monday.jpg",
+   "box": [
+    53,
+    569,
+    507,
+    911
+   ],
+   "focus_x": 0.5,
+   "fit": "cover"
+  },
+  {
+   "slug": "khamas-x-jayjay",
+   "poster": "2-monday.jpg",
+   "box": [
+    53,
+    940,
+    507,
+    1282
+   ],
+   "focus_x": 0.5,
+   "fit": "contain"
+  },
+  {
+   "slug": "earn",
+   "poster": "3-tuesday.jpg",
+   "box": [
+    53,
+    191,
+    507,
+    534
+   ],
+   "focus_x": 0.4,
+   "fit": "cover"
+  },
+  {
+   "slug": "the-chocolate-cosmos",
+   "poster": "3-tuesday.jpg",
+   "box": [
+    53,
+    561,
+    507,
+    904
+   ],
+   "focus_x": 0.5,
+   "fit": "cover"
+  },
+  {
+   "slug": "aey-kuljira",
+   "poster": "3-tuesday.jpg",
+   "box": [
+    53,
+    931,
+    507,
+    1274
+   ],
+   "focus_x": 0.5,
+   "fit": "cover"
+  },
+  {
+   "slug": "aomsin",
+   "poster": "4-wednesday.jpg",
+   "box": [
+    53,
+    198,
+    507,
+    541
+   ],
+   "focus_x": 0.4,
+   "fit": "cover"
+  },
+  {
+   "slug": "mut-matthew",
+   "poster": "4-wednesday.jpg",
+   "box": [
+    53,
+    569,
+    507,
+    911
+   ],
+   "focus_x": 0.5,
+   "fit": "cover"
+  },
+  {
+   "slug": "far-x-jayson-creer",
+   "poster": "4-wednesday.jpg",
+   "box": [
+    53,
+    940,
+    507,
+    1282
+   ],
+   "focus_x": 0.35,
+   "fit": "cover"
+  },
+  {
+   "slug": "aomsin-and-the-boys",
+   "poster": "6-friday.jpg",
+   "box": [
+    53,
+    198,
+    507,
+    541
+   ],
+   "focus_x": 0.5,
+   "fit": "cover"
+  },
+  {
+   "slug": "run-baby-run",
+   "poster": "6-friday.jpg",
+   "box": [
+    53,
+    569,
+    507,
+    911
+   ],
+   "focus_x": 0.5,
+   "fit": "cover"
+  },
+  {
+   "slug": "sam-sermsartr",
+   "poster": "6-friday.jpg",
+   "box": [
+    53,
+    940,
+    507,
+    1282
+   ],
+   "focus_x": 0.4,
+   "fit": "cover"
+  },
+  {
+   "slug": "stoned-dog",
+   "poster": "7-saturday.jpg",
+   "box": [
+    53,
+    198,
+    507,
+    541
+   ],
+   "focus_x": 0.4,
+   "fit": "cover"
+  },
+  {
+   "slug": "medium-rare",
+   "poster": "7-saturday.jpg",
+   "box": [
+    53,
+    569,
+    507,
+    911
+   ],
+   "focus_x": 0.5,
+   "fit": "cover"
+  },
+  {
+   "slug": "kill-the-night",
+   "poster": "7-saturday.jpg",
+   "box": [
+    53,
+    940,
+    507,
+    1282
+   ],
+   "focus_x": 0.4,
+   "fit": "cover"
+  },
+  {
+   "slug": "kiki",
+   "poster": "8-sunday.jpg",
+   "box": [
+    53,
+    198,
+    507,
+    541
+   ],
+   "focus_x": 0.5,
+   "fit": "contain"
+  },
+  {
+   "slug": "shukar-tan",
+   "poster": "8-sunday.jpg",
+   "box": [
+    53,
+    569,
+    507,
+    911
+   ],
+   "focus_x": 0.5,
+   "fit": "cover"
+  },
+  {
+   "slug": "motherfunky",
+   "poster": "8-sunday.jpg",
+   "box": [
+    53,
+    940,
+    507,
+    1282
+   ],
+   "focus_x": 0.15,
+   "fit": "cover"
+  }
+ ]
+}

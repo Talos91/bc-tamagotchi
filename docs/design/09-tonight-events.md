@@ -36,6 +36,7 @@ Today (15 Nov 2026) the game shows the last row: only October is transcribed. Th
 - Source of record: `docs/venue/events/<yyyy-mm>.json` next to the poster (format in that folder's README: `date`, `day`, `title`, `time`, `time_kind` showtime|onwards, optional `lineup`, `note`).
 - In the game: a copy at `game/data/events/<yyyy-mm>.json` (bundled: the export include filter has `*.json`). The game looks for the file by name, so no list to update.
 - **To add a month**: Daniele sends the poster → a worker saves it as `docs/venue/events/<yyyy-mm>-upcoming-events.jpg`, transcribes `<yyyy-mm>.json` (asks, never guesses, unreadable titles), copies the JSON to `game/data/events/`, runs `test_tonight`, commits; the next PATCH deploy carries it. Titles are shown as printed on the poster (English) in both languages.
+- **Weekly lineup + calendar (2026-11-20, tonight-lineup):** the sheet has two tabs. *Tonight*: special-event card, then "Who's playing tonight" act cards (photo, name, genre, set time, description) from `game/data/events/lineup-<monday>.json`, the act on now (Bangkok clock) lit with "Now on stage"; *Calendar*: Mon–Sun month grid (gold = special event, red LED bar = lineup in), tap a day for its events and acts. Data format and the weekly recipe: `docs/venue/events/README.md`. Suite `test_lineup`.
 - Later (not built): fetch the month from the server when presence/Supabase exists, with the bundled copy as fallback.
 
 ## Code and tests
