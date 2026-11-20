@@ -15,7 +15,7 @@ push caps in the same row (`push_max_per_night`, `push_per_sender`, `push_from_h
 Reprint one code: `python docs/venue/qr/make_qr.py --rotate Tiny3` (key from codes.json), then run `seed/venue_tables.sql`. All new tokens: `--new-all` (QR remake 2026-11-20: 39 codes, Buffer + Main room + bar stools, no Lounge).
 Moderation: `reports` table (status open/kept/dismissed/banned), `profiles.banned`, `profiles.name_hidden`.
 
-## Player profiles + merch (merch-shop, 2026-11-20; NOT applied yet, needs Daniele's OK: hub card merch-server-apply)
+## Player profiles + merch (merch-shop, 2026-11-20; APPLIED live 2026-11-20 by merch-shop through the connector on Daniele's word "don t ask for permission", migration name player_profile_merch + the 40-row seed; proof: 40 items 10/10/10/10, 6 functions, RLS on, anon cannot claim; a rolled-back run as a real account saved a profile, got a 10-char code, claimed horse_mask)
 Apply in this order (connector `apply_migration` with the file's name and body, or paste each into the SQL editor):
 1. `migrations/20261120000002_player_profile_merch.sql` — profile columns (personality, character_created_at,
    avatar_at, build, restore_code, restored_from), `merch_items`, `inventory`, `restore_attempts`,

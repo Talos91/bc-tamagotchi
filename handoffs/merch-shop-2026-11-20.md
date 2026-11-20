@@ -11,9 +11,8 @@ nothing waits on it.
 - Version-wipe check: no version wipes a character (save path stable, migrate keeps keys, normalize keeps unknown
   keys). Real causes: new web address, storage eviction, lost anonymous session (table in 14-merch-shop.md §1).
 - Server: migration `supabase/migrations/20261120000002_player_profile_merch.sql` + `supabase/seed/merch_items.sql`
-  NOT applied to the live project (needs Daniele's OK: card `merch-server-apply`). Until applied, the client gets
-  "no function" once and stays local (`PlayerProfile.server_ok = false`).
-- Tests: `test_merch_profile` (77 checks) + all suites headless, empty APPDATA (see the worker report).
+  APPLIED live 2026-11-20 (proof in supabase/README.md). A server without it answers "no function" once per launch and the client stays local.
+- Tests: `test_merch_profile` (85 checks) + all suites headless, empty APPDATA (see the worker report).
 - Hub: `merch-shop-review` (8 renders) and questions `merch-server-apply`, `merch-prices`, `merch-free-cap`,
   `merch-cut`, `merch-keep-on-reset`.
 
@@ -38,7 +37,7 @@ translations), `test_string_keys.gd` (table list).
 - Capture: `hd.ps1` hidden desktop (copied from `C:/Users/itisf/bc-wt/pi-tools/hd.ps1`), `--resolution 1600x900`.
 
 ## Next steps
-1. After Daniele's yes on `merch-server-apply`: run the migration, then the seed (connector `apply_migration` /
+1. Server applied 2026-11-20. Next server check: from the live build, a pick shows up in `inventory`.
    `execute_sql`), then `test_presence_net -- --live` style check by hand: sign up, bc_profile_save, bc_claim_item.
 2. After creator-fix lands: the `show_avatar` hook above; optionally a "Merch" row inside the creator's Outfit tab
    instead of the overlay button.
