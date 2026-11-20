@@ -15,6 +15,10 @@ local_5352afaa. Branch `wk/venue-entrance`, worktree `C:/Users/itisf/bc-wt/venue
 - Merge script for layout.json own lines (round 2): the successor's report lists the name regex; the method is
   export to a copy, take only own names (others' drift in the export: Mic0, PedalboardGtr, CurtainBack*, Backdrop*,
   ElectricPiano, PatronsBoardMonth, Bay4, ReindeerHead, Band_Guitar/Keys — never merge those).
+- Round 3 (Daniele 18:05-18:20: table centred in front of the street door, stray props in the Blender corridor, darker,
+  grey floor, the red curtain = buffer entrance) is built too: lights cut to 42 (MerchLight, ArcadeGlow, StickerDoorLight,
+  BoothLight, LongTableLightB gone; corridor/red lamp/eagle lamp/red panels lower), CurtainBufferLounge pair, review
+  file: KIT lineup and FONT labels hidden, textured floors grey (TEXTURED_BASE), exposure -1. Card v3.
 - Open questions (for Daniele, not blocking): (a) QR codes LoungeTable0/1 (`docs/venue/qr/codes.json`,
   `supabase/seed/venue_tables.sql`) now name tables that are gone from the game: reassign one to CornerTable or retire
   them (presence role); (b) the arcade on its stand by the Sticker door is dressing only (the game machine stays
