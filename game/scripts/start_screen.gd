@@ -410,12 +410,13 @@ func _build_ui() -> void:
 	tw.tween_property(_prompt, "modulate:a", 0.35, 1.1).set_trans(Tween.TRANS_SINE)
 	tw.tween_property(_prompt, "modulate:a", 1.0, 1.1).set_trans(Tween.TRANS_SINE)
 	_screen.add_child(VersionInfo.label())  # bottom right, fades out with the prompt
-	var tel := UI.label(UIS.t("ui.start.telemetry"), 11.0, Color(UI.SMOKE, 0.7))   # telemetry notice, bottom left
+	var tel := UI.label(UIS.t("ui.start.telemetry"), 11.0, Color(UI.SMOKE, 0.7), HORIZONTAL_ALIGNMENT_CENTER)   # telemetry notice, under the prompt
 	tel.name = "TelemetryNotice"
-	tel.set_anchors_preset(Control.PRESET_BOTTOM_LEFT)
-	tel.grow_vertical = Control.GROW_DIRECTION_BEGIN
-	tel.offset_left = UI.dp(8)
-	tel.offset_bottom = -UI.dp(6)
+	tel.anchor_right = 1.0
+	tel.anchor_top = 0.9
+	tel.anchor_bottom = 0.9
+	tel.offset_top = UI.dp(20)
+	tel.offset_bottom = UI.dp(36)
 	_screen.add_child(tel)
 	_stake_box = VBoxContainer.new()
 	_stake_box.name = "StakeInfo"
