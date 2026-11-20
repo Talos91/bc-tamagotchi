@@ -32,6 +32,17 @@ worker: 2026-11-20-ui-black-cabin-152930 (capture replies_to). Self-handover at 
   reimport, exit segfaults from static caches -> fixed). Full 32-suite run on 48492a9 was started in the background:
   results `C:/Users/itisf/bc-wt/pi-suites/summary.txt` (one log per suite there). Check it first.
 
+## Successor progress (session local_f76df517 era, load id 2026-11-20-ui-black-cabin-b09079; 2026-11-20 21:40)
+- 32/32 suites PASS rc=0 on 48492a9 (`pi-suites/summary.txt`, test_walk "fail" words are table headers).
+- a76c65b: `FullscreenButton.force_show` (capture-only static) + `tests/capture_fullscreen.gd`; captures 720x1280 /
+  1280x720 on the hidden desktop (1080x1920 gets clamped to 1080x1421 there): `pi-out/fs/`, sheets
+  `docs/art/screens/perf-iphone-1120/fullscreen-{portrait,landscape}.jpg`. In portrait the hint covers the pet tag
+  ("Ty ♥") for its 6 s; left as is.
+- Hub: `perf-iphone-1120-review` was already ANSWERED "ok" by Daniele 13:53 (version 2), so the battery-saver question
+  went on a NEW card `perf-iphone-1120-saver` (order 412, version 1; options on (rec) / venue-only 30 / off) with the
+  two full-screen pictures and the install/update notes. Orchestrator copies answers to DECISIONS.
+- Now: waiting for "main has everything" from local_14422c6c (step 4).
+
 ## Next steps (successor)
 1. Read `pi-suites/summary.txt`; every line must end PASS with rc=0 (32 suites incl. test_battery_saver). Fix any failure.
 2. Captures of the full-screen button: on desktop it is hidden (not web). Add a capture-only switch (e.g. a static
