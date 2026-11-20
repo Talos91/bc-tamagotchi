@@ -58,6 +58,10 @@ func _post(path: String, body: Dictionary, token: String, timeout: float) -> Dic
 		return {"ok": false, "reason": "off"}
 	var http := HTTPRequest.new()
 	http.timeout = timeout
+	# No gzip from Godot's side (hotfix 2026-11-20, check-in "No signal" on every new phone): Supabase auth answers
+	# gzipped; on the web the browser has already unzipped the body, and HTTPRequest unzipping it again failed
+	# (stream_peer_gzip), which read as offline. The browser still negotiates compression on its own.
+	http.accept_gzip = false
 	host.add_child(http)
 	var headers := PackedStringArray(["apikey: " + anon_key, "Content-Type: application/json"])
 	headers.append("Authorization: Bearer " + (token if token != "" else anon_key))
