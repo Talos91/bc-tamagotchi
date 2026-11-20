@@ -6,12 +6,16 @@ extends RefCounted
 
 const Avatar = preload("res://scripts/avatar.gd")
 
+## The check-in tables = docs/venue/qr/codes.json table_ids (QR remake 2026-11-20: Buffer + Main room, raised
+## tables, bar; no Lounge). tests/test_qr_codes.gd keeps this, the codes and the venue's seats in step.
 const TABLES := {
-	"Table0": "Tables", "Table1": "Tables", "Table2": "Tables", "Table3": "Tables", "Table4": "Tables",
-	"WestTable0": "Tables", "WestTable1": "Tables", "RectTableW": "Tables", "RectTableE": "Tables",
-	"EastTable": "Tables", "OpeningTall0": "Tables", "OpeningTall1": "Tables",
-	"LongTable": "Lounge", "LoungeTable0": "Lounge", "LoungeTable1": "Lounge",
 	"BufferTall0": "Buffer", "BufferTall1": "Buffer", "BufferTall2": "Buffer", "BufferTall3": "Buffer",
+	"OpeningTall0": "Buffer", "OpeningTall1": "Buffer",
+	"Table0": "Tables", "Table1": "Tables", "Table2": "Tables", "Table3": "Tables", "Table4": "Tables",
+	"WestTable0": "Tables", "WestTable1": "Tables", "RectTableW": "Tables", "RectTableE": "Tables", "EastTable": "Tables",
+	"Tiny0": "Tables", "Tiny1": "Tables", "Tiny2": "Tables", "Tiny3": "Tables", "Tiny4": "Tables", "Tiny5": "Tables",
+	"TinyE0": "Tables", "TinyE1": "Tables", "TinyE2": "Tables",
+	"Raised0": "Raised", "Raised1": "Raised", "Raised2": "Raised", "Raised3": "Raised", "Raised4": "Raised",
 	"Bar": "Bar",
 }
 const PHRASE_RE := "^p(0[1-9]|1[0-9]|2[0-4])$"
@@ -50,7 +54,7 @@ func _init() -> void:
 
 ## A deterministic 10-character code per table for tests ("MkTable3xx" style, padded).
 static func code_for(table_id: String) -> String:
-	var s := ("Mk" + table_id.replace("Table", "T").replace("Tall", "L")).rpad(10, "x").left(10)
+	var s := ("Mk" + table_id.replace("Table", "T").replace("Tall", "L").replace("Opening", "Op")).rpad(10, "x").left(10)
 	return s
 
 

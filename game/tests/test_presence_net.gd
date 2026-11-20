@@ -164,7 +164,7 @@ func _checkin_and_tablemates() -> void:
 	r = await c.checkin(Mock.code_for("Table3"))
 	var ids: Array = r["tablemates"].map(func(x): return x["player_id"])
 	check(ids.has(b.player_id()) and not ids.has(a.player_id()), "C 50 min after A, 40 after B: tablemate B only (%s)" % [ids])
-	r = await here.checkin(Mock.code_for("LoungeTable0"))
+	r = await here.checkin(Mock.code_for("Raised2"))
 	check(r.get("ok"), "here-mode player checks in")
 	r = await hidden.checkin(Mock.code_for("Table3"))
 	check(r.get("ok") and r.get("first_of_night") and r.get("tablemates") == [], "nobody-mode check-in counts, no tablemates")

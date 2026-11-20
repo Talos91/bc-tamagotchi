@@ -1,22 +1,314 @@
-{
-  "Table0": "3hY9WEUfxi",
-  "Table1": "nZMhXxH2HR",
-  "Table2": "DD3NAQxY7i",
-  "Table3": "Kq58SDyTWS",
-  "Table4": "oNSMUTq2LJ",
-  "WestTable0": "uzVtBmrAS8",
-  "WestTable1": "UNjb5Aijur",
-  "RectTableW": "vtuFy8UJyd",
-  "RectTableE": "xG2ugpdcGq",
-  "EastTable": "G7UJar4C4k",
-  "OpeningTall0": "sdse5B7YfD",
-  "OpeningTall1": "SxnGgVtEag",
-  "LongTable": "RZFX6FMYDo",
-  "LoungeTable0": "x6KMa8KHwZ",
-  "LoungeTable1": "2BYgfrBWj9",
-  "BufferTall0": "9YL5HnBgJM",
-  "BufferTall1": "2JPaNA87GM",
-  "BufferTall2": "5s3zrycvAb",
-  "BufferTall3": "MLRH3w4qJh",
-  "Bar": "Uqmj4YnQVc"
-}
+[
+ {
+  "n": 1,
+  "key": "BufferTall0",
+  "code": "KPtoEzTQZS",
+  "table_id": "BufferTall0",
+  "label": "Tall table B0",
+  "zone": "Buffer"
+ },
+ {
+  "n": 2,
+  "key": "BufferTall1",
+  "code": "vGQKYYua8c",
+  "table_id": "BufferTall1",
+  "label": "Tall table B1",
+  "zone": "Buffer"
+ },
+ {
+  "n": 3,
+  "key": "BufferTall2",
+  "code": "meHwjMxdw6",
+  "table_id": "BufferTall2",
+  "label": "Tall table B2",
+  "zone": "Buffer"
+ },
+ {
+  "n": 4,
+  "key": "BufferTall3",
+  "code": "2iGhMTe9BZ",
+  "table_id": "BufferTall3",
+  "label": "Tall table B3",
+  "zone": "Buffer"
+ },
+ {
+  "n": 5,
+  "key": "OpeningTall0",
+  "code": "uTUZZgPfqb",
+  "table_id": "OpeningTall0",
+  "label": "Tall table O0",
+  "zone": "Buffer"
+ },
+ {
+  "n": 6,
+  "key": "OpeningTall1",
+  "code": "FoJPLk89KU",
+  "table_id": "OpeningTall1",
+  "label": "Tall table O1",
+  "zone": "Buffer"
+ },
+ {
+  "n": 7,
+  "key": "WestTable0",
+  "code": "GsNhzWkgxG",
+  "table_id": "WestTable0",
+  "label": "West table 0",
+  "zone": "Tables"
+ },
+ {
+  "n": 8,
+  "key": "WestTable1",
+  "code": "vDSMxqVqtn",
+  "table_id": "WestTable1",
+  "label": "West table 1",
+  "zone": "Tables"
+ },
+ {
+  "n": 9,
+  "key": "RectTableW",
+  "code": "74C3bWXRFj",
+  "table_id": "RectTableW",
+  "label": "Long table W",
+  "zone": "Tables"
+ },
+ {
+  "n": 10,
+  "key": "Table0",
+  "code": "6kmjEJb2ZZ",
+  "table_id": "Table0",
+  "label": "Round table 0",
+  "zone": "Tables"
+ },
+ {
+  "n": 11,
+  "key": "Tiny0",
+  "code": "BrRYGJfujZ",
+  "table_id": "Tiny0",
+  "label": "Small table 0",
+  "zone": "Tables"
+ },
+ {
+  "n": 12,
+  "key": "Tiny1",
+  "code": "PTGKXRwoAG",
+  "table_id": "Tiny1",
+  "label": "Small table 1",
+  "zone": "Tables"
+ },
+ {
+  "n": 13,
+  "key": "Table1",
+  "code": "GEe7G7tPFx",
+  "table_id": "Table1",
+  "label": "Round table 1",
+  "zone": "Tables"
+ },
+ {
+  "n": 14,
+  "key": "Tiny2",
+  "code": "SV7hd4mUz9",
+  "table_id": "Tiny2",
+  "label": "Small table 2",
+  "zone": "Tables"
+ },
+ {
+  "n": 15,
+  "key": "Table2",
+  "code": "cpS6TewLhD",
+  "table_id": "Table2",
+  "label": "Round table 2",
+  "zone": "Tables"
+ },
+ {
+  "n": 16,
+  "key": "Tiny3",
+  "code": "Aqr5c5KXQJ",
+  "table_id": "Tiny3",
+  "label": "Small table 3",
+  "zone": "Tables"
+ },
+ {
+  "n": 17,
+  "key": "Tiny4",
+  "code": "ztLuU8tzGk",
+  "table_id": "Tiny4",
+  "label": "Small table 4",
+  "zone": "Tables"
+ },
+ {
+  "n": 18,
+  "key": "Table3",
+  "code": "pM6aQj2xSn",
+  "table_id": "Table3",
+  "label": "Round table 3",
+  "zone": "Tables"
+ },
+ {
+  "n": 19,
+  "key": "TinyE0",
+  "code": "9rN9LXEaZW",
+  "table_id": "TinyE0",
+  "label": "Small table E0",
+  "zone": "Tables"
+ },
+ {
+  "n": 20,
+  "key": "TinyE1",
+  "code": "666c3Yz8oN",
+  "table_id": "TinyE1",
+  "label": "Small table E1",
+  "zone": "Tables"
+ },
+ {
+  "n": 21,
+  "key": "TinyE2",
+  "code": "T8nvUDYYVn",
+  "table_id": "TinyE2",
+  "label": "Small table E2",
+  "zone": "Tables"
+ },
+ {
+  "n": 22,
+  "key": "Tiny5",
+  "code": "J6GxnFTz2b",
+  "table_id": "Tiny5",
+  "label": "Small table 5",
+  "zone": "Tables"
+ },
+ {
+  "n": 23,
+  "key": "Table4",
+  "code": "FbiR7RLNGP",
+  "table_id": "Table4",
+  "label": "Round table 4",
+  "zone": "Tables"
+ },
+ {
+  "n": 24,
+  "key": "EastTable",
+  "code": "XvehHY5NDA",
+  "table_id": "EastTable",
+  "label": "East table",
+  "zone": "Tables"
+ },
+ {
+  "n": 25,
+  "key": "RectTableE",
+  "code": "9238TkKhHb",
+  "table_id": "RectTableE",
+  "label": "Long table E",
+  "zone": "Tables"
+ },
+ {
+  "n": 26,
+  "key": "Raised0",
+  "code": "h2uSp4TWjr",
+  "table_id": "Raised0",
+  "label": "Raised table 0",
+  "zone": "Raised"
+ },
+ {
+  "n": 27,
+  "key": "Raised1",
+  "code": "PifttsGisJ",
+  "table_id": "Raised1",
+  "label": "Raised table 1",
+  "zone": "Raised"
+ },
+ {
+  "n": 28,
+  "key": "Raised2",
+  "code": "ZueNeEQ8L8",
+  "table_id": "Raised2",
+  "label": "Raised table 2",
+  "zone": "Raised"
+ },
+ {
+  "n": 29,
+  "key": "Raised3",
+  "code": "rgdfKK454z",
+  "table_id": "Raised3",
+  "label": "Raised table 3",
+  "zone": "Raised"
+ },
+ {
+  "n": 30,
+  "key": "Raised4",
+  "code": "pPWUuG4CBd",
+  "table_id": "Raised4",
+  "label": "Raised table 4",
+  "zone": "Raised"
+ },
+ {
+  "n": 31,
+  "key": "BarStool1",
+  "code": "fJFscC8ggc",
+  "table_id": "Bar",
+  "label": "Bar stool 1",
+  "zone": "Bar"
+ },
+ {
+  "n": 32,
+  "key": "BarStool2",
+  "code": "wwNdj2HKPr",
+  "table_id": "Bar",
+  "label": "Bar stool 2",
+  "zone": "Bar"
+ },
+ {
+  "n": 33,
+  "key": "BarStool3",
+  "code": "XgdsTbFxR3",
+  "table_id": "Bar",
+  "label": "Bar stool 3",
+  "zone": "Bar"
+ },
+ {
+  "n": 34,
+  "key": "BarStool4",
+  "code": "KtL7XpKQrk",
+  "table_id": "Bar",
+  "label": "Bar stool 4",
+  "zone": "Bar"
+ },
+ {
+  "n": 35,
+  "key": "BarStool5",
+  "code": "MH8ZiT8F8d",
+  "table_id": "Bar",
+  "label": "Bar stool 5",
+  "zone": "Bar"
+ },
+ {
+  "n": 36,
+  "key": "BarStool6",
+  "code": "795Ydb5BrR",
+  "table_id": "Bar",
+  "label": "Bar stool 6",
+  "zone": "Bar"
+ },
+ {
+  "n": 37,
+  "key": "BarStool7",
+  "code": "uf6HCAxQ9d",
+  "table_id": "Bar",
+  "label": "Bar stool 7",
+  "zone": "Bar"
+ },
+ {
+  "n": 38,
+  "key": "BarStool8",
+  "code": "3hiBGir8fH",
+  "table_id": "Bar",
+  "label": "Bar stool 8",
+  "zone": "Bar"
+ },
+ {
+  "n": 39,
+  "key": "BarStool9",
+  "code": "iFP3HkEyrL",
+  "table_id": "Bar",
+  "label": "Bar stool 9",
+  "zone": "Bar"
+ }
+]

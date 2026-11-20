@@ -19,10 +19,10 @@ const Avatar = preload("res://scripts/avatar.gd")
 
 const NAMES := ["Mai", "Ploy", "Ton", "Fah", "Beam", "Nok", "Arthit", "Kanya", "June", "Pim", "Golf", "Mew"]
 const PresenceMock = preload("res://scripts/presence/presence_mock.gd")   ## every code's table and zone (arrive())
-## In-game tables (layout.json ids) and their zones (08 §7.7)
+## In-game tables (layout.json ids) and their zones (08 §7.7); a subset of the QR tables (docs/venue/qr/codes.json)
 const TABLES := {"Table0": "Tables", "Table1": "Tables", "Table2": "Tables", "Table3": "Tables", "Table4": "Tables",
-	"WestTable0": "Tables", "WestTable1": "Tables", "LongTable": "Lounge", "BufferTall0": "Buffer",
-	"BufferTall1": "Buffer", "LoungeTable0": "Lounge", "EastTable": "Tables"}
+	"WestTable0": "Tables", "WestTable1": "Tables", "Raised1": "Raised", "BufferTall0": "Buffer",
+	"BufferTall1": "Buffer", "Tiny2": "Tables", "EastTable": "Tables"}
 const CODE_RE := "^[A-Za-z0-9]{10}$"
 
 var people: Array = []          ## tonight's check-ins (the server's rows): <presence> + "visibility" (everyone | here)
