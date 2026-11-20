@@ -130,6 +130,11 @@ def _color(s, default=(0.5, 0.5, 0.5)):
 
 
 _GMATS = {}
+# Materials that are a texture only in Godot (no albedo_color): their average colour (build_venue.gd), so the floors
+# read grey cement as in the game, not the 80 % grey default that turned them white (Daniele 2026-11-20: "the floor is
+# more grayish then white ... old gray floor was fine")
+TEXTURED_BASE = {"Floor": (0.29, 0.282, 0.282), "Concrete": (0.29, 0.282, 0.282), "Marble": (0.5, 0.49, 0.47),
+                 "Planks": (0.431, 0.208, 0.133), "Red Brick": (0.416, 0.149, 0.125), "Upper Brick": (0.075, 0.055, 0.051)}
 
 
 def godot_material(sub, rid):
@@ -140,11 +145,13 @@ def godot_material(sub, rid):
     name = r.get("resource_name", '"%s"' % rid).strip('"')
     if name == "FloorTile":
         m = K.material("FloorGrey")
+    elif r.get("_type") == "ShaderMaterial" and "shader_parameter/top_col" in r:
+        m = two_tone_material(name, r)
     else:
         m = bpy.data.materials.new("venue_" + name)
         m.use_nodes = True
         bsdf = next(n for n in m.node_tree.nodes if n.type == "BSDF_PRINCIPLED")
-        col = tuple(K.srgb_to_linear(c) for c in _color(r.get("albedo_color"), (0.8, 0.8, 0.8)))
+        col = tuple(K.srgb_to_linear(c) for c in _color(r.get("albedo_color"), TEXTURED_BASE.get(name, (0.8, 0.8, 0.8))))
         bsdf.inputs["Base Color"].default_value = (*col, 1.0)
         bsdf.inputs["Roughness"].default_value = float(r.get("roughness", 0.8))
         bsdf.inputs["Metallic"].default_value = float(r.get("metallic", 0.0))
@@ -154,6 +161,56 @@ def godot_material(sub, rid):
             bsdf.inputs["Emission Color"].default_value = (*ecol, 1.0)
             bsdf.inputs["Emission Strength"].default_value = float(r.get("emission_energy_multiplier", 1.0)) * 2.0
     _GMATS[rid] = m
+    return m
+
+
+def two_tone_material(name, r):
+    """The venue's two-tone walls (build_venue.gd _two_tone_mat, a ShaderMaterial: the main room's north wall, the
+    entrance plaster, the lounge wainscot): top_col above split_y metres, bottom_col below, a thin line between them
+    glowing neon_energy. Rebuilt here from world height, so they are no longer the 80 % grey a shader material's
+    missing albedo gave (Daniele 2026-11-20, "the blender has many invisible walls")."""
+    top = tuple(K.srgb_to_linear(c) for c in _color(r.get("shader_parameter/top_col"), (0.6, 0.6, 0.6)))
+    bot = tuple(K.srgb_to_linear(c) for c in _color(r.get("shader_parameter/bottom_col"), (0.2, 0.2, 0.2)))
+    neon = tuple(K.srgb_to_linear(c) for c in _color(r.get("shader_parameter/neon"), (1, 0.1, 0.05)))
+    split = float(r.get("shader_parameter/split_y", 0.9))
+    energy = float(r.get("shader_parameter/neon_energy", 0.0))
+    m = bpy.data.materials.new("venue_" + name)
+    m.use_nodes = True
+    nt = m.node_tree
+    bsdf = next(n for n in nt.nodes if n.type == "BSDF_PRINCIPLED")
+    bsdf.inputs["Roughness"].default_value = 0.9
+    geo = nt.nodes.new("ShaderNodeNewGeometry")
+    sep = nt.nodes.new("ShaderNodeSeparateXYZ")
+    nt.links.new(geo.outputs["Position"], sep.inputs[0])
+    below = nt.nodes.new("ShaderNodeMath")
+    below.operation = "LESS_THAN"
+    below.inputs[1].default_value = split
+    nt.links.new(sep.outputs["Z"], below.inputs[0])
+    mix = nt.nodes.new("ShaderNodeMix")
+    mix.data_type = "RGBA"
+    mix.inputs["A"].default_value = (*top, 1.0)
+    mix.inputs["B"].default_value = (*bot, 1.0)
+    nt.links.new(below.outputs[0], mix.inputs["Factor"])
+    nt.links.new(mix.outputs["Result"], bsdf.inputs["Base Color"])
+    if energy > 0.0:
+        off = nt.nodes.new("ShaderNodeMath")
+        off.operation = "SUBTRACT"
+        off.inputs[1].default_value = split
+        nt.links.new(sep.outputs["Z"], off.inputs[0])
+        dist = nt.nodes.new("ShaderNodeMath")
+        dist.operation = "ABSOLUTE"
+        nt.links.new(off.outputs[0], dist.inputs[0])
+        line = nt.nodes.new("ShaderNodeMath")
+        line.operation = "LESS_THAN"
+        line.inputs[1].default_value = 0.04
+        nt.links.new(dist.outputs[0], line.inputs[0])
+        amp = nt.nodes.new("ShaderNodeMath")
+        amp.operation = "MULTIPLY"
+        amp.inputs[1].default_value = energy * 2.0
+        nt.links.new(line.outputs[0], amp.inputs[0])
+        bsdf.inputs["Emission Color"].default_value = (*neon, 1.0)
+        nt.links.new(amp.outputs[0], bsdf.inputs["Emission Strength"])
+    m.diffuse_color = (*top, 1.0)                                    # Solid view: the upper colour
     return m
 
 

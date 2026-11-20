@@ -57,7 +57,7 @@ const TABLE_ZONES := ["Tables", "Raised", "Lounge"]
 const BAR_DEPTH := 3.4
 const BAR_APPROACH := 1.6
 const STAGE_FRONT := 2.2          ## metres of floor south of the carpet that count as the front row
-const EXIT_DEPTH := 0.9           ## metres in front of the street door (the doorway only: the spawn at x 1.5 is outside it)
+const EXIT_DEPTH := 0.9           ## metres in front of the street door (the doorway only: the spawn at x 1.12 is outside it)
 const EXIT_OUTSIDE := 2.0         ## metres beyond it: the step of street outside the open door
 
 var zones: Array[Dictionary] = []

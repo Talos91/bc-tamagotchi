@@ -68,8 +68,8 @@ const STAIR_H1 := 1.6                                 # landing height
 const STAIR_TOP := 4.0                                # the floor above
 const STAIR_STOP_Z := 10.05                           # rope across the second flight: as high as the player climbs
 const CABINET_X := 10.3                               # game machine, ~1.9 m east of the bottom step (back by the stair foot, Daniele 2026-11-02)
-const LEDGE_X := Vector2(11.1, 12.8)                  # high counter on the south wall between the game machine and the Sticker door
-const MERCH := Vector3(13.6, 0, 1.55)                 # merch counter, top right of the lounge (lounge revamp)
+const LEDGE_X := Vector2(11.0, 12.1)                 # high counter on the south wall between the game machine and the arcade by the Sticker door (shortened 2026-11-20, photo 07)
+const MERCH := Vector3(11.6, 0, 6.6)                  # merch counter in the middle of the lounge, walkable all round (Daniele 2026-11-20)
 const PORTRAIT_X0 := 3.0                              # corridor south wall: ten top-patron portraits 1.2 m apart (B7)
 const PORTRAIT_STEP := 1.2
 const LOW_NEON_X1 := 6.5                              # corridor west end: the low neon line runs from the street wall to here
@@ -831,8 +831,7 @@ func _lobby_and_corridor() -> void:
 	# Sticker door between the corridor and the lounge: swings open for whoever comes through, stickers and the PDPA
 	# notice on the corridor side (front +z)
 	_swing_door(g, "StickerDoor", "sticker_door", Vector3((STICKER_DOOR.x + STICKER_DOOR.y) * 0.5, 0, LOUNGE.end.y + 0.1), 0.0, Vector3.BACK)
-	_omni(g, "CorridorLight", CANDLE, 2.05, 6.0, Vector3(9.0, 3.3, 14.1))
-	_omni(g, "StickerDoorLight", HOUSE_RED, 0.8, 3.0, Vector3(13.6, 2.6, 14.4))   # the red wash on the door (photo 06)
+	_omni(g, "CorridorLight", CANDLE, 1.4, 6.0, Vector3(9.0, 3.3, 14.1))
 	for x in [PORTRAIT_X0 + PORTRAIT_STEP * 0.5, PORTRAIT_X0 + PORTRAIT_STEP * 5.5]:   # between portraits, above them
 		_cut(_kit(g, "wall_lamp", Vector3(x, 2.6, CORRIDOR.end.y - 0.05), 0.0, "CorridorLamp%d" % int(x)), Vector3.BACK)
 	_kit(g, "track_light", Vector3(13.0, ROOM_H, 14.1), 0.0, "CorridorTrack")
@@ -887,8 +886,7 @@ func _lounge() -> void:
 		_kit_solid(g, "cafe_chair", Vector3(4.75, 0, z), -90.0, "Chair%d" % i)
 		_seat("Lounge", "Lounge_Chair%d" % i, Vector3(4.75, 0, z), -90.0, 0.45, "sit", "LongTable")
 		_seat("Lounge", "Lounge_Banquette%d" % i, Vector3(LOUNGE.position.x + 0.3, 0, z), 90.0, 0.45, "sit", "LongTable", true)
-	_omni(g, "LongTableLightA", CANDLE, 1.75, 3.4, Vector3(3.9, 1.5, 4.3))
-	_omni(g, "LongTableLightB", CANDLE, 1.45, 3.2, Vector3(3.9, 1.5, 5.9))
+	_omni(g, "LongTableLightA", CANDLE, 1.5, 3.8, Vector3(3.9, 1.5, 5.0))   # one light for the long table (light budget 42, 2026-11-20)
 	_memory_corner(g)
 	# Pinball on the west wall between the banquette and the stairs (Daniele 2026-11-01); the kit's arcade cabinet
 	# stands in for it until pinball_machine lands (Neon Pinball runs on it, DECISIONS (c)).
@@ -911,17 +909,18 @@ func _lounge() -> void:
 	# The high counter and its two stools (R02) moved from the top right to the south wall, east of the game machine
 	_box(g, "HighCounter", Vector3(LEDGE_X.x, 0, LOUNGE.end.y - 0.5), Vector3(LEDGE_X.y - LEDGE_X.x, 0.95, 0.5), _mat("wood_mid", WOOD_MID, 0.4))
 	for i in 2:
-		var sp := Vector3(LEDGE_X.x + 0.45 + i * 0.95, 0, LOUNGE.end.y - 1.05)
+		var sp := Vector3(LEDGE_X.x + 0.2 + i * 0.8, 0, LOUNGE.end.y - 1.05)
 		_kit_solid(g, "bar_stool", sp, 0.0, "CounterStool%d" % i)
 		_seat("Lounge", "Lounge_Stool%d" % i, sp, 0.0, BAR_SEAT_H, "sit", "HighCounter")
 	_cut(_kit(g, "wall_lamp", Vector3(10.2, 1.7, 0.1), 0.0, "RedDiscLamp"), Vector3.FORWARD)
 	_cut(_kit(g, "ac_unit", Vector3(7.0, 3.3, 0.15), 0.0, "ACUnit"), Vector3.FORWARD)
 	_cut(_kit(g, "painting_a", Vector3(8.2, 1.4, 0.05), 0.0, "LoungePainting"), Vector3.FORWARD)
 	_lounge_dressing(g)
-	# Two round tables with four chairs in the open middle (the real lounge changes often, Daniele)
-	for n in 2:
-		_round_table(g, "LoungeTable%d" % n, "Lounge", Vector3(11.0, 0, 5.0 + n * 4.0), 0.0, n == 0)
-	_omni(g, "LoungeTablesLight", CANDLE, 1.6, 4.5, Vector3(11.0, 1.9, 7.0))
+	# The two round tables in the open middle are gone (Daniele 2026-11-20: "remove the 2 tables from lounge and move
+	# the merch booth at the center of the room so players can walk around it"); the merch stand stands there now
+	# (_merch_shop), the curtained corner table top right (_curtain_corner), the Sticker door's lounge side (07)
+	_curtain_corner(g)
+	_sticker_door_lounge(g)
 	# Red cove strip and the ceiling: black beam grid with red emissive panels
 	_box(g, "RedCove", Vector3(LOUNGE.position.x + 0.31, 0.9, 3.3), Vector3(0.04, 0.04, 3.4), _mat("red_strip", NEON_RED, 0.5, 3.0), false)
 	var ceil := _group("CeilingGrid", g)
@@ -932,21 +931,77 @@ func _lounge() -> void:
 		for i in 8:
 			_kit(ceil, "ceiling_panel", Vector3(4.0 + i * 1.3, ROOM_H, 1.75 + row * 2.5 + (i % 2) * 0.5), 0.0, "Panel%d_%d" % [row, i])
 	_ceiling_group(ceil)
-	_omni(g, "RedPanelLightA", PANEL_RED, 3.05, 6.5, Vector3(4.6, 2.6, 1.8))   # also washes the memory corner red (photo 25)
-	_omni(g, "RedPanelLightB", PANEL_RED, 2.35, 7.0, Vector3(10.0, 3.6, 10.0))
+	_omni(g, "RedPanelLightA", PANEL_RED, 2.4, 6.5, Vector3(4.6, 2.6, 1.8))   # also washes the memory corner red (photo 25)
+	_omni(g, "RedPanelLightB", PANEL_RED, 1.8, 7.0, Vector3(10.0, 3.6, 10.0))
 	for t in [[Vector3(6.0, ROOM_H, 7.0), "TrackLight0"], [Vector3(12.0, ROOM_H, 11.0), "TrackLight1"]]:   # hid the player under it (camera feel 2)
 		_cut(_kit(g, "track_light", t[0], 0.0, t[1]), Vector3.ZERO).set_meta("cut_sight_only", true)
 	_cut_rooms(g, ["lounge", "alcove", "merch", "memory", "patrons"])
 
-## Merch shop, top right of the lounge (Daniele 2026-11-02, BACKLOG B11): the collectibles shelf stays on the north
-## wall, a garment rail with three tees beside it and the lit MERCH counter in front (customers on its south side;
-## zone "merch", scripts/zones/venue_zones.gd). What is sold, prices and how to pay are open questions.
+## Merch (Daniele 2026-11-02, BACKLOG B11; moved 2026-11-20): the lit MERCH counter stands in the middle of the lounge,
+## where the two round tables were, so players walk all round it (customers on its south side; zone "merch",
+## scripts/zones/venue_zones.gd); the collectibles shelf stays on the north wall west of the curtained corner (photo 08,
+## the wire shelves on the left), the garment rail by the Sticker door (_sticker_door_lounge, photo 07). What is sold,
+## prices and how to pay are open questions.
 func _merch_shop(g: Node) -> void:
-	_kit(g, "collectibles_shelf", Vector3(13.6, 0, 0.22), 0.0, "CollectiblesShelf")
-	_collider(g, "ShelfCollider", Vector3(13.6, 1.1, 0.22), Vector3(2.0, 2.2, 0.4))
-	_ph(g, "merch_rack", Vector3(11.85, 0, 0.3), 0.0, "MerchRack")
+	_kit(g, "collectibles_shelf", Vector3(11.5, 0, 0.22), 0.0, "CollectiblesShelf")
+	_collider(g, "ShelfCollider", Vector3(11.5, 1.1, 0.22), Vector3(2.0, 2.2, 0.4))
 	_ph(g, "merch_stand", MERCH, 0.0, "MerchStand")
-	_ph(g, "potted_plant", Vector3(15.05, 0, 0.45), 0.0, "MerchPlant")
+	_ph(g, "potted_plant", Vector3(12.8, 0, 0.35), 0.0, "MerchPlant")
+
+## The curtained corner, top right of the lounge (photo 08, where the merch stand was): rust-red curtains hang along
+## the north and east walls, the big lit BLACK CABIN frame leans on them, a wooden table with four chairs and a lamp
+## in front. Its light is the table's candle lamp.
+const CURTAIN_TABLE := Vector3(14.2, 0, 1.6)
+func _curtain_corner(g: Node) -> void:
+	var c := _group("CurtainCorner", g)
+	for i in 3:   # north wall, east of the shelf and the plant
+		_cut(_kit(c, "curtain_panel", Vector3(13.55 + i * 0.95, 0, 0.12), 0.0, "CurtainN%d" % i), Vector3.FORWARD)
+	for i in 3:   # east wall, up to the buffer's opening
+		_cut(_kit(c, "curtain_panel", Vector3(LOUNGE.end.x - 0.12, 0, 0.5 + i * 0.95), -90.0, "CurtainE%d" % i), Vector3.RIGHT)
+	# The buffer's entrance is a red curtain too (Daniele 2026-11-20, "the red tent is the entrance to the buffer zone
+	# before the main venue"): the buffer's lounge-side pair (_buffer) shows its folds into the buffer and its flat back
+	# to the lounge, so a second pair hangs back to back with folds to the lounge, drawn back like them, cut the same way
+	for zc in [BUFFER.position.y + 0.4, BUFFER.end.y - 0.4]:
+		var cp := _kit(c, "curtain_panel", Vector3(LOUNGE.end.x - 0.12, 0, zc), -90.0, "CurtainBufferLounge%d" % int(zc * 10))
+		_cut(cp, Vector3.ZERO).set_meta("cut_sight_only", true)
+	# The lit frame: a white tube rectangle on a dark panel with the wordmark, leaning on the north curtains
+	var f := Node3D.new()
+	f.name = "CabinFrame"
+	f.position = Vector3(13.45, 0, 0.42)
+	f.rotation_degrees = Vector3(-6.0, 0, 0)
+	_own(f, c)
+	var tube := _mat("frame_tube", Color("ffe6e0"), 0.5, 2.2)
+	_box(f, "Panel", Vector3(-0.45, 0.02, -0.03), Vector3(0.9, 1.9, 0.03), _mat("frame_panel", Color("1a0606"), 0.8), false)
+	for e in [[Vector3(-0.47, 0.0, 0.0), Vector3(0.04, 1.94, 0.03)], [Vector3(0.43, 0.0, 0.0), Vector3(0.04, 1.94, 0.03)],
+			[Vector3(-0.47, 0.0, 0.0), Vector3(0.94, 0.04, 0.03)], [Vector3(-0.47, 1.9, 0.0), Vector3(0.94, 0.04, 0.03)]]:
+		_box(f, "Tube%d" % f.get_child_count(), e[0], e[1], tube, false)
+	_wordmark(f, "Word", "BLACK
+CABIN", Vector3(0, 1.45, 0.035), 0.0, 0.0042, Color(2.2, 1.0, 0.9), 48)
+	_cut(f, Vector3.FORWARD)
+	_collider(c, "FrameCollider", Vector3(13.45, 1.0, 0.35), Vector3(0.95, 2.0, 0.3))
+	_rect_table(c, "CornerTable", "Lounge", CURTAIN_TABLE, 1.6)
+	_omni(c, "CornerTableLight", CANDLE, 1.3, 3.4, CURTAIN_TABLE + Vector3(0, 1.4, -0.4))
+
+## The Sticker door from inside the lounge (photo 07): the garment rail with the tee, a lit lamp on its shelf and three
+## frames over it on the left (east) of the door, curtain beside it; the exit sign over the door; on its right (west)
+## the arcade on its stand with a mirror above it. The arcade is dressing (the lounge's game machine is GameCabinet).
+func _sticker_door_lounge(g: Node) -> void:
+	var s := _group("StickerDoorLounge", g)
+	var z := LOUNGE.end.y
+	_ph(s, "merch_rack", Vector3(14.85, 0, z - 0.3), 180.0, "MerchRack", true, Vector3(0.85, 1, 1))
+	_kit(s, "table_lamp_lit", Vector3(15.05, 0.55, z - 0.3), 0.0, "MerchRackLamp")
+	for i in 3:
+		_cut(_ph(s, "wall_picture_framed", Vector3(14.45 + i * 0.4, 2.05, z - 0.06), 180.0, "RackFrame%d" % i, false, Vector3(0.6, 0.6, 1)), Vector3.BACK)
+	_cut(_kit(s, "exit_sign", Vector3((STICKER_DOOR.x + STICKER_DOOR.y) * 0.5, 2.55, z - 0.12), 180.0, "ExitSignStickerLounge"), Vector3.BACK)
+	# The arcade on a stand: the kit cabinet scaled down on four legs, the mirror on the wall above it
+	var dark := _mat("beam_black", BEAM_BLACK, 0.7)
+	var ax := 12.6
+	for i in 4:
+		_box(s, "ArcadeLeg%d" % i, Vector3(ax - 0.28 + (i % 2) * 0.52, 0, z - 0.6 + (i / 2) * 0.42), Vector3(0.04, 0.8, 0.04), dark, false)
+	_box(s, "ArcadeShelf", Vector3(ax - 0.3, 0.78, z - 0.62), Vector3(0.6, 0.04, 0.5), dark, false)
+	_kit(s, "arcade_cabinet", Vector3(ax, 0.82, z - 0.36), 180.0, "ArcadeOnStand", Vector3(0.75, 0.55, 0.75))
+	_collider(s, "ArcadeStandCollider", Vector3(ax, 0.9, z - 0.38), Vector3(0.62, 1.8, 0.52))
+	_cut(_ph(s, "mirror_wall_panel", Vector3(ax, 1.85, z - 0.04), 180.0, "ArcadeMirror", false, Vector3(0.8, 0.36, 1)), Vector3.BACK)
 
 ## Photo booth on the lounge's north wall, between the memory corner and the merch rack (Daniele 2026-11-09: "a
 ## photo booth in the lounge where you can enter and the character creator pops up"; the one authorised lounge
@@ -965,7 +1020,7 @@ func _lounge_dressing(g: Node) -> void:
 		var y := (STAIR_LOWER.end.x - x) / STAIR_LOWER.size.x * STAIR_H1 + 1.3
 		_cut(_ph(g, "wall_picture_framed_b", Vector3(x, y, LOUNGE.end.y - 0.06), 180.0, "GigPoster%d" % i, false), Vector3.BACK)
 	for i in 3:
-		_cut(_ph(g, "vinyl_record_wall", Vector3(LEDGE_X.x + 0.35 + i * 0.6, 1.3, LOUNGE.end.y - 0.06), 180.0, "LoungeVinyl%d" % i, false), Vector3.BACK)
+		_cut(_ph(g, "vinyl_record_wall", Vector3(LEDGE_X.x + 0.2 + i * 0.4, 1.3, LOUNGE.end.y - 0.06), 180.0, "LoungeVinyl%d" % i, false), Vector3.BACK)
 	_ph(g, "potted_plant", Vector3(STAIR_UPPER.end.x + 0.45, 0, STAIR_LOWER.position.y - 0.4), 0.0, "StairPlant")
 
 ## "Top patrons" board (Daniele 2026-11-02, BACKLOG B10) on the face of the plinth under the second flight, facing the
@@ -1119,53 +1174,50 @@ func _rail(g: Node, nm: String, a: Vector3, b: Vector3) -> void:
 		var p := a.lerp(b, float(i) / n)
 		_box(g, "%sPost%d" % [nm, i], Vector3(p.x - 0.025, p.y - 0.9, p.z - 0.025), Vector3(0.05, 0.9, 0.05), mi.material_override, false)
 
-## Memory corner (Daniele 2026-11-02, photo 25) in the lounge's north-west corner: potted snake plant, red disc lamp on
-## a stand, the CRT TV on its stand with a camera on a short tripod beside it, a floor lamp with a lit shade, two
-## chairs facing the room with the lit BLACK CABIN box on a stool between them. Where you will share a real photo
-## from a night at Black Cabin (BACKLOG D5; zone "memory", scripts/zones/venue_zones.gd). Lit by RedPanelLightA,
-## moved here (no new light). Placeholders for a later kit pass: snake plant, disc lamp stand, tripod camera,
-## floor lamp, the cube light box, upholstered chairs (cafe_chair stands in).
+## Memory corner (Daniele 2026-11-02; remade from photo 09, Daniele 2026-11-20) in the lounge's north-west corner: a
+## long dark counter down the west wall with the CRT TV (the game on its screen) and a potted plant on it, the BLACK
+## CABIN sign on a stand between two low upholstered stools facing the room, the orange disc lamp on its pole behind
+## them, posters on the north wall and the charging kiosk on their right (_charging_kiosk). Where you will share a real
+## photo from a night at Black Cabin (BACKLOG D5; zone "memory" around the CRT, scripts/zones/venue_zones.gd). Lit by
+## RedPanelLightA (no new light).
 func _memory_corner(g: Node) -> void:
 	var c := _group("MemoryCorner", g)
 	var dark := _mat("beam_black", BEAM_BLACK, 0.7)
-	# Snake plant in a metal pot, in the corner
-	_box(c, "PlantPot", Vector3(2.57, 0, 0.27), Vector3(0.36, 0.42, 0.36), _mat("pot_steel", Color("4a4448"), 0.35))
+	var x0 := LOUNGE.position.x
+	# The counter along the west wall, from the corner to the plant wall
+	_box(c, "MemoryCounter", Vector3(x0, 0, 0.0), Vector3(0.62, 0.75, 2.9), _mat("memory_counter", Color("1a1010"), 0.5))
+	# The CRT on it, turned to the room, and a snake plant in a pot further along
+	_kit(c, "crt_monitor", Vector3(x0 + 0.33, 0.75, 0.75), 120.0, "CRT", Vector3(0.6, 0.6, 0.6))
+	_box(c, "PlantPot", Vector3(x0 + 0.13, 0.75, 1.7), Vector3(0.3, 0.3, 0.3), _mat("pot_steel", Color("4a4448"), 0.35), false)
 	var leaf := _mat("snake_leaf", Color("2e5228"), 0.8)
 	var rng := RandomNumberGenerator.new()
 	rng.seed = 25
 	for i in 7:
 		var a := i * TAU / 7.0 + rng.randf_range(-0.3, 0.3)
-		var base := Vector3(2.75 + cos(a) * 0.08, 0.4, 0.45 + sin(a) * 0.08)
-		_tube(c, "Leaf%d" % i, base, base + Vector3(cos(a) * 0.22, rng.randf_range(0.55, 0.95), sin(a) * 0.22), 0.07, leaf)
-	# Red disc lamp on a stand (the kit's wall disc lamp on a pole)
-	_box(c, "DiscBase", Vector3(3.27, 0, 0.62), Vector3(0.26, 0.04, 0.26), dark, false)
-	_box(c, "DiscPole", Vector3(3.38, 0, 0.73), Vector3(0.04, 1.45, 0.04), dark, false)
-	_kit(c, "wall_lamp", Vector3(3.4, 1.2, 0.65), 0.0, "DiscLamp")
-	# The CRT TV on its stand, a camera on a short tripod beside it
-	_kit_solid(c, "crt_monitor", Vector3(4.05, 0, 0.35), 0.0, "CRT")
-	var apex := Vector3(4.72, 1.0, 0.75)
-	for i in 3:
-		var a := i * TAU / 3.0 + 0.4
-		_tube(c, "TripodLeg%d" % i, apex, Vector3(apex.x + cos(a) * 0.24, 0.0, apex.z + sin(a) * 0.24), 0.025, dark)
-	_box(c, "Camera", apex + Vector3(-0.09, 0.0, -0.06), Vector3(0.18, 0.12, 0.12), _mat("camera_body", Color("101012"), 0.4), false)
-	_box(c, "CameraLens", apex + Vector3(-0.04, 0.02, -0.12), Vector3(0.08, 0.08, 0.07), _mat("camera_lens", Color("2a2c34"), 0.1), false)
-	# Floor lamp with a lit cream shade
-	_box(c, "FloorLampBase", Vector3(5.12, 0, 0.22), Vector3(0.26, 0.04, 0.26), dark, false)
-	_box(c, "FloorLampPole", Vector3(5.23, 0, 0.33), Vector3(0.04, 1.45, 0.04), _mat("cymbal_gold", Color("c8a050"), 0.35), false)
-	_box(c, "FloorLampShade", Vector3(5.04, 1.42, 0.14), Vector3(0.42, 0.3, 0.42), _mat("lamp_shade", Color("ffd8b0"), 0.8, 1.1), false)
-	# One collider along the wall for the plant, lamps and tripod (the furniture strip is not walkable)
-	_collider(c, "StripCollider", Vector3(3.9, 0.8, 0.55), Vector3(3.1, 1.6, 0.7))
-	# Two chairs facing the room, the lit BLACK CABIN box on a stool between them
+		var base := Vector3(x0 + 0.28 + cos(a) * 0.06, 1.02, 1.85 + sin(a) * 0.06)
+		_tube(c, "Leaf%d" % i, base, base + Vector3(cos(a) * 0.2, rng.randf_range(0.45, 0.8), sin(a) * 0.2), 0.06, leaf)
+	# The orange disc lamp on its pole, behind the stools
+	_box(c, "DiscBase", Vector3(4.37, 0, 0.12), Vector3(0.26, 0.04, 0.26), dark, false)
+	_box(c, "DiscPole", Vector3(4.48, 0, 0.23), Vector3(0.04, 1.45, 0.04), dark, false)
+	_kit(c, "wall_lamp", Vector3(4.5, 1.2, 0.15), 0.0, "DiscLamp")
+	_box(c, "DiscGlow", Vector3(4.33, 1.27, 0.27), Vector3(0.34, 0.34, 0.02), _mat("disc_orange", Color("ff9a3a"), 0.6, 2.4), false)
+	# Two low upholstered stools facing the room, the BLACK CABIN sign on a stand between them
 	for i in 2:
-		var p := Vector3(5.75 + i * 1.15, 0, 0.75)
-		_kit_solid(c, "cafe_chair", p, 0.0, "MemoryChair%d" % i)
+		var p := Vector3(4.15 + i * 1.6, 0, 0.75)
+		_kit_solid(c, "drum_stool", p, 0.0, "MemoryChair%d" % i)
 		_seat("Lounge", "Memory_Chair%d" % i, p, 0.0, 0.45, "sit", "memory")
-	_ph(c, "tall_stool", Vector3(6.32, 0, 0.4), 0.0, "BoxStool")
-	_box(c, "CabinBox", Vector3(6.1, 0.75, 0.22), Vector3(0.44, 0.44, 0.36), _mat("cabin_box", Color("ff6a5a"), 0.7, 1.3), false)
-	# Printed in dark ink on the lit box (photo 25), lettered in Kristi (Daniele, Questions tab third batch)
-	var word := _wordmark(c, "CabinBoxWord", "Black\nCabin", Vector3(6.32, 0.97, 0.585), 0.0, 0.0034, Color("1c0604"), 64)
+	_box(c, "SignStand", Vector3(4.92, 0, 0.42), Vector3(0.06, 0.95, 0.06), dark, false)
+	_box(c, "CabinBox", Vector3(4.7, 0.9, 0.4), Vector3(0.5, 0.42, 0.04), _mat("cabin_sign", Color("f2ece4"), 0.7, 0.5), false)
+	# Printed in dark ink on the white sign (photo 09), lettered in Kristi (Daniele, Questions tab third batch)
+	var word := _wordmark(c, "CabinBoxWord", "Black
+Cabin", Vector3(4.95, 1.12, 0.445), 0.0, 0.0034, Color("1c0604"), 64)
 	word.font = load(KRISTI)
 	word.line_spacing = -26.0
+	_collider(c, "SignCollider", Vector3(4.95, 0.6, 0.42), Vector3(0.5, 1.2, 0.3))
+	# Posters on the north wall over the stools (the gig posters of photo 09)
+	for col in 3:
+		for row in 2:
+			_cut(_kit(c, "poster_bc", Vector3(5.6 + col * 0.5, 1.35 + row * 0.65, 0.03), 0.0, "MemoryPoster%d_%d" % [col, row]), Vector3.FORWARD)
 
 ## White wordmark (the Black Cabin logo style, photos 24/25): a Label3D in the default font, glowing when `col` is
 ## over 1, facing +z turned by `yaw` degrees.
@@ -1220,10 +1272,11 @@ func _corridor_end(g: Node) -> void:
 
 # --- entrance round (Daniele 2026-11-20, docs/venue/photos/2026-11-20-entrance-round/) ---------------------------
 
-const EAGLE_TABLE := Vector3(1.1, 0.0, 5.42)          # lobby north wall, facing the street door's way in (photo 14)
-const EAGLE_AT := Vector3(0.98, 0.95, 5.42)            # the falcon on the table, its lamp east of it (photos 12, 13)
-const EAGLE_WALL_Z := 8.4                              # the entrance room's south wall with its door (photo 01)
-const EAGLE_DOOR := Vector2(0.475, 1.675)              # its door, x range, centred as in photo 01 (DOOR_W, the walk-through width)
+const EAGLE_TABLE := Vector3(1.83, 0.0, 7.2)           # the room's east wall, facing the street door: you see it as you come in (photo 14)
+const EAGLE_AT := Vector3(1.86, 0.95, 7.28)            # the falcon in the middle of its table, the lamp at its north end (photos 12-14)
+const EAGLE_WALL_Z := 8.4                              # the entrance room's south wall with its door (photos 01, 13)
+const EAGLE_DOOR := Vector2(0.55, 1.75)                # its door, x range: beside the table's corner, so from left of the falcon
+                                                       # looking right you see it (photo 13; DOOR_W, the walk-through width)
 const MARBLE := Rect2(0.0, 8.6, 2.15, 4.2)            # the marble stretch south of the entrance room (photos 01, 15)
 const RED_LAMP := Vector3(0.32, 0.0, 9.0)             # the red floor lamp against the west wall (photos 01, 15)
 const MURAL_TEX := "res://assets/venue/corridor_mural.png"   # tools/venue_mural.py
@@ -1231,16 +1284,17 @@ const MURAL_SIZE := Vector2(6.0, 1.875)
 const MURAL_AT := Vector3(9.55, 1.32, 0.0)            # centre x, y; on the lounge wall's corridor face, ends by the door
 const KIOSK_AT := Vector3(7.65, 0.0, 0.35)            # the lounge's charging kiosk, north wall (photos 09, 10)
 
-## The entrance room (photos 12-14): the lobby's north end stays dark; the stuffed falcon on its driftwood stands on a
-## worn wooden table against the north wall with a cordless brass lamp beside it, the PDPA notice on the wall above
-## and a fire extinguisher in the corner. The falcon greets the player with a speech bubble when they come in
-## (scenes/ui/eagle_bubble.gd, main.gd greet_at_door); it is in group "entrance_greeter" so the bubble can find it.
-## The lamp is the room's only light: warm white, short range.
+## The entrance room (photos 12-14, Daniele's corrections 2026-11-20): you come in by the street door (west wall) and
+## face the stuffed falcon on its driftwood, on a worn wooden table against the east wall, a cordless brass lamp beside
+## it and the PDPA notice on the wall above. The door on to the marble stretch is in the south wall right beside the
+## table's corner, a fire extinguisher between them: from left of the falcon, looking right, you see the door (13).
+## The falcon greets the player with a speech bubble when they come in (scenes/ui/eagle_bubble.gd, main.gd
+## greet_at_door); it is in group "entrance_greeter" so the bubble can find it. The lamp is the room's only light.
 func _entrance_room(g: Node) -> void:
 	var r := _group("EntranceRoom", g)
-	# Its south wall and door (photo 01, Daniele 2026-11-20 "the view from the corner towards the eagle entrance"): a
-	# dark door under a lit exit box leads on to the marble stretch. The wall is cut only when it stands between the
-	# camera (south, looking north) and the player, so from the marble side it stands as in the photo.
+	# Its south wall and door (photos 01, 13): a dark door under a lit exit box leads on to the marble stretch. The
+	# wall is cut only when it stands between the camera (south, looking north) and the player, so from the marble
+	# side it stands as in the photo.
 	var wall := _two_tone_mat("lobby_plaster", PLASTER_TOP, PLASTER_DAMP, PLASTER_DAMP, PLASTER_SPLIT, 0.0)
 	var before := r.get_child_count()
 	_wall_x(r, "EagleRoomWall", EAGLE_WALL_Z, LOBBY.position.x, LOBBY.end.x, wall, Vector3.BACK, [EAGLE_DOOR], 2.15)
@@ -1249,21 +1303,21 @@ func _entrance_room(g: Node) -> void:
 	var dc := Vector3((EAGLE_DOOR.x + EAGLE_DOOR.y) * 0.5, 0, EAGLE_WALL_Z + 0.1)
 	_swing_door(r, "EagleRoomDoor", "staff_door", dc, 0.0, Vector3.BACK, EAGLE_DOOR.y - EAGLE_DOOR.x)
 	_cut(_kit(r, "exit_sign", Vector3(dc.x, 2.35, EAGLE_WALL_Z + 0.26), 0.0, "ExitSignEagleRoom"), Vector3.ZERO).set_meta("cut_sight_only", true)
-	_kit_solid(r, "entrance_table", EAGLE_TABLE, 0.0, "EagleTable")
-	var eagle := _kit(r, "eagle_greeter", EAGLE_AT, 0.0, "EagleGreeter")
+	_kit_solid(r, "entrance_table", EAGLE_TABLE, -90.0, "EagleTable")
+	var eagle := _kit(r, "eagle_greeter", EAGLE_AT, -90.0, "EagleGreeter")
 	if eagle:
 		eagle.add_to_group("entrance_greeter", true)
-	_kit(r, "brass_lamp", Vector3(1.45, 0.95, 5.55), 0.0, "EagleLamp")
-	_omni(r, "EagleLampLight", Color("ffe8c4"), 1.3, 3.2, Vector3(1.42, 1.35, 5.75))
-	_cut(_kit(r, "pdpa_sign", Vector3(1.1, 1.75, LOBBY.position.y + 0.02), 0.0, "PdpaSignLobby"), Vector3.FORWARD)
-	_kit_solid(r, "fire_extinguisher", Vector3(1.9, 0, 5.3), 0.0, "FireExtinguisher")
+	_kit(r, "brass_lamp", Vector3(1.7, 0.95, 6.86), 0.0, "EagleLamp")
+	_omni(r, "EagleLampLight", Color("ffe8c4"), 0.9, 2.6, Vector3(1.6, 1.3, 6.9))
+	_cut(_kit(r, "pdpa_sign", Vector3(LOBBY.end.x - 0.02, 1.75, EAGLE_TABLE.z), -90.0, "PdpaSignLobby"), Vector3.RIGHT)
+	_kit_solid(r, "fire_extinguisher", Vector3(1.98, 0, 8.12), -90.0, "FireExtinguisher")
 
 ## The marble stretch (photos 01, 15): white marble tiles with a few dark ones down the middle of the lobby, the red
 ## pleated floor lamp against the west wall and its red light (the house red that lit the lobby before).
 func _marble_stretch(g: Node) -> void:
 	_floor(g, MARBLE, _marble_mat(), 0.005, "MarbleFloor")
 	_kit_solid(g, "red_floor_lamp", RED_LAMP, 0.0, "RedFloorLamp")
-	_omni(g, "RedFloorLampLight", HOUSE_RED, 1.0, 4.5, RED_LAMP + Vector3(0.35, 1.45, 0.2))
+	_omni(g, "RedFloorLampLight", HOUSE_RED, 0.75, 4.0, RED_LAMP + Vector3(0.35, 1.45, 0.2))
 
 ## Marble tiles 0.5 m square (photos 01, 15): pale grey-white with soft veins, a few dark grey tiles, thin grout;
 ## a 2 m seamless image, world-triplanar like the cement, a little glossier.
@@ -1305,7 +1359,6 @@ func _poster_booth(g: Node) -> void:
 	_kit_solid(b, "booth_table", Vector3(0.36, 0, 14.15), 90.0, "BoothTable")
 	_kit(b, "table_lamp_lit", Vector3(0.32, 1.0, 13.98), 0.0, "BoothLamp")
 	_cut(_kit(b, "exit_sign", Vector3(0.06, 2.85, 14.15), 90.0, "ExitSignBooth"), Vector3.LEFT)
-	_omni(b, "BoothLight", NEON_RED, 0.9, 2.6, Vector3(0.9, 1.7, 14.1))
 
 ## The REAL mural (photos 03-05): the artist's spray-painted lettering and painter on a patch of pale plaster on the
 ## lounge wall's corridor face, from the corridor's middle to the Sticker door (texture by tools/venue_mural.py). It

@@ -885,9 +885,9 @@
    "name": "DiscLamp",
    "object": "wall_lamp",
    "position": [
-    3.4,
+    4.5,
     1.2,
-    0.65
+    0.15
    ],
    "rotation_y": 0.0,
    "scale": [
@@ -901,9 +901,25 @@
    "name": "CRT",
    "object": "crt_monitor",
    "position": [
-    4.05,
+    2.68,
+    0.75,
+    0.75
+   ],
+   "rotation_y": 120.0,
+   "scale": [
+    0.6,
+    0.6,
+    0.6
+   ],
+   "zone": "Lounge"
+  },
+  {
+   "name": "MemoryChair0",
+   "object": "drum_stool",
+   "position": [
+    4.15,
     0.0,
-    0.35
+    0.75
    ],
    "rotation_y": 0.0,
    "scale": [
@@ -914,8 +930,8 @@
    "zone": "Lounge"
   },
   {
-   "name": "MemoryChair0",
-   "object": "cafe_chair",
+   "name": "MemoryChair1",
+   "object": "drum_stool",
    "position": [
     5.75,
     0.0,
@@ -930,12 +946,12 @@
    "zone": "Lounge"
   },
   {
-   "name": "MemoryChair1",
-   "object": "cafe_chair",
+   "name": "MemoryPoster0_0",
+   "object": "poster_bc",
    "position": [
-    6.9,
-    0.0,
-    0.75
+    5.6,
+    1.35,
+    0.03
    ],
    "rotation_y": 0.0,
    "scale": [
@@ -946,12 +962,76 @@
    "zone": "Lounge"
   },
   {
-   "name": "BoxStool",
-   "object": "tall_stool",
+   "name": "MemoryPoster0_1",
+   "object": "poster_bc",
    "position": [
-    6.32,
-    0.0,
-    0.4
+    5.6,
+    2.0,
+    0.03
+   ],
+   "rotation_y": 0.0,
+   "scale": [
+    1.0,
+    1.0,
+    1.0
+   ],
+   "zone": "Lounge"
+  },
+  {
+   "name": "MemoryPoster1_0",
+   "object": "poster_bc",
+   "position": [
+    6.1,
+    1.35,
+    0.03
+   ],
+   "rotation_y": 0.0,
+   "scale": [
+    1.0,
+    1.0,
+    1.0
+   ],
+   "zone": "Lounge"
+  },
+  {
+   "name": "MemoryPoster1_1",
+   "object": "poster_bc",
+   "position": [
+    6.1,
+    2.0,
+    0.03
+   ],
+   "rotation_y": 0.0,
+   "scale": [
+    1.0,
+    1.0,
+    1.0
+   ],
+   "zone": "Lounge"
+  },
+  {
+   "name": "MemoryPoster2_0",
+   "object": "poster_bc",
+   "position": [
+    6.6,
+    1.35,
+    0.03
+   ],
+   "rotation_y": 0.0,
+   "scale": [
+    1.0,
+    1.0,
+    1.0
+   ],
+   "zone": "Lounge"
+  },
+  {
+   "name": "MemoryPoster2_1",
+   "object": "poster_bc",
+   "position": [
+    6.6,
+    2.0,
+    0.03
    ],
    "rotation_y": 0.0,
    "scale": [
@@ -1029,7 +1109,7 @@
    "name": "CollectiblesShelf",
    "object": "collectibles_shelf",
    "position": [
-    13.6,
+    11.5,
     0.0,
     0.22
    ],
@@ -1045,9 +1125,25 @@
    "name": "MerchRack",
    "object": "merch_rack",
    "position": [
-    11.85,
+    14.85,
     0.0,
-    0.3
+    12.75
+   ],
+   "rotation_y": -180.0,
+   "scale": [
+    0.85,
+    1.0,
+    1.0
+   ],
+   "zone": "Lounge"
+  },
+  {
+   "name": "MerchRackLamp",
+   "object": "table_lamp_lit",
+   "position": [
+    15.05,
+    0.55,
+    12.75
    ],
    "rotation_y": 0.0,
    "scale": [
@@ -1058,12 +1154,108 @@
    "zone": "Lounge"
   },
   {
+   "name": "RackFrame0",
+   "object": "wall_picture_framed",
+   "position": [
+    14.45,
+    2.05,
+    12.99
+   ],
+   "rotation_y": -180.0,
+   "scale": [
+    0.6,
+    0.6,
+    1.0
+   ],
+   "zone": "Lounge"
+  },
+  {
+   "name": "RackFrame1",
+   "object": "wall_picture_framed",
+   "position": [
+    14.85,
+    2.05,
+    12.99
+   ],
+   "rotation_y": -180.0,
+   "scale": [
+    0.6,
+    0.6,
+    1.0
+   ],
+   "zone": "Lounge"
+  },
+  {
+   "name": "RackFrame2",
+   "object": "wall_picture_framed",
+   "position": [
+    15.25,
+    2.05,
+    12.99
+   ],
+   "rotation_y": -180.0,
+   "scale": [
+    0.6,
+    0.6,
+    1.0
+   ],
+   "zone": "Lounge"
+  },
+  {
+   "name": "ExitSignStickerLounge",
+   "object": "exit_sign",
+   "position": [
+    13.65,
+    2.55,
+    12.93
+   ],
+   "rotation_y": -180.0,
+   "scale": [
+    1.0,
+    1.0,
+    1.0
+   ],
+   "zone": "Lounge"
+  },
+  {
+   "name": "ArcadeOnStand",
+   "object": "arcade_cabinet",
+   "position": [
+    12.6,
+    0.82,
+    12.69
+   ],
+   "rotation_y": -180.0,
+   "scale": [
+    0.75,
+    0.55,
+    0.75
+   ],
+   "zone": "Lounge"
+  },
+  {
+   "name": "ArcadeMirror",
+   "object": "mirror_wall_panel",
+   "position": [
+    12.6,
+    1.85,
+    13.01
+   ],
+   "rotation_y": -180.0,
+   "scale": [
+    0.8,
+    0.36,
+    1.0
+   ],
+   "zone": "Lounge"
+  },
+  {
    "name": "MerchStand",
    "object": "merch_stand",
    "position": [
-    13.6,
+    11.6,
     0.0,
-    1.55
+    6.6
    ],
    "rotation_y": 0.0,
    "scale": [
@@ -1093,9 +1285,9 @@
    "name": "MerchPlant",
    "object": "potted_plant",
    "position": [
-    15.05,
+    12.8,
     0.0,
-    0.45
+    0.35
    ],
    "rotation_y": 0.0,
    "scale": [
@@ -1109,7 +1301,7 @@
    "name": "CounterStool0",
    "object": "bar_stool",
    "position": [
-    11.55,
+    11.2,
     0.0,
     12.0
    ],
@@ -1125,7 +1317,7 @@
    "name": "CounterStool1",
    "object": "bar_stool",
    "position": [
-    12.5,
+    12.0,
     0.0,
     12.0
    ],
@@ -1237,7 +1429,7 @@
    "name": "LoungeVinyl0",
    "object": "vinyl_record_wall",
    "position": [
-    11.45,
+    11.2,
     1.3,
     12.99
    ],
@@ -1253,7 +1445,7 @@
    "name": "LoungeVinyl1",
    "object": "vinyl_record_wall",
    "position": [
-    12.05,
+    11.6,
     1.3,
     12.99
    ],
@@ -1269,7 +1461,7 @@
    "name": "LoungeVinyl2",
    "object": "vinyl_record_wall",
    "position": [
-    12.65,
+    12.0,
     1.3,
     12.99
    ],
@@ -1298,12 +1490,12 @@
    "zone": "Lounge"
   },
   {
-   "name": "LoungeTable0",
-   "object": "round_table",
+   "name": "CurtainN0",
+   "object": "curtain_panel",
    "position": [
-    11.0,
+    13.55,
     0.0,
-    5.0
+    0.12
    ],
    "rotation_y": 0.0,
    "scale": [
@@ -1314,12 +1506,140 @@
    "zone": "Lounge"
   },
   {
-   "name": "LoungeTable0Lamp",
+   "name": "CurtainN1",
+   "object": "curtain_panel",
+   "position": [
+    14.5,
+    0.0,
+    0.12
+   ],
+   "rotation_y": 0.0,
+   "scale": [
+    1.0,
+    1.0,
+    1.0
+   ],
+   "zone": "Lounge"
+  },
+  {
+   "name": "CurtainN2",
+   "object": "curtain_panel",
+   "position": [
+    15.45,
+    0.0,
+    0.12
+   ],
+   "rotation_y": 0.0,
+   "scale": [
+    1.0,
+    1.0,
+    1.0
+   ],
+   "zone": "Lounge"
+  },
+  {
+   "name": "CurtainE0",
+   "object": "curtain_panel",
+   "position": [
+    15.33,
+    0.0,
+    0.5
+   ],
+   "rotation_y": -90.0,
+   "scale": [
+    1.0,
+    1.0,
+    1.0
+   ],
+   "zone": "Lounge"
+  },
+  {
+   "name": "CurtainE1",
+   "object": "curtain_panel",
+   "position": [
+    15.33,
+    0.0,
+    1.45
+   ],
+   "rotation_y": -90.0,
+   "scale": [
+    1.0,
+    1.0,
+    1.0
+   ],
+   "zone": "Lounge"
+  },
+  {
+   "name": "CurtainE2",
+   "object": "curtain_panel",
+   "position": [
+    15.33,
+    0.0,
+    2.4
+   ],
+   "rotation_y": -90.0,
+   "scale": [
+    1.0,
+    1.0,
+    1.0
+   ],
+   "zone": "Lounge"
+  },
+  {
+   "name": "CurtainBufferLounge34",
+   "object": "curtain_panel",
+   "position": [
+    15.33,
+    0.0,
+    3.4
+   ],
+   "rotation_y": -90.0,
+   "scale": [
+    1.0,
+    1.0,
+    1.0
+   ],
+   "zone": "Lounge"
+  },
+  {
+   "name": "CurtainBufferLounge71",
+   "object": "curtain_panel",
+   "position": [
+    15.33,
+    0.0,
+    7.2
+   ],
+   "rotation_y": -90.0,
+   "scale": [
+    1.0,
+    1.0,
+    1.0
+   ],
+   "zone": "Lounge"
+  },
+  {
+   "name": "CornerTable",
+   "object": "communal_table",
+   "position": [
+    14.2,
+    0.0,
+    1.6
+   ],
+   "rotation_y": 90.0,
+   "scale": [
+    0.4,
+    1.0,
+    1.0
+   ],
+   "zone": "Lounge"
+  },
+  {
+   "name": "CornerTableLamp",
    "object": "table_lamp_lit",
    "position": [
-    10.9,
+    14.2,
     0.75,
-    4.95
+    1.2
    ],
    "rotation_y": 0.0,
    "scale": [
@@ -1330,12 +1650,12 @@
    "zone": "Lounge"
   },
   {
-   "name": "LoungeTable0Tealight0",
+   "name": "CornerTableTealight",
    "object": "tealight_lantern",
    "position": [
-    11.14,
+    14.3,
     0.75,
-    5.1
+    2.0
    ],
    "rotation_y": 0.0,
    "scale": [
@@ -1346,12 +1666,12 @@
    "zone": "Lounge"
   },
   {
-   "name": "LoungeTable0Glass0",
+   "name": "CornerTableGlassW0",
    "object": "beer_glass",
    "position": [
-    11.215,
+    13.95,
     0.75,
-    5.147
+    1.2
    ],
    "rotation_y": 0.0,
    "scale": [
@@ -1362,12 +1682,12 @@
    "zone": "Lounge"
   },
   {
-   "name": "LoungeTable0Glass1",
+   "name": "CornerTableGlassE0",
    "object": "beer_glass",
    "position": [
-    10.765,
+    14.45,
     0.75,
-    5.111
+    1.3
    ],
    "rotation_y": 0.0,
    "scale": [
@@ -1378,108 +1698,12 @@
    "zone": "Lounge"
   },
   {
-   "name": "LoungeTable0Glass2",
-   "object": "beer_glass",
-   "position": [
-    11.023,
-    0.75,
-    4.741
-   ],
-   "rotation_y": 0.0,
-   "scale": [
-    1.0,
-    1.0,
-    1.0
-   ],
-   "zone": "Lounge"
-  },
-  {
-   "name": "LoungeTable0Napkins",
-   "object": "napkin_cup",
-   "position": [
-    11.06,
-    0.75,
-    4.8
-   ],
-   "rotation_y": 0.0,
-   "scale": [
-    1.0,
-    1.0,
-    1.0
-   ],
-   "zone": "Lounge"
-  },
-  {
-   "name": "LoungeTable0Menu",
-   "object": "menu_card",
-   "position": [
-    10.76,
-    0.75,
-    5.12
-   ],
-   "rotation_y": 107.0,
-   "scale": [
-    1.0,
-    1.0,
-    1.0
-   ],
-   "zone": "Lounge"
-  },
-  {
-   "name": "LoungeTable0Chair0",
+   "name": "CornerTableChairW0",
    "object": "cafe_chair",
    "position": [
-    11.0,
+    13.45,
     0.0,
-    4.34
-   ],
-   "rotation_y": 0.0,
-   "scale": [
-    1.0,
-    1.0,
-    1.0
-   ],
-   "zone": "Lounge"
-  },
-  {
-   "name": "LoungeTable0Chair1",
-   "object": "cafe_chair",
-   "position": [
-    11.66,
-    0.0,
-    5.0
-   ],
-   "rotation_y": -90.0,
-   "scale": [
-    1.0,
-    1.0,
-    1.0
-   ],
-   "zone": "Lounge"
-  },
-  {
-   "name": "LoungeTable0Chair2",
-   "object": "cafe_chair",
-   "position": [
-    11.0,
-    0.0,
-    5.66
-   ],
-   "rotation_y": 180.0,
-   "scale": [
-    1.0,
-    1.0,
-    1.0
-   ],
-   "zone": "Lounge"
-  },
-  {
-   "name": "LoungeTable0Chair3",
-   "object": "cafe_chair",
-   "position": [
-    10.34,
-    0.0,
-    5.0
+    1.2
    ],
    "rotation_y": 90.0,
    "scale": [
@@ -1490,156 +1714,12 @@
    "zone": "Lounge"
   },
   {
-   "name": "LoungeTable1",
-   "object": "round_table",
-   "position": [
-    11.0,
-    0.0,
-    9.0
-   ],
-   "rotation_y": 0.0,
-   "scale": [
-    1.0,
-    1.0,
-    1.0
-   ],
-   "zone": "Lounge"
-  },
-  {
-   "name": "LoungeTable1Tealight0",
-   "object": "tealight_lantern",
-   "position": [
-    11.14,
-    0.75,
-    9.1
-   ],
-   "rotation_y": 0.0,
-   "scale": [
-    1.0,
-    1.0,
-    1.0
-   ],
-   "zone": "Lounge"
-  },
-  {
-   "name": "LoungeTable1Tealight1",
-   "object": "tealight_lantern",
-   "position": [
-    11.24,
-    0.75,
-    8.94
-   ],
-   "rotation_y": 0.0,
-   "scale": [
-    1.0,
-    1.0,
-    1.0
-   ],
-   "zone": "Lounge"
-  },
-  {
-   "name": "LoungeTable1Glass0",
-   "object": "beer_glass",
-   "position": [
-    11.215,
-    0.75,
-    9.147
-   ],
-   "rotation_y": 0.0,
-   "scale": [
-    1.0,
-    1.0,
-    1.0
-   ],
-   "zone": "Lounge"
-  },
-  {
-   "name": "LoungeTable1Glass1",
-   "object": "beer_glass",
-   "position": [
-    10.765,
-    0.75,
-    9.111
-   ],
-   "rotation_y": 0.0,
-   "scale": [
-    1.0,
-    1.0,
-    1.0
-   ],
-   "zone": "Lounge"
-  },
-  {
-   "name": "LoungeTable1Glass2",
-   "object": "beer_glass",
-   "position": [
-    11.023,
-    0.75,
-    8.741
-   ],
-   "rotation_y": 0.0,
-   "scale": [
-    1.0,
-    1.0,
-    1.0
-   ],
-   "zone": "Lounge"
-  },
-  {
-   "name": "LoungeTable1Napkins",
-   "object": "napkin_cup",
-   "position": [
-    11.06,
-    0.75,
-    8.8
-   ],
-   "rotation_y": 0.0,
-   "scale": [
-    1.0,
-    1.0,
-    1.0
-   ],
-   "zone": "Lounge"
-  },
-  {
-   "name": "LoungeTable1Menu",
-   "object": "menu_card",
-   "position": [
-    10.76,
-    0.75,
-    9.12
-   ],
-   "rotation_y": 107.0,
-   "scale": [
-    1.0,
-    1.0,
-    1.0
-   ],
-   "zone": "Lounge"
-  },
-  {
-   "name": "LoungeTable1Chair0",
+   "name": "CornerTableChairE0",
    "object": "cafe_chair",
    "position": [
-    11.0,
+    14.95,
     0.0,
-    8.34
-   ],
-   "rotation_y": 0.0,
-   "scale": [
-    1.0,
-    1.0,
-    1.0
-   ],
-   "zone": "Lounge"
-  },
-  {
-   "name": "LoungeTable1Chair1",
-   "object": "cafe_chair",
-   "position": [
-    11.66,
-    0.0,
-    9.0
+    1.2
    ],
    "rotation_y": -90.0,
    "scale": [
@@ -1650,14 +1730,14 @@
    "zone": "Lounge"
   },
   {
-   "name": "LoungeTable1Chair2",
-   "object": "cafe_chair",
+   "name": "CornerTableGlassW1",
+   "object": "beer_glass",
    "position": [
-    11.0,
-    0.0,
-    9.66
+    13.95,
+    0.75,
+    2.0
    ],
-   "rotation_y": 180.0,
+   "rotation_y": 0.0,
    "scale": [
     1.0,
     1.0,
@@ -1666,14 +1746,46 @@
    "zone": "Lounge"
   },
   {
-   "name": "LoungeTable1Chair3",
+   "name": "CornerTableGlassE1",
+   "object": "beer_glass",
+   "position": [
+    14.45,
+    0.75,
+    2.1
+   ],
+   "rotation_y": 0.0,
+   "scale": [
+    1.0,
+    1.0,
+    1.0
+   ],
+   "zone": "Lounge"
+  },
+  {
+   "name": "CornerTableChairW1",
    "object": "cafe_chair",
    "position": [
-    10.34,
+    13.45,
     0.0,
-    9.0
+    2.0
    ],
    "rotation_y": 90.0,
+   "scale": [
+    1.0,
+    1.0,
+    1.0
+   ],
+   "zone": "Lounge"
+  },
+  {
+   "name": "CornerTableChairE1",
+   "object": "cafe_chair",
+   "position": [
+    14.95,
+    0.0,
+    2.0
+   ],
+   "rotation_y": -90.0,
    "scale": [
     1.0,
     1.0,
@@ -11749,11 +11861,11 @@
    "name": "EagleTable",
    "object": "entrance_table",
    "position": [
-    1.1,
+    1.83,
     0.0,
-    5.42
+    7.2
    ],
-   "rotation_y": 0.0,
+   "rotation_y": -90.0,
    "scale": [
     1.0,
     1.0,
@@ -11765,11 +11877,11 @@
    "name": "EagleGreeter",
    "object": "eagle_greeter",
    "position": [
-    0.98,
+    1.86,
     0.95,
-    5.42
+    7.28
    ],
-   "rotation_y": 0.0,
+   "rotation_y": -90.0,
    "scale": [
     1.0,
     1.0,
@@ -11781,9 +11893,9 @@
    "name": "EagleLamp",
    "object": "brass_lamp",
    "position": [
-    1.45,
+    1.7,
     0.95,
-    5.55
+    6.86
    ],
    "rotation_y": 0.0,
    "scale": [
@@ -11797,11 +11909,11 @@
    "name": "PdpaSignLobby",
    "object": "pdpa_sign",
    "position": [
-    1.1,
+    2.13,
     1.75,
-    5.07
+    7.2
    ],
-   "rotation_y": 0.0,
+   "rotation_y": -90.0,
    "scale": [
     1.0,
     1.0,
@@ -11813,11 +11925,11 @@
    "name": "FireExtinguisher",
    "object": "fire_extinguisher",
    "position": [
-    1.9,
+    1.98,
     0.0,
-    5.3
+    8.12
    ],
-   "rotation_y": 0.0,
+   "rotation_y": -90.0,
    "scale": [
     1.0,
     1.0,
@@ -12293,7 +12405,7 @@
    "name": "EagleRoomDoorLeaf",
    "object": "staff_door",
    "position": [
-    1.075,
+    1.15,
     0.0,
     8.5
    ],
@@ -12309,7 +12421,7 @@
    "name": "ExitSignEagleRoom",
    "object": "exit_sign",
    "position": [
-    1.075,
+    1.15,
     2.35,
     8.66
    ],
@@ -12328,7 +12440,7 @@
   {
    "pose": "stand",
    "position": [
-    1.5,
+    1.12,
     0.0,
     7.2
    ],
@@ -12438,7 +12550,7 @@
   {
    "pose": "sit",
    "position": [
-    5.75,
+    4.15,
     0.0,
     0.75
    ],
@@ -12452,7 +12564,7 @@
   {
    "pose": "sit",
    "position": [
-    6.9,
+    5.75,
     0.0,
     0.75
    ],
@@ -12466,7 +12578,7 @@
   {
    "pose": "sit",
    "position": [
-    11.55,
+    11.2,
     0.0,
     12.0
    ],
@@ -12480,7 +12592,7 @@
   {
    "pose": "sit",
    "position": [
-    12.5,
+    12.0,
     0.0,
     12.0
    ],
@@ -12494,113 +12606,57 @@
   {
    "pose": "sit",
    "position": [
-    11.0,
+    13.45,
     0.0,
-    4.34
-   ],
-   "preset_slot": "PATRON",
-   "rotation_y": 0.0,
-   "seat_h": 0.45,
-   "spot": "Lounge_LoungeTable0_C0",
-   "table": "LoungeTable0",
-   "zone": "Lounge"
-  },
-  {
-   "pose": "sit",
-   "position": [
-    11.66,
-    0.0,
-    5.0
-   ],
-   "preset_slot": "PATRON",
-   "rotation_y": -90.0,
-   "seat_h": 0.45,
-   "spot": "Lounge_LoungeTable0_C1",
-   "table": "LoungeTable0",
-   "zone": "Lounge"
-  },
-  {
-   "pose": "sit",
-   "position": [
-    11.0,
-    0.0,
-    5.66
-   ],
-   "preset_slot": "PATRON",
-   "rotation_y": 180.0,
-   "seat_h": 0.45,
-   "spot": "Lounge_LoungeTable0_C2",
-   "table": "LoungeTable0",
-   "zone": "Lounge"
-  },
-  {
-   "pose": "sit",
-   "position": [
-    10.34,
-    0.0,
-    5.0
+    1.2
    ],
    "preset_slot": "PATRON",
    "rotation_y": 90.0,
    "seat_h": 0.45,
-   "spot": "Lounge_LoungeTable0_C3",
-   "table": "LoungeTable0",
+   "spot": "Lounge_CornerTable_W0",
+   "table": "CornerTable",
    "zone": "Lounge"
   },
   {
    "pose": "sit",
    "position": [
-    11.0,
+    14.95,
     0.0,
-    8.34
-   ],
-   "preset_slot": "PATRON",
-   "rotation_y": 0.0,
-   "seat_h": 0.45,
-   "spot": "Lounge_LoungeTable1_C0",
-   "table": "LoungeTable1",
-   "zone": "Lounge"
-  },
-  {
-   "pose": "sit",
-   "position": [
-    11.66,
-    0.0,
-    9.0
+    1.2
    ],
    "preset_slot": "PATRON",
    "rotation_y": -90.0,
    "seat_h": 0.45,
-   "spot": "Lounge_LoungeTable1_C1",
-   "table": "LoungeTable1",
+   "spot": "Lounge_CornerTable_E0",
+   "table": "CornerTable",
    "zone": "Lounge"
   },
   {
    "pose": "sit",
    "position": [
-    11.0,
+    13.45,
     0.0,
-    9.66
-   ],
-   "preset_slot": "PATRON",
-   "rotation_y": 180.0,
-   "seat_h": 0.45,
-   "spot": "Lounge_LoungeTable1_C2",
-   "table": "LoungeTable1",
-   "zone": "Lounge"
-  },
-  {
-   "pose": "sit",
-   "position": [
-    10.34,
-    0.0,
-    9.0
+    2.0
    ],
    "preset_slot": "PATRON",
    "rotation_y": 90.0,
    "seat_h": 0.45,
-   "spot": "Lounge_LoungeTable1_C3",
-   "table": "LoungeTable1",
+   "spot": "Lounge_CornerTable_W1",
+   "table": "CornerTable",
+   "zone": "Lounge"
+  },
+  {
+   "pose": "sit",
+   "position": [
+    14.95,
+    0.0,
+    2.0
+   ],
+   "preset_slot": "PATRON",
+   "rotation_y": -90.0,
+   "seat_h": 0.45,
+   "spot": "Lounge_CornerTable_E1",
+   "table": "CornerTable",
    "zone": "Lounge"
   },
   {

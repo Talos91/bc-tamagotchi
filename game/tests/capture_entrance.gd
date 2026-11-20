@@ -8,9 +8,12 @@ extends SceneTree
 ## Writes <tag>-<view>.png at 1080x1920 / 1920x1080.
 
 const VIEWS := [
-	# The arrival: the player at the street door, the eagle on its table greets them (bubble in the after set)
-	{"name": "entrance", "player": Vector3(0.9, 0.1, 7.6), "yaw": PI * 0.5, "arrive": true},
-	{"name": "entrance-top", "player": Vector3(0.9, 0.1, 7.6), "yaw": PI * 0.5, "cam": [Vector3(2.0, 2.9, 11.0), Vector3(0.6, 0.7, 6.0)]},
+	# The arrival: in by the street door (west wall), the eagle on its table against the east wall greets them
+	{"name": "entrance", "player": Vector3(1.12, 0.1, 7.2), "yaw": PI * 0.5, "arrive": true},
+	{"name": "entrance-top", "player": Vector3(1.12, 0.1, 7.2), "yaw": PI * 0.5, "cam": [Vector3(0.15, 2.4, 7.2), Vector3(2.15, 0.9, 7.2)]},
+	# Photo 13: from left of the falcon looking right, the door to the corridor beside the table
+	{"name": "eagle-door", "player": Vector3(0.5, 0.1, 6.0), "yaw": PI * 0.5, "cam": [Vector3(1.5, 1.6, 5.4), Vector3(1.15, 1.0, 8.6)]},
+	{"name": "eagle-close", "player": Vector3(0.5, 0.1, 6.0), "yaw": PI * 0.5, "cam": [Vector3(0.9, 1.5, 7.0), Vector3(2.0, 1.1, 7.25)]},
 	# The marble stretch with the red floor lamp, looking south to the booth
 	{"name": "corridor-marble", "player": Vector3(1.1, 0.1, 10.8), "yaw": 0.0},
 	{"name": "booth", "player": Vector3(1.1, 0.1, 12.6), "yaw": 0.0},
@@ -20,10 +23,14 @@ const VIEWS := [
 	{"name": "corridor-top", "player": Vector3(7.0, 0.1, 14.1), "yaw": -PI * 0.5, "cam": [Vector3(4.0, 2.4, 14.7), Vector3(9.0, 1.4, 13.3)]},
 	{"name": "sticker-door", "player": Vector3(12.6, 0.1, 14.2), "yaw": -PI * 0.5},
 	{"name": "sticker-door-top", "player": Vector3(11.0, 0.1, 14.4), "yaw": -PI * 0.5, "cam": [Vector3(13.65, 1.6, 14.8), Vector3(13.65, 1.3, 13.1)]},
-	{"name": "eagle-close", "player": Vector3(1.5, 0.1, 7.2), "yaw": PI * 0.5, "cam": [Vector3(1.2, 1.5, 6.9), Vector3(1.0, 1.0, 5.3)]},
-	# The lounge (photos 07-11)
+	# The lounge (photos 07-11): the Sticker door from inside (07), the memory corner (09), the curtained corner (08),
+	# the merch stand in the middle
 	{"name": "lounge", "player": Vector3(7.5, 0.1, 6.5), "yaw": PI},
 	{"name": "lounge-south", "player": Vector3(9.0, 0.1, 10.5), "yaw": PI},
+	{"name": "sticker-door-lounge", "player": Vector3(12.0, 0.1, 9.0), "yaw": PI, "cam": [Vector3(12.6, 1.8, 8.6), Vector3(13.6, 1.1, 13.0)]},
+	{"name": "memory-corner", "player": Vector3(7.0, 0.1, 4.0), "yaw": PI, "cam": [Vector3(7.6, 1.7, 4.6), Vector3(4.2, 0.8, 0.2)]},
+	{"name": "lounge-ne", "player": Vector3(10.0, 0.1, 5.0), "yaw": PI, "cam": [Vector3(8.6, 1.9, 2.0), Vector3(15.4, 1.0, 1.4)]},
+	{"name": "merch-centre", "player": Vector3(9.5, 0.1, 8.5), "yaw": PI, "cam": [Vector3(14.6, 2.8, 10.2), Vector3(11.6, 0.6, 6.6)]},
 ]
 
 var out := "res://../docs/art/screens/venue-entrance/after"

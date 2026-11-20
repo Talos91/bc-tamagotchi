@@ -352,7 +352,7 @@ func _booth_and_greeter() -> void:
 	check(main.session.greeted == "nam" and lines.size() == 1 and "Nam" in lines[0] and "Black Cabin" in lines[0], "Easy Sipper: the eagle welcomes, Nam waves first (%s)" % [lines])
 	check(cards.is_empty(), "no popup card for the entrance message")
 	var bird := main.get_tree().get_first_node_in_group("entrance_greeter") as Node3D
-	check(bird != null and bird.global_position.distance_to(Vector3(0.98, 0.95, 5.42)) < 0.05, "the eagle stands on the entrance table")
+	check(bird != null and bird.global_position.distance_to(Vector3(1.86, 0.95, 7.28)) < 0.05, "the eagle stands on the entrance table, east wall (build_venue EAGLE_AT)")
 	main.greet_at_door()
 	await process_frame
 	var bub: Control = main.eagle_bubble

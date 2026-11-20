@@ -5,12 +5,20 @@ local_5352afaa. Branch `wk/venue-entrance`, worktree `C:/Users/itisf/bc-wt/venue
 `handoffs/worker-reports-2026-11/venue-entrance.md`. Hub card `venue-entrance-review` (order 410).
 
 ## State now and next step: read this first
-- Built and committed on `wk/venue-entrance` (not pushed; the Verifier pushes). Daniele asked to see it in Blender before
-  it goes live: `blender/BlackCabin-entrance-review.blend` (not committed, regenerate with the two commands below) was
-  opened on his screen 2026-11-20 ~17:10. His Blender look and the card answer gate the push.
-- Next: his answer on the card / chat. Changes he asks for are layout edits in `game/tools/build_venue.gd`
-  (`_entrance_room`, `_marble_stretch`, `_poster_booth`, `_corridor_mural`, `_charging_kiosk`) and kit edits in
-  `tools/blender/bc_kit.py` (section "entrance round").
+- Successor (map-builder, load id 2026-11-20-map-builder-black-cabin-b7c402) built Daniele's corrections 1-6 (see the
+  HANDOVER list at the end) on `wk/venue-entrance`, rebased on origin/main; not pushed (the Verifier pushes). The review
+  file `blender/BlackCabin-entrance-review.blend` (10 cameras, near walls shown, two-tone walls) was reopened on his
+  screen 2026-11-20. Hub card `venue-entrance-review` carries the round-2 pictures (photo | game pairs).
+- Next: his answer on the card / chat. Same places to edit: `game/tools/build_venue.gd` (`_entrance_room`,
+  `_memory_corner`, `_curtain_corner`, `_sticker_door_lounge`, `_merch_shop`), then `tools/blender/bc_review.py` +
+  `bc_entrance_review.py` for the review file.
+- Merge script for layout.json own lines (round 2): the successor's report lists the name regex; the method is
+  export to a copy, take only own names (others' drift in the export: Mic0, PedalboardGtr, CurtainBack*, Backdrop*,
+  ElectricPiano, PatronsBoardMonth, Bay4, ReindeerHead, Band_Guitar/Keys — never merge those).
+- Open questions (for Daniele, not blocking): (a) QR codes LoungeTable0/1 (`docs/venue/qr/codes.json`,
+  `supabase/seed/venue_tables.sql`) now name tables that are gone from the game: reassign one to CornerTable or retire
+  them (presence role); (b) the arcade on its stand by the Sticker door is dressing only (the game machine stays
+  GameCabinet by the stairs): should it be playable?; (c) the high counter was shortened to 1.1 m to fit the arcade.
 
 ## Owner words (all 2026-11-20, chat)
 - "new round of venue picture this time we improve entrance entrance corridor and if needed lounge have a look, a thing
@@ -37,6 +45,10 @@ local_5352afaa. Branch `wk/venue-entrance`, worktree `C:/Users/itisf/bc-wt/venue
   `venue.eagle.name|welcome|welcome_anon` in `strings_venue.csv` (TH machine drafts).
 
 ## Gotchas
+- Player spawn is x 1.12 (main.tscn): the eagle table now stands at x 1.53-2.13 and the exit zone ends at x 0.96.
+- High counter stools 0.8 m apart: at 0.6 the HighCounter seat zone shrank past the navmesh and smoke_doors_sit failed.
+- bc_review puts west/south-facing cutaway walls in "VENUE ceiling and near walls" (excluded for the overview); the
+  entrance review re-includes it and excludes the KIT lineup (it stands inside the lounge).
 - The eagle-room door must be DOOR_W (1.2 m): at 0.96 m the navmesh (agent radius 0.4) closed it and smoke_tap failed.
 - Its wall pieces carry `cut_sight_only`: from the south (lobby camera looks north) the wall stands; it is cut only
   when it hides the player. The cut normal BACK alone would hide it in every lobby view.

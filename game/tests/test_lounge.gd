@@ -71,7 +71,7 @@ func _init() -> void:
 	var overlap := ""
 	if cab != null:
 		var mrect := Rect2(cab.global_position.x - 0.4, cab.global_position.z - 0.5, 0.8, 1.0)
-		for n in ["HighCounter", "CounterStool0", "CounterStool1", "StairPlant", "LoungeTable1"]:
+		for n in ["HighCounter", "CounterStool0", "CounterStool1", "StairPlant", "ArcadeOnStand"]:
 			var o: Node3D = venue.find_child(n, true, false)
 			if o != null and mrect.grow(0.25).has_point(Vector2(o.global_position.x, o.global_position.z)):
 				overlap += n + " "
@@ -82,7 +82,19 @@ func _init() -> void:
 	var cz: Dictionary = main.zones.first_of("cabinet")
 	check(not cz.is_empty() and Vector2(cz["approach"].x - 10.3, cz["approach"].z - 12.65).length() < 1.6, "the machine's zone sits at its new place")
 	var stand: Node3D = venue.find_child("MerchStand", true, false)
-	check(stand != null and stand.global_position.x > 11.0 and stand.global_position.z < 3.0, "merch counter top right (%s)" % (stand.global_position if stand else "missing"))
+	check(stand != null and stand.global_position.x > 9.5 and stand.global_position.x < 13.5 and stand.global_position.z > 4.5 and stand.global_position.z < 8.5,
+		"merch counter in the middle of the lounge (Daniele 2026-11-20) (%s)" % (stand.global_position if stand else "missing"))
+	var around := 0
+	if stand != null:   # walkable all round: the navmesh reaches a point 1.1 m off each side
+		var nav_map: RID = venue.get_world_3d().navigation_map
+		for off in [Vector3(1.6, 0, 0), Vector3(-1.6, 0, 0), Vector3(0, 0, 1.1), Vector3(0, 0, -1.1)]:
+			var want: Vector3 = stand.global_position + off
+			var got := NavigationServer3D.map_get_closest_point(nav_map, want)
+			if Vector2(got.x - want.x, got.z - want.z).length() < 0.15:
+				around += 1
+	check(around == 4, "players walk all round the merch counter (%d of 4 sides on the navmesh)" % around)
+	for n in ["LoungeTable0", "LoungeTable1"]:
+		check(venue.find_child(n, true, false) == null, "%s removed (Daniele 2026-11-20)" % n)
 	var board: Node3D = venue.find_child("PatronsBoard", true, false)
 	var up_rect := Rect2(2.35, 7.75, 1.6, 3.6)   # build_venue STAIR_UPPER: the second flight along the west wall
 	check(board != null and absf(board.global_position.x - up_rect.end.x) < 0.2 and board.global_position.z > up_rect.position.y and board.global_position.z < up_rect.end.y and board.global_position.y + 1.0 < 1.6,
@@ -139,7 +151,7 @@ func _init() -> void:
 		await open_and_check(z, func(sh): return sh.find_child("Picture", true, false) != null and sh.find_child("Info_message", true, false) != null, "portrait %d sheet opens with the picture" % r)
 
 	print("taps")
-	await tap_object("merch", Vector3(11.4, 0.1, 3.2), stand.global_position + Vector3(0, 0.95, 0.1) if stand else Vector3.ZERO)
+	await tap_object("merch", Vector3(14.0, 0.1, 6.6), stand.global_position + Vector3(0, 0.95, 0.1) if stand else Vector3.ZERO)
 	await tap_object("patrons", Vector3(7.0, 0.1, 9.0), board.global_position + Vector3(0.1, 0.5, 0) if board else Vector3.ZERO)
 	var f3: Node3D = venue.find_child("Portrait3", true, false)
 	await tap_object("portrait:3", Vector3(2.0, 0.1, 14.0), f3.global_position + Vector3(0, 0.4, -0.05) if f3 else Vector3.ZERO)

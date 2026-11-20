@@ -330,9 +330,10 @@ func _init() -> void:
 	await corner("main room NW (top-left)", Vector3(23.2, 0.1, 2.6), ["WestTable0", "WestTable1"])
 	await corner("main room SW (bottom-left)", Vector3(22.0, 0.1, 10.3), ["OpeningTall0", "OpeningTall1"])
 	await corner("meeting room (buffer zone)", Vector3(17.7, 0.1, 5.3), ["BufferTall0", "BufferTall1", "BufferTall2", "BufferTall3"])
-	await corner("lounge, middle", Vector3(8.0, 0.1, 6.0), ["LongTable", "LoungeTable0"])
-	await corner("lounge, north-east", Vector3(11.5, 0.1, 2.6), ["MerchStand", "CollectiblesShelf"])   # the merch shop since the lounge revamp
-	await corner("lounge, south", Vector3(9.5, 0.1, 9.5), ["LoungeTable1", "LongTable"])
+	await corner("lounge, middle", Vector3(8.0, 0.1, 6.0), ["LongTable"])
+	await corner("lounge, north-east", Vector3(11.5, 0.1, 2.6), ["CornerTable", "CollectiblesShelf"])   # the curtained corner (photo 08, 2026-11-20)
+	await corner("lounge, south", Vector3(9.5, 0.1, 9.5), ["LongTable"])
+	await corner("lounge, merch stand", Vector3(14.0, 0.1, 6.6), ["MerchStand"])   # in the middle since 2026-11-20, seen from its east side
 	# Stubs: a cut box wall is replaced by its 0.4 m stub, never by nothing
 	teleport(Vector3(23.2, 0.1, 2.6))
 	await frames(30)

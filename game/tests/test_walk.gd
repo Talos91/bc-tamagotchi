@@ -148,7 +148,7 @@ func _init() -> void:
 	worst.sort_custom(func(a, b): return a[0] > b[0])
 	for i in mini(worst.size(), 25):
 		print("    ", worst[i][1])
-	check(total > 300, "enough walks sampled: %d" % total)
+	check(total >= 280, "enough walks sampled: %d" % total)   # 300 since the two lounge round tables went (2026-11-20)
 	check(bad == 0, "no tap-walk stops short (> %.1f m) or stalls: %d of %d failed" % [MAX_SHORT, bad, total])
 
 	print("walk-stuck: stick held straight at a goal 3 to 6 m away, 2 s")
