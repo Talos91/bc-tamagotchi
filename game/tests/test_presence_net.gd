@@ -74,6 +74,7 @@ func _offline() -> void:
 	await _offline_queue()
 	await _report_and_delete()
 	await _check_out()
+	await _still_here()
 	await _autoload_hook()
 	await _perf()
 
@@ -360,9 +361,9 @@ func _check_out() -> void:
 	var rows: Array = (await z.tonight(true))["presences"]
 	check(not find(rows, x.player_id()).is_empty() and not find(rows, y.player_id()).is_empty(),
 		"a player who did not scan sees both check-ins")
-	mock.now_override += 3 * 3600.0   # hours later, phones locked: no expiry
+	mock.now_override += 80 * 60.0   # phones locked, "Still here?" not answered yet (E): still in until 90 min
 	rows = (await z.tonight(true))["presences"]
-	check(not find(rows, x.player_id()).is_empty(), "no expiry: still shown hours later the same night")
+	check(not find(rows, x.player_id()).is_empty(), "no heartbeat: still shown 80 min later with phones locked")
 	var r: Dictionary = await x.check_out()
 	check(r.get("ok") and r.get("was_in"), "Leave: check_out ok (%s)" % r)
 	check(x.my_table == "", "my_table cleared on Leave")
@@ -377,6 +378,49 @@ func _check_out() -> void:
 	rows = (await y.tonight(true))["presences"]
 	check(not find(rows, x.player_id()).is_empty(), "after the re-scan the others see them again")
 	for n in [x, y, z]:
+		n.queue_free()
+
+
+## E (Daniele 11-21): "Still at Black Cabin?" an hour after the check-in and every hour after a Yes; no answer in
+## 30 minutes checks out.
+func _still_here() -> void:
+	var t0 := bkk(2026, 12, 4, 20)
+	mock.now_override = t0
+	var x: Node = await client("everyone", "Still")
+	var y: Node = await client("everyone", "Watcher")
+	await x.checkin(Mock.code_for("Table1"))
+	await y.checkin(Mock.code_for("Table2"))
+	var asked := []
+	x.still_due_changed.connect(func(d): asked.append(d))
+	mock.now_override = t0 + 59 * 60.0
+	await x.tonight(true)
+	check(not x.still_due, "59 min after the check-in: no prompt yet")
+	mock.now_override = t0 + 61 * 60.0
+	var tx: Dictionary = await x.tonight(true)
+	check(x.still_due and asked == [true], "61 min: still_due set, signal once (%s)" % [asked])
+	check(absf(x.still_deadline - (t0 + 90 * 60.0)) < 1.0, "deadline = check-in + 90 min")
+	var r: Dictionary = await x.still_here()
+	check(r.get("ok") and not x.still_due, "Yes, I'm here: ok, prompt cleared")
+	mock.now_override = t0 + 61 * 60.0 + 59 * 60.0
+	await x.tonight(true)
+	check(not x.still_due, "59 min after the Yes: no prompt")
+	mock.now_override = t0 + 61 * 60.0 + 61 * 60.0
+	await x.tonight(true)
+	check(x.still_due, "an hour after the Yes: asked again")
+	mock.now_override = t0 + 61 * 60.0 + 91 * 60.0
+	var rows: Array = (await y.tonight(true))["presences"]
+	check(find(rows, x.player_id()).is_empty(), "no answer within 30 min: the others no longer see them")
+	tx = await x.tonight(true)
+	check(not tx.get("me_checked_in") and x.my_table == "" and not x.still_due, "and they read as checked out")
+	r = await x.still_here()
+	check(r.get("reason") == "left", "a late Yes answers left (scan again)")
+	r = await x.checkin(Mock.code_for("Table1"))
+	check(r.get("ok"), "re-scan checks in again")
+	rows = (await y.tonight(true))["presences"]
+	check(not find(rows, x.player_id()).is_empty(), "seen again after the re-scan")
+	await x.tonight(true)
+	check(not x.still_due, "the re-scan restarts the hour")
+	for n in [x, y]:
 		n.queue_free()
 
 

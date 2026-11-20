@@ -119,6 +119,17 @@ func my_table() -> String:
 
 
 var checked_out := false        ## Leave pressed (hotfix 3)
+var still := false              ## tests: the hourly "Still at Black Cabin?" is due
+var still_answers: Array = []   ## tests: each "Yes, I'm here"
+
+func still_due() -> bool:
+	return still and not checked_out
+
+
+func still_here(cb: Callable) -> void:
+	still = false
+	still_answers.append(Time.get_unix_time_from_system())
+	cb.call({"ok": true})
 
 func check_out(cb: Callable) -> void:
 	checked_out = true

@@ -87,6 +87,9 @@ func _ready() -> void:
 	player.set_avatar(needs.avatar())
 	zones.player = player
 	session.setup(needs, zones, player)
+	var pat := get_node_or_null("Venue/Patrons")
+	if pat != null and pat.has_signal("leave_requested"):
+		pat.leave_requested.connect(func(): session.leave())   # "Still at Black Cabin?" -> Leave (presence hotfix E)
 	hud.setup(session, needs)
 	zones.zone_changed.connect(_on_zone_changed)
 	hud.prompt_pressed.connect(func(): open_sheet(zones.current))

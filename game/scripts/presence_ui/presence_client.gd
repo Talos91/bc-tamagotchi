@@ -49,6 +49,10 @@ class RealSource extends RefCounted:
 		return str(node.my_table)
 	func check_out(cb: Callable) -> void:
 		cb.call(await node.check_out())
+	func still_due() -> bool:
+		return bool(node.still_due)
+	func still_here(cb: Callable) -> void:
+		cb.call(await node.still_here())
 	func mark_read(ids: Array) -> void:
 		node.mark_read(ids)
 	func hide(id: String) -> void:
@@ -255,6 +259,20 @@ static func check_out(cb := Callable()) -> void:
 	if not active():
 		return
 	_source.check_out(func(r: Dictionary):
+		if cb.is_valid():
+			fire(cb, [r]))
+
+
+## The hourly "Still at Black Cabin?" wants an answer (Daniele 2026-11-21; set by the last tonight list).
+static func still_due() -> bool:
+	return active() and _source.still_due()
+
+
+## "Yes, I'm here". cb.call({ok, reason}); reason "left" = too late, checked out.
+static func still_here(cb := Callable()) -> void:
+	if not active():
+		return
+	_source.still_here(func(r: Dictionary):
 		if cb.is_valid():
 			fire(cb, [r]))
 

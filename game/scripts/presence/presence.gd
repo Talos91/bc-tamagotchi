@@ -14,6 +14,7 @@ signal checked_in(answer: Dictionary)
 signal tonight_changed(presences: Array, added: Array, removed: Array)
 signal inbox_changed(count: int)
 signal status_changed(status: String)
+signal still_due_changed(due: bool)   ## "Still at Black Cabin?" is waiting for an answer (20261121000002)
 
 const Config = preload("res://scripts/presence/presence_config.gd")
 const Api = preload("res://scripts/presence/presence_api.gd")
@@ -50,6 +51,8 @@ var _code_read := false
 var _poll: Timer
 var _inbox_count := 0
 var _auth_busy := false
+var still_due := false                ## bc_tonight still_due: the hourly "Still at Black Cabin?" wants an answer
+var still_deadline := 0.0             ## unix time: no answer by then = checked out
 var my_table := ""                    ## the viewer's table tonight (check-in answer, then bc_tonight my_table); "" = not in
 var _closing := false                 ## out of the tree: pending calls answer "offline", nothing resumes on a freed node
 
@@ -219,6 +222,8 @@ func tonight(force := false) -> Dictionary:
 		var cached: Array = _tonight.get("presences", [])
 		return {"ok": false, "reason": r.get("reason", "server"), "presences": cached}
 	my_table = str(r.get("my_table", "")) if r.get("me_checked_in", false) else ""
+	still_deadline = float(r["still_deadline"]) if r.get("still_deadline") != null else 0.0
+	_set_still(bool(r.get("still_due", false)))
 	var old := _ids(_tonight.get("presences", []))
 	var new_ids := _ids(r.get("presences", []))
 	_tonight = r
@@ -238,8 +243,28 @@ func check_out() -> Dictionary:
 	if not is_active() or player_id() == "":
 		return {"ok": true, "skipped": true}
 	my_table = ""
+	_set_still(false)
 	_tonight_at = -1.0e9
 	return await _rpc("bc_check_out", {}, LONG_TIMEOUT_S)
+
+
+## "Yes, I'm here": the hour starts again. Too late: {ok:false, reason:"left"} (checked out; scan again).
+func still_here() -> Dictionary:
+	if not is_active() or player_id() == "":
+		return {"ok": false, "reason": "off"}
+	var r := await _rpc("bc_still_here", {}, LONG_TIMEOUT_S)
+	if r.get("ok", false) or r.get("reason", "") == "left":
+		_set_still(false)
+		_tonight_at = -1.0e9
+	if r.get("reason", "") == "left":
+		my_table = ""
+	return r
+
+
+func _set_still(due: bool) -> void:
+	if due != still_due:
+		still_due = due
+		still_due_changed.emit(due)
 
 
 func send_verb(to: String, kind: String, payload := {}) -> Dictionary:

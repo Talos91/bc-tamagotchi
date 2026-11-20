@@ -46,6 +46,7 @@ const PresenceClient = preload("res://scripts/presence_ui/presence_client.gd")
 const Badge = preload("res://scripts/presence_ui/presence_badge.gd")
 const PresenceTaps = preload("res://scripts/presence_ui/presence_taps.gd")
 const OverflowSeats = preload("res://scripts/presence_ui/overflow_seats.gd")
+const UIS = preload("res://scripts/ui/ui_strings.gd")
 const PresenceInbox = preload("res://scripts/presence_ui/presence_inbox.gd")
 const UI = preload("res://scripts/minigames/mg_ui.gd")
 const INBOX_POLL_S := 20.0      ## received verbs show within this (hotfix 3); the list itself keeps PRESENCE_POLL_S
@@ -92,6 +93,7 @@ var _door_point := Vector3.INF      ## where late check-ins come in (Wander_Lobb
 var _poll_t := 0.0
 var _polling := false
 var _inbox_t := 0.0
+signal leave_requested           ## "Still at Black Cabin?" answered Leave: main.gd leaves as with the HUD button
 static var _shown_events := {}  ## event id -> true: each received verb is announced once per run
 
 func _ready() -> void:
@@ -358,6 +360,66 @@ func _on_inbox(items: Array) -> void:
 		show_banner("
 ".join(lines.slice(maxi(0, lines.size() - 3))))
 
+## "Still at Black Cabin?" (Daniele 2026-11-21: an hour after the check-in, and every hour after a Yes; a push goes
+## to phones that allowed it; no answer within 30 minutes checks the player out on the server). Yes, I'm here
+## restarts the hour; Leave leaves the bar as the HUD button does (and checks out).
+func show_still_prompt() -> Control:
+	var have := get_node_or_null("StillPrompt")
+	if have != null:
+		return have.get_child(0)
+	var layer := CanvasLayer.new()
+	layer.name = "StillPrompt"
+	layer.layer = 60
+	add_child(layer)
+	var dim := ColorRect.new()
+	dim.color = Color(UI.BG_DEEP, 0.7)
+	dim.set_anchors_preset(Control.PRESET_FULL_RECT)
+	dim.mouse_filter = Control.MOUSE_FILTER_STOP
+	layer.add_child(dim)
+	var center := CenterContainer.new()
+	center.set_anchors_preset(Control.PRESET_FULL_RECT)
+	dim.add_child(center)
+	var panel := PanelContainer.new()
+	panel.custom_minimum_size = Vector2(UI.dp(300), 0)
+	panel.add_theme_stylebox_override("panel", UI.box(UI.BG_BASE, 20, UI.GOLD, 2.0))
+	center.add_child(panel)
+	var pad := MarginContainer.new()
+	for side in ["left", "right", "top", "bottom"]:
+		pad.add_theme_constant_override("margin_" + side, int(UI.dp(18)))
+	panel.add_child(pad)
+	var col := VBoxContainer.new()
+	col.add_theme_constant_override("separation", int(UI.dp(10)))
+	pad.add_child(col)
+	col.add_child(UI.title(UIS.t("ui.presence.still.title"), 24))
+	col.add_child(UI.wrap(UI.label(UIS.t("ui.presence.still.body"), 14, UI.SMOKE)))
+	var yes := UI.button(UIS.t("ui.presence.still.yes"), "primary")
+	yes.name = "Yes"
+	yes.pressed.connect(func():
+		layer.queue_free()
+		PresenceClient.still_here(func(r: Dictionary):
+			if not r.get("ok", false) and r.get("reason", "") == "left" and is_inside_tree():
+				show_banner(UIS.t("ui.presence.still.too_late"))))
+	col.add_child(yes)
+	var leave := UI.button(UIS.t("ui.presence.still.leave"), "ghost")
+	leave.name = "Leave"
+	leave.pressed.connect(func():
+		layer.queue_free()
+		leave_requested.emit())
+	col.add_child(leave)
+	return dim
+
+## The prompt waits for a visit (not over the start screen); the venue's first list may come before it.
+func _ask_still() -> void:
+	var n := _needs()
+	if n == null or n.visit_active:
+		show_still_prompt()
+	elif n.has_signal("visit_started") and not n.visit_started.is_connected(_on_visit_for_still):
+		n.visit_started.connect(_on_visit_for_still, CONNECT_ONE_SHOT)
+
+func _on_visit_for_still(_info: Dictionary) -> void:
+	if is_inside_tree() and PresenceClient.still_due():
+		show_still_prompt()
+
 ## A short banner at the top of the screen (received verbs).
 func show_banner(text: String) -> Control:
 	var layer := CanvasLayer.new()
@@ -385,6 +447,8 @@ func show_banner(text: String) -> Control:
 func _on_tonight(list: Array, ok: bool) -> void:
 	if not ok or not is_inside_tree():
 		return   # offline: keep who is shown (§8)
+	if PresenceClient.still_due():
+		_ask_still()
 	var ids := {}
 	for p: Dictionary in list:
 		ids[str(p.get("player_id", ""))] = true

@@ -176,3 +176,8 @@ ui.presence.checkin.err.bad_code,This code doesn't work. Ask the staff for help.
 ui.presence.checkin.err.other,Check-in didn't work. Try again in a minute.,เช็กอินไม่สำเร็จ ลองใหม่อีกครั้งในอีกสักครู่,Check-in failed: anything else,60
 ui.presence.checkin.skip,Not now,ไว้ทีหลัง,Check-in card: walk in without checking in,14
 ui.start.telemetry,Perf and game results are sent with your name,ข้อมูลประสิทธิภาพและผลเกมจะถูกส่งพร้อมชื่อของคุณ,"Start screen, small line under Tap to enter: the one-line telemetry notice (perf reports + gameplay results go to the Black Cabin server, Daniele 11-19/11-20). TH is a machine draft",48
+ui.presence.still.title,Still at Black Cabin?,ยังอยู่ที่ Black Cabin ไหม?,Hourly check-in prompt title,28
+ui.presence.still.body,"Tap Yes to stay checked in. No answer in 30 minutes checks you out.",แตะ ใช่ เพื่ออยู่ต่อ ถ้าไม่ตอบใน 30 นาทีจะเช็กเอาต์ให้อัตโนมัติ,Hourly check-in prompt body,90
+ui.presence.still.yes,"Yes, I'm here",ใช่ ยังอยู่,Hourly prompt: stay checked in,18
+ui.presence.still.leave,Leave,ออกจากร้าน,Hourly prompt: leave the bar (checks out),14
+ui.presence.still.too_late,You were checked out. Scan your table's code to check in again.,คุณถูกเช็กเอาต์แล้ว สแกนโค้ดที่โต๊ะเพื่อเช็กอินอีกครั้ง,Banner when Yes came after the 30 minutes,70

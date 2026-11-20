@@ -28,6 +28,8 @@ var push_per_sender := 1
 var push_from_hour := 19
 var push_until_hour := 2
 var tablemate_window_min := 45
+var still_after_min := 60     ## "Still at Black Cabin?" after this long (20261121000002_still_here.sql)
+var still_grace_min := 30     ## no answer within this: checked out
 var verbs_per_night := 40
 
 var codes := {}               ## code -> {table_id, label, zone, active}
@@ -120,6 +122,7 @@ func rpc(fn: String, args: Dictionary, token: String, _timeout: float) -> Dictio
 				args.get("p_avatar", {}), str(args.get("p_mode", "")))
 		"bc_tonight": return _tonight(uid)
 		"bc_check_out": return _check_out(uid)
+		"bc_still_here": return _still_here(uid)
 		"bc_send_verb": return _send_verb(uid, str(args.get("p_to", "")), str(args.get("p_kind", "")), args.get("p_payload", {}))
 		"bc_inbox": return _inbox(uid)
 		"bc_mark_read": return _mark_read(uid, args.get("p_ids", []))
@@ -207,7 +210,7 @@ func add_fakes(n: int, seed_value := 7) -> Array:
 		var tid: String = tables[rng.randi() % tables.size()]
 		var at := t - rng.randf_range(0.0, 3.0 * 3600.0)
 		checkins["%s|%d" % [uid, night_of(t)]] = {"player_id": uid, "night": night_of(t), "table_id": tid, "at": at,
-			"first_at": at, "display_name": nm, "avatar": av, "visibility": "everyone"}
+			"first_at": at, "display_name": nm, "avatar": av, "visibility": "everyone", "confirmed_at": t}
 		ids.append(uid)
 	return ids
 
@@ -284,7 +287,7 @@ func _check_in(uid: String, code: String, name: String, avatar, mode: String) ->
 	else:
 		moved = checkins[k]["table_id"] != vt["table_id"]
 		checkins[k].merge({"table_id": vt["table_id"], "at": t, "display_name": p["display_name"],
-			"avatar": p["avatar"], "visibility": mode, "left": false}, true)
+			"avatar": p["avatar"], "visibility": mode, "left": false, "confirmed_at": 0.0}, true)
 	if mode != "nobody":
 		for ck in checkins:
 			var c: Dictionary = checkins[ck]
@@ -303,6 +306,26 @@ func _check_in(uid: String, code: String, name: String, avatar, mode: String) ->
 		"first_of_night": first, "moved": moved, "tablemates": mates}
 
 
+func _still_base(c: Dictionary) -> float:
+	return maxf(float(c["at"]), float(c.get("confirmed_at", 0.0)))
+
+
+func _still_expired(c: Dictionary) -> bool:
+	return now() >= _still_base(c) + (still_after_min + still_grace_min) * 60.0
+
+
+func _gone(c: Dictionary) -> bool:
+	return c.get("left", false) or _still_expired(c)
+
+
+func _still_here(uid: String) -> Dictionary:
+	var k := "%s|%d" % [uid, night_of(now())]
+	if not checkins.has(k) or _gone(checkins[k]):
+		return {"ok": false, "reason": "left"}
+	checkins[k]["confirmed_at"] = now()
+	return {"ok": true, "next_at": now() + still_after_min * 60.0}
+
+
 ## Leave (hotfix 3): the row stays (tonight's count, a re-scan is not a first scan) but nobody is shown it.
 func _check_out(uid: String) -> Dictionary:
 	var k := "%s|%d" % [uid, night_of(now())]
@@ -312,11 +335,11 @@ func _check_out(uid: String) -> Dictionary:
 
 
 func _presences(viewer: String, n: int) -> Array:
-	var here: bool = checkins.has("%s|%d" % [viewer, n]) and not checkins["%s|%d" % [viewer, n]].get("left", false)
+	var here: bool = checkins.has("%s|%d" % [viewer, n]) and not _gone(checkins["%s|%d" % [viewer, n]])
 	var rows := []
 	for ck in checkins:
 		var c: Dictionary = checkins[ck]
-		if c["night"] != n or c.get("left", false):
+		if c["night"] != n or _gone(c):
 			continue
 		var pid: String = c["player_id"]
 		var me := pid == viewer
@@ -355,6 +378,8 @@ func _tonight(uid: String) -> Dictionary:
 	var n := night_of(t)
 	var open := is_open(t)
 	var mine: Dictionary = checkins.get("%s|%d" % [uid, n], {})
+	if not mine.is_empty() and _gone(mine):
+		mine = {}
 	var pres := []
 	var last := []
 	if open:
@@ -366,7 +391,8 @@ func _tonight(uid: String) -> Dictionary:
 				last.append({"player_id": x["player_id"], "display_name": x["display_name"], "avatar": x["avatar"]})
 	return {"ok": true, "night": night_str(n), "open": open, "me_checked_in": open and not mine.is_empty(),
 		"my_table": str(mine.get("table_id", "")) if open else "", "presences": pres, "last_night": last,
-		"server_time": t}
+		"server_time": t, "still_due": open and not mine.is_empty() and t >= _still_base(mine) + still_after_min * 60.0,
+		"still_deadline": _still_base(mine) + (still_after_min + still_grace_min) * 60.0 if not mine.is_empty() else null}
 
 
 func _send_verb(uid: String, to: String, kind: String, payload) -> Dictionary:

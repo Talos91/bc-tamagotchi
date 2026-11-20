@@ -226,6 +226,17 @@ func _init() -> void:
 	pat._on_inbox([{"id": 901, "kind": "wave", "payload": {}, "from": {"player_id": who, "display_name": "Jack"}}])
 	check(pat.get_children().filter(func(c): return String(c.name).begins_with("PresenceBanner")).size() == 1,
 		"the same verb is announced once")
+	print("still")
+	var prompt: Control = pat.show_still_prompt()
+	check(prompt != null and pat.show_still_prompt() == prompt, "Still at Black Cabin? prompt: one at a time")
+	(prompt.find_child("Yes", true, false) as Button).pressed.emit()
+	await process_frame
+	check(fake.still_answers.size() == 1 and pat.get_node_or_null("StillPrompt") == null, "Yes answers and closes it")
+	var left := [false]
+	pat.leave_requested.connect(func(): left[0] = true)
+	prompt = pat.show_still_prompt()
+	(prompt.find_child("Leave", true, false) as Button).pressed.emit()
+	check(left[0], "Leave asks main to leave the bar")
 	await _free(main)
 
 	PresenceClient.reset()
