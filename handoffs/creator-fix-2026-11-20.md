@@ -1,6 +1,6 @@
 # 🖼️ creator-fix — role note (2026-11-20)
 
-Worker chain under orchestrator local_5352afaa. First session: Opus 5.5, ui profile, load id
+Worker chain under orchestrator local_5352afaa; **from 2026-11-20 evening the orchestrator is local_14422c6c-6819-4921-bfc9-af16d4185b7b: report there, not to local_5352afaa.** First session: Opus 5.5, ui profile, load id
 2026-11-20-ui-black-cabin-b3ce6e (the successor loads its own and reports with both ids). Worktree
 `C:/Users/itisf/bc-wt/creator-fix` on `wk/creator-fix`, based on origin/main 649a06a. Never push.
 
