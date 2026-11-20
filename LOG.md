@@ -340,3 +340,4 @@ Append-only. One dated line per event, newest last. Never edit earlier lines.
 - 2026-11-20 — Daniele: "Start it tonight" → 🎮 minigame-ramp-1120 (Opus, local_b65235c8) from the queued brief; Godot only on 'Godot free'; ramp table on card minigame-ramp-review needs Daniele's OK before shipping.
 - 2026-11-20 verify-b607586-creator: PASS 36/36 + web, pushed b607586, deploy green, live bc-356c6c7b
 - 2026-11-20 — Daniele OK on minigame-ramp-review: "ok yes go" (3 strikes, per-game caps). creator-fix 2 PUSHED b607586 (36/36, web 61.3 MB, deploy 44762207569 green, blackcabin.app = bc-356c6c7b). Godot free → merch-shop. Shared .git/index corrupt again (2nd time tonight), rebuilt with read-tree HEAD.
+- 2026-11-20 — Daniele: "don t ask for permission ... have every session continue until all is pushed LIVE" → workers apply their own Supabase migrations and proceed to live without asking; PROJECT Tests 36.
