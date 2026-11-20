@@ -2,10 +2,10 @@
 
 ## LIVE
 - Live site https://bc-tamagotchi.vercel.app = Daniele's redeploy of 11-19 (0.3.1 + sprites era). **Daniele 11-19: no more redeploys until all is ready = v0.4.0.**
-- origin/main **54b1e94** = v0.3.3 + all 8 minigames wired with rivals + test_feel fix (3e489c1, 27/27) + docs. Supabase bc-tamagotchi-presence LIVE https://czrbsjalcjekcslylwbt.supabase.co (Singapore, free; ethos paused; anon sign-ins on).
+- origin/main **773025e = v0.4.0** (+docs) on top of v0.3.3 + all 8 minigames wired with rivals + test_feel fix (3e489c1, 27/27) + docs. Supabase bc-tamagotchi-presence LIVE https://czrbsjalcjekcslylwbt.supabase.co (Singapore, free; ethos paused; anon sign-ins on).
 
 ## IN FLIGHT
-- **v0.4.0 release = local main 773025e** (not on origin): presence backend + client (wave 1: QR check-in, friends in your bar with live badge, late walk-ins, reactions, inbox, web push), UI build (I2 neon-tube need glyphs, D2 Back-bar skin `game/scripts/ui/bc_skin.gd`, Tilt Neon OFL), Tests 30, changelog closes 0.3.3, bump 0.4.0 (a929206), presence integration fix 0ad0264. **🔍 verify-040 local_8702f6fa re-verifying 773025e** (first try 26/30 → fixed). On push: give Daniele `python tools/build_web.py --deploy --out %LOCALAPPDATA%c-web`, archive verify-040, push docs.
+- **v0.4.0 release = local main 773025e** (not on origin): presence backend + client (wave 1: QR check-in, friends in your bar with live badge, late walk-ins, reactions, inbox, web push), UI build (I2 neon-tube need glyphs, D2 Back-bar skin `game/scripts/ui/bc_skin.gd`, Tilt Neon OFL), Tests 30, changelog closes 0.3.3, bump 0.4.0 (a929206), presence integration fix 0ad0264. **PUSHED 773025e = v0.4.0** (verify-040: 30/30 + web, .pck 20.0 MB, push-sw.js in the service worker, Tilt Neon in the pck; archived). **Redeploy command given to Daniele 11-20; awaiting his deploy + friend test** (real device and live Supabase not verified).
 - Before his friend test: blackcabin.app does NOT resolve (attached on Vercel; DNS non-existent) → QR codes use it; fallback `https://bc-tamagotchi.vercel.app/?t=<code>`. Push to a real phone NOT DONE (iPhone needs home-screen install). Presence in web build ON by default (`?presence=off|fake`), inert headless (08b v1.2 §1.1).
 - No other workers running. Next jobs after the release: 🧹 Housekeeping (cards listed below, archive answered hub cards, chase list), telemetry client hook (auto report per visit → `Presence.perf_report()`), real-phone checks from Daniele's friend, song job (item 34), Nov/Dec posters → events JSON.
 
