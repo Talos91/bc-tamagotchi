@@ -56,7 +56,10 @@ func _init() -> void:
 	var total := 0
 	var tables := ["Table0", "Table1", "Table2", "Table3", "Table4", "WestTable0", "WestTable1", "RectTableW",
 		"RectTableE", "EastTable", "OpeningTall0", "OpeningTall1", "LongTable", "BufferTall0", "BufferTall1",
-		"BufferTall2", "BufferTall3", "Bar"]
+		"BufferTall2", "BufferTall3", "Bar",
+		# QR remake 2026-11-20: the small and raised tables have codes too
+		"Tiny0", "Tiny1", "Tiny2", "Tiny3", "Tiny4", "Tiny5", "TinyE0", "TinyE1", "TinyE2",
+		"Raised0", "Raised1", "Raised2", "Raised3", "Raised4"]
 	for t in tables:
 		var sl: Dictionary = ov.slots(t)
 		check(not sl.is_empty(), "%s: slots computed" % t)
