@@ -1,66 +1,91 @@
-# Report: perf-iphone-1120 (🖼️ UI worker, Opus 5.5, 2026-11-20; mobile optimisation round, iPhone first)
+# Report: perf-iphone-1120 (🖼️ UI worker, Opus 5.5, 2026-11-20/21; mobile optimisation round, iPhone first)
 
-Owner words (Daniele 2026-11-20, via the orchestrator): an optimisation round for mobile, especially iPhones, on top of the venue update. Load id 2026-11-20-ui-black-cabin-152930.
+Owner words (Daniele 2026-11-20, via the orchestrator): an optimisation round for mobile, especially iPhones, on top of the
+venue update; "my whole phone overheat", the app "cannot be installed", the phone keeps showing an old build, and "add a
+full screen button in the interface to force full screen (vertical)". Load ids 2026-11-20-ui-black-cabin-152930 (first
+worker) and 2026-11-20-ui-black-cabin-b09079 (successor).
 
 ## EVIDENCE
-- Branch `wk/perf-iphone` (worktree `C:/Users/itisf/bc-wt/perf-iphone`), base 4e9dbc8 (venue entrance round 4). Tip: see the commit that adds this report. Not pushed, no version bump.
-- Suites: SUITES_LINE
-- Hub card **perf-iphone-1120-review** (order 411): 3 pictures (portrait, landscape, carpet zoom) + 3 files; one question (ship it / something looks different).
-- Captures: `docs/art/screens/perf-iphone-1120/` (card sheets); all 21 views before/after, portrait and landscape, PNG: `C:/Users/itisf/bc-wt/pi-out/` (`b-p`/`a3-p`, `b-l`/`a-l`; logs `views-*.log`, `probe-pb.log`/`probe-pa3.log`).
-- iPhone test script: `docs/tech/iphone-test-script.md` (8 steps). Docs: `docs/tech/03-web-build.md` § Static merge and the iPhone round.
-- Supabase perf rows: **not read**. The Supabase connector is off and needs Daniele's OK; and `perf_reports` can only hold rows once the client hook is wired (`Presence.perf_report()` is called nowhere yet, STATE "telemetry client hook"), and RLS lets a player read only their own rows. So there is no phone data yet.
+- Branch `wk/perf-iphone` (worktree `C:/Users/itisf/bc-wt/perf-iphone`), rebased on origin/main **0b5fa04** (v0.4.4:
+  overflow, telemetry, QR remake, creator-fix 2, merch shop, check-in hotfixes, endless minigames, presence fixes,
+  still-here prompt). Code commit 3e6127e (was 48492a9 before the rebase), captures 080c3ea, then this report and the
+  separate version commit **0.4.5** (orchestrator's order). Not pushed (verify-queue-1120 pushes).
+- Rebase: two additive conflicts (DECISIONS.md rows, strings_ui.csv rows), both sides kept. project.godot: main's six
+  autoloads all kept + FramePacer.
+- Suites on the rebased tree, each with its own empty APPDATA: **38/38 PASS, rc=0** (the 36 of PROJECT.md +
+  `test_battery_saver` (new, this job) + `test_merch_profile` (on main, missing from PROJECT.md's list)). Logs
+  `C:/Users/itisf/bc-wt/pi-suites/` (`summary.txt`). Before the rebase: 32/32 PASS on 48492a9. smoke_version re-run
+  after the bump (see the version commit).
+- Hub cards: **perf-iphone-1120-review** (order 411, merge pictures) — answered "ok" by Daniele 2026-11-20 13:53 (not yet
+  in DECISIONS: orchestrator). **perf-iphone-1120-saver** (order 412, new): full-screen button pictures + ONE question,
+  battery saver on by default for phones (30 venue / 15 idle; rec: yes).
+- Captures: `docs/art/screens/perf-iphone-1120/` (card sheets, incl. `fullscreen-{portrait,landscape}.jpg`); full-screen
+  raw shots `C:/Users/itisf/bc-wt/pi-out/fs/`; 20 views before/after on 0b5fa04, PNG: `pi-out/b44-p`/`a45-p`,
+  `b44-l`/`a45-l` (logs `views-b44-*.log`, `views-a45-*.log`, `probe-pb44.log`, `probe-pa45.log`, `saver45.log`,
+  `sw45b.log`, `sw45fresh.log`).
+- iPhone test script: `docs/tech/iphone-test-script.md` (8 steps). Docs: `docs/tech/03-web-build.md` § Static merge and
+  the iPhone round.
+- Telemetry: Supabase read 2026-11-20 (connector on, then off): `perf_reports` 0 rows ever; `play_events` 2 rows, both a
+  worker's tests. Daniele's phone sent nothing (the live build then had no hook). No real-phone data.
 
 ## Method
-Before = clean worktree of 4e9dbc8 (`C:/Users/itisf/bc-wt/perf-iphone-base`), after = this branch. Godot 4.6.1 console exe from godot-local, Compatibility renderer, RTX laptop.
-- Per view: `tools/perf_views.gd --fixed-fps 30 -- --win 720x1560 --phone` (portrait; 3D 480x1040, MSAA off) and `--win 1560x720` (landscape), on the private hidden desktop (hd.ps1), one fresh APPDATA per run, same frame for before and after; pixel diff = share of pixels whose grey difference > 8.
-- Memory in the venue: `tools/perf_probe.gd -- --skip-intro` at 750x1624 (Godot monitors). Start screen in the web build: `tools/web_probe.js` (bcPeak) in the built-in browser, 375x812, `?phone=1&dpr=3` (cap 2 on), local server, hidden pane.
-- Download: live https://blackcabin.app (2ce7624) with curl, raw and brotli. Load: local builds, page open -> `start:title`, 3 runs each.
+Before = clean worktree of origin/main 0b5fa04 (`C:/Users/itisf/bc-wt/perf-iphone-base`), after = this branch rebased on
+it. Godot 4.6.1 console (godot-local), Compatibility renderer, RTX laptop.
+- Per view: `tools/perf_views.gd --fixed-fps 30 -- --win 720x1560 --phone` (portrait; 3D 480x1040, MSAA off) and
+  `--win 1560x720` (landscape), on the private hidden desktop (hd.ps1), fresh APPDATA per run, same frame before/after;
+  pixel diff = share of pixels whose grey difference > 8.
+- Memory in the venue: `tools/perf_probe.gd -- --skip-intro` at 750x1624 (Godot monitors).
+- Web: local export of this branch (`pi-tools/build45.py`, godot-local exe), served locally, headless Chrome over CDP:
+  `saver_test.mjs` (draw calls/s, phone emulated) and `sw_test.mjs` (service-worker update path, installability).
 
-## Ranked costs (before, 4e9dbc8)
-| # | cost | evidence |
-|---|---|---|
-| 1 | Static venue meshes drawn one by one (1,430 mesh instances, 3,329 surfaces; ~2,400 draws in Corridor) | ablations: Corridor 3,247 draws, shadow off 2,474, patrons off 3,068 |
-| 2 | Key-light shadow pass (~770-860 draws: 277 casters left alone, each surface a draw) | shadow off: Lobby 1,452 -> 588, Corridor 3,247 -> 2,474 |
-| 3 | Download: pck 22.7 MB raw / 17.8 MB brotli (barely compresses), wasm 37.7 / 8.9 MB | curl on blackcabin.app |
-| 4 | GPU memory at the start screen ~94 MB: render targets 43.6 (two full-screen RGBA16F 18.6, two depth 9.3, shadow map 8), font atlases 10 (ten 512x512), corridor mural 2048x640 5, corridor neon 3.9, portraits 3.7 | `bcGroups()` |
-| 5 | Patrons (~73 merged figures, ~180 draws; skinning GPU) | patrons off: Corridor -179 draws, GPU -3.6 ms (desktop) |
-| 6 | 42 lights: no extra draws (lit in the base pass), GPU -0 to -5 % on desktop with all omni/spot off; per-pixel cost on a phone GPU not measurable here | ablation `omni` |
-| 7 | Start: title ~6-9 s after page open on a local server (wasm compile + pck + scene), no network | bcSceneT, 3 runs |
-Minigames: not measured separately; the 3D venue pauses behind a minigame frame (Q2, test_venue_pause).
-
-## Before / after
-| | before (4e9dbc8) | after | how |
+## Before / after (on 0b5fa04, v0.4.4)
+| | before (main 0b5fa04) | after (this branch) | how |
 |---|---|---|---|
-| Draws, Corridor (portrait) | 3,244 | 1,533 | perf_views |
-| Draws, Curtains | 3,167 | 1,426 | |
-| Draws, Corridor End | 2,152 | 1,109 | |
-| Draws, Floor | 1,790 | 1,045 | |
-| Draws, Lobby / Bar / Stage | 1,453 / 939 / 1,112 | 890 / 525 / 762 | |
-| Draws, all 21 views | 522-3,244 | 425-1,533 (-17 to -53 %) | |
-| Draws, landscape Corridor / Floor / Bar | 1,716 / 2,036 / 1,292 | 1,016 / 1,087 / 618 | |
-| Render CPU ms, Corridor (desktop) | 12.8 | 5.7-8.9 | noisy between runs |
-| Pixels changed, same frame | - | 0-0.2 % (Stage 1.0 % portrait incl. version label; carpet speckle) | |
-| GPU buffers in the venue | 18.2 MB | 25.9 MB (+7.7) | perf_probe |
-| GPU total in the venue (vram) | 95.7 MB | 103.3 MB | perf_probe |
-| Start screen GPU (web, cap 2) | 93.6 MB | 97.1 MB | bcPeak |
-| .pck / .wasm | 22.75 / 37.69 MB | 22.75 / 37.69 MB | local export |
-| Page open -> title (local) | 6.1 / 8.0 / 9.2 s | 7.7 / 8.4 / 7.6 s | same within noise |
-| Merge work at load | - | 0.48 s native, sliced 6 ms/frame over ~41 frames | |
+| Draws, Corridor (portrait) | 3,216 | 1,524 (-53 %) | perf_views |
+| Draws, Curtains | 3,176 | 1,433 (-55 %) | |
+| Draws, Corridor End | 2,131 | 1,103 | |
+| Draws, Floor | 1,792 | 1,047 | |
+| Draws, Lobby / Bar / Stage | 1,463 / 918 / 1,120 | 900 / 504 / 770 | |
+| Draws, all 20 views portrait | 524-3,216 (sum 25,162) | 426-1,524 (sum 14,747, -41 %); every view -16 to -55 % | |
+| Draws, all 20 views landscape | 569-2,124 (sum 20,839) | 415-1,097 (sum 12,679, -39 %); every view -22 to -53 % | |
+| Render CPU ms, Corridor / Curtains (desktop) | 9.5 / 8.6 | 7.9 / 7.4 | noisy, suites ran alongside |
+| GPU ms, Corridor / Curtains (desktop) | 8.3 / 7.5 | 6.6 / 6.4 | |
+| Pixels changed, same frame | - | 0-0.1 % in 35 of 40 shots; Stage 0.9 / 0.8 % (carpet speckle, as on the first card); landscape Floor 0.8 %, Merch 0.2 %; landscape Bar 3.8 % = the mirror ball at a different turn (its merged copy is parented under DiscoBall in code, so it still turns) | cmp.py |
+| GPU memory in the venue (vram) | 89.8 MB | 97.5 MB (+7.7, mesh buffers 18.0 -> 25.8) | perf_probe |
+| Web, start screen, phone emulated: draw calls/s | 73,860 (`?saver=0`) | 20,558 (default) ; frames drawn 60 -> 16.6/s | saver_test |
+| Web .pck / .wasm (this branch) | - | 23.29 / 37.69 MB (pck grew from 22.75 with main's new assets; this branch adds scripts only) | local export |
+| Install check (Chrome, fresh profile) | live: `manifest-display-not-supported` | 0 errors | sw_test |
+| Update path | live: old build kept (Godot's cache-first worker) | from Godot's old worker: the new build loads at the next open; the build after it takes over within 22 s on its own | sw_test |
 
 ## What changed
-- `game/scripts/venue_batch.gd`: `merge_static` on, rewritten: light pairing by the engine's own light boxes (`Light3D.get_aabb()`), greedy chunks per 8 m cell kept at <= 8 lights, a chunk made only when it draws fewer surfaces (also one mesh of many surfaces, e.g. the 60 shelf tiles of 17 surfaces), identical materials share a surface, untextured plain colours join via a 1x1 white texture, glass surfaces kept in a `_Rest` child, retired casters stay shadow-only, vertices compressed, material checks cached, packed-array maths (1.25 s -> 0.44 s native), sliced over frames. `shadow_proxies`: a single caster with several surfaces gets a proxy too.
-- `game/scripts/venue.gd`: calls the sliced merge. `game/tools/perf_merge.gd` (new): what is merged and what is left, per group.
-- Docs: `docs/tech/03-web-build.md`, `docs/tech/iphone-test-script.md`; captures `docs/art/screens/perf-iphone-1120/`.
+1. Static merge on (`game/scripts/venue_batch.gd` `merge_static`): chunks keep <= 8 lights by the engine's own light
+   boxes, same pixels, sliced over frames in a `MergeWorker` node (6 ms/frame). Shadow proxies extended.
+2. Battery saver (`game/scripts/frame_pacer.gd`, autoload FramePacer): touch phones on the web draw 30 fps in the venue,
+   15 after 20 s without a touch, uncapped in minigames; `?saver=0/1`; Debug > Performance > Battery saver.
+3. Full-screen button (`game/scenes/ui/fullscreen_button.gd`, HUD title row): Fullscreen API + portrait lock; iPhone:
+   "Add to Home Screen for full screen" hint for 6 s. Capture-only `force_show` + `tests/capture_fullscreen.gd`.
+4. Install + update (`tools/build_web.py` pwa_patch, preset display standalone + iOS meta): installable; service worker
+   skipWaiting, clients.claim, network-first page, one reload when it replaces an older build's cache.
+5. `test_battery_saver` (new suite) guards 2 and 3 and a venue_batch parse error.
 
-## Left, and why (questions only if the friend's phone still struggles; on the card, recommendation: none now)
-- Look trade-offs, not decided: shadow map 2048 -> 1024 on phones (-6 MB), iPhone pixel ratio cap 2 -> 1.5 (-44 % pixels, softer), corridor mural 2048x640 -> 1024x320 (-3.75 MB), MSDF fonts (one atlas instead of ten, slightly different text edges).
-- Bigger jobs, no look change, proposed as follow-ups: a custom web export template without unused engine modules (wasm 37.7 MB -> est. 25 MB, needs an emscripten build); minigame art in a second pck fetched on first play (-~3.5 MB from the first download); texture compression (ETC2/ASTC) for phones would need `.import` settings in git (they are gitignored on purpose), so it is an owner/tech decision.
-- `merge_static` keeps the originals' meshes alive (scene cache), so the merged copies cost +7.7 MB; freeing them saved only 1.7 MB and was dropped.
-- Not verified: a real iPhone, the web build in a visible browser (the pane was hidden: no frame rates), landscape web numbers.
+## Left, and why
+- Look trade-offs, not decided (only if the friend's phone still struggles): shadow map 2048 -> 1024 on phones (-6 MB),
+  iPhone pixel ratio cap 2 -> 1.5, corridor mural 2048x640 -> 1024x320, MSDF fonts.
+- Bigger jobs, no look change, follow-ups: custom web export template without unused modules (wasm 37.7 -> est. 25 MB),
+  minigame art in a second pck, ETC2/ASTC texture compression (needs `.import` settings in git: owner/tech decision).
+- In portrait the iPhone hint covers the pet tag for its 6 s (left as is).
+- PROJECT.md's suite list lacks `test_merch_profile` and `test_battery_saver` (orchestrator adds suites).
+- Not verified: a real iPhone or Android phone; the battery saver's effect on heat; the web build in a visible browser;
+  in a Chrome profile that had the old build, the install check still reported the old manifest error during the test
+  (fresh profile: 0 errors); iPhone Safari's Add to Home Screen.
 
 ## Incidents
-- My worktree's index stayed as `index.lock` after `git worktree add` (Drive mount), so `git status` showed every file deleted; renamed the finished lock to `index` (no git process running), status clean after.
-- The first import of the base worktree crashed (FATAL index -1 in a CSV import) while another session ran Godot; the retry passed.
+- Drive-mount worktree index left as `index.lock` after `git worktree add`; renamed (no git running).
+- A first import of the base worktree crashed while another session ran Godot; the retry passed.
+- `bc-perf2/build.py` calls the Ooze Godot path and fails with an empty APPDATA (no export templates): wrapped in
+  `pi-tools/build45.py` with the godot-local exe and the normal APPDATA.
+- The first worker hit 41 % context and handed over; the successor finished from the role note.
 
 ## Profile note
-- Loaded as `ui`; this is the fourth perf job on the ui profile. A `perf` / tech-art profile (measure, ablate, same-frame captures, web probe) would fit; suggest `request_agent` at the next organize pass.
+- Loaded as `ui`; the fifth perf job on the ui profile. A `perf` / tech-art profile (measure, ablate, same-frame captures,
+  web probe, headless Chrome) would fit; suggest `request_agent` at the next organize pass.
