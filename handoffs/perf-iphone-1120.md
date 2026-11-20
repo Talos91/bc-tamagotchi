@@ -75,3 +75,12 @@ worker: 2026-11-20-ui-black-cabin-152930 (capture replies_to). Self-handover at 
 - `git worktree add` on the Drive mount can leave `index.lock` instead of `index`: with no git running, rename it.
 - QR codes / table codes / presence check-in tables: do NOT touch (Daniele testing tonight).
 - Scrolling on phones belongs to creator-fix-1120, not here.
+
+## DONE (2026-11-21, successor)
+- Rebased on origin/main 0b5fa04 (v0.4.4); conflicts DECISIONS.md + strings_ui.csv, both sides kept; autoloads: main's six
+  + FramePacer. 38/38 suites PASS (pi-suites/summary.txt + test_merch_profile.log; smoke_version45.log shows v0.4.5).
+- Re-measured on 0b5fa04: draws -41 % portrait / -39 % landscape (Corridor 3,216 -> 1,524), vram 89.8 -> 97.5 MB,
+  saver 73,860 -> 20,558 draw calls/s, install 0 errors (fresh profile), SW update path OK (sw45b.log, sw45fresh.log).
+  Landscape Bar 3.8 % pixel diff = mirror ball turn phase (merged copy parented under DiscoBall).
+- Report rewritten; LOG line; last commit = "Version 0.4.5" (project.godot only). Next: Verifier verify-queue-1120 pushes.
+- Tools added: pi-tools/suites37.sh, views4.ps1, probe4.ps1, build45.py (godot-local exe, real APPDATA for templates).
