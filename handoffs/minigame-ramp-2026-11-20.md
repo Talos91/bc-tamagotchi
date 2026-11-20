@@ -29,3 +29,7 @@ C:/Users/itisf/bc-wt/minigame-ramp), load id 2026-11-20-rules-powers-black-cabin
   q7 (never ends: needs abandon()), q8 (pour spill loop hangs), q9 (rhythm/candle never end), capture_rivals_hooks
   (pour round never ends). Use capture_ramp.gd for the endless look.
 - Unused now, kept for test_strings: mg.*.status keys of the 8 games.
+
+## Done (2026-11-20 night)
+- Suites 37/37 headless with empty APPDATA; captures on the hidden desktop; card minigame-ramp-review has the 8
+  pictures. Report: handoffs/worker-reports-2026-11/minigame-ramp.md. Tip = the 0.4.2 version bump commit.
