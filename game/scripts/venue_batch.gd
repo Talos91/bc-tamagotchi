@@ -41,7 +41,12 @@ static func _proxy_root(root: Node3D, stats: Dictionary, min_casters: int) -> vo
 	_gather(root, root, casters, subs)
 	for sub in subs:
 		_proxy_root(sub, stats, 2)
-	if casters.size() < min_casters:
+	var surfaces := 0
+	for mi in casters:
+		surfaces += mi.mesh.get_surface_count()
+	if casters.size() < min_casters and surfaces < 2:   # one caster of several surfaces still saves draws (perf-iphone)
+		return
+	if casters.is_empty():
 		return
 	var buckets := {}   # cull mode -> [PackedVector3Array, PackedInt32Array]
 	var inv: Transform3D = root.global_transform.affine_inverse()
@@ -131,40 +136,92 @@ static func _append_positions(mesh: Mesh, s: int, xf: Transform3D, b: Array) -> 
 
 # --- static meshes (main pass) --------------------------------------------------------------------------------------
 
-## Cell size of a merged chunk (metres, x and z) and the most lights one chunk may be touched by: the Compatibility
-## renderer lights each object with at most rendering/limits/opengl/max_lights_per_object (8), so a chunk that would
-## gather more is split into its single meshes again (left as they were).
-## OFF (2026-11-19): measured -8 to -22 % draws in the wide views (Corridor 2,926 -> 2,275) but it shifts the
-## lighting on some corridor wall pieces (2.7 % of pixels, captures in docs/art/screens/perf-telemetry/) and adds
-## speckles where coplanar stage-floor faces now share one draw. Kept for a later pass; venue.gd calls it only when on.
-const MERGE_STATIC := false
-const CELL := 4.0
+## Cell size of a merged chunk (metres, x and z) and the most lights one chunk may be paired with: the Compatibility
+## renderer lights each object with at most rendering/limits/opengl/max_lights_per_object (8) of the omni / spot
+## lights whose box (Light3D.get_aabb(), a cube of the range for an omni) overlaps the object's box. A chunk is only
+## made when every light any of its meshes was lit by is still among its own at most 8: then each pixel gets the same
+## lights as before (a light that pairs with the bigger box but reaches none of its vertices adds exactly 0).
+## 2026-11-19 (perf-telemetry): first version off, it counted lights by sphere, fewer than the engine pairs, so some
+## chunks lost a light (2.7 % of corridor pixels). 2026-11-20 (perf-iphone): pairing by the engine's own boxes, a chunk
+## grows mesh by mesh while it stays within 8 lights, identical materials share a surface, untextured plain ones too.
+const MERGE_STATIC := true
+const CELL := 8.0
 const MAX_LIGHTS := 8
 
 ## Every static, opaque venue mesh drawn on layer 1 is merged per group (and per cut-away piece), per CELL and per
-## material: plain textured ones (venue kit, seam texture) into one surface with colour / roughness / metallic per
-## vertex (PLAIN_SHADER), others per identical material. The originals stay in the tree with layers = 0 (drawn by no
-## camera), so nothing that looks them up changes.
-static func merge_static(venue: Node3D) -> Dictionary:
-	var stats := {"meshes": 0, "chunks": 0, "surfaces": 0}
+## material: plain ones (venue kit, seam texture, or a plain colour) into one surface with colour / roughness /
+## metallic per vertex (PLAIN_SHADER), others per identical material. The originals stay in the tree with layers = 0
+## (drawn by no camera), so nothing that looks them up changes.
+## Work per frame when `sliced` (venue.gd): the merge runs over the first frames of the start screen instead of
+## holding the title back (~0.4 s native, ~1 s or more in a phone browser).
+const SLICE_MS := 6
+## Merged chunks store their vertices compressed (positions 16-bit within the chunk's box, as the imported kit meshes
+## are): the copies cost ~11 MB of GPU buffers uncompressed (perf-iphone 2026-11-20).
+const COMPRESS := true
+
+static func merge_static(venue: Node3D, sliced := false) -> Dictionary:
+	var stats := {"meshes": 0, "chunks": 0, "surfaces": 0, "lit_out": 0, "jobs": []}
 	if not enabled:
 		return stats
-	var lights: Array = []
+	var lights: Array[AABB] = []
 	for l in venue.find_children("*", "Light3D", true, false):
 		if not l is DirectionalLight3D:
-			lights.append([(l as Light3D).global_position, float(l.get("omni_range") if l is OmniLight3D else l.get("spot_range"))])
+			lights.append((l as Light3D).global_transform * (l as Light3D).get_aabb())
 	for g in venue.get_children():
 		if g is Node3D and not String(g.name) in SKIP_GROUPS and g.get_script() == null:
-			_merge_root(g, lights, stats, 1)
+			_merge_root(g, lights, stats, 1)   # plans the chunks (cheap); the vertex work is in _make_chunk
+	if sliced:
+		var w := MergeWorker.new()
+		w.name = "MergeWorker"
+		w.stats = stats
+		w.vb = load("res://scripts/venue_batch.gd")
+		venue.add_child(w)
+		return stats
+	for j in stats.jobs:
+		_make_chunk(j[0], j[1], j[2], j[3], stats)
+	_done(stats)
 	return stats
 
 
-static func _merge_root(root: Node3D, lights: Array, stats: Dictionary, min_meshes: int) -> void:
+static func _done(stats: Dictionary) -> void:
+	for k in ["jobs", "mats", "white"]:
+		stats.erase(k)
+
+
+## Runs the planned chunks a few milliseconds per frame (the start screen keeps its frame rate). A child of the venue,
+## so it goes with it; no coroutine is left waiting if the game quits mid-way.
+class MergeWorker extends Node:
+	var stats: Dictionary
+	var vb: GDScript
+
+	func _process(_d: float) -> void:
+		var t0 := Time.get_ticks_usec()
+		var jobs: Array = stats.jobs
+		while not jobs.is_empty() and Time.get_ticks_usec() - t0 < SLICE_MS * 1000:
+			var j: Array = jobs.pop_front()
+			if is_instance_valid(j[0]):
+				vb._make_chunk(j[0], j[1], j[2], j[3], stats)
+		stats.frames = stats.get("frames", 0) + 1
+		if jobs.is_empty():
+			vb._done(stats)
+			queue_free()
+
+
+## Indices of the lights whose boxes overlap `box` (the engine's pairing test).
+static func _lights_of(box: AABB, lights: Array[AABB]) -> PackedInt32Array:
+	var out := PackedInt32Array()
+	for i in lights.size():
+		if lights[i].intersects(box):
+			out.append(i)
+	return out
+
+
+static func _merge_root(root: Node3D, lights: Array[AABB], stats: Dictionary, min_meshes: int) -> void:
 	var all: Array[MeshInstance3D] = []
 	var subs: Array[Node3D] = []
 	_gather_static(root, root, all, subs)
 	for sub in subs:
-		_merge_root(sub, lights, stats, 2)
+		_merge_root(sub, lights, stats, 1)
 	if all.size() < min_meshes:
 		return
 	var cells := {}
@@ -176,53 +233,130 @@ static func _merge_root(root: Node3D, lights: Array, stats: Dictionary, min_mesh
 		cells[k].append(mi)
 	var inv: Transform3D = root.global_transform.affine_inverse()
 	for k in cells:
-		var list: Array = cells[k]
-		if list.size() < 2:
-			continue
-		var box: AABB = (list[0] as MeshInstance3D).global_transform * (list[0] as MeshInstance3D).get_aabb()
-		for mi in list:
-			box = box.merge((mi as MeshInstance3D).global_transform * (mi as MeshInstance3D).get_aabb())
-		var n_lights := 0
-		for l in lights:
-			var p: Vector3 = l[0]
-			if (p.clamp(box.position, box.end) - p).length() <= l[1]:
-				n_lights += 1
-		if n_lights > MAX_LIGHTS:
-			stats.lit_out = stats.get("lit_out", 0) + list.size()
-			continue
-		var groups := {}
-		for mi: MeshInstance3D in list:
-			var xf: Transform3D = inv * mi.global_transform
-			for s in mi.mesh.get_surface_count():
-				var mat := mi.get_active_material(s) as BaseMaterial3D
-				var src := mi.mesh.surface_get_arrays(s)
-				var fmt := _fmt_of(src)
-				var plain := _plain_textured(mat) and not fmt & (Mesh.ARRAY_FORMAT_TEX_UV2 | Mesh.ARRAY_FORMAT_BONES)
-				var key := ("plain|%d" % mat.albedo_texture.get_rid().get_id() if plain else "mat|%d" % mat.get_instance_id()) + "|%d" % (fmt & (Mesh.ARRAY_FORMAT_NORMAL | Mesh.ARRAY_FORMAT_TANGENT | Mesh.ARRAY_FORMAT_TEX_UV | Mesh.ARRAY_FORMAT_TEX_UV2 | Mesh.ARRAY_FORMAT_COLOR))
-				if not groups.has(key):
-					groups[key] = {"mat": mat, "fmt": fmt, "plain": plain, "parts": []}
-				groups[key].parts.append([_transformed(src, xf), mat.albedo_color, null, Vector2(mat.roughness, mat.metallic) if plain else null])
-		var mesh := ArrayMesh.new()
-		for key in groups:
-			var gr: Dictionary = groups[key]
-			var arrays := _concat(gr.parts, gr.fmt | (Mesh.ARRAY_FORMAT_TEX_UV2 if gr.plain else 0), gr.plain)
-			mesh.add_surface_from_arrays(Mesh.PRIMITIVE_TRIANGLES, arrays)
-			var m: Material = gr.mat
-			if gr.plain:
-				m = ShaderMaterial.new()
-				(m as ShaderMaterial).shader = _plain_shader()
-				(m as ShaderMaterial).set_shader_parameter("texture_albedo", (gr.mat as BaseMaterial3D).albedo_texture)
-			mesh.surface_set_material(mesh.get_surface_count() - 1, m)
-		var chunk := MeshInstance3D.new()
-		chunk.name = "Merged_%d_%d" % [k.x, k.y]
-		chunk.mesh = mesh
-		chunk.cast_shadow = GeometryInstance3D.SHADOW_CASTING_SETTING_OFF
-		root.add_child(chunk)
-		for mi: MeshInstance3D in list:
-			mi.layers = 0
-		stats.meshes += list.size()
-		stats.chunks += 1
-		stats.surfaces += mesh.get_surface_count()
+		# Greedy chunks: a mesh joins the first chunk whose box, grown by it, still pairs with at most MAX_LIGHTS lights.
+		var chunks: Array = []   # [box, [meshes]]
+		for mi: MeshInstance3D in cells[k]:
+			var b: AABB = mi.global_transform * mi.get_aabb()
+			if _lights_of(b, lights).size() > MAX_LIGHTS:
+				stats.lit_out += 1   # lit by more than 8 already: left as it is
+				continue
+			var placed := false
+			for ch in chunks:
+				var grown: AABB = (ch[0] as AABB).merge(b)
+				if _lights_of(grown, lights).size() <= MAX_LIGHTS:
+					ch[0] = grown
+					(ch[1] as Array).append(mi)
+					placed = true
+					break
+			if not placed:
+				chunks.append([b, [mi]])
+		var n := 0
+		for ch in chunks:
+			stats.jobs.append([root, inv, ch[1], "Merged_%d_%d_%d" % [k.x, k.y, n]])
+			n += 1
+
+
+## Makes the chunk when it draws fewer surfaces than its meshes did (one mesh of many surfaces counts too).
+static func _make_chunk(root: Node3D, inv: Transform3D, list: Array, nm: String, stats: Dictionary) -> bool:
+	var groups := {}
+	var before := 0
+	for mi: MeshInstance3D in list:
+		var xf: Transform3D = inv * mi.global_transform
+		for s in mi.mesh.get_surface_count():
+			var mat := mi.get_active_material(s) as BaseMaterial3D
+			if not _opaque(mat):
+				continue
+			before += 1
+			var src := mi.mesh.surface_get_arrays(s)
+			var fmt := _fmt_of(src)
+			var info := _mat_info(mat, stats)
+			var plain: bool = info[0] and not fmt & (Mesh.ARRAY_FORMAT_TEX_UV2 | Mesh.ARRAY_FORMAT_BONES)
+			var tex: Texture2D = mat.albedo_texture if plain else null
+			if not plain and info[1] and not fmt & (Mesh.ARRAY_FORMAT_TEX_UV2 | Mesh.ARRAY_FORMAT_BONES):
+				plain = true
+				tex = _white(stats)
+				fmt |= Mesh.ARRAY_FORMAT_TEX_UV   # zero UVs are added for it (a 1x1 white texture reads 1.0 anywhere)
+			var keep := Mesh.ARRAY_FORMAT_NORMAL | Mesh.ARRAY_FORMAT_TANGENT | Mesh.ARRAY_FORMAT_TEX_UV | Mesh.ARRAY_FORMAT_TEX_UV2 | Mesh.ARRAY_FORMAT_COLOR
+			var key: String = ("plain|%d" % tex.get_rid().get_id() if plain else "mat|" + str(info[2])) + "|%d" % (fmt & keep)
+			if not groups.has(key):
+				groups[key] = {"mat": mat, "tex": tex, "fmt": fmt, "plain": plain, "parts": []}
+			groups[key].parts.append([_transformed(src, xf), mat.albedo_color, null, Vector2(mat.roughness, mat.metallic) if plain else null])
+	if groups.size() >= before:
+		return false
+	var mesh := ArrayMesh.new()
+	for key in groups:
+		var gr: Dictionary = groups[key]
+		var arrays := _concat(gr.parts, gr.fmt | (Mesh.ARRAY_FORMAT_TEX_UV2 if gr.plain else 0), gr.plain)
+		mesh.add_surface_from_arrays(Mesh.PRIMITIVE_TRIANGLES, arrays, [], {}, Mesh.ARRAY_FLAG_COMPRESS_ATTRIBUTES if COMPRESS else 0)
+		var m: Material = gr.mat
+		if gr.plain:
+			m = ShaderMaterial.new()
+			(m as ShaderMaterial).shader = _plain_shader()
+			(m as ShaderMaterial).set_shader_parameter("texture_albedo", gr.tex)
+		mesh.surface_set_material(mesh.get_surface_count() - 1, m)
+	var chunk := MeshInstance3D.new()
+	chunk.name = nm
+	chunk.mesh = mesh
+	chunk.cast_shadow = GeometryInstance3D.SHADOW_CASTING_SETTING_OFF
+	chunk.set_meta("bc_parts", list.duplicate())   # the meshes it draws (tests check sight lines against their boxes)
+	root.add_child(chunk)
+	for mi: MeshInstance3D in list:
+		_retire(mi)
+	stats.meshes += list.size()
+	stats.chunks += 1
+	stats.surfaces += mesh.get_surface_count()
+	return true
+
+
+## The original stops drawing in the main pass: its transparent surfaces (if any) move to a child of their own; a mesh that still casts its own shadow (no proxy took it) keeps casting it, shadow only.
+static func _retire(mi: MeshInstance3D) -> void:
+	var rest := ArrayMesh.new()
+	for s in mi.mesh.get_surface_count():
+		var mat := mi.get_active_material(s) as BaseMaterial3D
+		if not _opaque(mat):
+			rest.add_surface_from_arrays(Mesh.PRIMITIVE_TRIANGLES, mi.mesh.surface_get_arrays(s))
+			rest.surface_set_material(rest.get_surface_count() - 1, mat)
+	if rest.get_surface_count() > 0:
+		var r := MeshInstance3D.new()
+		r.name = String(mi.name) + "_Rest"
+		r.mesh = rest
+		r.layers = mi.layers
+		r.cast_shadow = GeometryInstance3D.SHADOW_CASTING_SETTING_OFF
+		mi.add_child(r)   # a child, so it hides with the original
+	if mi.cast_shadow == GeometryInstance3D.SHADOW_CASTING_SETTING_OFF:
+		mi.layers = 0
+	else:
+		mi.cast_shadow = GeometryInstance3D.SHADOW_CASTING_SETTING_SHADOWS_ONLY
+
+
+## Per-run caches live in the merge's own stats (never in static vars: a texture or material held by a static var is
+## freed after the renderer at exit and crashes the engine).
+static func _mat_info(m: BaseMaterial3D, stats: Dictionary) -> Array:
+	if not stats.has("mats"):
+		stats.mats = {}
+	if not stats.mats.has(m):
+		stats.mats[m] = [_plain_textured(m), _plain_colour(m), _mat_key(m) + "|" + str(m.albedo_color)]
+	return stats.mats[m]
+
+static func _white(stats: Dictionary) -> ImageTexture:
+	if not stats.has("white"):
+		var img := Image.create(1, 1, false, Image.FORMAT_RGBA8)
+		img.fill(Color.WHITE)
+		stats.white = ImageTexture.create_from_image(img)
+	return stats.white
+
+
+## A StandardMaterial3D at its defaults but for albedo colour (opaque), roughness and metallic, with no texture.
+static func _plain_colour(m: BaseMaterial3D) -> bool:
+	if not m is StandardMaterial3D or m.albedo_texture != null or m.albedo_color.a < 1.0:
+		return false
+	if _default_mat == null:
+		_default_mat = StandardMaterial3D.new()
+	for p in m.get_property_list():
+		if p.usage & PROPERTY_USAGE_STORAGE and not p.name in ["albedo_color", "roughness", "metallic", "resource_name", "resource_path", "resource_local_to_scene"]:
+			if str(m.get(p.name)) != str(_default_mat.get(p.name)):
+				return false
+	return true
 
 
 ## Format bits of a surface's arrays (primitive meshes have no surface_get_format).
@@ -236,7 +370,8 @@ static func _fmt_of(a: Array) -> int:
 	return f
 
 
-## Static, opaque, layer-1 meshes under `root`, as _gather (shadow proxies) but whatever their shadow setting.
+## Static, layer-1 meshes under `root` with at least one opaque surface, as _gather (shadow proxies) but whatever
+## their shadow setting. Their transparent surfaces stay drawn on their own (_make_chunk).
 static func _gather_static(n: Node, root: Node3D, out: Array[MeshInstance3D], subs: Array[Node3D]) -> void:
 	if n != root:
 		if n.get_script() != null or n.is_in_group("ceiling") or n.is_in_group("swing_door"):
@@ -246,31 +381,46 @@ static func _gather_static(n: Node, root: Node3D, out: Array[MeshInstance3D], su
 		if n.is_in_group("cutaway") or n.is_in_group("occluder"):
 			subs.append(n as Node3D)
 			return
-		if String(n.name).begins_with("ShadowProxy") or String(n.name).begins_with("Merged_"):
+		if String(n.name).begins_with("ShadowProxy") or String(n.name).begins_with("Merged_") or String(n.name).ends_with("_Rest"):
 			return
 	if n is MeshInstance3D:
 		var mi := n as MeshInstance3D
-		if mi.layers == 1 and mi.material_overlay == null and _proxy_ok(mi) and mi.cast_shadow != GeometryInstance3D.SHADOW_CASTING_SETTING_SHADOWS_ONLY:
-			var ok := true
-			for s in mi.mesh.get_surface_count():
-				ok = ok and mi.get_active_material(s) is BaseMaterial3D
-			if ok:
-				out.append(mi)
+		if mi.layers == 1 and mi.material_overlay == null and mi.cast_shadow != GeometryInstance3D.SHADOW_CASTING_SETTING_SHADOWS_ONLY and _merge_ok(mi):
+			out.append(mi)
 	for c in n.get_children():
 		_gather_static(c, root, out, subs)
+
+
+static func _merge_ok(mi: MeshInstance3D) -> bool:
+	if mi.mesh == null or mi.skin != null or (mi.mesh is ArrayMesh and (mi.mesh as ArrayMesh).get_blend_shape_count() > 0) or not mi.is_inside_tree():
+		return false
+	var opaque := 0
+	for s in mi.mesh.get_surface_count():
+		if mi.mesh is ArrayMesh and (mi.mesh as ArrayMesh).surface_get_primitive_type(s) != Mesh.PRIMITIVE_TRIANGLES:
+			return false
+		var m := mi.get_active_material(s)
+		if not m is BaseMaterial3D:
+			return false
+		if _opaque(m as BaseMaterial3D):
+			opaque += 1
+	return opaque > 0
+
+
+static func _opaque(b: BaseMaterial3D) -> bool:
+	return b.transparency == BaseMaterial3D.TRANSPARENCY_DISABLED and not b.grow and not b.use_point_size and b.billboard_mode == BaseMaterial3D.BILLBOARD_DISABLED
 
 
 ## Mesh arrays moved by `xf` (positions; normals and tangents by the normal matrix).
 static func _transformed(a: Array, xf: Transform3D) -> Array:
 	var nb := xf.basis.inverse().transposed()
-	var v: PackedVector3Array = a[Mesh.ARRAY_VERTEX]
-	for i in v.size():
-		v[i] = xf * v[i]
+	var v: PackedVector3Array = xf * (a[Mesh.ARRAY_VERTEX] as PackedVector3Array)   # native loop
 	a[Mesh.ARRAY_VERTEX] = v
 	if a[Mesh.ARRAY_NORMAL] != null:
-		var nn: PackedVector3Array = a[Mesh.ARRAY_NORMAL]
-		for i in nn.size():
-			nn[i] = (nb * nn[i]).normalized()
+		var nn: PackedVector3Array = Transform3D(nb, Vector3.ZERO) * (a[Mesh.ARRAY_NORMAL] as PackedVector3Array)
+		var sc := nb.get_scale()
+		if absf(sc.x - 1.0) > 1e-5 or absf(sc.y - 1.0) > 1e-5 or absf(sc.z - 1.0) > 1e-5 or not nb.is_conformal():
+			for i in nn.size():
+				nn[i] = nn[i].normalized()
 		a[Mesh.ARRAY_NORMAL] = nn
 	if a[Mesh.ARRAY_TANGENT] != null:
 		var t: PackedFloat32Array = a[Mesh.ARRAY_TANGENT]
@@ -442,15 +592,24 @@ static func _concat(parts: Array, fmt: int, with_color := true) -> Array:
 		if fmt & Mesh.ARRAY_FORMAT_TANGENT:
 			tan.append_array(a[Mesh.ARRAY_TANGENT])
 		if fmt & Mesh.ARRAY_FORMAT_TEX_UV:
-			uv.append_array(a[Mesh.ARRAY_TEX_UV])
+			if a[Mesh.ARRAY_TEX_UV] != null and (a[Mesh.ARRAY_TEX_UV] as PackedVector2Array).size() == pv.size():
+				uv.append_array(a[Mesh.ARRAY_TEX_UV])
+			else:
+				var fz := PackedVector2Array()
+				fz.resize(pv.size())
+				uv.append_array(fz)
 		if p[3] != null:   # plain textured part: roughness, metallic per vertex (PLAIN_SHADER)
-			for i in pv.size():
-				uv2.append(p[3])
+			var f2 := PackedVector2Array()
+			f2.resize(pv.size())
+			f2.fill(p[3])
+			uv2.append_array(f2)
 		elif fmt & Mesh.ARRAY_FORMAT_TEX_UV2:
 			uv2.append_array(a[Mesh.ARRAY_TEX_UV2])
 		if with_color:
-			for i in pv.size():
-				col.append(c)
+			var fc := PackedColorArray()
+			fc.resize(pv.size())
+			fc.fill(c)
+			col.append_array(fc)
 		elif fmt & Mesh.ARRAY_FORMAT_COLOR:
 			col.append_array(a[Mesh.ARRAY_COLOR])
 		if remap != null:

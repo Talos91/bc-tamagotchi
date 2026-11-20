@@ -181,3 +181,5 @@ ui.presence.still.body,"Tap Yes to stay checked in. No answer in 30 minutes chec
 ui.presence.still.yes,"Yes, I'm here",ใช่ ยังอยู่,Hourly prompt: stay checked in,18
 ui.presence.still.leave,Leave,ออกจากร้าน,Hourly prompt: leave the bar (checks out),14
 ui.presence.still.too_late,You were checked out. Scan your table's code to check in again.,คุณถูกเช็กเอาต์แล้ว สแกนโค้ดที่โต๊ะเพื่อเช็กอินอีกครั้ง,Banner when Yes came after the 30 minutes,70
+ui.fullscreen.button,Full screen,เต็มจอ,"HUD full-screen button (top right, web only): tooltip and accessible name",14
+ui.fullscreen.ios_hint,Add to Home Screen for full screen: Share → Add to Home Screen,เพิ่มไปยังหน้าจอโฮมเพื่อเล่นเต็มจอ: แชร์ → เพิ่มไปยังหน้าจอโฮม,"Hint shown on iPhone when the full-screen button is tapped (Safari has no full screen for pages; the home-screen app opens full screen)",70

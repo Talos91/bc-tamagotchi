@@ -73,7 +73,7 @@ func setup(main_node: Node, needs_node: Node) -> void:
 	_row(box, "Clock", [["+1 hour", _jump.bind(3600.0)], ["+12 hours", _jump.bind(12.0 * 3600.0)], ["+1 night", _jump_night]])
 	_row(box, "Stakes (ghost, revival)", [["Make ghost", _make_ghost], ["Fake check-in (revive)", _check_in]])
 	# Performance (owner item 41): the live overlay and the copyable report (scripts/perf_telemetry.gd)
-	_row(box, "Performance", [["Perf overlay", _perf_overlay], ["Copy perf report", _perf_copy]])
+	_row(box, "Performance", [["Perf overlay", _perf_overlay], ["Copy perf report", _perf_copy], ["Battery saver", _battery_saver]])
 	reset_btn = _button(box, "Reset save", _reset)
 	var close := _button(box, "Close", func(): set_open(false))
 	close.size_flags_horizontal = Control.SIZE_EXPAND_FILL
@@ -170,6 +170,13 @@ func _perf_overlay() -> void:
 	if p:
 		p.show_overlay(not p.overlay_shown())
 		set_open(false)
+
+
+func _battery_saver() -> void:
+	var fp := get_node_or_null("/root/FramePacer")
+	if fp:
+		fp.set_saver(not fp.saver)
+		_say(fp.describe() + ": 30 fps in the venue, 15 when idle (scripts/frame_pacer.gd)")
 
 
 func _perf_copy() -> void:

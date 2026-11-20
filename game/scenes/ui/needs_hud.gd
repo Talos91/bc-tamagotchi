@@ -25,6 +25,7 @@ const PromptScene = preload("res://scenes/ui/zone_prompt.tscn")
 const CardScene = preload("res://scenes/ui/action_card.tscn")
 const Orientation = preload("res://scripts/ui/orientation.gd")
 const OrientationToggle = preload("res://scenes/ui/orientation_toggle.gd")
+const FullscreenButton = preload("res://scenes/ui/fullscreen_button.gd")
 const VersionInfo = preload("res://scripts/version_info.gd")
 const TonightEvents = preload("res://scripts/tonight_events.gd")
 const StageChip = preload("res://scripts/ui/stage_chip.gd")
@@ -59,6 +60,8 @@ static var areas_hidden := false   ## owner item 14: the area column slid off to
 var _here := ""
 var _top: Control
 var orientation_toggle: Button
+var fullscreen_button: Button
+var _fs_hint: Label
 var _zone_name := ""
 var _title_age := 0.0
 var _clock := 0.0
@@ -157,6 +160,18 @@ func _build() -> void:
 		Orientation.toggle(needs)
 		orientation_toggle.refresh())
 	title_row.add_child(orientation_toggle)
+	fullscreen_button = FullscreenButton.new()   # web only; hides itself when full screen or installed
+	fullscreen_button.pressed.connect(func():
+		if Orientation.current() == Orientation.LANDSCAPE:   # "force full screen (vertical)"
+			Orientation.toggle(needs)
+			orientation_toggle.refresh())
+	fullscreen_button.hint.connect(_show_fs_hint)
+	title_row.add_child(fullscreen_button)
+	_fs_hint = BCSkin.tag("", UI.GOLD)
+	_fs_hint.name = "FullscreenHint"
+	_fs_hint.autowrap_mode = TextServer.AUTOWRAP_WORD_SMART
+	_fs_hint.visible = false
+	_top.add_child(_fs_hint)
 	_caption = StageChip.new()
 	_top.add_child(_caption)
 	_status = UI.label("", 14, UI.GOLD)
@@ -242,6 +257,7 @@ func retitle() -> void:
 	_zone_name = ""
 	set_zone_name(z)
 	orientation_toggle.refresh()
+	fullscreen_button.tooltip_text = preload("res://scripts/ui/ui_strings.gd").t("ui.fullscreen.button")
 	var tb: Button = find_child("Tonight", true, false)
 	if tb != null:
 		tb.text = TonightEvents.t("tonight.button")
@@ -363,3 +379,12 @@ func _float_gain(m: String, v: float) -> void:
 	tw.tween_property(l, "position:y", l.position.y + UI.dp(36), 1.4).set_ease(Tween.EASE_OUT)
 	tw.tween_property(l, "modulate:a", 0.0, 1.4).set_delay(0.5)
 	tw.chain().tween_callback(l.queue_free)
+
+
+## iPhone: the full-screen button's "Add to Home Screen" hint under the title, for a few seconds.
+func _show_fs_hint(text: String) -> void:
+	_fs_hint.text = text
+	_fs_hint.visible = true
+	get_tree().create_timer(6.0).timeout.connect(func():
+		if is_instance_valid(_fs_hint):
+			_fs_hint.visible = false)

@@ -12,6 +12,7 @@ config/features=PackedStringArray("4.6", "GL Compatibility")
 
 Needs="*res://scripts/needs.gd"
 PerfTelemetry="*res://scripts/perf_telemetry.gd"
+FramePacer="*res://scripts/frame_pacer.gd"
 Presence="*res://scripts/presence/presence.gd"
 PlayTelemetry="*res://scripts/play_telemetry.gd"
 TouchScroll="*res://scripts/ui/touch_scroll.gd"

@@ -730,17 +730,23 @@ func sight_blockers() -> Array:
 		for g in geoms:
 			if not is_instance_valid(g) or not g.is_visible_in_tree() or (g.layers & cam.cull_mask) == 0 or g.cast_shadow == GeometryInstance3D.SHADOW_CASTING_SETTING_SHADOWS_ONLY:   # shadow-only: never drawn (venue_batch.gd proxies)
 				continue
-			var box := g.get_aabb()
-			if box.size.y < 0.05 or (box.size.x < 0.02 and box.size.z < 0.02):
-				continue
-			if not (g.global_transform * box).intersects_segment(a, e):
-				continue
-			var inv := g.global_transform.affine_inverse()
-			if box.intersects_segment(inv * a, inv * e):
-				var nm := "%s/%s" % [g.get_parent().name, g.name]
-				if not out.has(nm):
-					out.append(nm)
+			# a merged chunk (venue_batch.gd merge_static) draws the meshes it replaced: test their own boxes
+			for part in (g.get_meta("bc_parts") if g.has_meta("bc_parts") else [g]):
+				if is_instance_valid(part) and _blocks(part, a, e):
+					var nm := "%s/%s" % [part.get_parent().name, part.name]
+					if not out.has(nm):
+						out.append(nm)
 	return out
+
+
+func _blocks(g: VisualInstance3D, a: Vector3, e: Vector3) -> bool:
+	var box := g.get_aabb()
+	if box.size.y < 0.05 or (box.size.x < 0.02 and box.size.z < 0.02):
+		return false
+	if not (g.global_transform * box).intersects_segment(a, e):
+		return false
+	var inv := g.global_transform.affine_inverse()
+	return box.intersects_segment(inv * a, inv * e)
 
 
 ## True when the node is part of a character (crowd, staff, regulars): they may walk in front of the player.

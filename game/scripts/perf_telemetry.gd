@@ -198,6 +198,9 @@ func report() -> String:
 	var lines: Array[String] = ["Black Cabin perf report " + preload("res://scripts/version_info.gd").text()]
 	lines.append(device_text())
 	lines.append("quality: %s%s%s" % [Quality.NAMES[Quality.level], " (set by hand)" if _manual else "", ("; " + "; ".join(quality_log)) if not quality_log.is_empty() else ""])
+	var fp := get_node_or_null("/root/FramePacer")   # battery saver: drawn frames are capped, so fps here = refreshes
+	if fp:
+		lines.append(fp.describe())
 	lines.append("load: engine up %s, title %s, first venue frame %s (ms after the page opened)" % [_ms(t_engine_ms), _ms(t_title_ms), _ms(t_entry_ms)])
 	lines.append("fps p50 / p5, all: " + fps_text(all_ms))
 	var keys := frames.keys()

@@ -279,7 +279,76 @@ def hash_rename():
             s = "importScripts('push-sw.js');\n" + s
         write(p, s)
     shutil.copyfile(os.path.join(ROOT, 'tools', 'push-sw.js'), os.path.join(WEB, 'push-sw.js'))
+    pwa_patch()
     return tag
+
+
+# Install and update (perf-iphone 2026-11-20; Daniele: "if i do install on my phone it says it cannot be installed",
+# and his phone kept showing the old venue after a deploy).
+# - Manifest: standalone (the preset), portrait, short_name, scope and id, so Chrome offers "Install"; iOS gets its
+#   home-screen meta tags from the preset's head_include.
+# - Service worker: Godot's worker served index.html cache-first and a new worker waited until every tab was closed,
+#   so a phone kept the old build for days. Now the page comes from the network first (the cache only when offline),
+#   a new worker takes over at once (skipWaiting + clients.claim) and, when it replaces an older build's cache, reloads
+#   the open pages once (ACTIVATE_NEW), so one reopen shows the new version stamp, even from Godot's old worker.
+ACTIVATE_OLD = """self.addEventListener('activate', (event) => {
+	event.waitUntil(caches.keys().then(
+		function (keys) {
+			// Remove old caches.
+			return Promise.all(keys.filter((key) => key.startsWith(CACHE_PREFIX) && key !== CACHE_NAME).map((key) => caches.delete(key)));
+		}
+	).then(function () {
+		// Enable navigation preload if available.
+		return ('navigationPreload' in self.registration) ? self.registration.navigationPreload.enable() : Promise.resolve();
+	}));
+});"""
+ACTIVATE_NEW = """self.addEventListener('activate', (event) => {
+	// bc: take over at once; if an older build's cache was here, reload the open pages once so they run this build.
+	event.waitUntil(caches.keys().then(
+		function (keys) {
+			const old = keys.filter((key) => key.startsWith(CACHE_PREFIX) && key !== CACHE_NAME);
+			return Promise.all(old.map((key) => caches.delete(key))).then(() => old.length);
+		}
+	).then(function (replaced) {
+		const preload = ('navigationPreload' in self.registration) ? self.registration.navigationPreload.enable() : Promise.resolve();
+		return preload.then(() => self.clients.claim()).then(() => {
+			// Not awaited: a reload goes through this worker, which must finish activating first.
+			if (replaced) {
+				self.clients.matchAll({ type: 'window' }).then((all) => all.forEach((c) => c.navigate(c.url).catch(() => null)));
+			}
+		});
+	}));
+});"""
+SW_PATCHES = [
+    ("event.waitUntil(caches.open(CACHE_NAME).then((cache) => cache.addAll(CACHED_FILES)));",
+     "self.skipWaiting();\n\tevent.waitUntil(caches.open(CACHE_NAME).then((cache) => cache.addAll(CACHED_FILES)));"),
+    (ACTIVATE_OLD, ACTIVATE_NEW),
+    ("// Check if we have full cache during HTML page request.",
+     "// Network first for the page itself (bc: a new deploy shows on the next open); the cache only when offline.\n"
+     "\t\t\t\t\ttry { return await fetchAndCache(event, cache, isCacheable); } catch (e) {\n"
+     "\t\t\t\t\t\tconst hit = (await cache.match(event.request)) || (await cache.match(CACHED_FILES[0]));\n"
+     "\t\t\t\t\t\tif (hit) { return hit; }\n"
+     "\t\t\t\t\t}\n"
+     "\t\t\t\t\t// Check if we have full cache during HTML page request."),
+]
+
+
+def pwa_patch():
+    p = os.path.join(WEB, 'index.manifest.json')
+    if os.path.exists(p):
+        m = json.loads(read(p))
+        m.update({'short_name': 'Black Cabin', 'display': 'standalone', 'orientation': 'portrait', 'scope': './', 'id': './'})
+        for ic in m.get('icons', []):
+            ic['purpose'] = 'any'
+        write(p, json.dumps(m, indent=1) + '\n')
+    p = os.path.join(WEB, 'index.service.worker.js')
+    if os.path.exists(p):
+        s = read(p)
+        for a, b in SW_PATCHES:
+            if a not in s:
+                sys.exit("build_web: service worker patch no longer matches Godot's worker: " + a[:60])
+            s = s.replace(a, b, 1)
+        write(p, s)
 
 
 def vercel_json():
