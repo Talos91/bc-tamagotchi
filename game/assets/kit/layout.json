@@ -1218,22 +1218,6 @@
    "zone": "Lounge"
   },
   {
-   "name": "ArcadeOnStand",
-   "object": "arcade_cabinet",
-   "position": [
-    12.6,
-    0.82,
-    12.69
-   ],
-   "rotation_y": -180.0,
-   "scale": [
-    0.75,
-    0.55,
-    0.75
-   ],
-   "zone": "Lounge"
-  },
-  {
    "name": "ArcadeMirror",
    "object": "mirror_wall_panel",
    "position": [

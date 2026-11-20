@@ -79,6 +79,32 @@ func _init() -> void:
 			var o: Node3D = venue.find_child(n, true, false)
 			check(o != null and absf(o.global_position.z - 13.05) < 1.6 and o.global_position.x > cab.global_position.x + 0.6 and o.global_position.x < 13.0, "%s stands east of the machine, short of the Sticker door (%s)" % [n, o.global_position if o else "missing"])
 	check(overlap == "", "nothing stands on or against the game machine (%s)" % overlap)
+	# Owner list 2026-11-20: 8 one arcade machine only (the big one), 9 the memory corner's screen faces the room,
+	# 10 the street door fills its opening (no strip of night over it)
+	check(venue.find_child("ArcadeOnStand", true, false) == null and cab != null and venue.find_children("*", "", true, false).filter(
+		func(n): return n is Node3D and n.scene_file_path.ends_with("arcade_cabinet.glb")).is_empty(), "one arcade machine in the lounge: GameCabinet (item 8)")
+	var chairs := Vector3(4.95, 0, 0.75)   # between the memory corner's two stools
+	if crt != null:
+		var front: Vector3 = crt.global_basis.z.normalized()   # kit front is +z
+		var to_room := (chairs - crt.global_position) * Vector3(1, 0, 1)
+		check(front.dot(to_room.normalized()) > 0.5 and front.z > 0.2, "the memory corner's CRT faces its stools and the room (item 9) (front %s)" % front)
+	else:
+		check(false, "the memory corner's CRT exists")
+	# (read from the built scene: in play the camera sinks the lobby's west wall)
+	var built: Node3D = (load("res://scenes/venue/venue.tscn") as PackedScene).instantiate()
+	var leaf: Node3D = built.find_child("StreetDoorLeaf", true, false)
+	var lintel: Node3D = built.find_child("WallWest_L0", true, false)
+	if leaf != null and lintel != null:
+		var top := 0.0
+		for mi: MeshInstance3D in leaf.find_children("*", "MeshInstance3D", true, false):
+			top = maxf(top, (_rel(mi, built) * mi.get_aabb()).end.y)
+		var low := INF
+		for mi: MeshInstance3D in ([lintel] if lintel is MeshInstance3D else []) + lintel.find_children("*", "MeshInstance3D", true, false):
+			low = minf(low, (_rel(mi, built) * mi.get_aabb()).position.y)
+		check(top > 2.0 and low <= top + 0.02, "the street door reaches the lintel over it (item 10) (door top %.2f, lintel from %.2f)" % [top, low])
+	else:
+		check(false, "street door leaf and its lintel exist")
+	built.free()
 	var cz: Dictionary = main.zones.first_of("cabinet")
 	check(not cz.is_empty() and Vector2(cz["approach"].x - 10.3, cz["approach"].z - 12.65).length() < 1.6, "the machine's zone sits at its new place")
 	var stand: Node3D = venue.find_child("MerchStand", true, false)
@@ -321,6 +347,17 @@ func _init() -> void:
 
 	print("TEST LOUNGE ", "PASS" if fails.is_empty() else "FAIL (%d)" % fails.size())
 	quit(0 if fails.is_empty() else 1)
+
+
+## `n`'s transform relative to `top` (a scene not in the tree).
+func _rel(n: Node3D, top: Node3D) -> Transform3D:
+	var t := Transform3D.IDENTITY
+	var c: Node = n
+	while c != null and c != top:
+		if c is Node3D:
+			t = (c as Node3D).transform * t
+		c = c.get_parent()
+	return t
 
 
 func teleport(pos: Vector3) -> void:

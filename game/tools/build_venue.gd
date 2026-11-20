@@ -68,7 +68,7 @@ const STAIR_H1 := 1.6                                 # landing height
 const STAIR_TOP := 4.0                                # the floor above
 const STAIR_STOP_Z := 10.05                           # rope across the second flight: as high as the player climbs
 const CABINET_X := 10.3                               # game machine, ~1.9 m east of the bottom step (back by the stair foot, Daniele 2026-11-02)
-const LEDGE_X := Vector2(11.0, 12.1)                 # high counter on the south wall between the game machine and the arcade by the Sticker door (shortened 2026-11-20, photo 07)
+const LEDGE_X := Vector2(11.0, 12.1)                 # high counter on the south wall between the game machine and the Sticker door mirror (shortened 2026-11-20, photo 07)
 const MERCH := Vector3(11.6, 0, 6.6)                  # merch counter in the middle of the lounge, walkable all round (Daniele 2026-11-20)
 const PORTRAIT_X0 := 3.0                              # corridor south wall: ten top-patron portraits 1.2 m apart (B7)
 const PORTRAIT_STEP := 1.2
@@ -799,7 +799,9 @@ func _lobby_and_corridor() -> void:
 	_floor(g, CORRIDOR, _concrete_mat(), 0.0, "CorridorFloor")
 	_ceiling(g, Rect2(LOBBY.position.x, LOBBY.position.y, CORRIDOR.end.x - LOBBY.position.x, LOBBY.size.y))
 	# West (street) wall with the door, north wall, the long south wall, the corridor's east end
-	_wall_z(g, "WallWest", 0.0, LOBBY.position.y, LOBBY.end.y, wall, Vector3.LEFT, [STREET_DOOR], 2.3)
+	# The opening's lintel sits on the door kit's own frame (2.15 m): at 2.3 m a strip of night showed over the door
+	# (Daniele 2026-11-20: "entrance door doesn't fit the full door frame and has the top open")
+	_wall_z(g, "WallWest", 0.0, LOBBY.position.y, LOBBY.end.y, wall, Vector3.LEFT, [STREET_DOOR], kit["staff_door"].height_m if kit.has("staff_door") else 2.15)
 	_wall_x(g, "WallNorth", LOBBY.position.y, -0.2, LOUNGE.position.x, wall, Vector3.FORWARD)
 	_wall_x(g, "WallSouth", CORRIDOR.end.y, -0.2, CORRIDOR.end.x + 0.2, wall, Vector3.BACK)
 	_wall_z(g, "WallEast", CORRIDOR.end.x, CORRIDOR.position.y, CORRIDOR.end.y, wall, Vector3.RIGHT)
@@ -1012,7 +1014,8 @@ CABIN", Vector3(0, 1.45, 0.035), 0.0, 0.0042, Color(2.2, 1.0, 0.9), 48)
 
 ## The Sticker door from inside the lounge (photo 07): the garment rail with the tee, a lit lamp on its shelf and three
 ## frames over it on the left (east) of the door, curtain beside it; the exit sign over the door; on its right (west)
-## the arcade on its stand with a mirror above it. The arcade is dressing (the lounge's game machine is GameCabinet).
+## the mirror. The small arcade on a stand under the mirror is gone (Daniele 2026-11-20: "there's 2 arcade machines,
+## keep only the big one"; the big one is GameCabinet, the lounge's game machine; DECISIONS.md).
 func _sticker_door_lounge(g: Node) -> void:
 	var s := _group("StickerDoorLounge", g)
 	var z := LOUNGE.end.y
@@ -1021,14 +1024,8 @@ func _sticker_door_lounge(g: Node) -> void:
 	for i in 3:
 		_cut(_ph(s, "wall_picture_framed", Vector3(14.45 + i * 0.4, 2.05, z - 0.06), 180.0, "RackFrame%d" % i, false, Vector3(0.6, 0.6, 1)), Vector3.BACK)
 	_cut(_kit(s, "exit_sign", Vector3((STICKER_DOOR.x + STICKER_DOOR.y) * 0.5, 2.55, z - 0.12), 180.0, "ExitSignStickerLounge"), Vector3.BACK)
-	# The arcade on a stand: the kit cabinet scaled down on four legs, the mirror on the wall above it
-	var dark := _mat("beam_black", BEAM_BLACK, 0.7)
+	# The mirror on the wall (the small arcade that stood under it was removed, item 8)
 	var ax := 12.6
-	for i in 4:
-		_box(s, "ArcadeLeg%d" % i, Vector3(ax - 0.28 + (i % 2) * 0.52, 0, z - 0.6 + (i / 2) * 0.42), Vector3(0.04, 0.8, 0.04), dark, false)
-	_box(s, "ArcadeShelf", Vector3(ax - 0.3, 0.78, z - 0.62), Vector3(0.6, 0.04, 0.5), dark, false)
-	_kit(s, "arcade_cabinet", Vector3(ax, 0.82, z - 0.36), 180.0, "ArcadeOnStand", Vector3(0.75, 0.55, 0.75))
-	_collider(s, "ArcadeStandCollider", Vector3(ax, 0.9, z - 0.38), Vector3(0.62, 1.8, 0.52))
 	_cut(_ph(s, "mirror_wall_panel", Vector3(ax, 1.85, z - 0.04), 180.0, "ArcadeMirror", false, Vector3(0.8, 0.36, 1)), Vector3.BACK)
 
 ## Photo booth on the lounge's north wall, between the memory corner and the merch rack (Daniele 2026-11-09: "a
@@ -1214,8 +1211,10 @@ func _memory_corner(g: Node) -> void:
 	var x0 := LOUNGE.position.x
 	# The counter along the west wall, from the corner to the plant wall
 	_box(c, "MemoryCounter", Vector3(x0, 0, 0.0), Vector3(0.62, 0.75, 2.9), _mat("memory_counter", Color("1a1010"), 0.5))
-	# The CRT on it, turned to the room, and a snake plant in a pot further along
-	_kit(c, "crt_monitor", Vector3(x0 + 0.33, 0.75, 0.75), 120.0, "CRT", Vector3(0.6, 0.6, 0.6))
+	# The CRT on it, its screen turned to the stools and the corner's view (60°: east-south-east; it was 120°, toward
+	# the north wall, Daniele 2026-11-20: "the screen for share a memory is facing the wall instead of the player"),
+	# and a snake plant in a pot further along
+	_kit(c, "crt_monitor", Vector3(x0 + 0.33, 0.75, 0.75), 60.0, "CRT", Vector3(0.6, 0.6, 0.6))
 	_box(c, "PlantPot", Vector3(x0 + 0.13, 0.75, 1.7), Vector3(0.3, 0.3, 0.3), _mat("pot_steel", Color("4a4448"), 0.35), false)
 	var leaf := _mat("snake_leaf", Color("2e5228"), 0.8)
 	var rng := RandomNumberGenerator.new()
