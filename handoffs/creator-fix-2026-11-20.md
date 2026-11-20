@@ -13,7 +13,7 @@ you can see trough both ways".
 Successor session (Opus 5.5, ui, load id 2026-11-20-ui-black-cabin-807c4f). Branch rebased on origin/main 9502c68.
 Hub card `creator-fix-1120-review` (8 before/after sheets, files list). Report `handoffs/worker-reports-2026-11/creator-fix.md`.
 - **Item 7** (invisible player after any minigame): `main._cover_venue` disabled the Venue, which takes its colliders
-  out of physics, while the player kept running gravity: it fell ~20 m per game. Now the player pauses with the venue.
+  out of physics, while the player kept running gravity: it fell ~20 m per game. Now the player's physics step pauses with the venue (set_physics_process; disabling the whole player emptied its zones, smoke_loop).
   Suite `test_mg_return` (all 8 games, real leave path; before: y -20 -> -722 m, after: 0.000 m).
 - **Item 6** (no touch scrolling): Godot 4.6 drag-scrolls only from emulated mouse that reaches the ScrollContainer, and
   all our rows/cards/buttons are MOUSE_FILTER_STOP. New autoload `TouchScroll` (`scripts/ui/touch_scroll.gd`) scrolls
