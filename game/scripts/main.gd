@@ -213,15 +213,19 @@ func _sync_block() -> void:
 
 
 ## A minigame frame is opaque and covers the screen: stop drawing the 3D world (Viewport.disable_3d: no draw calls,
-## lights or shadow passes) and stop the venue's own processing (patron walks, flicker, disco ball). The player, the
-## camera rig, Session and Needs keep running, so positions and real-time needs are untouched; the venue wakes on close.
-## (docs/design/11-minigame-quality.md 1.3, job Q2.)
+## lights or shadow passes) and stop the venue's own processing (patron walks, flicker, disco ball). Session and Needs
+## keep running, so real-time needs are untouched; the venue wakes on close. (docs/design/11-minigame-quality.md 1.3, Q2.)
+## The player (and its camera rig) stops with the venue: a disabled Venue takes its floor and wall colliders out of
+## physics, and a player still running fell through the floor behind every game and came back invisible, under the
+## venue (owner list 2026-11-20 item 7, "happens with all games"; check tests/test_mg_return.gd).
 func _cover_venue(on: bool) -> void:
 	if venue_covered == on:
 		return
 	venue_covered = on
 	get_viewport().disable_3d = on
-	$Venue.process_mode = Node.PROCESS_MODE_DISABLED if on else Node.PROCESS_MODE_INHERIT
+	var mode := Node.PROCESS_MODE_DISABLED if on else Node.PROCESS_MODE_INHERIT
+	$Venue.process_mode = mode
+	player.process_mode = mode
 
 
 ## The start screen has walked the player in: HUD fades in and the visit starts as it does without one.
