@@ -57,7 +57,10 @@ func _post(path: String, body: Dictionary, token: String, timeout: float) -> Dic
 	if url == "" or host == null or not host.is_inside_tree():
 		return {"ok": false, "reason": "off"}
 	var http := HTTPRequest.new()
-	http.timeout = timeout
+	# No engine timeout (hotfix 2, 2026-11-20): HTTPRequest's timer counts frame delta, and the QR check-in is sent in
+	# the first frame after the web start-up block (7.8 s on the live build in a browser), so its 4 s timer fired
+	# before the request ever reached fetch: "No signal" on every phone. The wait below counts at most 0.25 s a frame.
+	http.timeout = 0.0
 	# No gzip from Godot's side (hotfix 2026-11-20, check-in "No signal" on every new phone): Supabase auth answers
 	# gzipped; on the web the browser has already unzipped the body, and HTTPRequest unzipping it again failed
 	# (stream_peer_gzip), which read as offline. The browser still negotiates compression on its own.
@@ -69,7 +72,26 @@ func _post(path: String, body: Dictionary, token: String, timeout: float) -> Dic
 	if err != OK:
 		http.queue_free()
 		return {"ok": false, "reason": "offline", "detail": "request %d" % err}
-	var res: Array = await http.request_completed
+	var res: Array = []
+	http.request_completed.connect(func(a, b, c, d): res.assign([a, b, c, d]), CONNECT_ONE_SHOT)
+	var tree := host.get_tree()
+	var waited := 0.0
+	var last := Time.get_ticks_msec()
+	while res.is_empty():
+		await tree.process_frame
+		if not res.is_empty():
+			break
+		if not is_instance_valid(http) or not is_instance_valid(host) or not host.is_inside_tree():
+			if is_instance_valid(http):
+				http.queue_free()
+			return {"ok": false, "reason": "offline", "detail": "closed"}
+		var now := Time.get_ticks_msec()
+		waited += minf((now - last) / 1000.0, 0.25)
+		last = now
+		if waited >= timeout:
+			http.cancel_request()
+			http.queue_free()
+			return {"ok": false, "reason": "offline", "detail": "timeout"}
 	http.queue_free()
 	var result: int = res[0]
 	var code: int = res[1]
