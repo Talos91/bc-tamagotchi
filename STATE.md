@@ -1,29 +1,22 @@
-# STATE — Black Cabin Tamagotchi (rewritten, never appended; as of 2026-11-20 ~20:50, final rewrite of orchestrator local_5352afaa before handover; context 67 % of 500k measured = past 40 %)
+# STATE — Black Cabin Tamagotchi (rewritten, never appended; as of 2026-11-21 ~02:30 Bangkok, orchestrator local_14422c6c; context 370k = 74 % of 500k measured — Daniele: "no handover")
 
 ## LIVE
-- https://blackcabin.app (bought 11-20; www → apex; also bc-tamagotchi.vercel.app) = **4e9dbc8** (venue entrance round + tonight lineup 2ce7624 + v0.4.0 presence). **Auto deploy live**: a push to main touching game/ builds on GitHub Actions → Vercel preview → prod (docs/tech/04-deploy.md). Supabase czrbsjalcjekcslylwbt.
-- Phones may show an old build (PWA service worker): close every tab and reopen (fix in perf-iphone).
+- https://blackcabin.app = **v0.4.6 · 8b86f99** (bc-57f2a887). Auto deploy on push to main. Supabase czrbsjalcjekcslylwbt.
+- Landed 11-20/21 night (each verified + deployed): overflow seats 8d51b2b · play telemetry 53096f4 · QR remake 296783a (39 codes/31 tables, new tokens, seed live) · creator-fix 2 b607586 · merch shop + PlayerProfile b74364f (40 items, migration+seed live) · check-in hotfix 1 65801ea (gzip, did NOT fix) · hotfix 2 291a00f v0.4.1 (4 s HTTP timeout during 7.8 s boot block = real cause) · minigame endless ramp 90e3da2 v0.4.2 · presence hotfix 3 3e17417 v0.4.3 (same-table seating, in-bar verb banner, Leave = check-out; migration 000001 live) · still-here prompt 0b5fa04 v0.4.4 (migration 000002 + edge fn still-here + crons live) · perf-iphone 08236bd v0.4.5 · presence hotfix 4 8b86f99 v0.4.6 (session mirrored to localStorage; restore brings tonight; migration 000003 live).
+- Confirmed by Daniele at the bar: check-in works on 0.4.1. NOT yet seen on a phone: seating, banners, Leave, still-here, perf, 0.4.6 session keep.
 
-## IN FLIGHT (order: overflow → play-telemetry → creator-fix 2 → perf-iphone LAST)
-- 🔍 verify-f4abb26-overflow local_0aa239c0: overflow seats, cherry-pick 8d51b2b on 72f669d, verifying with Godot quiet. Worker overflow-seats-1120 local_f0b1504b held until pushed.
-- 🎮 play-telemetry-1120 local_295e6368 (4th worker, Daniele's word): play_events table + mg start/end/loss; Daniele wants it live tonight, queries for tomorrow's tuning (docs/tech/telemetry-queries.sql).
-- 🖼️ creator-fix 2 (successor of local_768f5184, started by Daniele): item 7 invisible player after EVERY minigame FIRST, then 6 global touch scroll, 8 remove small arcade, 9 memory screen faces room, 10 entrance door gap, creator UI responsiveness (1) + new clothes in the creator (3). Done already at f0aa27b/e55b39b: 4 reach-out selector, 5 alcove wall, 2 hair cover, wardrobe kit + avatar v2. Role note handoffs/creator-fix-2026-11-20.md.
-- 🛠️ perf-iphone-1120 local_d6113b6d: perf + phone overheating (Daniele's telemetry), fullscreen button (iPhone = Add to Home Screen hint), SW update takeover, PWA install fails on Daniele's phone. **Lands LAST: message it "main has everything" when the three above are live**; then it rebases, re-measures, reports.
-- QUEUED: minigame endless ramp + loss conditions → `handoffs/queued-minigame-ramp-2026-11-20.md` (start when a slot frees; ramp table needs Daniele's OK).
-- Local docs NOT pushed: 1af7567 (PROJECT Tests 32), fec3963, 94bf978, this rewrite + handoff → push after the overflow verifier pushes (FF check).
+## OPEN / NEXT
+- Daniele: add Vault secret `bc_service_role_key` (Supabase Dashboard → Vault) so still-here push notifications send; until then in-game prompt only.
+- Daniele had 2 anon users tonight (old ac0eecf4 checked in, new 1e8e6f68); fix = enter old player code in merch shop (restore moves check-in + 7 unread verbs) or re-scan QR.
+- test_avatar is flaky (fails on main too) → small fix job.
+- Queued next week: handoffs/queued-next-week-2026-11-21.md (Black Cabin loading screen; Android APK/AAB + iOS via cloud Mac/TestFlight).
+- Hub cards open: merch-prices, merch-free-cap, merch-cut, merch-keep-on-reset, perf-iphone-1120-saver, minigame-ramp rivals/candle (built on rec), DECISIONS rows for tonight's answers still to write (Housekeeping).
+- Worktrees under C:/Users/itisf/bc-wt/ (play-telemetry, qr-remake, creator-fix, merch-shop, minigame-ramp, perf-iphone, checkin-hotfix*, presence-hotfix-3/4) → Housekeeping cleanup after Daniele's OK.
 
-## TREE (method 3b)
-- Predecessor tree local_96f4e96d: done/archived. This stint local_5352afaa: 7 workers/verifiers archived (hk-cards, deploy-pipeline, verify-deploy, venue-entrance ×2, verify-venue, tonight-lineup, verify-lineup); open: the five above. Recap: vault raw/agent-notes/2026-11-20-black-cabin-orchestrator-stint-session-local-5352afaa-2026-1.md. Handoff handoffs/ORCHESTRATOR-HANDOVER-2026-11-20b.md.
-- Orchestrator now local_14422c6c (from 20:45). The five open sessions (verify-overflow, overflow-seats, play-telemetry, creator-fix 2, perf-iphone) were DETACHED at handover = top level: close each myself (role note, report, archive) when done; archiving local_5352afaa does not take them along (Master 11-20).
-- **Orchestrator: Opus 5.5 medium; orchestrators never Sonnet (Daniele 11-20). Fable workers only for an architecture plan or a bug Opus failed twice; Daniele's OK each time, logged.**
-- Hard walls: never push past unverified code; Verifier always its own session; code workers in own worktree C:/Users/itisf/bc-wt/<job>; ≤ 3 workers (4th only by Daniele's word); ctx measured vs 500k (40 % = 200k, any compaction = past 40 %).
-- Godot: ALWAYS C:/Users/itisf/godot-local/Godot_v4.6.1-stable_win64_console.exe (Drive exe crashes; skill default is Drive → pass --godot). Concurrent imports crash on strings_venue.csv → verifiers wait for quiet Godot + own TEMP. Kill by PID only.
-- Peer/event-started turns cannot start sessions → verifier cards Daniele clicks. Archiving a worker detaches its nested successor.
-
-## WAITING ON OWNER (hub #questions)
-- **QR FREEZE (Daniele 11-20): don't change docs/venue/qr or table codes — friend test tonight.** Table map docs/venue/qr/table-map.svg.
-- Open: redirect vercel.app → blackcabin.app (resets saves; keep both meanwhile); band-photos-consent; bar-open-mondays (posters list Monday); LoungeTable0/1 QR name removed tables; cards 403–406 (phrase lines, send-drink coins, drink inventory, Prae's sign); reviews tonight-lineup-review, overflow-seats-review, creator-fix-1120-review (coming). Answered: venue-entrance-review v4 (QR tables, arcade, counter) — not yet built.
-- Hub has no archive field: the 160 answered cards stay; old card list in git history.
+## TREE
+- Open (NOT archived — Daniele 11-21: no archiving until he says so): verify-queue-1120 local_4e5c969d, minigame-ramp-1120 local_b65235c8, merch-shop-1120 local_2ab6c32e (out of context), perf successor local_b366ab41, old perf local_d6113b6d. Archived earlier tonight (before that rule): 10 sessions, see LOG.
+- Rules tonight: every code push bumps PATCH (Daniele); no permission prompts until all live (Daniele); Godot runs serialized (concurrent imports crash 3221225477/…356); Remote Control turns can't start sessions → subagents / idle workers used.
+- Shared .git/index got corrupt twice (Drive) → rebuilt with read-tree HEAD.
 
 ## POINTERS
-Rules PROJECT.md (Tests: 32 suites incl. test_lineup, test_overflow_seats); history LOG.md; decisions docs/design/DECISIONS.md; deploy docs/tech/04-deploy.md; events docs/venue/events/README.md (weekly lineup = data only); ideas docs/design/BACKLOG.md (stale since 11-15: refresh via Housekeeping); hub https://claude.ai/artifact/BbpBxVWVVXMjz7TgJ7aFBW.
+PROJECT.md (Tests 38) · LOG.md · docs/design/DECISIONS.md · docs/tech/04-deploy.md · docs/tech/telemetry-queries.sql · hub https://claude.ai/artifact/BbpBxVWVVXMjz7TgJ7aFBW
