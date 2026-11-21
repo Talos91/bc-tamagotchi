@@ -9,6 +9,7 @@ const CEILING_LAYER_MASK := 1 << 1
 ## nothing else. Patrons are not lifted, so the player stands out from the crowd.
 const PLAYER_LIFT := 0.15
 const VenueBatch = preload("res://scripts/venue_batch.gd")
+const PhoneGraphics = preload("res://scripts/phone_graphics.gd")
 
 var _tealights: Array[Light3D] = []
 var _base_energy: Array[float] = []
@@ -37,7 +38,7 @@ func _ready() -> void:
 			_rate.append(rng.randf_range(1.0, 2.0))
 	_find_player.call_deferred()
 	VenueBatch.shadow_proxies.call_deferred(self)   # one shadow-only mesh per group (venue_batch.gd, owner item 41)
-	if VenueBatch.MERGE_STATIC:
+	if VenueBatch.MERGE_STATIC and not PhoneGraphics.low_memory():   # a low-memory phone keeps the draws, not the copies
 		VenueBatch.merge_static.call_deferred(self, true)  # same pixels, ~45 % fewer draws; sliced over frames (perf-iphone)
 
 ## The player (a Player sibling under the same main scene): lift its figure now and whenever it is rebuilt (set_look).

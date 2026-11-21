@@ -2,11 +2,13 @@ extends SceneTree
 ## Headless test of the iPhone round (perf-iphone 2026-11-20): the battery saver's frame pacing (scripts/frame_pacer.gd,
 ## autoload FramePacer: 30 / 15 a second, off off the web), the full-screen button (scenes/ui/fullscreen_button.gd:
 ## hidden off the web, its strings in both languages) and the static merge (venue_batch.gd merge_static: chunks made,
-## each paired with at most 8 lights, so no pixel loses a light).
+## each paired with at most 8 lights, so no pixel loses a light), and its skip on a low-memory phone (android-oom
+## 2026-11-21: phone_graphics.gd low_memory(), from navigator.deviceMemory in window.bcPhone).
 ##   godot --headless --path . --script res://tests/test_battery_saver.gd
 
 const Pacer = preload("res://scripts/frame_pacer.gd")
 const VenueBatch = preload("res://scripts/venue_batch.gd")
+const PhoneGraphics = preload("res://scripts/phone_graphics.gd")
 const U = preload("res://scripts/ui/ui_strings.gd")
 
 var fails: Array[String] = []
@@ -79,6 +81,24 @@ func _init() -> void:
 			still += 1
 	check(still == 0, "a retired original never casts from layer 0 (shadow-only instead) (%d)" % still)
 	venue.queue_free()
+	await process_frame
+
+	print("low-memory phone")
+	check(not PhoneGraphics.low_memory(), "off the web: not a low-memory phone")
+	PhoneGraphics._parts = {"dpr": true, "mem": 4}
+	check(not PhoneGraphics.low_memory(), "4 GB: not low memory (merge stays)")
+	PhoneGraphics._parts = {"dpr": true, "mem": 0}
+	check(not PhoneGraphics.low_memory(), "memory unknown (Safari): not low memory")
+	PhoneGraphics._parts = {"dpr": true, "mem": 2}
+	check(PhoneGraphics.low_memory(), "2 GB: low memory")
+	venue = load("res://scenes/venue/venue.tscn").instantiate()
+	root.add_child(venue)
+	for i in 60:
+		await process_frame
+	var n_low := venue.find_children("Merged_*", "MeshInstance3D", true, false).size()
+	check(n_low == 0, "a low-memory phone skips the static merge (%d chunks)" % n_low)
+	venue.queue_free()
+	PhoneGraphics._parts = null
 	await process_frame
 
 	print("%d failed" % fails.size())

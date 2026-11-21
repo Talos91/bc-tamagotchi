@@ -22,7 +22,8 @@ HEAVY = ('wasm', 'pck', 'js')
 # tapping it hides it. "BC-DIAG" line in the banner = copyable one-liner for a screenshot.
 SHELL_GUARD = r'''<script>
 (function () {
-	var msgs = [], box = null, title = '';
+	var msgs = [], box = null, title = '', stale = '';
+	var SLOW = 'Still loading after 25 s. Slow connection, or the browser stalled. The 50 MB download needs a stable connection.';
 	function ua() { return (navigator.userAgent || '').replace(/^Mozilla\/5.0 /, ''); }
 	function show() {
 		if (!document.body) { document.addEventListener('DOMContentLoaded', show); return; }
@@ -155,7 +156,8 @@ SHELL_GUARD = r'''<script>
 		try { coarse = window.matchMedia('(pointer: coarse)').matches; } catch (x) {}
 		var phone = /[?&]phone=1/.test(q) || (!/[?&]phone=0/.test(q) && (navigator.maxTouchPoints || 0) > 0 && coarse);
 		var pm = /[?&]pg=([a-z,]*)/.exec(q), parts = pm ? pm[1].split(',') : PHONE_PARTS;
-		window.bcPhone = phone ? { dpr: parts.indexOf('dpr') >= 0, msaa: parts.indexOf('msaa') >= 0, scale: parts.indexOf('scale') >= 0 } : null;
+		// mem: the browser's device memory in GB (Chrome / Edge only, 0 when unknown); phone_graphics.gd low_memory().
+		window.bcPhone = phone ? { dpr: parts.indexOf('dpr') >= 0, msaa: parts.indexOf('msaa') >= 0, scale: parts.indexOf('scale') >= 0, mem: navigator.deviceMemory || 0 } : null;
 		if (phone && window.bcPhone.dpr) {
 			var dd = Object.getOwnPropertyDescriptor(window, 'devicePixelRatio') || Object.getOwnPropertyDescriptor(Window.prototype, 'devicePixelRatio');
 			var real = function () { return dd && dd.get ? dd.get.call(window) : 1; };
@@ -195,20 +197,31 @@ SHELL_GUARD = r'''<script>
 	try {
 		var s = window.sessionStorage;
 		if (s.getItem('bc-started') === '1' && s.getItem('bc-ok') !== '1') {
-			fail('The previous start did not finish: the browser probably ran out of memory and reloaded the tab (or the page was reloaded while loading). Close other tabs/apps and try again.');
+			stale = 'The previous start did not finish: the browser probably ran out of memory and reloaded the tab (or the page was reloaded while loading). Close other tabs/apps and try again.';
+			fail(stale);
 		}
 		s.setItem('bc-started', '1'); s.removeItem('bc-ok');
 		window.bcOk = function () { try { s.setItem('bc-ok', '1'); } catch (x) {} };
 	} catch (e) { window.bcOk = function () {}; }
+	// This start got through (android-oom 2026-11-21): the "previous start" and "still loading" notes are stale now, so
+	// they go (the banner hides when nothing else is in it); any other message (a real failure) keeps the banner.
+	function clearStale() {
+		var before = msgs.length;
+		msgs = msgs.filter(function (m) { return m !== stale && m !== SLOW; });
+		if (msgs.length === before) { return; }
+		if (msgs.length) { show(); } else if (box) { box.style.display = 'none'; }
+	}
 	// 25 s without the first frame: say what we know.
 	var t0 = Date.now(), warned = false;
 	var iv = setInterval(function () {
 		var st = document.getElementById('status');
 		if (!st || !document.body || !document.body.contains(st)) {
-			if (document.body && Date.now() - t0 > 300) { window.bcOk(); clearInterval(iv); if (warned && box) { box.style.display = 'none'; } }
+			if (document.body && Date.now() - t0 > 300) {
+				window.bcOk(); clearInterval(iv); clearStale();
+			}
 			return;
 		}
-		if (!warned && Date.now() - t0 > 25000) { warned = true; fail('Still loading after 25 s. Slow connection, or the browser stalled. The 50 MB download needs a stable connection.'); }
+		if (!warned && Date.now() - t0 > 25000) { warned = true; fail(SLOW); }
 	}, 500);
 }());
 </script>
@@ -289,8 +302,15 @@ def hash_rename():
 #   home-screen meta tags from the preset's head_include.
 # - Service worker: Godot's worker served index.html cache-first and a new worker waited until every tab was closed,
 #   so a phone kept the old build for days. Now the page comes from the network first (the cache only when offline),
-#   a new worker takes over at once (skipWaiting + clients.claim) and, when it replaces an older build's cache, reloads
-#   the open pages once (ACTIVATE_NEW), so one reopen shows the new version stamp, even from Godot's old worker.
+#   a new worker takes over at once (skipWaiting + clients.claim) and drops older builds' caches (ACTIVATE_NEW).
+# - android-oom 2026-11-21 (Android 10 / Edge on 0.4.6: "The previous start did not finish"): the engine registers the
+#   worker right after callMain, i.e. during the multi-second scene load before the first frame. A new deploy's worker
+#   then installed, activated and, under 0.4.5's rule, reloaded the page (clients.navigate) mid-boot: the start never
+#   finished and the next one began with that banner and a second 50 MB download. Now it never reloads a page (the next
+#   open is network-first and shows the new build anyway), and the 38 MB wasm / 23 MB pck are never cached by the worker
+#   (CACHEABLE_FILES empty): from 0.4.5 on the worker controls the page, so it would copy them into Cache Storage while
+#   the engine reads them, more peak memory on a low-memory phone. They are hashed and immutable (vercel.json), so the
+#   browser's HTTP cache still keeps them.
 ACTIVATE_OLD = """self.addEventListener('activate', (event) => {
 	event.waitUntil(caches.keys().then(
 		function (keys) {
@@ -303,20 +323,16 @@ ACTIVATE_OLD = """self.addEventListener('activate', (event) => {
 	}));
 });"""
 ACTIVATE_NEW = """self.addEventListener('activate', (event) => {
-	// bc: take over at once; if an older build's cache was here, reload the open pages once so they run this build.
+	// bc: take over at once and drop older builds' caches; the open pages pick the new build up on their next open.
 	event.waitUntil(caches.keys().then(
 		function (keys) {
 			const old = keys.filter((key) => key.startsWith(CACHE_PREFIX) && key !== CACHE_NAME);
-			return Promise.all(old.map((key) => caches.delete(key))).then(() => old.length);
+			return Promise.all(old.map((key) => caches.delete(key)));
 		}
-	).then(function (replaced) {
+	).then(function () {
 		const preload = ('navigationPreload' in self.registration) ? self.registration.navigationPreload.enable() : Promise.resolve();
-		return preload.then(() => self.clients.claim()).then(() => {
-			// Not awaited: a reload goes through this worker, which must finish activating first.
-			if (replaced) {
-				self.clients.matchAll({ type: 'window' }).then((all) => all.forEach((c) => c.navigate(c.url).catch(() => null)));
-			}
-		});
+		// No reload of the open pages here (android-oom 2026-11-21): this runs while the engine is still booting.
+		return preload.then(() => self.clients.claim());
 	}));
 });"""
 SW_PATCHES = [
@@ -348,6 +364,9 @@ def pwa_patch():
             if a not in s:
                 sys.exit("build_web: service worker patch no longer matches Godot's worker: " + a[:60])
             s = s.replace(a, b, 1)
+        s, n = re.subn(r'const CACHEABLE_FILES = \[[^\]]*\];', 'const CACHEABLE_FILES = []; // bc: wasm/pck never copied into the cache (android-oom)', s)
+        if n != 1:
+            sys.exit("build_web: service worker CACHEABLE_FILES no longer matches Godot's worker")
         write(p, s)
 
 

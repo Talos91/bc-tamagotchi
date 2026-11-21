@@ -68,3 +68,8 @@ An iPhone at pixel ratio 3 lost the WebGL context entering the venue with ~250 M
 - **Tools:** `game/tools/perf_merge.gd` (headless: what is merged, what is left and why, per group).
 - **Download** (live 2026-11-20): pck 22.7 MB raw, 17.8 MB brotli (mostly already-compressed textures and meshes); wasm 37.7 MB raw, 8.9 MB brotli. Biggest pck items: ICU data 4.8 MB (Thai line breaking), imported scenes 7.5 MB, textures 7.3 MB, fonts 1.5 MB.
 - **Phone test:** `docs/tech/iphone-test-script.md` (8 steps for a tester, ends with Copy perf report).
+
+## Android boot fix (android-oom, 2026-11-21, v0.4.7)
+- **Report:** Android 10 / Edge 157 on 0.4.6 showed "The previous start did not finish" over the splash (full progress bar).
+- **Cause:** the engine registers the service worker right after `callMain`, during the multi-second scene load before the first frame. 0.4.5's worker, on a new deploy, activated at once and reloaded every open page (`clients.navigate`) when it replaced an older cache: the boot was cut, the next one began with that banner and a second 50 MB download, now through the worker, which copied the 38 MB wasm + 23 MB pck into Cache Storage while the engine read them.
+- **Fix** (`tools/build_web.py` `pwa_patch`): the worker never reloads a page (the next open is network-first anyway) and never caches wasm / pck (`CACHEABLE_FILES = []`; they are hashed and immutable, the HTTP cache keeps them). The "previous start" / "still loading" notes hide once a start succeeds (`clearStale`); real failures keep the banner. A phone whose `navigator.deviceMemory` is 2 GB or less skips the static merge (`PhoneGraphics.low_memory()`; the merge costs ~9 MB heap, ~11 MB at its peak, ~8 MB GPU; headless venue 105.7 -> 127.4 MB with it, 118.4 without).

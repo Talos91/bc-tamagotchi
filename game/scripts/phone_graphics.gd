@@ -39,3 +39,13 @@ static func apply(vp: Viewport) -> void:
 ## MSAA for a 3D preview (character creator): off with the msaa part, else the usual 2x.
 static func preview_msaa() -> Viewport.MSAA:
 	return Viewport.MSAA_DISABLED if on("msaa") else Viewport.MSAA_2X
+
+
+## A phone that says it has at most LOW_MEMORY_GB of memory (navigator.deviceMemory, Chrome / Edge; Safari does not
+## say, so iPhones never count). Such a phone skips the venue's static merge (venue.gd), which keeps ~9 MB more heap,
+## ~11 MB at its peak, and ~8 MB more GPU buffers (android-oom 2026-11-21: Android 10 / Edge failed to start 0.4.6).
+const LOW_MEMORY_GB := 2.0
+
+static func low_memory() -> bool:
+	var gb := float(parts().get("mem", 0))
+	return gb > 0.0 and gb <= LOW_MEMORY_GB
